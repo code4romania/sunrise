@@ -1,10 +1,8 @@
-# Project name
+# Sunrise
 
 [![GitHub contributors][ico-contributors]][link-contributors]
 [![GitHub last commit][ico-last-commit]][link-last-commit]
 [![License: MPL 2.0][ico-license]][link-license]
-
-Insert bullets description of the project if available.
 
 [See the project live][link-production]
 
@@ -21,20 +19,57 @@ Help us out by testing this project in the [staging environment][link-staging]. 
 If you would like to suggest new functionality, open an Issue and mark it as a __[Feature request]__. Please be specific about why you think this functionality will be of use. If you can, please include some visual description of what you would like the UI to look like, if you are suggesting new UI elements.
 
 ## Built With
+- Laravel
+- Livewire
+- Filament
+- Tailwind CSS
 
-### Programming languages
+### Requirements
+-   PHP 8.3+
+-   Nginx
+-   MySQL 8+
 
-### Platforms
+## Development
+This project uses Laravel Sail, Laravel's default Docker development environment.
 
-### Frontend framework
+After running the [initial setup](#initial-setup), run this command to start up the environment:
+```sh
+./vendor/bin/sail up -d
+```
 
-### Package managers
+and then this command to rebuild the css / js assets on change:
 
-### Database technology & provider
+```sh
+./vendor/bin/sail npm run dev
+```
 
-## Repos and projects
+### Initial setup
 
-Mention all related repos and projects.
+```sh
+# 1. Install composer dependencies
+docker run --rm -v ${PWD}:/app -w /app composer:latest composer install --ignore-platform-reqs --no-scripts --no-interaction --prefer-dist --optimize-autoloader
+
+# 2. Copy the environment variables file
+cp .env.example .env
+
+# 3. Start the application
+./vendor/bin/sail up -d
+
+# 4. Install npm dependencies
+./vendor/bin/sail npm ci
+
+# 5. Build the frontend
+./vendor/bin/sail npm run build
+
+# 6. Generate the app secret key
+./vendor/bin/sail artisan key:generate
+
+# 7. Migrate and seed the database
+./vendor/bin/sail artisan migrate:fresh --seed
+```
+
+For more information on Laravel Sail, check out the [official documentation](https://laravel.com/docs/10.x/sail).
+
 
 ## Deployment
 
@@ -64,12 +99,12 @@ Started in 2016, Code for Romania is a civic tech NGO, official member of the Co
 Last, but not least, we rely on donations to ensure the infrastructure, logistics and management of our community that is widely spread across 11 timezones, coding for social change to make Romania and the world a better place. If you want to support us, [you can do it here][link-donate].
 
 
-[ico-contributors]: https://img.shields.io/github/contributors/code4romania/standard-repo-template.svg?style=for-the-badge
-[ico-last-commit]: https://img.shields.io/github/last-commit/code4romania/standard-repo-template.svg?style=for-the-badge
+[ico-contributors]: https://img.shields.io/github/contributors/code4romania/sunrise.svg?style=for-the-badge
+[ico-last-commit]: https://img.shields.io/github/last-commit/code4romania/sunrise.svg?style=for-the-badge
 [ico-license]: https://img.shields.io/badge/license-MPL%202.0-brightgreen.svg?style=for-the-badge
 
-[link-contributors]: https://github.com/code4romania/standard-repo-template/graphs/contributors
-[link-last-commit]: https://github.com/code4romania/standard-repo-template/commits/main
+[link-contributors]: https://github.com/code4romania/sunrise/graphs/contributors
+[link-last-commit]: https://github.com/code4romania/sunrise/commits/main
 [link-license]: https://opensource.org/licenses/MPL-2.0
 [link-contributing]: https://github.com/code4romania/.github/blob/main/CONTRIBUTING.md
 
