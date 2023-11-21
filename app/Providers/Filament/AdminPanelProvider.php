@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\Login;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -19,6 +20,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,9 +29,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            // ->path('admin')
             ->sidebarCollapsibleOnDesktop()
-            ->login()
+            ->login(Login::class)
             ->colors([
                 'primary' => Color::Purple,
             ])
@@ -45,6 +46,14 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
 
+            ])
+            ->plugins([
+                BreezyCore::make()
+                    ->myProfile(
+                        hasAvatars: true,
+                        slug: 'settings'
+                    )
+                    ->enableTwoFactorAuthentication(),
             ])
             ->middleware([
                 EncryptCookies::class,
