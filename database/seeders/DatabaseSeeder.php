@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Organization;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Mail;
 
@@ -21,10 +21,7 @@ class DatabaseSeeder extends Seeder
 
         Mail::fake();
 
-        User::factory(['email' => 'admin@example.com'])
-            ->create();
-
-        User::factory()
+        Organization::factory()
             ->count(10)
             ->create();
     }

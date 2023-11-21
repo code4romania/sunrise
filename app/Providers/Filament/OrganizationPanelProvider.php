@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages;
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Tenancy\EditOrganizationProfile;
+use App\Http\Middleware\ApplyTenantScopes;
+use App\Models\Organization;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -22,31 +25,35 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 
-class AdminPanelProvider extends PanelProvider
+class OrganizationPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
-            ->id('admin')
+            ->id('organization')
             ->sidebarCollapsibleOnDesktop()
             ->login(Login::class)
             ->colors([
                 'primary' => Color::Purple,
             ])
-            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->viteTheme('resources/css/filament/organization/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('3rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                // Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(
+                in: app_path('Filament/Widgets/Organizations'),
+                for: 'App\\Filament\\Widgets\\Organizations'
+            )
             ->widgets([
-                Widgets\AccountWidget::class,
+                // Widgets\AccountWidget::class,
 
             ])
+            ->databaseNotifications()
             ->plugins([
                 BreezyCore::make()
                     ->myProfile(
@@ -68,6 +75,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->tenant(Organization::class)
+            ->tenantProfile(EditOrganizationProfile::class)
+            ->tenantMiddleware([
+                // ApplyTenantScopes::class,
+            ], isPersistent: true);
     }
 }
