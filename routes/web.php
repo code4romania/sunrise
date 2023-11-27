@@ -15,6 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+// Fix for the `Route [login] not defined.` error that keeps appearing in development.
+Route::get('/laravel/login', fn () => redirect(route('filament.organization.auth.login')))->name('login');

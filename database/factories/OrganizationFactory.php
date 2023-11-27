@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\City;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,8 +22,21 @@ class OrganizationFactory extends Factory
      */
     public function definition(): array
     {
+        $name = fake()->company();
+        $city = City::query()->inRandomOrder()->first();
+
         return [
-            'name' => fake()->company(),
+            'name' => $name,
+            'short_name' => preg_replace('/\b(\w)|./u', '$1', $name),
+            'phone' => fake()->phoneNumber(),
+            'website' => fake()->url(),
+
+            'city_id' => $city->id,
+            'county_id' => $city->county_id,
+            'address' => fake()->streetAddress(),
+
+            'reprezentative_name' => fake()->name(),
+            'reprezentative_email' => fake()->safeEmail(),
         ];
     }
 
@@ -31,7 +45,7 @@ class OrganizationFactory extends Factory
         return $this->afterCreating(function (Organization $organization) {
             $organization->users()->attach(
                 User::factory()
-                    ->count(5)
+                    ->count(25)
                     ->sequence(fn (Sequence $sequence) => [
                         'email' => sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
                     ])

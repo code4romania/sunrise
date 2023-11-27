@@ -52,18 +52,19 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('first_name'),
-                TextColumn::make('last_name'),
+                TextColumn::make('first_name')
+                    ->searchable(),
+                TextColumn::make('last_name')
+                    ->searchable(),
                 TextColumn::make('roles'),
                 TextColumn::make('account_status'),
                 TextColumn::make('last_login_at'),
-
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

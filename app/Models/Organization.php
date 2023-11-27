@@ -4,19 +4,35 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasLocation;
+use App\Concerns\HasUlid;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Illuminate\Support\Facades\Storage;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Organization extends Model implements HasAvatar
+class Organization extends Model implements HasAvatar, HasMedia
 {
     use HasFactory;
+    use HasLocation;
+    use HasUlid;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'name',
-        'avatar_url',
+        'slug',
+        'short_name',
+        'type',
+        'cif',
+        'main_activity',
+        'address',
+        'reprezentative_name',
+        'reprezentative_email',
+        'phone',
+        'website',
     ];
 
     public function users(): MorphToMany
@@ -24,8 +40,23 @@ class Organization extends Model implements HasAvatar
         return $this->morphedByMany(User::class, 'model', 'model_has_organizations');
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('logo')
+            ->singleFile()
+            ->registerMediaConversions(function () {
+                $this->addMediaConversion('thumb')
+                    ->fit(Manipulations::FIT_CONTAIN, 64, 64)
+                    ->optimize();
+
+                $this->addMediaConversion('large')
+                    ->fit(Manipulations::FIT_CONTAIN, 256, 256)
+                    ->optimize();
+            });
+    }
+
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->avatar_url ? Storage::url($this->avatar_url) : null;
+        return $this->getFirstMediaUrl('logo', 'thumb');
     }
 }

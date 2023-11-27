@@ -6,6 +6,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages;
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Profile\UserPersonalInfo;
 use App\Filament\Pages\Tenancy\EditOrganizationProfile;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Models\Organization;
@@ -24,15 +25,22 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
+use Livewire\Livewire;
 
 class OrganizationPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        Livewire::component('user_personal_info', UserPersonalInfo::class);
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->default()
             ->id('organization')
             ->sidebarCollapsibleOnDesktop()
+            ->collapsibleNavigationGroups(false)
             ->login(Login::class)
             ->colors([
                 'primary' => Color::Purple,
@@ -51,7 +59,6 @@ class OrganizationPanelProvider extends PanelProvider
             )
             ->widgets([
                 // Widgets\AccountWidget::class,
-
             ])
             ->databaseNotifications()
             ->plugins([
@@ -60,6 +67,9 @@ class OrganizationPanelProvider extends PanelProvider
                         hasAvatars: true,
                         slug: 'settings'
                     )
+                    ->myProfileComponents([
+                        'personal_info' => UserPersonalInfo::class,
+                    ])
                     ->enableTwoFactorAuthentication(),
             ])
             ->middleware([
