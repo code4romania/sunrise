@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\City;
+use App\Models\Intervention;
 use App\Models\Organization;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -53,6 +55,16 @@ class OrganizationFactory extends Factory
                     ->pluck('id')
                     ->toArray()
             );
+
+            Service::factory()
+                ->count(5)
+                ->for($organization)
+                ->has(
+                    Intervention::factory()
+                        ->count(5)
+                        ->for($organization)
+                )
+                ->create();
         });
     }
 }

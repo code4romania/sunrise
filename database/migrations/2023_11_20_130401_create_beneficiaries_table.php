@@ -18,9 +18,6 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('prior_name')->nullable();
-            $table->string('full_name')->virtualAs(<<<'SQL'
-                NULLIF(CONCAT_WS(" ", first_name, last_name), " ")
-            SQL);
 
             $table->string('civil_status')->nullable();
             $table->decimal('cnp', 13, 0)->nullable();

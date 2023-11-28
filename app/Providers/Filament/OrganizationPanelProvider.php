@@ -17,7 +17,6 @@ use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\Alignment;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -63,7 +62,7 @@ class OrganizationPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
             ])
             ->bootUsing(function () {
-                Page::formActionsAlignment(Alignment::End);
+                Page::alignFormActionsEnd();
             })
             ->databaseNotifications()
             ->plugins([

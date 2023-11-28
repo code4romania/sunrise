@@ -16,7 +16,7 @@ trait HasUlid
         // Generate ULID if none provided
         static::creating(function (Model $model) {
             if (! $model->{$model->ulidColumn}) {
-                $model->{$model->ulidColumn} = (string) Str::ulid();
+                $model->{$model->ulidColumn} = strtolower((string) Str::ulid());
             }
         });
 

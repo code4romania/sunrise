@@ -10,6 +10,7 @@ use App\Concerns\HasUlid;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
@@ -40,6 +41,11 @@ class Organization extends Model implements HasAvatar, HasMedia
     public function users(): MorphToMany
     {
         return $this->morphedByMany(User::class, 'model', 'model_has_organizations');
+    }
+
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class);
     }
 
     public function registerMediaCollections(): void
