@@ -6,6 +6,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Concerns\HasUlid;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
@@ -17,14 +18,18 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Image\Manipulations;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, HasTenants
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, HasMedia, HasTenants
 {
     use HasApiTokens;
     use HasFactory;
+    use HasUlid;
+    use InteractsWithMedia;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -38,7 +43,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'last_name',
         'email',
         'password',
-        'avatar_url',
     ];
 
     /**
@@ -66,6 +70,21 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return $this->morphToMany(Organization::class, 'model', 'model_has_organizations', 'model_id');
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatar')
+            ->singleFile()
+            ->registerMediaConversions(function () {
+                $this->addMediaConversion('thumb')
+                    ->fit(Manipulations::FIT_CONTAIN, 64, 64)
+                    ->optimize();
+
+                $this->addMediaConversion('large')
+                    ->fit(Manipulations::FIT_CONTAIN, 256, 256)
+                    ->optimize();
+            });
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasVerifiedEmail();
@@ -73,7 +92,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->avatar_url ? Storage::url($this->avatar_url) : null;
+        return $this->getFirstMediaUrl('avatar', 'thumb');
     }
 
     public function getFilamentName(): string

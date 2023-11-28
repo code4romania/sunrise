@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\HasLocation;
+use App\Concerns\HasSlug;
 use App\Concerns\HasUlid;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +20,7 @@ class Organization extends Model implements HasAvatar, HasMedia
     use HasFactory;
     use HasLocation;
     use HasUlid;
+    use HasSlug;
     use InteractsWithMedia;
 
     protected $fillable = [
@@ -58,5 +60,10 @@ class Organization extends Model implements HasAvatar, HasMedia
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->getFirstMediaUrl('logo', 'thumb');
+    }
+
+    protected function getSlugSource(): string
+    {
+        return $this->name;
     }
 }

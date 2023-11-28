@@ -13,9 +13,11 @@ use App\Models\Organization;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Alignment;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -60,6 +62,9 @@ class OrganizationPanelProvider extends PanelProvider
             ->widgets([
                 // Widgets\AccountWidget::class,
             ])
+            ->bootUsing(function () {
+                Page::formActionsAlignment(Alignment::End);
+            })
             ->databaseNotifications()
             ->plugins([
                 BreezyCore::make()
@@ -86,7 +91,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->tenant(Organization::class)
+            ->tenant(Organization::class, 'slug')
             ->tenantProfile(EditOrganizationProfile::class)
             ->tenantMiddleware([
                 // ApplyTenantScopes::class,

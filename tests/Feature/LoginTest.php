@@ -47,7 +47,7 @@ it('can authenticate and redirect user to their intended URL', function () {
 });
 
 it('can redirect unauthenticated app requests', function () {
-    $this->get(route('filament.admin.pages.dashboard'))
+    $this->get(route('filament.organization.pages.dashboard', ['tenant' => 'test']))
         ->assertRedirect(Filament::getLoginUrl());
 });
 

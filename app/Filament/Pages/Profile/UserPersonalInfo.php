@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages\Profile;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 use Jeffgreco13\FilamentBreezy\Livewire\PersonalInfo as BasePersonalInfo;
 
 class UserPersonalInfo extends BasePersonalInfo
@@ -17,29 +19,43 @@ class UserPersonalInfo extends BasePersonalInfo
         'email',
     ];
 
-    protected function getProfileFormSchema(): array
+    public function mount(): void
     {
-        $groupFields = [];
+        $this->user = Filament::getCurrentPanel()->auth()->user();
 
-        if ($this->hasAvatars) {
-            $groupFields[] = SpatieMediaLibraryFileUpload::make('avatar')
-                ->label(__('filament-breezy::default.fields.avatar'))
-                ->avatar()
-                ->collection('avatars')
-                ->conversion('large');
-        }
+        $this->form->fill($this->user->only($this->only));
+    }
 
-        $groupFields[] = Group::make()
-            ->columnSpan(2)
-            ->columns(2)
+    public function form(Form $form): Form
+    {
+        return $form
+            ->columns(3)
+            ->statePath('data')
+            ->model($this->user)
             ->schema([
-                TextInput::make('first_name'),
-                TextInput::make('last_name'),
+                SpatieMediaLibraryFileUpload::make('avatar')
+                    ->label(__('filament-breezy::default.fields.avatar'))
+                    ->avatar()
+                    ->collection('avatar')
+                    ->conversion('large'),
 
-                $this->getEmailComponent()
-                    ->columnSpanFull(),
+                Group::make()
+                    ->columnSpan(2)
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('first_name')
+                            ->label(__('field.first_name')),
+
+                        TextInput::make('last_name')
+                            ->label(__('field.last_name')),
+
+                        TextInput::make('email')
+                            ->label(__('field.last_name'))
+                            ->unique(ignoreRecord:true)
+                            ->required()
+                            ->email()
+                            ->columnSpanFull(),
+                    ]),
             ]);
-
-        return $groupFields;
     }
 }

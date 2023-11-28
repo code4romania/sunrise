@@ -7,13 +7,13 @@ namespace App\Filament\MediaLibrary;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\DefaultPathGenerator;
 
-class TenantPathGenerator extends DefaultPathGenerator
+class UserPathGenerator extends DefaultPathGenerator
 {
     protected function getBasePath(Media $media): string
     {
         return collect([
-            'org',
-            filament()->getTenant()->ulid,
+            'user',
+            $media->model->ulid,
             $media->getKey(),
         ])
             ->filter()
