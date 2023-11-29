@@ -16,6 +16,20 @@ jobs:
     env:
       extensions: mbstring, sqlite, intl, gd
 
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: sunrise_tests
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 3306/tcp
+        options: >-
+            --health-cmd "mysqladmin ping"
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 3
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,8 +73,10 @@ jobs:
 
       - name: Setup env
         run: |
-          cp .env.example .env
+          cp .env.ci .env
           php artisan key:generate --ansi
 
       - name: Run tests
         run: php artisan test
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
