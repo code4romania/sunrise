@@ -27,7 +27,7 @@ class Login extends BaseLogin
         }
 
         $this->form->fill([
-            'email' => 'admin@example.com',
+            'email' => 'user-1-1@example.com',
             'password' => 'password',
             'remember' => true,
         ]);

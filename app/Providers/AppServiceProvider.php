@@ -40,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'beneficiary' => \App\Models\Beneficiary::class,
             'city' => \App\Models\City::class,
+            'community_profile' => \App\Models\CommunityProfile::class,
             'county' => \App\Models\County::class,
             'organization' => \App\Models\Organization::class,
             'user' => \App\Models\User::class,

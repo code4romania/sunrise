@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Beneficiary;
 use App\Models\City;
+use App\Models\CommunityProfile;
 use App\Models\Intervention;
 use App\Models\Organization;
 use App\Models\Service;
@@ -55,6 +57,15 @@ class OrganizationFactory extends Factory
                     ->pluck('id')
                     ->toArray()
             );
+
+            CommunityProfile::factory()
+                ->for($organization)
+                ->create();
+
+            Beneficiary::factory()
+                ->count(25)
+                ->for($organization)
+                ->create();
 
             Service::factory()
                 ->count(5)

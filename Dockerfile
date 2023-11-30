@@ -41,7 +41,6 @@ COPY \
     package.json \
     package-lock.json \
     postcss.config.js \
-    tailwind.config.js \
     vite.config.js \
     ./
 

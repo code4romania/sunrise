@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Widgets\Organizations;
 
+use App\Models\Beneficiary;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -14,11 +15,25 @@ class CaseStatsWidget extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make(__('beneficiary.stats.open'), 25),
+            Stat::make(
+                __('beneficiary.stats.open'),
+                Beneficiary::query()
+                    ->count()
+            ),
 
-            Stat::make(__('beneficiary.stats.monitoring'), 21),
+            Stat::make(
+                __('beneficiary.stats.monitoring'),
+                Beneficiary::query()
+                    // ->where('status', 'monitoring')
+                    ->count()
+            ),
 
-            Stat::make(__('beneficiary.stats.closed'), 312),
+            Stat::make(
+                __('beneficiary.stats.closed'),
+                Beneficiary::query()
+                    // ->where('status', 'closed')
+                    ->count()
+            ),
         ];
     }
 }

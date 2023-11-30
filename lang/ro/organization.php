@@ -27,4 +27,11 @@ return [
         'website' => 'Website',
         'logo' => 'Logo organizație',
     ],
+
+    'filter' => [
+        'county' => [
+            'label' => 'Filtrează după locație',
+            'placeholder' => 'Național',
+        ],
+    ],
 ];

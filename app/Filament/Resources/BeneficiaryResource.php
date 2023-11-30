@@ -9,13 +9,17 @@ use App\Models\Beneficiary;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class BeneficiaryResource extends Resource
 {
     protected static ?string $model = Beneficiary::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    protected static ?string $slug = 'cases';
 
     public static function getNavigationGroup(): ?string
     {
@@ -37,6 +41,11 @@ class BeneficiaryResource extends Resource
         return __('beneficiary.label.plural');
     }
 
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->full_name;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -49,18 +58,28 @@ class BeneficiaryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id'),
+
+                TextColumn::make('full_name')
+                    ->searchable(),
+
+                TextColumn::make('created_at')
+                    ->date(),
+
+                TextColumn::make('last_evaluated_at')
+                    ->date(),
+
+                TextColumn::make('last_serviced_at')
+                    ->date(),
+
+                TextColumn::make('status')
+                    ->badge(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\ViewAction::make(),
             ]);
     }
 
@@ -76,6 +95,7 @@ class BeneficiaryResource extends Resource
         return [
             'index' => Pages\ListBeneficiaries::route('/'),
             'create' => Pages\CreateBeneficiary::route('/create'),
+            'view' => Pages\ViewBeneficiary::route('/{record}'),
             'edit' => Pages\EditBeneficiary::route('/{record}/edit'),
         ];
     }

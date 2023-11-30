@@ -19,7 +19,11 @@ class BeneficiaryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'prior_name' => fake()->boolean(25) ? fake()->lastName() : null,
+
+            'cnp' => fake()->boolean(75) ? fake()->cnp() : null,
         ];
     }
 }

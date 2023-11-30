@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Concerns;
 
 use App\Models\Organization;
+use App\Models\Scopes\BelongsToCurrentTenant;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait BelongsToOrganization
@@ -23,6 +24,8 @@ trait BelongsToOrganization
 
             $model->organization_id = auth()->user()->organization_id;
         });
+
+        static::addGlobalScope(new BelongsToCurrentTenant);
     }
 
     public function organization(): BelongsTo

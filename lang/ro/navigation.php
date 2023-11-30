@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 return [
 
-    'group' => [
-        'beneficiaries' => 'Beneficiari',
-        'configurations' => 'Configurări',
-    ],
-
     'beneficiaries' => [
         '_group' => 'Beneficiari',
         'cases' => 'Cazuri',
+    ],
+
+    'community' => [
+        '_group' => 'Comunitatea Sunrise',
+        'network' => 'Rețea organizații VDP',
+        'profile' => 'Profilul meu în rețea',
     ],
 
     'configurations' => [
