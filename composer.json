@@ -15,8 +15,8 @@
         "php": "^8.2",
         "alcea/cnp": "^3.0",
         "blade-ui-kit/blade-icons": "^1.5",
-        "filament/filament": "^3.0",
-        "filament/spatie-laravel-media-library-plugin": "^3.0",
+        "filament/filament": "^3.1",
+        "filament/spatie-laravel-media-library-plugin": "^3.1",
         "guzzlehttp/guzzle": "^7.2",
         "jeffgreco13/filament-breezy": "^2.2",
         "laravel/framework": "^10.34",
@@ -24,7 +24,7 @@
         "laravel/tinker": "^2.8",
         "sentry/sentry-laravel": "^4.1",
         "stevegrunwell/time-constants": "^1.1",
-        "tpetry/laravel-query-expressions": "^0.8"
+        "tpetry/laravel-query-expressions": "^0.9"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9",
@@ -35,7 +35,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
-        "pestphp/pest": "^2.25",
+        "pestphp/pest": "^2.26",
         "pestphp/pest-plugin-faker": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.2",
         "pestphp/pest-plugin-livewire": "^2.1",
@@ -57,11 +57,11 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan filament:upgrade",
             "@php artisan ide-helper:generate",
             "@php artisan ide-helper:meta",
             "@php artisan ide-helper:models --nowrite"
