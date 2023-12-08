@@ -23,4 +23,44 @@ return [
     'phone' => 'Introdu număr telefon',
     'contact_notes' => 'Adaugă interval orar sau orice detalii relevante legate de preferințe în contactare',
 
+    // 'accreditation_number' => 'Introdu seria și numărul',
+    // 'activity' => 'Introdu activitatea',
+    // 'age' => 'Vârstă',
+    // 'all_beneficiaries' => 'Toți beneficiarii',
+    // 'choose_services' => 'Alegeți unul sau mai multe servicii',
+    //
+    // 'city' => 'Alege localitatea',
+    //
+    //
+    // 'course_credits' => 'Total credite EMC obținute',
+    // 'course_name' => 'Numele cursului EMC',
+    // 'course_provider' => 'Numele organizatiei care a oferit cursul',
+    // 'course_theme' => 'Tema cursului EMC',
+    // 'date' => 'Alege o dată',
+    // 'email' => 'Adresă de email',
+    // 'employer_name' => 'Numele organizației angajatoare',
+    // 'employer_ongoing' => 'Lucrez aici în prezent',
+    // 'employer_project' => 'Introdu numele proiectului',
+    // 'employer_type' => 'Tip angajator',
+    // 'family' => 'Alege o familie',
+    // 'household' => 'Alege o gospodărie',
+    // 'id_number' => 'Introdu numărul actului de identitate',
+    // 'id_serial' => 'Introdu seria actului de identitate',
+    // 'id_type' => 'Alege un tip de act de identitate',
+    // 'intervention_reason' => 'Motivul intervenției',
+
+    // 'location' => 'Introdu locația',
+    // 'no_segmentation_age' => 'Fără segmentare pe vârstă',
+    // 'no_segmentation_city' => 'Fără segmentare pe localitate',
+    // 'no_segmentation_county' => 'Fără segmentare pe județ',
+    // 'no_segmentation_gender' => 'Fără segmentare pe sex',
+    // 'organizer' => 'Introdu organizatorul',
+    // 'participants' => 'Introdu număr beneficiari',
+    //
+    //
+    //
+    // 'study_duration' => 'Total durată în ani',
+    // 'study_institution' => 'Introdu numele instituției',
+    // 'study_name' => 'Numele programului educațional',
+
 ];

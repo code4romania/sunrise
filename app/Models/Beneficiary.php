@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\Gender;
-use App\Concerns\HasUlid;
-use App\Enums\CivilStatus;
-use App\Concerns\HasEthnicity;
-use App\Concerns\HasCitizenship;
-use App\Enums\ResidenceEnvironment;
 use App\Concerns\BelongsToOrganization;
-use Illuminate\Database\Eloquent\Model;
+use App\Concerns\HasCitizenship;
+use App\Concerns\HasEthnicity;
+use App\Concerns\HasUlid;
+use App\Enums\CaseStatus;
+use App\Enums\CivilStatus;
+use App\Enums\Gender;
+use App\Enums\ResidenceEnvironment;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Beneficiary extends Model
 {
@@ -55,6 +56,8 @@ class Beneficiary extends Model
         'primary_phone',
         'backup_phone',
         'contact_notes',
+
+        'status',
     ];
 
     protected $casts = [
@@ -64,6 +67,7 @@ class Beneficiary extends Model
         'legal_residence_environment' => ResidenceEnvironment::class,
         'effective_residence_environment' => ResidenceEnvironment::class,
         'same_as_legal_residence' => 'boolean',
+        'status' => CaseStatus::class,
     ];
 
     public function legalResidenceCounty(): BelongsTo

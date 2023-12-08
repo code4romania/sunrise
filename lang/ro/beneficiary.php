@@ -39,4 +39,12 @@ return [
             ],
         ],
     ],
+
+    'status' => [
+        'active' => 'Activ',
+        'reactivated' => 'Reactivat',
+        'monitoring' => 'În monitorizare',
+        'closed' => 'Închis',
+    ],
+
 ];

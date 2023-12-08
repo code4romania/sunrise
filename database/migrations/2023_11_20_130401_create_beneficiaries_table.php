@@ -28,6 +28,8 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
+            $table->string('status');
+
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('prior_name')->nullable();

@@ -49,25 +49,52 @@ class BeneficiaryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
+                TextColumn::make('id')
+                    ->label(__('field.case_id'))
+                    ->extraHeaderAttributes([
+                        'class' => 'w-1',
+                    ]),
 
                 TextColumn::make('full_name')
+                    ->label(__('field.beneficiary'))
                     ->searchable(),
 
                 TextColumn::make('created_at')
-                    ->date(),
+                    ->label(__('field.open_at'))
+                    ->date()
+                    ->extraHeaderAttributes([
+                        'class' => 'w-1',
+                    ]),
 
                 TextColumn::make('last_evaluated_at')
-                    ->date(),
+                    ->label(__('field.last_evaluated_at'))
+                    ->date()
+                    ->extraHeaderAttributes([
+                        'class' => 'w-1',
+                    ]),
 
                 TextColumn::make('last_serviced_at')
-                    ->date(),
+                    ->label(__('field.last_serviced_at'))
+                    ->date()
+                    ->extraHeaderAttributes([
+                        'class' => 'w-1',
+                    ]),
 
                 TextColumn::make('status')
-                    ->badge(),
+                    ->label(__('field.status'))
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => $state?->label())
+                    ->extraHeaderAttributes([
+                        'class' => 'w-1',
+                    ]),
             ])
             ->filters([
                 //
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

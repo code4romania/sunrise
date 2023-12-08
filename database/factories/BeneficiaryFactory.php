@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
@@ -42,6 +43,8 @@ class BeneficiaryFactory extends Factory
 
             'primary_phone' => fake()->phoneNumber(),
             'backup_phone' => fake()->boolean(25) ? fake()->phoneNumber() : null,
+
+            'status' => fake()->randomElement(CaseStatus::values()),
         ];
     }
 
