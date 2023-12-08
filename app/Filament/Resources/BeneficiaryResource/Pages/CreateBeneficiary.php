@@ -6,9 +6,8 @@ namespace App\Filament\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Resources\BeneficiaryResource;
 use App\Rules\ValidCNP;
-use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord;
@@ -26,31 +25,34 @@ class CreateBeneficiary extends CreateRecord
             Step::make('consent')
                 ->label(__('beneficiary.wizard.consent.label'))
                 ->schema([
-                    Group::make()
-                        ->columnSpan(3)
-                        ->columns(2)
+                    Grid::make()
+                        ->maxWidth('3xl')
                         ->schema([
                             Checkbox::make('consent')
-                                ->label(__('beneficiary.wizard.consent.fields.consent'))
+                                ->label(__('field.create_beneficiary_consent'))
                                 ->required()
                                 ->accepted()
                                 ->columnSpanFull(),
 
                             TextInput::make('cnp')
-                                ->label(__('beneficiary.wizard.consent.fields.cnp'))
+                                ->label(__('field.cnp'))
                                 ->nullable()
-                                ->rule(new ValidCNP),
+                                ->rule(new ValidCNP)
+                                ->disabled()
+                                ->lazy(),
                         ]),
                 ])
-                ->columns(5)
                 ->afterValidation(function ($state, Step $component) {
+                    if (! $state['cnp']) {
+                        return;
+                    }
+
+                    dd($state, \func_get_args());
                 }),
 
             Step::make('beneficiary')
                 ->label(__('beneficiary.wizard.beneficiary.label'))
-                ->schema([
-                    // ...
-                ]),
+                ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema()),
 
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
@@ -63,7 +65,6 @@ class CreateBeneficiary extends CreateRecord
                 ->schema([
                     // ...
                 ]),
-
         ];
     }
 }

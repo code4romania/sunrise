@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasBeneficiaries;
 use App\Concerns\HasLocation;
 use App\Concerns\HasSlug;
 use App\Concerns\HasUlid;
@@ -21,6 +22,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCurrentTenantLabel
 {
+    use HasBeneficiaries;
     use HasFactory;
     use HasLocation;
     use HasUlid;

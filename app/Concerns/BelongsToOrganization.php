@@ -6,6 +6,7 @@ namespace App\Concerns;
 
 use App\Models\Organization;
 use App\Models\Scopes\BelongsToCurrentTenant;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait BelongsToOrganization
@@ -18,11 +19,11 @@ trait BelongsToOrganization
     protected static function bootBelongsToOrganization(): void
     {
         static::creating(function (self $model) {
-            if (! auth()->check()) {
+            if (! Filament::auth()->check()) {
                 return;
             }
 
-            $model->organization_id = auth()->user()->organization_id;
+            $model->organization_id = filament()->getTenant()->id;
         });
 
         static::addGlobalScope(new BelongsToCurrentTenant);

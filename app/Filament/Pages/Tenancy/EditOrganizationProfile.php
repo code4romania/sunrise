@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages\Tenancy;
 
-use App\Filament\Forms\Components\Location;
+use App\Forms\Components\Location;
 use App\Rules\ValidCIF;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -62,6 +62,7 @@ class EditOrganizationProfile extends EditTenantProfile
                             ->required(),
 
                         Location::make()
+                            ->city()
                             ->required(),
                     ]),
 

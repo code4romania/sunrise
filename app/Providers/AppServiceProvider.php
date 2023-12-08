@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Carbon\Carbon;
+use App\Models\Beneficiary;
+use App\Models\City;
+use App\Models\CommunityProfile;
+use App\Models\County;
+use App\Models\Organization;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,9 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->registerCarbonMacros();
-
-        Vite::macro('image', fn (string $asset) => $this->asset("resources/images/{$asset}"));
+        $this->registerBlueprintMacros();
+        $this->registerViteMacros();
     }
 
     /**
@@ -38,35 +43,42 @@ class AppServiceProvider extends ServiceProvider
     protected function enforceMorphMap(): void
     {
         Relation::enforceMorphMap([
-            'beneficiary' => \App\Models\Beneficiary::class,
-            'city' => \App\Models\City::class,
-            'community_profile' => \App\Models\CommunityProfile::class,
-            'county' => \App\Models\County::class,
-            'organization' => \App\Models\Organization::class,
-            'user' => \App\Models\User::class,
+            'beneficiary' => Beneficiary::class,
+            'city' => City::class,
+            'community_profile' => CommunityProfile::class,
+            'county' => County::class,
+            'organization' => Organization::class,
+            'user' => User::class,
         ]);
     }
 
-    protected function registerCarbonMacros(): void
+    protected function registerBlueprintMacros(): void
     {
-        Carbon::macro('toFormattedDate', function () {
-            return $this->translatedFormat(config('forms.components.date_time_picker.display_formats.date'));
+        Blueprint::macro('county', function (?string $name = null) {
+            $column = collect([$name, 'county_id'])
+                ->filter()
+                ->join('_');
+
+            return $this->foreignIdFor(County::class, $column)
+                ->nullable()
+                ->constrained('countries')
+                ->cascadeOnDelete();
         });
 
-        Carbon::macro('toFormattedDateTime', function () {
-            return $this->translatedFormat(config('forms.components.date_time_picker.display_formats.date_time'));
-        });
+        Blueprint::macro('city', function (?string $name = null) {
+            $column = collect([$name, 'city_id'])
+                ->filter()
+                ->join('_');
 
-        Carbon::macro('toFormattedDateTimeWithSeconds', function () {
-            return $this->translatedFormat(config('forms.components.date_time_picker.display_formats.date_time_with_seconds'));
+            return $this->foreignIdFor(City::class, $column)
+                ->nullable()
+                ->constrained('cities')
+                ->cascadeOnDelete();
         });
+    }
 
-        Carbon::macro('toFormattedTime', function () {
-            return $this->translatedFormat(config('forms.components.date_time_picker.display_formats.time'));
-        });
-
-        Carbon::macro('toFormattedTimeWithSeconds', function () {
-            return $this->translatedFormat(config('forms.components.date_time_picker.display_formats.time_with_seconds'));
-        });
+    protected function registerViteMacros(): void
+    {
+        Vite::macro('image', fn (string $asset) => $this->asset("resources/images/{$asset}"));
     }
 }

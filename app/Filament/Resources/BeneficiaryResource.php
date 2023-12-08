@@ -6,7 +6,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\BeneficiaryResource\Pages;
 use App\Models\Beneficiary;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -44,14 +43,6 @@ class BeneficiaryResource extends Resource
     public static function getGlobalSearchResultTitle(Model $record): string
     {
         return $record->full_name;
-    }
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                //
-            ]);
     }
 
     public static function table(Table $table): Table
@@ -96,7 +87,8 @@ class BeneficiaryResource extends Resource
             'index' => Pages\ListBeneficiaries::route('/'),
             'create' => Pages\CreateBeneficiary::route('/create'),
             'view' => Pages\ViewBeneficiary::route('/{record}'),
-            'edit' => Pages\EditBeneficiary::route('/{record}/edit'),
+
+            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
         ];
     }
 }

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 return [
 
+    'age' => 'Vârstă',
     'city' => 'Localitate',
+    'civil_status' => 'Stare civilă',
     'cnp' => 'CNP',
     'county' => 'Județ',
-    'date_of_birth' => 'Data nașterii',
+    'birthdate' => 'Data nașterii',
+    'birthplace' => 'Locul nașterii',
     'date' => 'Data',
     'email' => 'Email',
     'ethnicity' => 'Etnie',
@@ -44,6 +47,24 @@ return [
     'start_time' => 'Oră început',
     'start_year' => 'Anul de început',
     'status' => 'Status',
+    'prior_name' => 'Nume anterior',
+    'citizenship' => 'Cetățenie',
 
+    'legal_residence_county' => 'Județ domiciliu legal',
+    'legal_residence_city' => 'Oraș/UAT domiciliu legal',
+    'legal_residence_address' => 'Adresă domiciliu legal',
+    'legal_residence_environment' => 'Mediu rezidență domiciliu legal',
 
+    'same_as_legal_residence' => 'Domiciliul legal al beneficiarului este și domiciliul efectiv',
+
+    'effective_residence_county' => 'Județ domiciliu efectiv',
+    'effective_residence_city' => 'Oraș/UAT domiciliu efectiv',
+    'effective_residence_address' => 'Adresă domiciliu efectiv',
+    'effective_residence_environment' => 'Mediu rezidență domiciliu efectiv',
+
+    'primary_phone' => 'Număr telefon primar',
+    'backup_phone' => 'Număr telefon rezervă',
+    'contact_notes' => 'Notițe legate de contactare beneficiar',
+
+    'create_beneficiary_consent' => 'Confirm că s-a obținut acordul beneficiarului pentru înregistrarea datelor personale și utilizarea datelor rezultate din evaluare și intervenție în scopul oferirii serviciilor de management de caz.',
 ];
