@@ -9,11 +9,12 @@ use App\Models\CommunityProfile;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
-use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\Split as InfolistSplit;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -82,7 +83,7 @@ class CommunityProfileResource extends Resource
                                     ->alignCenter(),
                             ]),
 
-                        Split::make([
+                        InfolistSplit::make([
 
                             TextEntry::make('website')
                                 ->icon('heroicon-o-link')
