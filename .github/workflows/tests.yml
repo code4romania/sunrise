@@ -20,7 +20,7 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_DATABASE: sunrise_tests
+          MYSQL_DATABASE: tests
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
         ports:
           - 3306/tcp
@@ -79,6 +79,4 @@ jobs:
       - name: Run tests
         run: php artisan test
         env:
-          DB_CONNECTION: mysql
-          DB_DATABASE: sunrise_tests
           DB_PORT: ${{ job.services.mysql.ports[3306] }}

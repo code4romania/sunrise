@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Filament\Pages\Auth\Login;
+use App\Filament\Organizations\Pages\Auth\Login;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Illuminate\Support\Str;
