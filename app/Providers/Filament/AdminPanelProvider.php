@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Organizations\Pages;
-use App\Http\Middleware\ApplyTenantScopes;
-use App\Models\Organization;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Infolists\Infolist;
-use Filament\Pages\Page;
+use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -25,10 +22,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Jeffgreco13\FilamentBreezy\BreezyCore;
-use Livewire\Livewire;
 
-class OrganizationPanelProvider extends PanelProvider
+class AdminPanelProvider extends PanelProvider
 {
     public static string $defaultDateDisplayFormat = 'd.m.Y';
 
@@ -47,58 +42,36 @@ class OrganizationPanelProvider extends PanelProvider
         $this->setDefaultDateTimeDisplayFormats();
     }
 
-    public function boot(): void
-    {
-        Livewire::component('user_personal_info', UserPersonalInfo::class);
-    }
-
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('organization')
-            ->sidebarCollapsibleOnDesktop()
-            ->collapsibleNavigationGroups(false)
-            ->login(Pages\Auth\Login::class)
+            ->id('admin')
+            ->path('admin')
             ->colors([
-                'primary' => Color::Purple,
+                'primary' => Color::Red,
             ])
             ->maxContentWidth('full')
             ->viteTheme('resources/css/filament/common/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('3rem')
             ->discoverResources(
-                in: app_path('Filament/Organizations/Resources'),
-                for: 'App\\Filament\\Organizations\\Resources'
+                in: app_path('Filament/Admin/Resources'),
+                for: 'App\\Filament\\Admin\\Resources'
             )
             ->discoverPages(
-                in: app_path('Filament/Organizations/Pages'),
-                for: 'App\\Filament\\Organizations\\Pages'
+                in: app_path('Filament/Admin/Pages'),
+                for: 'App\\Filament\\Admin\\Pages'
             )
             ->pages([
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(
-                in: app_path('Filament/Organizations/Widgets'),
-                for: 'App\\Filament\\Organizations\\Widgets'
+                in: app_path('Filament/Admin/Widgets'),
+                for: 'App\\Filament\\Admin\\Widgets'
             )
             ->widgets([
-                // Widgets\AccountWidget::class,
-            ])
-            ->bootUsing(function () {
-                Page::alignFormActionsEnd();
-            })
-            ->databaseNotifications()
-            ->plugins([
-                BreezyCore::make()
-                    ->myProfile(
-                        hasAvatars: true,
-                        slug: 'settings'
-                    )
-                    ->myProfileComponents([
-                        'personal_info' => Pages\Profile\UserPersonalInfo::class,
-                    ])
-                    ->enableTwoFactorAuthentication(),
+                Widgets\AccountWidget::class,
+                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -113,12 +86,7 @@ class OrganizationPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->tenant(Organization::class, 'slug')
-            ->tenantProfile(Pages\Tenancy\EditOrganizationProfile::class)
-            ->tenantMiddleware([
-                // ApplyTenantScopes::class,
-            ], isPersistent: true);
+            ]);
     }
 
     protected function setDefaultDateTimeDisplayFormats(): void
