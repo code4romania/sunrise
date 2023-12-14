@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Spacer;
 use App\Rules\ValidCNP;
+use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -44,7 +45,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                             ->schema(static::getBeneficiaryIdentityFormSchema()),
                         Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
-                            ->schema([]),
+                            ->schema(static::getChildrenIdentityFormSchema()),
 
                     ]),
             ]);
@@ -123,7 +124,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->relationship('citizenship', 'name')
                         ->nullable(),
 
-                    Select::make('ethnicity')
+                    Select::make('ethnicity_id')
                         ->label(__('field.ethnicity'))
                         ->placeholder(__('placeholder.ethnicity'))
                         ->relationship('ethnicity', 'name')
@@ -215,6 +216,103 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->nullable()
                         ->columnSpanFull(),
                 ]),
+        ];
+    }
+
+    public static function getChildrenIdentityFormSchema(): array
+    {
+        return [
+            Checkbox::make('doesnt_have_children')
+                ->label(__('field.doesnt_have_children'))
+                ->live()
+                ->columnSpanFull()
+                ->afterStateUpdated(function (bool $state, Set $set) {
+                    if ($state) {
+                        $set('children_total_count', null);
+                        $set('children_care_count', null);
+                        $set('children_under_10_care_count', null);
+                        $set('children_10_18_care_count', null);
+                        $set('children_18_care_count', null);
+                        $set('children_accompanying_count', null);
+                        $set('children', null);
+                        $set('children_notes', null);
+                    }
+                }),
+
+            Grid::make()
+                ->maxWidth('3xl')
+                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                ->schema([
+                    TextInput::make('children_total_count')
+                        ->label(__('field.children_total_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(99),
+
+                    TextInput::make('children_care_count')
+                        ->label(__('field.children_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(99),
+
+                    TextInput::make('children_under_10_care_count')
+                        ->label(__('field.children_under_10_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(99),
+
+                    TextInput::make('children_10_18_care_count')
+                        ->label(__('field.children_10_18_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(99),
+
+                    TextInput::make('children_18_care_count')
+                        ->label(__('field.children_18_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(99),
+
+                    TextInput::make('children_accompanying_count')
+                        ->label(__('field.children_accompanying_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(99),
+                ]),
+
+            TableRepeater::make('children')
+                ->reorderable(false)
+                ->columnSpanFull()
+                ->hideLabels()
+                ->addActionLabel(__('beneficiary.action.add_child'))
+                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                ->emptyLabel(false)
+                ->schema([
+                    TextInput::make('name')
+                        ->label(__('field.child_name')),
+
+                    TextInput::make('age')
+                        ->label(__('field.age')),
+
+                    TextInput::make('address')
+                        ->label(__('field.current_address')),
+
+                    TextInput::make('status')
+                        ->label(__('field.child_status')),
+                ]),
+
+            Textarea::make('children_notes')
+                ->label(__('field.children_notes'))
+                ->placeholder(__('placeholder.other_relevant_details'))
+                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                ->nullable()
+                ->columnSpanFull(),
         ];
     }
 }

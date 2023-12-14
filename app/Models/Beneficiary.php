@@ -58,6 +58,17 @@ class Beneficiary extends Model
         'contact_notes',
 
         'status',
+
+        'has_children',
+        'doesnt_have_children',
+        'children_total_count',
+        'children_care_count',
+        'children_under_10_care_count',
+        'children_10_18_care_count',
+        'children_18_care_count',
+        'children_accompanying_count',
+        'children',
+        'children_notes',
     ];
 
     protected $casts = [
@@ -68,6 +79,14 @@ class Beneficiary extends Model
         'effective_residence_environment' => ResidenceEnvironment::class,
         'same_as_legal_residence' => 'boolean',
         'status' => CaseStatus::class,
+        'has_children' => 'boolean',
+        'children_total_count' => 'integer',
+        'children_care_count' => 'integer',
+        'children_under_10_care_count' => 'integer',
+        'children_10_18_care_count' => 'integer',
+        'children_18_care_count' => 'integer',
+        'children_accompanying_count' => 'integer',
+        'children' => 'collection',
     ];
 
     public function legalResidenceCounty(): BelongsTo
@@ -84,6 +103,14 @@ class Beneficiary extends Model
     {
         return Attribute::make(
             get: fn () => $this->birthdate?->age,
+        );
+    }
+
+    public function doesntHaveChildren(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => ! $this->has_children,
+            set: fn ($value) => dd($value) && $this->has_children = ! $value,
         );
     }
 }

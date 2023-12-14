@@ -25,7 +25,7 @@ class BeneficiaryFactory extends Factory
     public function definition(): array
     {
         $birthdate = fake()
-            ->dateTimeBetween('1900-01-01', '2099-12-31')
+            ->dateTimeBetween('1900-01-01', 'now')
             ->format('Y-m-d');
 
         $gender = fake()->randomElement(Gender::values());
@@ -45,6 +45,7 @@ class BeneficiaryFactory extends Factory
             'backup_phone' => fake()->boolean(25) ? fake()->phoneNumber() : null,
 
             'status' => fake()->randomElement(CaseStatus::values()),
+            'has_children' => false,
         ];
     }
 
@@ -102,6 +103,29 @@ class BeneficiaryFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'contact_notes' => fake()->paragraphs(asText: true),
+        ]);
+    }
+
+    public function withChildren(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'has_children' => true,
+            'children_total_count' => fake()->numberBetween(1, 10),
+            'children_care_count' => fake()->numberBetween(1, 10),
+            'children_under_10_care_count' => fake()->numberBetween(1, 10),
+            'children_10_18_care_count' => fake()->numberBetween(1, 10),
+            'children_18_care_count' => fake()->numberBetween(1, 10),
+            'children_accompanying_count' => fake()->numberBetween(1, 10),
+
+            'children' => collect(range(1, 10))
+                ->map(fn () => [
+                    'name' => fake()->name(),
+                    'age' => fake()->boolean() ? fake()->numberBetween(0, 20) : null,
+                    'current_address' => fake()->boolean() ? fake()->address() : null,
+                    'status' => fake()->boolean() ? fake()->words(asText: true) : null,
+                ])
+                ->toJson(),
+
         ]);
     }
 }

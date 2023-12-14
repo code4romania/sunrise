@@ -56,9 +56,7 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
-                ->schema([
-                    // ...
-                ]),
+                ->schema(EditBeneficiaryIdentity::getChildrenIdentityFormSchema()),
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))

@@ -68,4 +68,16 @@ return [
     'start_year' => 'Anul de început',
     'status' => 'Status',
 
+    'children_total_count' => 'Număr total copii',
+    'children_care_count' => 'Număr copii în întreținere',
+    'children_under_10_care_count' => 'Număr copii în întreținere cu vârsta < 10 ani',
+    'children_10_18_care_count' => 'Număr copii în întreținere cu vârsta 10-18 ani',
+    'children_18_care_count' => 'Număr copii în întreținere cu vârsta 18 ani+',
+    'children_accompanying_count' => 'Număr care însoțesc beneficiara',
+    'doesnt_have_children' => 'Persoana nu are copii',
+    'child_name' => 'Nume și preunme copil',
+    'current_address' => 'Domiciliul actual',
+    'child_status' => 'Statut/ ocupație',
+    'children_notes' => 'Observații despre copii',
+
 ];

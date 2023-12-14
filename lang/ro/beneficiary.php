@@ -47,4 +47,7 @@ return [
         'closed' => 'Închis',
     ],
 
+    'action' => [
+        'add_child' => 'Adaugă copil',
+    ],
 ];

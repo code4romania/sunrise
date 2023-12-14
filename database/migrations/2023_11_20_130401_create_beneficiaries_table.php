@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\CaseStatus;
 use App\Models\Beneficiary;
 use App\Models\Country;
 use App\Models\Ethnicity;
@@ -28,7 +29,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->string('status');
+            $table->string('status')->default(CaseStatus::ACTIVE);
 
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
@@ -71,6 +72,17 @@ return new class extends Migration
             $table->string('primary_phone')->nullable();
             $table->string('backup_phone')->nullable();
             $table->text('contact_notes')->nullable();
+
+            $table->boolean('has_children');
+            $table->tinyInteger('children_total_count')->unsigned()->nullable();
+            $table->tinyInteger('children_care_count')->unsigned()->nullable();
+            $table->tinyInteger('children_under_10_care_count')->unsigned()->nullable();
+            $table->tinyInteger('children_10_18_care_count')->unsigned()->nullable();
+            $table->tinyInteger('children_18_care_count')->unsigned()->nullable();
+            $table->tinyInteger('children_accompanying_count')->unsigned()->nullable();
+            $table->json('children')->nullable();
+
+            $table->text('children_notes')->nullable();
         });
     }
 };

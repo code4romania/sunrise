@@ -23,6 +23,8 @@ return [
     'phone' => 'Introdu număr telefon',
     'contact_notes' => 'Adaugă interval orar sau orice detalii relevante legate de preferințe în contactare',
     'service_description' => 'Descrie pe scurt serviciul',
+    'number' => 'Introdu un număr',
+    'other_relevant_details' => 'Adaugă alte detalii relevante',
 
     // 'accreditation_number' => 'Introdu seria și numărul',
     // 'activity' => 'Introdu activitatea',
