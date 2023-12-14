@@ -100,15 +100,17 @@ class OrganizationFactory extends Factory
                 ->withEffectiveResidence()
                 ->create();
 
-            Service::factory()
-                ->count(5)
-                ->for($organization)
-                ->has(
+            Service::query()
+                ->inRandomOrder()
+                ->limit(5)
+                ->get()
+                ->each(function (Service $service) use ($organization) {
                     Intervention::factory()
-                        ->count(5)
+                        ->count(25)
                         ->for($organization)
-                )
-                ->create();
+                        ->for($service)
+                        ->create();
+                });
         });
     }
 }

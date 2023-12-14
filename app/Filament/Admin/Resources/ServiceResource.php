@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources;
+namespace App\Filament\Admin\Resources;
 
-use App\Filament\Organizations\Resources\ServiceResource\Pages;
+use App\Filament\Admin\Resources\ServiceResource\Pages;
 use App\Models\Service;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -42,7 +44,17 @@ class ServiceResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name')
+                    ->label(__('service.field.name'))
+                    ->columnSpanFull()
+                    ->required(),
+
+                Textarea::make('description')
+                    ->label(__('service.field.description'))
+                    ->placeholder(__('placeholder.service_description'))
+                    ->rows(5)
+                    ->columnSpanFull()
+                    ->nullable(),
             ]);
     }
 
@@ -56,7 +68,6 @@ class ServiceResource extends Resource
 
                 TextColumn::make('interventions_count')
                     ->counts('interventions'),
-
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

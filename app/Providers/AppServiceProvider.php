@@ -8,7 +8,9 @@ use App\Models\Beneficiary;
 use App\Models\City;
 use App\Models\CommunityProfile;
 use App\Models\County;
+use App\Models\Intervention;
 use App\Models\Organization;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -47,7 +49,9 @@ class AppServiceProvider extends ServiceProvider
             'city' => City::class,
             'community_profile' => CommunityProfile::class,
             'county' => County::class,
+            'intervention' => Intervention::class,
             'organization' => Organization::class,
+            'service' => Service::class,
             'user' => User::class,
         ]);
     }

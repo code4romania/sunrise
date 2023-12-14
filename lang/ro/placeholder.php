@@ -22,6 +22,7 @@ return [
     'residence_environment' => 'Alege mediu de rezidență',
     'phone' => 'Introdu număr telefon',
     'contact_notes' => 'Adaugă interval orar sau orice detalii relevante legate de preferințe în contactare',
+    'service_description' => 'Descrie pe scurt serviciul',
 
     // 'accreditation_number' => 'Introdu seria și numărul',
     // 'activity' => 'Introdu activitatea',

@@ -20,6 +20,10 @@ class BelongsToCurrentTenant implements Scope
             return;
         }
 
-        $builder->whereBelongsTo(filament()->getTenant());
+        if (! Filament::hasTenancy()) {
+            return;
+        }
+
+        $builder->whereBelongsTo(Filament::getTenant());
     }
 }

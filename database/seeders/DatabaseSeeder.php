@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Country;
 use App\Models\Ethnicity;
 use App\Models\Organization;
+use App\Models\Service;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Mail;
 
@@ -29,6 +30,10 @@ class DatabaseSeeder extends Seeder
 
         Ethnicity::factory()
             ->count(10)
+            ->create();
+
+        Service::factory()
+            ->count(20)
             ->create();
 
         Organization::factory()
