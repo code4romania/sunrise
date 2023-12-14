@@ -7,11 +7,13 @@ namespace App\Providers\Filament;
 use App\Filament\Organizations\Pages;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Models\Organization;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Infolists\Infolist;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -88,7 +90,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->bootUsing(function () {
                 Page::alignFormActionsEnd();
             })
-            ->databaseNotifications()
+            // ->databaseNotifications()
             ->plugins([
                 BreezyCore::make()
                     ->myProfile(
@@ -99,6 +101,16 @@ class OrganizationPanelProvider extends PanelProvider
                         'personal_info' => Pages\Profile\UserPersonalInfo::class,
                     ])
                     ->enableTwoFactorAuthentication(),
+            ])
+            ->navigationItems([
+                NavigationItem::make(__('navigation.configurations.organization'))
+                    ->group(__('navigation.configurations._group'))
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->url(fn () => Filament::getTenantProfileUrl())
+                    ->isActiveWhen(
+                        fn () => url()->current() === Filament::getTenantProfileUrl()
+                    )
+                    ->sort(30),
             ])
             ->middleware([
                 EncryptCookies::class,

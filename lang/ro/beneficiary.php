@@ -58,6 +58,7 @@ return [
     ],
 
     'action' => [
+        'create' => 'Înregistrează caz nou',
         'add_child' => 'Adaugă copil',
     ],
 ];

@@ -15,6 +15,8 @@ use Filament\Pages\Tenancy\EditTenantProfile;
 
 class EditOrganizationProfile extends EditTenantProfile
 {
+    protected static ?string $slug = 'organization';
+
     public static function getLabel(): string
     {
         return __('organization.profile');

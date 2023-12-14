@@ -20,7 +20,9 @@ class InterventionResource extends Resource
 {
     protected static ?string $model = Intervention::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-view-columns';
+
+    protected static ?int $navigationSort = 32;
 
     public static function getNavigationGroup(): ?string
     {
@@ -46,7 +48,6 @@ class InterventionResource extends Resource
     {
         return $form
             ->schema([
-
                 TextInput::make('name')
                     ->label(__('intervention.field.name'))
                     ->required(),
@@ -91,7 +92,8 @@ class InterventionResource extends Resource
                     ->label(__('service.label.singular'))
                     ->collapsible(),
             ])
-            ->defaultGroup('service.name');
+            ->defaultGroup('service.name')
+            ->groupingSettingsHidden();
     }
 
     public static function getRelations(): array

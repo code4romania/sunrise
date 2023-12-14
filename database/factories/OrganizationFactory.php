@@ -111,7 +111,7 @@ class OrganizationFactory extends Factory
                 ->get()
                 ->each(function (Service $service) use ($organization) {
                     Intervention::factory()
-                        ->count(25)
+                        ->count(5)
                         ->for($organization)
                         ->for($service)
                         ->create();

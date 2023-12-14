@@ -17,6 +17,7 @@ return [
 
     'configurations' => [
         '_group' => 'Configurări',
+        'organization' => 'Informații organizație',
         'services' => 'Nomenclator servicii',
         'staff' => 'Staff',
     ],

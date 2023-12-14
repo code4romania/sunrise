@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
@@ -19,6 +20,8 @@ class BeneficiaryResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $slug = 'cases';
+
+    protected static ?int $navigationSort = 10;
 
     public static function getNavigationGroup(): ?string
     {
@@ -88,6 +91,13 @@ class BeneficiaryResource extends Resource
                 TextColumn::make('status')
                     ->label(__('field.status'))
                     ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        CaseStatus::ACTIVE => 'success',
+                        CaseStatus::REACTIVATED => 'success',
+                        CaseStatus::MONITORED => 'warning',
+                        CaseStatus::CLOSED => 'gray',
+                        default => dd($state)
+                    })
                     ->formatStateUsing(fn ($state) => $state?->label())
                     ->extraHeaderAttributes([
                         'class' => 'w-1',
