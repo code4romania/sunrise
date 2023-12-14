@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Enums;
+
+use App\Concerns;
+
+enum Income: string
+{
+    use Concerns\Enums\Arrayable;
+    use Concerns\Enums\Comparable;
+    use Concerns\Enums\HasLabel;
+
+    case NONE = 'none';
+    case BELOW_MINIMUM = 'below_minimum';
+    case BETWEEN_MINIMUM_AVERAGE = 'between_minimum_average';
+    case ABOVE_AVERAGE = 'above_average';
+    case SOCIAL_BENEFITS = 'social_benefits';
+    case OTHER = 'other';
+
+    protected function labelKeyPrefix(): ?string
+    {
+        return 'enum.income';
+    }
+}

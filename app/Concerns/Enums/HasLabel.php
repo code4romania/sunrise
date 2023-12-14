@@ -14,7 +14,7 @@ trait HasLabel
     public function label(): string
     {
         $label = collect([$this->labelKeyPrefix(), $this->value])
-            ->filter()
+            ->filter(fn ($value) => $value !== null)
             ->implode('.');
 
         return __($label);

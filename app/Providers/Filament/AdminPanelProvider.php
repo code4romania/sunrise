@@ -10,6 +10,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Infolists\Infolist;
 use Filament\Pages;
+use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -22,6 +23,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -47,8 +49,11 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->sidebarCollapsibleOnDesktop()
+            ->collapsibleNavigationGroups(false)
+            ->login(Pages\Auth\Login::class)
             ->colors([
-                'primary' => Color::Red,
+                'primary' => Color::Indigo,
             ])
             ->maxContentWidth('full')
             ->viteTheme('resources/css/filament/common/theme.css')
@@ -70,8 +75,18 @@ class AdminPanelProvider extends PanelProvider
                 for: 'App\\Filament\\Admin\\Widgets'
             )
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+            ])
+            ->bootUsing(function () {
+                Page::alignFormActionsEnd();
+            })
+            ->plugins([
+                BreezyCore::make()
+                    ->myProfile(
+                        hasAvatars: true,
+                        slug: 'settings'
+                    )
+                    ->enableTwoFactorAuthentication(),
             ])
             ->middleware([
                 EncryptCookies::class,

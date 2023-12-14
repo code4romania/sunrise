@@ -38,12 +38,22 @@ return [
                 'children' => 'Identitate copii',
             ],
         ],
+
+        'personal_information' => [
+            'title' => 'Informații personale',
+            'section' => [
+                'beneficiary' => 'Beneficiar',
+                'aggressor' => 'Informații despre agresor',
+                'antecedents' => 'Antecedente caz',
+                'flow' => 'Flux prezentare victimă',
+            ],
+        ],
     ],
 
     'status' => [
         'active' => 'Activ',
         'reactivated' => 'Reactivat',
-        'monitoring' => 'În monitorizare',
+        'monitored' => 'În monitorizare',
         'closed' => 'Închis',
     ],
 

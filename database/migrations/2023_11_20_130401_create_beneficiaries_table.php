@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Enums\CaseStatus;
+use App\Enums\Ternary;
 use App\Models\Beneficiary;
 use App\Models\Country;
 use App\Models\Ethnicity;
@@ -73,7 +74,7 @@ return new class extends Migration
             $table->string('backup_phone')->nullable();
             $table->text('contact_notes')->nullable();
 
-            $table->boolean('has_children');
+            $table->boolean('doesnt_have_children');
             $table->tinyInteger('children_total_count')->unsigned()->nullable();
             $table->tinyInteger('children_care_count')->unsigned()->nullable();
             $table->tinyInteger('children_under_10_care_count')->unsigned()->nullable();
@@ -83,6 +84,25 @@ return new class extends Migration
             $table->json('children')->nullable();
 
             $table->text('children_notes')->nullable();
+
+            $table->enum('has_family_doctor', Ternary::values())->nullable();
+            $table->string('family_doctor_name')->nullable();
+            $table->string('family_doctor_contact')->nullable();
+
+            $table->string('psychiatric_history')->nullable();
+            $table->string('psychiatric_history_notes')->nullable();
+
+            $table->string('criminal_history')->nullable();
+            $table->string('criminal_history_notes')->nullable();
+
+            $table->string('studies')->nullable();
+            $table->string('occupation')->nullable();
+            $table->string('workplace')->nullable();
+            $table->string('income')->nullable();
+
+            $table->tinyInteger('elder_care_count')->unsigned()->nullable();
+
+            $table->string('homeownership')->nullable();
         });
     }
 };

@@ -45,7 +45,7 @@ class BeneficiaryFactory extends Factory
             'backup_phone' => fake()->boolean(25) ? fake()->phoneNumber() : null,
 
             'status' => fake()->randomElement(CaseStatus::values()),
-            'has_children' => false,
+            'doesnt_have_children' => true,
         ];
     }
 
@@ -109,7 +109,7 @@ class BeneficiaryFactory extends Factory
     public function withChildren(): static
     {
         return $this->state(fn (array $attributes) => [
-            'has_children' => true,
+            'doesnt_have_children' => false,
             'children_total_count' => fake()->numberBetween(1, 10),
             'children_care_count' => fake()->numberBetween(1, 10),
             'children_under_10_care_count' => fake()->numberBetween(1, 10),

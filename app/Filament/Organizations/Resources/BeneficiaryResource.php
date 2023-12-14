@@ -53,7 +53,9 @@ class BeneficiaryResource extends Resource
                     ->label(__('field.case_id'))
                     ->extraHeaderAttributes([
                         'class' => 'w-1',
-                    ]),
+                    ])
+                    ->sortable()
+                    ->searchable(),
 
                 TextColumn::make('full_name')
                     ->label(__('field.beneficiary'))
@@ -64,21 +66,24 @@ class BeneficiaryResource extends Resource
                     ->date()
                     ->extraHeaderAttributes([
                         'class' => 'w-1',
-                    ]),
+                    ])
+                    ->sortable(),
 
                 TextColumn::make('last_evaluated_at')
                     ->label(__('field.last_evaluated_at'))
                     ->date()
                     ->extraHeaderAttributes([
                         'class' => 'w-1',
-                    ]),
+                    ])
+                    ->sortable(),
 
                 TextColumn::make('last_serviced_at')
                     ->label(__('field.last_serviced_at'))
                     ->date()
                     ->extraHeaderAttributes([
                         'class' => 'w-1',
-                    ]),
+                    ])
+                    ->sortable(),
 
                 TextColumn::make('status')
                     ->label(__('field.status'))
@@ -98,7 +103,8 @@ class BeneficiaryResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-            ]);
+            ])
+            ->defaultSort('id', 'desc');
     }
 
     public static function getRelations(): array
@@ -116,6 +122,7 @@ class BeneficiaryResource extends Resource
             'view' => Pages\ViewBeneficiary::route('/{record}'),
 
             'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
+            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal'),
         ];
     }
 }

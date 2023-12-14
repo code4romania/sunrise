@@ -33,4 +33,53 @@ return [
         'unknown' => 'Necunoscut',
     ],
 
+    'studies' => [
+        'none' => 'Fără studii',
+        'primary' => 'Ciclu primar (I-IV)',
+        'secondary' => 'Ciclu gimnazial (V-VIII)',
+        'vocational' => 'Școală profesională de arte și meserii',
+        'highschool' => 'Liceu (IX-XII)',
+        'postsecondary' => 'Școală postliceală',
+        'highereducation' => 'Studii superioare',
+    ],
+
+    'occupation' => [
+        'none' => 'Fără ocupație',
+        'employee' => 'Salariat',
+        'self_employed' => 'Lucrător pe cont propriu',
+        'association_worker' => 'Lucrător în asociație',
+        'business_owner' => 'Patron',
+        'farmer' => 'Agricultor',
+        'student' => 'Elev/Student',
+        'unemployed' => 'Șomer',
+        'domestic' => 'Casnic',
+        'retired' => 'Pensionar',
+    ],
+
+    'income' => [
+        'none' => 'Fără venit',
+        'below_minimum' => 'Sub salariul minim pe economie',
+        'between_minimum_average' => 'Între salariul minim și salariul mediu pe economie',
+        'above_average' => 'Peste salariul mediu pe economie',
+        'social_benefits' => 'Prestații sociale',
+        'other' => 'Alte situații (Alocații de stat)',
+    ],
+
+    'homeownership' => [
+        'none' => 'Fără locuință',
+        'property_of_victim' => 'Proprietate victimă',
+        'property_of_aggressor' => 'Proprietate agresor',
+        'joint' => 'Coproprietate',
+        'family_of_victim' => 'La familia de origine a victimei',
+        'family_of_aggressor' => 'La familia de origine a agresorului',
+        'rent' => 'Închiriată',
+        'other' => 'Altă situație',
+    ],
+
+    'ternary' => [
+        1 => 'Da',
+        0 => 'Nu',
+        -1 => 'Nu știe/ Nu răspunde',
+    ],
+
 ];

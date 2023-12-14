@@ -24,14 +24,14 @@ class CaseStatsWidget extends BaseWidget
             Stat::make(
                 __('beneficiary.stats.monitoring'),
                 Beneficiary::query()
-                    // ->where('status', 'monitoring')
+                    ->whereCaseIsMonitored()
                     ->count()
             ),
 
             Stat::make(
                 __('beneficiary.stats.closed'),
                 Beneficiary::query()
-                    // ->where('status', 'closed')
+                    ->whereCaseIsClosed()
                     ->count()
             ),
         ];

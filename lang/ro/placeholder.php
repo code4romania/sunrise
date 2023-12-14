@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 return [
 
+    'name' => 'Introdu numele',
     'last_name' => 'Nume de familie',
     'first_name' => 'Numele mic',
     'prior_name' => 'Alte nume deținute în trecut',
     'civil_status' => 'Alege starea civilă',
     'cnp' => 'Cod Numeric Personal',
-    'select_many' => 'Selectează valorile care se aplică',
-    'select_one' => 'Selectează o valoare',
+    'select_many' => 'alege răspunsurile care se aplică',
+    'select_one' => 'Alege un răspuns',
     'id_number' => 'Introdu număr act',
     'id_serial' => 'Introdu serie act',
     'id_type' => 'Alege un tip de act de identitate',
@@ -25,6 +26,9 @@ return [
     'service_description' => 'Descrie pe scurt serviciul',
     'number' => 'Introdu un număr',
     'other_relevant_details' => 'Adaugă alte detalii relevante',
+    'phone_or_email' => 'Introdu un număr de telefon sau email',
+    'studies' => 'Alege cel mai înalt nivel absolvit',
+    'workplace' => 'Introdu detalii privind locația și angajatorul (sau unitatea de învățământ)',
 
     // 'accreditation_number' => 'Introdu seria și numărul',
     // 'activity' => 'Introdu activitatea',

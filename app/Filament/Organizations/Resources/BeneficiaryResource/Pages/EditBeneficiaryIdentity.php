@@ -39,6 +39,7 @@ class EditBeneficiaryIdentity extends EditRecord
     public function form(Form $form): Form
     {
         return $form
+            ->columns(1)
             ->schema([
                 Tabs::make()
                     ->tabs([
@@ -141,8 +142,7 @@ class EditBeneficiaryIdentity extends EditRecord
                                 $set('id_serial', null);
                                 $set('id_number', null);
                             }
-                        })
-                        ->required(),
+                        }),
 
                     TextInput::make('id_serial')
                         ->label(__('field.id_serial'))
@@ -234,7 +234,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         $set('children_10_18_care_count', null);
                         $set('children_18_care_count', null);
                         $set('children_accompanying_count', null);
-                        $set('children', null);
+                        $set('children', []);
                         $set('children_notes', null);
                     }
                 }),

@@ -79,5 +79,18 @@ return [
     'current_address' => 'Domiciliul actual',
     'child_status' => 'Statut/ ocupație',
     'children_notes' => 'Observații despre copii',
+    'has_family_doctor' => 'Medic de familie',
+    'family_doctor_name' => 'Nume medic de familie',
+    'family_doctor_contact' => 'Contact medic de familie',
+    'psychiatric_history' => 'Antecedente psihiatrice',
+    'psychiatric_history_notes' => 'Observații antecedente psihiatrice',
+    'criminal_history' => 'Antecedente penale',
+    'criminal_history_notes' => 'Observații antecedente penale',
+    'studies' => 'Studii absolvite',
+    'occupation' => 'Ocupație',
+    'workplace' => 'Locul de muncă',
+    'income' => 'Încadrare în venit',
+    'elder_care_count' => 'Vârstnici în întreținere (65+)',
+    'homeownership' => 'Dreptul de proprietate asupra locuinței primare',
 
 ];

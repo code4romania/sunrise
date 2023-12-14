@@ -28,11 +28,12 @@ class ViewBeneficiary extends ViewRecord
         return $infolist
             ->columns()
             ->schema([
-                $this->identitySectionSchema(),
+                $this->identitySectionSection(),
+                $this->personalInformationSection(),
             ]);
     }
 
-    protected function identitySectionSchema(): Section
+    protected function identitySectionSection(): Section
     {
         return Section::make(__('beneficiary.section.identity.title'))
             ->columnSpan(1)
@@ -42,6 +43,9 @@ class ViewBeneficiary extends ViewRecord
                     ->label(__('general.action.view_details'))
                     ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record]))
                     ->link(),
+            ])
+            ->extraAttributes([
+                'class' => 'h-full',
             ])
             ->schema([
                 TextEntry::make('age')
@@ -61,15 +65,21 @@ class ViewBeneficiary extends ViewRecord
                 EnumEntry::make('civil_status')
                     ->label(__('field.civil_status')),
 
+                TextEntry::make('children_care_count')
+                    ->label(__('field.children_care_count')),
+
                 TextEntry::make('legal_residence_address')
+                    ->label(__('field.legal_residence_address'))
                     ->icon('heroicon-o-map-pin')
                     ->columnSpanFull(),
 
                 TextEntry::make('primary_phone')
+                    ->label(__('field.primary_phone'))
                     ->icon('heroicon-o-phone')
                     ->url(fn ($state) => "tel:{$state}"),
 
                 TextEntry::make('backup_phone')
+                    ->label(__('field.backup_phone'))
                     ->icon('heroicon-o-phone')
                     ->url(fn ($state) => "tel:{$state}"),
 
@@ -77,6 +87,25 @@ class ViewBeneficiary extends ViewRecord
                     ->label(__('field.notes'))
                     ->icon('heroicon-o-chat-bubble-bottom-center-text')
                     ->columnSpanFull(),
+            ]);
+    }
+
+    protected function personalInformationSection(): Section
+    {
+        return Section::make(__('beneficiary.section.personal_information.title'))
+            ->columnSpan(1)
+            ->columns()
+            ->headerActions([
+                Action::make('edit')
+                    ->label(__('general.action.view_details'))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
+                    ->link(),
+            ])
+            ->extraAttributes([
+                'class' => 'h-full',
+            ])
+            ->schema([
+                //
             ]);
     }
 }
