@@ -29,6 +29,8 @@ return [
     'phone_or_email' => 'Introdu un număr de telefon sau email',
     'studies' => 'Alege cel mai înalt nivel absolvit',
     'workplace' => 'Introdu detalii privind locația și angajatorul (sau unitatea de învățământ)',
+    'email' => 'Introdu adresa de email',
+    'url' => 'URL',
 
     // 'accreditation_number' => 'Introdu seria și numărul',
     // 'activity' => 'Introdu activitatea',

@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\CommunityResource\Pages;
 use App\Models\CommunityProfile;
+use App\Tables\Columns\ServiceChipsColumn;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
@@ -21,6 +22,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class CommunityResource extends Resource
@@ -28,6 +30,8 @@ class CommunityResource extends Resource
     protected static ?string $model = CommunityProfile::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
+
+    protected static ?string $recordRouteKeyName = 'slug';
 
     protected static bool $isScopedToTenant = false;
 
@@ -43,16 +47,6 @@ class CommunityResource extends Resource
     public static function getNavigationLabel(): string
     {
         return __('navigation.community.network');
-    }
-
-    public static function getModelLabel(): string
-    {
-        return __('beneficiary.label.singular');
-    }
-
-    public static function getPluralModelLabel(): string
-    {
-        return __('beneficiary.label.plural');
     }
 
     public static function infolist(Infolist $infolist): Infolist
@@ -113,6 +107,7 @@ class CommunityResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('services', 'counties'))
             ->columns([
                 Split::make([
                     Stack::make([
@@ -125,7 +120,7 @@ class CommunityResource extends Resource
                             ->size('text-3xl')
                             ->weight('normal')
                             ->extraAttributes([
-                                'class' => 'mt-2.5 mb-6',
+                                'class' => '-mt-3.5',
                             ]),
 
                         TextColumn::make('description')
@@ -135,7 +130,12 @@ class CommunityResource extends Resource
                                     ->stripTags()
                                     ->limit(300, '...')
                             ),
+
+                        ServiceChipsColumn::make('services'),
                     ])
+                        ->extraAttributes([
+                            'class' => 'flex flex-col gap-6',
+                        ])
                         ->columnSpan(2),
 
                     SpatieMediaLibraryImageColumn::make('logo')
@@ -149,6 +149,10 @@ class CommunityResource extends Resource
 
                 ])
                     ->from('md'),
+            ])
+
+            ->contentGrid([
+                'default' => 1,
             ])
             ->filters([
                 SelectFilter::make('county')
@@ -174,7 +178,7 @@ class CommunityResource extends Resource
     {
         return [
             'index' => Pages\ListCommunityProfiles::route('/'),
-            'view' => Pages\ViewCommunityProfile::route('/{record}'),
+            'view' => Pages\ViewCommunityProfile::route('/{record:slug}'),
         ];
     }
 }

@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Models\CommunityProfile;
 use App\Models\County;
+use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -40,6 +41,19 @@ class CommunityProfileFactory extends Factory
                     ->inRandomOrder()
                     ->take(fake()->numberBetween(1, 3))
                     ->get()
+            );
+
+            $communityProfile->services()->createMany(
+                Service::query()
+                    ->inRandomOrder()
+                    ->take(fake()->numberBetween(1, 3))
+                    ->get()
+                    ->map(fn (Service $service) => [
+                        'model_type' => $communityProfile->getMorphClass(),
+                        'service_id' => $service->id,
+                        'is_visible' => fake()->boolean(),
+                        'is_available' => fake()->boolean(),
+                    ])
             );
         });
     }

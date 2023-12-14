@@ -18,10 +18,12 @@ return new class extends Migration
             $table->text('description')->nullable();
         });
 
-        Schema::create('model_has_service', function (Blueprint $table) {
+        Schema::create('model_has_services', function (Blueprint $table) {
             $table->id();
             $table->morphs('model');
             $table->foreignIdFor(Service::class)->constrained()->cascadeOnDelete();
+            $table->boolean('is_visible')->default(false);
+            $table->boolean('is_available')->default(false);
         });
     }
 };
