@@ -80,5 +80,5 @@ jobs:
         run: php artisan test
         env:
           DB_CONNECTION: mysql
-          DB_DATABASE: ${{ job.services.mysql.env.MYSQL_DATABASE }}
+          DB_DATABASE: sunrise_tests
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
