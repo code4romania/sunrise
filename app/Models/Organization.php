@@ -65,10 +65,12 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
             ->registerMediaConversions(function () {
                 $this->addMediaConversion('thumb')
                     ->fit(Manipulations::FIT_CONTAIN, 64, 64)
+                    ->keepOriginalImageFormat()
                     ->optimize();
 
                 $this->addMediaConversion('large')
                     ->fit(Manipulations::FIT_CONTAIN, 256, 256)
+                    ->keepOriginalImageFormat()
                     ->optimize();
             });
     }

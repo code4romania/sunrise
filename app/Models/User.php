@@ -63,6 +63,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'boolean',
     ];
 
     public function organizations(): MorphToMany
@@ -77,17 +78,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             ->registerMediaConversions(function () {
                 $this->addMediaConversion('thumb')
                     ->fit(Manipulations::FIT_CONTAIN, 64, 64)
+                    ->keepOriginalImageFormat()
                     ->optimize();
 
                 $this->addMediaConversion('large')
                     ->fit(Manipulations::FIT_CONTAIN, 256, 256)
+                    ->keepOriginalImageFormat()
                     ->optimize();
             });
-    }
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $this->hasVerifiedEmail();
     }
 
     public function getFilamentAvatarUrl(): ?string
@@ -100,9 +98,26 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return "{$this->first_name} {$this->last_name}";
     }
 
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if (app()->isLocal()) {
+            return true;
+        }
+
+        if ($panel->getId() === 'admin') {
+            return $this->is_admin;
+        }
+
+        return $this->getTenants($panel)->isNotEmpty();
+    }
+
     public function getTenants(Panel $panel): Collection
     {
-        return $this->organizations;
+        if ($panel->getId() === 'organization') {
+            return $this->organizations;
+        }
+
+        return collect();
     }
 
     public function canAccessTenant(Model $tenant): bool

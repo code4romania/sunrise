@@ -9,6 +9,8 @@ use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
 use App\Enums\ResidenceEnvironment;
+use App\Models\Aggressor;
+use App\Models\Beneficiary;
 use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -127,5 +129,14 @@ class BeneficiaryFactory extends Factory
                 ->toJson(),
 
         ]);
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            Aggressor::factory()
+                ->for($beneficiary)
+                ->create();
+        });
     }
 }

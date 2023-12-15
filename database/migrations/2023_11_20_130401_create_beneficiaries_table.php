@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Enums\CaseStatus;
-use App\Enums\Ternary;
 use App\Models\Beneficiary;
 use App\Models\Country;
 use App\Models\Ethnicity;
@@ -85,7 +84,7 @@ return new class extends Migration
 
             $table->text('children_notes')->nullable();
 
-            $table->enum('has_family_doctor', Ternary::values())->nullable();
+            $table->string('has_family_doctor')->nullable();
             $table->string('family_doctor_name')->nullable();
             $table->string('family_doctor_contact')->nullable();
 

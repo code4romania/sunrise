@@ -82,4 +82,41 @@ return [
         -1 => 'Nu știe/ Nu răspunde',
     ],
 
+    'aggressor_relationship' => [
+        'marital' => 'Maritală',
+        'consensual' => 'Relație consensuală (Concubin)',
+        'former_partner' => 'Fost partener',
+        'parental' => 'Parentală sau asimilată (Agresorul e părinte)',
+        'filial' => 'Filiație (Agresorul e Fiul/Fiica)',
+        'other_related' => 'Altă relație de rudenie',
+        'other' => 'Altă situație',
+    ],
+
+    'violence' => [
+        'verbal' => 'Verbală',
+        'psychological' => 'Psihologică',
+        'physical' => 'Fizică',
+        'sexual' => 'Sexuală',
+        'economic' => 'Economică',
+        'social' => 'Socială',
+        'spiritual' => 'Spirituală',
+        'cyber' => 'Cibernetică',
+        'deprivation' => 'Prin deprivare/ neglijare',
+    ],
+
+    'drug' => [
+        'alcohol_occasional' => 'Alcool ocazional',
+        'alcohol_frequent' => 'Alcool frecvent',
+        'tobacco' => 'Tutun',
+        'tranquilizers' => 'Tranchilizante',
+        'drugs' => 'Droguri',
+        'other' => 'Altele',
+    ],
+
+    'aggressor_legal_history' => [
+        'crimes' => 'Infracțiuni',
+        'contraventions' => 'Contravenții',
+        'protection_order' => 'Ordin de protecție',
+    ],
+
 ];

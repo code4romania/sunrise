@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Beneficiary extends Model
 {
@@ -125,6 +126,12 @@ class Beneficiary extends Model
     public function legalResidenceCity(): BelongsTo
     {
         return $this->belongsTo(City::class, 'legal_residence_city_id');
+    }
+
+    public function aggressor(): HasOne
+    {
+        return $this->hasOne(Aggressor::class)
+            ->withDefault();
     }
 
     public function age(): Attribute

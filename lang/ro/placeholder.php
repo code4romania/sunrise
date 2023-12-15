@@ -10,7 +10,7 @@ return [
     'prior_name' => 'Alte nume deținute în trecut',
     'civil_status' => 'Alege starea civilă',
     'cnp' => 'Cod Numeric Personal',
-    'select_many' => 'alege răspunsurile care se aplică',
+    'select_many' => 'Alege răspunsurile care se aplică',
     'select_one' => 'Alege un răspuns',
     'id_number' => 'Introdu număr act',
     'id_serial' => 'Introdu serie act',

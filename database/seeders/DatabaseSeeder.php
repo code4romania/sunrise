@@ -8,6 +8,7 @@ use App\Models\Country;
 use App\Models\Ethnicity;
 use App\Models\Organization;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Mail;
 
@@ -23,6 +24,10 @@ class DatabaseSeeder extends Seeder
         }
 
         Mail::fake();
+
+        User::factory(['email' => 'admin@example.com'])
+            ->admin()
+            ->create();
 
         Country::factory()
             ->count(195)
