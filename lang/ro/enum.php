@@ -119,4 +119,39 @@ return [
         'protection_order' => 'Ordin de protecție',
     ],
 
+    'presentation_mode' => [
+        'spontaneous' => 'Spontan',
+        'scheduled' => 'Programat',
+        'forwarded' => 'Trimis de o instituție',
+    ],
+
+    'referral_mode' => [
+        'verbal' => 'Verbal',
+        'written' => 'Scris',
+        'phone' => 'Telefonic',
+        'brought' => 'Adus de reprezentant instituție',
+    ],
+
+    'notifier' => [
+        'victim' => 'Victima',
+        'aggressor' => 'Agresor',
+        'child' => 'Copii',
+        'other_related' => 'Alte rude',
+        'neighbour' => 'Vecini',
+        'other' => 'Alte persoane (specificați)',
+    ],
+
+    'notification_mode' => [
+        'phone' => 'Telefonic',
+        'personal' => 'Personal',
+    ],
+
+    'act_location' => [
+        'domicile' => 'Domiciliul legal al victimei',
+        'residence' => 'Reședința victimei',
+        'public' => 'Loc public',
+        'work' => 'Locul de muncă al victimei',
+        'other' => 'Alt loc (specificați)',
+    ],
+
 ];

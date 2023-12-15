@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\ActLocation;
 use App\Enums\AggressorLegalHistory;
 use App\Enums\AggressorRelationship;
 use App\Enums\CivilStatus;
@@ -11,7 +12,11 @@ use App\Enums\Drug;
 use App\Enums\Gender;
 use App\Enums\HomeOwnership;
 use App\Enums\Income;
+use App\Enums\NotificationMode;
+use App\Enums\Notifier;
 use App\Enums\Occupation;
+use App\Enums\PresentationMode;
+use App\Enums\ReferralMode;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Enums\Violence;
@@ -50,6 +55,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                     static::beneficiarySection(),
                     static::aggressorSection(),
                     static::antecedentsSection(),
+                    static::flowSection(),
                 ]),
         ];
     }
@@ -64,7 +70,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                     ->placeholder(__('placeholder.select_one'))
                     ->options(Ternary::options())
                     ->enum(Ternary::class)
-                    ->live(),
+                    ->lazy(),
 
                 TextInput::make('family_doctor_name')
                     ->label(__('field.family_doctor_name'))
@@ -83,7 +89,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         TextInput::make('psychiatric_notes')
                             ->label(__('field.psychiatric_notes'))
@@ -97,7 +103,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         TextInput::make('criminal_notes')
                             ->label(__('field.criminal_notes'))
@@ -153,7 +159,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                     ->placeholder(__('placeholder.select_one'))
                     ->options(AggressorRelationship::options())
                     ->enum(AggressorRelationship::class)
-                    ->live(),
+                    ->lazy(),
 
                 TextInput::make('age')
                     ->label(__('field.aggressor_age'))
@@ -199,7 +205,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         Select::make('violence_types')
                             ->label(__('field.aggressor_violence_types'))
@@ -218,7 +224,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         TextInput::make('psychiatric_history_notes')
                             ->label(__('field.aggressor_psychiatric_history_notes'))
@@ -232,7 +238,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         Select::make('drugs')
                             ->label(__('field.aggressor_drugs'))
@@ -252,7 +258,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->options(AggressorLegalHistory::options())
                             ->enum(AggressorLegalHistory::class)
                             ->multiple()
-                            ->live(),
+                            ->lazy(),
                     ]),
 
                 Grid::make()
@@ -262,7 +268,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         TextInput::make('protection_order_notes')
                             ->label(__('field.protection_order_notes')),
@@ -282,7 +288,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         TextInput::make('police_report_count')
                             ->label(__('field.police_report_count'))
@@ -300,7 +306,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->placeholder(__('placeholder.select_one'))
                             ->options(Ternary::options())
                             ->enum(Ternary::class)
-                            ->live(),
+                            ->lazy(),
 
                         TextInput::make('medical_report_count')
                             ->label(__('field.medical_report_count'))
@@ -310,6 +316,86 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             ->minValue(0)
                             ->maxValue(999),
                     ]),
+            ]);
+    }
+
+    /**
+     * TODO: reflect in model and table
+     * TODO: field "Prima instituție la care a apelat victima"
+     * TODO: field "Următoarele instituții la care a apelat victima".
+     */
+    protected static function flowSection(): Section
+    {
+        return Section::make(__('beneficiary.section.personal_information.section.flow'))
+            ->columns()
+            ->schema([
+                Grid::make()
+                    ->schema([
+                        Select::make('presentation_mode')
+                            ->label(__('field.presentation_mode'))
+                            ->placeholder(__('placeholder.select_one'))
+                            ->options(PresentationMode::options())
+                            ->enum(PresentationMode::class)
+                            ->lazy(),
+
+                        Select::make('referring_institution_id')
+                            ->label(__('field.referring_institution'))
+                            ->placeholder(__('placeholder.select_one'))
+                            ->relationship('referringInstitution', 'name')
+                            ->visible(fn (Get $get) => PresentationMode::isValue(
+                                $get('presentation_mode'),
+                                PresentationMode::FORWARDED
+                            ))
+                            ->nullable(),
+
+                        Select::make('referral_mode')
+                            ->label(__('field.referral_mode'))
+                            ->placeholder(__('placeholder.select_one'))
+                            ->relationship('referringInstitution', 'name')
+                            ->options(ReferralMode::options())
+                            ->enum(ReferralMode::class)
+                            ->visible(fn (Get $get) => PresentationMode::isValue(
+                                $get('presentation_mode'),
+                                PresentationMode::FORWARDED
+                            ))
+                            ->nullable(),
+                    ]),
+
+                Select::make('notifier')
+                    ->label(__('field.notifier'))
+                    ->placeholder(__('placeholder.select_one'))
+                    ->options(Notifier::options())
+                    ->enum(Notifier::class)
+                    ->lazy(),
+
+                Select::make('notification_mode')
+                    ->label(__('field.notification_mode'))
+                    ->placeholder(__('placeholder.select_one'))
+                    ->options(NotificationMode::options())
+                    ->enum(NotificationMode::class),
+
+                TextInput::make('notifier_other')
+                    ->label(__('field.notifier_other'))
+                    ->visible(fn (Get $get) => Notifier::isValue(
+                        $get('notifier'),
+                        Notifier::OTHER
+                    )),
+
+                Select::make('act_location')
+                    ->label(__('field.act_location'))
+                    ->placeholder(__('placeholder.select_many'))
+                    ->options(ActLocation::options())
+                    ->enum(ActLocation::class)
+                    ->multiple()
+                    ->lazy(),
+
+                TextInput::make('act_location_other')
+                    ->label(__('field.act_location_other'))
+                    ->visible(
+                        fn (Get $get) => collect($get('act_location'))
+                            ->filter(fn ($value) => ActLocation::isValue($value, ActLocation::OTHER))
+                            ->isNotEmpty()
+                    ),
             ]);
     }
 }

@@ -60,9 +60,7 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
-                ->schema([
-                    // ...
-                ]),
+                ->schema(EditBeneficiaryPersonalInformation::getPersonalInformationFormSchema()),
         ];
     }
 }

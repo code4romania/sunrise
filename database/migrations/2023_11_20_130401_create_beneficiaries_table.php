@@ -7,6 +7,7 @@ use App\Models\Beneficiary;
 use App\Models\Country;
 use App\Models\Ethnicity;
 use App\Models\Organization;
+use App\Models\ReferringInstitution;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -108,6 +109,11 @@ return new class extends Migration
 
             $table->string('has_medical_reports')->nullable();
             $table->smallInteger('medical_report_count')->unsigned()->nullable();
+
+            $table->foreignIdFor(ReferringInstitution::class)
+                ->nullable()
+                ->constrained()
+                ->cascadeOnDelete();
         });
     }
 };

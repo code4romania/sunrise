@@ -114,4 +114,15 @@ return [
     'police_report_count' => 'Număr sesizări',
     'has_medical_reports' => 'Certificate medico-legale',
     'medical_report_count' => 'Număr certificate',
+
+    'presentation_mode' => 'Modalitate prezentare',
+    'referring_institution' => 'Instituție care trimite victima',
+
+    'referral_mode' => 'Modalitatea de referire',
+    'notifier' => 'Persoana care a anunțat cazul',
+    'notifier_other' => 'Specificați care alte persoane',
+    'notification_mode' => 'Modalitatea de anunțare',
+    'act_location' => 'Locul producerii actelor de VD',
+    'act_location_other' => 'Specificați ce alt loc',
+
 ];

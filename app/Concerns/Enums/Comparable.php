@@ -28,16 +28,16 @@ trait Comparable
         return ! $this->is($enum);
     }
 
-    public static function isValue(mixed $subject, BackedEnum $value): bool
+    public static function isValue(mixed $subject, BackedEnum $enum): bool
     {
         if ($subject === null) {
             return false;
         }
 
         if (! $subject instanceof self) {
-            $subject = self::tryFrom((int) $subject);
+            $subject = self::tryFrom(\is_int($enum->value) ? (int) $subject : (string) $subject);
         }
 
-        return $subject?->is($value) ?? false;
+        return $subject?->is($enum) ?? false;
     }
 }

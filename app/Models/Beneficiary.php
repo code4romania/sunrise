@@ -125,6 +125,12 @@ class Beneficiary extends Model
         'studies' => Studies::class,
     ];
 
+    public function aggressor(): HasOne
+    {
+        return $this->hasOne(Aggressor::class)
+            ->withDefault();
+    }
+
     public function legalResidenceCounty(): BelongsTo
     {
         return $this->belongsTo(County::class, 'legal_residence_county_id');
@@ -135,10 +141,20 @@ class Beneficiary extends Model
         return $this->belongsTo(City::class, 'legal_residence_city_id');
     }
 
-    public function aggressor(): HasOne
+    public function effectiveResidenceCounty(): BelongsTo
     {
-        return $this->hasOne(Aggressor::class)
-            ->withDefault();
+        return $this->belongsTo(County::class, 'effective_residence_county_id');
+    }
+
+    public function effectiveResidenceCity(): BelongsTo
+    {
+        return $this->belongsTo(City::class, 'effective_residence_city_id');
+    }
+
+    public function referringInstitution(): BelongsTo
+    {
+        return $this->belongsTo(ReferringInstitution::class)
+            ->orderBy('order');
     }
 
     public function age(): Attribute
