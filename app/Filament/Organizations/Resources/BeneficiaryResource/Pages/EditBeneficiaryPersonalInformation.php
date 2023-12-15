@@ -48,6 +48,8 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                 ->maxWidth('3xl')
                 ->schema([
                     static::beneficiarySection(),
+                    static::aggressorSection(),
+                    static::antecedentsSection(),
                 ]),
         ];
     }
@@ -264,6 +266,49 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                         TextInput::make('protection_order_notes')
                             ->label(__('field.protection_order_notes')),
+                    ]),
+            ]);
+    }
+
+    protected static function antecedentsSection(): Section
+    {
+        return Section::make(__('beneficiary.section.personal_information.section.antecedents'))
+            ->columns()
+            ->schema([
+                Grid::make()
+                    ->schema([
+                        Select::make('has_police_reports')
+                            ->label(__('field.has_police_reports'))
+                            ->placeholder(__('placeholder.select_one'))
+                            ->options(Ternary::options())
+                            ->enum(Ternary::class)
+                            ->live(),
+
+                        TextInput::make('police_report_count')
+                            ->label(__('field.police_report_count'))
+                            ->placeholder(__('placeholder.number'))
+                            ->visible(fn (Get $get) => Ternary::isYes($get('has_police_reports')))
+                            ->numeric()
+                            ->minValue(0)
+                            ->maxValue(999),
+                    ]),
+
+                Grid::make()
+                    ->schema([
+                        Select::make('has_medical_reports')
+                            ->label(__('field.has_medical_reports'))
+                            ->placeholder(__('placeholder.select_one'))
+                            ->options(Ternary::options())
+                            ->enum(Ternary::class)
+                            ->live(),
+
+                        TextInput::make('medical_report_count')
+                            ->label(__('field.medical_report_count'))
+                            ->placeholder(__('placeholder.number'))
+                            ->visible(fn (Get $get) => Ternary::isYes($get('has_medical_reports')))
+                            ->numeric()
+                            ->minValue(0)
+                            ->maxValue(999),
                     ]),
             ]);
     }

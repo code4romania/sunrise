@@ -102,6 +102,12 @@ return new class extends Migration
             $table->tinyInteger('elder_care_count')->unsigned()->nullable();
 
             $table->string('homeownership')->nullable();
+
+            $table->string('has_police_reports')->nullable();
+            $table->smallInteger('police_report_count')->unsigned()->nullable();
+
+            $table->string('has_medical_reports')->nullable();
+            $table->smallInteger('medical_report_count')->unsigned()->nullable();
         });
     }
 };

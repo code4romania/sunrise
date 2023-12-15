@@ -90,6 +90,11 @@ class Beneficiary extends Model
         'income',
         'elder_care_count',
         'homeownership',
+
+        'has_police_reports',
+        'police_report_count',
+        'has_medical_reports',
+        'medical_report_count',
     ];
 
     protected $casts = [
@@ -103,11 +108,13 @@ class Beneficiary extends Model
         'children' => 'collection',
         'civil_status' => CivilStatus::class,
         'criminal_history' => Ternary::class,
+        'doesnt_have_children' => 'boolean',
         'effective_residence_environment' => ResidenceEnvironment::class,
         'elder_care_count' => 'integer',
         'gender' => Gender::class,
-        'doesnt_have_children' => 'boolean',
         'has_family_doctor' => Ternary::class,
+        'has_medical_reports' => Ternary::class,
+        'has_police_reports' => Ternary::class,
         'homeownership' => HomeOwnership::class,
         'income' => Income::class,
         'legal_residence_environment' => ResidenceEnvironment::class,

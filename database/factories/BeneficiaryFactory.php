@@ -127,7 +127,16 @@ class BeneficiaryFactory extends Factory
                     'status' => fake()->boolean() ? fake()->words(asText: true) : null,
                 ])
                 ->toJson(),
+        ]);
+    }
 
+    public function withAntecedents(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'has_police_reports' => fake()->boolean(),
+            'police_report_count' => fake()->numberBetween(0, 300),
+            'has_medical_reports' => fake()->boolean(),
+            'medical_report_count' => fake()->numberBetween(0, 300),
         ]);
     }
 

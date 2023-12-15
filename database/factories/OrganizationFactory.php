@@ -66,6 +66,7 @@ class OrganizationFactory extends Factory
                 ->count(5)
                 ->withContactNotes()
                 ->withChildren()
+                ->withAntecedents()
                 ->for($organization)
                 ->create();
 
@@ -81,6 +82,7 @@ class OrganizationFactory extends Factory
                 ->for($organization)
                 ->withID()
                 ->withChildren()
+                ->withAntecedents()
                 ->create();
 
             Beneficiary::factory()
@@ -95,6 +97,7 @@ class OrganizationFactory extends Factory
                 ->for($organization)
                 ->withEffectiveResidence()
                 ->withChildren()
+                ->withAntecedents()
                 ->create();
 
             Beneficiary::factory()
@@ -102,7 +105,7 @@ class OrganizationFactory extends Factory
                 ->for($organization)
                 ->withLegalResidence()
                 ->withEffectiveResidence()
-                ->withChildren()
+                ->withAntecedents()
                 ->create();
 
             Service::query()

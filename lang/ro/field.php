@@ -109,4 +109,9 @@ return [
     'aggressor_legal_history' => 'Aspecte legale agresor',
     'has_protection_order' => 'Ordin de protecție',
     'protection_order_notes' => 'Observații ordin de protecție',
+
+    'has_police_reports' => 'Sesizare la poliție',
+    'police_report_count' => 'Număr sesizări',
+    'has_medical_reports' => 'Certificate medico-legale',
+    'medical_report_count' => 'Număr certificate',
 ];
