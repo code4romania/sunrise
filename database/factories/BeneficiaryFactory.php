@@ -61,7 +61,6 @@ class BeneficiaryFactory extends Factory
             'notification_mode' => fake()->randomElement(NotificationMode::values()),
 
             'act_location' => fake()->randomElement(ActLocation::values()),
-
         ];
     }
 

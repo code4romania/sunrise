@@ -100,10 +100,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function canAccessPanel(Panel $panel): bool
     {
-        if (app()->isLocal()) {
-            return true;
-        }
-
         if ($panel->getId() === 'admin') {
             return $this->is_admin;
         }
