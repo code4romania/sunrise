@@ -4,14 +4,20 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\ActLocation;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
+use App\Enums\NotificationMode;
+use App\Enums\Notifier;
+use App\Enums\PresentationMode;
+use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Models\City;
+use App\Models\ReferringInstitution;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -48,6 +54,14 @@ class BeneficiaryFactory extends Factory
 
             'status' => fake()->randomElement(CaseStatus::values()),
             'doesnt_have_children' => true,
+
+            'presentation_mode' => fake()->randomElement(PresentationMode::values()),
+            'referral_mode' => fake()->randomElement(ReferralMode::values()),
+            'notifier' => fake()->randomElement(Notifier::values()),
+            'notification_mode' => fake()->randomElement(NotificationMode::values()),
+
+            'act_location' => fake()->randomElement(ActLocation::values()),
+
         ];
     }
 
@@ -142,10 +156,28 @@ class BeneficiaryFactory extends Factory
 
     public function configure(): static
     {
-        return $this->afterCreating(function (Beneficiary $beneficiary) {
-            Aggressor::factory()
-                ->for($beneficiary)
-                ->create();
-        });
+        $referringInstitutions = ReferringInstitution::all();
+
+        return $this
+            ->afterMaking(function (Beneficiary $beneficiary) use ($referringInstitutions) {
+                if (PresentationMode::isValue($beneficiary->presentation_method, PresentationMode::FORWARDED)) {
+                    $beneficiary->referringInstitution()->attach(
+                        $referringInstitutions->random()
+                    );
+                }
+
+                $beneficiary->firstCalledInstitution()->associate(
+                    $referringInstitutions->random()
+                );
+            })
+            ->afterCreating(function (Beneficiary $beneficiary) use ($referringInstitutions) {
+                Aggressor::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                $beneficiary->otherCalledInstitution()->sync(
+                    $referringInstitutions->random(fake()->numberBetween(1, 4)),
+                );
+            });
     }
 }

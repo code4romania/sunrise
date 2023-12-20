@@ -8,7 +8,6 @@ export default defineConfig({
                 'resources/css/filament/common/theme.css',
                 'resources/js/app.js',
             ],
-            detectTls: 'sunrise.test',
             refresh: true,
         }),
     ],

@@ -124,5 +124,7 @@ return [
     'notification_mode' => 'Modalitatea de anunțare',
     'act_location' => 'Locul producerii actelor de VD',
     'act_location_other' => 'Specificați ce alt loc',
+    'first_called_institution' => 'Prima instituție la care a apelat victima',
+    'other_called_institutions' => 'Următoarele instituții la care a apelat victima',
 
 ];

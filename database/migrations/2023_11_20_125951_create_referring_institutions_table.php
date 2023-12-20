@@ -29,8 +29,15 @@ return new class extends Migration
             'Primărie',
             'DGASPC',
             'ONG',
-            'Altele',
-        ])
-            ->each(fn (string $name) => ReferringInstitution::forceCreate(['name' => $name]));
+            'Alta',
+        ])->each(fn (string $name) => ReferringInstitution::forceCreate(['name' => $name]));
+
+        Schema::create('model_has_referring_institutions', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('model');
+            $table->foreignIdFor(ReferringInstitution::class, 'institution_id')
+                ->constrained('referring_institutions')
+                ->cascadeOnDelete();
+        });
     }
 };

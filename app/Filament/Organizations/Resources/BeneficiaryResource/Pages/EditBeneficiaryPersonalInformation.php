@@ -21,9 +21,11 @@ use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Rules\MultipleIn;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -49,353 +51,368 @@ class EditBeneficiaryPersonalInformation extends EditRecord
     public static function getPersonalInformationFormSchema(): array
     {
         return [
-            Grid::make()
+            Tabs::make()
+                ->columnSpanFull()
                 ->maxWidth('3xl')
+                ->tabs([
+                    Tabs\Tab::make(__('beneficiary.section.personal_information.section.beneficiary'))
+                        ->columns()
+                        ->schema(static::beneficiarySection()),
+
+                    Tabs\Tab::make(__('beneficiary.section.personal_information.section.aggressor'))
+                        ->schema([
+                            Group::make()
+                                ->relationship('aggressor')
+                                ->columns()
+                                ->schema(static::aggressorSection()),
+                        ]),
+
+                    Tabs\Tab::make(__('beneficiary.section.personal_information.section.antecedents'))
+                        ->columns()
+                        ->schema(static::antecedentsSection()),
+
+                    Tabs\Tab::make(__('beneficiary.section.personal_information.section.flow'))
+                        ->columns()
+                        ->schema(static::flowSection()),
+                ]),
+
+        ];
+    }
+
+    protected static function beneficiarySection(): array
+    {
+        return [
+            Select::make('has_family_doctor')
+                ->label(__('field.has_family_doctor'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(Ternary::options())
+                ->enum(Ternary::class)
+                ->live(),
+
+            TextInput::make('family_doctor_name')
+                ->label(__('field.family_doctor_name'))
+                ->placeholder(__('placeholder.name'))
+                ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+
+            TextInput::make('family_doctor_contact')
+                ->label(__('field.family_doctor_contact'))
+                ->placeholder(__('placeholder.phone_or_email'))
+                ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+
+            Grid::make()
                 ->schema([
-                    static::beneficiarySection(),
-                    static::aggressorSection(),
-                    static::antecedentsSection(),
-                    static::flowSection(),
+                    Select::make('psychiatric_history')
+                        ->label(__('field.psychiatric_history'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    TextInput::make('psychiatric_notes')
+                        ->label(__('field.psychiatric_notes'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+                ]),
+
+            Grid::make()
+                ->schema([
+                    Select::make('criminal_history')
+                        ->label(__('field.criminal_history'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    TextInput::make('criminal_notes')
+                        ->label(__('field.criminal_notes'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
+                ]),
+
+            Select::make('studies')
+                ->label(__('field.studies'))
+                ->placeholder(__('placeholder.studies'))
+                ->options(Studies::options())
+                ->enum(Studies::class),
+
+            Select::make('occupation')
+                ->label(__('field.occupation'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(Occupation::options())
+                ->enum(Occupation::class),
+
+            TextInput::make('workplace')
+                ->label(__('field.workplace'))
+                ->placeholder(__('placeholder.workplace'))
+                ->columnSpanFull(),
+
+            Select::make('income')
+                ->label(__('field.income'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(Income::options())
+                ->enum(Income::class),
+
+            TextInput::make('elder_care_count')
+                ->label(__('field.elder_care_count'))
+                ->placeholder(__('placeholder.number'))
+                ->numeric()
+                ->minValue(0)
+                ->maxValue(99),
+
+            Select::make('homeownership')
+                ->label(__('field.homeownership'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(HomeOwnership::options())
+                ->enum(HomeOwnership::class),
+        ];
+    }
+
+    protected static function aggressorSection(): array
+    {
+        return [
+            Select::make('relationship')
+                ->label(__('field.aggressor_relationship'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(AggressorRelationship::options())
+                ->enum(AggressorRelationship::class)
+                ->live(),
+
+            TextInput::make('age')
+                ->label(__('field.aggressor_age'))
+                ->placeholder(__('placeholder.number'))
+                ->numeric()
+                ->minValue(0)
+                ->maxValue(200),
+
+            Select::make('gender')
+                ->label(__('field.aggressor_gender'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(Gender::options())
+                ->enum(Gender::class),
+
+            Select::make('citizenship_id')
+                ->label(__('field.aggressor_citizenship'))
+                ->placeholder(__('placeholder.citizenship'))
+                ->relationship('citizenship', 'name')
+                ->nullable(),
+
+            Select::make('civil_status')
+                ->label(__('field.aggressor_civil_status'))
+                ->placeholder(__('placeholder.civil_status'))
+                ->options(CivilStatus::options())
+                ->enum(CivilStatus::class),
+
+            Select::make('studies')
+                ->label(__('field.aggressor_studies'))
+                ->placeholder(__('placeholder.studies'))
+                ->options(Studies::options())
+                ->enum(Studies::class),
+
+            Select::make('occupation')
+                ->label(__('field.aggressor_occupation'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(Occupation::options())
+                ->enum(Occupation::class),
+
+            Grid::make()
+                ->schema([
+                    Select::make('has_violence_history')
+                        ->label(__('field.aggressor_has_violence_history'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    Select::make('violence_types')
+                        ->label(__('field.aggressor_violence_types'))
+                        ->placeholder(__('placeholder.select_many'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('violence_history')))
+                        ->options(Violence::options())
+                        ->rule(new MultipleIn(Violence::values()))
+                        ->multiple(),
+
+                ]),
+
+            Grid::make()
+                ->schema([
+                    Select::make('has_psychiatric_history')
+                        ->label(__('field.aggressor_has_psychiatric_history'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    TextInput::make('psychiatric_history_notes')
+                        ->label(__('field.aggressor_psychiatric_history_notes'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+                ]),
+
+            Grid::make()
+                ->schema([
+                    Select::make('has_drug_history')
+                        ->label(__('field.aggressor_has_drug_history'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    Select::make('drugs')
+                        ->label(__('field.aggressor_drugs'))
+                        ->placeholder(__('placeholder.select_many'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('has_drug_history')))
+                        ->options(Drug::options())
+                        ->rule(new MultipleIn(Drug::values()))
+                        ->multiple(),
+                ]),
+
+            Grid::make()
+                ->schema([
+                    Select::make('legal_history')
+                        ->label(__('field.aggressor_legal_history'))
+                        ->placeholder(__('placeholder.select_many'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('violence_history')))
+                        ->options(AggressorLegalHistory::options())
+                        ->rule(new MultipleIn(AggressorLegalHistory::values()))
+                        ->multiple()
+                        ->live(),
+                ]),
+
+            Grid::make()
+                ->schema([
+                    Select::make('has_protection_order')
+                        ->label(__('field.has_protection_order'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    TextInput::make('protection_order_notes')
+                        ->label(__('field.protection_order_notes')),
                 ]),
         ];
     }
 
-    protected static function beneficiarySection(): Section
+    protected static function antecedentsSection(): array
     {
-        return Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
-            ->columns()
-            ->schema([
-                Select::make('has_family_doctor')
-                    ->label(__('field.has_family_doctor'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(Ternary::options())
-                    ->enum(Ternary::class)
-                    ->lazy(),
+        return [
+            Grid::make()
+                ->schema([
+                    Select::make('has_police_reports')
+                        ->label(__('field.has_police_reports'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
 
-                TextInput::make('family_doctor_name')
-                    ->label(__('field.family_doctor_name'))
-                    ->placeholder(__('placeholder.name'))
-                    ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+                    TextInput::make('police_report_count')
+                        ->label(__('field.police_report_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('has_police_reports')))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(999),
+                ]),
 
-                TextInput::make('family_doctor_contact')
-                    ->label(__('field.family_doctor_contact'))
-                    ->placeholder(__('placeholder.phone_or_email'))
-                    ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+            Grid::make()
+                ->schema([
+                    Select::make('has_medical_reports')
+                        ->label(__('field.has_medical_reports'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
 
-                Grid::make()
-                    ->schema([
-                        Select::make('psychiatric_history')
-                            ->label(__('field.psychiatric_history'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
-
-                        TextInput::make('psychiatric_notes')
-                            ->label(__('field.psychiatric_notes'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
-                    ]),
-
-                Grid::make()
-                    ->schema([
-                        Select::make('criminal_history')
-                            ->label(__('field.criminal_history'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
-
-                        TextInput::make('criminal_notes')
-                            ->label(__('field.criminal_notes'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
-                    ]),
-
-                Select::make('studies')
-                    ->label(__('field.studies'))
-                    ->placeholder(__('placeholder.studies'))
-                    ->options(Studies::options())
-                    ->enum(Studies::class),
-
-                Select::make('occupation')
-                    ->label(__('field.occupation'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(Occupation::options())
-                    ->enum(Occupation::class),
-
-                TextInput::make('workplace')
-                    ->label(__('field.workplace'))
-                    ->placeholder(__('placeholder.workplace'))
-                    ->columnSpanFull(),
-
-                Select::make('income')
-                    ->label(__('field.income'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(Income::options())
-                    ->enum(Income::class),
-
-                TextInput::make('elder_care_count')
-                    ->label(__('field.elder_care_count'))
-                    ->placeholder(__('placeholder.number'))
-                    ->numeric()
-                    ->minValue(0)
-                    ->maxValue(99),
-
-                Select::make('homeownership')
-                    ->label(__('field.homeownership'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(HomeOwnership::options())
-                    ->enum(HomeOwnership::class),
-            ]);
+                    TextInput::make('medical_report_count')
+                        ->label(__('field.medical_report_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->visible(fn (Get $get) => Ternary::isYes($get('has_medical_reports')))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(999),
+                ]),
+        ];
     }
 
-    protected static function aggressorSection(): Section
+    protected static function flowSection(): array
     {
-        return Section::make(__('beneficiary.section.personal_information.section.aggressor'))
-            ->relationship('aggressor')
-            ->columns()
-            ->schema([
-                Select::make('relationship')
-                    ->label(__('field.aggressor_relationship'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(AggressorRelationship::options())
-                    ->enum(AggressorRelationship::class)
-                    ->lazy(),
+        return [
+            Grid::make()
+                ->schema([
+                    Select::make('presentation_mode')
+                        ->label(__('field.presentation_mode'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(PresentationMode::options())
+                        ->enum(PresentationMode::class)
+                        ->live(),
 
-                TextInput::make('age')
-                    ->label(__('field.aggressor_age'))
-                    ->placeholder(__('placeholder.number'))
-                    ->numeric()
-                    ->minValue(0)
-                    ->maxValue(200),
+                    Select::make('referring_institution_id')
+                        ->label(__('field.referring_institution'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->relationship('referringInstitution', 'name')
+                        ->visible(fn (Get $get) => PresentationMode::isValue(
+                            $get('presentation_mode'),
+                            PresentationMode::FORWARDED
+                        ))
+                        ->nullable(),
 
-                Select::make('gender')
-                    ->label(__('field.aggressor_gender'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(Gender::options())
-                    ->enum(Gender::class),
+                    Select::make('referral_mode')
+                        ->label(__('field.referral_mode'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(ReferralMode::options())
+                        ->enum(ReferralMode::class)
+                        ->visible(fn (Get $get) => PresentationMode::isValue(
+                            $get('presentation_mode'),
+                            PresentationMode::FORWARDED
+                        ))
+                        ->nullable(),
+                ]),
 
-                Select::make('citizenship_id')
-                    ->label(__('field.aggressor_citizenship'))
-                    ->placeholder(__('placeholder.citizenship'))
-                    ->relationship('citizenship', 'name')
-                    ->nullable(),
+            Select::make('notifier')
+                ->label(__('field.notifier'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(Notifier::options())
+                ->enum(Notifier::class)
+                ->live(),
 
-                Select::make('civil_status')
-                    ->label(__('field.aggressor_civil_status'))
-                    ->placeholder(__('placeholder.civil_status'))
-                    ->options(CivilStatus::options())
-                    ->enum(CivilStatus::class),
+            Select::make('notification_mode')
+                ->label(__('field.notification_mode'))
+                ->placeholder(__('placeholder.select_one'))
+                ->options(NotificationMode::options())
+                ->enum(NotificationMode::class),
 
-                Select::make('studies')
-                    ->label(__('field.aggressor_studies'))
-                    ->placeholder(__('placeholder.studies'))
-                    ->options(Studies::options())
-                    ->enum(Studies::class),
+            TextInput::make('notifier_other')
+                ->label(__('field.notifier_other'))
+                ->visible(fn (Get $get) => Notifier::isValue(
+                    $get('notifier'),
+                    Notifier::OTHER
+                )),
 
-                Select::make('occupation')
-                    ->label(__('field.aggressor_occupation'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(Occupation::options())
-                    ->enum(Occupation::class),
+            Select::make('act_location')
+                ->label(__('field.act_location'))
+                ->placeholder(__('placeholder.select_many'))
+                ->options(ActLocation::options())
+                ->rule(new MultipleIn(ActLocation::values()))
+                ->multiple()
+                ->live(),
 
-                Grid::make()
-                    ->schema([
-                        Select::make('has_violence_history')
-                            ->label(__('field.aggressor_has_violence_history'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
+            TextInput::make('act_location_other')
+                ->label(__('field.act_location_other'))
+                ->visible(
+                    fn (Get $get) => collect($get('act_location'))
+                        ->filter(fn ($value) => ActLocation::isValue($value, ActLocation::OTHER))
+                        ->isNotEmpty()
+                ),
 
-                        Select::make('violence_types')
-                            ->label(__('field.aggressor_violence_types'))
-                            ->placeholder(__('placeholder.select_many'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('violence_history')))
-                            ->options(Violence::options())
-                            ->enum(Violence::class)
-                            ->multiple(),
+            Select::make('first_called_institution_id')
+                ->label(__('field.first_called_institution'))
+                ->placeholder(__('placeholder.select_one'))
+                ->relationship('firstCalledInstitution', 'name')
+                ->nullable(),
 
-                    ]),
-
-                Grid::make()
-                    ->schema([
-                        Select::make('has_psychiatric_history')
-                            ->label(__('field.aggressor_has_psychiatric_history'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
-
-                        TextInput::make('psychiatric_history_notes')
-                            ->label(__('field.aggressor_psychiatric_history_notes'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
-                    ]),
-
-                Grid::make()
-                    ->schema([
-                        Select::make('has_drug_history')
-                            ->label(__('field.aggressor_has_drug_history'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
-
-                        Select::make('drugs')
-                            ->label(__('field.aggressor_drugs'))
-                            ->placeholder(__('placeholder.select_many'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('has_drug_history')))
-                            ->options(Drug::options())
-                            ->enum(Drug::class)
-                            ->multiple(),
-                    ]),
-
-                Grid::make()
-                    ->schema([
-                        Select::make('legal_history')
-                            ->label(__('field.aggressor_legal_history'))
-                            ->placeholder(__('placeholder.select_many'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('violence_history')))
-                            ->options(AggressorLegalHistory::options())
-                            ->enum(AggressorLegalHistory::class)
-                            ->multiple()
-                            ->lazy(),
-                    ]),
-
-                Grid::make()
-                    ->schema([
-                        Select::make('has_protection_order')
-                            ->label(__('field.has_protection_order'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
-
-                        TextInput::make('protection_order_notes')
-                            ->label(__('field.protection_order_notes')),
-                    ]),
-            ]);
-    }
-
-    protected static function antecedentsSection(): Section
-    {
-        return Section::make(__('beneficiary.section.personal_information.section.antecedents'))
-            ->columns()
-            ->schema([
-                Grid::make()
-                    ->schema([
-                        Select::make('has_police_reports')
-                            ->label(__('field.has_police_reports'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
-
-                        TextInput::make('police_report_count')
-                            ->label(__('field.police_report_count'))
-                            ->placeholder(__('placeholder.number'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('has_police_reports')))
-                            ->numeric()
-                            ->minValue(0)
-                            ->maxValue(999),
-                    ]),
-
-                Grid::make()
-                    ->schema([
-                        Select::make('has_medical_reports')
-                            ->label(__('field.has_medical_reports'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(Ternary::options())
-                            ->enum(Ternary::class)
-                            ->lazy(),
-
-                        TextInput::make('medical_report_count')
-                            ->label(__('field.medical_report_count'))
-                            ->placeholder(__('placeholder.number'))
-                            ->visible(fn (Get $get) => Ternary::isYes($get('has_medical_reports')))
-                            ->numeric()
-                            ->minValue(0)
-                            ->maxValue(999),
-                    ]),
-            ]);
-    }
-
-    /**
-     * TODO: reflect in model and table
-     * TODO: field "Prima instituție la care a apelat victima"
-     * TODO: field "Următoarele instituții la care a apelat victima".
-     */
-    protected static function flowSection(): Section
-    {
-        return Section::make(__('beneficiary.section.personal_information.section.flow'))
-            ->columns()
-            ->schema([
-                Grid::make()
-                    ->schema([
-                        Select::make('presentation_mode')
-                            ->label(__('field.presentation_mode'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->options(PresentationMode::options())
-                            ->enum(PresentationMode::class)
-                            ->lazy(),
-
-                        Select::make('referring_institution_id')
-                            ->label(__('field.referring_institution'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->relationship('referringInstitution', 'name')
-                            ->visible(fn (Get $get) => PresentationMode::isValue(
-                                $get('presentation_mode'),
-                                PresentationMode::FORWARDED
-                            ))
-                            ->nullable(),
-
-                        Select::make('referral_mode')
-                            ->label(__('field.referral_mode'))
-                            ->placeholder(__('placeholder.select_one'))
-                            ->relationship('referringInstitution', 'name')
-                            ->options(ReferralMode::options())
-                            ->enum(ReferralMode::class)
-                            ->visible(fn (Get $get) => PresentationMode::isValue(
-                                $get('presentation_mode'),
-                                PresentationMode::FORWARDED
-                            ))
-                            ->nullable(),
-                    ]),
-
-                Select::make('notifier')
-                    ->label(__('field.notifier'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(Notifier::options())
-                    ->enum(Notifier::class)
-                    ->lazy(),
-
-                Select::make('notification_mode')
-                    ->label(__('field.notification_mode'))
-                    ->placeholder(__('placeholder.select_one'))
-                    ->options(NotificationMode::options())
-                    ->enum(NotificationMode::class),
-
-                TextInput::make('notifier_other')
-                    ->label(__('field.notifier_other'))
-                    ->visible(fn (Get $get) => Notifier::isValue(
-                        $get('notifier'),
-                        Notifier::OTHER
-                    )),
-
-                Select::make('act_location')
-                    ->label(__('field.act_location'))
-                    ->placeholder(__('placeholder.select_many'))
-                    ->options(ActLocation::options())
-                    ->enum(ActLocation::class)
-                    ->multiple()
-                    ->lazy(),
-
-                TextInput::make('act_location_other')
-                    ->label(__('field.act_location_other'))
-                    ->visible(
-                        fn (Get $get) => collect($get('act_location'))
-                            ->filter(fn ($value) => ActLocation::isValue($value, ActLocation::OTHER))
-                            ->isNotEmpty()
-                    ),
-            ]);
+            Select::make('other_called_institutions')
+                ->label(__('field.other_called_institutions'))
+                ->placeholder(__('placeholder.select_one'))
+                ->relationship('otherCalledInstitution', 'name')
+                ->multiple()
+                ->nullable(),
+        ];
     }
 }

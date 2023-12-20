@@ -10,6 +10,7 @@ use App\Models\CommunityProfile;
 use App\Models\County;
 use App\Models\Intervention;
 use App\Models\Organization;
+use App\Models\ReferringInstitution;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -51,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
             'county' => County::class,
             'intervention' => Intervention::class,
             'organization' => Organization::class,
+            'referring_institution' => ReferringInstitution::class,
             'service' => Service::class,
             'user' => User::class,
         ]);

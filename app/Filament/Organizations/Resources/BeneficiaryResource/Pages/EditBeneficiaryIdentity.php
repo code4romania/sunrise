@@ -109,7 +109,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.birthdate'))
                         ->maxDate(today()->endOfDay())
                         ->nullable()
-                        ->lazy(),
+                        ->live(),
 
                     TextInput::make('birthplace')
                         ->label(__('field.birthplace'))

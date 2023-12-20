@@ -20,11 +20,11 @@
         "filament/spatie-laravel-media-library-plugin": "^3.1",
         "guzzlehttp/guzzle": "^7.2",
         "jeffgreco13/filament-breezy": "^2.2",
-        "laravel/framework": "^10.35",
+        "laravel/framework": "^10.38",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "sentry/sentry-laravel": "^4.1",
-        "stevegrunwell/time-constants": "^1.1",
+        "stevegrunwell/time-constants": "^1.2",
         "tpetry/laravel-query-expressions": "^0.9"
     },
     "require-dev": {

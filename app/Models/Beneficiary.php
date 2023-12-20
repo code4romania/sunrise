@@ -9,20 +9,27 @@ use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
 use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
+use App\Enums\ActLocation;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\HomeOwnership;
 use App\Enums\Income;
+use App\Enums\NotificationMode;
+use App\Enums\Notifier;
 use App\Enums\Occupation;
+use App\Enums\PresentationMode;
+use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
 use App\Enums\Studies;
 use App\Enums\Ternary;
+use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Beneficiary extends Model
 {
@@ -95,6 +102,15 @@ class Beneficiary extends Model
         'police_report_count',
         'has_medical_reports',
         'medical_report_count',
+
+        'presentation_mode',
+        'referral_mode',
+        'notification_mode',
+        'notifier',
+        'notifier_other',
+
+        'act_location',
+        'act_location_other',
     ];
 
     protected $casts = [
@@ -123,6 +139,11 @@ class Beneficiary extends Model
         'same_as_legal_residence' => 'boolean',
         'status' => CaseStatus::class,
         'studies' => Studies::class,
+        'presentation_mode' => PresentationMode::class,
+        'referral_mode' => ReferralMode::class,
+        'notification_mode' => NotificationMode::class,
+        'notifier' => Notifier::class,
+        'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
     public function aggressor(): HasOne
@@ -151,10 +172,33 @@ class Beneficiary extends Model
         return $this->belongsTo(City::class, 'effective_residence_city_id');
     }
 
+    public function institutions(): MorphToMany
+    {
+        return $this->morphToMany(
+            ReferringInstitution::class,
+            'model',
+            'model_has_referring_institutions',
+            relatedPivotKey: 'institution_id'
+        )
+
+            ->orderBy('order');
+    }
+
     public function referringInstitution(): BelongsTo
     {
         return $this->belongsTo(ReferringInstitution::class)
             ->orderBy('order');
+    }
+
+    public function firstCalledInstitution(): BelongsTo
+    {
+        return $this->belongsTo(ReferringInstitution::class, 'first_called_institution_id')
+            ->orderBy('order');
+    }
+
+    public function otherCalledInstitution()
+    {
+        return $this->institutions();
     }
 
     public function age(): Attribute
