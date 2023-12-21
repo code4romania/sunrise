@@ -20,7 +20,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Image\Manipulations;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -77,12 +77,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             ->singleFile()
             ->registerMediaConversions(function () {
                 $this->addMediaConversion('thumb')
-                    ->fit(Manipulations::FIT_CONTAIN, 64, 64)
+                    ->fit(Fit::Contain, 64, 64)
                     ->keepOriginalImageFormat()
                     ->optimize();
 
                 $this->addMediaConversion('large')
-                    ->fit(Manipulations::FIT_CONTAIN, 256, 256)
+                    ->fit(Fit::Contain, 256, 256)
                     ->keepOriginalImageFormat()
                     ->optimize();
             });

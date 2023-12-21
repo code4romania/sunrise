@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Organizations\Pages;
+use App\Filament\Organizations\Pages\Profile\UserPersonalInfo;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Models\Organization;
 use Filament\Facades\Filament;

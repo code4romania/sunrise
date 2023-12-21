@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Image\Manipulations;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -47,7 +47,7 @@ class CommunityProfile extends Model implements HasMedia
             ->singleFile()
             ->registerMediaConversions(function () {
                 $this->addMediaConversion('large')
-                    ->fit(Manipulations::FIT_CONTAIN, 256, 256)
+                    ->fit(Fit::Contain, 512, 512)
                     ->optimize();
             });
     }

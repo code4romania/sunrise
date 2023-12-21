@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Image\Manipulations;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -64,12 +64,12 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
             ->singleFile()
             ->registerMediaConversions(function () {
                 $this->addMediaConversion('thumb')
-                    ->fit(Manipulations::FIT_CONTAIN, 64, 64)
+                    ->fit(Fit::Contain, 64, 64)
                     ->keepOriginalImageFormat()
                     ->optimize();
 
                 $this->addMediaConversion('large')
-                    ->fit(Manipulations::FIT_CONTAIN, 256, 256)
+                    ->fit(Fit::Contain, 256, 256)
                     ->keepOriginalImageFormat()
                     ->optimize();
             });
