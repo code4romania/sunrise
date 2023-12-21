@@ -8,6 +8,7 @@ use App\Concerns\HasBeneficiaries;
 use App\Concerns\HasLocation;
 use App\Concerns\HasSlug;
 use App\Concerns\HasUlid;
+use App\Enums\OrganizationType;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasCurrentTenantLabel;
 use Filament\Models\Contracts\HasName;
@@ -41,6 +42,10 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
         'reprezentative_email',
         'phone',
         'website',
+    ];
+
+    protected $casts = [
+        'type' => OrganizationType::class,
     ];
 
     public function users(): MorphToMany

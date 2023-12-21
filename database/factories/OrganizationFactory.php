@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\OrganizationType;
 use App\Models\Beneficiary;
 use App\Models\City;
 use App\Models\CommunityProfile;
@@ -32,6 +33,7 @@ class OrganizationFactory extends Factory
         return [
             'name' => $name,
             'short_name' => preg_replace('/\b(\w)|./u', '$1', $name),
+            'type' => fake()->randomElement(OrganizationType::values()),
             'phone' => fake()->phoneNumber(),
             'website' => fake()->url(),
 

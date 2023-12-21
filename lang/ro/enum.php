@@ -154,4 +154,10 @@ return [
         'other' => 'Alt loc (specificați)',
     ],
 
+    'organization_type' => [
+        'ngo' => 'Organizație non-profit',
+        'public' => 'Instituție publică',
+        'private' => 'Entitate privată',
+    ],
+
 ];
