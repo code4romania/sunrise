@@ -7,6 +7,7 @@ namespace App\Tables\Columns;
 use Closure;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\Concerns;
+use Illuminate\Support\Collection;
 
 class ServiceChipsColumn extends Column
 {
@@ -28,5 +29,12 @@ class ServiceChipsColumn extends Column
         return $this->evaluate($this->size, [
             'state' => $state,
         ]);
+    }
+
+    public function getServices(): Collection
+    {
+        return collect($this->getState())
+            ->filter(fn ($service) => $service->is_visible)
+            ->dump();
     }
 }
