@@ -16,7 +16,16 @@ class Intervention extends Model
     use HasFactory;
     use HasUlids;
 
-    public $with = ['service'];
+    protected $fillable = [
+        'name',
+        'description',
+        'service_id',
+        'organization_id',
+    ];
+
+    public $with = [
+        'service',
+    ];
 
     public function service(): BelongsTo
     {

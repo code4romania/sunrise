@@ -12,6 +12,11 @@ class Service extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
     public function interventions(): HasMany
     {
         return $this->hasMany(Intervention::class);
