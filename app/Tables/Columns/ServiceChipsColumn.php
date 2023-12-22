@@ -34,7 +34,6 @@ class ServiceChipsColumn extends Column
     public function getServices(): Collection
     {
         return collect($this->getState())
-            ->filter(fn ($service) => $service->is_visible)
-            ->dump();
+            ->filter(fn ($service) => $service->is_visible);
     }
 }

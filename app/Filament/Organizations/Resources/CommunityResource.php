@@ -84,19 +84,27 @@ class CommunityResource extends Resource
                             TextEntry::make('website')
                                 ->icon('heroicon-o-link')
                                 ->hiddenLabel()
-                                ->url(fn (string $state) => $state)
+                                ->url(fn (?string $state) => $state)
                                 ->openUrlInNewTab(),
 
                             TextEntry::make('email')
                                 ->icon('heroicon-o-envelope')
                                 ->hiddenLabel()
-                                ->url(fn (string $state) => "mailto:{$state}")
+                                ->url(
+                                    fn (?string $state) => $state !== null
+                                        ? "mailto:{$state}"
+                                        : null
+                                )
                                 ->openUrlInNewTab(),
 
                             TextEntry::make('phone')
                                 ->icon('heroicon-o-phone')
                                 ->hiddenLabel()
-                                ->url(fn (string $state) => "tel:{$state}")
+                                ->url(
+                                    fn (?string $state) => $state !== null
+                                        ? "tel:{$state}"
+                                        : null
+                                )
                                 ->openUrlInNewTab(),
                         ]),
                     ]),
