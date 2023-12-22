@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Admin\Resources\OrganizationResource\Pages;
 
 use App\Filament\Admin\Resources\OrganizationResource;
@@ -14,6 +16,13 @@ class EditOrganization extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+        ];
+    }
+
+    public function getRelationManagers(): array
+    {
+        return [
+            //
         ];
     }
 }

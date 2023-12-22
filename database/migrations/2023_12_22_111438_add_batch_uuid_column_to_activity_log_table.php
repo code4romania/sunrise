@@ -18,5 +18,4 @@ return new class extends Migration
                 $table->uuid('batch_uuid')->nullable()->after('properties');
             });
     }
-}
-;
+};
