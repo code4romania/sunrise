@@ -19,7 +19,9 @@ it('can render page', function () {
 it('can authenticate', function () {
     $this->assertGuest();
 
-    $user = User::factory()->create();
+    $user = User::factory()
+        ->withOrganization()
+        ->create();
 
     livewire(Login::class)
         ->fillForm([
@@ -35,7 +37,9 @@ it('can authenticate', function () {
 it('can authenticate and redirect user to their intended URL', function () {
     session()->put('url.intended', $intendedUrl = Str::random());
 
-    $user = User::factory()->create();
+    $user = User::factory()
+        ->withOrganization()
+        ->create();
 
     livewire(Login::class)
         ->fillForm([
@@ -52,7 +56,9 @@ it('can redirect unauthenticated app requests', function () {
 });
 
 it('cannot authenticate with incorrect credentials', function () {
-    $user = User::factory()->create();
+    $user = User::factory()
+        ->withOrganization()
+        ->create();
 
     livewire(Login::class)
         ->fillForm([
@@ -68,7 +74,9 @@ it('cannot authenticate with incorrect credentials', function () {
 it('can throttle authentication attempts', function () {
     $this->assertGuest();
 
-    $user = User::factory()->create();
+    $user = User::factory()
+        ->withOrganization()
+        ->create();
 
     collect(range(1, 5))
         ->each(function () use ($user) {

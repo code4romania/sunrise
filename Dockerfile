@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine AS vendor
+FROM php:8.2-fpm-alpine AS vendor
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
@@ -16,12 +16,14 @@ RUN apk update && \
     #
     # install extensions
     install-php-extensions \
+    excimer \
+    exif \
     gd \
-    pdo_mysql \
-    zip \
+    imagick \
     intl \
     mbstring \
-    exif
+    pdo_mysql \
+    zip
 
 COPY --chown=www-data:www-data . /var/www
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -52,7 +54,7 @@ RUN npm run build
 
 FROM vendor
 
-ARG S6_OVERLAY_VERSION=3.1.6.1
+ARG S6_OVERLAY_VERSION=3.1.6.2
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
 RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
@@ -72,6 +74,11 @@ ENV APP_ENV production
 ENV APP_DEBUG false
 ENV LOG_CHANNEL stderr
 
+# determines what the container should do if one of the service scripts fails
+# 0: Continue silently even if a script has failed.
+# 1: Continue but warn with an annoying error message.ext script
+# 2: Stop the container.
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS 2
 ENV S6_CMD_WAIT_FOR_SERVICES_MAXTIME 0
 
 EXPOSE 80

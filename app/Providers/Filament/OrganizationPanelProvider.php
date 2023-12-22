@@ -6,7 +6,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Organizations\Pages;
 use App\Filament\Organizations\Pages\Profile\UserPersonalInfo;
-use App\Http\Middleware\ApplyTenantScopes;
 use App\Models\Organization;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
@@ -129,9 +128,7 @@ class OrganizationPanelProvider extends PanelProvider
             ])
             ->tenant(Organization::class, 'slug')
             ->tenantProfile(Pages\Tenancy\EditOrganizationProfile::class)
-            ->tenantMiddleware([
-                // ApplyTenantScopes::class,
-            ], isPersistent: true);
+            ->tenantRoutePrefix('org');
     }
 
     protected function setDefaultDateTimeDisplayFormats(): void

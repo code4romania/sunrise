@@ -43,6 +43,10 @@ class DatabaseSeeder extends Seeder
 
         Organization::factory()
             ->count(10)
+            ->withBeneficiaries()
+            ->withCommunityProfile()
+            ->withInterventions()
+            ->withUsers()
             ->create();
     }
 }

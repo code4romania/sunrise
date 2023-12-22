@@ -46,12 +46,12 @@ class OrganizationFactory extends Factory
         ];
     }
 
-    public function configure(): static
+    public function withUsers(int $count = 25): static
     {
-        return $this->afterCreating(function (Organization $organization) {
+        return $this->afterCreating(function (Organization $organization) use ($count) {
             $organization->users()->attach(
                 User::factory()
-                    ->count(25)
+                    ->count($count)
                     ->sequence(fn (Sequence $sequence) => [
                         'email' => sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
                     ])
@@ -59,68 +59,49 @@ class OrganizationFactory extends Factory
                     ->pluck('id')
                     ->toArray()
             );
+        });
+    }
 
+    public function withCommunityProfile(): static
+    {
+        return $this->afterCreating(function (Organization $organization) {
             CommunityProfile::factory()
                 ->for($organization)
                 ->create();
+        });
+    }
 
+    public function withBeneficiaries(int $count = 50): static
+    {
+        return $this->afterCreating(function (Organization $organization) use ($count) {
             Beneficiary::factory()
-                ->count(5)
+                ->count($count)
+                ->withCNP()
+                ->withID()
+                ->withLegalResidence()
+                ->withEffectiveResidence()
                 ->withContactNotes()
                 ->withChildren()
                 ->withAntecedents()
                 ->for($organization)
                 ->create();
+        });
+    }
 
-            Beneficiary::factory()
-                ->count(5)
-                ->for($organization)
-                ->withCNP()
-                ->withChildren()
-                ->create();
-
-            Beneficiary::factory()
-                ->count(5)
-                ->for($organization)
-                ->withID()
-                ->withChildren()
-                ->withAntecedents()
-                ->create();
-
-            Beneficiary::factory()
-                ->count(5)
-                ->for($organization)
-                ->withID()
-                ->withLegalResidence()
-                ->create();
-
-            Beneficiary::factory()
-                ->count(5)
-                ->for($organization)
-                ->withEffectiveResidence()
-                ->withChildren()
-                ->withAntecedents()
-                ->create();
-
-            Beneficiary::factory()
-                ->count(5)
-                ->for($organization)
-                ->withLegalResidence()
-                ->withEffectiveResidence()
-                ->withAntecedents()
-                ->create();
-
+    public function withInterventions(int $count = 5): static
+    {
+        return $this->afterCreating(function (Organization $organization) use ($count) {
             Service::query()
                 ->inRandomOrder()
-                ->limit(5)
+                ->limit($count)
                 ->get()
-                ->each(function (Service $service) use ($organization) {
-                    Intervention::factory()
-                        ->count(5)
+                ->each(
+                    fn (Service $service) => Intervention::factory()
+                        ->count($count)
                         ->for($organization)
                         ->for($service)
-                        ->create();
-                });
+                        ->create()
+                );
         });
     }
 }

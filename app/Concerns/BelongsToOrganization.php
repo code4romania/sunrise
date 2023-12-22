@@ -23,6 +23,10 @@ trait BelongsToOrganization
                 return;
             }
 
+            if (! Filament::hasTenancy()) {
+                return;
+            }
+
             $model->organization_id = filament()->getTenant()->id;
         });
 
