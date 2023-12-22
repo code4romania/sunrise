@@ -29,8 +29,11 @@ return [
     ],
 
     'filter' => [
+        'service' => [
+            'label' => 'Servicii',
+        ],
         'county' => [
-            'label' => 'Filtrează după locație',
+            'label' => 'Locație',
             'placeholder' => 'Național',
         ],
     ],

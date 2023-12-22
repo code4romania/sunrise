@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources;
 use App\Filament\Organizations\Resources\CommunityResource\Pages;
 use App\Models\CommunityProfile;
 use App\Tables\Columns\ServiceChipsColumn;
+use App\Tables\Filters\ServicesFilter;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
@@ -80,7 +81,6 @@ class CommunityResource extends Resource
                             ]),
 
                         InfolistSplit::make([
-
                             TextEntry::make('website')
                                 ->icon('heroicon-o-link')
                                 ->hiddenLabel()
@@ -98,7 +98,6 @@ class CommunityResource extends Resource
                                 ->hiddenLabel()
                                 ->url(fn (string $state) => "tel:{$state}")
                                 ->openUrlInNewTab(),
-
                         ]),
                     ]),
             ]);
@@ -150,11 +149,14 @@ class CommunityResource extends Resource
                 ])
                     ->from('md'),
             ])
-
             ->contentGrid([
                 'default' => 1,
             ])
             ->filters([
+                ServicesFilter::make('services')
+                    ->label(__('organization.filter.service.label'))
+                    ->columnSpanFull(),
+
                 SelectFilter::make('county')
                     ->relationship('counties', 'name')
                     ->label(__('organization.filter.county.label'))
