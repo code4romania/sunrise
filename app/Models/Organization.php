@@ -60,7 +60,10 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
 
     public function communityProfile(): HasOne
     {
-        return $this->hasOne(CommunityProfile::class);
+        return $this->hasOne(CommunityProfile::class)
+            ->withDefault(function (CommunityProfile $communityProfile, Organization $organization) {
+                $communityProfile->name = $organization->name;
+            });
     }
 
     public function registerMediaCollections(): void
