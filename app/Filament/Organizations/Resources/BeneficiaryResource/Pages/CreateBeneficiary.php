@@ -38,17 +38,10 @@ class CreateBeneficiary extends CreateRecord
                                 ->label(__('field.cnp'))
                                 ->nullable()
                                 ->rule(new ValidCNP)
-                                ->disabled()
+                                ->hidden()
                                 ->lazy(),
                         ]),
-                ])
-                ->afterValidation(function ($state, Step $component) {
-                    if (! $state['cnp']) {
-                        return;
-                    }
-
-                    dd($state, \func_get_args());
-                }),
+                ]),
 
             Step::make('beneficiary')
                 ->label(__('beneficiary.wizard.beneficiary.label'))

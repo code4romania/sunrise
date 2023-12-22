@@ -55,7 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ->collapsibleNavigationGroups(false)
             ->login(Pages\Auth\Login::class)
             ->colors([
-                'primary' => Color::Indigo,
+                'primary' => Color::Amber,
             ])
             ->maxContentWidth('full')
             ->viteTheme('resources/css/filament/common/theme.css')
