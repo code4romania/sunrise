@@ -4,32 +4,40 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Concerns\HasUlid;
+use App\Concerns\MustSetInitialPassword;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasDefaultTenant;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, HasMedia, HasTenants
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, HasMedia, HasTenants, HasDefaultTenant
 {
+    use CausesActivity;
     use HasApiTokens;
     use HasFactory;
     use HasUlid;
     use InteractsWithMedia;
+    use LogsActivity;
+    use MustSetInitialPassword;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -43,6 +51,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'last_name',
         'email',
         'password',
+        'password_set_at',
+        'latest_organization_id',
+        'is_admin',
     ];
 
     /**
@@ -61,14 +72,34 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
     ];
 
+    protected static function booted()
+    {
+        static::addGlobalScope('withLastLogin', function (Builder $query) {
+            return $query->withLastLoginAt();
+        });
+    }
+
     public function organizations(): MorphToMany
     {
         return $this->morphToMany(Organization::class, 'model', 'model_has_organizations', 'model_id');
+    }
+
+    public function latestOrganization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'latest_organization_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logExcept($this->hidden)
+            ->logOnlyDirty();
     }
 
     public function registerMediaCollections(): void
@@ -119,5 +150,26 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function canAccessTenant(Model $tenant): bool
     {
         return $this->organizations->contains($tenant);
+    }
+
+    public function getDefaultTenant(Panel $panel): ?Model
+    {
+        return $this->latestOrganization ?? $this->getTenants($panel)->first();
+    }
+
+    public function scopeWithLastLoginAt(Builder $query): Builder
+    {
+        return $query
+            ->addSelect([
+                'last_login_at' => Activity::query()
+                    ->select('created_at')
+                    ->where('subject_type', $this->getMorphClass())
+                    ->whereColumn('subject_id', 'users.id')
+                    ->where('log_name', 'system')
+                    ->where('event', 'logged_in')
+                    ->latest()
+                    ->take(1),
+            ])
+            ->withCasts(['last_login_at' => 'datetime']);
     }
 }

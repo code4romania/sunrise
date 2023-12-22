@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Http\Responses\LoginResponse;
 use App\Models\Beneficiary;
 use App\Models\City;
 use App\Models\CommunityProfile;
@@ -13,6 +14,8 @@ use App\Models\Organization;
 use App\Models\ReferringInstitution;
 use App\Models\Service;
 use App\Models\User;
+use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
+use Filament\Tables\Columns\Column;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
@@ -28,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerBlueprintMacros();
         $this->registerViteMacros();
+
+        $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+
+        Column::macro('shrink', fn () => $this->extraHeaderAttributes(['class' => 'w-1']));
     }
 
     /**

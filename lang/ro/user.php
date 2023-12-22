@@ -19,4 +19,11 @@ return [
         'monitoring' => 'Cazuri în monitorizare',
         'closed' => 'Cazuri închise',
     ],
+
+    'role' => [
+        'admin' => 'Administrator',
+        'specialist' => 'Specialist',
+        'manager' => 'Manager',
+
+    ],
 ];

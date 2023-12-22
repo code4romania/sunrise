@@ -6,6 +6,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\Organizations\Pages;
 use App\Filament\Organizations\Pages\Profile\UserPersonalInfo;
+use App\Http\Middleware\UpdateDefaultTenant;
+use App\Livewire\Welcome;
 use App\Models\Organization;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
@@ -26,6 +28,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Jeffgreco13\FilamentBreezy\BreezyCore;
 use Livewire\Livewire;
@@ -80,6 +83,9 @@ class OrganizationPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->routes(function () {
+                Route::get('/welcome/{user:ulid}', Welcome::class)->name('auth.welcome');
+            })
             ->discoverWidgets(
                 in: app_path('Filament/Organizations/Widgets'),
                 for: 'App\\Filament\\Organizations\\Widgets'
@@ -128,7 +134,10 @@ class OrganizationPanelProvider extends PanelProvider
             ])
             ->tenant(Organization::class, 'slug')
             ->tenantProfile(Pages\Tenancy\EditOrganizationProfile::class)
-            ->tenantRoutePrefix('org');
+            ->tenantRoutePrefix('org')
+            ->tenantMiddleware([
+                UpdateDefaultTenant::class,
+            ]);
     }
 
     protected function setDefaultDateTimeDisplayFormats(): void

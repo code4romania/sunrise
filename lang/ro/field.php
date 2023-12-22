@@ -49,6 +49,8 @@ return [
     'nurse' => 'Asistent Medical Comunitar',
     'open_at' => 'Deschis la',
     'organizer' => 'Organizator',
+    'organization' => 'Organizație',
+    'organizations' => 'Organizații',
     'outside_working_hours' => 'Realizat în afara programului de lucru',
     'participants_list' => 'Listă nominală participanți',
     'participants' => 'Participanți',
@@ -126,5 +128,8 @@ return [
     'act_location_other' => 'Specificați ce alt loc',
     'first_called_institution' => 'Prima instituție la care a apelat victima',
     'other_called_institutions' => 'Următoarele instituții la care a apelat victima',
+    'last_login_at' => 'Ultima accesare',
+
+    'role' => 'Rol',
 
 ];

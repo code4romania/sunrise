@@ -29,12 +29,21 @@ class UsersRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
-                TextColumn::make('first_name'),
-                TextColumn::make('last_name'),
-                TextColumn::make('email'),
-                TextColumn::make('role'),
-                TextColumn::make('created_at'),
+                TextColumn::make('id')
+                    ->label(__('field.id'))
+                    ->shrink(),
+
+                TextColumn::make('first_name')
+                    ->label(__('field.first_name')),
+
+                TextColumn::make('last_name')
+                    ->label(__('field.last_name')),
+
+                TextColumn::make('email')
+                    ->label(__('field.email')),
+
+                TextColumn::make('last_login_at')
+                    ->label(__('field.last_login_at')),
             ])
             ->filters([
                 //

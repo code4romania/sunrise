@@ -46,7 +46,7 @@ class OrganizationFactory extends Factory
         ];
     }
 
-    public function withUsers(int $count = 25): static
+    public function withUsers(int $count = 5): static
     {
         return $this->afterCreating(function (Organization $organization) use ($count) {
             $organization->users()->attach(

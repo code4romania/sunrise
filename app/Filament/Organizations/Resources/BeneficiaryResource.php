@@ -54,9 +54,7 @@ class BeneficiaryResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id'))
-                    ->extraHeaderAttributes([
-                        'class' => 'w-1',
-                    ])
+                    ->shrink()
                     ->sortable()
                     ->searchable(),
 
@@ -67,25 +65,19 @@ class BeneficiaryResource extends Resource
                 TextColumn::make('created_at')
                     ->label(__('field.open_at'))
                     ->date()
-                    ->extraHeaderAttributes([
-                        'class' => 'w-1',
-                    ])
+                    ->shrink()
                     ->sortable(),
 
                 TextColumn::make('last_evaluated_at')
                     ->label(__('field.last_evaluated_at'))
                     ->date()
-                    ->extraHeaderAttributes([
-                        'class' => 'w-1',
-                    ])
+                    ->shrink()
                     ->sortable(),
 
                 TextColumn::make('last_serviced_at')
                     ->label(__('field.last_serviced_at'))
                     ->date()
-                    ->extraHeaderAttributes([
-                        'class' => 'w-1',
-                    ])
+                    ->shrink()
                     ->sortable(),
 
                 TextColumn::make('status')
@@ -99,9 +91,7 @@ class BeneficiaryResource extends Resource
                         default => dd($state)
                     })
                     ->formatStateUsing(fn ($state) => $state?->label())
-                    ->extraHeaderAttributes([
-                        'class' => 'w-1',
-                    ]),
+                    ->shrink(),
             ])
             ->filters([
                 //
