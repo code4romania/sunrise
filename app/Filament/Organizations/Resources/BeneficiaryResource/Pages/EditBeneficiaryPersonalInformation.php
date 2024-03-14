@@ -30,6 +30,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditBeneficiaryPersonalInformation extends EditRecord
 {
@@ -40,6 +41,14 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         return [
             //
         ];
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return  __('beneficiary.page.edit_personal_information.title', [
+            'name' => $this->record->full_name,
+            'id' => $this->record->id,
+        ]);
     }
 
     public function form(Form $form): Form
