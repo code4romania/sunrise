@@ -15,4 +15,9 @@ class Dashboard extends BaseDashboard
             'name' => auth()->user()->first_name,
         ]);
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('dashboard.labels.navigation');
+    }
 }
