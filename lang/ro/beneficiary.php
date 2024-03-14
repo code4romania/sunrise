@@ -9,6 +9,18 @@ return [
         'plural' => 'Cazuri',
     ],
 
+    'page' => [
+        'view' => [
+            'title' => '#:id :name',
+        ],
+        'edit_identity' => [
+            'title' => 'Editeaza cazul #:id :name',
+        ],
+        'edit_personal_information' => [
+            'title' => 'Editeaza cazul #:id :name',
+        ],
+    ],
+
     'stats' => [
         'open' => 'Cazuri deschise',
         'monitoring' => 'Cazuri în monitorizare',

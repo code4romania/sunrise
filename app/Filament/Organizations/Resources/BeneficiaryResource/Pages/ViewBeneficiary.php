@@ -12,6 +12,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
 {
@@ -22,6 +23,17 @@ class ViewBeneficiary extends ViewRecord
         return [
             //
         ];
+    }
+
+    /**
+     * @return string|Htmlable
+     */
+    public function getTitle(): string|Htmlable
+    {
+        return  __('beneficiary.page.view.title', [
+            'name' => $this->record->full_name,
+            'id' => $this->record->id,
+        ]);
     }
 
     public function infolist(Infolist $infolist): Infolist
