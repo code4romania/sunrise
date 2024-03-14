@@ -15,6 +15,7 @@ use App\Models\ReferringInstitution;
 use App\Models\Service;
 use App\Models\User;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Columns\Column;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -47,6 +48,10 @@ class AppServiceProvider extends ServiceProvider
         tap($this->app->isLocal(), function (bool $shouldBeEnabled) {
             Model::preventLazyLoading($shouldBeEnabled);
             Model::preventAccessingMissingAttributes($shouldBeEnabled);
+        });
+
+        TextEntry::configureUsing(function (TextEntry $entry){
+           return $entry->default('-');
         });
     }
 
