@@ -224,7 +224,14 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                         ->pluck('name', 'id');
                 })
                 ->getOptionLabelUsing(fn ($value) => City::find($value)?->name)
-                ->visible($this->hasCity()),
+                ->visible(fn (Get $get) => $this->hasCity() && $get($this->getCountyField())),
+
+            Select::make($this->getCityField() . '_fake')
+                ->label($this->getCityLabel())
+                ->options([__('general.')])
+                ->disabled()
+                ->lazy()
+                ->visible(fn (Get $get) => $this->hasCity() && !$get($this->getCountyField())),
 
             TextInput::make($this->getAddressField())
                 ->label($this->getAddressLabel())
