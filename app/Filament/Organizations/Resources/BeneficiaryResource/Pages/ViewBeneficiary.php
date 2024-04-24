@@ -52,9 +52,9 @@ class ViewBeneficiary extends ViewRecord
             ->columnSpan(1)
             ->columns()
             ->headerActions([
-                Action::make('edit')
+                Action::make('view')
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record]))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_identity', ['record' => $record]))
                     ->link(),
             ])
             ->extraAttributes([
@@ -109,9 +109,9 @@ class ViewBeneficiary extends ViewRecord
             ->columnSpan(1)
             ->columns()
             ->headerActions([
-                Action::make('edit')
+                Action::make('view')
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_personal_information', ['record' => $record]))
                     ->link(),
             ])
             ->extraAttributes([
