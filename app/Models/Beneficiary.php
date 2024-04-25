@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -206,5 +207,30 @@ class Beneficiary extends Model
         return Attribute::make(
             get: fn () => $this->birthdate?->age,
         );
+    }
+
+    public function specialists(): HasMany
+    {
+        return $this->hasMany(Specialist::class);
+    }
+
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
+    public function partner(): HasOne
+    {
+        return $this->hasOne(BeneficiaryPartner::class);
+    }
+
+    public function multidisciplinaryEvaluation(): HasOne
+    {
+        return $this->hasOne(MultidisciplinaryEvaluation::class);
+    }
+
+    public function detailedEvaluationResult(): HasOne
+    {
+        return $this->hasOne(DetailedEvaluationResult::class);
     }
 }

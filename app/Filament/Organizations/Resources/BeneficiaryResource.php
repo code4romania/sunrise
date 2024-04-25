@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -123,6 +124,8 @@ class BeneficiaryResource extends Resource
 
             'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
             'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal'),
+
+            'create_detailed_evaluation' => CreateDetailedEvaluation::route('/{record}/detailedEvaluation/create'),
         ];
     }
 }

@@ -43,6 +43,7 @@ class ViewBeneficiary extends ViewRecord
             ->schema([
                 $this->identitySectionSection(),
                 $this->personalInformationSection(),
+                $this->evaluations(),
             ]);
     }
 
@@ -154,5 +155,19 @@ class ViewBeneficiary extends ViewRecord
                 EnumEntry::make('has_protection_order')
                     ->label(__('field.has_protection_order')),
             ]);
+    }
+
+    private function evaluations()
+    {
+        return Section::make('evaluare initiala')
+            ->columnSpan(1)
+            ->headerActions(
+                [
+                    Action::make('edit')
+                        ->label(__('general.action.view_details'))
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                        ->link()]
+            )
+            ->schema([]);
     }
 }
