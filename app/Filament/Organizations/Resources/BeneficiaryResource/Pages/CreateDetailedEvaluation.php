@@ -73,6 +73,7 @@ class CreateDetailedEvaluation extends EditRecord
                         ->relationship('meetings')
                         ->columnSpan(1)
                         ->columns()
+                        ->addActionLabel(__('beneficiary.action.add_meet_row'))
                         ->label(__('beneficiary.section.detailed_evaluation.labels.meetings'))
                         ->schema([
                             TextInput::make('specialist')
@@ -159,7 +160,10 @@ class CreateDetailedEvaluation extends EditRecord
                                     ->label(__('beneficiary.section.detailed_evaluation.labels.applicant'))
                                     ->placeholder(__('beneficiary.placeholder.applicant'))
 //                                    ->required()
-                                    ->options([]),
+                                    ->options([
+                                        'aaaa' => 'aaaaa',
+                                        'bbbb' => 'bbbbb',
+                                    ]),
                                 TextInput::make('reporting_by')
                                     ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
                                     ->placeholder(__('beneficiary.placeholder.reporting_by')),
