@@ -159,14 +159,22 @@ class ViewBeneficiary extends ViewRecord
 
     private function evaluations()
     {
-        return Section::make('evaluare initiala')
+        return Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
             ->columnSpan(1)
             ->headerActions(
                 [
                     Action::make('edit')
                         ->label(__('general.action.view_details'))
                         ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
-                        ->link()]
+                        ->link()
+                        ->visible(fn ($record) => ! $record->detailedEvaluationResult),
+
+                    Action::make('view')
+                        ->label(__('general.action.view_details'))
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
+                        ->link()
+                        ->visible(fn ($record) => $record->detailedEvaluationResult),
+                ]
             )
             ->schema([]);
     }
