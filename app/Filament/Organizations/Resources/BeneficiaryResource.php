@@ -125,6 +125,12 @@ class BeneficiaryResource extends Resource
             'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
             'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal'),
 
+            //            'view_initial_evaluation' => '',
+            //            'edit_initial_evaluation' => '',
+            'create_initial_evaluation' => Pages\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
+            //            'view_initial_evaluation' => '',
+            //            'view_initial_evaluation' => '',
+
             'view_detailed_evaluation' => Pages\ViewDetailedEvaluation::route('/{record}/detailedEvaluation'),
             'edit_detailed_evaluation' => Pages\EditDetailedEvaluation::route('/{record}/detailedEvaluation/edit'),
             'create_detailed_evaluation' => CreateDetailedEvaluation::route('/{record}/detailedEvaluation/create'),

@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+
+use App\Enums\Frequency;
+use App\Enums\Violence;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Form;
+use Filament\Resources\Pages\EditRecord;
+
+class EditViolence extends EditRecord
+{
+    protected static string $resource = BeneficiaryResource::class;
+
+    public function form(Form $form): Form
+    {
+        return $form->schema(self::getSchema());
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            Group::make([
+                Select::make('violence_types')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                    ->placeholder(__('beneficiary.placeholder.violence_type'))
+                    ->options(Violence::options())
+                    ->multiple()
+                    ->required(),
+                Select::make('violence_primary_type')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
+                    ->placeholder(__('beneficiary.placeholder.violence_primary_type'))
+                    ->options(Violence::options())
+                    ->required(),
+                Select::make('frequency_violence')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
+                    ->placeholder(__('beneficiary.placeholder.frequency_violence'))
+                    ->options(Frequency::options())
+                    ->required(),
+                MarkdownEditor::make('description')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.description'))
+                    ->placeholder(__('beneficiary.placeholder.description'))
+                    ->helperText(__('beneficiary.helper_text.violence_description'))
+                    ->columnSpanFull(),
+            ])
+                ->relationship('violence')
+                ->columns(),
+
+        ];
+    }
+}

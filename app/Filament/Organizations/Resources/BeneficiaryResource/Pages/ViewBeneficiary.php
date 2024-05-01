@@ -8,6 +8,7 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -159,23 +160,44 @@ class ViewBeneficiary extends ViewRecord
 
     private function evaluations()
     {
-        return Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
-            ->columnSpan(1)
-            ->headerActions(
-                [
-                    Action::make('edit')
-                        ->label(__('general.action.view_details'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
-                        ->link()
-                        ->visible(fn ($record) => ! $record->detailedEvaluationResult),
+        return Group::make([
+            Section::make(__('beneficiary.page.create_initial_evaluation.title'))
+                ->columnSpan(1)
+                ->headerActions(
+                    [
+                        Action::make('edit')
+                            ->label(__('general.action.view_details'))
+                            ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                            ->link()
+                            ->visible(fn ($record) => ! $record->detailedEvaluationResult),
 
-                    Action::make('view')
-                        ->label(__('general.action.view_details'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
-                        ->link()
-                        ->visible(fn ($record) => $record->detailedEvaluationResult),
-                ]
-            )
-            ->schema([]);
+                        Action::make('view')
+                            ->label(__('general.action.view_details'))
+                            ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
+                            ->link()
+                            ->visible(fn ($record) => $record->detailedEvaluationResult),
+                    ]
+                )
+                ->schema([]),
+
+            Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
+                ->columnSpan(1)
+                ->headerActions(
+                    [
+                        Action::make('edit')
+                            ->label(__('general.action.view_details'))
+                            ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                            ->link()
+                            ->visible(fn ($record) => ! $record->detailedEvaluationResult),
+
+                        Action::make('view')
+                            ->label(__('general.action.view_details'))
+                            ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
+                            ->link()
+                            ->visible(fn ($record) => $record->detailedEvaluationResult),
+                    ]
+                )
+                ->schema([]),
+        ]);
     }
 }

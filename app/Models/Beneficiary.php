@@ -233,4 +233,29 @@ class Beneficiary extends Model
     {
         return $this->hasOne(DetailedEvaluationResult::class);
     }
+
+    public function evaluateDetails(): HasOne
+    {
+        return $this->hasOne(EvaluateDetails::class);
+    }
+
+    public function violence(): HasOne
+    {
+        return $this->hasOne(Violence::class);
+    }
+
+    public function riskFactors(): HasOne
+    {
+        return $this->hasOne(RiskFactors::class);
+    }
+
+    public function requestedServices(): HasOne
+    {
+        return $this->hasOne(RequestedServices::class);
+    }
+
+    public function beneficiarySituation(): HasOne
+    {
+        return $this->hasOne(BeneficiarySituation::class);
+    }
 }

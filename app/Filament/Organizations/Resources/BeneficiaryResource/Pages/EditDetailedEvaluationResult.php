@@ -26,6 +26,18 @@ class EditDetailedEvaluationResult extends EditRecord
     {
         return [
             Group::make([
+                self::getRecommendationServicesSchema(),
+                self::getInterventionPlanSchema(),
+
+            ])
+                ->relationship('detailedEvaluationResult'),
+        ];
+    }
+
+    public static function getRecommendationServicesSchema(): Section
+    {
+        return Section::make('recommendation_services')
+            ->schema([
                 Checkbox::make('psychological_advice')
                     ->label(__('beneficiary.section.detailed_evaluation.labels.psychological_advice')),
                 Checkbox::make('legal_advice')
@@ -59,16 +71,17 @@ class EditDetailedEvaluationResult extends EditRecord
                 Textarea::make('other_services_description')
                     ->label('')
                     ->placeholder(__('beneficiary.placeholder.other_services')),
-                Section::make(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
-                    ->schema([
-                        MarkdownEditor::make('recommendations_for_intervention_plan')
-                            ->helperText(__('beneficiary.helper_text.recommendations_for_intervention_plan'))
-                            ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
-                            ->placeholder(__('beneficiary.placeholder.other_services')),
-                    ]),
+            ]);
+    }
 
-            ])
-                ->relationship('detailedEvaluationResult'),
-        ];
+    public static function getInterventionPlanSchema(): Section
+    {
+        return Section::make(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
+            ->schema([
+                MarkdownEditor::make('recommendations_for_intervention_plan')
+                    ->helperText(__('beneficiary.helper_text.recommendations_for_intervention_plan'))
+                    ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
+                    ->placeholder(__('beneficiary.placeholder.other_services')),
+            ]);
     }
 }

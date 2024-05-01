@@ -160,4 +160,19 @@ return [
         'private' => 'Entitate privată',
     ],
 
+    'frequency' => [
+        'daily' => 'Zilnică',
+        'weekly' => 'Săptămânală',
+        'monthly' => 'Lunară',
+        'lass_than_monthly' => 'Mai rar decât lunară',
+    ],
+
+    'helps' => [
+        'temporary_shelter' => 'Găzduire temporară',
+        'emergency_bag_storage' => 'Păstrare bagaj urgență',
+        'financial_support' => 'Sprijin financiar',
+        'emotional_support' => 'Sprijin emoțional',
+        'accompanying_actions' => 'Acompaniere demersuri',
+        'emergency_call' => 'Apelare de urgență',
+    ],
 ];
