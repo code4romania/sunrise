@@ -101,6 +101,7 @@ return [
                 'heading_4' => 'IV. Heading 4',
                 'heading_5' => 'V. Heading 5',
                 'heading_6' => 'VI. Heading 6',
+                'types_of_requested_services' => 'Tipuri de servicii solicitate',
             ],
             'labels' => [
                 'registered_date' => 'Data înregistrării',
@@ -141,6 +142,9 @@ return [
 
                 'FR_S6Q1' => '24. Familia extinsă poate oferi',
                 'FR_S6Q2' => '25. Vecinii/ prietenii pot oferi',
+
+                'moment_of_evaluation' => 'Momentul evaluării situației',
+                'description_of_situation' => 'A se include și situația juridică - acțiuni în instanță, situația socio-familială, situația medicală actuală):',
             ],
         ],
         'detailed_evaluation' => [
@@ -173,7 +177,7 @@ return [
                 'psychological_advice' => 'Consiliere psihologica',
                 'legal_advice' => 'Consiliere juridica',
                 'legal_assistance' => 'Asistenta juridica',
-                '' => 'Consiliere familiala',
+                'family_counseling' => 'Consiliere familiala',
                 'prenatal_advice' => 'Consiliere prenatala',
                 'social_advice' => 'Consiliere sociala',
                 'medical_services' => 'Servicii medicale de diagnostic medico-legal in cazurile de traumatisme fizice
@@ -200,6 +204,7 @@ return [
                 'risk' => 'Riscuri',
                 'partner' => 'Sotul/ partenerul',
                 'recommendations_for_intervention_plan' => 'Recomandari pentru planul de interventie',
+                'recommendation_services' => 'Servicii recomandate',
             ],
         ],
     ],
@@ -248,6 +253,8 @@ return [
         'frequency_violence' => 'Alege o frecvență',
         'description' => 'Descrieți pe scurt problema și contextul',
         'observations' => 'Observații',
+        'moment_of_evaluation' => 'Situația la data realizării evaluării inițiale',
+        'description_of_situation' => 'Descrieți pe scurt situația',
     ],
     'helper_text' => [
         'recommendations_for_intervention_plan' => 'Exemple de recomandări posibile conform standardelor:

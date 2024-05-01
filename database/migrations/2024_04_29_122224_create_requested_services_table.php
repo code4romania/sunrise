@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('psychological_advice')->default(false);
             $table->boolean('legal_advice')->default(false);
             $table->boolean('legal_assistance')->default(false);
+            $table->boolean('family_counseling')->default(false);
             $table->boolean('prenatal_advice')->default(false);
             $table->boolean('social_advice')->default(false);
             $table->boolean('medical_services')->default(false);

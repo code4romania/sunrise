@@ -17,6 +17,7 @@ class RequestedServices extends Model
         'psychological_advice',
         'legal_advice',
         'legal_assistance',
+        'family_counseling',
         'prenatal_advice',
         'social_advice',
         'medical_services',
