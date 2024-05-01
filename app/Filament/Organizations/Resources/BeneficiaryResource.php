@@ -125,11 +125,13 @@ class BeneficiaryResource extends Resource
             'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
             'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal'),
 
-            //            'view_initial_evaluation' => '',
-            //            'edit_initial_evaluation' => '',
+            'view_initial_evaluation' => Pages\ViewInitialEvaluation::route('/{record}/initialEvaluation'),
             'create_initial_evaluation' => Pages\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
-            //            'view_initial_evaluation' => '',
-            //            'view_initial_evaluation' => '',
+            'edit_initial_evaluation_details' => Pages\EditEvaluationDetails::route('/{record}/initialEvaluation/details/edit'),
+            'edit_initial_evaluation_violence' => Pages\EditViolence::route('/{record}/initialEvaluation/Violence/edit'),
+            'edit_initial_evaluation_risk_factors' => Pages\EditRiskFactors::route('/{record}/initialEvaluation/riskFactors/edit'),
+            'edit_initial_evaluation_requested_services' => Pages\EditRequestedServices::route('/{record}/initialEvaluation/requestedServices/edit'),
+            'edit_initial_evaluation_beneficiary_situation' => Pages\EditBeneficiarySituation::route('/{record}/initialEvaluation/beneficiarySituation/edit'),
 
             'view_detailed_evaluation' => Pages\ViewDetailedEvaluation::route('/{record}/detailedEvaluation'),
             'edit_detailed_evaluation' => Pages\EditDetailedEvaluation::route('/{record}/detailedEvaluation/edit'),

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\EnumEntry;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 
 class EditDetailedEvaluationResult extends EditRecord
@@ -85,5 +87,46 @@ class EditDetailedEvaluationResult extends EditRecord
                     ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
                     ->placeholder(__('beneficiary.placeholder.other_services')),
             ]);
+    }
+
+    public static function getRecommendationServicesInfolistSchema(): array
+    {
+        return [
+            EnumEntry::make('psychological_advice')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.psychological_advice')),
+            EnumEntry::make('legal_advice')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.legal_advice')),
+            EnumEntry::make('legal_assistance')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.legal_assistance')),
+            EnumEntry::make('family_counseling')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.family_counseling')),
+            EnumEntry::make('prenatal_advice')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.prenatal_advice')),
+            EnumEntry::make('social_advice')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.social_advice')),
+            EnumEntry::make('medical_services')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.medical_services')),
+            EnumEntry::make('medical_payment')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.medical_payment')),
+            EnumEntry::make('securing_residential_spaces')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.securing_residential_spaces')),
+            EnumEntry::make('occupational_program_services')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.occupational_program_services')),
+            EnumEntry::make('educational_services_for_children')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.educational_services_for_children')),
+            EnumEntry::make('temporary_shelter_services')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.temporary_shelter_services')),
+            EnumEntry::make('protection_order')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.protection_order')),
+            EnumEntry::make('crisis_assistance')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.crisis_assistance')),
+            EnumEntry::make('safety_plan')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.safety_plan')),
+            EnumEntry::make('other_services')
+                ->label(__('beneficiary.section.detailed_evaluation.labels.other_services')),
+            TextEntry::make('other_services_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.other_services')),
+        ];
     }
 }

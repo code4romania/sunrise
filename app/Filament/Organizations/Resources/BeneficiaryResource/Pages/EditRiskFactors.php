@@ -7,12 +7,16 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\Helps;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\EnumEntry;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Group as InfolistGroup;
+use Filament\Infolists\Components\Section as InfolistSection;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 
 class EditRiskFactors extends EditRecord
@@ -272,6 +276,207 @@ class EditRiskFactors extends EditRecord
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q2'))
                 ->multiple()
                 ->options(Helps::options()),
+        ];
+    }
+
+    public static function getInfoListSchema(): array
+    {
+        return [
+            InfolistGroup::make([
+                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.violence_history'))
+                    ->schema(self::getViolenceHistoryInfolistSchema()),
+                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.violences_types'))
+                    ->schema(self::getViolencesTypesInfolistSchema()),
+                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.heading_3'))
+                    ->schema(self::getSection3InfolistSchema()),
+                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.heading_4'))
+                    ->schema(self::getSection4InfolistSchema()),
+                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.heading_5'))
+                    ->schema(self::getSection5InfolistSchema()),
+                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.heading_6'))
+                    ->columns()
+                    ->schema(self::getSection6InfolistSchema()),
+            ])
+                ->relationship('riskFactors'),
+        ];
+    }
+
+    public static function getViolenceHistoryInfolistSchema(): array
+    {
+        return [
+            EnumEntry::make('previous_acts_of_violence')
+                ->label(__('beneficiary.section.initial_evaluation.labels.previous_acts_of_violence'))
+                ->inlineLabel(false),
+            TextEntry::make('previous_acts_of_violence_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('violence_against_children_or_family_members')
+                ->label(__('beneficiary.section.initial_evaluation.labels.violence_against_children_or_family_members'))
+                ->inlineLabel(false),
+            TextEntry::make('violence_against_children_or_family_members_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('abuser_exhibited_generalized_violent')
+                ->label(__('beneficiary.section.initial_evaluation.labels.abuser_exhibited_generalized_violent'))
+                ->inlineLabel(false),
+            TextEntry::make('abuser_exhibited_generalized_violent_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('protection_order_in_past')
+                ->label(__('beneficiary.section.initial_evaluation.labels.protection_order_in_past'))
+                ->inlineLabel(false),
+            TextEntry::make('protection_order_in_past_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('abuser_violated_protection_order')
+                ->label(__('beneficiary.section.initial_evaluation.labels.abuser_violated_protection_order'))
+                ->inlineLabel(false),
+            TextEntry::make('abuser_violated_protection_order_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+        ];
+    }
+
+    public static function getViolencesTypesInfolistSchema(): array
+    {
+        return [
+            EnumEntry::make('frequency_of_violence_acts')
+                ->label(__('beneficiary.section.initial_evaluation.labels.frequency_of_violence_acts'))
+                ->inlineLabel(false),
+            TextEntry::make('frequency_of_violence_acts_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('use_weapons_in_act_of_violence')
+                ->label(__('beneficiary.section.initial_evaluation.labels.use_weapons_in_act_of_violence'))
+                ->inlineLabel(false),
+            TextEntry::make('use_weapons_in_act_of_violence_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('controlling_and_isolating')
+                ->label(__('beneficiary.section.initial_evaluation.labels.controlling_and_isolating'))
+                ->inlineLabel(false),
+            TextEntry::make('controlling_and_isolating_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('stalked_or_harassed')
+                ->label(__('beneficiary.section.initial_evaluation.labels.stalked_or_harassed'))
+                ->inlineLabel(false),
+            TextEntry::make('stalked_or_harassed_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('sexual_violence')
+                ->label(__('beneficiary.section.initial_evaluation.labels.sexual_violence'))
+                ->inlineLabel(false),
+            TextEntry::make('sexual_violence_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('death_threats')
+                ->label(__('beneficiary.section.initial_evaluation.labels.death_threats'))
+                ->inlineLabel(false),
+            TextEntry::make('death_threats_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('strangulation_attempt')
+                ->label(__('beneficiary.section.initial_evaluation.labels.strangulation_attempt'))
+                ->inlineLabel(false),
+            TextEntry::make('strangulation_attempt_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+        ];
+    }
+
+    public static function getSection3InfolistSchema(): array
+    {
+        return [
+            EnumEntry::make('FR_S3Q1')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q1'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S3Q1_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S3Q2')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q2'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S3Q2_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S3Q3')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q3'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S3Q3_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S3Q4')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q4'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S3Q4_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+        ];
+    }
+
+    public static function getSection4InfolistSchema(): array
+    {
+        return [
+            EnumEntry::make('FR_S4Q1')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S4Q1'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S4Q1_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S4Q2')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S4Q2'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S4Q2_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+        ];
+    }
+
+    public static function getSection5InfolistSchema(): array
+    {
+        return [
+            EnumEntry::make('FR_S5Q1')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q1'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S5Q1_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S5Q2')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q2'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S5Q2_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S5Q3')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q3'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S5Q3_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S5Q4')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q4'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S5Q4_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+            EnumEntry::make('FR_S5Q5')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q5'))
+                ->inlineLabel(false),
+            TextEntry::make('FR_S5Q5_description')
+                ->label('')
+                ->placeholder(__('beneficiary.placeholder.observations')),
+
+        ];
+    }
+
+    public static function getSection6InfolistSchema(): array
+    {
+        return [
+            TextEntry::make('FR_S6Q1')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q1')),
+            EnumEntry::make('FR_S6Q2')
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q2')),
         ];
     }
 }

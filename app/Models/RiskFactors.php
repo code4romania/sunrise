@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,5 +65,33 @@ class RiskFactors extends Model
         'FR_S6Q1_description',
         'FR_S6Q2',
         'FR_S6Q2_description',
+    ];
+
+    protected $casts = [
+        'previous_acts_of_violence' => Ternary::class,
+        'violence_against_children_or_family_members' => Ternary::class,
+        'abuser_exhibited_generalized_violent' => Ternary::class,
+        'protection_order_in_past' => Ternary::class,
+        'abuser_violated_protection_order' => Ternary::class,
+        'frequency_of_violence_acts' => Ternary::class,
+        'use_weapons_in_act_of_violence' => Ternary::class,
+        'controlling_and_isolating' => Ternary::class,
+        'stalked_or_harassed' => Ternary::class,
+        'sexual_violence' => Ternary::class,
+        'death_threats' => Ternary::class,
+        'strangulation_attempt' => Ternary::class,
+        'FR_S3Q1' => Ternary::class,
+        'FR_S3Q2' => Ternary::class,
+        'FR_S3Q3' => Ternary::class,
+        'FR_S3Q4' => Ternary::class,
+        'FR_S4Q1' => Ternary::class,
+        'FR_S4Q2' => Ternary::class,
+        'FR_S5Q1' => Ternary::class,
+        'FR_S5Q2' => Ternary::class,
+        'FR_S5Q3' => Ternary::class,
+        'FR_S5Q4' => Ternary::class,
+        'FR_S5Q5' => Ternary::class,
+        'FR_S6Q1' => Ternary::class,
+        'FR_S6Q2' => Ternary::class,
     ];
 }

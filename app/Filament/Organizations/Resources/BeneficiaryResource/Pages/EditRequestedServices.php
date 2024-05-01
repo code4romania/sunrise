@@ -8,6 +8,8 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Group as InfolistGroup;
+use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Resources\Pages\EditRecord;
 
 class EditRequestedServices extends EditRecord
@@ -27,6 +29,17 @@ class EditRequestedServices extends EditRecord
             Group::make([
                 Section::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
                     ->schema(EditDetailedEvaluationResult::getRecommendationServicesSchema()),
+            ])
+                ->relationship('requestedServices'),
+        ];
+    }
+
+    public static function getInfoListSchema(): array
+    {
+        return [
+            InfolistGroup::make([
+                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
+                    ->schema(EditDetailedEvaluationResult::getRecommendationServicesInfolistSchema()),
             ])
                 ->relationship('requestedServices'),
         ];

@@ -7,10 +7,13 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\Frequency;
 use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\EnumEntry;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Group as InfolistGroup;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 
 class EditViolence extends EditRecord
@@ -46,6 +49,30 @@ class EditViolence extends EditRecord
                     ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                     ->placeholder(__('beneficiary.placeholder.description'))
                     ->helperText(__('beneficiary.helper_text.violence_description'))
+                    ->columnSpanFull(),
+            ])
+                ->relationship('violence')
+                ->columns(),
+
+        ];
+    }
+
+    public static function getInfoListSchema(): array
+    {
+        return [
+            InfolistGroup::make([
+                //                EnumEntry::make('violence_types')
+                //                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                //                    ->placeholder(__('beneficiary.placeholder.violence_type')),
+                EnumEntry::make('violence_primary_type')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
+                    ->placeholder(__('beneficiary.placeholder.violence_primary_type')),
+                EnumEntry::make('frequency_violence')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
+                    ->placeholder(__('beneficiary.placeholder.frequency_violence')),
+                TextEntry::make('description')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.description'))
+                    ->placeholder(__('beneficiary.placeholder.description'))
                     ->columnSpanFull(),
             ])
                 ->relationship('violence')
