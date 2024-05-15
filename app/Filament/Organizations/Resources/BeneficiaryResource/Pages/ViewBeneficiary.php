@@ -169,16 +169,29 @@ class ViewBeneficiary extends ViewRecord
                             ->label(__('general.action.view_details'))
                             ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
                             ->link()
-                            ->visible(fn ($record) => ! $record->detailedEvaluationResult),
+                            ->visible(fn ($record) => ! $record->violence?->violence_types),
 
                         Action::make('view')
                             ->label(__('general.action.view_details'))
                             ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
                             ->link()
-                            ->visible(fn ($record) => $record->detailedEvaluationResult),
+                            ->visible(fn ($record) => $record->violence?->violence_types),
                     ]
                 )
-                ->schema([]),
+                ->schema([Group::make([
+                    TextEntry::make('evaluateDetails.registered_date')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
+                        ->hidden(fn ($state) => $state == '-')
+                        ->date(),
+                    TextEntry::make('violence.violence_types')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                        ->hidden(fn ($state) => $state == '-')
+                        ->badge()
+                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                    // TODO add risk grade
+                ])
+                    ->columns(),
+                ]),
 
             Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
                 ->columnSpan(1)
@@ -197,7 +210,13 @@ class ViewBeneficiary extends ViewRecord
                             ->visible(fn ($record) => $record->detailedEvaluationResult),
                     ]
                 )
-                ->schema([]),
+                ->schema([
+                    Group::make([
+                        // TODO add detailedEvaluationResult as badges
+                    ])
+                        ->relationship('detailedEvaluationResult'),
+
+                ]),
         ]);
     }
 }

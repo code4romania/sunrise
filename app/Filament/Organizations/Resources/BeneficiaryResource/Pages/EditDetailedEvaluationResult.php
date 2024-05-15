@@ -74,7 +74,8 @@ class EditDetailedEvaluationResult extends EditRecord
                 ->label(__('beneficiary.section.detailed_evaluation.labels.other_services')),
             Textarea::make('other_services_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.other_services')),
+                ->placeholder(__('beneficiary.placeholder.other_services'))
+                ->maxLength(100),
         ];
     }
 
@@ -85,7 +86,8 @@ class EditDetailedEvaluationResult extends EditRecord
                 MarkdownEditor::make('recommendations_for_intervention_plan')
                     ->helperText(__('beneficiary.helper_text.recommendations_for_intervention_plan'))
                     ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
-                    ->placeholder(__('beneficiary.placeholder.other_services')),
+                    ->placeholder(__('beneficiary.placeholder.recommendations_for_intervention_plan'))
+                    ->maxLength(5000),
             ]);
     }
 

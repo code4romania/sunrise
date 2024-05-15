@@ -36,7 +36,8 @@ class EditEvaluationDetails extends EditRecord
                     ->required(),
                 TextInput::make('file_number')
                     ->label(__('beneficiary.section.initial_evaluation.labels.file_number'))
-                    ->placeholder(__('beneficiary.placeholder.file_number')),
+                    ->placeholder(__('beneficiary.placeholder.file_number'))
+                    ->maxLength(50),
                 Select::make('specialist_id')
                     ->label(__('beneficiary.section.initial_evaluation.labels.specialist'))
                     ->placeholder(__('beneficiary.placeholder.specialist'))
@@ -56,7 +57,8 @@ class EditEvaluationDetails extends EditRecord
                 Textarea::make('method_of_identifying_the_service')
                     ->label(__('beneficiary.section.initial_evaluation.labels.method_of_identifying_the_service'))
                     ->placeholder(__('beneficiary.placeholder.method_of_identifying_the_service'))
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->maxLength(2000),
             ])
                 ->columns()
                 ->relationship('evaluateDetails'),

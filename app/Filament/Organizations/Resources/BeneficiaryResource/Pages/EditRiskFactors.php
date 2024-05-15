@@ -60,7 +60,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('previous_acts_of_violence_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('violence_against_children_or_family_members')
                 ->label(__('beneficiary.section.initial_evaluation.labels.violence_against_children_or_family_members'))
                 ->inline()
@@ -68,7 +69,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('violence_against_children_or_family_members_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('abuser_exhibited_generalized_violent')
                 ->label(__('beneficiary.section.initial_evaluation.labels.abuser_exhibited_generalized_violent'))
                 ->inline()
@@ -76,7 +78,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('abuser_exhibited_generalized_violent_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('protection_order_in_past')
                 ->label(__('beneficiary.section.initial_evaluation.labels.protection_order_in_past'))
                 ->inline()
@@ -84,7 +87,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('protection_order_in_past_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('abuser_violated_protection_order')
                 ->label(__('beneficiary.section.initial_evaluation.labels.abuser_violated_protection_order'))
                 ->inline()
@@ -92,7 +96,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('abuser_violated_protection_order_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
         ];
     }
 
@@ -106,7 +111,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('frequency_of_violence_acts_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('use_weapons_in_act_of_violence')
                 ->label(__('beneficiary.section.initial_evaluation.labels.use_weapons_in_act_of_violence'))
                 ->inline()
@@ -114,7 +120,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('use_weapons_in_act_of_violence_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('controlling_and_isolating')
                 ->label(__('beneficiary.section.initial_evaluation.labels.controlling_and_isolating'))
                 ->inline()
@@ -122,7 +129,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('controlling_and_isolating_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('stalked_or_harassed')
                 ->label(__('beneficiary.section.initial_evaluation.labels.stalked_or_harassed'))
                 ->inline()
@@ -130,7 +138,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('stalked_or_harassed_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('sexual_violence')
                 ->label(__('beneficiary.section.initial_evaluation.labels.sexual_violence'))
                 ->inline()
@@ -138,7 +147,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('sexual_violence_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('death_threats')
                 ->label(__('beneficiary.section.initial_evaluation.labels.death_threats'))
                 ->inline()
@@ -146,7 +156,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('death_threats_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('strangulation_attempt')
                 ->label(__('beneficiary.section.initial_evaluation.labels.strangulation_attempt'))
                 ->inline()
@@ -154,7 +165,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('strangulation_attempt_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
         ];
     }
 
@@ -168,7 +180,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S3Q1_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S3Q2')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q2'))
                 ->inline()
@@ -176,7 +189,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S3Q2_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S3Q3')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q3'))
                 ->inline()
@@ -184,7 +198,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S3Q3_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S3Q4')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q4'))
                 ->inline()
@@ -192,7 +207,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S3Q4_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
         ];
     }
 
@@ -206,7 +222,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S4Q1_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S4Q2')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S4Q2'))
                 ->inline()
@@ -214,7 +231,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S4Q2_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
         ];
     }
 
@@ -228,7 +246,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S5Q1_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S5Q2')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q2'))
                 ->inline()
@@ -236,7 +255,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S5Q2_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S5Q3')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q3'))
                 ->inline()
@@ -244,7 +264,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S5Q3_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S5Q4')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q4'))
                 ->inline()
@@ -252,7 +273,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S5Q4_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
             Radio::make('FR_S5Q5')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q5'))
                 ->inline()
@@ -260,7 +282,8 @@ class EditRiskFactors extends EditRecord
                 ->options(Ternary::options()),
             TextInput::make('FR_S5Q5_description')
                 ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100),
 
         ];
     }

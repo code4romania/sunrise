@@ -175,4 +175,9 @@ return [
         'accompanying_actions' => 'Acompaniere demersuri',
         'emergency_call' => 'Apelare de urgență',
     ],
+
+    'applicant' => [
+        'beneficiary' => 'Solicitare din partea beneficiarului',
+        'other' => 'Semnalare caz de către altcineva',
+    ],
 ];

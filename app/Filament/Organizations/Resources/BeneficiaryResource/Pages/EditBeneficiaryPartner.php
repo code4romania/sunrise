@@ -35,15 +35,18 @@ class EditBeneficiaryPartner extends EditRecord
                     ->schema([
                         TextInput::make('last_name')
                             ->label(__('field.last_name'))
-                            ->placeholder(__('beneficiary.placeholder.last_name')),
+                            ->placeholder(__('beneficiary.placeholder.last_name'))
+                            ->maxLength(50),
 
                         TextInput::make('first_name')
                             ->label(__('field.first_name'))
-                            ->placeholder(__('beneficiary.placeholder.first_name')),
+                            ->placeholder(__('beneficiary.placeholder.first_name'))
+                            ->maxLength(50),
 
                         TextInput::make('age')
                             ->label(__('field.age'))
-                            ->placeholder(__('beneficiary.placeholder.age')),
+                            ->placeholder(__('beneficiary.placeholder.age'))
+                            ->maxLength(2),
 
                         Select::make('occupation')
                             ->label(__('field.occupation'))
@@ -78,7 +81,8 @@ class EditBeneficiaryPartner extends EditRecord
 
                         Textarea::make('observations')
                             ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
-                            ->placeholder(__('beneficiary.placeholder.partner_relevant_observations')),
+                            ->placeholder(__('beneficiary.placeholder.partner_relevant_observations'))
+                            ->maxLength(500),
                     ]),
             ])
                 ->relationship('partner')

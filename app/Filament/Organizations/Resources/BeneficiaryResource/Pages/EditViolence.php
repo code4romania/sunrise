@@ -49,7 +49,8 @@ class EditViolence extends EditRecord
                     ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                     ->placeholder(__('beneficiary.placeholder.description'))
                     ->helperText(__('beneficiary.helper_text.violence_description'))
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->maxLength(5000),
             ])
                 ->relationship('violence')
                 ->columns(),
@@ -61,9 +62,10 @@ class EditViolence extends EditRecord
     {
         return [
             InfolistGroup::make([
-                //                EnumEntry::make('violence_types')
-                //                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                //                    ->placeholder(__('beneficiary.placeholder.violence_type')),
+                TextEntry::make('violence_types')
+                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
                 EnumEntry::make('violence_primary_type')
                     ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
                     ->placeholder(__('beneficiary.placeholder.violence_primary_type')),

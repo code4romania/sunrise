@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
@@ -34,13 +35,17 @@ class EditDetailedEvaluation extends EditRecord
                 ->deletable()
                 ->schema([
                     TextInput::make('full_name')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.full_name')),
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))
+                        ->maxLength(50),
 
                     TextInput::make('institution')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.institution')),
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.institution'))
+                        ->maxLength(50)
+                        ->default(fn () => Filament::getTenant()->name),
 
                     TextInput::make('relationship')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.relationship')),
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.relationship'))
+                        ->maxLength(50),
 
                     DatePicker::make('date')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date')),
@@ -56,6 +61,7 @@ class EditDetailedEvaluation extends EditRecord
                     TextInput::make('specialist')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.specialist'))
                         ->placeholder(__('beneficiary.placeholder.full_name'))
+                        ->maxLength(50)
                         ->required(),
                     DatePicker::make('date')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.date'))
@@ -63,10 +69,12 @@ class EditDetailedEvaluation extends EditRecord
                         ->required(),
                     TextInput::make('location')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.location'))
-                        ->placeholder(__('beneficiary.placeholder.meet_location')),
+                        ->placeholder(__('beneficiary.placeholder.meet_location'))
+                        ->maxLength(50),
                     TextInput::make('observations')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
-                        ->placeholder(__('beneficiary.placeholder.relevant_details')),
+                        ->placeholder(__('beneficiary.placeholder.relevant_details'))
+                        ->maxLength(200),
 
                 ]),
         ];
