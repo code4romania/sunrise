@@ -101,10 +101,10 @@ return [
             'heading' => [
                 'violence_history' => 'I. Istoricul violenței',
                 'violences_types' => 'II. Formele și tipurile violenței',
-                'heading_3' => 'III. Heading 3',
-                'heading_4' => 'IV. Heading 4',
-                'heading_5' => 'V. Heading 5',
-                'heading_6' => 'VI. Heading 6',
+                'risk_factors' => 'III. Factori de risc legați de comportamentul agresorului',
+                'victim_perception_of_the_risk' => 'IV. Percepția victimei asupra riscului',
+                'aggravating_factors' => 'V. Factori agravanți',
+                'social_support' => 'VI. Suport social',
                 'types_of_requested_services' => 'Tipuri de servicii solicitate',
             ],
             'labels' => [
