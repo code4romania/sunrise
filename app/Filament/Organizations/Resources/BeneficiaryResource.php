@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources;
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -139,6 +140,8 @@ class BeneficiaryResource extends Resource
             'edit_beneficiary_partner' => Pages\EditBeneficiaryPartner::route('/{record}/beneficiaryPartner/edit'),
             'edit_multidisciplinary_evaluation' => Pages\EditMultidisciplinaryEvaluation::route('/{record}/multidisciplinaryEvaluation/edit'),
             'edit_detailed_evaluation_result' => Pages\EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
+
+            'view_specialists' => ListSpecialists::route('/{record}/specialists'),
         ];
     }
 }

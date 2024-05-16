@@ -9,6 +9,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -45,6 +46,7 @@ class ViewBeneficiary extends ViewRecord
                 $this->identitySectionSection(),
                 $this->personalInformationSection(),
                 $this->evaluations(),
+                $this->team(),
             ]);
     }
 
@@ -158,7 +160,7 @@ class ViewBeneficiary extends ViewRecord
             ]);
     }
 
-    private function evaluations()
+    private function evaluations(): Group
     {
         return Group::make([
             Section::make(__('beneficiary.page.create_initial_evaluation.title'))
@@ -218,5 +220,32 @@ class ViewBeneficiary extends ViewRecord
 
                 ]),
         ]);
+    }
+
+    private function team(): Section
+    {
+        return Section::make(__('beneficiary.section.specialists.title'))
+            ->columnSpan(1)
+            ->headerActions([
+                Action::make('edit')
+                    ->label(__('general.action.view_details'))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_specialists', ['record' => $record]))
+                    ->link(),
+            ])
+            ->schema([
+
+                RepeatableEntry::make('team')
+                    ->label('')
+                    ->contained(false)
+                    ->columns()
+                    ->schema([
+                        TextEntry::make('roles')
+                            ->label(__('beneficiary.section.specialists.labels.role'))
+                            ->badge(),
+                        TextEntry::make('user_id')
+                            ->label(__('beneficiary.section.specialists.labels.name'))
+                            ->formatStateUsing(fn ($record) => $record->user->getFilamentName()),
+                    ]),
+            ]);
     }
 }

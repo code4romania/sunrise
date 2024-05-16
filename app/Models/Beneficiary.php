@@ -258,4 +258,9 @@ class Beneficiary extends Model
     {
         return $this->hasOne(BeneficiarySituation::class);
     }
+
+    public function team(): HasMany
+    {
+        return $this->hasMany(CaseTeam::class);
+    }
 }

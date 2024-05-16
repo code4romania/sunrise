@@ -211,6 +211,16 @@ return [
                 'recommendation_services' => 'Servicii recomandate',
             ],
         ],
+        'specialists' => [
+            'title' => 'Echipă caz ',
+            'add_action' => 'Adaugă specialist',
+            'change_action' => 'Modifică',
+            'labels' => [
+                'name' => 'Nume specialist',
+                'role' => 'Rol',
+                'status' => 'Status',
+            ],
+        ],
     ],
 
     'status' => [
