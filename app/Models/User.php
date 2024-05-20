@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\HasUlid;
 use App\Concerns\MustSetInitialPassword;
+use App\Enums\UserStatus;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasDefaultTenant;
@@ -50,6 +51,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'first_name',
         'last_name',
         'email',
+        'phone_number',
+        'status',
+        'roles',
+        'can_be_case_manager',
+        'case_permissions',
+        'admin_permissions',
         'password',
         'password_set_at',
         'latest_organization_id',
@@ -75,12 +82,20 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'roles' => 'json',
+        'case_permissions' => 'json',
+        'admin_permissions' => 'json',
+        'status' => UserStatus::class,
     ];
 
     protected static function booted()
     {
         static::addGlobalScope('withLastLogin', function (Builder $query) {
             return $query->withLastLoginAt();
+        });
+
+        static::creating(function (User $model) {
+            $model->status = UserStatus::PENDING;
         });
     }
 
@@ -171,5 +186,19 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
                     ->take(1),
             ])
             ->withCasts(['last_login_at' => 'datetime']);
+    }
+
+    public function deactivate(): void
+    {
+        $this->update(['status' => UserStatus::INACTIVE]);
+    }
+
+    // TODO create notifications
+    public function resetPassword(): void
+    {
+    }
+
+    public function resendInvitation(): void
+    {
     }
 }

@@ -160,4 +160,9 @@ return [
         'private' => 'Entitate privată',
     ],
 
+    'user_status' => [
+        'active' => 'Activ',
+        'inactive' => 'Dezactivat',
+        'pending' => 'In asteptare',
+    ],
 ];
