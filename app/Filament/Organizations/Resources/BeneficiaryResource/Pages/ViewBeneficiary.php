@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\Level;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
@@ -190,6 +191,16 @@ class ViewBeneficiary extends ViewRecord
                         ->hidden(fn ($state) => $state == '-')
                         ->badge()
                         ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                    TextEntry::make('riskFactors.risk_level')
+                        ->label('')
+                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : '')
+                        ->hidden(fn ($state) => $state == '-')
+                        ->badge()
+                        ->colors([
+                            'success' => Level::LOW,
+                            'warning' => Level::MEDIUM,
+                            'danger' => Level::HIGH,
+                        ]),
                     // TODO add risk grade
                 ])
                     ->columns(),

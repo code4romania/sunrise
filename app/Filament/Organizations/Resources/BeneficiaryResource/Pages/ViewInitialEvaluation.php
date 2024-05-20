@@ -48,17 +48,21 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema(EditViolence::getInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.risk_factors.label'))
                         ->schema([
-                            Section::make(__('beneficiary.wizard.risk_factors.label'))
-                                ->headerActions([
-                                    Action::make('edit')
-                                        ->label(__('general.action.edit'))
-                                        ->url(fn ($record) => BeneficiaryResource::getUrl(
-                                            'edit_initial_evaluation_risk_factors',
-                                            ['record' => $record]
-                                        ))
-                                        ->link(),
-                                ])
-                                ->schema(EditRiskFactors::getInfoListSchema())]),
+                            Section::make(fn ($record) => $record->riskFactors->risk_level->label() ??
+                                __('beneficiary.wizard.risk_factors.label'))
+                                ->schema([
+                                    Section::make(__('beneficiary.wizard.risk_factors.label'))
+                                        ->headerActions([
+                                            Action::make('edit')
+                                                ->label(__('general.action.edit'))
+                                                ->url(fn ($record) => BeneficiaryResource::getUrl(
+                                                    'edit_initial_evaluation_risk_factors',
+                                                    ['record' => $record]
+                                                ))
+                                                ->link(),
+                                        ])
+                                        ->schema(EditRiskFactors::getInfoListSchema())]),
+                        ]),
                     Tabs\Tab::make(__('beneficiary.wizard.requested_services.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.requested_services.label'))

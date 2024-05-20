@@ -180,4 +180,10 @@ return [
         'beneficiary' => 'Solicitare din partea beneficiarului',
         'other' => 'Semnalare caz de către altcineva',
     ],
+
+    'level' => [
+        'high' => 'Grad de risc crescut',
+        'medium' => 'Grad de risc mediu',
+        'low' => 'Grad de risc scăzut',
+    ],
 ];

@@ -8,6 +8,8 @@ use App\Enums\Helps;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Models\Beneficiary;
+use App\Models\RiskFactors;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
@@ -306,15 +308,15 @@ class EditRiskFactors extends EditRecord
     {
         return [
             InfolistGroup::make([
-                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.violence_history'))
+                InfolistSection::make(fn (Beneficiary $record) => self::getViolenceHeading($record))
                     ->schema(self::getViolenceHistoryInfolistSchema()),
-                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.violences_types'))
+                InfolistSection::make(fn (Beneficiary $record) => self::getViolencesTypesHeading($record))
                     ->schema(self::getViolencesTypesInfolistSchema()),
-                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.risk_factors'))
+                InfolistSection::make(fn (Beneficiary $record) => self::getRiskFactorsHeading($record))
                     ->schema(self::getRiskFactorsInfolistSchema()),
-                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.victim_perception_of_the_risk'))
+                InfolistSection::make(fn (Beneficiary $record) => self::getVictimPerceptionOfTherRiskHeading($record))
                     ->schema(self::getVictimPerceptionOfTheRiskInfolistSchema()),
-                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.aggravating_factors'))
+                InfolistSection::make(fn (Beneficiary $record) => self::getAggravatingFactorsHeading($record))
                     ->schema(self::getAggravatingFactorsInfolistSchema()),
                 InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
                     ->columns()
@@ -497,9 +499,75 @@ class EditRiskFactors extends EditRecord
     {
         return [
             TextEntry::make('FR_S6Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q1')),
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q1'))
+                ->badge(),
             EnumEntry::make('FR_S6Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q2')),
+                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q2'))
+                ->badge(),
         ];
+    }
+
+    private static function getViolenceHeading(Beneficiary $record): string
+    {
+        $totalAnswers = 5;
+        $fields = ['previous_acts_of_violence', 'violence_against_children_or_family_members',
+            'abuser_exhibited_generalized_violent', 'protection_order_in_past', 'abuser_violated_protection_order'];
+        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+
+        return __('beneficiary.section.initial_evaluation.heading.violence_history') . ' ' .
+            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+    }
+
+    private static function getViolencesTypesHeading(Beneficiary $record): string
+    {
+        $totalAnswers = 7;
+        $fields = ['frequency_of_violence_acts', 'use_weapons_in_act_of_violence', 'controlling_and_isolating',
+            'stalked_or_harassed', 'sexual_violence', 'death_threats', 'strangulation_attempt'];
+        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+
+        return __('beneficiary.section.initial_evaluation.heading.violences_types') . ' ' .
+            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+    }
+
+    private static function getRiskFactorsHeading(Beneficiary $record): string
+    {
+        $totalAnswers = 4;
+        $fields = ['FR_S3Q1', 'FR_S3Q2', 'FR_S3Q3', 'FR_S3Q4'];
+        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+
+        return __('beneficiary.section.initial_evaluation.heading.risk_factors') . ' ' .
+            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+    }
+
+    private static function getVictimPerceptionOfTherRiskHeading(Beneficiary $record): string
+    {
+        $totalAnswers = 2;
+        $fields = ['FR_S4Q1', 'FR_S4Q2'];
+        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+
+        return __('beneficiary.section.initial_evaluation.heading.victim_perception_of_the_risk') . ' ' .
+            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+    }
+
+    private static function getAggravatingFactorsHeading(Beneficiary $record): string
+    {
+        $totalAnswers = 5;
+        $fields = ['FR_S5Q1', 'FR_S5Q2', 'FR_S5Q3', 'FR_S5Q4', 'FR_S5Q5'];
+        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+
+        return __('beneficiary.section.initial_evaluation.heading.aggravating_factors') . ' ' .
+            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+    }
+
+    private static function getTrueAnswers(RiskFactors $riskFactors, array $fields): int
+    {
+        $count = 0;
+        foreach ($fields as $field) {
+            if (Ternary::isYes($riskFactors->$field)) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }

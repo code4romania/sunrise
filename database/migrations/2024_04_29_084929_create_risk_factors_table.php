@@ -67,6 +67,7 @@ return new class extends Migration
             $table->string('FR_S6Q1_description')->nullable();
             $table->string('FR_S6Q2');
             $table->string('FR_S6Q2_description')->nullable();
+            $table->string('risk_level')->nullable();
             $table->timestamps();
         });
     }

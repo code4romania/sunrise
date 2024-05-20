@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Enums\Helps;
+use App\Enums\Level;
 use App\Enums\Ternary;
+use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -65,6 +68,7 @@ class RiskFactors extends Model
         'FR_S6Q1_description',
         'FR_S6Q2',
         'FR_S6Q2_description',
+        'risk_level',
     ];
 
     protected $casts = [
@@ -91,7 +95,86 @@ class RiskFactors extends Model
         'FR_S5Q3' => Ternary::class,
         'FR_S5Q4' => Ternary::class,
         'FR_S5Q5' => Ternary::class,
-        'FR_S6Q1' => Ternary::class,
-        'FR_S6Q2' => Ternary::class,
+        'FR_S6Q1' => AsEnumCollection::class . ':' . Helps::class,
+        'FR_S6Q2' => AsEnumCollection::class . ':' . Helps::class,
+        'risk_level' => Level::class,
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        self::creating(fn (RiskFactors $model) => self::calculateRiskLevel($model));
+
+        self::updating(fn (RiskFactors $model) => self::calculateRiskLevel($model));
+    }
+
+    public static function calculateRiskLevel(self $model): void
+    {
+        if (self::hasHighRiskLevel($model)) {
+            $model->risk_level = Level::HIGH;
+
+            return;
+        }
+
+        if (self::hasMediumRiskLevel($model)) {
+            $model->risk_level = Level::MEDIUM;
+
+            return;
+        }
+
+        if (self::hasLowRiskLevel($model)) {
+            $model->risk_level = Level::LOW;
+        }
+    }
+
+    private static function hasHighRiskLevel(self $model): bool
+    {
+        if (Ternary::isYes($model->use_weapons_in_act_of_violence)) {
+            return true;
+        }
+
+        if (Ternary::isYes($model->death_threats)) {
+            return true;
+        }
+
+        if (Ternary::isYes($model->FR_S4Q1)) {
+            return true;
+        }
+
+        if (self::getTrueAnswersCount($model) >= 5) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static function getTrueAnswersCount(self $model): int
+    {
+        $count = 0;
+        foreach ($model->getAttributes() as $value) {
+            if (Ternary::isYes($value)) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    private static function hasMediumRiskLevel(self $model): bool
+    {
+        if (self::getTrueAnswersCount($model) == 4) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static function hasLowRiskLevel(self $model): bool
+    {
+        if (self::getTrueAnswersCount($model) >= 1) {
+            return true;
+        }
+
+        return false;
+    }
 }
