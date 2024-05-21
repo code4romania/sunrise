@@ -8,7 +8,7 @@ return [
 
     'action' => [
         'view_details' => 'Vezi detalii',
-        'edit' => 'Editeaza',
+        'edit' => 'Editează',
     ],
 
 ];

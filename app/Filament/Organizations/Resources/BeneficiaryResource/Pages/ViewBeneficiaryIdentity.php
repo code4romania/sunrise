@@ -99,12 +99,12 @@ class ViewBeneficiaryIdentity extends ViewRecord
                             TextEntry::make('citizenship_id')
                                 ->label(__('field.citizenship'))
                                 ->placeholder(__('placeholder.citizenship'))
-                                ->formatStateUsing(fn ($record) => $record->citizenship->name),
+                                ->formatStateUsing(fn ($record) => $record->citizenship?->name),
 
                             TextEntry::make('ethnicity_id')
                                 ->label(__('field.ethnicity'))
                                 ->placeholder(__('placeholder.ethnicity'))
-                                ->formatStateUsing(fn ($record) => $record->ethnicity->name),
+                                ->formatStateUsing(fn ($record) => $record->ethnicity?->name),
 
                             TextEntry::make('id_serial')
                                 ->label(__('field.id_serial'))
