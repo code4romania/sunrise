@@ -212,9 +212,9 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->label($this->getCityLabel())
                 ->placeholder(__('placeholder.city'))
                 ->lazy()
-                ->searchable()
+                ->searchable(fn (Get $get) => $get($this->getCountyField()))
                 ->required($this->isRequired())
-                ->disabled($this->isDisabled())
+                ->disabled(fn (Get $get) => $this->isDisabled() || ! $get($this->getCountyField()))
                 ->getSearchResultsUsing(function (string $search, Get $get) {
                     return City::query()
                         ->where('county_id', (int) $get($this->getCountyField()))
@@ -224,7 +224,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                         ->pluck('name', 'id');
                 })
                 ->getOptionLabelUsing(fn ($value) => City::find($value)?->name)
-                ->visible($this->hasCity()),
+                ->visible(fn () => $this->hasCity()),
 
             TextInput::make($this->getAddressField())
                 ->label($this->getAddressLabel())

@@ -201,8 +201,8 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->city()
                         ->address()
                         ->environment()
-                        ->disabled(function (Get $get) {
-                            return $get('same_as_legal_residence');
+                        ->visible(function (Get $get) {
+                            return ! $get('same_as_legal_residence');
                         }),
 
                     Spacer::make(),

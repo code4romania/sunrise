@@ -146,6 +146,14 @@ class Beneficiary extends Model
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        self::creating(fn (Beneficiary $model) => self::copyLegalResidenceToEffectiveResidence($model));
+
+        self::updating(fn (Beneficiary $model) => self::copyLegalResidenceToEffectiveResidence($model));
+    }
+
     public function aggressor(): HasOne
     {
         return $this->hasOne(Aggressor::class)
@@ -206,5 +214,15 @@ class Beneficiary extends Model
         return Attribute::make(
             get: fn () => $this->birthdate?->age,
         );
+    }
+
+    private static function copyLegalResidenceToEffectiveResidence(self $model): void
+    {
+        if ($model->same_as_legal_residence) {
+            $model->effective_residence_county_id = $model->legal_residence_county_id;
+            $model->effective_residence_city_id = $model->legal_residence_city_id;
+            $model->effective_residence_address = $model->legal_residence_address;
+            $model->effective_residence_environment = $model->legal_residence_environment;
+        }
     }
 }
