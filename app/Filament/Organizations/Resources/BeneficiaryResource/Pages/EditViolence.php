@@ -9,7 +9,7 @@ use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use Filament\Forms\Components\Group;
-use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
@@ -45,7 +45,7 @@ class EditViolence extends EditRecord
                     ->placeholder(__('beneficiary.placeholder.frequency_violence'))
                     ->options(Frequency::options())
                     ->required(),
-                MarkdownEditor::make('description')
+                RichEditor::make('description')
                     ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                     ->placeholder(__('beneficiary.placeholder.description'))
                     ->helperText(__('beneficiary.helper_text.violence_description'))

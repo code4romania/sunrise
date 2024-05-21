@@ -8,7 +8,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
-use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
@@ -83,7 +83,7 @@ class EditDetailedEvaluationResult extends EditRecord
     {
         return Section::make(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
             ->schema([
-                MarkdownEditor::make('recommendations_for_intervention_plan')
+                RichEditor::make('recommendations_for_intervention_plan')
                     ->helperText(__('beneficiary.helper_text.recommendations_for_intervention_plan'))
                     ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
                     ->placeholder(__('beneficiary.placeholder.recommendations_for_intervention_plan'))

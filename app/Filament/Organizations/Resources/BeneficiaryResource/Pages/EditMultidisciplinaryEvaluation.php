@@ -7,7 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\Applicant;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use Filament\Forms\Components\Group;
-use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -53,7 +53,7 @@ class EditMultidisciplinaryEvaluation extends EditRecord
                             ->label(__('beneficiary.section.detailed_evaluation.labels.date_interval'))
                             ->placeholder(__('beneficiary.placeholder.date_interval'))
                             ->maxLength(100),
-                        MarkdownEditor::make('significant_events')
+                        RichEditor::make('significant_events')
                             ->label(__('beneficiary.section.detailed_evaluation.labels.significant_events'))
                             ->placeholder(__('beneficiary.placeholder.significant_events'))
                             ->maxLength(2000),

@@ -6,7 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use Filament\Forms\Components\Group;
-use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
@@ -30,7 +30,7 @@ class EditBeneficiarySituation extends EditRecord
                     ->label(__('beneficiary.section.initial_evaluation.labels.moment_of_evaluation'))
                     ->placeholder(__('beneficiary.placeholder.moment_of_evaluation'))
                     ->maxLength(100),
-                MarkdownEditor::make('description_of_situation')
+                RichEditor::make('description_of_situation')
                     ->label(__('beneficiary.section.initial_evaluation.labels.description_of_situation'))
                     ->placeholder(__('beneficiary.placeholder.description_of_situation'))
                     ->maxLength(5000),
