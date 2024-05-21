@@ -71,13 +71,13 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.last_name'))
                         ->placeholder(__('placeholder.last_name'))
                         ->maxLength(50)
-                        ->nullable(),
+                        ->required(),
 
                     TextInput::make('first_name')
                         ->label(__('field.first_name'))
                         ->placeholder(__('placeholder.first_name'))
                         ->maxLength(50)
-                        ->nullable(),
+                        ->required(),
 
                     TextInput::make('prior_name')
                         ->label(__('field.prior_name'))
