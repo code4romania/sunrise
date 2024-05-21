@@ -121,8 +121,10 @@ class BeneficiaryResource extends Resource
             'create' => Pages\CreateBeneficiary::route('/create'),
             'view' => Pages\ViewBeneficiary::route('/{record}'),
 
-            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
-            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal'),
+            'view_identity' => Pages\ViewBeneficiaryIdentity::route('/{record}/identity'),
+            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity/edit'),
+            'view_personal_information' => Pages\ViewBeneficiaryPersonalInformation::route('/{record}/personal'),
+            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal/edit'),
         ];
     }
 }
