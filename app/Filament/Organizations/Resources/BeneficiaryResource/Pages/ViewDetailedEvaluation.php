@@ -43,11 +43,10 @@ class ViewDetailedEvaluation extends ViewRecord
                             ]),
 
                         Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
-                            ->schema([]),
-                        //                                ->schema(static::getBeneficiaryIdentityFormSchema()),
+                            ->schema(ViewBeneficiaryIdentity::getBeneficiaryIdentityFormSchema()),
+
                         Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
-                            ->schema([]),
-                        //                                ->schema(static::getChildrenIdentityFormSchema()),
+                            ->schema(ViewBeneficiaryIdentity::getChildrenIdentityFormSchema()),
 
                         Tabs\Tab::make(__('beneficiary.wizard.partner.label'))
                             ->schema([

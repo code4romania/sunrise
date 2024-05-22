@@ -33,6 +33,13 @@ class ViewInitialEvaluation extends ViewRecord
                                         ->link(),
                                 ])
                                 ->schema(EditEvaluationDetails::getInfoListSchema())]),
+
+                    Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                        ->schema(ViewBeneficiaryIdentity::getBeneficiaryIdentityFormSchema()),
+
+                    Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
+                        ->schema(ViewBeneficiaryIdentity::getChildrenIdentityFormSchema()),
+
                     Tabs\Tab::make(__('beneficiary.wizard.violence.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.violence.label'))
