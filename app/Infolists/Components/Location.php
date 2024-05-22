@@ -2,27 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Forms\Components;
+namespace App\Infolists\Components;
 
-use App\Enums\ResidenceEnvironment;
 use App\Models\City;
 use App\Models\County;
 use Closure;
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\Concerns\CanBeValidated;
-use Filament\Forms\Components\Concerns\EntanglesStateWithSingularRelationship;
-use Filament\Forms\Components\Contracts\CanEntangleWithSingularRelationships;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Illuminate\Support\Facades\Cache;
+use Filament\Infolists\Components\Component;
+use Filament\Infolists\Components\TextEntry;
 
-class Location extends Component implements CanEntangleWithSingularRelationships
+class Location extends Component
 {
-    use EntanglesStateWithSingularRelationship;
-    use CanBeValidated;
-
     protected string $view = 'filament-forms::components.grid';
 
     protected string | Closure | null $countyField = null;
@@ -188,61 +177,23 @@ class Location extends Component implements CanEntangleWithSingularRelationships
     public function getChildComponents(): array
     {
         return [
-            Select::make($this->getCountyField())
+            TextEntry::make($this->getCountyField())
                 ->label($this->getCountyLabel())
                 ->placeholder(__('placeholder.county'))
-                ->options(function () {
-                    return Cache::driver('array')
-                        ->rememberForever(
-                            'counties',
-                            fn () => County::pluck('name', 'id')
-                        );
-                })
-                ->searchable()
-                ->preload()
-                ->lazy()
-                ->required($this->isRequired())
-                ->disabled($this->isDisabled())
-                ->afterStateUpdated(function (Set $set) {
-                    $set($this->getCityField(), null);
-                })
-                ->when(! $this->hasCity(), fn (Select $component) => $component->columnSpanFull()),
+                ->formatStateUsing(fn ($state) => County::find($state)?->name ?? '-'),
 
-            Select::make($this->getCityField())
+            TextEntry::make($this->getCityField())
                 ->label($this->getCityLabel())
                 ->placeholder(__('placeholder.city'))
-                ->lazy()
-                ->searchable(fn (Get $get) => $get($this->getCountyField()))
-                ->required($this->isRequired())
-                ->disabled(fn (Get $get) => $this->isDisabled() || ! $get($this->getCountyField()))
-                ->getSearchResultsUsing(function (string $search, Get $get) {
-                    return City::query()
-                        ->where('county_id', (int) $get($this->getCountyField()))
-                        ->search($search)
-                        ->limit(100)
-                        ->get()
-                        ->pluck('name', 'id');
-                })
-                ->getOptionLabelUsing(fn ($value) => City::find($value)?->name)
-                ->visible(fn () => $this->hasCity()),
+                ->formatStateUsing(fn ($state) => City::find($state)?->name ?? '-'),
 
-            TextInput::make($this->getAddressField())
+            TextEntry::make($this->getAddressField())
                 ->label($this->getAddressLabel())
-                ->placeholder(__('placeholder.address'))
-                ->required($this->isRequired())
-                ->disabled($this->isDisabled())
-                ->visible($this->hasAddress())
-                ->lazy(),
+                ->placeholder(__('placeholder.address')),
 
-            Select::make($this->getEnvironmentField())
+            EnumEntry::make($this->getEnvironmentField())
                 ->label($this->getEnvironmentLabel())
-                ->placeholder(__('placeholder.residence_environment'))
-                ->options(ResidenceEnvironment::options())
-                ->enum(ResidenceEnvironment::class)
-                ->required($this->isRequired())
-                ->disabled($this->isDisabled())
-                ->visible($this->hasEnvironment())
-                ->lazy(),
+                ->placeholder(__('placeholder.residence_environment')),
         ];
     }
 }

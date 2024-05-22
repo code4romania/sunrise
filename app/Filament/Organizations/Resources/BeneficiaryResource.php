@@ -123,9 +123,11 @@ class BeneficiaryResource extends Resource
             'create' => Pages\CreateBeneficiary::route('/create'),
             'view' => Pages\ViewBeneficiary::route('/{record}'),
 
-            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
-            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal'),
-
+            'view_identity' => Pages\ViewBeneficiaryIdentity::route('/{record}/identity'),
+            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity/edit'),
+            'view_personal_information' => Pages\ViewBeneficiaryPersonalInformation::route('/{record}/personal'),
+            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal/edit'),
+            
             'view_initial_evaluation' => Pages\ViewInitialEvaluation::route('/{record}/initialEvaluation'),
             'create_initial_evaluation' => Pages\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
             'edit_initial_evaluation_details' => Pages\EditEvaluationDetails::route('/{record}/initialEvaluation/details/edit'),
@@ -142,6 +144,7 @@ class BeneficiaryResource extends Resource
             'edit_detailed_evaluation_result' => Pages\EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
 
             'view_specialists' => ListSpecialists::route('/{record}/specialists'),
+
         ];
     }
 }
