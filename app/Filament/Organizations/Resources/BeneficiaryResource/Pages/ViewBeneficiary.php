@@ -163,74 +163,78 @@ class ViewBeneficiary extends ViewRecord
 
     private function evaluations(): Group
     {
-        return Group::make([
-            Section::make(__('beneficiary.page.create_initial_evaluation.title'))
-                ->columnSpan(1)
-                ->headerActions(
-                    [
-                        Action::make('edit')
-                            ->label(__('general.action.view_details'))
-                            ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
-                            ->link()
-                            ->visible(fn ($record) => ! $record->violence?->violence_types),
+        return Group::make()
+            ->schema([
+                Section::make(__('beneficiary.page.create_initial_evaluation.title'))
+                    ->columnSpan(1)
+                    ->headerActions(
+                        [
+                            Action::make('edit')
+                                ->label(__('general.action.view_details'))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                ->link()
+                                ->visible(fn ($record) => ! $record->violence?->violence_types),
 
-                        Action::make('view')
-                            ->label(__('general.action.view_details'))
-                            ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
-                            ->link()
-                            ->visible(fn ($record) => $record->violence?->violence_types),
-                    ]
-                )
-                ->schema([Group::make([
-                    TextEntry::make('evaluateDetails.registered_date')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
-                        ->hidden(fn ($state) => $state == '-')
-                        ->date(),
-                    TextEntry::make('violence.violence_types')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                        ->hidden(fn ($state) => $state == '-')
-                        ->badge()
-                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
-                    TextEntry::make('riskFactors.risk_level')
-                        ->label('')
-                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : '')
-                        ->hidden(fn ($state) => $state == '-')
-                        ->badge()
-                        ->colors([
-                            'success' => Level::LOW,
-                            'warning' => Level::MEDIUM,
-                            'danger' => Level::HIGH,
-                        ]),
-                    // TODO add risk grade
-                ])
-                    ->columns(),
-                ]),
+                            Action::make('view')
+                                ->label(__('general.action.view_details'))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
+                                ->link()
+                                ->visible(fn ($record) => $record->violence?->violence_types),
+                        ]
+                    )
+                    ->schema([
+                        Group::make()
+                            ->columns()
+                            ->schema([
+                                TextEntry::make('evaluateDetails.registered_date')
+                                    ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
+                                    ->hidden(fn ($state) => $state == '-')
+                                    ->date(),
+                                TextEntry::make('violence.violence_types')
+                                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                                    ->hidden(fn ($state) => $state == '-')
+                                    ->badge()
+                                    ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                                TextEntry::make('riskFactors.risk_level')
+                                    ->label('')
+                                    ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : '')
+                                    ->hidden(fn ($state) => $state == '-')
+                                    ->badge()
+                                    ->colors([
+                                        'success' => Level::LOW,
+                                        'warning' => Level::MEDIUM,
+                                        'danger' => Level::HIGH,
+                                    ]),
+                                // TODO add risk grade
+                            ]),
+                    ]),
 
-            Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
-                ->columnSpan(1)
-                ->headerActions(
-                    [
-                        Action::make('edit')
-                            ->label(__('general.action.view_details'))
-                            ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
-                            ->link()
-                            ->visible(fn ($record) => ! $record->detailedEvaluationResult),
+                Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
+                    ->columnSpan(1)
+                    ->headerActions(
+                        [
+                            Action::make('edit')
+                                ->label(__('general.action.view_details'))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                ->link()
+                                ->visible(fn ($record) => ! $record->detailedEvaluationResult),
 
-                        Action::make('view')
-                            ->label(__('general.action.view_details'))
-                            ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
-                            ->link()
-                            ->visible(fn ($record) => $record->detailedEvaluationResult),
-                    ]
-                )
-                ->schema([
-                    Group::make([
-                        // TODO add detailedEvaluationResult as badges
-                    ])
-                        ->relationship('detailedEvaluationResult'),
+                            Action::make('view')
+                                ->label(__('general.action.view_details'))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
+                                ->link()
+                                ->visible(fn ($record) => $record->detailedEvaluationResult),
+                        ]
+                    )
+                    ->schema([
+                        Group::make()
+                            ->relationship('detailedEvaluationResult')
+                            ->schema([
+                                // TODO add detailedEvaluationResult as badges
+                            ]),
 
-                ]),
-        ]);
+                    ]),
+            ]);
     }
 
     private function team(): Section

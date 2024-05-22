@@ -27,13 +27,14 @@ class EditDetailedEvaluationResult extends EditRecord
     public static function getSchema(): array
     {
         return [
-            Group::make([
-                Section::make(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
-                    ->schema(self::getRecommendationServicesSchema()),
-                self::getInterventionPlanSchema(),
+            Group::make()
+                ->relationship('detailedEvaluationResult')
+                ->schema([
+                    Section::make(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
+                        ->schema(self::getRecommendationServicesSchema()),
+                    self::getInterventionPlanSchema(),
 
-            ])
-                ->relationship('detailedEvaluationResult'),
+                ]),
         ];
     }
 

@@ -30,63 +30,64 @@ class EditBeneficiaryPartner extends EditRecord
     public static function getSchema(): array
     {
         return [
-            Group::make([
-                Section::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
-                    ->schema([
-                        TextInput::make('last_name')
-                            ->label(__('field.last_name'))
-                            ->placeholder(__('beneficiary.placeholder.last_name'))
-                            ->maxLength(50),
-
-                        TextInput::make('first_name')
-                            ->label(__('field.first_name'))
-                            ->placeholder(__('beneficiary.placeholder.first_name'))
-                            ->maxLength(50),
-
-                        TextInput::make('age')
-                            ->label(__('field.age'))
-                            ->placeholder(__('beneficiary.placeholder.age'))
-                            ->maxLength(2),
-
-                        Select::make('occupation')
-                            ->label(__('field.occupation'))
-                            ->placeholder(__('beneficiary.placeholder.occupation'))
-                            ->options(Occupation::options())
-                            ->enum(Occupation::class),
-
-                        Location::make('legal_residence')
-                            ->city()
-                            ->address()
-                            ->environment(false),
-
-                        Checkbox::make('same_as_legal_residence')
-                            ->label(__('field.same_as_legal_residence'))
-                            ->live()
-                            ->afterStateUpdated(function (bool $state, Set $set) {
-                                if ($state) {
-                                    $set('effective_residence_county_id', null);
-                                    $set('effective_residence_city_id', null);
-                                    $set('effective_residence_address', null);
-                                    $set('effective_residence_environment', null);
-                                }
-                            })
-                            ->columnSpanFull(),
-
-                        Location::make('effective_residence')
-                            ->city()
-                            ->address()
-                            ->hidden(function (Get $get) {
-                                return $get('same_as_legal_residence');
-                            }),
-
-                        Textarea::make('observations')
-                            ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
-                            ->placeholder(__('beneficiary.placeholder.partner_relevant_observations'))
-                            ->maxLength(500),
-                    ]),
-            ])
+            Group::make()
                 ->relationship('partner')
-                ->columns(),
+                ->columns()
+                ->schema([
+                    Section::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
+                        ->schema([
+                            TextInput::make('last_name')
+                                ->label(__('field.last_name'))
+                                ->placeholder(__('beneficiary.placeholder.last_name'))
+                                ->maxLength(50),
+
+                            TextInput::make('first_name')
+                                ->label(__('field.first_name'))
+                                ->placeholder(__('beneficiary.placeholder.first_name'))
+                                ->maxLength(50),
+
+                            TextInput::make('age')
+                                ->label(__('field.age'))
+                                ->placeholder(__('beneficiary.placeholder.age'))
+                                ->maxLength(2),
+
+                            Select::make('occupation')
+                                ->label(__('field.occupation'))
+                                ->placeholder(__('beneficiary.placeholder.occupation'))
+                                ->options(Occupation::options())
+                                ->enum(Occupation::class),
+
+                            Location::make('legal_residence')
+                                ->city()
+                                ->address()
+                                ->environment(false),
+
+                            Checkbox::make('same_as_legal_residence')
+                                ->label(__('field.same_as_legal_residence'))
+                                ->live()
+                                ->afterStateUpdated(function (bool $state, Set $set) {
+                                    if ($state) {
+                                        $set('effective_residence_county_id', null);
+                                        $set('effective_residence_city_id', null);
+                                        $set('effective_residence_address', null);
+                                        $set('effective_residence_environment', null);
+                                    }
+                                })
+                                ->columnSpanFull(),
+
+                            Location::make('effective_residence')
+                                ->city()
+                                ->address()
+                                ->hidden(function (Get $get) {
+                                    return $get('same_as_legal_residence');
+                                }),
+
+                            Textarea::make('observations')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
+                                ->placeholder(__('beneficiary.placeholder.partner_relevant_observations'))
+                                ->maxLength(500),
+                        ]),
+                ]),
         ];
     }
 }

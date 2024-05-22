@@ -33,22 +33,23 @@ class EditRiskFactors extends EditRecord
     public static function getSchema(): array
     {
         return [
-            Group::make([
-                Section::make(__('beneficiary.section.initial_evaluation.heading.violence_history'))
-                    ->schema(self::getViolenceHistorySchema()),
-                Section::make(__('beneficiary.section.initial_evaluation.heading.violences_types'))
-                    ->schema(self::getViolencesTypesSchema()),
-                Section::make(__('beneficiary.section.initial_evaluation.heading.risk_factors'))
-                    ->schema(self::getRiskFactorsSchema()),
-                Section::make(__('beneficiary.section.initial_evaluation.heading.victim_perception_of_the_risk'))
-                    ->schema(self::getVictimPerceptionOfTheRiskSchema()),
-                Section::make(__('beneficiary.section.initial_evaluation.heading.aggravating_factors'))
-                    ->schema(self::getAggravatingFactorsSchema()),
-                Section::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
-                    ->columns()
-                    ->schema(self::getSocialSupportSchema()),
-            ])
-                ->relationship('riskFactors'),
+            Group::make()
+                ->relationship('riskFactors')
+                ->schema([
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.violence_history'))
+                        ->schema(self::getViolenceHistorySchema()),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.violences_types'))
+                        ->schema(self::getViolencesTypesSchema()),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.risk_factors'))
+                        ->schema(self::getRiskFactorsSchema()),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.victim_perception_of_the_risk'))
+                        ->schema(self::getVictimPerceptionOfTheRiskSchema()),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.aggravating_factors'))
+                        ->schema(self::getAggravatingFactorsSchema()),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
+                        ->columns()
+                        ->schema(self::getSocialSupportSchema()),
+                ]),
         ];
     }
 
@@ -330,22 +331,23 @@ class EditRiskFactors extends EditRecord
     public static function getInfoListSchema(): array
     {
         return [
-            InfolistGroup::make([
-                InfolistSection::make(fn (Beneficiary $record) => self::getViolenceHeading($record))
-                    ->schema(self::getViolenceHistoryInfolistSchema()),
-                InfolistSection::make(fn (Beneficiary $record) => self::getViolencesTypesHeading($record))
-                    ->schema(self::getViolencesTypesInfolistSchema()),
-                InfolistSection::make(fn (Beneficiary $record) => self::getRiskFactorsHeading($record))
-                    ->schema(self::getRiskFactorsInfolistSchema()),
-                InfolistSection::make(fn (Beneficiary $record) => self::getVictimPerceptionOfTherRiskHeading($record))
-                    ->schema(self::getVictimPerceptionOfTheRiskInfolistSchema()),
-                InfolistSection::make(fn (Beneficiary $record) => self::getAggravatingFactorsHeading($record))
-                    ->schema(self::getAggravatingFactorsInfolistSchema()),
-                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
-                    ->columns()
-                    ->schema(self::getSocialSupportInfolistSchema()),
-            ])
-                ->relationship('riskFactors'),
+            InfolistGroup::make()
+                ->relationship('riskFactors')
+                ->schema([
+                    InfolistSection::make(fn (Beneficiary $record) => self::getViolenceHeading($record))
+                        ->schema(self::getViolenceHistoryInfolistSchema()),
+                    InfolistSection::make(fn (Beneficiary $record) => self::getViolencesTypesHeading($record))
+                        ->schema(self::getViolencesTypesInfolistSchema()),
+                    InfolistSection::make(fn (Beneficiary $record) => self::getRiskFactorsHeading($record))
+                        ->schema(self::getRiskFactorsInfolistSchema()),
+                    InfolistSection::make(fn (Beneficiary $record) => self::getVictimPerceptionOfTherRiskHeading($record))
+                        ->schema(self::getVictimPerceptionOfTheRiskInfolistSchema()),
+                    InfolistSection::make(fn (Beneficiary $record) => self::getAggravatingFactorsHeading($record))
+                        ->schema(self::getAggravatingFactorsInfolistSchema()),
+                    InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
+                        ->columns()
+                        ->schema(self::getSocialSupportInfolistSchema()),
+                ]),
         ];
     }
 

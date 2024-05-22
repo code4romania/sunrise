@@ -26,22 +26,24 @@ class EditRequestedServices extends EditRecord
     public static function getSchema(): array
     {
         return [
-            Group::make([
-                Section::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
-                    ->schema(EditDetailedEvaluationResult::getRecommendationServicesSchema()),
-            ])
-                ->relationship('requestedServices'),
+            Group::make()
+                ->relationship('requestedServices')
+                ->schema([
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
+                        ->schema(EditDetailedEvaluationResult::getRecommendationServicesSchema()),
+                ]),
         ];
     }
 
     public static function getInfoListSchema(): array
     {
         return [
-            InfolistGroup::make([
-                InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
-                    ->schema(EditDetailedEvaluationResult::getRecommendationServicesInfolistSchema()),
-            ])
-                ->relationship('requestedServices'),
+            InfolistGroup::make()
+                ->relationship('requestedServices')
+                ->schema([
+                    InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
+                        ->schema(EditDetailedEvaluationResult::getRecommendationServicesInfolistSchema()),
+                ]),
         ];
     }
 }

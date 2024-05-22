@@ -51,57 +51,60 @@ class ViewDetailedEvaluation extends ViewRecord
 
                         Tabs\Tab::make(__('beneficiary.wizard.partner.label'))
                             ->schema([
-                                Group::make([
-                                    Section::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
-                                        ->headerActions([
-                                            Action::make('edit')
-                                                ->label(__('general.action.edit'))
-                                                ->url(fn ($record) => BeneficiaryResource::getUrl(
-                                                    'edit_beneficiary_partner',
-                                                    ['record' => $record]
-                                                ))
-                                                ->link(),
-                                        ])
-                                        ->schema($this->getPartnerSchema()),
-                                ])
+                                Group::make()
                                     ->relationship('partner')
-                                    ->columns(),
+                                    ->columns()
+                                    ->schema([
+                                        Section::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
+                                            ->headerActions([
+                                                Action::make('edit')
+                                                    ->label(__('general.action.edit'))
+                                                    ->url(fn ($record) => BeneficiaryResource::getUrl(
+                                                        'edit_beneficiary_partner',
+                                                        ['record' => $record]
+                                                    ))
+                                                    ->link(),
+                                            ])
+                                            ->schema($this->getPartnerSchema()),
+                                    ]),
                             ]),
 
                         Tabs\Tab::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
                             ->schema([
-                                Group::make([
-                                    Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
-                                        ->headerActions([
-                                            Action::make('edit')
-                                                ->label(__('general.action.edit'))
-                                                ->url(fn ($record) => BeneficiaryResource::getUrl(
-                                                    'edit_multidisciplinary_evaluation',
-                                                    ['record' => $record]
-                                                ))
-                                                ->link(),
-                                        ])
-                                        ->schema($this->getMultidisciplinarySchema()),
-                                ])
-                                    ->relationship('multidisciplinaryEvaluation'),
+                                Group::make()
+                                    ->relationship('multidisciplinaryEvaluation')
+                                    ->schema([
+                                        Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
+                                            ->headerActions([
+                                                Action::make('edit')
+                                                    ->label(__('general.action.edit'))
+                                                    ->url(fn ($record) => BeneficiaryResource::getUrl(
+                                                        'edit_multidisciplinary_evaluation',
+                                                        ['record' => $record]
+                                                    ))
+                                                    ->link(),
+                                            ])
+                                            ->schema($this->getMultidisciplinarySchema()),
+                                    ]),
                             ]),
 
                         Tabs\Tab::make(__('beneficiary.wizard.results.label'))
                             ->schema([
-                                Group::make([
-                                    Section::make(__('beneficiary.wizard.results.label'))
-                                        ->headerActions([
-                                            Action::make('edit')
-                                                ->label(__('general.action.edit'))
-                                                ->url(fn ($record) => BeneficiaryResource::getUrl(
-                                                    'edit_detailed_evaluation_result',
-                                                    ['record' => $record]
-                                                ))
-                                                ->link(),
-                                        ])
-                                        ->schema($this->getResultSchema()),
-                                ])
-                                    ->relationship('detailedEvaluationResult'),
+                                Group::make()
+                                    ->relationship('detailedEvaluationResult')
+                                    ->schema([
+                                        Section::make(__('beneficiary.wizard.results.label'))
+                                            ->headerActions([
+                                                Action::make('edit')
+                                                    ->label(__('general.action.edit'))
+                                                    ->url(fn ($record) => BeneficiaryResource::getUrl(
+                                                        'edit_detailed_evaluation_result',
+                                                        ['record' => $record]
+                                                    ))
+                                                    ->link(),
+                                            ])
+                                            ->schema($this->getResultSchema()),
+                                    ]),
                             ]),
 
                     ]),
