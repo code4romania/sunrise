@@ -186,4 +186,23 @@ return [
         'medium' => 'Grad de risc mediu',
         'low' => 'Grad de risc scăzut',
     ],
+
+    'role' => [
+        'coordinator' => 'Coordonator',
+        'manger' => 'Manager de caz',
+        'chef_manager' => 'Șef manager de caz',
+        'chef_service' => 'Șef serviciu',
+        'psychological_advice' => 'Consilier Psihologic',
+        'psychotherapist' => 'Psihoterapeut',
+        'clinical_psychologist' => 'Psiholog Clinician',
+        'psycho_pedagogue' => 'Psihopedagog',
+        'social_worker' => 'Asistent social',
+        'legal_advisor' => 'Consilier juridic',
+        'facilitator' => 'Facilitator',
+        'trainer' => 'Formator',
+        'doctor' => 'Medic',
+        'medical_assistant' => 'Asistent medical',
+        'occupational_therapist' => 'Terapeut ocupațional',
+        'other' => 'Alt Specialist',
+    ],
 ];

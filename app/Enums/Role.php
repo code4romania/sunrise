@@ -14,21 +14,22 @@ enum Role: string
     use Comparable;
     use HasLabel;
 
-    case COORDINATOR = 'Coordonator';
-    case MANGER = 'Manager de caz';
-    case CHEF_MANAGER = 'Șef manager de caz';
-    case CHEF_SERVICE = 'Șef serviciu';
-    case PSYCHOLOGICAL_ADVICE = 'Consilier Psihologic';
-    //  case = 'Psihoterapeut';
-    //  case = 'Psiholog Clinician';
-    //  case = 'Psihopedagog';
-    //  case = 'Asistent social';
-    //  case = 'Consilier juridic';
-    //  case = 'Facilitator';
-    //  case = 'Formator; Medic';
-    //  case = 'Asistent medical';
-    //  case = 'Terapeut ocupațional';
-    //  case = 'Alt Specialis't
+    case COORDINATOR = 'coordinator';
+    case MANGER = 'manger';
+    case CHEF_MANAGER = 'chef_manager';
+    case CHEF_SERVICE = 'chef_service';
+    case PSYCHOLOGICAL_ADVICE = 'psychological_advice';
+    case PSYCHOTHERAPIST = 'psychotherapist';
+    case CLINICAL_PSYCHOLOGIST = 'clinical_psychologist';
+    case PSYCHO_PEDAGOGUE = 'psycho_pedagogue';
+    case SOCIAL_WORKER = 'social_worker';
+    case LEGAL_ADVISOR = 'legal_advisor';
+    case FACILITATOR = 'facilitator';
+    case TRAINER = 'trainer';
+    case DOCTOR = 'doctor';
+    case MEDICAL_ASSISTANT = 'medical_assistant';
+    case OCCUPATIONAL_THERAPIST = 'occupational_therapist';
+    case OTHER = 'other';
 
     protected function labelKeyPrefix(): ?string
     {

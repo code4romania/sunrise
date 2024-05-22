@@ -14,7 +14,7 @@ enum Applicant: string
     use Comparable;
     use HasLabel;
 
-    case BENFECIARY = 'beneficiary';
+    case BENEFICIARY = 'beneficiary';
     case OTHER = 'other';
 
     protected function labelKeyPrefix(): ?string
