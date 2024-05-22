@@ -26,13 +26,6 @@ return [
         'can_be_case_manager' => 'Poate lua rol de manager de caz',
         'case_permissions' => 'Permisiuni cazuri',
         'admin_permissions' => 'Permisiuni administrare',
-        'has_access_to_all_cases' => 'Are acces la toate cazurile din Centru',
-        'can_search_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției',
-        'can_copy_cases_in_all_centers' => 'Poate copia date identificare beneficiar dintr-o bază de date în alta  a instituției',
-        'has_access_to_statistics' => 'Are acces la rapoarte statistice',
-        'can_change_nomenclature' => 'Are drepturi de modificare nomenclator',
-        'can_change_staff' => 'Are drepturi de modificare Echipă Specialiști (Staff)',
-        'can_change_organisation_profile' => 'Are drepturi de modificare Profilul Organizației în Rețeaua Sunrise',
     ],
 
     'stats' => [
@@ -61,5 +54,16 @@ return [
         'deactivate' => 'Deactivează cont',
         'reset_password' => 'Resetează parola',
         'resend_invitation' => 'Retrimite invitația',
+    ],
+
+    'action_resend_invitation_confirm' => [
+        'title' => 'Retrimite invitația',
+        'success' => 'Invitația a fost trimisata cu succes.',
+        'failure_title' => 'Eroare la retrimiterea invitației!',
+        'failure_body' => 'A aparut o eroare la retrimiterea invitației',
+    ],
+    'action_deactivate_confirm' => [
+        'title' => 'Deactivează cont',
+        'success' => 'Cont dezactivat cu succes',
     ],
 ];

@@ -20,20 +20,17 @@ class ViewUser extends ViewRecord
 
     public function form(Form $form): Form
     {
-        return $form->schema(
-            array_merge(
-                [
-                    Group::make([
-                        Placeholder::make('status')
-                            ->content(fn (User $record) => $record->status?->label()),
-                        Placeholder::make('updated_at')
-                            ->content(fn (User $record) => $record->updated_at),
-                    ])
-                        ->columns()
-                        ->columnSpanFull()],
-                UserResource::getSchema()
-            )
-        );
+        return $form->schema([
+            ...[Group::make([
+                Placeholder::make('status')
+                    ->content(fn (User $record) => $record->status?->label()),
+                Placeholder::make('updated_at')
+                    ->content(fn (User $record) => $record->updated_at),
+            ])
+                ->columns()
+                ->columnSpanFull()],
+            ...UserResource::getSchema(),
+        ]);
     }
 
     protected function getHeaderActions(): array
@@ -41,20 +38,14 @@ class ViewUser extends ViewRecord
         return [
             Actions\EditAction::make('edit'),
 
-            Actions\Action::make('deactivate')
-                ->label(__('user.actions.deactivate'))
-                ->visible(fn (User $record) => UserStatus::isValue($record->status, UserStatus::ACTIVE))
-                ->action(fn (User $record) => $record->deactivate()),
+            UserResource\Actions\DeactivateUserAction::make(),
 
             Actions\Action::make('reset_password')
                 ->label(__('user.actions.reset_password'))
                 ->visible(fn (User $record) => UserStatus::isValue($record->status, UserStatus::ACTIVE))
                 ->action(fn (User $record) => $record->resetPassword()),
 
-            Actions\Action::make('resend_invitation')
-                ->label(__('user.actions.resend_invitation'))
-                ->visible(fn (User $record) => UserStatus::isValue($record->status, UserStatus::PENDING))
-                ->action(fn (User $record) => $record->resendInvitation()),
+            UserResource\Actions\ResendInvitationAction::make(),
         ];
     }
 

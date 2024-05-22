@@ -14,6 +14,7 @@ use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -83,6 +84,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password' => 'hashed',
         'is_admin' => 'boolean',
         'roles' => 'json',
+        //        'roles' => AsEnumCollection::class . ':' . Role::class,
         'case_permissions' => 'json',
         'admin_permissions' => 'json',
         'status' => UserStatus::class,
@@ -195,10 +197,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     // TODO create notifications
     public function resetPassword(): void
-    {
-    }
-
-    public function resendInvitation(): void
     {
     }
 }

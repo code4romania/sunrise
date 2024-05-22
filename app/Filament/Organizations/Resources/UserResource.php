@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Enums\AdminPermission;
+use App\Enums\CasePermission;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms\Components\Checkbox;
@@ -128,11 +130,15 @@ class UserResource extends Resource
             // TODO get roles from enum after merge with #23
             Select::make('roles')
                 ->label(__('user.labels.select_roles'))
-                ->options([
-                    'aaaa' => 'aaaa',
-                    'bbbb' => 'bbbb',
-                    'cccc' => 'cccc',
-                ])
+                ->options(
+//                    Role::options()
+                    [
+                        'aaaa' => 'aaaa',
+                        'bbbb' => 'bbbb',
+                        'cccc' => 'cccc',
+                    ]
+                )
+//                ->enum(Role::class)
                 ->multiple()
                 ->required(),
             Checkbox::make('can_be_case_manager')
@@ -143,20 +149,11 @@ class UserResource extends Resource
                 ->columnSpanFull(),
             CheckboxList::make('case_permissions')
                 ->label(__('user.labels.case_permissions'))
-                ->options([
-                    'has_access_to_all_cases' => __('user.labels.has_access_to_all_cases'),
-                    'can_search_cases_in_all_centers' => __('user.labels.can_search_cases_in_all_centers'),
-                    'can_copy_cases_in_all_centers' => __('user.labels.can_copy_cases_in_all_centers'),
-                    'has_access_to_statistics' => __('user.labels.has_access_to_statistics'),
-                ])
+                ->options(CasePermission::options())
                 ->columnSpanFull(),
             CheckboxList::make('admin_permissions')
                 ->label(__('user.labels.admin_permissions'))
-                ->options([
-                    'can_change_nomenclature' => __('user.labels.can_change_nomenclature'),
-                    'can_change_staff' => __('user.labels.can_change_staff'),
-                    'can_change_organisation_profile' => __('user.labels.can_change_organisation_profile'),
-                ])
+                ->options(AdminPermission::options())
                 ->columnSpanFull(),
         ];
     }
