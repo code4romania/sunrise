@@ -256,7 +256,8 @@ class ViewBeneficiary extends ViewRecord
                     ->schema([
                         TextEntry::make('roles')
                             ->label(__('beneficiary.section.specialists.labels.role'))
-                            ->badge(),
+                            ->badge()
+                            ->formatStateUsing(fn ($state) => $state->label()),
                         TextEntry::make('user_id')
                             ->label(__('beneficiary.section.specialists.labels.name'))
                             ->formatStateUsing(fn ($record) => $record->user->getFilamentName()),

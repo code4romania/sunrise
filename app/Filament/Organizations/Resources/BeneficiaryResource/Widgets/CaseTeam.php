@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Enums\Role;
-use App\Models\CaseTeam;
+use App\Models\CaseTeam as CaseTeamModel;
 use App\Models\Organization;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
@@ -18,7 +18,7 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Model;
 
-class TeamCase extends BaseWidget
+class CaseTeam extends BaseWidget
 {
     public ?Model $record = null;
 
@@ -26,7 +26,7 @@ class TeamCase extends BaseWidget
     {
         return $table
             ->query(
-                fn () => CaseTeam::query()
+                fn () => CaseTeamModel::query()
                     ->where('beneficiary_id', $this->record->id)
             )
             ->columns([
@@ -35,7 +35,8 @@ class TeamCase extends BaseWidget
                     ->formatStateUsing(fn ($record) => $record->user->getFilamentName()),
                 TextColumn::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
-                    ->badge(),
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => $state->label()),
                 TextColumn::make('user.password_set_at')
                     ->label(__('beneficiary.section.specialists.labels.status'))
                     ->default(0)
