@@ -59,6 +59,10 @@ return [
                 'antecedents' => 'Antecedente caz',
                 'flow' => 'Flux prezentare victimă',
             ],
+            'actions' => [
+                'add_aggressor' => 'Adaugă încă un agresor',
+                'delete_aggressor' => 'Sterge agresor',
+            ],
         ],
     ],
 

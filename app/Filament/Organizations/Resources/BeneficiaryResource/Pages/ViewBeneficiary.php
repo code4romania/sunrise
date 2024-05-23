@@ -8,6 +8,7 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -132,15 +133,17 @@ class ViewBeneficiary extends ViewRecord
                     ->icon('heroicon-o-phone')
                     ->url(fn ($state) => "tel:{$state}"),
 
-                EnumEntry::make('aggressor.relationship')
-                    ->label(__('field.aggressor_relationship')),
+                RepeatableEntry::make('aggressor')
+                    ->schema([
+                        EnumEntry::make('relationship')
+                            ->label(__('field.aggressor_relationship')),
 
-                EnumEntry::make('aggressor.gender')
-                    ->label(__('field.aggressor_gender')),
+                        EnumEntry::make('gender')
+                            ->label(__('field.aggressor_gender')),
 
-                EnumEntry::make('aggressor.has_violence_history')
-                    ->label(__('field.aggressor_has_violence_history')),
-
+                        EnumEntry::make('has_violence_history')
+                            ->label(__('field.aggressor_has_violence_history')),
+                    ]),
                 EnumEntry::make('has_police_reports')
                     ->label(__('field.has_police_reports'))
                     ->suffix(fn ($record) => Ternary::isYes($record->has_police_reports)
