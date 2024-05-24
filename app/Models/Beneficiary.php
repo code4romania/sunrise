@@ -271,7 +271,12 @@ class Beneficiary extends Model
     {
         return $this->hasMany(CaseTeam::class);
     }
-  
+
+    public function violenceHistory(): HasMany
+    {
+        return $this->hasMany(ViolenceHistory::class);
+    }
+
     private static function copyLegalResidenceToEffectiveResidence(self $model): void
     {
         if ($model->same_as_legal_residence) {
@@ -280,6 +285,5 @@ class Beneficiary extends Model
             $model->effective_residence_address = $model->legal_residence_address;
             $model->effective_residence_environment = $model->legal_residence_environment;
         }
-
     }
 }

@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\Applicant;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -47,10 +48,15 @@ class EditMultidisciplinaryEvaluation extends EditRecord
                                 ->visible(fn (Get $get) => Applicant::OTHER->is($get('applicant'))),
                         ])
                         ->columns(),
+                ]),
 
-                    Section::make(__('beneficiary.section.detailed_evaluation.heading.historic_violence'))
+            Section::make(__('beneficiary.section.detailed_evaluation.heading.historic_violence'))
+                ->schema([
+                    Repeater::make('violenceHistory')
+                        ->relationship('violenceHistory')
+                        ->hiddenLabel()
+                        ->addActionLabel(__('beneficiary.action.add_violence_history'))
                         ->schema([
-                            // TODO: repeater
                             TextInput::make('date_interval')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.date_interval'))
                                 ->placeholder(__('beneficiary.placeholder.date_interval'))
@@ -60,7 +66,11 @@ class EditMultidisciplinaryEvaluation extends EditRecord
                                 ->placeholder(__('beneficiary.placeholder.significant_events'))
                                 ->maxLength(2000),
                         ]),
+                ]),
 
+            Group::make()
+                ->relationship('multidisciplinaryEvaluation')
+                ->schema([
                     Section::make(__('beneficiary.section.detailed_evaluation.heading.beneficiary_needs'))
                         ->schema([
                             Textarea::make('medical_need')

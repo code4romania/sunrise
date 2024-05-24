@@ -235,6 +235,7 @@ return [
         'add_child' => 'Adaugă copil',
         'add_row' => 'Adauga inca un rand',
         'add_meet_row' => 'Adauga inca o intrevedere',
+        'add_violence_history' => 'Adaugă încă o dată sau perioadă',
     ],
 
     'breadcrumb' => [

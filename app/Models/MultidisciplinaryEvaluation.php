@@ -17,8 +17,6 @@ class MultidisciplinaryEvaluation extends Model
     protected $fillable = [
         'applicant',
         'reporting_by',
-        'date_interval',
-        'significant_events',
         'medical_need',
         'professional_need',
         'emotional_and_psychological_need',

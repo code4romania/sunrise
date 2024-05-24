@@ -70,21 +70,17 @@ class ViewDetailedEvaluation extends ViewRecord
 
                         Tabs\Tab::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
                             ->schema([
-                                Group::make()
-                                    ->relationship('multidisciplinaryEvaluation')
-                                    ->schema([
-                                        Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
-                                            ->headerActions([
-                                                Action::make('edit')
-                                                    ->label(__('general.action.edit'))
-                                                    ->url(fn ($record) => BeneficiaryResource::getUrl(
-                                                        'edit_multidisciplinary_evaluation',
-                                                        ['record' => $record]
-                                                    ))
-                                                    ->link(),
-                                            ])
-                                            ->schema($this->getMultidisciplinarySchema()),
-                                    ]),
+                                Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
+                                    ->headerActions([
+                                        Action::make('edit')
+                                            ->label(__('general.action.edit'))
+                                            ->url(fn ($record) => BeneficiaryResource::getUrl(
+                                                'edit_multidisciplinary_evaluation',
+                                                ['record' => $record]
+                                            ))
+                                            ->link(),
+                                    ])
+                                    ->schema($this->getMultidisciplinarySchema()),
                             ]),
 
                         Tabs\Tab::make(__('beneficiary.wizard.results.label'))
@@ -173,71 +169,83 @@ class ViewDetailedEvaluation extends ViewRecord
     public function getMultidisciplinarySchema(): array
     {
         return [
-            Section::make(__('beneficiary.section.detailed_evaluation.heading.reasons_for_start_evaluation'))
+            Group::make()
+                ->relationship('multidisciplinaryEvaluation')
                 ->schema([
-                    TextEntry::make('applicant')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.applicant'))
-                        ->placeholder(__('beneficiary.placeholder.applicant')),
-                    TextEntry::make('reporting_by')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
-                        ->placeholder(__('beneficiary.placeholder.reporting_by')),
-                ])
-                ->columns(),
+                    Section::make(__('beneficiary.section.detailed_evaluation.heading.reasons_for_start_evaluation'))
+                        ->schema([
+                            TextEntry::make('applicant')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.applicant'))
+                                ->placeholder(__('beneficiary.placeholder.applicant')),
+                            TextEntry::make('reporting_by')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
+                                ->placeholder(__('beneficiary.placeholder.reporting_by')),
+                        ])
+                        ->columns(),
 
+                ]),
             Section::make(__('beneficiary.section.detailed_evaluation.heading.historic_violence'))
                 ->schema([
-                    // TODO: repeater
-                    TextEntry::make('date_interval')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.date_interval'))
-                        ->placeholder(__('beneficiary.placeholder.date_interval')),
-                    TextEntry::make('significant_events')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.significant_events'))
-                        ->placeholder(__('beneficiary.placeholder.significant_events')),
+                    RepeatableEntry::make('violenceHistory')
+                        ->hiddenLabel()
+                        ->schema([
+                            TextEntry::make('date_interval')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.date_interval'))
+                                ->placeholder(__('beneficiary.placeholder.date_interval')),
+                            TextEntry::make('significant_events')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.significant_events'))
+                                ->placeholder(__('beneficiary.placeholder.significant_events'))
+                                ->html(),
+                        ]),
                 ]),
 
-            Section::make(__('beneficiary.section.detailed_evaluation.heading.beneficiary_needs'))
+            Group::make()
+                ->relationship('multidisciplinaryEvaluation')
                 ->schema([
-                    TextEntry::make('medical_need')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.medical_need'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('professional_need')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.professional_need'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('emotional_and_psychological_need')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.emotional_and_psychological_need'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('social_economic_need')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.social_economic_need'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('legal_needs')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.legal_needs'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                ]),
+                    Section::make(__('beneficiary.section.detailed_evaluation.heading.beneficiary_needs'))
+                        ->schema([
+                            TextEntry::make('medical_need')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.medical_need'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('professional_need')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.professional_need'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('emotional_and_psychological_need')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.emotional_and_psychological_need'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('social_economic_need')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.social_economic_need'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('legal_needs')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.legal_needs'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                        ]),
 
-            Section::make(__('beneficiary.section.detailed_evaluation.heading.family'))
-                ->schema([
-                    TextEntry::make('extended_family')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.extended_family'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('family_social_integration')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.family_social_integration'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('income')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.income'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('community_resources')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.community_resources'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                    TextEntry::make('house')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.house'))
-                        ->placeholder(__('beneficiary.placeholder.need_description')),
-                ]),
+                    Section::make(__('beneficiary.section.detailed_evaluation.heading.family'))
+                        ->schema([
+                            TextEntry::make('extended_family')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.extended_family'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('family_social_integration')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.family_social_integration'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('income')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.income'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('community_resources')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.community_resources'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                            TextEntry::make('house')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.house'))
+                                ->placeholder(__('beneficiary.placeholder.need_description')),
+                        ]),
 
-            Section::make(__('beneficiary.section.detailed_evaluation.heading.risk'))
-                ->schema([
-                    TextEntry::make('risk')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.risk'))
-                        ->placeholder(__('beneficiary.placeholder.crisis_risk')),
+                    Section::make(__('beneficiary.section.detailed_evaluation.heading.risk'))
+                        ->schema([
+                            TextEntry::make('risk')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.risk'))
+                                ->placeholder(__('beneficiary.placeholder.crisis_risk')),
+                        ]),
                 ]),
         ];
     }

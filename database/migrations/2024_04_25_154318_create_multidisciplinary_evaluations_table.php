@@ -19,8 +19,6 @@ return new class extends Migration
             $table->foreignIdFor(Beneficiary::class);
             $table->string('applicant');
             $table->string('reporting_by')->nullable();
-            $table->string('date_interval')->nullable();
-            $table->text('significant_events')->nullable();
             $table->text('medical_need')->nullable();
             $table->text('professional_need')->nullable();
             $table->text('emotional_and_psychological_need')->nullable();
