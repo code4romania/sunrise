@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\HasEffectiveAddress;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,7 @@ class BeneficiaryPartner extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use HasEffectiveAddress;
 
     protected $fillable = [
         'last_name',
@@ -28,21 +30,4 @@ class BeneficiaryPartner extends Model
         'observations',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-        self::creating(fn (BeneficiaryPartner $model) => self::copyLegalResidenceToEffectiveResidence($model));
-
-        self::updating(fn (BeneficiaryPartner $model) => self::copyLegalResidenceToEffectiveResidence($model));
-    }
-
-    // TODO after merge this pr and #13 make a trait with this function
-    private static function copyLegalResidenceToEffectiveResidence(self $model): void
-    {
-        if ($model->same_as_legal_residence) {
-            $model->effective_residence_county_id = $model->legal_residence_county_id;
-            $model->effective_residence_city_id = $model->legal_residence_city_id;
-            $model->effective_residence_address = $model->legal_residence_address;
-        }
-    }
 }

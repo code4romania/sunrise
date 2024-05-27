@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\BelongsToOrganization;
 use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
+use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
 use App\Enums\ActLocation;
@@ -40,6 +41,7 @@ class Beneficiary extends Model
     use HasEthnicity;
     use HasFactory;
     use HasUlid;
+    use HasEffectiveAddress;
 
     protected $fillable = [
         'first_name',
@@ -146,14 +148,6 @@ class Beneficiary extends Model
         'notifier' => Notifier::class,
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-        self::creating(fn (Beneficiary $model) => self::copyLegalResidenceToEffectiveResidence($model));
-
-        self::updating(fn (Beneficiary $model) => self::copyLegalResidenceToEffectiveResidence($model));
-    }
 
     public function aggressor(): HasOne
     {
@@ -277,13 +271,4 @@ class Beneficiary extends Model
         return $this->hasMany(ViolenceHistory::class);
     }
 
-    private static function copyLegalResidenceToEffectiveResidence(self $model): void
-    {
-        if ($model->same_as_legal_residence) {
-            $model->effective_residence_county_id = $model->legal_residence_county_id;
-            $model->effective_residence_city_id = $model->legal_residence_city_id;
-            $model->effective_residence_address = $model->legal_residence_address;
-            $model->effective_residence_environment = $model->legal_residence_environment;
-        }
-    }
 }

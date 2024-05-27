@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\Location;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -269,22 +270,19 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->label(__('field.occupation'))
                 ->placeholder(__('beneficiary.placeholder.occupation')),
 
-            //                                            Location::make('legal_residence')
-            //                                                ->city()
-            //                                                ->address()
-            //                                                ->environment(false),
+            Location::make('legal_residence')
+                ->city()
+                ->address()
+                ->environment(false),
 
             TextEntry::make('same_as_legal_residence')
                 ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
                 ->label(__('field.same_as_legal_residence'))
                 ->columnSpanFull(),
 
-            //                                            Location::make('effective_residence')
-            //                                                ->city()
-            //                                                ->address()
-            //                                                ->hidden(function (Get $get) {
-            //                                                    return $get('same_as_legal_residence');
-            //                                                }),
+            Location::make('effective_residence')
+                ->city()
+                ->address(),
 
             TextEntry::make('observations')
                 ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
