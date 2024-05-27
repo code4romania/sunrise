@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Enums\Level;
+use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
@@ -205,7 +206,6 @@ class ViewBeneficiary extends ViewRecord
                                         'warning' => Level::MEDIUM,
                                         'danger' => Level::HIGH,
                                     ]),
-                                // TODO add risk grade
                             ]),
                     ]),
 
@@ -229,9 +229,24 @@ class ViewBeneficiary extends ViewRecord
                     ->schema([
                         Group::make()
                             ->relationship('detailedEvaluationResult')
-                            ->schema([
-                                // TODO add detailedEvaluationResult as badges
-                            ]),
+                            ->columns()
+                            ->schema(function ($state) {
+                                $fields = [];
+                                foreach (RecommendationService::options() as $key => $option)
+                                {
+                                    if (!isset($state->$key) || !$state->$key)
+                                    {
+                                        continue;
+                                    }
+
+                                    $fields[] = TextEntry::make($key)
+                                        ->hiddenLabel()
+                                        ->badge()
+                                        ->formatStateUsing(fn () => substr($option, 0, 50));
+                                }
+
+                                return $fields;
+                            }),
 
                     ]),
             ]);
