@@ -19,8 +19,6 @@ class ViewDetailedEvaluation extends ViewRecord
 {
     protected static string $resource = BeneficiaryResource::class;
 
-    // TODO get infolist Location from pr #22 and schema for beneficiary info and child from ViewBeneficiaryIdentity
-
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
