@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\AggravatingFactorsSchema;
 use App\Enums\Helps;
+use App\Enums\RiskFactorsSchema;
 use App\Enums\Ternary;
+use App\Enums\VictimPerceptionOfTheRiskSchema;
+use App\Enums\ViolenceHistorySchema;
+use App\Enums\ViolencesTypesSchema;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
-use App\Models\RiskFactors;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
@@ -55,263 +59,37 @@ class EditRiskFactors extends EditRecord
 
     public static function getViolenceHistorySchema(): array
     {
-        return [
-            Radio::make('previous_acts_of_violence')
-                ->label(__('beneficiary.section.initial_evaluation.labels.previous_acts_of_violence'))
-                ->inline()
-                ->inlineLabel(false)->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('previous_acts_of_violence_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('violence_against_children_or_family_members')
-                ->label(__('beneficiary.section.initial_evaluation.labels.violence_against_children_or_family_members'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('violence_against_children_or_family_members_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('abuser_exhibited_generalized_violent')
-                ->label(__('beneficiary.section.initial_evaluation.labels.abuser_exhibited_generalized_violent'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('abuser_exhibited_generalized_violent_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('protection_order_in_past')
-                ->label(__('beneficiary.section.initial_evaluation.labels.protection_order_in_past'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('protection_order_in_past_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('abuser_violated_protection_order')
-                ->label(__('beneficiary.section.initial_evaluation.labels.abuser_violated_protection_order'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('abuser_violated_protection_order_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-        ];
+        $enumOptions = ViolenceHistorySchema::options();
+
+        return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getViolencesTypesSchema(): array
     {
-        return [
-            Radio::make('frequency_of_violence_acts')
-                ->label(__('beneficiary.section.initial_evaluation.labels.frequency_of_violence_acts'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('frequency_of_violence_acts_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('use_weapons_in_act_of_violence')
-                ->label(__('beneficiary.section.initial_evaluation.labels.use_weapons_in_act_of_violence'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('use_weapons_in_act_of_violence_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('controlling_and_isolating')
-                ->label(__('beneficiary.section.initial_evaluation.labels.controlling_and_isolating'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('controlling_and_isolating_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('stalked_or_harassed')
-                ->label(__('beneficiary.section.initial_evaluation.labels.stalked_or_harassed'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('stalked_or_harassed_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('sexual_violence')
-                ->label(__('beneficiary.section.initial_evaluation.labels.sexual_violence'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('sexual_violence_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('death_threats')
-                ->label(__('beneficiary.section.initial_evaluation.labels.death_threats'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('death_threats_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('strangulation_attempt')
-                ->label(__('beneficiary.section.initial_evaluation.labels.strangulation_attempt'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('strangulation_attempt_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-        ];
+        $enumOptions = ViolencesTypesSchema::options();
+
+        return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getRiskFactorsSchema(): array
     {
-        return [
-            Radio::make('FR_S3Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q1'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S3Q1_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S3Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q2'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S3Q2_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S3Q3')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q3'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S3Q3_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S3Q4')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q4'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S3Q4_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-        ];
+        $enumOptions = RiskFactorsSchema::options();
+
+        return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getVictimPerceptionOfTheRiskSchema(): array
     {
-        return [
-            Radio::make('FR_S4Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S4Q1'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S4Q1_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S4Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S4Q2'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S4Q2_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-        ];
+        $enumOptions = VictimPerceptionOfTheRiskSchema::options();
+
+        return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getAggravatingFactorsSchema(): array
     {
-        return [
-            Radio::make('FR_S5Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q1'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S5Q1_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S5Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q2'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S5Q2_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S5Q3')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q3'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S5Q3_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S5Q4')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q4'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S5Q4_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
-            Radio::make('FR_S5Q5')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q5'))
-                ->inline()
-                ->inlineLabel(false)
-                ->options(Ternary::options())
-                ->enum(Ternary::class),
-            TextInput::make('FR_S5Q5_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->maxLength(100),
+        $enumOptions = AggravatingFactorsSchema::options();
 
-        ];
+        return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getSocialSupportSchema(): array
@@ -353,177 +131,43 @@ class EditRiskFactors extends EditRecord
 
     public static function getViolenceHistoryInfolistSchema(): array
     {
-        return [
-            EnumEntry::make('previous_acts_of_violence')
-                ->label(__('beneficiary.section.initial_evaluation.labels.previous_acts_of_violence'))
-                ->inlineLabel(false),
-            TextEntry::make('previous_acts_of_violence_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('violence_against_children_or_family_members')
-                ->label(__('beneficiary.section.initial_evaluation.labels.violence_against_children_or_family_members'))
-                ->inlineLabel(false),
-            TextEntry::make('violence_against_children_or_family_members_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('abuser_exhibited_generalized_violent')
-                ->label(__('beneficiary.section.initial_evaluation.labels.abuser_exhibited_generalized_violent'))
-                ->inlineLabel(false),
-            TextEntry::make('abuser_exhibited_generalized_violent_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('protection_order_in_past')
-                ->label(__('beneficiary.section.initial_evaluation.labels.protection_order_in_past'))
-                ->inlineLabel(false),
-            TextEntry::make('protection_order_in_past_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('abuser_violated_protection_order')
-                ->label(__('beneficiary.section.initial_evaluation.labels.abuser_violated_protection_order'))
-                ->inlineLabel(false),
-            TextEntry::make('abuser_violated_protection_order_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-        ];
+        $enumOptions = ViolenceHistorySchema::options();
+
+        return self::getInfolistSchemaFromEnum($enumOptions);
     }
 
     public static function getViolencesTypesInfolistSchema(): array
     {
-        return [
-            EnumEntry::make('frequency_of_violence_acts')
-                ->label(__('beneficiary.section.initial_evaluation.labels.frequency_of_violence_acts'))
-                ->inlineLabel(false),
-            TextEntry::make('frequency_of_violence_acts_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('use_weapons_in_act_of_violence')
-                ->label(__('beneficiary.section.initial_evaluation.labels.use_weapons_in_act_of_violence'))
-                ->inlineLabel(false),
-            TextEntry::make('use_weapons_in_act_of_violence_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('controlling_and_isolating')
-                ->label(__('beneficiary.section.initial_evaluation.labels.controlling_and_isolating'))
-                ->inlineLabel(false),
-            TextEntry::make('controlling_and_isolating_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('stalked_or_harassed')
-                ->label(__('beneficiary.section.initial_evaluation.labels.stalked_or_harassed'))
-                ->inlineLabel(false),
-            TextEntry::make('stalked_or_harassed_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('sexual_violence')
-                ->label(__('beneficiary.section.initial_evaluation.labels.sexual_violence'))
-                ->inlineLabel(false),
-            TextEntry::make('sexual_violence_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('death_threats')
-                ->label(__('beneficiary.section.initial_evaluation.labels.death_threats'))
-                ->inlineLabel(false),
-            TextEntry::make('death_threats_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('strangulation_attempt')
-                ->label(__('beneficiary.section.initial_evaluation.labels.strangulation_attempt'))
-                ->inlineLabel(false),
-            TextEntry::make('strangulation_attempt_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-        ];
+        $enumOptions = ViolencesTypesSchema::options();
+
+        return self::getInfolistSchemaFromEnum($enumOptions);
     }
 
     public static function getRiskFactorsInfolistSchema(): array
     {
-        return [
-            EnumEntry::make('FR_S3Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q1'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S3Q1_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S3Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q2'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S3Q2_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S3Q3')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q3'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S3Q3_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S3Q4')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S3Q4'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S3Q4_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-        ];
+        $enumOptions = RiskFactorsSchema::options();
+
+        return self::getInfolistSchemaFromEnum($enumOptions);
     }
 
     public static function getVictimPerceptionOfTheRiskInfolistSchema(): array
     {
-        return [
-            EnumEntry::make('FR_S4Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S4Q1'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S4Q1_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S4Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S4Q2'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S4Q2_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-        ];
+        $enumOptions = VictimPerceptionOfTheRiskSchema::options();
+
+        return self::getInfolistSchemaFromEnum($enumOptions);
     }
 
     public static function getAggravatingFactorsInfolistSchema(): array
     {
-        return [
-            EnumEntry::make('FR_S5Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q1'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S5Q1_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S5Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q2'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S5Q2_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S5Q3')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q3'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S5Q3_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S5Q4')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q4'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S5Q4_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
-            EnumEntry::make('FR_S5Q5')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S5Q5'))
-                ->inlineLabel(false),
-            TextEntry::make('FR_S5Q5_description')
-                ->label('')
-                ->placeholder(__('beneficiary.placeholder.observations')),
+        $enumOptions = AggravatingFactorsSchema::options();
 
-        ];
+        return self::getInfolistSchemaFromEnum($enumOptions);
     }
 
     public static function getSocialSupportInfolistSchema(): array
     {
         return [
-            TextEntry::make('FR_S6Q1')
+            EnumEntry::make('FR_S6Q1')
                 ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q1'))
                 ->badge(),
             EnumEntry::make('FR_S6Q2')
@@ -534,65 +178,94 @@ class EditRiskFactors extends EditRecord
 
     private static function getViolenceHeading(Beneficiary $record): string
     {
-        $totalAnswers = 5;
-        $fields = ['previous_acts_of_violence', 'violence_against_children_or_family_members',
-            'abuser_exhibited_generalized_violent', 'protection_order_in_past', 'abuser_violated_protection_order'];
-        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+        $fields = ViolenceHistorySchema::values();
+
+        $trueAnswers = self::getTrueAnswers($record->riskFactors->risk_factors, $fields);
 
         return __('beneficiary.section.initial_evaluation.heading.violence_history') . ' ' .
-            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+            __('general.true_answers', ['total_answers' => \count($fields), 'true_answers' => $trueAnswers]);
     }
 
     private static function getViolencesTypesHeading(Beneficiary $record): string
     {
-        $totalAnswers = 7;
-        $fields = ['frequency_of_violence_acts', 'use_weapons_in_act_of_violence', 'controlling_and_isolating',
-            'stalked_or_harassed', 'sexual_violence', 'death_threats', 'strangulation_attempt'];
-        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+        $fields = ViolencesTypesSchema::values();
+        $trueAnswers = self::getTrueAnswers($record->riskFactors->risk_factors, $fields);
 
         return __('beneficiary.section.initial_evaluation.heading.violences_types') . ' ' .
-            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+            __('general.true_answers', ['total_answers' => \count($fields), 'true_answers' => $trueAnswers]);
     }
 
     private static function getRiskFactorsHeading(Beneficiary $record): string
     {
-        $totalAnswers = 4;
-        $fields = ['FR_S3Q1', 'FR_S3Q2', 'FR_S3Q3', 'FR_S3Q4'];
-        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+        $fields = RiskFactorsSchema::values();
+        $trueAnswers = self::getTrueAnswers($record->riskFactors->risk_factors, $fields);
 
         return __('beneficiary.section.initial_evaluation.heading.risk_factors') . ' ' .
-            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+            __('general.true_answers', ['total_answers' => \count($fields), 'true_answers' => $trueAnswers]);
     }
 
     private static function getVictimPerceptionOfTherRiskHeading(Beneficiary $record): string
     {
-        $totalAnswers = 2;
-        $fields = ['FR_S4Q1', 'FR_S4Q2'];
-        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+        $fields = VictimPerceptionOfTheRiskSchema::values();
+        $trueAnswers = self::getTrueAnswers($record->riskFactors->risk_factors, $fields);
 
         return __('beneficiary.section.initial_evaluation.heading.victim_perception_of_the_risk') . ' ' .
-            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+            __('general.true_answers', ['total_answers' => \count($fields), 'true_answers' => $trueAnswers]);
     }
 
     private static function getAggravatingFactorsHeading(Beneficiary $record): string
     {
-        $totalAnswers = 5;
-        $fields = ['FR_S5Q1', 'FR_S5Q2', 'FR_S5Q3', 'FR_S5Q4', 'FR_S5Q5'];
-        $trueAnswers = self::getTrueAnswers($record->riskFactors, $fields);
+        $fields = AggravatingFactorsSchema::values();
+        $trueAnswers = self::getTrueAnswers($record->riskFactors->risk_factors, $fields);
 
         return __('beneficiary.section.initial_evaluation.heading.aggravating_factors') . ' ' .
-            __('general.true_answers', ['total_answers' => $totalAnswers, 'true_answers' => $trueAnswers]);
+            __('general.true_answers', ['total_answers' => \count($fields), 'true_answers' => $trueAnswers]);
     }
 
-    private static function getTrueAnswers(RiskFactors $riskFactors, array $fields): int
+    private static function getTrueAnswers(array $riskFactors, array $fields): int
     {
         $count = 0;
         foreach ($fields as $field) {
-            if (Ternary::isYes($riskFactors->$field)) {
+            if (Ternary::isYes($riskFactors[$field]['value'])) {
                 $count++;
             }
         }
 
         return $count;
+    }
+
+    public static function getSchemaFromEnum(array $enumOptions): array
+    {
+        $fields = [];
+        foreach ($enumOptions as $key => $value) {
+            $fields[] = Radio::make('risk_factors.' . $key . '.value')
+                ->label($value)
+                ->inline()
+                ->inlineLabel(false)
+                ->options(Ternary::options())
+                ->enum(Ternary::class);
+            $fields[] = TextInput::make('risk_factors.' . $key . '.description')
+                ->hiddenLabel()
+                ->placeholder(__('beneficiary.placeholder.observations'))
+                ->maxLength(100);
+        }
+
+        return $fields;
+    }
+
+    public static function getInfolistSchemaFromEnum(array $enumOptions): array
+    {
+        $fields = [];
+        foreach ($enumOptions as $key => $value) {
+            $fields[] = TextEntry::make('risk_factors.' . $key . '.value')
+                ->label($value)
+                ->formatStateUsing(fn ($state) => $state == '-' ?: Ternary::options()[$state])
+                ->inlineLabel(false);
+            $fields[] = TextEntry::make('risk_factors.' . $key . '.description')
+                ->hiddenLabel()
+                ->placeholder(__('beneficiary.placeholder.observations'));
+        }
+
+        return $fields;
     }
 }
