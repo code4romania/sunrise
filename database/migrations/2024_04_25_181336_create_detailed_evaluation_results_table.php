@@ -18,7 +18,6 @@ return new class extends Migration
         Schema::create('detailed_evaluation_results', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Beneficiary::class);
-            // maybe without family_counseling
             foreach (RecommendationService::values() as $value) {
                 $table->boolean($value)->default(false);
             }
