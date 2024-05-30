@@ -239,8 +239,9 @@ return [
     ],
 
     'breadcrumb' => [
-        'wizard_detailed_evaluation' => 'Evaluare detaliata',
-        'wizard_initial_evaluation' => 'Evaluare initiala',
+        'wizard_detailed_evaluation' => 'Evaluare detaliată',
+        'wizard_initial_evaluation' => 'Evaluare initială',
+        'personal_information' => 'Informații personale',
     ],
 
     'placeholder' => [

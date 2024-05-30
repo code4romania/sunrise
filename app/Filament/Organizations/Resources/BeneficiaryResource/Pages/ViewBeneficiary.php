@@ -9,6 +9,7 @@ use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -21,6 +22,12 @@ use Illuminate\Contracts\Support\Htmlable;
 class ViewBeneficiary extends ViewRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBaseBreadcrumbs();
+    }
 
     protected function getHeaderActions(): array
     {
@@ -232,10 +239,8 @@ class ViewBeneficiary extends ViewRecord
                             ->columns()
                             ->schema(function ($state) {
                                 $fields = [];
-                                foreach (RecommendationService::options() as $key => $option)
-                                {
-                                    if (!isset($state->$key) || !$state->$key)
-                                    {
+                                foreach (RecommendationService::options() as $key => $option) {
+                                    if (! isset($state->$key) || ! $state->$key) {
                                         continue;
                                     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
@@ -16,6 +17,12 @@ use Filament\Resources\Pages\EditRecord;
 class EditBeneficiarySituation extends EditRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBreadcrumbsForInitialEvaluation();
+    }
 
     public function form(Form $form): Form
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
@@ -20,6 +21,12 @@ class EditDetailedEvaluation extends EditRecord
     public function form(Form $form): Form
     {
         return $form->schema(self::getSchema());
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBreadcrumbsForDetailedEvaluation();
     }
 
     public static function getSchema(): array

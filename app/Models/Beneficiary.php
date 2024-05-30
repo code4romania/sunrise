@@ -149,6 +149,13 @@ class Beneficiary extends Model
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
+    public function getBreadcrumb(): string
+    {
+        $fullNameWithID = '#' . $this->id . ' ' . $this->full_name;
+
+        return $this->prior_name ? $fullNameWithID . ' (' . $this->prior_name . ')' : $fullNameWithID;
+    }
+
     public function aggressor(): HasOne
     {
         return $this->hasOne(Aggressor::class)
@@ -270,5 +277,4 @@ class Beneficiary extends Model
     {
         return $this->hasMany(ViolenceHistory::class);
     }
-
 }

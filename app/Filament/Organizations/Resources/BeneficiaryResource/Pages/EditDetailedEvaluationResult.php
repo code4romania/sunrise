@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
@@ -19,6 +20,12 @@ use Filament\Resources\Pages\EditRecord;
 class EditDetailedEvaluationResult extends EditRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBreadcrumbsForDetailedEvaluation();
+    }
 
     public function form(Form $form): Form
     {

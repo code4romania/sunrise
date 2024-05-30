@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Organization;
 use App\Models\User;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Group;
@@ -25,6 +26,12 @@ class EditEvaluationDetails extends EditRecord
     public function form(Form $form): Form
     {
         return $form->schema(self::getSchema());
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBreadcrumbsForInitialEvaluation();
     }
 
     public static function getSchema(): array

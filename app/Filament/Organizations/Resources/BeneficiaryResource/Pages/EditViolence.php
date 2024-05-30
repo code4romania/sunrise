@@ -8,6 +8,7 @@ use App\Enums\Frequency;
 use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -19,6 +20,12 @@ use Filament\Resources\Pages\EditRecord;
 class EditViolence extends EditRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBreadcrumbsForInitialEvaluation();
+    }
 
     public function form(Form $form): Form
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
@@ -19,6 +20,12 @@ class CreateDetailedEvaluation extends EditRecord
     public function getBreadcrumb(): string
     {
         return __('beneficiary.breadcrumb.wizard_detailed_evaluation');
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBreadcrumbsForDetailedEvaluation();
     }
 
     /**
