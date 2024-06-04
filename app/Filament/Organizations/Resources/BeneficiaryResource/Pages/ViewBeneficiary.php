@@ -8,6 +8,7 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -43,6 +44,7 @@ class ViewBeneficiary extends ViewRecord
             ->schema([
                 $this->identitySectionSection(),
                 $this->personalInformationSection(),
+                $this->documents(),
             ]);
     }
 
@@ -153,6 +155,32 @@ class ViewBeneficiary extends ViewRecord
 
                 EnumEntry::make('has_protection_order')
                     ->label(__('field.has_protection_order')),
+            ]);
+    }
+
+    private function documents(): Section
+    {
+        return Section::make(__('beneficiary.section.documents.title.page'))
+            ->columnSpan(1)
+            ->headerActions([
+                Action::make('edit')
+                    ->label(__('general.action.view_details'))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_documents', ['record' => $record]))
+                    ->link(),
+            ])
+            ->schema([
+
+                RepeatableEntry::make('documents')
+                    ->label('')
+                    ->contained(false)
+                    ->columns()
+                    ->schema([
+                        TextEntry::make('type')
+                            ->label(__('beneficiary.section.documents.labels.type'))
+                            ->formatStateUsing(fn ($state) => $state->label()),
+                        TextEntry::make('name')
+                            ->label(__('beneficiary.section.documents.labels.name'))
+                    ]),
             ]);
     }
 }
