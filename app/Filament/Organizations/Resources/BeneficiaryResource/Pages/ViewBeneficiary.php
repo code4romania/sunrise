@@ -9,10 +9,11 @@ use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Livewire\Beneficiary\ListTeam;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
-use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -268,20 +269,7 @@ class ViewBeneficiary extends ViewRecord
                     ->link(),
             ])
             ->schema([
-
-                RepeatableEntry::make('team')
-                    ->label('')
-                    ->contained(false)
-                    ->columns()
-                    ->schema([
-                        TextEntry::make('roles')
-                            ->label(__('beneficiary.section.specialists.labels.role'))
-                            ->badge()
-                            ->formatStateUsing(fn ($state) => $state->label()),
-                        TextEntry::make('user_id')
-                            ->label(__('beneficiary.section.specialists.labels.name'))
-                            ->formatStateUsing(fn ($record) => $record->user->getFilamentName()),
-                    ]),
+                Livewire::make(ListTeam::class),
             ]);
     }
 }

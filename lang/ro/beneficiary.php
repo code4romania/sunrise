@@ -215,6 +215,10 @@ return [
             'title' => 'Echipă caz ',
             'add_action' => 'Adaugă specialist',
             'change_action' => 'Modifică',
+            'heading' => [
+                'add_modal' => 'Adaugă specialist în echipă',
+                'edit_modal' => 'Modifică  specialist în echipă',
+            ],
             'labels' => [
                 'name' => 'Nume specialist',
                 'role' => 'Rol',

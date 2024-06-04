@@ -46,50 +46,46 @@ class CaseTeam extends BaseWidget
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->form([
-                        Select::make('user_id')
-                            ->options(fn () => Organization::find(Filament::getTenant()->id)
-                                ->with('users')
-                                ->first()
-                                ->users
-                                ->map(fn ($item) => [
-                                    'full_name' => $item->first_name . ' ' . $item->last_name,
-                                    'id' => $item->id,
-                                ])
-                                ->pluck('full_name', 'id')),
-
-                        Select::make('roles')
-                            ->options(fn () => Role::options())
-                            ->multiple(),
-
-                        Hidden::make('beneficiary_id')
-                            ->formatStateUsing(fn () => $this->record->id),
-                    ])
+                    ->form($this->getFormSchema())
+                    ->modalHeading(__('beneficiary.section.specialists.heading.add_modal'))
                     ->label(__('beneficiary.section.specialists.add_action')),
             ])
             ->actions([
                 EditAction::make()
-                    ->form([
-                        Select::make('user_id')
-                            ->options(fn () => Organization::find(Filament::getTenant()->id)
-                                ->with('users')
-                                ->first()
-                                ->users
-                                ->map(fn ($item) => [
-                                    'full_name' => $item->first_name . ' ' . $item->last_name,
-                                    'id' => $item->id,
-                                ])
-                                ->pluck('full_name', 'id')),
-
-                        Select::make('roles')
-                            ->options(fn () => Role::options())
-                            ->multiple(),
-                    ])
+                    ->form($this->getFormSchema())
+                    ->modalHeading(__('beneficiary.section.specialists.heading.edit_modal'))
                     ->extraModalFooterActions([
                         DeleteAction::make(),
                     ])
                     ->label(__('beneficiary.section.specialists.change_action')),
             ])
             ->heading(__('beneficiary.section.specialists.title'));
+    }
+
+    /**
+     * @return array
+     */
+    public function getFormSchema(): array
+    {
+        return [
+            Select::make('user_id')
+                ->label(__('beneficiary.section.specialists.labels.name'))
+                ->options(fn () => Organization::find(Filament::getTenant()->id)
+                    ->with('users')
+                    ->first()
+                    ->users
+                    ->map(fn ($item) => [
+                        'full_name' => $item->first_name . ' ' . $item->last_name,
+                        'id' => $item->id,
+                    ])
+                    ->pluck('full_name', 'id')),
+
+            Select::make('roles')
+                ->options(fn () => Role::options())
+                ->multiple(),
+
+            Hidden::make('beneficiary_id')
+                ->formatStateUsing(fn () => $this->record->id),
+        ];
     }
 }
