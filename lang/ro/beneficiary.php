@@ -60,6 +60,29 @@ return [
                 'flow' => 'Flux prezentare victimă',
             ],
         ],
+
+        'documents' => [
+            'actions' => [
+                'add' => 'Încarcă document',
+            ],
+            'title' => [
+                'page' => 'Documente',
+                'table' => 'Arhivă documente',
+                'add_modal' => 'Adaugă document',
+                'edit_modal' => 'Actualizează detalii document',
+            ],
+            'labels' => [
+                'type' => 'Tip document',
+                'name' => 'Denumire document',
+                'observations' => 'Observatii',
+                'date' => 'Data',
+                'document_file' => 'Încarcă document',
+            ],
+        ],
+    ],
+
+    'helper_text' => [
+        'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls, .csv, .png, .tiff, .jpg. Dimensiunea maxima nu poate depăși 25 Mb',
     ],
 
     'status' => [

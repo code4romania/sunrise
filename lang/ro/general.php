@@ -9,6 +9,7 @@ return [
     'action' => [
         'view_details' => 'Vezi detalii',
         'edit' => 'Editează',
+        'actions' => 'Acțiuni',
     ],
 
 ];
