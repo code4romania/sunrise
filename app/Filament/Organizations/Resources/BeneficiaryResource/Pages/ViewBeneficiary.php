@@ -8,7 +8,7 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -169,18 +169,7 @@ class ViewBeneficiary extends ViewRecord
                     ->link(),
             ])
             ->schema([
-
-                RepeatableEntry::make('documents')
-                    ->label('')
-                    ->contained(false)
-                    ->columns()
-                    ->schema([
-                        TextEntry::make('type')
-                            ->label(__('beneficiary.section.documents.labels.type'))
-                            ->formatStateUsing(fn ($state) => $state->label()),
-                        TextEntry::make('name')
-                            ->label(__('beneficiary.section.documents.labels.name'))
-                    ]),
+                Livewire::make(\App\Livewire\Beneficiary\ListDocuments::class),
             ]);
     }
 }
