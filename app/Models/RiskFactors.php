@@ -19,15 +19,15 @@ class RiskFactors extends Model
 
     protected $fillable = [
         'risk_factors',
-        'FR_S6Q1',
-        'FR_S6Q2',
+        'extended_family_can_provide',
+        'friends_can_provide',
         'risk_level',
     ];
 
     protected $casts = [
         'risk_factors' => 'json',
-        'FR_S6Q1' => AsEnumCollection::class . ':' . Helps::class,
-        'FR_S6Q2' => AsEnumCollection::class . ':' . Helps::class,
+        'extended_family_can_provide' => AsEnumCollection::class . ':' . Helps::class,
+        'friends_can_provide' => AsEnumCollection::class . ':' . Helps::class,
         'risk_level' => Level::class,
     ];
 
@@ -60,7 +60,7 @@ class RiskFactors extends Model
 
     private static function hasHighRiskLevel(array $riskFactors): bool
     {
-        $highRiskFields = ['use_weapons_in_act_of_violence', 'death_threats', 'FR_S4Q1'];
+        $highRiskFields = ['use_weapons_in_act_of_violence', 'death_threats', 'victim_afraid_for_himself'];
         foreach ($highRiskFields as $field) {
             if (Ternary::isYes($riskFactors[$field]['value'])) {
                 return true;

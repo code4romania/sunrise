@@ -102,12 +102,12 @@ class EditRiskFactors extends EditRecord
     public static function getSocialSupportSchema(): array
     {
         return [
-            Select::make('FR_S6Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q1'))
+            Select::make('extended_family_can_provide')
+                ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
                 ->multiple()
                 ->options(Helps::options()),
-            Select::make('FR_S6Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q2'))
+            Select::make('friends_can_provide')
+                ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
                 ->multiple()
                 ->options(Helps::options()),
         ];
@@ -174,11 +174,11 @@ class EditRiskFactors extends EditRecord
     public static function getSocialSupportInfolistSchema(): array
     {
         return [
-            EnumEntry::make('FR_S6Q1')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q1'))
+            EnumEntry::make('extended_family_can_provide')
+                ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
                 ->badge(),
-            EnumEntry::make('FR_S6Q2')
-                ->label(__('beneficiary.section.initial_evaluation.labels.FR_S6Q2'))
+            EnumEntry::make('friends_can_provide')
+                ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
                 ->badge(),
         ];
     }

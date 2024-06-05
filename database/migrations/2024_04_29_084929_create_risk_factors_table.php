@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Beneficiary::class);
             $table->json('risk_factors')->nullable();
-            $table->string('FR_S6Q1')->nullable();
-            $table->string('FR_S6Q2')->nullable();
+            $table->string('extended_family_can_provide')->nullable();
+            $table->string('friends_can_provide')->nullable();
             $table->string('risk_level')->nullable();
             $table->timestamps();
         });

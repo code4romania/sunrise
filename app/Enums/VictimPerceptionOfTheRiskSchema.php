@@ -14,8 +14,8 @@ enum VictimPerceptionOfTheRiskSchema: string
     use Comparable;
     use HasLabel;
 
-    case FR_S4Q1 = 'FR_S4Q1';
-    case FR_S4Q2 = 'FR_S4Q2';
+    case VICTIM_AFRAID_FOR_HIMSELF = 'victim_afraid_for_himself';
+    case VICTIM_HAS_AN_ATTITUDE_OF_ACCEPTANCE = 'victim_has_an_attitude_of_acceptance';
 
     protected function labelKeyPrefix(): ?string
     {

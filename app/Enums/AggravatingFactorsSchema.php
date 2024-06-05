@@ -14,11 +14,11 @@ enum AggravatingFactorsSchema: string
     use Comparable;
     use HasLabel;
 
-    case FR_S5Q1 = 'FR_S5Q1';
-    case FR_S5Q2 = 'FR_S5Q2';
-    case FR_S5Q3 = 'FR_S5Q3';
-    case FR_S5Q4 = 'FR_S5Q4';
-    case FR_S5Q5 = 'FR_S5Q5';
+    case SEPARATION = 'separation';
+    case AGGRESSOR_PARENT_HAS_CONTACT_WITH_CHILDREN = 'aggressor_parent_has_contact_with_children';
+    case AGGRESSOR_PARENT_THREATEN_THE_VICTIM_IN_THE_VISITATION_PROGRAM = 'aggressor_parent_threaten_the_victim_in_the_visitation_program';
+    case CHILDREN_FROM_OTHER_MARRIAGE_ARE_INTEGRATED_INTO_FAMILY = 'children_from_other_marriage_are_integrated_into_family';
+    case DOMESTIC_VIOLENCE_DURING_PREGNANCY = 'domestic_violence_during_pregnancy';
 
     protected function labelKeyPrefix(): ?string
     {
