@@ -11,6 +11,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Livewire\Beneficiary\ListTeam;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Livewire;
@@ -18,6 +19,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\ActionSize;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -178,12 +180,6 @@ class ViewBeneficiary extends ViewRecord
                     ->columnSpan(1)
                     ->headerActions(
                         [
-                            Action::make('edit')
-                                ->label(__('general.action.view_details'))
-                                ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
-                                ->link()
-                                ->visible(fn ($record) => ! $record->violence?->violence_types),
-
                             Action::make('view')
                                 ->label(__('general.action.view_details'))
                                 ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
@@ -194,6 +190,7 @@ class ViewBeneficiary extends ViewRecord
                     ->schema([
                         Group::make()
                             ->columns()
+                            ->visible(fn ($record) => $record->violence?->violence_types)
                             ->schema([
                                 TextEntry::make('evaluateDetails.registered_date')
                                     ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
@@ -215,18 +212,34 @@ class ViewBeneficiary extends ViewRecord
                                         'danger' => Level::HIGH,
                                     ]),
                             ]),
+                        Group::make()
+                            ->visible(fn ($record) => ! $record->violence?->violence_types)
+                            ->schema([
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.initial_evaluation'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Large),
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.initial_evaluation_2'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Medium),
+                                Actions::make([
+                                    Action::make('edit')
+                                        ->label(__('beneficiary.action.start_evaluation'))
+                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                        ->badge()
+                                        ->size(ActionSize::ExtraLarge),
+                                ])
+                                    ->alignCenter(),
+                            ]),
                     ]),
 
                 Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
                     ->columnSpan(1)
                     ->headerActions(
                         [
-                            Action::make('edit')
-                                ->label(__('general.action.view_details'))
-                                ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
-                                ->link()
-                                ->visible(fn ($record) => ! $record->detailedEvaluationResult),
-
                             Action::make('view')
                                 ->label(__('general.action.view_details'))
                                 ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
@@ -237,6 +250,7 @@ class ViewBeneficiary extends ViewRecord
                     ->schema([
                         Group::make()
                             ->relationship('detailedEvaluationResult')
+                            ->visible(fn ($record) => $record->detailedEvaluationResult)
                             ->columns()
                             ->schema(function ($state) {
                                 $fields = [];
@@ -253,7 +267,28 @@ class ViewBeneficiary extends ViewRecord
 
                                 return $fields;
                             }),
-
+                        Group::make()
+                            ->visible(fn ($record) => ! $record->detailedEvaluationResult)
+                            ->schema([
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.detailed_evaluation'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Large),
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.detailed_evaluation_2'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Medium),
+                                Actions::make([
+                                    Action::make('edit')
+                                        ->label(__('beneficiary.action.start_evaluation'))
+                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                        ->badge()
+                                        ->size(ActionSize::ExtraLarge),
+                                ])
+                                    ->alignCenter(),
+                            ]),
                     ]),
             ]);
     }

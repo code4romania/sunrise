@@ -240,6 +240,7 @@ return [
         'add_row' => 'Adauga inca un rand',
         'add_meet_row' => 'Adauga inca o intrevedere',
         'add_violence_history' => 'Adaugă încă o dată sau perioadă',
+        'start_evaluation' => 'Începe evaluarea',
     ],
 
     'breadcrumb' => [
@@ -284,5 +285,9 @@ return [
                 * admiterea (numele și prenumele victimei) în Centrul (nume centru) pentru acordarea de servicii de specialitate.
             ',
         'violence_description' => 'A se include și istoricul socio- familial, istoricul agresiunilor, istoricul juridic al solicitantei-ordin de protecție, plângeri penale',
+        'initial_evaluation' => 'Identificarea nevoilor inițiale',
+        'initial_evaluation_2' => 'Pentru oferirea de servicii imediate',
+        'detailed_evaluation' => 'Evaluarea multidiciplinară',
+        'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
     ],
 ];
