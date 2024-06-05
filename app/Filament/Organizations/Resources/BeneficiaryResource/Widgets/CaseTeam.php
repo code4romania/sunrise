@@ -6,8 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Enums\Role;
 use App\Models\CaseTeam as CaseTeamModel;
-use App\Models\Organization;
-use Filament\Facades\Filament;
+use App\Models\User;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Actions\CreateAction;
@@ -70,15 +69,7 @@ class CaseTeam extends BaseWidget
         return [
             Select::make('user_id')
                 ->label(__('beneficiary.section.specialists.labels.name'))
-                ->options(fn () => Organization::find(Filament::getTenant()->id)
-                    ->with('users')
-                    ->first()
-                    ->users
-                    ->map(fn ($item) => [
-                        'full_name' => $item->first_name . ' ' . $item->last_name,
-                        'id' => $item->id,
-                    ])
-                    ->pluck('full_name', 'id')),
+                ->options(fn () => User::getTenantOrganizationUsers()),
 
             Select::make('roles')
                 ->options(fn () => Role::options())
