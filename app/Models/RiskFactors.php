@@ -62,6 +62,9 @@ class RiskFactors extends Model
     {
         $highRiskFields = ['use_weapons_in_act_of_violence', 'death_threats', 'victim_afraid_for_himself'];
         foreach ($highRiskFields as $field) {
+            if (empty($riskFactors[$field])) {
+                continue;
+            }
             if (Ternary::isYes($riskFactors[$field]['value'])) {
                 return true;
             }

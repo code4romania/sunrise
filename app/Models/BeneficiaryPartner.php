@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
 use App\Concerns\HasEffectiveAddress;
+use App\Enums\Occupation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,4 +31,7 @@ class BeneficiaryPartner extends Model
         'observations',
     ];
 
+    protected $casts = [
+        'occupation' => Occupation::class,
+    ];
 }

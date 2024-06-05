@@ -233,6 +233,10 @@ class EditRiskFactors extends EditRecord
     {
         $count = 0;
         foreach ($fields as $field) {
+            if (empty($riskFactors[$field]['value'])) {
+                continue;
+            }
+
             if (Ternary::isYes($riskFactors[$field]['value'])) {
                 $count++;
             }
@@ -266,7 +270,7 @@ class EditRiskFactors extends EditRecord
         foreach ($enumOptions as $key => $value) {
             $fields[] = TextEntry::make('risk_factors.' . $key . '.value')
                 ->label($value)
-                ->formatStateUsing(fn ($state) => $state == '-' ?: Ternary::options()[$state])
+                ->formatStateUsing(fn ($state) => $state == '-' ? $state : Ternary::options()[$state])
                 ->inlineLabel(false);
             $fields[] = TextEntry::make('risk_factors.' . $key . '.description')
                 ->hiddenLabel()

@@ -182,6 +182,7 @@ class ViewDetailedEvaluation extends ViewRecord
                         ->schema([
                             TextEntry::make('applicant')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.applicant'))
+                                ->formatStateUsing(fn ($state) => $state == '-' ? $state : $state->label())
                                 ->placeholder(__('beneficiary.placeholder.applicant')),
                             TextEntry::make('reporting_by')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
@@ -273,6 +274,7 @@ class ViewDetailedEvaluation extends ViewRecord
 
             TextEntry::make('occupation')
                 ->label(__('field.occupation'))
+                ->formatStateUsing(fn ($state) => $state == '-' ? $state : $state->label())
                 ->placeholder(__('beneficiary.placeholder.occupation')),
 
             Location::make('legal_residence')

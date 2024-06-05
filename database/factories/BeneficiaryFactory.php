@@ -16,8 +16,19 @@ use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryPartner;
+use App\Models\BeneficiarySituation;
+use App\Models\CaseTeam;
 use App\Models\City;
+use App\Models\DetailedEvaluationResult;
+use App\Models\EvaluateDetails;
+use App\Models\Meeting;
+use App\Models\MultidisciplinaryEvaluation;
 use App\Models\ReferringInstitution;
+use App\Models\RequestedServices;
+use App\Models\RiskFactors;
+use App\Models\Violence;
+use App\Models\ViolenceHistory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -170,6 +181,53 @@ class BeneficiaryFactory extends Factory
                 );
             })
             ->afterCreating(function (Beneficiary $beneficiary) use ($referringInstitutions) {
+                BeneficiaryPartner::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                BeneficiarySituation::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                CaseTeam::factory()
+                    ->for($beneficiary)
+                    ->count(rand(1, 5))
+                    ->create();
+
+                DetailedEvaluationResult::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                EvaluateDetails::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                Meeting::factory()
+                    ->for($beneficiary)
+                    ->count(rand(1, 5))
+                    ->create();
+
+                MultidisciplinaryEvaluation::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                RiskFactors::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                Violence::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                ViolenceHistory::factory()
+                    ->for($beneficiary)
+                    ->count(rand(1, 5))
+                    ->create();
+
+                RequestedServices::factory()
+                    ->for($beneficiary)
+                    ->create();
+
                 Aggressor::factory()
                     ->for($beneficiary)
                     ->create();

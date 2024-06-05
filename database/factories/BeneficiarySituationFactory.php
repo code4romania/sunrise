@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Beneficiary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +20,9 @@ class BeneficiarySituationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'beneficiary_id' => Beneficiary::inRandomOrder()->first()->id,
+            'moment_of_evaluation' => fake()->text(),
+            'description_of_situation' => fake()->text(),
         ];
     }
 }
