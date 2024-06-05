@@ -22,4 +22,13 @@ enum Level: string
     {
         return 'enum.level';
     }
+
+    public static function colors(): array
+    {
+        return [
+            'success' => Level::LOW,
+            'warning' => Level::MEDIUM,
+            'danger' => Level::HIGH,
+        ];
+    }
 }

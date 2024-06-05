@@ -206,11 +206,7 @@ class ViewBeneficiary extends ViewRecord
                                     ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : '')
                                     ->hidden(fn ($state) => $state == '-')
                                     ->badge()
-                                    ->colors([
-                                        'success' => Level::LOW,
-                                        'warning' => Level::MEDIUM,
-                                        'danger' => Level::HIGH,
-                                    ]),
+                                    ->colors(Level::colors()),
                             ]),
                         Group::make()
                             ->visible(fn ($record) => ! $record->violence?->violence_types)
@@ -255,7 +251,7 @@ class ViewBeneficiary extends ViewRecord
                             ->schema(function ($state) {
                                 $fields = [];
                                 foreach (RecommendationService::options() as $key => $option) {
-                                    if (! isset($state->$key) || ! $state->$key) {
+                                    if (empty($state->$key)) {
                                         continue;
                                     }
 
