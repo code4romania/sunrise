@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\Ternary;
-use App\Models\Beneficiary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +20,6 @@ class RequestedServicesFactory extends Factory
     public function definition(): array
     {
         return [
-            'beneficiary_id' => Beneficiary::inRandomOrder()->first()->id,
             'psychological_advice' => fake()->randomElement(Ternary::values()),
             'legal_advice' => fake()->randomElement(Ternary::values()),
             'legal_assistance' => fake()->randomElement(Ternary::values()),

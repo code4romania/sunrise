@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\Applicant;
-use App\Models\Beneficiary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,7 +22,6 @@ class MultidisciplinaryEvaluationFactory extends Factory
         $applicant = fake()->randomElement(Applicant::values());
 
         return [
-            'beneficiary_id' => Beneficiary::inRandomOrder()->first()->id,
             'applicant' => $applicant,
             'reporting_by' => Applicant::OTHER->is($applicant) ? fake()->text() : null,
             'medical_need' => fake()->text(),

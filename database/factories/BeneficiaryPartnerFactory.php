@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\Occupation;
-use App\Models\Beneficiary;
 use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,7 +25,6 @@ class BeneficiaryPartnerFactory extends Factory
         $sameAddress = fake()->boolean();
 
         return [
-            'beneficiary_id' => Beneficiary::inRandomOrder()->first()->id,
             'last_name' => fake()->lastName(),
             'first_name' => fake()->firstName(),
             'age' => fake()->numberBetween(10, 99),

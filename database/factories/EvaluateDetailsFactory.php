@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\Beneficiary;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,21 +18,7 @@ class EvaluateDetailsFactory extends Factory
      */
     public function definition(): array
     {
-        $beneficiary = Beneficiary::query()
-            ->with('organization')
-            ->inRandomOrder()
-            ->first();
-
         return [
-            'beneficiary_id' => $beneficiary->id,
-            'specialist_id' => User::query()
-                ->whereHas(
-                    'organizations',
-                    fn (Builder $query) => $query->where('organizations.id', $beneficiary->organization->id)
-                )
-                ->inRandomOrder()
-                ->first()
-                ->id,
             'registered_date' => fake()->date(),
             'file_number' => fake()->randomNumber(),
             'method_of_identifying_the_service' => fake()->text(),

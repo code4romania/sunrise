@@ -27,9 +27,12 @@ use App\Models\MultidisciplinaryEvaluation;
 use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
+use App\Models\User;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Beneficiary>
@@ -189,9 +192,22 @@ class BeneficiaryFactory extends Factory
                     ->for($beneficiary)
                     ->create();
 
+                $count = rand(1, 5);
+                $users = User::query()
+                    ->whereHas(
+                        'organizations',
+                        fn (Builder $query) => $query->where('organizations.id', $beneficiary->organization->id)
+                    )
+                    ->inRandomOrder()
+                    ->limit($count)
+                    ->get()
+                    ->map(fn ($item) => ['user_id' => $item->id])
+                    ->toArray();
+
                 CaseTeam::factory()
                     ->for($beneficiary)
-                    ->count(rand(1, 5))
+                    ->state(new Sequence(...$users))
+                    ->count($count)
                     ->create();
 
                 DetailedEvaluationResult::factory()
@@ -200,6 +216,15 @@ class BeneficiaryFactory extends Factory
 
                 EvaluateDetails::factory()
                     ->for($beneficiary)
+                    ->state(['specialist_id' => User::query()
+                        ->whereHas(
+                            'organizations',
+                            fn (Builder $query) => $query->where('organizations.id', $beneficiary->organization->id)
+                        )
+                        ->inRandomOrder()
+                        ->first()
+                        ->id,
+                    ])
                     ->create();
 
                 Meeting::factory()
