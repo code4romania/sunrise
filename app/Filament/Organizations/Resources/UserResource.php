@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
+use App\Enums\Role;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms\Components\Checkbox;
@@ -127,18 +128,9 @@ class UserResource extends Resource
                 ->label(__('user.labels.phone_number'))
                 ->tel()
                 ->required(),
-            // TODO get roles from enum after merge with #23
             Select::make('roles')
                 ->label(__('user.labels.select_roles'))
-                ->options(
-//                    Role::options()
-                    [
-                        'aaaa' => 'aaaa',
-                        'bbbb' => 'bbbb',
-                        'cccc' => 'cccc',
-                    ]
-                )
-//                ->enum(Role::class)
+                ->options(Role::options())
                 ->multiple()
                 ->required(),
             Checkbox::make('can_be_case_manager')
