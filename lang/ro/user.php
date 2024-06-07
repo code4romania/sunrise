@@ -26,4 +26,9 @@ return [
         'manager' => 'Manager',
 
     ],
+
+    'status' => [
+        'active' => 'Activ',
+        'inactive' => 'Inactiv',
+    ],
 ];

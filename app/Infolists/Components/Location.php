@@ -193,6 +193,7 @@ class Location extends Component
 
             EnumEntry::make($this->getEnvironmentField())
                 ->label($this->getEnvironmentLabel())
+                ->visible($this->hasEnvironment())
                 ->placeholder(__('placeholder.residence_environment')),
         ];
     }

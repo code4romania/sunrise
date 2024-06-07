@@ -12,4 +12,5 @@ return [
         'actions' => 'Acțiuni',
     ],
 
+    'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',
 ];

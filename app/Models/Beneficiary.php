@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\BelongsToOrganization;
 use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
+use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
 use App\Enums\ActLocation;
@@ -40,6 +41,7 @@ class Beneficiary extends Model
     use HasEthnicity;
     use HasFactory;
     use HasUlid;
+    use HasEffectiveAddress;
 
     protected $fillable = [
         'first_name',
@@ -147,12 +149,11 @@ class Beneficiary extends Model
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
-    protected static function boot()
+    public function getBreadcrumb(): string
     {
-        parent::boot();
-        self::creating(fn (Beneficiary $model) => self::copyLegalResidenceToEffectiveResidence($model));
+        $fullNameWithID = '#' . $this->id . ' ' . $this->full_name;
 
-        self::updating(fn (Beneficiary $model) => self::copyLegalResidenceToEffectiveResidence($model));
+        return $this->prior_name ? $fullNameWithID . ' (' . $this->prior_name . ')' : $fullNameWithID;
     }
 
     public function aggressor(): HasOne
@@ -217,14 +218,64 @@ class Beneficiary extends Model
         );
     }
 
-    private static function copyLegalResidenceToEffectiveResidence(self $model): void
+    public function specialists(): HasMany
     {
-        if ($model->same_as_legal_residence) {
-            $model->effective_residence_county_id = $model->legal_residence_county_id;
-            $model->effective_residence_city_id = $model->legal_residence_city_id;
-            $model->effective_residence_address = $model->legal_residence_address;
-            $model->effective_residence_environment = $model->legal_residence_environment;
-        }
+        return $this->hasMany(Specialist::class);
+    }
+
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
+    public function partner(): HasOne
+    {
+        return $this->hasOne(BeneficiaryPartner::class);
+    }
+
+    public function multidisciplinaryEvaluation(): HasOne
+    {
+        return $this->hasOne(MultidisciplinaryEvaluation::class);
+    }
+
+    public function detailedEvaluationResult(): HasOne
+    {
+        return $this->hasOne(DetailedEvaluationResult::class);
+    }
+
+    public function evaluateDetails(): HasOne
+    {
+        return $this->hasOne(EvaluateDetails::class);
+    }
+
+    public function violence(): HasOne
+    {
+        return $this->hasOne(Violence::class);
+    }
+
+    public function riskFactors(): HasOne
+    {
+        return $this->hasOne(RiskFactors::class);
+    }
+
+    public function requestedServices(): HasOne
+    {
+        return $this->hasOne(RequestedServices::class);
+    }
+
+    public function beneficiarySituation(): HasOne
+    {
+        return $this->hasOne(BeneficiarySituation::class);
+    }
+
+    public function team(): HasMany
+    {
+        return $this->hasMany(CaseTeam::class);
+    }
+
+    public function violenceHistory(): HasMany
+    {
+        return $this->hasMany(ViolenceHistory::class);
     }
 
     public function documents(): HasMany
