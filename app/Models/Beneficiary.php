@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\BelongsToOrganization;
 use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
+use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
 use App\Enums\ActLocation;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
@@ -39,6 +41,7 @@ class Beneficiary extends Model
     use HasEthnicity;
     use HasFactory;
     use HasUlid;
+    use HasEffectiveAddress;
 
     protected $fillable = [
         'first_name',
@@ -146,6 +149,13 @@ class Beneficiary extends Model
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
+    public function getBreadcrumb(): string
+    {
+        $fullNameWithID = '#' . $this->id . ' ' . $this->full_name;
+
+        return $this->prior_name ? $fullNameWithID . ' (' . $this->prior_name . ')' : $fullNameWithID;
+    }
+
     public function aggressor(): HasOne
     {
         return $this->hasOne(Aggressor::class)
@@ -206,5 +216,65 @@ class Beneficiary extends Model
         return Attribute::make(
             get: fn () => $this->birthdate?->age,
         );
+    }
+
+    public function specialists(): HasMany
+    {
+        return $this->hasMany(Specialist::class);
+    }
+
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
+    public function partner(): HasOne
+    {
+        return $this->hasOne(BeneficiaryPartner::class);
+    }
+
+    public function multidisciplinaryEvaluation(): HasOne
+    {
+        return $this->hasOne(MultidisciplinaryEvaluation::class);
+    }
+
+    public function detailedEvaluationResult(): HasOne
+    {
+        return $this->hasOne(DetailedEvaluationResult::class);
+    }
+
+    public function evaluateDetails(): HasOne
+    {
+        return $this->hasOne(EvaluateDetails::class);
+    }
+
+    public function violence(): HasOne
+    {
+        return $this->hasOne(Violence::class);
+    }
+
+    public function riskFactors(): HasOne
+    {
+        return $this->hasOne(RiskFactors::class);
+    }
+
+    public function requestedServices(): HasOne
+    {
+        return $this->hasOne(RequestedServices::class);
+    }
+
+    public function beneficiarySituation(): HasOne
+    {
+        return $this->hasOne(BeneficiarySituation::class);
+    }
+
+    public function team(): HasMany
+    {
+        return $this->hasMany(CaseTeam::class);
+    }
+
+    public function violenceHistory(): HasMany
+    {
+        return $this->hasMany(ViolenceHistory::class);
     }
 }

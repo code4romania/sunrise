@@ -8,6 +8,8 @@ return [
 
     'action' => [
         'view_details' => 'Vezi detalii',
+        'edit' => 'Editează',
     ],
 
+    'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',
 ];

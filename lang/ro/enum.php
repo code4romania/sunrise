@@ -177,5 +177,51 @@ return [
         'can_change_nomenclature' => 'Are drepturi de modificare nomenclator',
         'can_change_staff' => 'Are drepturi de modificare Echipă Specialiști (Staff)',
         'can_change_organisation_profile' => 'Are drepturi de modificare Profilul Organizației în Rețeaua Sunrise',
+     ],
+
+    'frequency' => [
+        'daily' => 'Zilnică',
+        'weekly' => 'Săptămânală',
+        'monthly' => 'Lunară',
+        'lass_than_monthly' => 'Mai rar decât lunară',
+    ],
+
+    'helps' => [
+        'temporary_shelter' => 'Găzduire temporară',
+        'emergency_bag_storage' => 'Păstrare bagaj urgență',
+        'financial_support' => 'Sprijin financiar',
+        'emotional_support' => 'Sprijin emoțional',
+        'accompanying_actions' => 'Acompaniere demersuri',
+        'emergency_call' => 'Apelare de urgență',
+    ],
+
+    'applicant' => [
+        'beneficiary' => 'Solicitare din partea beneficiarului',
+        'other' => 'Semnalare caz de către altcineva',
+    ],
+
+    'level' => [
+        'high' => 'Grad de risc crescut',
+        'medium' => 'Grad de risc mediu',
+        'low' => 'Grad de risc scăzut',
+    ],
+
+    'role' => [
+        'coordinator' => 'Coordonator',
+        'manger' => 'Manager de caz',
+        'chef_manager' => 'Șef manager de caz',
+        'chef_service' => 'Șef serviciu',
+        'psychological_advice' => 'Consilier Psihologic',
+        'psychotherapist' => 'Psihoterapeut',
+        'clinical_psychologist' => 'Psiholog Clinician',
+        'psycho_pedagogue' => 'Psihopedagog',
+        'social_worker' => 'Asistent social',
+        'legal_advisor' => 'Consilier juridic',
+        'facilitator' => 'Facilitator',
+        'trainer' => 'Formator',
+        'doctor' => 'Medic',
+        'medical_assistant' => 'Asistent medical',
+        'occupational_therapist' => 'Terapeut ocupațional',
+        'other' => 'Alt Specialist',
     ],
 ];

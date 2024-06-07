@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\HasUlid;
 use App\Concerns\MustSetInitialPassword;
 use App\Enums\UserStatus;
+use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasDefaultTenant;
@@ -198,5 +199,20 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     // TODO create notifications
     public function resetPassword(): void
     {
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public static function getTenantOrganizationUsers(): Collection
+    {
+        return self::whereHas(
+            'organizations',
+            fn (Builder $query) => $query->where('organizations.id', Filament::getTenant()->id)
+        )
+            ->get()
+            ->pluck('full_name', 'id');
     }
 }

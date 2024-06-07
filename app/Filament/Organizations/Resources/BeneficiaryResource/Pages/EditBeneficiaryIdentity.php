@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Spacer;
 use App\Rules\ValidCNP;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
@@ -45,6 +46,12 @@ class EditBeneficiaryIdentity extends EditRecord
         ]);
     }
 
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getIdentityBreadcrumbs();
+    }
+
     public function form(Form $form): Form
     {
         return $form
@@ -71,13 +78,13 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.last_name'))
                         ->placeholder(__('placeholder.last_name'))
                         ->maxLength(50)
-                        ->nullable(),
+                        ->required(),
 
                     TextInput::make('first_name')
                         ->label(__('field.first_name'))
                         ->placeholder(__('placeholder.first_name'))
                         ->maxLength(50)
-                        ->nullable(),
+                        ->required(),
 
                     TextInput::make('prior_name')
                         ->label(__('field.prior_name'))
@@ -201,8 +208,8 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->city()
                         ->address()
                         ->environment()
-                        ->disabled(function (Get $get) {
-                            return $get('same_as_legal_residence');
+                        ->visible(function (Get $get) {
+                            return ! $get('same_as_legal_residence');
                         }),
 
                     Spacer::make(),

@@ -6,6 +6,8 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -121,8 +123,28 @@ class BeneficiaryResource extends Resource
             'create' => Pages\CreateBeneficiary::route('/create'),
             'view' => Pages\ViewBeneficiary::route('/{record}'),
 
-            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity'),
-            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal'),
+            'view_identity' => Pages\ViewBeneficiaryIdentity::route('/{record}/identity'),
+            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity/edit'),
+            'view_personal_information' => Pages\ViewBeneficiaryPersonalInformation::route('/{record}/personal'),
+            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal/edit'),
+
+            'view_initial_evaluation' => Pages\ViewInitialEvaluation::route('/{record}/initialEvaluation'),
+            'create_initial_evaluation' => Pages\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
+            'edit_initial_evaluation_details' => Pages\EditEvaluationDetails::route('/{record}/initialEvaluation/details/edit'),
+            'edit_initial_evaluation_violence' => Pages\EditViolence::route('/{record}/initialEvaluation/Violence/edit'),
+            'edit_initial_evaluation_risk_factors' => Pages\EditRiskFactors::route('/{record}/initialEvaluation/riskFactors/edit'),
+            'edit_initial_evaluation_requested_services' => Pages\EditRequestedServices::route('/{record}/initialEvaluation/requestedServices/edit'),
+            'edit_initial_evaluation_beneficiary_situation' => Pages\EditBeneficiarySituation::route('/{record}/initialEvaluation/beneficiarySituation/edit'),
+
+            'view_detailed_evaluation' => Pages\ViewDetailedEvaluation::route('/{record}/detailedEvaluation'),
+            'create_detailed_evaluation' => CreateDetailedEvaluation::route('/{record}/detailedEvaluation/create'),
+            'edit_detailed_evaluation' => Pages\EditDetailedEvaluation::route('/{record}/detailedEvaluation/edit'),
+            'edit_beneficiary_partner' => Pages\EditBeneficiaryPartner::route('/{record}/beneficiaryPartner/edit'),
+            'edit_multidisciplinary_evaluation' => Pages\EditMultidisciplinaryEvaluation::route('/{record}/multidisciplinaryEvaluation/edit'),
+            'edit_detailed_evaluation_result' => Pages\EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
+
+            'view_specialists' => ListSpecialists::route('/{record}/specialists'),
+
         ];
     }
 }

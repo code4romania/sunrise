@@ -66,4 +66,8 @@ return [
         'title' => 'Deactivează cont',
         'success' => 'Cont dezactivat cu succes',
     ],
+    'status' => [
+        'active' => 'Activ',
+        'inactive' => 'Inactiv',
+    ],
 ];
