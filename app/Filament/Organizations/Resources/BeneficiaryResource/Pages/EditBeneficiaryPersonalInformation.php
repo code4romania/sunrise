@@ -183,6 +183,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                 ->relationship('aggressor')
                 ->columnSpanFull()
                 ->hiddenLabel()
+                ->columns()
                 ->addActionLabel(__('beneficiary.section.personal_information.actions.add_aggressor'))
                 ->schema([
                     Select::make('relationship')
@@ -241,7 +242,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             Select::make('violence_types')
                                 ->label(__('field.aggressor_violence_types'))
                                 ->placeholder(__('placeholder.select_many'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('violence_history')))
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history')))
                                 ->options(Violence::options())
                                 ->rule(new MultipleIn(Violence::values()))
                                 ->multiple(),
@@ -259,7 +260,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             TextInput::make('psychiatric_history_notes')
                                 ->label(__('field.aggressor_psychiatric_history_notes'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_psychiatric_history'))),
                         ]),
 
                     Grid::make()
@@ -285,7 +286,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             Select::make('legal_history')
                                 ->label(__('field.aggressor_legal_history'))
                                 ->placeholder(__('placeholder.select_many'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('violence_history')))
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history')))
                                 ->options(AggressorLegalHistory::options())
                                 ->rule(new MultipleIn(AggressorLegalHistory::values()))
                                 ->multiple()

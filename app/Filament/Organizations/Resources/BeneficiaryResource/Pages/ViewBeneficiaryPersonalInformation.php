@@ -201,7 +201,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                                     EnumEntry::make('violence_types')
                                         ->label(__('field.aggressor_violence_types'))
-                                        ->placeholder(__('placeholder.select_many')),
+                                        ->placeholder(__('placeholder.select_many'))
+                                        ->badge(),
 
                                 ]),
 
@@ -220,24 +221,19 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     EnumEntry::make('has_drug_history')
                                         ->label(__('field.aggressor_has_drug_history'))
                                         ->placeholder(__('placeholder.select_one')),
-                                  
+
                                     EnumEntry::make('drugs')
                                         ->label(__('field.aggressor_drugs'))
                                         ->placeholder(__('placeholder.select_many'))
                                         ->badge(),
-
-                                    //                    TextEntry::make('drugs')
-                                    //                        ->label(__('field.aggressor_drugs'))
-                                    //                        ->placeholder(__('placeholder.select_many'))
-                                    //                        ->formatStateUsing(fn ($state) => dd($state)),
                                 ]),
 
                             Grid::make()
                                 ->schema([
                                     EnumEntry::make('legal_history')
                                         ->label(__('field.aggressor_legal_history'))
-                                        ->placeholder(__('placeholder.select_many')),
-                                    // observatii aspecte legale agresor
+                                        ->placeholder(__('placeholder.select_many'))
+                                        ->badge(),
                                 ]),
 
                             Grid::make()
