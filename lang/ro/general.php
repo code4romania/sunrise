@@ -11,4 +11,5 @@ return [
         'edit' => 'Editează',
     ],
 
+    'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',
 ];

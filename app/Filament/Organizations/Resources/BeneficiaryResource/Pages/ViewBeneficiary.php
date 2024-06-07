@@ -4,20 +4,34 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\Level;
+use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Livewire\Beneficiary\ListTeam;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Group;
+use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\ActionSize;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBaseBreadcrumbs();
+    }
 
     protected function getHeaderActions(): array
     {
@@ -44,6 +58,8 @@ class ViewBeneficiary extends ViewRecord
             ->schema([
                 $this->identitySectionSection(),
                 $this->personalInformationSection(),
+                $this->evaluations(),
+                $this->team(),
             ]);
     }
 
@@ -156,6 +172,138 @@ class ViewBeneficiary extends ViewRecord
 
                 EnumEntry::make('has_protection_order')
                     ->label(__('field.has_protection_order')),
+            ]);
+    }
+
+    private function evaluations(): Group
+    {
+        return Group::make()
+            ->schema([
+                Section::make(__('beneficiary.page.create_initial_evaluation.title'))
+                    ->columnSpan(1)
+                    ->headerActions(
+                        [
+                            Action::make('view')
+                                ->label(__('general.action.view_details'))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
+                                ->link()
+                                ->visible(fn ($record) => $record->violence?->violence_types),
+                        ]
+                    )
+                    ->schema([
+                        Group::make()
+                            ->columns()
+                            ->visible(fn ($record) => $record->violence?->violence_types)
+                            ->schema([
+                                TextEntry::make('evaluateDetails.registered_date')
+                                    ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
+                                    ->hidden(fn ($state) => $state == '-')
+                                    ->date(),
+                                TextEntry::make('violence.violence_types')
+                                    ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                                    ->hidden(fn ($state) => $state == '-')
+                                    ->badge()
+                                    ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                                TextEntry::make('riskFactors.risk_level')
+                                    ->label('')
+                                    ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : '')
+                                    ->hidden(fn ($state) => $state == '-')
+                                    ->badge()
+                                    ->colors(Level::colors()),
+                            ]),
+                        Group::make()
+                            ->visible(fn ($record) => ! $record->violence?->violence_types)
+                            ->schema([
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.initial_evaluation'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Large),
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.initial_evaluation_2'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Medium),
+                                Actions::make([
+                                    Action::make('edit')
+                                        ->label(__('beneficiary.action.start_evaluation'))
+                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                        ->badge()
+                                        ->size(ActionSize::ExtraLarge),
+                                ])
+                                    ->alignCenter(),
+                            ]),
+                    ]),
+
+                Section::make(__('beneficiary.page.create_detailed_evaluation.title'))
+                    ->columnSpan(1)
+                    ->headerActions(
+                        [
+                            Action::make('view')
+                                ->label(__('general.action.view_details'))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
+                                ->link()
+                                ->visible(fn ($record) => $record->detailedEvaluationResult),
+                        ]
+                    )
+                    ->schema([
+                        Group::make()
+                            ->relationship('detailedEvaluationResult')
+                            ->visible(fn ($record) => $record->detailedEvaluationResult)
+                            ->columns()
+                            ->schema(function ($state) {
+                                $fields = [];
+                                foreach (RecommendationService::options() as $key => $option) {
+                                    if (empty($state->$key)) {
+                                        continue;
+                                    }
+
+                                    $fields[] = TextEntry::make($key)
+                                        ->hiddenLabel()
+                                        ->badge()
+                                        ->formatStateUsing(fn () => substr($option, 0, 50));
+                                }
+
+                                return $fields;
+                            }),
+                        Group::make()
+                            ->visible(fn ($record) => ! $record->detailedEvaluationResult)
+                            ->schema([
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.detailed_evaluation'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Large),
+                                TextEntry::make('description')
+                                    ->hiddenLabel()
+                                    ->default(__('beneficiary.helper_text.detailed_evaluation_2'))
+                                    ->alignCenter()
+                                    ->size(TextEntry\TextEntrySize::Medium),
+                                Actions::make([
+                                    Action::make('edit')
+                                        ->label(__('beneficiary.action.start_evaluation'))
+                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                        ->badge()
+                                        ->size(ActionSize::ExtraLarge),
+                                ])
+                                    ->alignCenter(),
+                            ]),
+                    ]),
+            ]);
+    }
+
+    private function team(): Section
+    {
+        return Section::make(__('beneficiary.section.specialists.title'))
+            ->columnSpan(1)
+            ->headerActions([
+                Action::make('edit')
+                    ->label(__('general.action.view_details'))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_specialists', ['record' => $record]))
+                    ->link(),
+            ])
+            ->schema([
+                Livewire::make(ListTeam::class),
             ]);
     }
 }

@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -27,6 +28,12 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             'name' => $this->record->full_name,
             'id' => $this->record->id,
         ]);
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getPersonalInformationBreadcrumbs();
     }
 
     public function infolist(Infolist $infolist): Infolist
@@ -213,6 +220,11 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     EnumEntry::make('has_drug_history')
                                         ->label(__('field.aggressor_has_drug_history'))
                                         ->placeholder(__('placeholder.select_one')),
+                                  
+                                    EnumEntry::make('drugs')
+                                        ->label(__('field.aggressor_drugs'))
+                                        ->placeholder(__('placeholder.select_many'))
+                                        ->badge(),
 
                                     //                    TextEntry::make('drugs')
                                     //                        ->label(__('field.aggressor_drugs'))
@@ -326,17 +338,19 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                     EnumEntry::make('act_location')
                         ->label(__('field.act_location'))
-                        ->placeholder(__('placeholder.select_many')),
+                        ->placeholder(__('placeholder.select_many'))
+                        ->badge(),
 
                     TextEntry::make('act_location_other')
                         ->label(__('field.act_location_other')),
 
-                    EnumEntry::make('first_called_institution_id')
+                    TextEntry::make('firstCalledInstitution.name')
                         ->label(__('field.first_called_institution'))
                         ->placeholder(__('placeholder.select_one')),
 
-                    EnumEntry::make('other_called_institutions')
+                    TextEntry::make('otherCalledInstitution.name')
                         ->label(__('field.other_called_institutions'))
+                        ->badge()
                         ->placeholder(__('placeholder.select_one')),
                 ]),
         ];

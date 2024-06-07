@@ -14,7 +14,6 @@ use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Enums\Violence;
 use App\Models\Aggressor;
-use App\Models\Beneficiary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -30,8 +29,6 @@ class AggressorFactory extends Factory
     public function definition(): array
     {
         return [
-            'beneficiary_id' => Beneficiary::factory(),
-
             'relationship' => fake()->randomElement(AggressorRelationship::values()),
             'age' => fake()->randomNumber(2),
             'gender' => fake()->randomElement(Gender::values()),

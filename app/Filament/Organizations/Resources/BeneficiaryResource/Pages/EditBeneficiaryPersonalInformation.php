@@ -22,6 +22,7 @@ use App\Enums\Ternary;
 use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Rules\MultipleIn;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -49,6 +50,12 @@ class EditBeneficiaryPersonalInformation extends EditRecord
             'name' => $this->record->full_name,
             'id' => $this->record->id,
         ]);
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getPersonalInformationBreadcrumbs();
     }
 
     public function form(Form $form): Form

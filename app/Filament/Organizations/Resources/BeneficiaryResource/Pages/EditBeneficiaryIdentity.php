@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Spacer;
 use App\Rules\ValidCNP;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
@@ -43,6 +44,12 @@ class EditBeneficiaryIdentity extends EditRecord
             'name' => $this->record->full_name,
             'id' => $this->record->id,
         ]);
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getIdentityBreadcrumbs();
     }
 
     public function form(Form $form): Form
