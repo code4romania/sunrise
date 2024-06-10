@@ -152,7 +152,7 @@ return [
                 'description_of_situation' => 'A se include și situația juridică - acțiuni în instanță, situația socio-familială, situația medicală actuală):',
             ],
         ],
-        
+
         'detailed_evaluation' => [
             'labels' => [
                 'specialists' => 'Specialisti care au colaborat la realizarea evaluarii',
@@ -213,7 +213,7 @@ return [
                 'recommendation_services' => 'Servicii recomandate',
             ],
         ],
-        
+
         'specialists' => [
             'title' => 'Echipă caz ',
             'add_action' => 'Adaugă specialist',
@@ -227,8 +227,8 @@ return [
                 'role' => 'Rol',
                 'status' => 'Status',
             ],
-        ],    
-        
+        ],
+
         'documents' => [
             'actions' => [
                 'add' => 'Încarcă document',
@@ -312,5 +312,7 @@ return [
         'detailed_evaluation' => 'Evaluarea multidiciplinară',
         'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
         'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls, .csv, .png, .tiff, .jpg. Dimensiunea maxima nu poate depăși 25 Mb',
+        'documents' => 'Niciun document încărcat',
+        'documents_2' => 'Încarcă un prim document în fișa beneficiarei',
     ],
 ];
