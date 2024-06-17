@@ -21,6 +21,7 @@ use App\Enums\Notifier;
 use App\Enums\Occupation;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
+use App\Enums\ResidenceEnvironment;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -58,6 +59,9 @@ class Beneficiary extends Model
         'id_type',
         'id_serial',
         'id_number',
+
+        'legal_residence_environment',
+        'effective_residence_environment',
 
         'primary_phone',
         'backup_phone',
@@ -116,6 +120,8 @@ class Beneficiary extends Model
         'civil_status' => CivilStatus::class,
         'criminal_history' => Ternary::class,
         'doesnt_have_children' => 'boolean',
+        'effective_residence_environment' => ResidenceEnvironment::class,
+        'legal_residence_environment' => ResidenceEnvironment::class,
         'elder_care_count' => 'integer',
         'gender' => Gender::class,
         'has_family_doctor' => Ternary::class,

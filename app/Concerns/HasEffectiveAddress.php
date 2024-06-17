@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Concerns;
 
-use App\Enums\ResidenceEnvironment;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryPartner;
 use App\Models\City;
@@ -18,17 +17,12 @@ trait HasEffectiveAddress
         $this->fillable[] = 'legal_residence_county_id';
         $this->fillable[] = 'legal_residence_city_id';
         $this->fillable[] = 'legal_residence_address';
-        $this->fillable[] = 'legal_residence_environment';
 
         $this->fillable[] = 'same_as_legal_residence';
 
         $this->fillable[] = 'effective_residence_county_id';
         $this->fillable[] = 'effective_residence_city_id';
         $this->fillable[] = 'effective_residence_address';
-        $this->fillable[] = 'effective_residence_environment';
-
-        $this->casts['effective_residence_environment'] = ResidenceEnvironment::class;
-        $this->casts['legal_residence_environment'] = ResidenceEnvironment::class;
     }
 
     protected static function bootHasEffectiveAddress(): void
