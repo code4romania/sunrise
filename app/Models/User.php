@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\HasUlid;
 use App\Concerns\MustSetInitialPassword;
+use App\Enums\Role;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
@@ -84,8 +85,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
-        'roles' => 'json',
-        //        'roles' => AsEnumCollection::class . ':' . Role::class,
+        'roles' => AsEnumCollection::class . ':' . Role::class,
         'case_permissions' => 'json',
         'admin_permissions' => 'json',
         'status' => UserStatus::class,
@@ -208,11 +208,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public static function getTenantOrganizationUsers(): Collection
     {
-        return self::whereHas(
-            'organizations',
-            fn (Builder $query) => $query->where('organizations.id', Filament::getTenant()->id)
-        )
-            ->get()
+        return Filament::getTenant()
+            ->users
             ->pluck('full_name', 'id');
     }
 }
