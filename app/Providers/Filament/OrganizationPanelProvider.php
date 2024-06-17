@@ -65,6 +65,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups(false)
             ->login(Pages\Auth\Login::class)
+            ->passwordReset()
             ->colors([
                 'primary' => Color::Purple,
             ])

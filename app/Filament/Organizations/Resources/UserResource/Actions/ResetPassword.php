@@ -9,24 +9,19 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\RateLimiter;
 
-class ResendInvitationAction extends Action
+class ResetPassword extends Action
 {
-    public static function getDefaultName(): ?string
-    {
-        return 'resend_invitation';
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isPending());
+        $this->visible(fn (User $record) => $record->isActive());
 
-        $this->label(__('user.actions.resend_invitation'));
+        $this->label(__('user.actions.reset_password'));
 
-        $this->icon('heroicon-o-envelope-open');
+        $this->icon('heroicon-o-lock-open');
 
-        $this->modalHeading(__('user.action_resend_invitation_confirm.title'));
+        $this->modalHeading(__('user.action_reset_password_confirm.title'));
 
         $this->modalWidth('md');
 
@@ -40,22 +35,23 @@ class ResendInvitationAction extends Action
 
             RateLimiter::increment($key, HOUR_IN_SECONDS);
 
-            $record->sendWelcomeNotification();
-            $this->success();
+            $record->resetPassword();
+//            $record->sendWelcomeNotification();
+//            $this->success();
         });
 
-        $this->successNotificationTitle(__('user.action_resend_invitation_confirm.success'));
+        $this->successNotificationTitle(__('user.action_reset_password_confirm.success'));
 
         $this->failureNotification(
             fn (Notification $notification) => $notification
                 ->danger()
-                ->title(__('user.action_resend_invitation_confirm.failure_title'))
-                ->body(__('user.action_resend_invitation_confirm.failure_body'))
+                ->title(__('user.action_reset_password_confirm.failure_title'))
+                ->body(__('user.action_reset_password_confirm.failure_body'))
         );
     }
 
     private function getRateLimiterKey(User $user): string
     {
-        return 'resend-invitation:' . $user->id;
+        return 'reset-password:' . $user->id;
     }
 }

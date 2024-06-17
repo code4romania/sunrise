@@ -12,6 +12,7 @@ use App\Models\User;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -69,7 +70,9 @@ class UserResource extends Resource
                     ->searchable(),
                 TextColumn::make('roles')
                     ->sortable()
-                    ->label(__('user.labels.roles')),
+                    ->badge()
+                    ->label(__('user.labels.roles'))
+                    ->formatStateUsing(fn ($state) => $state->label()),
                 TextColumn::make('status')
                     ->sortable()
                     ->label(__('user.labels.account_status'))
@@ -115,38 +118,42 @@ class UserResource extends Resource
     public static function getSchema(): array
     {
         return [
-            TextInput::make('first_name')
-                ->label(__('user.labels.first_name'))
-                ->required(),
-            TextInput::make('last_name')
-                ->label(__('user.labels.last_name'))
-                ->required(),
-            TextInput::make('email')
-                ->label(__('user.labels.email'))
-                ->required(),
-            TextInput::make('phone_number')
-                ->label(__('user.labels.phone_number'))
-                ->tel()
-                ->required(),
-            Select::make('roles')
-                ->label(__('user.labels.select_roles'))
-                ->options(Role::options())
-                ->multiple()
-                ->required(),
-            Checkbox::make('can_be_case_manager')
-                ->label(__('user.labels.can_be_case_manager')),
-            Placeholder::make('obs')
-                ->content(__('user.placeholders.obs'))
-                ->label('')
-                ->columnSpanFull(),
-            CheckboxList::make('case_permissions')
-                ->label(__('user.labels.case_permissions'))
-                ->options(CasePermission::options())
-                ->columnSpanFull(),
-            CheckboxList::make('admin_permissions')
-                ->label(__('user.labels.admin_permissions'))
-                ->options(AdminPermission::options())
-                ->columnSpanFull(),
+            Section::make()
+                ->columns()
+                ->schema([
+                    TextInput::make('first_name')
+                        ->label(__('user.labels.first_name'))
+                        ->required(),
+                    TextInput::make('last_name')
+                        ->label(__('user.labels.last_name'))
+                        ->required(),
+                    TextInput::make('email')
+                        ->label(__('user.labels.email'))
+                        ->required(),
+                    TextInput::make('phone_number')
+                        ->label(__('user.labels.phone_number'))
+                        ->tel()
+                        ->required(),
+                    Select::make('roles')
+                        ->label(__('user.labels.select_roles'))
+                        ->options(Role::options())
+                        ->multiple()
+                        ->required(),
+                    Checkbox::make('can_be_case_manager')
+                        ->label(__('user.labels.can_be_case_manager')),
+                    Placeholder::make('obs')
+                        ->content(__('user.placeholders.obs'))
+                        ->label('')
+                        ->columnSpanFull(),
+                    CheckboxList::make('case_permissions')
+                        ->label(__('user.labels.case_permissions'))
+                        ->options(CasePermission::options())
+                        ->columnSpanFull(),
+                    CheckboxList::make('admin_permissions')
+                        ->label(__('user.labels.admin_permissions'))
+                        ->options(AdminPermission::options())
+                        ->columnSpanFull(),
+                ]),
         ];
     }
 }

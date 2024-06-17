@@ -4,32 +4,66 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
-use App\Enums\UserStatus;
 use App\Filament\Organizations\Resources\UserResource;
-use App\Models\User;
 use Filament\Actions;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Str;
 
 class ViewUser extends ViewRecord
 {
     protected static string $resource = UserResource::class;
 
-    public function form(Form $form): Form
+    public function infolist(Infolist $infolist): Infolist
     {
-        return $form->schema([
-            ...[Group::make([
-                Placeholder::make('status')
-                    ->content(fn (User $record) => $record->status?->label()),
-                Placeholder::make('updated_at')
-                    ->content(fn (User $record) => $record->updated_at),
-            ])
+        return $infolist->schema([
+            Section::make()
                 ->columns()
-                ->columnSpanFull()],
-            ...UserResource::getSchema(),
+                ->schema([
+                    TextEntry::make('status')
+                        ->formatStateUsing(fn ($state) => $state->label()),
+                    TextEntry::make('updated_at'),
+                ]),
+            Section::make()
+                ->columns()
+                ->schema([
+                    TextEntry::make('first_name')
+                        ->label(__('user.labels.first_name')),
+                    TextEntry::make('last_name')
+                        ->label(__('user.labels.last_name')),
+                    TextEntry::make('email')
+                        ->label(__('user.labels.email')),
+                    TextEntry::make('phone_number')
+                        ->label(__('user.labels.phone_number')),
+                    TextEntry::make('roles')
+                        ->label(__('user.labels.select_roles'))
+                        ->badge(fn ($state) => $state != '-')
+                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : $state),
+                    TextEntry::make('can_be_case_manager')
+                        ->label(__('user.labels.can_be_case_manager'))
+                        ->default('0')
+                        ->formatStateUsing(fn ($state) => $state != '-' ? __('enum.ternary.' . $state) : $state),
+                    TextEntry::make('obs')
+                        ->default(
+                            Str::of(__('user.placeholders.obs'))
+                                ->inlineMarkdown()
+                                ->toHtmlString()
+                        )
+                        ->hiddenLabel()
+                        ->columnSpanFull(),
+                    TextEntry::make('case_permissions')
+                        ->label(__('user.labels.case_permissions'))
+                        ->badge(fn ($state) => $state != '-')
+                        ->formatStateUsing(fn ($state) => $state != '-' ? __('enum.case_permissions.' . $state) : $state)
+                        ->columnSpanFull(),
+                    TextEntry::make('admin_permissions')
+                        ->label(__('user.labels.admin_permissions'))
+                        ->badge(fn ($state) => $state != '-')
+                        ->formatStateUsing(fn ($state) => $state != '-' ? __('enum.admin_permission.' . $state) : $state)
+                        ->columnSpanFull(),
+                ]),
         ]);
     }
 
@@ -40,10 +74,7 @@ class ViewUser extends ViewRecord
 
             UserResource\Actions\DeactivateUserAction::make(),
 
-            Actions\Action::make('reset_password')
-                ->label(__('user.actions.reset_password'))
-                ->visible(fn (User $record) => UserStatus::isValue($record->status, UserStatus::ACTIVE))
-                ->action(fn (User $record) => $record->resetPassword()),
+            //            UserResource\Actions\ResetPassword::make('reset-password'),
 
             UserResource\Actions\ResendInvitationAction::make(),
         ];
@@ -51,10 +82,10 @@ class ViewUser extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return $this->record->getFilamentName();
+        return $this->getTitle();
     }
 
-    public function getHeading(): string|Htmlable
+    public function getTitle(): string
     {
         return $this->record->getFilamentName();
     }

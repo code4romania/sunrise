@@ -150,17 +150,14 @@ class Beneficiary extends Model
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
         static::created(function (Beneficiary $beneficiary) {
             if (auth()->user()?->can_be_case_manager) {
-                $team = new CaseTeam([
-                    'beneficiary_id' => $beneficiary->id,
+                $beneficiary->team()->create([
                     'user_id' => auth()->user()->id,
                     'roles' => [Role::MANGER],
                 ]);
-                $team->save();
             }
         });
     }

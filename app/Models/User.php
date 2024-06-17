@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\HasUlid;
+use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
 use App\Enums\Role;
 use App\Enums\UserStatus;
@@ -44,6 +45,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use MustSetInitialPassword;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasUserStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -98,7 +100,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         });
 
         static::creating(function (User $model) {
-            $model->status = UserStatus::PENDING;
+            $model->setPendingStatus();
         });
     }
 
@@ -189,11 +191,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
                     ->take(1),
             ])
             ->withCasts(['last_login_at' => 'datetime']);
-    }
-
-    public function deactivate(): void
-    {
-        $this->update(['status' => UserStatus::INACTIVE]);
     }
 
     // TODO create notifications
