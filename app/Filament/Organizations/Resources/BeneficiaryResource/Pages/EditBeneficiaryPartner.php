@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\Occupation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
@@ -18,15 +19,23 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditBeneficiaryPartner extends EditRecord
 {
+    use RedirectToDetailedEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getBreadcrumbsForDetailedEvaluation();
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.partner.label'));
     }
 
     public function form(Form $form): Form

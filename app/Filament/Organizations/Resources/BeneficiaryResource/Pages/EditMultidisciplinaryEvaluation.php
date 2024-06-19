@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\Applicant;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
@@ -17,10 +18,13 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class EditMultidisciplinaryEvaluation extends EditRecord
 {
+    use RedirectToDetailedEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function getBreadcrumbs(): array
@@ -32,6 +36,11 @@ class EditMultidisciplinaryEvaluation extends EditRecord
     public function form(Form $form): Form
     {
         return $form->schema(self::getSchema());
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.multidisciplinary_evaluation.label'));
     }
 
     public static function getSchema(): array

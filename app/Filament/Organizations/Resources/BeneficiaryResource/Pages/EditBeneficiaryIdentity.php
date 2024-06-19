@@ -52,6 +52,11 @@ class EditBeneficiaryIdentity extends EditRecord
             ->getIdentityBreadcrumbs();
     }
 
+    protected function getRedirectUrl(): string
+    {
+        return self::$resource::getUrl('view_identity', ['record' => $this->record->id]);
+    }
+
     public function form(Form $form): Form
     {
         return $form
