@@ -79,11 +79,11 @@ class ViewBeneficiary extends ViewRecord
             ->schema([
                 TextEntry::make('age')
                     ->label(__('field.age'))
-                    ->formatStateUsing(fn ($state) => trans_choice('general.age', $state)),
+                    ->formatStateUsing(fn ($state) => $state === '-' ? $state : trans_choice('general.age', $state)),
 
                 TextEntry::make('birthdate')
                     ->label(__('field.birthdate'))
-                    ->date(),
+                    ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->toDateString()),
 
                 EnumEntry::make('gender')
                     ->label(__('field.gender')),
