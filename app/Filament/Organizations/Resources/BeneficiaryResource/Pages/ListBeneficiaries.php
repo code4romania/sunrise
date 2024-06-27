@@ -12,6 +12,11 @@ class ListBeneficiaries extends ListRecords
 {
     protected static string $resource = BeneficiaryResource::class;
 
+    public function getBreadcrumbs(): array
+    {
+        return [];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
