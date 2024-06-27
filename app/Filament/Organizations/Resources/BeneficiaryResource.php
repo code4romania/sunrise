@@ -99,9 +99,7 @@ class BeneficiaryResource extends Resource
                 //
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                //
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
