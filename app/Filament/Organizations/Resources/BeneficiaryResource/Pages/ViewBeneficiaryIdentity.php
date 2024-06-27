@@ -8,7 +8,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -60,10 +59,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->columnSpan(1)
                 ->columns()
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditIdentity::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -167,10 +163,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->columnSpan(1)
                 ->columns()
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditIdentity::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
