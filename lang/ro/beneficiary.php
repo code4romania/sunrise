@@ -14,6 +14,9 @@ return [
     ],
 
     'page' => [
+        'create' => [
+            'title' => 'Înregistrează caz nou',
+        ],
         'view' => [
             'title' => '#:id :name',
         ],
