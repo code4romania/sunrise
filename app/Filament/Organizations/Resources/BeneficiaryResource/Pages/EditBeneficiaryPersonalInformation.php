@@ -95,7 +95,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         ];
     }
 
-    protected static function beneficiarySection(): array
+    public static function beneficiarySection(): array
     {
         return [
             Select::make('has_family_doctor')
@@ -181,7 +181,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         ];
     }
 
-    protected static function aggressorSection(): array
+    public static function aggressorSection(): array
     {
         return [
             Select::make('relationship')
@@ -306,7 +306,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         ];
     }
 
-    protected static function antecedentsSection(): array
+    public static function antecedentsSection(): array
     {
         return [
             Grid::make()
@@ -347,7 +347,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         ];
     }
 
-    protected static function flowSection(): array
+    public static function flowSection(): array
     {
         return [
             Grid::make()
