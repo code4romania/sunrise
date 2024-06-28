@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\Beneficiary;
-use App\Models\Country;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,10 +22,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->foreignIdFor(Country::class, 'citizenship_id')
-                ->nullable()
-                ->constrained('countries')
-                ->cascadeOnDelete();
+            $table->string('citizenship')->nullable();
 
             $table->string('relationship')->nullable();
             $table->tinyInteger('age')->unsigned()->nullable();
