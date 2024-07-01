@@ -101,6 +101,7 @@ return [
                 'delete_aggressor' => 'Sterge agresor',
             ],
         ],
+
         'initial_evaluation' => [
             'heading' => [
                 'violence_history' => 'I. Istoricul violenței',
@@ -155,6 +156,7 @@ return [
                 'description_of_situation' => 'A se include și situația juridică - acțiuni în instanță, situația socio-familială, situația medicală actuală):',
             ],
         ],
+
         'detailed_evaluation' => [
             'labels' => [
                 'specialists' => 'Specialisti care au colaborat la realizarea evaluarii',
@@ -215,6 +217,7 @@ return [
                 'recommendation_services' => 'Servicii recomandate',
             ],
         ],
+
         'specialists' => [
             'title' => 'Echipă caz ',
             'add_action' => 'Adaugă specialist',
@@ -227,6 +230,25 @@ return [
                 'name' => 'Nume specialist',
                 'role' => 'Rol',
                 'status' => 'Status',
+            ],
+        ],
+
+        'documents' => [
+            'actions' => [
+                'add' => 'Încarcă document',
+            ],
+            'title' => [
+                'page' => 'Documente',
+                'table' => 'Arhivă documente',
+                'add_modal' => 'Adaugă document',
+                'edit_modal' => 'Actualizează detalii document',
+            ],
+            'labels' => [
+                'type' => 'Tip document',
+                'name' => 'Denumire document',
+                'observations' => 'Observatii',
+                'date' => 'Data',
+                'document_file' => 'Încarcă document',
             ],
         ],
     ],
@@ -293,5 +315,8 @@ return [
         'initial_evaluation_2' => 'Pentru oferirea de servicii imediate',
         'detailed_evaluation' => 'Evaluarea multidiciplinară',
         'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
+        'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls, .csv, .png, .tiff, .jpg. Dimensiunea maxima nu poate depăși 25 Mb',
+        'documents' => 'Niciun document încărcat',
+        'documents_2' => 'Încarcă un prim document în fișa beneficiarei',
     ],
 ];

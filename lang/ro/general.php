@@ -9,6 +9,7 @@ return [
     'action' => [
         'view_details' => 'Vezi detalii',
         'edit' => 'Editează',
+        'actions' => 'Acțiuni',
     ],
 
     'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',

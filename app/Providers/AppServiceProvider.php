@@ -9,6 +9,7 @@ use App\Models\Beneficiary;
 use App\Models\City;
 use App\Models\CommunityProfile;
 use App\Models\County;
+use App\Models\Document;
 use App\Models\Intervention;
 use App\Models\Organization;
 use App\Models\ReferringInstitution;
@@ -50,8 +51,8 @@ class AppServiceProvider extends ServiceProvider
             Model::preventAccessingMissingAttributes($shouldBeEnabled);
         });
 
-        TextEntry::configureUsing(function (TextEntry $entry){
-           return $entry->default('-');
+        TextEntry::configureUsing(function (TextEntry $entry) {
+            return $entry->default('-');
         });
     }
 
@@ -67,6 +68,7 @@ class AppServiceProvider extends ServiceProvider
             'referring_institution' => ReferringInstitution::class,
             'service' => Service::class,
             'user' => User::class,
+            'document' => Document::class,
         ]);
     }
 

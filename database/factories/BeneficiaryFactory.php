@@ -21,6 +21,7 @@ use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
 use App\Models\City;
 use App\Models\DetailedEvaluationResult;
+use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\Meeting;
 use App\Models\MultidisciplinaryEvaluation;
@@ -251,6 +252,11 @@ class BeneficiaryFactory extends Factory
 
                 RequestedServices::factory()
                     ->for($beneficiary)
+                    ->create();
+
+                Document::factory()
+                    ->for($beneficiary)
+                    ->count(rand(1, 5))
                     ->create();
 
                 Aggressor::factory()
