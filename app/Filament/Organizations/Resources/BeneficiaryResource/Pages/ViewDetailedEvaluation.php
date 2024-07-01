@@ -32,6 +32,7 @@ class ViewDetailedEvaluation extends ViewRecord
             ->columns(1)
             ->schema([
                 Tabs::make()
+                    ->persistTabInQueryString()
                     ->tabs([
                         Tabs\Tab::make(__('beneficiary.wizard.detailed_evaluation.label'))
                             ->schema([

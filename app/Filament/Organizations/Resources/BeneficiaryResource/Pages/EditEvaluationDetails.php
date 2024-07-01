@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToInitialEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\User;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
@@ -16,9 +17,12 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditEvaluationDetails extends EditRecord
 {
+    use RedirectToInitialEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function form(Form $form): Form
@@ -30,6 +34,11 @@ class EditEvaluationDetails extends EditRecord
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getBreadcrumbsForInitialEvaluation();
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.details.label'));
     }
 
     public static function getSchema(): array

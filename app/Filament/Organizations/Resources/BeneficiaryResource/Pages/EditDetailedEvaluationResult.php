@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
@@ -16,15 +17,23 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditDetailedEvaluationResult extends EditRecord
 {
+    use RedirectToDetailedEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getBreadcrumbsForDetailedEvaluation();
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.results.label'));
     }
 
     public function form(Form $form): Form
