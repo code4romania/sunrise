@@ -21,13 +21,6 @@ class BeneficiaryPartner extends Model
         'first_name',
         'age',
         'occupation',
-        'legal_residence_county_id',
-        'legal_residence_city_id',
-        'legal_residence_address',
-        'same_as_legal_residence',
-        'effective_residence_county_id',
-        'effective_residence_city_id',
-        'effective_residence_address',
         'observations',
     ];
 
