@@ -8,6 +8,8 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Rules\ValidCNP;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord;
@@ -64,7 +66,27 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
-                ->schema(EditBeneficiaryPersonalInformation::getPersonalInformationFormSchema()),
+                ->schema([
+                    Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
+                        ->columns()
+                        ->schema(EditBeneficiaryPersonalInformation::beneficiarySection()),
+
+                    Section::make(__('beneficiary.section.personal_information.section.aggressor'))
+                        ->schema([
+                            Group::make()
+                                ->relationship('aggressor')
+                                ->columns()
+                                ->schema(EditBeneficiaryPersonalInformation::aggressorSection()),
+                        ]),
+
+                    Section::make(__('beneficiary.section.personal_information.section.antecedents'))
+                        ->columns()
+                        ->schema(EditBeneficiaryPersonalInformation::antecedentsSection()),
+
+                    Section::make(__('beneficiary.section.personal_information.section.flow'))
+                        ->columns()
+                        ->schema(EditBeneficiaryPersonalInformation::flowSection()),
+                ]),
         ];
     }
 }
