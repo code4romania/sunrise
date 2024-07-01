@@ -169,10 +169,9 @@ class Beneficiary extends Model
         return $this->prior_name ? $fullNameWithID . ' (' . $this->prior_name . ')' : $fullNameWithID;
     }
 
-    public function aggressor(): HasOne
+    public function aggressor(): HasMany
     {
-        return $this->hasOne(Aggressor::class)
-            ->withDefault();
+        return $this->hasMany(Aggressor::class);
     }
 
     public function legalResidenceCounty(): BelongsTo
