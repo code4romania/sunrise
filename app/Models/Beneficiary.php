@@ -22,6 +22,7 @@ use App\Enums\Occupation;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
+use App\Enums\Role;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -148,6 +149,18 @@ class Beneficiary extends Model
         'notifier' => Notifier::class,
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
+
+    protected static function booted()
+    {
+        static::created(function (Beneficiary $beneficiary) {
+            if (auth()->user()?->can_be_case_manager) {
+                $beneficiary->team()->create([
+                    'user_id' => auth()->user()->id,
+                    'roles' => [Role::MANGER],
+                ]);
+            }
+        });
+    }
 
     public function getBreadcrumb(): string
     {
