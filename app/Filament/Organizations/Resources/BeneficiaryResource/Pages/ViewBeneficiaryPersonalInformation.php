@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -74,10 +73,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -150,10 +146,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -256,10 +249,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -297,10 +287,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
