@@ -12,12 +12,23 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
+use Illuminate\Contracts\Support\Htmlable;
 
 class CreateBeneficiary extends CreateRecord
 {
     use HasWizard;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.create.title');
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return $this->getTitle();
+    }
 
     protected function getSteps(): array
     {
