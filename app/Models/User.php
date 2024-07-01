@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\HasUlid;
+use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
+use App\Enums\Role;
+use App\Enums\UserStatus;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -14,6 +17,7 @@ use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +45,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use MustSetInitialPassword;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasUserStatus;
 
     /**
      * The attributes that are mass assignable.
@@ -51,6 +56,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'first_name',
         'last_name',
         'email',
+        'phone_number',
+        'status',
+        'roles',
+        'can_be_case_manager',
+        'case_permissions',
+        'admin_permissions',
         'password',
         'password_set_at',
         'latest_organization_id',
@@ -76,12 +87,20 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'roles' => AsEnumCollection::class . ':' . Role::class,
+        'case_permissions' => 'json',
+        'admin_permissions' => 'json',
+        'status' => UserStatus::class,
     ];
 
     protected static function booted()
     {
         static::addGlobalScope('withLastLogin', function (Builder $query) {
             return $query->withLastLoginAt();
+        });
+
+        static::creating(function (User $model) {
+            $model->setPendingStatus();
         });
     }
 
@@ -174,6 +193,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             ->withCasts(['last_login_at' => 'datetime']);
     }
 
+    // TODO create notifications
+    public function resetPassword(): void
+    {
+    }
+
     public function getFullNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
@@ -181,11 +205,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public static function getTenantOrganizationUsers(): Collection
     {
-        return self::whereHas(
-            'organizations',
-            fn (Builder $query) => $query->where('organizations.id', Filament::getTenant()->id)
-        )
-            ->get()
+        return Filament::getTenant()
+            ->users
             ->pluck('full_name', 'id');
     }
 }
