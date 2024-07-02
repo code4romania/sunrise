@@ -13,13 +13,13 @@ use App\Livewire\Beneficiary\ListTeam;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Support\Enums\ActionSize;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -68,10 +68,8 @@ class ViewBeneficiary extends ViewRecord
             ->columnSpan(1)
             ->columns()
             ->headerActions([
-                Action::make('view')
-                    ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_identity', ['record' => $record]))
-                    ->link(),
+                BeneficiaryResource\Actions\ViewDetailsAction::make('view')
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_identity', ['record' => $record])),
             ])
             ->extraAttributes([
                 'class' => 'h-full',
@@ -79,11 +77,11 @@ class ViewBeneficiary extends ViewRecord
             ->schema([
                 TextEntry::make('age')
                     ->label(__('field.age'))
-                    ->formatStateUsing(fn ($state) => trans_choice('general.age', $state)),
+                    ->formatStateUsing(fn ($state) => $state === '-' ? $state : trans_choice('general.age', $state)),
 
                 TextEntry::make('birthdate')
                     ->label(__('field.birthdate'))
-                    ->date(),
+                    ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->toDateString()),
 
                 EnumEntry::make('gender')
                     ->label(__('field.gender')),
@@ -125,10 +123,8 @@ class ViewBeneficiary extends ViewRecord
             ->columnSpan(1)
             ->columns()
             ->headerActions([
-                Action::make('view')
-                    ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_personal_information', ['record' => $record]))
-                    ->link(),
+                BeneficiaryResource\Actions\ViewDetailsAction::make('view')
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_personal_information', ['record' => $record])),
             ])
             ->extraAttributes([
                 'class' => 'h-full',
@@ -148,15 +144,17 @@ class ViewBeneficiary extends ViewRecord
                     ->icon('heroicon-o-phone')
                     ->url(fn ($state) => "tel:{$state}"),
 
-                EnumEntry::make('aggressor.relationship')
-                    ->label(__('field.aggressor_relationship')),
+                RepeatableEntry::make('aggressor')
+                    ->schema([
+                        EnumEntry::make('relationship')
+                            ->label(__('field.aggressor_relationship')),
 
-                EnumEntry::make('aggressor.gender')
-                    ->label(__('field.aggressor_gender')),
+                        EnumEntry::make('gender')
+                            ->label(__('field.aggressor_gender')),
 
-                EnumEntry::make('aggressor.has_violence_history')
-                    ->label(__('field.aggressor_has_violence_history')),
-
+                        EnumEntry::make('has_violence_history')
+                            ->label(__('field.aggressor_has_violence_history')),
+                    ]),
                 EnumEntry::make('has_police_reports')
                     ->label(__('field.has_police_reports'))
                     ->suffix(fn ($record) => Ternary::isYes($record->has_police_reports)
@@ -180,10 +178,8 @@ class ViewBeneficiary extends ViewRecord
                     ->columnSpan(1)
                     ->headerActions(
                         [
-                            Action::make('view')
-                                ->label(__('general.action.view_details'))
+                            BeneficiaryResource\Actions\ViewDetailsAction::make('view')
                                 ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
-                                ->link()
                                 ->visible(fn ($record) => $record->violence?->violence_types),
                         ]
                     )
@@ -222,11 +218,9 @@ class ViewBeneficiary extends ViewRecord
                                     ->alignCenter()
                                     ->size(TextEntry\TextEntrySize::Medium),
                                 Actions::make([
-                                    Action::make('edit')
+                                    BeneficiaryResource\Actions\EditExtraLarge::make('edit')
                                         ->label(__('beneficiary.action.start_evaluation'))
-                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
-                                        ->badge()
-                                        ->size(ActionSize::ExtraLarge),
+                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record])),
                                 ])
                                     ->alignCenter(),
                             ]),
@@ -236,10 +230,8 @@ class ViewBeneficiary extends ViewRecord
                     ->columnSpan(1)
                     ->headerActions(
                         [
-                            Action::make('view')
-                                ->label(__('general.action.view_details'))
+                            BeneficiaryResource\Actions\ViewDetailsAction::make('view')
                                 ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
-                                ->link()
                                 ->visible(fn ($record) => $record->detailedEvaluationResult),
                         ]
                     )
@@ -277,11 +269,9 @@ class ViewBeneficiary extends ViewRecord
                                     ->alignCenter()
                                     ->size(TextEntry\TextEntrySize::Medium),
                                 Actions::make([
-                                    Action::make('edit')
+                                    BeneficiaryResource\Actions\EditExtraLarge::make('edit')
                                         ->label(__('beneficiary.action.start_evaluation'))
-                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
-                                        ->badge()
-                                        ->size(ActionSize::ExtraLarge),
+                                        ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record])),
                                 ])
                                     ->alignCenter(),
                             ]),
@@ -294,10 +284,8 @@ class ViewBeneficiary extends ViewRecord
         return Section::make(__('beneficiary.section.specialists.title'))
             ->columnSpan(1)
             ->headerActions([
-                Action::make('edit')
-                    ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_specialists', ['record' => $record]))
-                    ->link(),
+                BeneficiaryResource\Actions\ViewDetailsAction::make('view')
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_specialists', ['record' => $record])),
             ])
             ->schema([
                 Livewire::make(ListTeam::class),

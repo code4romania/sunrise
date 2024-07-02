@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
+            $table->string('phone_number')->nullable();
+            $table->string('status')->nullable();
+            $table->json('roles')->nullable();
+            $table->boolean('can_be_case_manager')->nullable();
+            $table->boolean('has_access_to_all_cases')->nullable();
+            $table->json('case_permissions')->nullable();
+            $table->json('admin_permissions')->nullable();
             $table->boolean('is_admin')->default(false);
             $table->timestamp('password_set_at')->nullable();
             $table->string('password');

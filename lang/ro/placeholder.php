@@ -12,6 +12,7 @@ return [
     'cnp' => 'Cod Numeric Personal',
     'select_many' => 'Alege răspunsurile care se aplică',
     'select_one' => 'Alege un răspuns',
+    'birthplace' => 'Localitatea în care s-a născut',
     'id_number' => 'Introdu număr act',
     'id_serial' => 'Introdu serie act',
     'id_type' => 'Alege un tip de act de identitate',

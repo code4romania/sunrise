@@ -160,6 +160,25 @@ return [
         'private' => 'Entitate privată',
     ],
 
+    'user_status' => [
+        'active' => 'Activ',
+        'inactive' => 'Dezactivat',
+        'pending' => 'În așteptare',
+    ],
+
+    'case_permissions' => [
+        'has_access_to_all_cases' => 'Are acces la toate cazurile din Centru',
+        'can_search_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției',
+        'can_copy_cases_in_all_centers' => 'Poate copia date identificare beneficiar dintr-o bază de date în alta  a instituției',
+        'has_access_to_statistics' => 'Are acces la rapoarte statistice',
+    ],
+
+    'admin_permission' => [
+        'can_change_nomenclature' => 'Are drepturi de modificare nomenclator',
+        'can_change_staff' => 'Are drepturi de modificare Echipă Specialiști (Staff)',
+        'can_change_organisation_profile' => 'Are drepturi de modificare Profilul Organizației în Rețeaua Sunrise',
+    ],
+
     'frequency' => [
         'daily' => 'Zilnică',
         'weekly' => 'Săptămânală',

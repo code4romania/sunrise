@@ -7,9 +7,8 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
@@ -55,12 +54,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->schema(static::beneficiarySection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.aggressor'))
-                        ->schema([
-                            Group::make()
-                                ->relationship('aggressor')
-                                ->columns()
-                                ->schema(static::aggressorSection()),
-                        ]),
+                        ->schema(static::aggressorSection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.antecedents'))
                         ->columns()
@@ -79,10 +73,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -155,96 +146,98 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
                 ])
                 ->schema([
-                    EnumEntry::make('relationship')
-                        ->label(__('field.aggressor_relationship'))
-                        ->placeholder(__('placeholder.select_one')),
-
-                    TextEntry::make('age')
-                        ->label(__('field.aggressor_age'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric(),
-
-                    EnumEntry::make('gender')
-                        ->label(__('field.aggressor_gender'))
-                        ->placeholder(__('placeholder.select_one')),
-
-                    EnumEntry::make('citizenship')
-                        ->label(__('field.aggressor_citizenship'))
-                        ->placeholder(__('placeholder.citizenship')),
-
-                    EnumEntry::make('civil_status')
-                        ->label(__('field.aggressor_civil_status'))
-                        ->placeholder(__('placeholder.civil_status')),
-
-                    EnumEntry::make('studies')
-                        ->label(__('field.aggressor_studies'))
-                        ->placeholder(__('placeholder.studies')),
-
-                    EnumEntry::make('occupation')
-                        ->label(__('field.aggressor_occupation'))
-                        ->placeholder(__('placeholder.select_one')),
-
-                    Grid::make()
+                    RepeatableEntry::make('aggressor')
+                        ->columns()
+                        ->columnSpanFull()
+                        ->hiddenLabel()
                         ->schema([
-                            EnumEntry::make('has_violence_history')
-                                ->label(__('field.aggressor_has_violence_history'))
+                            EnumEntry::make('relationship')
+                                ->label(__('field.aggressor_relationship'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            EnumEntry::make('violence_types')
-                                ->label(__('field.aggressor_violence_types'))
-                                ->badge()
-                                ->placeholder(__('placeholder.select_many')),
+                            TextEntry::make('age')
+                                ->label(__('field.aggressor_age'))
+                                ->placeholder(__('placeholder.number'))
+                                ->numeric(),
 
-                        ]),
-
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('has_psychiatric_history')
-                                ->label(__('field.aggressor_has_psychiatric_history'))
+                            EnumEntry::make('gender')
+                                ->label(__('field.aggressor_gender'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            TextEntry::make('psychiatric_history_notes')
-                                ->label(__('field.aggressor_psychiatric_history_notes')),
-                        ]),
+                            EnumEntry::make('citizenship')
+                                ->label(__('field.aggressor_citizenship'))
+                                ->placeholder(__('placeholder.citizenship')),
 
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('has_drug_history')
-                                ->label(__('field.aggressor_has_drug_history'))
+                            EnumEntry::make('civil_status')
+                                ->label(__('field.aggressor_civil_status'))
+                                ->placeholder(__('placeholder.civil_status')),
+
+                            EnumEntry::make('studies')
+                                ->label(__('field.aggressor_studies'))
+                                ->placeholder(__('placeholder.studies')),
+
+                            EnumEntry::make('occupation')
+                                ->label(__('field.aggressor_occupation'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            EnumEntry::make('drugs')
-                                ->label(__('field.aggressor_drugs'))
-                                ->placeholder(__('placeholder.select_many'))
-                                ->badge(),
-                        ]),
+                            Grid::make()
+                                ->schema([
+                                    EnumEntry::make('has_violence_history')
+                                        ->label(__('field.aggressor_has_violence_history'))
+                                        ->placeholder(__('placeholder.select_one')),
 
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('legal_history')
-                                ->label(__('field.aggressor_legal_history'))
-                                ->placeholder(__('placeholder.select_many'))
-                                ->badge(),
-                            // observatii aspecte legale agresor
-                        ]),
+                                    EnumEntry::make('violence_types')
+                                        ->label(__('field.aggressor_violence_types'))
+                                        ->placeholder(__('placeholder.select_many'))
+                                        ->badge(),
 
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('has_protection_order')
-                                ->label(__('field.has_protection_order'))
-                                ->placeholder(__('placeholder.select_one')),
+                                ]),
 
-                            TextEntry::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes')),
+                            Grid::make()
+                                ->schema([
+                                    EnumEntry::make('has_psychiatric_history')
+                                        ->label(__('field.aggressor_has_psychiatric_history'))
+                                        ->placeholder(__('placeholder.select_one')),
+
+                                    TextEntry::make('psychiatric_history_notes')
+                                        ->label(__('field.aggressor_psychiatric_history_notes')),
+                                ]),
+
+                            Grid::make()
+                                ->schema([
+                                    EnumEntry::make('has_drug_history')
+                                        ->label(__('field.aggressor_has_drug_history'))
+                                        ->placeholder(__('placeholder.select_one')),
+
+                                    EnumEntry::make('drugs')
+                                        ->label(__('field.aggressor_drugs'))
+                                        ->placeholder(__('placeholder.select_many'))
+                                        ->badge(),
+                                ]),
+
+                            Grid::make()
+                                ->schema([
+                                    EnumEntry::make('legal_history')
+                                        ->label(__('field.aggressor_legal_history'))
+                                        ->placeholder(__('placeholder.select_many'))
+                                        ->badge(),
+                                ]),
+
+                            Grid::make()
+                                ->schema([
+                                    EnumEntry::make('has_protection_order')
+                                        ->label(__('field.has_protection_order'))
+                                        ->placeholder(__('placeholder.select_one')),
+
+                                    TextEntry::make('protection_order_notes')
+                                        ->label(__('field.protection_order_notes')),
+                                ]),
                         ]),
                 ]),
         ];
@@ -256,10 +249,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -297,10 +287,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns(2)
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',

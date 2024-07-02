@@ -14,6 +14,9 @@ return [
     ],
 
     'page' => [
+        'create' => [
+            'title' => 'Înregistrează caz nou',
+        ],
         'view' => [
             'title' => '#:id :name',
         ],
@@ -95,6 +98,10 @@ return [
                 'aggressor' => 'Informații despre agresor',
                 'antecedents' => 'Antecedente caz',
                 'flow' => 'Flux prezentare victimă',
+            ],
+            'actions' => [
+                'add_aggressor' => 'Adaugă încă un agresor',
+                'delete_aggressor' => 'Sterge agresor',
             ],
         ],
         'initial_evaluation' => [

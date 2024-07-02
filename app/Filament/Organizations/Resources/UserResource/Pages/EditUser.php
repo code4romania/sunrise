@@ -18,4 +18,17 @@ class EditUser extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            self::$resource::getUrl() => self::$resource::getBreadcrumb(),
+            self::$resource::getUrl('view', ['record' => $this->record->id]) => $this->record->getFilamentName(),
+        ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return self::$resource::getUrl('view', ['record' => $this->record->id]);
+    }
 }
