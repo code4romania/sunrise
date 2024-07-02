@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\Country;
-use App\Models\Ethnicity;
 use App\Models\Organization;
 use App\Models\Service;
 use App\Models\User;
@@ -31,10 +30,6 @@ class DatabaseSeeder extends Seeder
 
         Country::factory()
             ->count(195)
-            ->create();
-
-        Ethnicity::factory()
-            ->count(10)
             ->create();
 
         Service::factory()

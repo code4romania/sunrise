@@ -170,7 +170,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.aggressor_gender'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            EnumEntry::make('citizenship_id')
+                            EnumEntry::make('citizenship')
                                 ->label(__('field.aggressor_citizenship'))
                                 ->placeholder(__('placeholder.citizenship')),
 

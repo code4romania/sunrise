@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace App\Concerns;
 
-use App\Models\Country;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Enums\Citizenship;
 
 trait HasCitizenship
 {
     public function initializeHasCitizenship(): void
     {
-        $this->fillable = array_merge($this->fillable, ['citizenship_id']);
-    }
-
-    public function citizenship(): BelongsTo
-    {
-        return $this->belongsTo(Country::class);
+        $this->fillable = array_merge($this->fillable, ['citizenship']);
+        $this->casts['citizenship'] = Citizenship::class;
     }
 }
