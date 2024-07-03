@@ -20,6 +20,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\FontWeight;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -211,6 +212,7 @@ class ViewBeneficiary extends ViewRecord
                                     ->hiddenLabel()
                                     ->default(__('beneficiary.helper_text.initial_evaluation'))
                                     ->alignCenter()
+                                    ->weight(FontWeight::Bold)
                                     ->size(TextEntry\TextEntrySize::Large),
                                 TextEntry::make('description')
                                     ->hiddenLabel()
@@ -262,6 +264,7 @@ class ViewBeneficiary extends ViewRecord
                                     ->hiddenLabel()
                                     ->default(__('beneficiary.helper_text.detailed_evaluation'))
                                     ->alignCenter()
+                                    ->weight(FontWeight::Bold)
                                     ->size(TextEntry\TextEntrySize::Large),
                                 TextEntry::make('description')
                                     ->hiddenLabel()
