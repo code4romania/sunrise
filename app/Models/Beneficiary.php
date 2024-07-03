@@ -156,9 +156,7 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        $fullNameWithID = '#' . $this->id . ' ' . $this->full_name;
-
-        return $this->prior_name ? $fullNameWithID . ' (' . $this->prior_name . ')' : $fullNameWithID;
+        return '#' . $this->id . ' ' . $this->full_name;
     }
 
     public function aggressor(): HasMany
