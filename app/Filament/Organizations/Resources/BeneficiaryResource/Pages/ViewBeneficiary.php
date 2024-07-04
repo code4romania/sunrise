@@ -20,6 +20,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -196,6 +197,7 @@ class ViewBeneficiary extends ViewRecord
                                     ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
                                     ->hidden(fn ($state) => $state == '-')
                                     ->badge()
+                                    ->color(Color::Gray)
                                     ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
                                 TextEntry::make('riskFactors.risk_level')
                                     ->label('')
@@ -250,6 +252,7 @@ class ViewBeneficiary extends ViewRecord
                                     $fields[] = TextEntry::make($key)
                                         ->hiddenLabel()
                                         ->badge()
+                                        ->color(Color::Gray)
                                         ->formatStateUsing(fn () => substr($option, 0, 50));
                                 }
 
