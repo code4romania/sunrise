@@ -226,6 +226,12 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->tel()
                         ->nullable(),
 
+                    TextInput::make('email')
+                        ->label(__('beneficiary.section.identity.labels.email'))
+                        ->placeholder(__('beneficiary.placeholder.email'))
+                        ->email()
+                        ->nullable(),
+
                     Textarea::make('contact_notes')
                         ->label(__('field.contact_notes'))
                         ->placeholder(__('placeholder.contact_notes'))

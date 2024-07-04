@@ -135,6 +135,10 @@ class ViewBeneficiaryIdentity extends ViewRecord
                                 ->label(__('field.backup_phone'))
                                 ->placeholder(__('placeholder.phone')),
 
+                            TextEntry::make('email')
+                                ->label(__('beneficiary.section.identity.labels.email'))
+                                ->icon('heroicon-o-envelope'),
+
                             TextEntry::make('contact_notes')
                                 ->label(__('field.contact_notes'))
                                 ->placeholder(__('placeholder.contact_notes'))

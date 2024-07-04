@@ -89,6 +89,9 @@ return [
                 'beneficiary' => 'Identitate beneficiar',
                 'children' => 'Identitate copii',
             ],
+            'labels' => [
+                'email' => 'Email beneficiar',
+            ],
         ],
 
         'personal_information' => [
@@ -284,6 +287,7 @@ return [
         'observations' => 'Observații',
         'moment_of_evaluation' => 'Situația la data realizării evaluării inițiale',
         'description_of_situation' => 'Descrieți pe scurt situația',
+        'email' => 'Introdu un email',
     ],
     'helper_text' => [
         'recommendations_for_intervention_plan' => 'Exemple de recomandări posibile conform standardelor:

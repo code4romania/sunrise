@@ -66,6 +66,7 @@ class Beneficiary extends Model
 
         'primary_phone',
         'backup_phone',
+        'email',
         'contact_notes',
 
         'status',
