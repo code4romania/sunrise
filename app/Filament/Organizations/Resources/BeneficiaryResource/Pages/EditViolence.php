@@ -16,6 +16,7 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Colors\Color;
 
 class EditViolence extends EditRecord
 {
@@ -76,6 +77,7 @@ class EditViolence extends EditRecord
                     TextEntry::make('violence_types')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
                         ->badge()
+                        ->color(Color::Gray)
                         ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
                     EnumEntry::make('violence_primary_type')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
