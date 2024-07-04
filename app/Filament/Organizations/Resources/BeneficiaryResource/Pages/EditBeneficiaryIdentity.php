@@ -318,6 +318,9 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('age')
                         ->label(__('field.age')),
 
+                    DatePicker::make('birthdate')
+                        ->label(__('field.birthdate')),
+
                     TextInput::make('address')
                         ->label(__('field.current_address')),
 

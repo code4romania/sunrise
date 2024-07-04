@@ -215,6 +215,9 @@ class ViewBeneficiaryIdentity extends ViewRecord
                             TextEntry::make('age')
                                 ->label(__('field.age')),
 
+                            TextEntry::make('birthdate')
+                                ->label(__('field.birthdate')),
+
                             TextEntry::make('address')
                                 ->label(__('field.current_address')),
 
