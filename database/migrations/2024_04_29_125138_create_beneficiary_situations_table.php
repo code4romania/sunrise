@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('beneficiary_situations', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Beneficiary::class);
-            $table->string('moment_of_evaluation');
-            $table->text('description_of_situation');
+            $table->string('moment_of_evaluation')->nullable();
+            $table->text('description_of_situation')->nullable();
             $table->timestamps();
         });
     }
