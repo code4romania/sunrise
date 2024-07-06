@@ -95,12 +95,6 @@ class BeneficiaryResource extends Resource
                     ->formatStateUsing(fn ($state) => $state?->label())
                     ->shrink(),
             ])
-            ->filters([
-                //
-            ])
-            ->bulkActions([
-                //
-            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
