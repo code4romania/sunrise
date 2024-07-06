@@ -5,16 +5,23 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 
 class CreateBeneficiary extends CreateRecord
 {
@@ -47,12 +54,51 @@ class CreateBeneficiary extends CreateRecord
                                 ->accepted()
                                 ->columnSpanFull(),
 
+                            Placeholder::make('consent_placeholder')
+                                ->hiddenLabel()
+                                ->columnSpanFull()
+                                ->content(__('beneficiary.placeholder.consent')),
+
+                            Placeholder::make('consent_placeholder')
+                                ->hiddenLabel()
+                                ->columnSpanFull()
+                                ->content(new HtmlString('<b>' . __('beneficiary.placeholder.check_beneficiary_exists') . '</b>')),
+
                             TextInput::make('cnp')
                                 ->label(__('field.cnp'))
                                 ->nullable()
                                 ->rule(new ValidCNP)
                                 ->hidden()
+                                ->hintAction(
+                                    Action::make('check_cnp')
+                                        ->label(__('field.check'))
+                                        ->action(function (Get $get, Set $set) {
+                                            $beneficiary = Beneficiary::query()
+                                                ->where('cnp', $get('cnp'))
+                                                ->first();
+                                            if ($beneficiary !== null) {
+                                                $set('beneficiary_status', 1);
+                                            } else {
+                                                $set('beneficiary_status', 0);
+                                            }
+                                        }),
+                                )
                                 ->lazy(),
+
+                            Hidden::make('beneficiary_status')
+                                ->live(),
+
+                            Placeholder::make('beneficiary_exists')
+                                ->hiddenLabel()
+                                ->columnSpanFull()
+                                ->content(new HtmlString(__('beneficiary.placeholder.beneficiary_exists')))
+                                ->visible(fn (Get $get) => $get('beneficiary_status') === 1),
+
+                            Placeholder::make('beneficiary_not_exists')
+                                ->hiddenLabel()
+                                ->columnSpanFull()
+                                ->content(new HtmlString(__('beneficiary.placeholder.beneficiary_not_exists')))
+                                ->visible(fn (Get $get) => $get('beneficiary_status') === 0),
                         ]),
                 ]),
 

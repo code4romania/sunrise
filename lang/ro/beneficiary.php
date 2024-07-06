@@ -284,6 +284,10 @@ return [
         'observations' => 'Observații',
         'moment_of_evaluation' => 'Situația la data realizării evaluării inițiale',
         'description_of_situation' => 'Descrieți pe scurt situația',
+        'consent' => 'Odată înregistrat cazul în sistem, aceste formulare de obținere a consimțământului vor putea fi încarcate în sistem, în secțiunea Documente Beneficiar.',
+        'check_beneficiary_exists' => 'Verifică dacă beneficiarul există în baza de date (Opțional)',
+        'beneficiary_exists' => 'CNP-ul a fost identificat în această bază de date, asociat cazului Maria Popescu. <a href="#">Vezi detalii</a>',
+        'beneficiary_not_exists' => '<i class="heroicon-check"></i>CNP-ul nu a fost identificat în această bază de date și nici în cea a altor centre ale instituției.',
     ],
     'helper_text' => [
         'recommendations_for_intervention_plan' => 'Exemple de recomandări posibile conform standardelor:
