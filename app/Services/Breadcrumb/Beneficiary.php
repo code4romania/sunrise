@@ -61,6 +61,16 @@ class Beneficiary
         );
     }
 
+    public function getBreadcrumbsForCreateInitialEvaluation(): array
+    {
+        $breadcrumb = __('beneficiary.page.create_initial_evaluation.title');
+
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [self::$resourcePath::getUrl('create_initial_evaluation', ['record' => $this->record->id]) => $breadcrumb],
+        );
+    }
+
     public function getBreadcrumbsForDetailedEvaluation(): array
     {
         $breadcrumb = __('beneficiary.breadcrumb.wizard_detailed_evaluation');
