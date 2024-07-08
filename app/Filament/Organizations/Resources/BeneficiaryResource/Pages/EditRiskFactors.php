@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\AggravatingFactorsSchema;
 use App\Enums\Helps;
 use App\Enums\RiskFactorsSchema;
@@ -25,15 +26,23 @@ use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditRiskFactors extends EditRecord
 {
+    use RedirectToInitialEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getBreadcrumbsForInitialEvaluation();
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.risk_factors.label'));
     }
 
     public function form(Form $form): Form

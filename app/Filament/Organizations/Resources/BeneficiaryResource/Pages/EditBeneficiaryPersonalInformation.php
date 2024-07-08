@@ -59,6 +59,11 @@ class EditBeneficiaryPersonalInformation extends EditRecord
             ->getPersonalInformationBreadcrumbs();
     }
 
+    protected function getRedirectUrl(): string
+    {
+        return self::$resource::getUrl('view_personal_information', ['record' => $this->record->id]);
+    }
+
     public function form(Form $form): Form
     {
         return $form

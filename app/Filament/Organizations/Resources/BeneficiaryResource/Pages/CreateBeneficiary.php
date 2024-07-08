@@ -74,7 +74,6 @@ class CreateBeneficiary extends CreateRecord
                     Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                         ->schema([
                             Group::make()
-                                ->relationship('aggressor')
                                 ->columns()
                                 ->schema(EditBeneficiaryPersonalInformation::aggressorSection()),
                         ]),
