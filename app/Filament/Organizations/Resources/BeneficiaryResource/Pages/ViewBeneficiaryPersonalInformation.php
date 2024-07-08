@@ -23,10 +23,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.edit_personal_information.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.section.personal_information.title');
     }
 
     public function getBreadcrumbs(): array

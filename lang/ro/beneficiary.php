@@ -51,7 +51,7 @@ return [
             'label' => 'Identitate copii',
         ],
         'personal_information' => [
-            'label' => 'Informații personale',
+            'label' => 'Informații caz',
         ],
         'detailed_evaluation' => [
             'label' => 'Detalii evaluare',
@@ -92,7 +92,7 @@ return [
         ],
 
         'personal_information' => [
-            'title' => 'Informații personale',
+            'title' => 'Informații caz',
             'section' => [
                 'beneficiary' => 'Beneficiar',
                 'aggressor' => 'Informații despre agresor',
@@ -275,7 +275,7 @@ return [
     'breadcrumb' => [
         'wizard_detailed_evaluation' => 'Evaluare detaliată',
         'wizard_initial_evaluation' => 'Evaluare initială',
-        'personal_information' => 'Informații personale',
+        'personal_information' => 'Informații caz',
     ],
 
     'placeholder' => [
