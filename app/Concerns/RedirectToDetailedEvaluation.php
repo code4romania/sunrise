@@ -8,7 +8,9 @@ trait RedirectToDetailedEvaluation
 {
     protected function getRedirectUrl(): string
     {
-        return self::$resource::getUrl('view_detailed_evaluation', ['record' => $this->record->id]) .
-            '?tab=-' . $this->getTabSlug() . '-tab';
+        return self::$resource::getUrl('view_detailed_evaluation', [
+            'record' => $this->record->id,
+            'tab' => sprintf('-%s-tab', $this->getTabSlug()),
+        ]);
     }
 }
