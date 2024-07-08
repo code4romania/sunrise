@@ -24,10 +24,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.edit_identity.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.section.identity.title');
     }
 
     public function getBreadcrumbs(): array
@@ -99,15 +96,13 @@ class ViewBeneficiaryIdentity extends ViewRecord
                                 ->label(__('field.birthplace'))
                                 ->placeholder(__('placeholder.birthplace')),
 
-                            TextEntry::make('citizenship_id')
+                            EnumEntry::make('citizenship')
                                 ->label(__('field.citizenship'))
-                                ->placeholder(__('placeholder.citizenship'))
-                                ->formatStateUsing(fn ($record) => $record->citizenship?->name),
+                                ->placeholder(__('placeholder.citizenship')),
 
-                            TextEntry::make('ethnicity_id')
+                            EnumEntry::make('ethnicity')
                                 ->label(__('field.ethnicity'))
-                                ->placeholder(__('placeholder.ethnicity'))
-                                ->formatStateUsing(fn ($record) => $record->ethnicity?->name),
+                                ->placeholder(__('placeholder.ethnicity')),
 
                             TextEntry::make('id_serial')
                                 ->label(__('field.id_serial'))
@@ -214,6 +209,9 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
                             TextEntry::make('age')
                                 ->label(__('field.age')),
+
+                            TextEntry::make('birthdate')
+                                ->label(__('field.birthdate')),
 
                             TextEntry::make('address')
                                 ->label(__('field.current_address')),

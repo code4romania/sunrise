@@ -131,5 +131,5 @@ return [
     'last_login_at' => 'Ultima accesare',
 
     'role' => 'Rol',
-
+    'check' => 'Verifică',
 ];

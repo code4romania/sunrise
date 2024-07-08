@@ -61,6 +61,16 @@ class Beneficiary
         );
     }
 
+    public function getBreadcrumbsForCreateInitialEvaluation(): array
+    {
+        $breadcrumb = __('beneficiary.page.create_initial_evaluation.title');
+
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [self::$resourcePath::getUrl('create_initial_evaluation', ['record' => $this->record->id]) => $breadcrumb],
+        );
+    }
+
     public function getBreadcrumbsForDetailedEvaluation(): array
     {
         $breadcrumb = __('beneficiary.breadcrumb.wizard_detailed_evaluation');
@@ -78,6 +88,16 @@ class Beneficiary
         return array_merge(
             $this->getBaseBreadcrumbs(),
             [self::$resourcePath::getUrl('view_specialists', ['record' => $this->record->id]) => $breadcrumb],
+        );
+    }
+
+    public function getBreadcrumbsForDocuments(): array
+    {
+        $breadcrumb = __('beneficiary.section.documents.title.page');
+
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [self::$resourcePath::getUrl('view_documents', ['record' => $this->record->id]) => $breadcrumb],
         );
     }
 }

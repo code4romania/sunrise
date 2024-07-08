@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\Frequency;
 use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -17,15 +18,23 @@ use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
+use Illuminate\Support\Str;
 
 class EditViolence extends EditRecord
 {
+    use RedirectToInitialEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getBreadcrumbsForInitialEvaluation();
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.violence.label'));
     }
 
     public function form(Form $form): Form

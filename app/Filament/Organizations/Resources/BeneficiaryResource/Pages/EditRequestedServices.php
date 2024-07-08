@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToInitialEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Group;
@@ -12,15 +13,23 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditRequestedServices extends EditRecord
 {
+    use RedirectToInitialEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getBreadcrumbsForInitialEvaluation();
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.requested_services.label'));
     }
 
     public function form(Form $form): Form
