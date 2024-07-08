@@ -55,6 +55,7 @@ class EditDetailedEvaluation extends EditRecord
                         ->maxLength(50),
 
                     DatePicker::make('date')
+                        ->native(false)
                         ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date')),
                 ]),
 
@@ -73,6 +74,7 @@ class EditDetailedEvaluation extends EditRecord
                     DatePicker::make('date')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.date'))
                         ->placeholder(__('beneficiary.placeholder.date'))
+                        ->native(false)
                         ->required(),
                     TextInput::make('location')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.location'))

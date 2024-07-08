@@ -125,6 +125,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.birthdate'))
                         ->maxDate(today()->endOfDay())
                         ->nullable()
+                        ->native(false)
                         ->live(),
 
                     TextInput::make('birthplace')
