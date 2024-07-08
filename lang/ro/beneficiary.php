@@ -27,10 +27,10 @@ return [
             'title' => 'Editeaza cazul #:id :name',
         ],
         'create_initial_evaluation' => [
-            'title' => 'Evaluare initiala',
+            'title' => 'Evaluare inițială',
         ],
         'create_detailed_evaluation' => [
-            'title' => 'Evaluare detaliata',
+            'title' => 'Evaluare detaliată',
         ],
     ],
 
@@ -222,7 +222,7 @@ return [
         ],
 
         'specialists' => [
-            'title' => 'Echipă caz ',
+            'title' => 'Echipa de caz',
             'add_action' => 'Adaugă specialist',
             'change_action' => 'Modifică',
             'heading' => [
