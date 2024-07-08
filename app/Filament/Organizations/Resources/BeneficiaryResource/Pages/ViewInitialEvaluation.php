@@ -25,6 +25,7 @@ class ViewInitialEvaluation extends ViewRecord
     {
         return $infolist->schema([
             Tabs::make()
+                ->persistTabInQueryString()
                 ->schema([
                     Tabs\Tab::make(__('beneficiary.wizard.details.label'))
                         ->schema([
