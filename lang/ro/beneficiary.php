@@ -27,10 +27,10 @@ return [
             'title' => 'Editeaza cazul #:id :name',
         ],
         'create_initial_evaluation' => [
-            'title' => 'Evaluare initiala',
+            'title' => 'Evaluare inițială',
         ],
         'create_detailed_evaluation' => [
-            'title' => 'Evaluare detaliata',
+            'title' => 'Evaluare detaliată',
         ],
     ],
 
@@ -51,7 +51,7 @@ return [
             'label' => 'Identitate copii',
         ],
         'personal_information' => [
-            'label' => 'Informații personale',
+            'label' => 'Informații caz',
         ],
         'detailed_evaluation' => [
             'label' => 'Detalii evaluare',
@@ -95,7 +95,7 @@ return [
         ],
 
         'personal_information' => [
-            'title' => 'Informații personale',
+            'title' => 'Informații caz',
             'section' => [
                 'beneficiary' => 'Beneficiar',
                 'aggressor' => 'Informații despre agresor',
@@ -107,6 +107,7 @@ return [
                 'delete_aggressor' => 'Sterge agresor',
             ],
         ],
+
         'initial_evaluation' => [
             'heading' => [
                 'violence_history' => 'I. Istoricul violenței',
@@ -161,6 +162,7 @@ return [
                 'description_of_situation' => 'A se include și situația juridică - acțiuni în instanță, situația socio-familială, situația medicală actuală):',
             ],
         ],
+
         'detailed_evaluation' => [
             'labels' => [
                 'specialists' => 'Specialisti care au colaborat la realizarea evaluarii',
@@ -221,8 +223,9 @@ return [
                 'recommendation_services' => 'Servicii recomandate',
             ],
         ],
+
         'specialists' => [
-            'title' => 'Echipă caz ',
+            'title' => 'Echipa de caz',
             'add_action' => 'Adaugă specialist',
             'change_action' => 'Modifică',
             'heading' => [
@@ -233,6 +236,25 @@ return [
                 'name' => 'Nume specialist',
                 'role' => 'Rol',
                 'status' => 'Status',
+            ],
+        ],
+
+        'documents' => [
+            'actions' => [
+                'add' => 'Încarcă document',
+            ],
+            'title' => [
+                'page' => 'Documente',
+                'table' => 'Arhivă documente',
+                'add_modal' => 'Adaugă document',
+                'edit_modal' => 'Actualizează detalii document',
+            ],
+            'labels' => [
+                'type' => 'Tip document',
+                'name' => 'Denumire document',
+                'observations' => 'Observatii',
+                'date' => 'Data',
+                'document_file' => 'Încarcă document',
             ],
         ],
     ],
@@ -256,7 +278,7 @@ return [
     'breadcrumb' => [
         'wizard_detailed_evaluation' => 'Evaluare detaliată',
         'wizard_initial_evaluation' => 'Evaluare initială',
-        'personal_information' => 'Informații personale',
+        'personal_information' => 'Informații caz',
     ],
 
     'placeholder' => [
@@ -288,6 +310,11 @@ return [
         'moment_of_evaluation' => 'Situația la data realizării evaluării inițiale',
         'description_of_situation' => 'Descrieți pe scurt situația',
         'email' => 'Introdu un email',
+        'consent' => 'Odată înregistrat cazul în sistem, aceste formulare de obținere a consimțământului vor putea fi încarcate în sistem, în secțiunea Documente Beneficiar.',
+        'check_beneficiary_exists' => 'Verifică dacă beneficiarul există în baza de date (Opțional)',
+        'beneficiary_exists' => 'CNP-ul a fost identificat în această bază de date, asociat cazului Maria Popescu. <a href="#">Vezi detalii</a>',
+        'beneficiary_not_exists' => '<i class="heroicon-check"></i>CNP-ul nu a fost identificat în această bază de date și nici în cea a altor centre ale instituției.',
+
     ],
     'helper_text' => [
         'recommendations_for_intervention_plan' => 'Exemple de recomandări posibile conform standardelor:
@@ -300,5 +327,8 @@ return [
         'initial_evaluation_2' => 'Pentru oferirea de servicii imediate',
         'detailed_evaluation' => 'Evaluarea multidiciplinară',
         'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
+        'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls, .csv, .png, .tiff, .jpg. Dimensiunea maxima nu poate depăși 25 Mb',
+        'documents' => 'Niciun document încărcat',
+        'documents_2' => 'Încarcă un prim document în fișa beneficiarei',
     ],
 ];

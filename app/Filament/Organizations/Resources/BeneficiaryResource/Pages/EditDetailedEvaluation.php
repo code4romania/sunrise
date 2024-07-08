@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
@@ -13,9 +14,12 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditDetailedEvaluation extends EditRecord
 {
+    use RedirectToDetailedEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function form(Form $form): Form
@@ -27,6 +31,11 @@ class EditDetailedEvaluation extends EditRecord
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getBreadcrumbsForDetailedEvaluation();
+    }
+
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.detailed_evaluation.label'));
     }
 
     public static function getSchema(): array
@@ -55,6 +64,7 @@ class EditDetailedEvaluation extends EditRecord
                         ->maxLength(50),
 
                     DatePicker::make('date')
+                        ->native(false)
                         ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date')),
                 ]),
 
@@ -73,6 +83,7 @@ class EditDetailedEvaluation extends EditRecord
                     DatePicker::make('date')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.date'))
                         ->placeholder(__('beneficiary.placeholder.date'))
+                        ->native(false)
                         ->required(),
                     TextInput::make('location')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.location'))

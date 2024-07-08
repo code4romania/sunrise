@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\RedirectToInitialEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\User;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
@@ -16,9 +17,12 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Str;
 
 class EditEvaluationDetails extends EditRecord
 {
+    use RedirectToInitialEvaluation;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function form(Form $form): Form
@@ -32,6 +36,11 @@ class EditEvaluationDetails extends EditRecord
             ->getBreadcrumbsForInitialEvaluation();
     }
 
+    protected function getTabSlug(): string
+    {
+        return Str::slug(__('beneficiary.wizard.details.label'));
+    }
+
     public static function getSchema(): array
     {
         return [
@@ -41,6 +50,7 @@ class EditEvaluationDetails extends EditRecord
                 ->schema([
                     DatePicker::make('registered_date')
                         ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
+                        ->native(false)
                         ->required(),
 
                     TextInput::make('file_number')

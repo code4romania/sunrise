@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\ActLocation;
 use App\Enums\AggressorLegalHistory;
 use App\Enums\AggressorRelationship;
+use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
 use App\Enums\Drug;
 use App\Enums\Gender;
@@ -56,6 +57,11 @@ class EditBeneficiaryPersonalInformation extends EditRecord
     {
         return BeneficiaryBreadcrumb::make($this->record)
             ->getPersonalInformationBreadcrumbs();
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return self::$resource::getUrl('view_personal_information', ['record' => $this->record->id]);
     }
 
     public function form(Form $form): Form
@@ -206,10 +212,10 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->options(Gender::options())
                         ->enum(Gender::class),
 
-                    Select::make('citizenship_id')
+                    Select::make('citizenship')
                         ->label(__('field.aggressor_citizenship'))
                         ->placeholder(__('placeholder.citizenship'))
-                        ->relationship('citizenship', 'name')
+                        ->options(Citizenship::options())
                         ->nullable(),
 
                     Select::make('civil_status')

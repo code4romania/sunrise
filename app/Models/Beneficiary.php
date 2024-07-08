@@ -262,4 +262,9 @@ class Beneficiary extends Model
     {
         return $this->hasMany(ViolenceHistory::class);
     }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
+    }
 }

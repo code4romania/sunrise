@@ -23,10 +23,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.edit_personal_information.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.section.personal_information.title');
     }
 
     public function getBreadcrumbs(): array
@@ -170,7 +167,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.aggressor_gender'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            EnumEntry::make('citizenship_id')
+                            EnumEntry::make('citizenship')
                                 ->label(__('field.aggressor_citizenship'))
                                 ->placeholder(__('placeholder.citizenship')),
 

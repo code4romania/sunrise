@@ -95,14 +95,6 @@ class BeneficiaryResource extends Resource
                     ->formatStateUsing(fn ($state) => $state?->label())
                     ->shrink(),
             ])
-            ->filters([
-                //
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
@@ -144,7 +136,8 @@ class BeneficiaryResource extends Resource
             'edit_detailed_evaluation_result' => Pages\EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
 
             'view_specialists' => ListSpecialists::route('/{record}/specialists'),
-
+          
+            'view_documents' => Pages\ListDocuments::route('/{record}/documents'),
         ];
     }
 }
