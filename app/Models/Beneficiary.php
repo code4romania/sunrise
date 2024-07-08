@@ -156,7 +156,7 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        return '#' . $this->id . ' ' . $this->full_name;
+        return sprintf('#%d %s', $this->id, $this->full_name);
     }
 
     public function aggressor(): HasMany
