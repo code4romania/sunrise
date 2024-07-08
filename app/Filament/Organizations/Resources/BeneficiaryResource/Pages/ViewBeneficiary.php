@@ -59,6 +59,7 @@ class ViewBeneficiary extends ViewRecord
                 $this->personalInformationSection(),
                 $this->evaluations(),
                 $this->team(),
+                $this->documents(),
             ]);
     }
 
@@ -289,6 +290,45 @@ class ViewBeneficiary extends ViewRecord
             ])
             ->schema([
                 Livewire::make(ListTeam::class),
+            ]);
+    }
+
+    private function documents(): Section
+    {
+        return Section::make(__('beneficiary.section.documents.title.page'))
+            ->columnSpan(1)
+            ->headerActions([
+                Action::make('edit')
+                    ->label(__('general.action.view_details'))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_documents', ['record' => $record]))
+                    ->link()
+                    ->visible(fn ($record) => $record->documents->count()),
+            ])
+            ->schema([
+                Livewire::make(\App\Livewire\Beneficiary\ListDocuments::class)
+                    ->visible(fn ($record) => $record->documents->count()),
+                Group::make()
+                    ->visible(fn ($record) => ! $record->documents->count())
+                    ->schema([
+                        TextEntry::make('description')
+                            ->hiddenLabel()
+                            ->default(__('beneficiary.helper_text.documents'))
+                            ->alignCenter()
+                            ->size(TextEntry\TextEntrySize::Large),
+                        TextEntry::make('description')
+                            ->hiddenLabel()
+                            ->default(__('beneficiary.helper_text.documents_2'))
+                            ->alignCenter()
+                            ->size(TextEntry\TextEntrySize::Medium),
+                        Actions::make([
+                            Action::make('edit')
+                                ->label(__('beneficiary.section.documents.actions.add'))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('view_documents', ['record' => $record]))
+                                ->badge()
+                                ->size(ActionSize::ExtraLarge),
+                        ])
+                            ->alignCenter(),
+                    ]),
             ]);
     }
 }
