@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use alcea\cnp\Cnp;
+use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
+use App\Enums\Ethnicity;
 use App\Enums\Gender;
 use App\Enums\IDType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -140,16 +142,16 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     Spacer::make(),
 
-                    Select::make('citizenship_id')
+                    Select::make('citizenship')
                         ->label(__('field.citizenship'))
                         ->placeholder(__('placeholder.citizenship'))
-                        ->relationship('citizenship', 'name')
+                        ->options(Citizenship::options())
                         ->nullable(),
 
-                    Select::make('ethnicity_id')
+                    Select::make('ethnicity')
                         ->label(__('field.ethnicity'))
                         ->placeholder(__('placeholder.ethnicity'))
-                        ->relationship('ethnicity', 'name')
+                        ->options(Ethnicity::options())
                         ->nullable(),
 
                     Select::make('id_type')

@@ -224,7 +224,38 @@ return [
         'occupational_therapist' => 'Terapeut ocupațional',
         'other' => 'Alt Specialist',
     ],
-  
+    'ethnicity' => [
+        'romanian' => 'Română',
+        'hungarian' => 'Maghiară',
+        'roma' => 'Romă',
+        'ukrainian' => 'Ucrainienă',
+        'german' => 'Germană',
+        'russian_lippovan' => 'Ruso-lipoveană',
+        'turkish' => 'Turcă',
+        'tatar' => 'Tătară',
+        'serbian' => 'Sârbă',
+        'other' => 'Alta',
+    ],
+
+    'citizenship' => [
+        'romanian' => 'Română',
+        'moldavian' => 'Moldovenească',
+        'italian' => 'Italiană',
+        'german' => 'Germană',
+        'ukrainian' => 'Ucraineană',
+        'hungarian' => 'Maghiară',
+        'turkish' => 'Turcă',
+        'syrian' => 'Siriană',
+        'chinese' => 'Chineză',
+        'french' => 'Franceză',
+        'bulgarian' => 'Bulgară',
+        'israeli' => 'Israeliană',
+        'serbian' => 'Sârbă',
+        'greek' => 'Greacă',
+        'russian' => 'Rusă',
+        'lebanese' => 'Libaneză',
+        'other' => 'Alta',
+    ],
     'document_type' => [
         'contract' => 'Contract',
         'form' => 'Forumular',
@@ -251,4 +282,5 @@ return [
         'standard_sheets' => 'Fișe standard',
         'document' => 'Document (nespecificat)',
       ],
+
 ];
