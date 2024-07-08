@@ -24,10 +24,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.edit_identity.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.section.identity.title');
     }
 
     public function getBreadcrumbs(): array
