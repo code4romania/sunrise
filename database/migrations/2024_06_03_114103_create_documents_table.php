@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Beneficiary::class);
+            $table->foreignIdFor(Beneficiary::class)->constrained()->cascadeOnDelete();
             $table->date('date')->default(now());
             $table->string('type');
             $table->string('name');
