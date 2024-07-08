@@ -50,6 +50,7 @@ class EditEvaluationDetails extends EditRecord
                 ->schema([
                     DatePicker::make('registered_date')
                         ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
+                        ->native(false)
                         ->required(),
 
                     TextInput::make('file_number')
