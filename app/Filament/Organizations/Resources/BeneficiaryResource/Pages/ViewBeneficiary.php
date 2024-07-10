@@ -12,6 +12,7 @@ use App\Infolists\Components\EnumEntry;
 use App\Livewire\Beneficiary\ListTeam;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\RepeatableEntry;
