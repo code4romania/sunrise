@@ -9,6 +9,7 @@ use App\Models\CaseTeam as CaseTeamModel;
 use App\Models\User;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Support\Colors\Color;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -35,6 +36,7 @@ class CaseTeam extends BaseWidget
                 TextColumn::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->badge()
+                    ->color(Color::Gray)
                     ->formatStateUsing(fn ($state) => $state->label()),
                 TextColumn::make('user.password_set_at')
                     ->label(__('beneficiary.section.specialists.labels.status'))

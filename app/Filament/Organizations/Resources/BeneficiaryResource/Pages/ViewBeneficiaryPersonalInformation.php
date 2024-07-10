@@ -15,6 +15,7 @@ use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiaryPersonalInformation extends ViewRecord
@@ -192,6 +193,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     EnumEntry::make('violence_types')
                                         ->label(__('field.aggressor_violence_types'))
                                         ->placeholder(__('placeholder.select_many'))
+                                        ->color(Color::Gray)
                                         ->badge(),
 
                                 ]),
@@ -215,6 +217,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     EnumEntry::make('drugs')
                                         ->label(__('field.aggressor_drugs'))
                                         ->placeholder(__('placeholder.select_many'))
+                                        ->color(Color::Gray)
                                         ->badge(),
                                 ]),
 
@@ -223,6 +226,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     EnumEntry::make('legal_history')
                                         ->label(__('field.aggressor_legal_history'))
                                         ->placeholder(__('placeholder.select_many'))
+                                        ->color(Color::Gray)
                                         ->badge(),
                                 ]),
 
@@ -319,6 +323,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                     EnumEntry::make('act_location')
                         ->label(__('field.act_location'))
                         ->placeholder(__('placeholder.select_many'))
+                        ->color(Color::Gray)
                         ->badge(),
 
                     TextEntry::make('act_location_other')
@@ -330,6 +335,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                     TextEntry::make('otherCalledInstitution.name')
                         ->label(__('field.other_called_institutions'))
+                        ->color(Color::Gray)
                         ->badge()
                         ->placeholder(__('placeholder.select_one')),
                 ]),
