@@ -17,6 +17,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class EditDetailedEvaluationResult extends EditRecord
@@ -24,6 +25,11 @@ class EditDetailedEvaluationResult extends EditRecord
     use RedirectToDetailedEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.edit_detailed_evaluation_result.title');
+    }
 
     public function getBreadcrumbs(): array
     {

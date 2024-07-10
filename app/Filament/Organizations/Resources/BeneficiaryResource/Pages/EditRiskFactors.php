@@ -27,6 +27,7 @@ use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class EditRiskFactors extends EditRecord
@@ -34,6 +35,11 @@ class EditRiskFactors extends EditRecord
     use RedirectToInitialEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.edit_risk_factors.title');
+    }
 
     public function getBreadcrumbs(): array
     {

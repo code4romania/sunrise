@@ -14,10 +14,16 @@ use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ViewDetailedEvaluation extends ViewRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.view_detailed_evaluation.title');
+    }
 
     public function getBreadcrumbs(): array
     {
@@ -294,6 +300,7 @@ class ViewDetailedEvaluation extends ViewRecord
         return [
             RepeatableEntry::make('specialists')
                 ->columns(4)
+                ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
                 ->schema([
                     TextEntry::make('full_name')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.full_name')),
