@@ -12,10 +12,9 @@ use App\Infolists\Components\EnumEntry;
 use App\Livewire\Beneficiary\ListTeam;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
-use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Livewire;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -112,6 +111,10 @@ class ViewBeneficiary extends ViewRecord
                     ->label(__('field.backup_phone'))
                     ->icon('heroicon-o-phone')
                     ->url(fn ($state) => "tel:{$state}"),
+
+                TextEntry::make('email')
+                    ->label(__('beneficiary.section.identity.labels.email'))
+                    ->icon('heroicon-o-envelope'),
 
                 TextEntry::make('notes')
                     ->label(__('field.notes'))

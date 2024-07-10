@@ -63,6 +63,7 @@ return new class extends Migration
 
             $table->string('primary_phone')->nullable();
             $table->string('backup_phone')->nullable();
+            $table->string('email')->nullable();
             $table->text('contact_notes')->nullable();
 
             $table->boolean('doesnt_have_children');
