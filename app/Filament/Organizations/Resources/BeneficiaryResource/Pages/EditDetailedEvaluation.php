@@ -6,8 +6,8 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Concerns\RedirectToDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
