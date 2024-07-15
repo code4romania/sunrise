@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
+use App\Models\Beneficiary;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -17,6 +18,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 
 class ViewBeneficiaryIdentity extends ViewRecord
 {
@@ -61,96 +63,128 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->extraAttributes([
                     'class' => 'h-full',
                 ])
+                ->schema(self::identitySchema()),
+        ];
+    }
+
+    public static function identitySchemaForOtherPage(Beneficiary $record): array
+    {
+        $spanClasses = 'font-semibold group-hover/link:underline group-focus-visible/link:underline text-sm text-custom-600 dark:text-custom-400';
+        $spanStyle = '--c-400:var(--primary-400);--c-600:var(--primary-600);';
+
+        return [
+            Section::make()
+                ->columnSpan(1)
+                ->columns()
+                ->icon('heroicon-o-information-circle')
+                ->iconColor('primary')
+                ->description(new HtmlString(
+                    __('beneficiary.section.identity.heading_description') .
+                    '<a href="' . self::$resource::getUrl('view_identity', ['record' => $record]) . '"> ' .
+                        '<span class="' . $spanClasses . '"
+                            style="' . $spanStyle . '">' .
+                            __('beneficiary.section.identity.title') .
+                        '</span>' .
+                    '</a>'
+                ))
+                ->extraAttributes([
+                    'class' => 'h-full',
+                ])
+                ->schema(self::identitySchema()),
+        ];
+    }
+
+    protected static function identitySchema(): array
+    {
+        return [
+            Grid::make()
+                ->maxWidth('3xl')
                 ->schema([
-                    Grid::make()
-                        ->maxWidth('3xl')
-                        ->schema([
-                            TextEntry::make('last_name')
-                                ->label(__('field.last_name'))
-                                ->placeholder(__('placeholder.last_name')),
+                    TextEntry::make('last_name')
+                        ->label(__('field.last_name'))
+                        ->placeholder(__('placeholder.last_name')),
 
-                            TextEntry::make('first_name')
-                                ->label(__('field.first_name'))
-                                ->placeholder(__('placeholder.first_name')),
+                    TextEntry::make('first_name')
+                        ->label(__('field.first_name'))
+                        ->placeholder(__('placeholder.first_name')),
 
-                            TextEntry::make('prior_name')
-                                ->label(__('field.prior_name'))
-                                ->placeholder(__('placeholder.prior_name')),
+                    TextEntry::make('prior_name')
+                        ->label(__('field.prior_name'))
+                        ->placeholder(__('placeholder.prior_name')),
 
-                            TextEntry::make('civil_status')
-                                ->label(__('field.civil_status'))
-                                ->placeholder(__('placeholder.civil_status')),
+                    TextEntry::make('civil_status')
+                        ->label(__('field.civil_status'))
+                        ->placeholder(__('placeholder.civil_status')),
 
-                            TextEntry::make('cnp')
-                                ->label(__('field.cnp'))
-                                ->placeholder(__('placeholder.cnp')),
+                    TextEntry::make('cnp')
+                        ->label(__('field.cnp'))
+                        ->placeholder(__('placeholder.cnp')),
 
-                            EnumEntry::make('gender')
-                                ->label(__('field.gender'))
-                                ->placeholder(__('placeholder.select_one')),
+                    EnumEntry::make('gender')
+                        ->label(__('field.gender'))
+                        ->placeholder(__('placeholder.select_one')),
 
-                            TextEntry::make('birthdate')
-                                ->label(__('field.birthdate')),
+                    TextEntry::make('birthdate')
+                        ->label(__('field.birthdate')),
 
-                            TextEntry::make('birthplace')
-                                ->label(__('field.birthplace'))
-                                ->placeholder(__('placeholder.birthplace')),
+                    TextEntry::make('birthplace')
+                        ->label(__('field.birthplace'))
+                        ->placeholder(__('placeholder.birthplace')),
 
-                            EnumEntry::make('citizenship')
-                                ->label(__('field.citizenship'))
-                                ->placeholder(__('placeholder.citizenship')),
+                    EnumEntry::make('citizenship')
+                        ->label(__('field.citizenship'))
+                        ->placeholder(__('placeholder.citizenship')),
 
-                            EnumEntry::make('ethnicity')
-                                ->label(__('field.ethnicity'))
-                                ->placeholder(__('placeholder.ethnicity')),
+                    EnumEntry::make('ethnicity')
+                        ->label(__('field.ethnicity'))
+                        ->placeholder(__('placeholder.ethnicity')),
 
-                            TextEntry::make('id_serial')
-                                ->label(__('field.id_serial'))
-                                ->placeholder(__('placeholder.id_serial')),
+                    TextEntry::make('id_serial')
+                        ->label(__('field.id_serial'))
+                        ->placeholder(__('placeholder.id_serial')),
 
-                            TextEntry::make('id_number')
-                                ->label(__('field.id_number'))
-                                ->placeholder(__('placeholder.id_number')),
+                    TextEntry::make('id_number')
+                        ->label(__('field.id_number'))
+                        ->placeholder(__('placeholder.id_number')),
 
-                            Location::make('legal_residence')
-                                ->city()
-                                ->address()
-                                ->environment(),
+                    Location::make('legal_residence')
+                        ->city()
+                        ->address()
+                        ->environment(),
 
-                            Location::make('effective_residence')
-                                ->city()
-                                ->address()
-                                ->environment(),
+                    Location::make('effective_residence')
+                        ->city()
+                        ->address()
+                        ->environment(),
 
-                            TextEntry::make('primary_phone')
-                                ->label(__('field.primary_phone'))
-                                ->placeholder(__('placeholder.phone')),
+                    TextEntry::make('primary_phone')
+                        ->label(__('field.primary_phone'))
+                        ->placeholder(__('placeholder.phone')),
 
-                            TextEntry::make('backup_phone')
-                                ->label(__('field.backup_phone'))
-                                ->placeholder(__('placeholder.phone')),
+                    TextEntry::make('backup_phone')
+                        ->label(__('field.backup_phone'))
+                        ->placeholder(__('placeholder.phone')),
 
-                            TextEntry::make('email')
-                                ->label(__('beneficiary.section.identity.labels.email'))
-                                ->icon('heroicon-o-envelope'),
+                    TextEntry::make('email')
+                        ->label(__('beneficiary.section.identity.labels.email'))
+                        ->icon('heroicon-o-envelope'),
 
-                            TextEntry::make('contact_notes')
-                                ->label(__('field.contact_notes'))
-                                ->placeholder(__('placeholder.contact_notes'))
-                                ->columnSpanFull(),
+                    TextEntry::make('contact_notes')
+                        ->label(__('field.contact_notes'))
+                        ->placeholder(__('placeholder.contact_notes'))
+                        ->columnSpanFull(),
 
-                            EnumEntry::make('studies')
-                                ->label(__('field.studies'))
-                                ->placeholder(__('placeholder.contact_notes')),
+                    EnumEntry::make('studies')
+                        ->label(__('field.studies'))
+                        ->placeholder(__('placeholder.contact_notes')),
 
-                            EnumEntry::make('occupation')
-                                ->label(__('field.occupation'))
-                                ->placeholder(__('placeholder.contact_notes')),
+                    EnumEntry::make('occupation')
+                        ->label(__('field.occupation'))
+                        ->placeholder(__('placeholder.contact_notes')),
 
-                            TextEntry::make('workplace')
-                                ->label(__('field.workplace'))
-                                ->placeholder(__('placeholder.contact_notes')),
-                        ]),
+                    TextEntry::make('workplace')
+                        ->label(__('field.workplace'))
+                        ->placeholder(__('placeholder.contact_notes')),
                 ]),
         ];
     }
@@ -167,68 +201,100 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->extraAttributes([
                     'class' => 'h-full',
                 ])
+                ->schema(self::childrenSchema()),
+        ];
+    }
+
+    public static function childrenSchemaForOtherPage(Beneficiary $record): array
+    {
+        $spanClasses = 'font-semibold group-hover/link:underline group-focus-visible/link:underline text-sm text-custom-600 dark:text-custom-400';
+        $spanStyle = '--c-400:var(--primary-400);--c-600:var(--primary-600);';
+
+        return [
+            Section::make()
+                ->columnSpan(1)
+                ->columns()
+                ->icon('heroicon-o-information-circle')
+                ->iconColor('primary')
+                ->description(new HtmlString(
+                    __('beneficiary.section.identity.heading_description') .
+                    '<a href="' . self::$resource::getUrl('view_identity', ['record' => $record]) . '"> ' .
+                    '<span class="' . $spanClasses . '"
+                            style="' . $spanStyle . '">' .
+                    __('beneficiary.section.identity.title') .
+                    '</span>' .
+                    '</a>'
+                ))
+                ->extraAttributes([
+                    'class' => 'h-full',
+                ])
+                ->schema(self::childrenSchema()),
+        ];
+    }
+
+    public static function childrenSchema(): array
+    {
+        return [
+            Grid::make()
+                ->hidden(fn ($record) => $record->doesnt_have_children)
+                ->maxWidth('3xl')
                 ->schema([
-                    Grid::make()
-                        ->hidden(fn ($record) => $record->doesnt_have_children)
-                        ->maxWidth('3xl')
-                        ->schema([
-                            TextEntry::make('children_total_count')
-                                ->label(__('field.children_total_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric(),
+                    TextEntry::make('children_total_count')
+                        ->label(__('field.children_total_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric(),
 
-                            TextEntry::make('children_care_count')
-                                ->label(__('field.children_care_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric(),
+                    TextEntry::make('children_care_count')
+                        ->label(__('field.children_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric(),
 
-                            TextEntry::make('children_under_10_care_count')
-                                ->label(__('field.children_under_10_care_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric(),
+                    TextEntry::make('children_under_10_care_count')
+                        ->label(__('field.children_under_10_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric(),
 
-                            TextEntry::make('children_10_18_care_count')
-                                ->label(__('field.children_10_18_care_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric(),
+                    TextEntry::make('children_10_18_care_count')
+                        ->label(__('field.children_10_18_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric(),
 
-                            TextEntry::make('children_18_care_count')
-                                ->label(__('field.children_18_care_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric(),
+                    TextEntry::make('children_18_care_count')
+                        ->label(__('field.children_18_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric(),
 
-                            TextEntry::make('children_accompanying_count')
-                                ->label(__('field.children_accompanying_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric(),
-                        ]),
-
-                    RepeatableEntry::make('children')
-                        ->label(__('enum.notifier.child'))
-                        ->columnSpanFull()
-                        ->columns(2)
-                        ->schema([
-                            TextEntry::make('name')
-                                ->label(__('field.child_name')),
-
-                            TextEntry::make('age')
-                                ->label(__('field.age')),
-
-                            TextEntry::make('birthdate')
-                                ->label(__('field.birthdate')),
-
-                            TextEntry::make('address')
-                                ->label(__('field.current_address')),
-
-                            TextEntry::make('status')
-                                ->label(__('field.child_status')),
-                        ]),
-
-                    TextEntry::make('children_notes')
-                        ->label(__('field.children_notes'))
-                        ->placeholder(__('placeholder.other_relevant_details'))
-                        ->columnSpanFull(),
+                    TextEntry::make('children_accompanying_count')
+                        ->label(__('field.children_accompanying_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric(),
                 ]),
+
+            RepeatableEntry::make('children')
+                ->label(__('enum.notifier.child'))
+                ->columnSpanFull()
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('name')
+                        ->label(__('field.child_name')),
+
+                    TextEntry::make('age')
+                        ->label(__('field.age')),
+
+                    TextEntry::make('birthdate')
+                        ->label(__('field.birthdate')),
+
+                    TextEntry::make('address')
+                        ->label(__('field.current_address')),
+
+                    TextEntry::make('status')
+                        ->label(__('field.child_status')),
+                ]),
+
+            TextEntry::make('children_notes')
+                ->label(__('field.children_notes'))
+                ->placeholder(__('placeholder.other_relevant_details'))
+                ->columnSpanFull(),
         ];
     }
 }

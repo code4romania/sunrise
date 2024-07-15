@@ -40,10 +40,10 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema(EditEvaluationDetails::getInfoListSchema())]),
 
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
-                        ->schema(ViewBeneficiaryIdentity::getBeneficiaryIdentityFormSchema()),
+                        ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->record)),
 
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
-                        ->schema(ViewBeneficiaryIdentity::getChildrenIdentityFormSchema()),
+                        ->schema(ViewBeneficiaryIdentity::childrenSchemaForOtherPage($this->record)),
 
                     Tabs\Tab::make(__('beneficiary.wizard.violence.label'))
                         ->schema([
