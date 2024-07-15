@@ -22,6 +22,11 @@ class CreateDetailedEvaluation extends EditRecord
         return __('beneficiary.breadcrumb.wizard_detailed_evaluation');
     }
 
+    protected function getRedirectUrl(): string
+    {
+        return self::$resource::getUrl('view', ['record' => $this->record->id]);
+    }
+
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
