@@ -9,12 +9,18 @@ use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class CreateInitialEvaluation extends EditRecord
 {
     use HasWizard;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.initial_evaluation.title');
+    }
 
     public function getBreadcrumbs(): array
     {
