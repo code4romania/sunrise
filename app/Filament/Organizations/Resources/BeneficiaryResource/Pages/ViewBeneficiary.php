@@ -14,6 +14,7 @@ use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\Livewire;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -23,7 +24,6 @@ use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\FontWeight;
-
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -322,10 +322,17 @@ class ViewBeneficiary extends ViewRecord
                 Group::make()
                     ->visible(fn ($record) => ! $record->documents->count())
                     ->schema([
+                        IconEntry::make('empty_state_documents')
+                            ->hiddenLabel()
+                            ->extraAttributes(['class' => 'flex justify-center'])
+                            ->default('heroicon-o-document')
+                            ->icon('heroicon-o-document')
+                            ->size(IconEntry\IconEntrySize::ExtraLarge),
                         TextEntry::make('description')
                             ->hiddenLabel()
                             ->default(__('beneficiary.helper_text.documents'))
                             ->alignCenter()
+                            ->weight(FontWeight::Bold)
                             ->size(TextEntry\TextEntrySize::Large),
                         TextEntry::make('description')
                             ->hiddenLabel()
