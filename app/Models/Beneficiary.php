@@ -146,10 +146,12 @@ class Beneficiary extends Model
     protected static function booted()
     {
         static::created(function (Beneficiary $beneficiary) {
-            if (auth()->user()?->can_be_case_manager) {
+            $user = auth()->user();
+            if ($user) {
+                $roles = $user->can_be_case_manager ? [Role::MANGER] : $user->roles;
                 $beneficiary->team()->create([
-                    'user_id' => auth()->user()->id,
-                    'roles' => [Role::MANGER],
+                    'user_id' => $user->id,
+                    'roles' => $roles,
                 ]);
             }
         });
