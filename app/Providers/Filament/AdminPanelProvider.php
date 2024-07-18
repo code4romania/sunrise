@@ -83,6 +83,7 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
             ])
             ->bootUsing(function () {
+                Page::stickyFormActions();
                 Page::alignFormActionsEnd();
             })
             ->plugins([

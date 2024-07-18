@@ -95,6 +95,7 @@ class OrganizationPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
             ])
             ->bootUsing(function () {
+                Page::stickyFormActions();
                 Page::alignFormActionsEnd();
             })
             // ->databaseNotifications()
