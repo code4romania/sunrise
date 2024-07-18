@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 use App\Enums\CaseStatus;
 use App\Models\Beneficiary;
-use App\Models\Country;
-use App\Models\Ethnicity;
 use App\Models\Organization;
 use App\Models\ReferringInstitution;
 use Illuminate\Database\Migrations\Migration;
@@ -49,15 +47,8 @@ return new class extends Migration
             $table->string('id_serial')->nullable();
             $table->string('id_number')->nullable();
 
-            $table->foreignIdFor(Country::class, 'citizenship_id')
-                ->nullable()
-                ->constrained('countries')
-                ->cascadeOnDelete();
-
-            $table->foreignIdFor(Ethnicity::class)
-                ->nullable()
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->string('citizenship')->nullable();
+            $table->string('ethnicity')->nullable();
 
             $table->county('legal_residence');
             $table->city('legal_residence');
@@ -72,6 +63,7 @@ return new class extends Migration
 
             $table->string('primary_phone')->nullable();
             $table->string('backup_phone')->nullable();
+            $table->string('email')->nullable();
             $table->text('contact_notes')->nullable();
 
             $table->boolean('doesnt_have_children');

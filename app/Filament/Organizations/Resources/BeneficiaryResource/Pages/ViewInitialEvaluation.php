@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Infolist;
@@ -26,18 +25,17 @@ class ViewInitialEvaluation extends ViewRecord
     {
         return $infolist->schema([
             Tabs::make()
+                ->persistTabInQueryString()
                 ->schema([
                     Tabs\Tab::make(__('beneficiary.wizard.details.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.details.label'))
                                 ->headerActions([
-                                    Action::make('edit')
-                                        ->label(__('general.action.edit'))
+                                    BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_details',
                                             ['record' => $record]
-                                        ))
-                                        ->link(),
+                                        )),
                                 ])
                                 ->schema(EditEvaluationDetails::getInfoListSchema())]),
 
@@ -51,13 +49,11 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.violence.label'))
                                 ->headerActions([
-                                    Action::make('edit')
-                                        ->label(__('general.action.edit'))
+                                    BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_violence',
                                             ['record' => $record]
-                                        ))
-                                        ->link(),
+                                        )),
                                 ])
                                 ->schema(EditViolence::getInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.risk_factors.label'))
@@ -67,13 +63,11 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema([
                                     Section::make(__('beneficiary.wizard.risk_factors.label'))
                                         ->headerActions([
-                                            Action::make('edit')
-                                                ->label(__('general.action.edit'))
+                                            BeneficiaryResource\Actions\Edit::make('edit')
                                                 ->url(fn ($record) => BeneficiaryResource::getUrl(
                                                     'edit_initial_evaluation_risk_factors',
                                                     ['record' => $record]
-                                                ))
-                                                ->link(),
+                                                )),
                                         ])
                                         ->schema(EditRiskFactors::getInfoListSchema())]),
                         ]),
@@ -81,26 +75,22 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.requested_services.label'))
                                 ->headerActions([
-                                    Action::make('edit')
-                                        ->label(__('general.action.edit'))
+                                    BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_requested_services',
                                             ['record' => $record]
-                                        ))
-                                        ->link(),
+                                        )),
                                 ])
                                 ->schema(EditRequestedServices::getInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.beneficiary_situation.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.beneficiary_situation.label'))
                                 ->headerActions([
-                                    Action::make('edit')
-                                        ->label(__('general.action.edit'))
+                                    BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_beneficiary_situation',
                                             ['record' => $record]
-                                        ))
-                                        ->link(),
+                                        )),
                                 ])
                                 ->schema(EditBeneficiarySituation::getInfoListSchema())]),
                 ]),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
@@ -15,9 +16,10 @@ class CreateInitialEvaluation extends EditRecord
 
     protected static string $resource = BeneficiaryResource::class;
 
-    public function getBreadcrumb(): string
+    public function getBreadcrumbs(): array
     {
-        return __('beneficiary.breadcrumb.wizard_initial_evaluation');
+        return BeneficiaryBreadcrumb::make($this->record)
+            ->getBreadcrumbsForCreateInitialEvaluation();
     }
 
     public function getSteps(): array

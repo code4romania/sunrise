@@ -22,6 +22,7 @@ use App\Enums\Occupation;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
+use App\Enums\Role;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -60,19 +61,12 @@ class Beneficiary extends Model
         'id_serial',
         'id_number',
 
-        'legal_residence_county_id',
-        'legal_residence_city_id',
-        'legal_residence_address',
         'legal_residence_environment',
-
-        'same_as_legal_residence',
-        'effective_residence_county_id',
-        'effective_residence_city_id',
-        'effective_residence_address',
         'effective_residence_environment',
 
         'primary_phone',
         'backup_phone',
+        'email',
         'contact_notes',
 
         'status',
@@ -129,6 +123,7 @@ class Beneficiary extends Model
         'criminal_history' => Ternary::class,
         'doesnt_have_children' => 'boolean',
         'effective_residence_environment' => ResidenceEnvironment::class,
+        'legal_residence_environment' => ResidenceEnvironment::class,
         'elder_care_count' => 'integer',
         'gender' => Gender::class,
         'has_family_doctor' => Ternary::class,
@@ -136,7 +131,6 @@ class Beneficiary extends Model
         'has_police_reports' => Ternary::class,
         'homeownership' => HomeOwnership::class,
         'income' => Income::class,
-        'legal_residence_environment' => ResidenceEnvironment::class,
         'occupation' => Occupation::class,
         'psychiatric_history' => Ternary::class,
         'same_as_legal_residence' => 'boolean',
@@ -149,37 +143,26 @@ class Beneficiary extends Model
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
+    protected static function booted()
+    {
+        static::created(function (Beneficiary $beneficiary) {
+            if (auth()->user()?->can_be_case_manager) {
+                $beneficiary->team()->create([
+                    'user_id' => auth()->user()->id,
+                    'roles' => [Role::MANGER],
+                ]);
+            }
+        });
+    }
+
     public function getBreadcrumb(): string
     {
-        $fullNameWithID = '#' . $this->id . ' ' . $this->full_name;
-
-        return $this->prior_name ? $fullNameWithID . ' (' . $this->prior_name . ')' : $fullNameWithID;
+        return sprintf('#%d %s', $this->id, $this->full_name);
     }
 
-    public function aggressor(): HasOne
+    public function aggressor(): HasMany
     {
-        return $this->hasOne(Aggressor::class)
-            ->withDefault();
-    }
-
-    public function legalResidenceCounty(): BelongsTo
-    {
-        return $this->belongsTo(County::class, 'legal_residence_county_id');
-    }
-
-    public function legalResidenceCity(): BelongsTo
-    {
-        return $this->belongsTo(City::class, 'legal_residence_city_id');
-    }
-
-    public function effectiveResidenceCounty(): BelongsTo
-    {
-        return $this->belongsTo(County::class, 'effective_residence_county_id');
-    }
-
-    public function effectiveResidenceCity(): BelongsTo
-    {
-        return $this->belongsTo(City::class, 'effective_residence_city_id');
+        return $this->hasMany(Aggressor::class);
     }
 
     public function institutions(): MorphToMany
@@ -276,5 +259,10 @@ class Beneficiary extends Model
     public function violenceHistory(): HasMany
     {
         return $this->hasMany(ViolenceHistory::class);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(Document::class);
     }
 }

@@ -8,7 +8,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -25,10 +24,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.edit_identity.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.section.identity.title');
     }
 
     public function getBreadcrumbs(): array
@@ -60,10 +56,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->columnSpan(1)
                 ->columns()
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditIdentity::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -103,15 +96,13 @@ class ViewBeneficiaryIdentity extends ViewRecord
                                 ->label(__('field.birthplace'))
                                 ->placeholder(__('placeholder.birthplace')),
 
-                            TextEntry::make('citizenship_id')
+                            EnumEntry::make('citizenship')
                                 ->label(__('field.citizenship'))
-                                ->placeholder(__('placeholder.citizenship'))
-                                ->formatStateUsing(fn ($record) => $record->citizenship?->name),
+                                ->placeholder(__('placeholder.citizenship')),
 
-                            TextEntry::make('ethnicity_id')
+                            EnumEntry::make('ethnicity')
                                 ->label(__('field.ethnicity'))
-                                ->placeholder(__('placeholder.ethnicity'))
-                                ->formatStateUsing(fn ($record) => $record->ethnicity?->name),
+                                ->placeholder(__('placeholder.ethnicity')),
 
                             TextEntry::make('id_serial')
                                 ->label(__('field.id_serial'))
@@ -138,6 +129,10 @@ class ViewBeneficiaryIdentity extends ViewRecord
                             TextEntry::make('backup_phone')
                                 ->label(__('field.backup_phone'))
                                 ->placeholder(__('placeholder.phone')),
+
+                            TextEntry::make('email')
+                                ->label(__('beneficiary.section.identity.labels.email'))
+                                ->icon('heroicon-o-envelope'),
 
                             TextEntry::make('contact_notes')
                                 ->label(__('field.contact_notes'))
@@ -167,10 +162,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->columnSpan(1)
                 ->columns()
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record]))
-                        ->link(),
+                    BeneficiaryResource\Actions\EditIdentity::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -221,6 +213,9 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
                             TextEntry::make('age')
                                 ->label(__('field.age')),
+
+                            TextEntry::make('birthdate')
+                                ->label(__('field.birthdate')),
 
                             TextEntry::make('address')
                                 ->label(__('field.current_address')),
