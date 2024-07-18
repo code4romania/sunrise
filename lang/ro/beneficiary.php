@@ -120,6 +120,8 @@ return [
 
     'section' => [
         'identity' => [
+            'title' => 'Date identitate',
+            'heading_description' => 'Pentru a modifica informațiile din această pagină, vă rugăm accesați secțiunea',
             'tab' => [
                 'beneficiary' => 'Identitate beneficiar',
                 'children' => 'Identitate copii',
@@ -270,6 +272,7 @@ return [
                 'name' => 'Nume specialist',
                 'role' => 'Rol',
                 'status' => 'Status',
+                'roles' => 'Rol în echipa de caz',
             ],
         ],
 

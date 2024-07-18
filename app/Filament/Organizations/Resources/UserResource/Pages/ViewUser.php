@@ -23,7 +23,7 @@ class ViewUser extends ViewRecord
                 ->columns()
                 ->schema([
                     TextEntry::make('status')
-                        ->formatStateUsing(fn ($state) => $state->label()),
+                        ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
                     TextEntry::make('updated_at'),
                 ]),
             Section::make()
