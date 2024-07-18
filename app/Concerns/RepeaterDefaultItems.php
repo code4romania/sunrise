@@ -28,7 +28,6 @@ trait RepeaterDefaultItems
 
     protected function createItem(): void
     {
-        debug('createItem');
         $newUuid = $this->generateUuid();
 
         $items = $this->getState();
