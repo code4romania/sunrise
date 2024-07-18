@@ -236,6 +236,7 @@ return [
                 'name' => 'Nume specialist',
                 'role' => 'Rol',
                 'status' => 'Status',
+                'roles' => 'Rol în echipa de caz',
             ],
         ],
 
