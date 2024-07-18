@@ -15,10 +15,10 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\View;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\HtmlString;
 
 class ViewBeneficiaryIdentity extends ViewRecord
 {
@@ -69,28 +69,22 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
     public static function identitySchemaForOtherPage(Beneficiary $record): array
     {
-        $spanClasses = 'font-semibold group-hover/link:underline group-focus-visible/link:underline text-sm text-custom-600 dark:text-custom-400';
-        $spanStyle = '--c-400:var(--primary-400);--c-600:var(--primary-600);';
-
         return [
             Section::make()
+                ->key('identity')
                 ->columnSpan(1)
                 ->columns()
-                ->icon('heroicon-o-information-circle')
-                ->iconColor('primary')
-                ->description(new HtmlString(
-                    __('beneficiary.section.identity.heading_description') .
-                    '<a href="' . self::$resource::getUrl('view_identity', ['record' => $record]) . '"> ' .
-                        '<span class="' . $spanClasses . '"
-                            style="' . $spanStyle . '">' .
-                            __('beneficiary.section.identity.title') .
-                        '</span>' .
-                    '</a>'
-                ))
-                ->extraAttributes([
-                    'class' => 'h-full',
-                ])
-                ->schema(self::identitySchema()),
+                ->schema([
+                    View::make('filament.notice')
+                        ->viewData([
+                            'icon' => 'heroicon-s-information-circle',
+                            'message' => __('beneficiary.section.identity.heading_description'),
+                            'actionUrl' => self::$resource::getUrl('view_identity', ['record' => $record]),
+                            'actionLabel' => __('beneficiary.section.identity.title'),
+                        ])
+                        ->columnSpanFull(),
+                    ...self::identitySchema(),
+                ]),
         ];
     }
 
@@ -207,28 +201,21 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
     public static function childrenSchemaForOtherPage(Beneficiary $record): array
     {
-        $spanClasses = 'font-semibold group-hover/link:underline group-focus-visible/link:underline text-sm text-custom-600 dark:text-custom-400';
-        $spanStyle = '--c-400:var(--primary-400);--c-600:var(--primary-600);';
-
         return [
             Section::make()
                 ->columnSpan(1)
                 ->columns()
-                ->icon('heroicon-o-information-circle')
-                ->iconColor('primary')
-                ->description(new HtmlString(
-                    __('beneficiary.section.identity.heading_description') .
-                    '<a href="' . self::$resource::getUrl('view_identity', ['record' => $record]) . '"> ' .
-                    '<span class="' . $spanClasses . '"
-                            style="' . $spanStyle . '">' .
-                    __('beneficiary.section.identity.title') .
-                    '</span>' .
-                    '</a>'
-                ))
-                ->extraAttributes([
-                    'class' => 'h-full',
-                ])
-                ->schema(self::childrenSchema()),
+                ->schema([
+                    View::make('filament.notice')
+                        ->viewData([
+                            'icon' => 'heroicon-s-information-circle',
+                            'message' => __('beneficiary.section.identity.heading_description'),
+                            'actionUrl' => self::$resource::getUrl('view_identity', ['record' => $record]),
+                            'actionLabel' => __('beneficiary.section.identity.title'),
+                        ])
+                        ->columnSpanFull(),
+                    ...self::childrenSchema(),
+                ]),
         ];
     }
 
