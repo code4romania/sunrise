@@ -98,6 +98,7 @@ class OrganizationPanelProvider extends PanelProvider
                 Page::stickyFormActions();
                 Page::alignFormActionsEnd();
             })
+            ->unsavedChangesAlerts()
             // ->databaseNotifications()
             ->plugins([
                 BreezyCore::make()

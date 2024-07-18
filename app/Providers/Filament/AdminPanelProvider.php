@@ -86,6 +86,7 @@ class AdminPanelProvider extends PanelProvider
                 Page::stickyFormActions();
                 Page::alignFormActionsEnd();
             })
+            ->unsavedChangesAlerts()
             ->plugins([
                 BreezyCore::make()
                     ->myProfile(
