@@ -74,6 +74,7 @@ class CaseTeam extends BaseWidget
                 ->options(fn () => User::getTenantOrganizationUsers()),
 
             Select::make('roles')
+                ->label(__('beneficiary.section.specialists.labels.roles'))
                 ->options(fn () => Role::options())
                 ->multiple(),
 
