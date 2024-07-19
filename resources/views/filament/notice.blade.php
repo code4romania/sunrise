@@ -3,9 +3,10 @@
     'message' => null,
     'actionUrl' => null,
     'actionLabel' => null,
+    'bgClass' => 'bg-primary-50',
 ])
 
-<div class="flex items-center gap-3 p-4 -mx-6 -mt-6 rounded-xl bg-primary-50">
+<div class="flex items-center gap-3 p-4 -mx-6 -mt-6 rounded-xl {{ $bgClass }}">
     @if ($icon)
         <x-dynamic-component :component="$icon" class="w-5 h-5 shrink-0 text-primary-600" />
     @endif
@@ -27,3 +28,20 @@
     </div>
 
 </div>
+
+<style>
+    .bg-danger {
+        --c-200:var(--danger-200);
+        --c-800:var(--danger-800);
+    }
+
+    .bg-warning {
+        --c-200:var(--warning-200);
+        --c-800:var(--warning-800);
+    }
+
+    .bg-success {
+        --c-200:var(--success-200);
+        --c-800:var(--success-800);"
+    }
+</style>

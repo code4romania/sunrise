@@ -81,7 +81,7 @@ class RiskFactors extends Model
     {
         $count = 0;
         foreach ($riskFactors as $value) {
-            if (Ternary::isYes($value)) {
+            if (Ternary::isYes($value['value'])) {
                 $count++;
             }
         }

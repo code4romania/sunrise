@@ -8,6 +8,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\View;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -58,9 +59,14 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema(EditViolence::getInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.risk_factors.label'))
                         ->schema([
-                            Section::make(fn ($record) => $record->riskFactors->risk_level->label() ??
-                                __('beneficiary.wizard.risk_factors.label'))
+                            Section::make()
                                 ->schema([
+                                    View::make('filament.notice')
+                                        ->viewData([
+                                            'message' => $this->record->riskFactors->risk_level->label(),
+                                            'bgClass' => sprintf('bg-%s bg-custom-200 text-custom-800', $this->record->riskFactors->risk_level->color()),
+                                        ])
+                                        ->columnSpanFull(),
                                     Section::make(__('beneficiary.wizard.risk_factors.label'))
                                         ->headerActions([
                                             BeneficiaryResource\Actions\Edit::make('edit')
