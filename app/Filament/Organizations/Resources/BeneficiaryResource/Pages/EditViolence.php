@@ -12,6 +12,7 @@ use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
@@ -45,34 +46,36 @@ class EditViolence extends EditRecord
     public static function getSchema(): array
     {
         return [
-            Group::make()
-                ->relationship('violence')
-                ->columns()
+            Section::make()
                 ->schema([
-                    Select::make('violence_types')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                        ->placeholder(__('beneficiary.placeholder.violence_type'))
-                        ->options(Violence::options())
-                        ->multiple()
-                        ->required(),
-                    Select::make('violence_primary_type')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
-                        ->placeholder(__('beneficiary.placeholder.violence_primary_type'))
-                        ->options(Violence::options())
-                        ->required(),
-                    Select::make('frequency_violence')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
-                        ->placeholder(__('beneficiary.placeholder.frequency_violence'))
-                        ->options(Frequency::options())
-                        ->required(),
-                    RichEditor::make('description')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.description'))
-                        ->placeholder(__('beneficiary.placeholder.description'))
-                        ->helperText(__('beneficiary.helper_text.violence_description'))
-                        ->columnSpanFull()
-                        ->maxLength(5000),
+                    Group::make()
+                        ->relationship('violence')
+                        ->columns()
+                        ->schema([
+                            Select::make('violence_types')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                                ->placeholder(__('beneficiary.placeholder.violence_type'))
+                                ->options(Violence::options())
+                                ->multiple()
+                                ->required(),
+                            Select::make('violence_primary_type')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
+                                ->placeholder(__('beneficiary.placeholder.violence_primary_type'))
+                                ->options(Violence::options())
+                                ->required(),
+                            Select::make('frequency_violence')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
+                                ->placeholder(__('beneficiary.placeholder.frequency_violence'))
+                                ->options(Frequency::options())
+                                ->required(),
+                            RichEditor::make('description')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.description'))
+                                ->placeholder(__('beneficiary.placeholder.description'))
+                                ->helperText(__('beneficiary.helper_text.violence_description'))
+                                ->columnSpanFull()
+                                ->maxLength(5000),
+                        ]),
                 ]),
-
         ];
     }
 
