@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Enums\Role;
-use App\Models\CaseTeam as CaseTeamModel;
 use App\Models\User;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
@@ -25,10 +24,7 @@ class CaseTeam extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(
-                fn () => CaseTeamModel::query()
-                    ->where('beneficiary_id', $this->record->id)
-            )
+            ->query(fn () => $this->record->team())
             ->columns([
                 TextColumn::make('user.first_name')
                     ->label(__('beneficiary.section.specialists.labels.name'))

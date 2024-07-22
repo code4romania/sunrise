@@ -62,8 +62,8 @@ class ViewBeneficiary extends ViewRecord
                 $this->identitySectionSection(),
                 $this->personalInformationSection(),
                 $this->evaluations(),
-                $this->team(),
-                $this->documents(),
+//                $this->team(),
+//                $this->documents(),
             ]);
     }
 
@@ -342,5 +342,13 @@ class ViewBeneficiary extends ViewRecord
                             ->alignCenter(),
                     ]),
             ]);
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            BeneficiaryResource\Widgets\ListCaseTeam::class,
+            BeneficiaryResource\Widgets\DocumentsList::class
+        ];
     }
 }
