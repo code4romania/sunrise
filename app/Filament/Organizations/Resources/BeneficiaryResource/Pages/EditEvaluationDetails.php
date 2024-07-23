@@ -63,7 +63,8 @@ class EditEvaluationDetails extends EditRecord
                         ->placeholder(__('beneficiary.placeholder.specialist'))
                         ->required()
                         ->default(auth()->user()->id)
-                        ->options(fn ($record) => User::getTenantOrganizationUsers()),
+                        ->options(fn ($record) => User::getTenantOrganizationUsers())
+                        ->native(false),
 
                     Textarea::make('method_of_identifying_the_service')
                         ->label(__('beneficiary.section.initial_evaluation.labels.method_of_identifying_the_service'))

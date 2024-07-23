@@ -71,7 +71,8 @@ class EditBeneficiaryPartner extends EditRecord
                                 ->label(__('field.occupation'))
                                 ->placeholder(__('beneficiary.placeholder.occupation'))
                                 ->options(Occupation::options())
-                                ->enum(Occupation::class),
+                                ->enum(Occupation::class)
+                                ->native(false),
 
                             Location::make('legal_residence')
                                 ->city()
