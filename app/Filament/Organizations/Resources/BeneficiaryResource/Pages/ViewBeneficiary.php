@@ -23,7 +23,6 @@ use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\FontWeight;
-
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -154,13 +153,11 @@ class ViewBeneficiary extends ViewRecord
                     ->url(fn ($state) => "tel:{$state}"),
 
                 RepeatableEntry::make('aggressor')
+                    ->columns()
+                    ->columnSpanFull()
                     ->schema([
                         EnumEntry::make('relationship')
                             ->label(__('field.aggressor_relationship')),
-
-                        EnumEntry::make('gender')
-                            ->label(__('field.aggressor_gender')),
-
                         EnumEntry::make('has_violence_history')
                             ->label(__('field.aggressor_has_violence_history')),
                     ]),
