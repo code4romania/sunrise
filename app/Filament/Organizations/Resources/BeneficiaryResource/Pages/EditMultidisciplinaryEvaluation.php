@@ -56,7 +56,8 @@ class EditMultidisciplinaryEvaluation extends EditRecord
                                 ->placeholder(__('beneficiary.placeholder.applicant'))
                                 ->required()
                                 ->live()
-                                ->options(Applicant::options()),
+                                ->options(Applicant::options())
+                                ->native(false),
                             TextInput::make('reporting_by')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
                                 ->placeholder(__('beneficiary.placeholder.reporting_by'))

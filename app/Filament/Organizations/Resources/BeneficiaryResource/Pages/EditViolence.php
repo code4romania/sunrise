@@ -59,11 +59,13 @@ class EditViolence extends EditRecord
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
                         ->placeholder(__('beneficiary.placeholder.violence_primary_type'))
                         ->options(Violence::options())
+                        ->native(false)
                         ->required(),
                     Select::make('frequency_violence')
                         ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
                         ->placeholder(__('beneficiary.placeholder.frequency_violence'))
                         ->options(Frequency::options())
+                        ->native(false)
                         ->required(),
                     RichEditor::make('description')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description'))

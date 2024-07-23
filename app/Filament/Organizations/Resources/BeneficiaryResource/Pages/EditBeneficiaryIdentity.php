@@ -103,7 +103,8 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.civil_status'))
                         ->placeholder(__('placeholder.civil_status'))
                         ->options(CivilStatus::options())
-                        ->enum(CivilStatus::class),
+                        ->enum(CivilStatus::class)
+                        ->native(false),
 
                     TextInput::make('cnp')
                         ->label(__('field.cnp'))
@@ -126,7 +127,8 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.gender'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Gender::options())
-                        ->enum(Gender::class),
+                        ->enum(Gender::class)
+                        ->native(false),
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
@@ -147,13 +149,15 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.citizenship'))
                         ->placeholder(__('placeholder.citizenship'))
                         ->options(Citizenship::options())
-                        ->nullable(),
+                        ->nullable()
+                        ->native(false),
 
                     Select::make('ethnicity')
                         ->label(__('field.ethnicity'))
                         ->placeholder(__('placeholder.ethnicity'))
                         ->options(Ethnicity::options())
-                        ->nullable(),
+                        ->nullable()
+                        ->native(false),
 
                     Select::make('id_type')
                         ->label(__('field.id_type'))
@@ -161,6 +165,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->options(IDType::options())
                         ->enum(IDType::class)
                         ->live()
+                        ->native(false)
                         ->afterStateUpdated(function ($state, Set $set) {
                             if (! $state || IDType::tryFrom($state)?->is(IDType::NONE)) {
                                 $set('id_serial', null);

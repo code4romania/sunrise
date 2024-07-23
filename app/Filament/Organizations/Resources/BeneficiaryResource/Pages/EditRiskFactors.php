@@ -115,11 +115,13 @@ class EditRiskFactors extends EditRecord
             Select::make('extended_family_can_provide')
                 ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
                 ->multiple()
-                ->options(Helps::options()),
+                ->options(Helps::options())
+                ->native(false),
             Select::make('friends_can_provide')
                 ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
                 ->multiple()
-                ->options(Helps::options()),
+                ->options(Helps::options())
+                ->native(false),
         ];
     }
 
