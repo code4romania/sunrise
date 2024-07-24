@@ -59,6 +59,7 @@ class EditFlowPresentation extends EditRecord
     {
         return [
             Section::make()
+                ->columns()
                 ->schema(static::flowSection()),
         ];
     }
@@ -122,21 +123,24 @@ class EditFlowPresentation extends EditRecord
                     Notifier::OTHER
                 )),
 
-            Select::make('act_location')
-                ->label(__('field.act_location'))
-                ->placeholder(__('placeholder.select_many'))
-                ->options(ActLocation::options())
-                ->rule(new MultipleIn(ActLocation::values()))
-                ->multiple()
-                ->live(),
+            Grid::make()
+                ->schema([
+                    Select::make('act_location')
+                        ->label(__('field.act_location'))
+                        ->placeholder(__('placeholder.select_many'))
+                        ->options(ActLocation::options())
+                        ->rule(new MultipleIn(ActLocation::values()))
+                        ->multiple()
+                        ->live(),
 
-            TextInput::make('act_location_other')
-                ->label(__('field.act_location_other'))
-                ->visible(
-                    fn (Get $get) => collect($get('act_location'))
-                        ->filter(fn ($value) => ActLocation::isValue($value, ActLocation::OTHER))
-                        ->isNotEmpty()
-                ),
+                    TextInput::make('act_location_other')
+                        ->label(__('field.act_location_other'))
+                        ->visible(
+                            fn (Get $get) => collect($get('act_location'))
+                                ->filter(fn ($value) => ActLocation::isValue($value, ActLocation::OTHER))
+                                ->isNotEmpty()
+                        ),
+                ]),
 
             Select::make('first_called_institution_id')
                 ->label(__('field.first_called_institution'))

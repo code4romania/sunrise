@@ -223,7 +223,8 @@ class EditAggressor extends EditRecord
                                 ->live(),
 
                             TextInput::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes')),
+                                ->label(__('field.protection_order_notes'))
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_protection_order'))),
                         ]),
                 ]),
         ];
