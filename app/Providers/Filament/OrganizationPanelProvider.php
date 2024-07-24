@@ -9,6 +9,7 @@ use App\Filament\Organizations\Pages\Profile\UserPersonalInfo;
 use App\Http\Middleware\UpdateDefaultTenant;
 use App\Livewire\Welcome;
 use App\Models\Organization;
+use Filament\Actions\MountableAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
@@ -20,6 +21,7 @@ use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Table;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -96,6 +98,9 @@ class OrganizationPanelProvider extends PanelProvider
             ])
             ->bootUsing(function () {
                 Page::alignFormActionsEnd();
+                MountableAction::configureUsing(function (MountableAction $action) {
+                    $action->modalFooterActionsAlignment(Alignment::Right);
+                });
             })
             // ->databaseNotifications()
             ->plugins([
@@ -105,7 +110,7 @@ class OrganizationPanelProvider extends PanelProvider
                         slug: 'settings'
                     )
                     ->myProfileComponents([
-                        'personal_info' => Pages\Profile\UserPersonalInfo::class,
+                        'personal_info' => UserPersonalInfo::class,
                     ])
                     ->enableTwoFactorAuthentication(),
             ])

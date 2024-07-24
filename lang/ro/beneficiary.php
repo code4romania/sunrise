@@ -244,6 +244,7 @@ return [
         'documents' => [
             'actions' => [
                 'add' => 'Încarcă document',
+                'create' => 'Adaugă document',
             ],
             'title' => [
                 'page' => 'Documente',
