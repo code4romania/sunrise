@@ -45,14 +45,19 @@ class ViewDocuments extends BaseWidget
                     ->form($this->getSchema())
                     ->modalHeading(__('beneficiary.section.documents.title.edit_modal'))
                     ->label(__('general.action.view_details'))
-                    ->icon(null),
+                    ->icon(null)
+                    ->modalSubmitActionLabel(__('general.action.save'))
+                    ->modalCancelActionLabel(__('general.action.cancel')),
             ])
             ->actionsColumnLabel(__('general.action.actions'))
             ->headerActions([
                 CreateAction::make()
                     ->form($this->getSchema())
                     ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
-                    ->label(__('beneficiary.section.documents.actions.add')),
+                    ->label(__('beneficiary.section.documents.actions.add'))
+                    ->createAnother(false)
+                    ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.create'))
+                    ->modalCancelActionLabel(__('general.action.cancel')),
             ])
             ->heading(__('beneficiary.section.documents.title.table'));
     }
