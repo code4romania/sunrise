@@ -108,7 +108,7 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
-                ->schema(EditBeneficiaryIdentity::getChildrenIdentityFormSchema()),
+                ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema()),
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
@@ -121,16 +121,16 @@ class CreateBeneficiary extends CreateRecord
                         ->schema([
                             Group::make()
                                 ->columns()
-                                ->schema(EditBeneficiaryPersonalInformation::aggressorSection()),
+                                ->schema(EditAggressor::aggressorSection()),
                         ]),
 
                     Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                         ->columns()
-                        ->schema(EditBeneficiaryPersonalInformation::antecedentsSection()),
+                        ->schema(EditAntecedents::antecedentsSection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.flow'))
                         ->columns()
-                        ->schema(EditBeneficiaryPersonalInformation::flowSection()),
+                        ->schema(EditFlowPresentation::flowSection()),
                 ]),
         ];
     }

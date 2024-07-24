@@ -45,7 +45,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Tabs::make()
                 ->columnSpanFull()
-                ->maxWidth('3xl')
+                ->persistTabInQueryString()
                 ->tabs([
                     Tab::make(__('beneficiary.section.personal_information.section.beneficiary'))
                         ->columns()
@@ -71,10 +71,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
-                ])
-                ->extraAttributes([
-                    'class' => 'h-full',
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
                 ])
                 ->schema([
                     EnumEntry::make('has_family_doctor')
@@ -144,10 +142,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
-                ])
-                ->extraAttributes([
-                    'class' => 'h-full',
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_aggressor', ['record' => $record])),
                 ])
                 ->schema([
                     RepeatableEntry::make('aggressor')
@@ -155,6 +151,18 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->columnSpanFull()
                         ->hiddenLabel()
                         ->schema([
+                            TextEntry::make('aggressor_heading')
+                                ->hiddenLabel()
+                                ->columnSpanFull()
+                                ->default(function ($component) {
+                                    $index = (int) explode('.', $component->getStatePath())[1];
+
+                                    return __('beneficiary.section.personal_information.heading.aggressor', [
+                                        'number' => $index + 1,
+                                    ]);
+                                })
+                                ->size(TextEntry\TextEntrySize::Large),
+
                             EnumEntry::make('relationship')
                                 ->label(__('field.aggressor_relationship'))
                                 ->placeholder(__('placeholder.select_one')),
@@ -250,7 +258,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -288,7 +297,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
