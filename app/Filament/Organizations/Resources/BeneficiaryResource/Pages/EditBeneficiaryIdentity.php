@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use alcea\cnp\Cnp;
+use App\Concerns\RedirectToIdentity;
 use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
 use App\Enums\Ethnicity;
@@ -13,14 +14,13 @@ use App\Enums\IDType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Spacer;
-use App\Forms\Components\TableRepeater;
 use App\Rules\ValidCNP;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -28,9 +28,12 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Str;
 
 class EditBeneficiaryIdentity extends EditRecord
 {
+    use RedirectToIdentity;
+
     protected static string $resource = BeneficiaryResource::class;
 
     protected function getHeaderActions(): array
@@ -54,9 +57,9 @@ class EditBeneficiaryIdentity extends EditRecord
             ->getIdentityBreadcrumbs();
     }
 
-    protected function getRedirectUrl(): string
+    protected function getTabSlug(): string
     {
-        return self::$resource::getUrl('view_identity', ['record' => $this->record->id]);
+        return Str::slug(__('beneficiary.section.identity.tab.beneficiary'));
     }
 
     public function form(Form $form): Form
@@ -64,14 +67,8 @@ class EditBeneficiaryIdentity extends EditRecord
         return $form
             ->columns(1)
             ->schema([
-                Tabs::make()
-                    ->tabs([
-                        Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
-                            ->schema(static::getBeneficiaryIdentityFormSchema()),
-                        Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
-                            ->schema(static::getChildrenIdentityFormSchema()),
-
-                    ]),
+                Section::make()
+                    ->schema(static::getBeneficiaryIdentityFormSchema()),
             ]);
     }
 
@@ -103,6 +100,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.civil_status'))
                         ->placeholder(__('placeholder.civil_status'))
                         ->options(CivilStatus::options())
+                        ->native(false)
                         ->enum(CivilStatus::class),
 
                     TextInput::make('cnp')
@@ -126,6 +124,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.gender'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Gender::options())
+                        ->native(false)
                         ->enum(Gender::class),
 
                     DatePicker::make('birthdate')
@@ -147,12 +146,14 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.citizenship'))
                         ->placeholder(__('placeholder.citizenship'))
                         ->options(Citizenship::options())
+                        ->native(false)
                         ->nullable(),
 
                     Select::make('ethnicity')
                         ->label(__('field.ethnicity'))
                         ->placeholder(__('placeholder.ethnicity'))
                         ->options(Ethnicity::options())
+                        ->native(false)
                         ->nullable(),
 
                     Select::make('id_type')
@@ -161,6 +162,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->options(IDType::options())
                         ->enum(IDType::class)
                         ->live()
+                        ->native(false)
                         ->afterStateUpdated(function ($state, Set $set) {
                             if (! $state || IDType::tryFrom($state)?->is(IDType::NONE)) {
                                 $set('id_serial', null);
@@ -246,109 +248,6 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->nullable()
                         ->columnSpanFull(),
                 ]),
-        ];
-    }
-
-    public static function getChildrenIdentityFormSchema(): array
-    {
-        return [
-            Checkbox::make('doesnt_have_children')
-                ->label(__('field.doesnt_have_children'))
-                ->live()
-                ->columnSpanFull()
-                ->afterStateUpdated(function (bool $state, Set $set) {
-                    if ($state) {
-                        $set('children_total_count', null);
-                        $set('children_care_count', null);
-                        $set('children_under_10_care_count', null);
-                        $set('children_10_18_care_count', null);
-                        $set('children_18_care_count', null);
-                        $set('children_accompanying_count', null);
-                        $set('children', []);
-                        $set('children_notes', null);
-                    }
-                }),
-
-            Grid::make()
-                ->maxWidth('3xl')
-                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
-                ->schema([
-                    TextInput::make('children_total_count')
-                        ->label(__('field.children_total_count'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric()
-                        ->minValue(0)
-                        ->maxValue(99),
-
-                    TextInput::make('children_care_count')
-                        ->label(__('field.children_care_count'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric()
-                        ->minValue(0)
-                        ->maxValue(99),
-
-                    TextInput::make('children_under_10_care_count')
-                        ->label(__('field.children_under_10_care_count'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric()
-                        ->minValue(0)
-                        ->maxValue(99),
-
-                    TextInput::make('children_10_18_care_count')
-                        ->label(__('field.children_10_18_care_count'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric()
-                        ->minValue(0)
-                        ->maxValue(99),
-
-                    TextInput::make('children_18_care_count')
-                        ->label(__('field.children_18_care_count'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric()
-                        ->minValue(0)
-                        ->maxValue(99),
-
-                    TextInput::make('children_accompanying_count')
-                        ->label(__('field.children_accompanying_count'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric()
-                        ->minValue(0)
-                        ->maxValue(99),
-                ]),
-
-            TableRepeater::make('children')
-                ->reorderable(false)
-                ->columnSpanFull()
-                ->hiddenLabel()
-                ->hideLabels()
-                ->addActionLabel(__('beneficiary.action.add_child'))
-                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
-                ->emptyLabel(false)
-                ->defaultItems(fn ($get) => $get('doesnt_have_children') ? 0 : 1)
-                ->schema([
-                    TextInput::make('name')
-                        ->label(__('field.child_name')),
-
-                    TextInput::make('age')
-                        ->label(__('field.age')),
-
-                    DatePicker::make('birthdate')
-                        ->label(__('field.birthdate'))
-                        ->native(false),
-
-                    TextInput::make('address')
-                        ->label(__('field.current_address')),
-
-                    TextInput::make('status')
-                        ->label(__('field.child_status')),
-                ]),
-
-            Textarea::make('children_notes')
-                ->label(__('field.children_notes'))
-                ->placeholder(__('placeholder.other_relevant_details'))
-                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
-                ->nullable()
-                ->columnSpanFull(),
         ];
     }
 }

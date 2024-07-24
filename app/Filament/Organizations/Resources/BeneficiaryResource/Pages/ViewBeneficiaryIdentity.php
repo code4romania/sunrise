@@ -38,9 +38,10 @@ class ViewBeneficiaryIdentity extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
-            ->columns()
             ->schema([
                 Tabs::make()
+                    ->persistTabInQueryString()
+                    ->columnSpanFull()
                     ->tabs([
                         Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                             ->schema(static::getBeneficiaryIdentityFormSchema()),
@@ -55,13 +56,10 @@ class ViewBeneficiaryIdentity extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.identity.tab.beneficiary'))
-                ->columnSpan(1)
-                ->columns()
+                ->maxWidth('3xl')
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditIdentity::make('edit'),
-                ])
-                ->extraAttributes([
-                    'class' => 'h-full',
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record])),
                 ])
                 ->schema(self::identitySchema()),
         ];
@@ -92,7 +90,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
     {
         return [
             Grid::make()
-                ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('last_name')
                         ->label(__('field.last_name'))
@@ -187,13 +184,10 @@ class ViewBeneficiaryIdentity extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.identity.tab.children'))
-                ->columnSpan(1)
-                ->columns()
+                ->maxWidth('3xl')
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditIdentity::make('edit'),
-                ])
-                ->extraAttributes([
-                    'class' => 'h-full',
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_children', ['record' => $record])),
                 ])
                 ->schema(self::childrenSchema()),
         ];
@@ -224,7 +218,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
         return [
             Grid::make()
                 ->hidden(fn ($record) => $record->doesnt_have_children)
-                ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('children_total_count')
                         ->label(__('field.children_total_count'))
