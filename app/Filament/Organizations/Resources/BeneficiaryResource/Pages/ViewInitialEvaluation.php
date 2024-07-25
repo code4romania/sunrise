@@ -63,19 +63,28 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema([
                                     View::make('filament.notice')
                                         ->viewData([
+                                            'icon' => $this->record->riskFactors->risk_level->icon(),
+                                            'iconColor' => $this->record->riskFactors->risk_level->color(),
                                             'message' => $this->record->riskFactors->risk_level->label(),
-                                            'bgClass' => sprintf('bg-%s bg-custom-200 text-custom-800', $this->record->riskFactors->risk_level->color()),
+                                            'bgColor' => $this->record->riskFactors->risk_level->color(),
                                         ])
                                         ->columnSpanFull(),
-                                    Section::make(__('beneficiary.wizard.risk_factors.label'))
-                                        ->headerActions([
-                                            BeneficiaryResource\Actions\Edit::make('edit')
-                                                ->url(fn ($record) => BeneficiaryResource::getUrl(
-                                                    'edit_initial_evaluation_risk_factors',
-                                                    ['record' => $record]
-                                                )),
+
+                                    View::make('filament.section-header')
+                                        ->viewData([
+                                            'message' => __('beneficiary.wizard.risk_factors.label'),
+                                            'messageSize' => 'md',
+                                            'bgColor' => 'default',
+                                            'actionAlign' => 'pull-right',
+                                            'actionLabel' => __('general.action.edit'),
+                                            'actionUrl' => BeneficiaryResource::getUrl(
+                                                'edit_initial_evaluation_risk_factors',
+                                                ['record' => $this->record]
+                                            ),
                                         ])
-                                        ->schema(EditRiskFactors::getInfoListSchema())]),
+                                        ->columnSpanFull(),
+                                    ...EditRiskFactors::getInfoListSchema(),
+                                ]),
                         ]),
                     Tabs\Tab::make(__('beneficiary.wizard.requested_services.label'))
                         ->schema([

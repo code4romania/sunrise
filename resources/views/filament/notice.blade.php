@@ -1,14 +1,20 @@
 @props([
     'icon' => null,
+    'iconColor' => 'primary',
     'message' => null,
     'actionUrl' => null,
     'actionLabel' => null,
-    'bgClass' => 'bg-primary-50',
+    'bgColor' => 'primary',
 ])
 
-<div class="flex items-center gap-3 p-4 -mx-6 -mt-6 rounded-xl {{ $bgClass }}">
+<div @class(['flex items-center gap-3 p-4 -mx-6 -mt-6 rounded-xl',
+        'bg-danger-200 text-danger-800' => $bgColor === 'danger',
+	    'bg-warning-200 text-warning-800' => $bgColor === 'warning',
+	    'bg-success-200 text-success-800' => $bgColor === 'success',
+	    'bg-primary-50' => $bgColor === 'primary',
+	    ])>
     @if ($icon)
-        <x-dynamic-component :component="$icon" class="w-5 h-5 shrink-0 text-primary-600" />
+        <x-dynamic-component :component="$icon" class="w-5 h-5 shrink-0 text-{{$iconColor}}-600"/>
     @endif
 
     <div class="flex-1 text-sm">
@@ -29,19 +35,3 @@
 
 </div>
 
-<style>
-    .bg-danger {
-        --c-200:var(--danger-200);
-        --c-800:var(--danger-800);
-    }
-
-    .bg-warning {
-        --c-200:var(--warning-200);
-        --c-800:var(--warning-800);
-    }
-
-    .bg-success {
-        --c-200:var(--success-200);
-        --c-800:var(--success-800);"
-    }
-</style>

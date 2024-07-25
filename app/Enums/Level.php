@@ -19,6 +19,7 @@ enum Level: string
     case HIGH = 'high';
     case MEDIUM = 'medium';
     case LOW = 'low';
+    case NONE = 'none';
 
     protected function labelKeyPrefix(): ?string
     {
@@ -28,8 +29,8 @@ enum Level: string
     public static function colors(): array
     {
         return [
-            'success' => Level::LOW,
-            'warning' => Level::MEDIUM,
+            'success' => Level::NONE,
+            'warning' => [Level::MEDIUM, Level::LOW],
             'danger' => Level::HIGH,
         ];
     }
@@ -37,9 +38,20 @@ enum Level: string
     public function color(): string
     {
         return match ($this->value) {
-            Level::LOW->value => 'success',
+            Level::NONE->value => 'success',
+            Level::LOW->value => 'warning',
             Level::MEDIUM->value => 'warning',
             Level::HIGH->value => 'danger',
+        };
+    }
+
+    public function icon(): string
+    {
+        return match ($this->value) {
+            Level::NONE->value => 'heroicon-s-check-circle',
+            Level::LOW->value => 'heroicon-s-exclamation-triangle',
+            Level::MEDIUM->value => 'heroicon-s-exclamation-triangle',
+            Level::HIGH->value => 'heroicon-s-exclamation-triangle',
         };
     }
 }
