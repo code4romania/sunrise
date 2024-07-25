@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Enums\DocumentType;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Document;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -54,7 +56,17 @@ class ViewDocuments extends BaseWidget
                     ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                     ->label(__('beneficiary.section.documents.actions.add')),
             ])
-            ->heading(__('beneficiary.section.documents.title.table'));
+            ->heading(__('beneficiary.section.documents.title.table'))
+            ->emptyStateIcon('heroicon-o-document')
+            ->emptyStateHeading(__('beneficiary.helper_text.documents'))
+            ->emptyStateDescription(__('beneficiary.helper_text.documents_2'))
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->form($this->getSchema())
+                    ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
+                    ->label(__('beneficiary.section.documents.actions.add'))
+                    ->outlined(),
+            ]);
     }
 
     /**

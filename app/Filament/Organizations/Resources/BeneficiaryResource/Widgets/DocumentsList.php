@@ -20,6 +20,13 @@ class DocumentsList extends BaseWidget
         return $table
             ->query(fn () => $this->record->documents()->limit(4))
             ->heading(__('beneficiary.section.documents.title.page'))
+            ->headerActions([
+                Tables\Actions\Action::make('view')
+                    ->label(__('general.action.view_details'))
+                    ->url(fn () => BeneficiaryResource::getUrl('view_documents', ['record' => $this->record]))
+                    ->link()
+                    ->visible(fn() => $this->record->documents->count()),
+                ])
             ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('type')
