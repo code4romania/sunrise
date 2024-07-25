@@ -24,7 +24,7 @@ class CreateInitialEvaluation extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return self::$resource::getUrl('view', ['record' => $this->record->id]);
+        return self::$resource::getUrl('view_initial_evaluation', ['record' => $this->record->id]);
     }
 
     public function getBreadcrumbs(): array
