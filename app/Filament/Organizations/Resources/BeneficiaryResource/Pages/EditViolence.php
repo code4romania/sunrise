@@ -10,7 +10,7 @@ use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -48,9 +48,9 @@ class EditViolence extends EditRecord
         return [
             Section::make()
                 ->schema([
-                    Group::make()
+                    Grid::make()
                         ->relationship('violence')
-                        ->columns()
+                        ->maxWidth('3xl')
                         ->schema([
                             Select::make('violence_types')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))

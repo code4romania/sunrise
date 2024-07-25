@@ -49,9 +49,11 @@ class EditMultidisciplinaryEvaluation extends EditRecord
             Section::make()
                 ->schema([
                     Group::make()
+                        ->maxWidth('3xl')
                         ->relationship('multidisciplinaryEvaluation')
                         ->schema([
                             Section::make(__('beneficiary.section.detailed_evaluation.heading.reasons_for_start_evaluation'))
+                                ->columns()
                                 ->schema([
                                     Select::make('applicant')
                                         ->label(__('beneficiary.section.detailed_evaluation.labels.applicant'))
@@ -64,11 +66,11 @@ class EditMultidisciplinaryEvaluation extends EditRecord
                                         ->placeholder(__('beneficiary.placeholder.reporting_by'))
                                         ->default(fn (Component $livewire) => $livewire->record->referringInstitution?->name)
                                         ->visible(fn (Get $get) => Applicant::OTHER->is($get('applicant'))),
-                                ])
-                                ->columns(),
+                                ]),
                         ]),
 
                     Section::make(__('beneficiary.section.detailed_evaluation.heading.historic_violence'))
+                        ->maxWidth('3xl')
                         ->schema([
                             Repeater::make('violenceHistory')
                                 ->relationship('violenceHistory')
@@ -87,6 +89,7 @@ class EditMultidisciplinaryEvaluation extends EditRecord
                         ]),
 
                     Group::make()
+                        ->maxWidth('3xl')
                         ->relationship('multidisciplinaryEvaluation')
                         ->schema([
                             Section::make(__('beneficiary.section.detailed_evaluation.heading.beneficiary_needs'))

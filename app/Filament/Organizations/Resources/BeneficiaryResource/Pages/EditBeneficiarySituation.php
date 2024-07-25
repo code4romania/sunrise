@@ -46,6 +46,7 @@ class EditBeneficiarySituation extends EditRecord
                 ->schema([
                     Group::make()
                         ->relationship('beneficiarySituation')
+                        ->maxWidth('3xl')
                         ->schema([
                             TextInput::make('moment_of_evaluation')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.moment_of_evaluation'))

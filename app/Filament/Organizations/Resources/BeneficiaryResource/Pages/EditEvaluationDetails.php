@@ -9,7 +9,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\User;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -47,8 +47,8 @@ class EditEvaluationDetails extends EditRecord
         return [
             Section::make()
                 ->schema([
-                    Group::make()
-                        ->columns()
+                    Grid::make()
+                        ->maxWidth('3xl')
                         ->relationship('evaluateDetails')
                         ->schema([
                             DatePicker::make('registered_date')
