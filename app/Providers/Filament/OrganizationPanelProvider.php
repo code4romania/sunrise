@@ -95,8 +95,10 @@ class OrganizationPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
             ])
             ->bootUsing(function () {
+                Page::stickyFormActions();
                 Page::alignFormActionsEnd();
             })
+            ->unsavedChangesAlerts()
             // ->databaseNotifications()
             ->plugins([
                 BreezyCore::make()
