@@ -238,7 +238,7 @@ return [
                 'role' => 'Rol',
                 'status' => 'Status',
                 'roles' => 'Rol în echipa de caz',
-                'summarize' => '+ alți :count specialiști',
+                'summarize' => '{1} +:count alt specialist|[2,19] +:count alți specialiști|[20,*] +:count de alți specialiști',
             ],
         ],
 
@@ -258,7 +258,7 @@ return [
                 'observations' => 'Observatii',
                 'date' => 'Data',
                 'document_file' => 'Încarcă document',
-                'summarize' => '+ :count alte documente',
+                'summarize' => '{1} +:count alt document|[2,19] +:count alte documente|[20,*] +:count de alte documente',
             ],
         ],
     ],
