@@ -6,15 +6,16 @@ namespace App\Enums;
 
 use App\Concerns\Enums\Arrayable;
 use App\Concerns\Enums\Comparable;
-use App\Concerns\Enums\HasColor;
 use App\Concerns\Enums\HasLabel;
+use Filament\Support\Colors\Color;
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasIcon;
 
-enum Level: string
+enum Level: string implements HasColor, HasIcon
 {
     use Arrayable;
     use Comparable;
     use HasLabel;
-    use HasColor;
 
     case HIGH = 'high';
     case MEDIUM = 'medium';
@@ -26,32 +27,23 @@ enum Level: string
         return 'enum.level';
     }
 
-    public static function colors(): array
+    public function getColor(): string | array | null
     {
-        return [
-            'success' => Level::NONE,
-            'warning' => [Level::MEDIUM, Level::LOW],
-            'danger' => Level::HIGH,
-        ];
-    }
-
-    public function color(): string
-    {
-        return match ($this->value) {
-            Level::NONE->value => 'success',
-            Level::LOW->value => 'warning',
-            Level::MEDIUM->value => 'warning',
-            Level::HIGH->value => 'danger',
+        return match ($this) {
+            self::HIGH => Color::Red,
+            self::MEDIUM => Color::Orange,
+            self::LOW => Color::Amber,
+            self::NONE => Color::Green,
         };
     }
 
-    public function icon(): string
+    public function getIcon(): ?string
     {
-        return match ($this->value) {
-            Level::NONE->value => 'heroicon-s-check-circle',
-            Level::LOW->value => 'heroicon-s-exclamation-triangle',
-            Level::MEDIUM->value => 'heroicon-s-exclamation-triangle',
-            Level::HIGH->value => 'heroicon-s-exclamation-triangle',
+        return match ($this) {
+            self::HIGH => 'heroicon-s-exclamation-triangle',
+            self::MEDIUM => 'heroicon-s-exclamation-triangle',
+            self::LOW => 'heroicon-s-exclamation-triangle',
+            self::NONE => 'heroicon-s-check-circle',
         };
     }
 }

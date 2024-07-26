@@ -289,10 +289,19 @@ class EditRiskFactors extends EditRecord
             $fields[] = TextEntry::make('risk_factors.' . $key . '.value')
                 ->label($value)
                 ->formatStateUsing(function ($record, $state) use ($key) {
-                    $description = $record->riskFactors->risk_factors[$key]['description'];
-                    $result = $state == '-' ? $state : Ternary::options()[$state];
+                    $result = \is_int($state)
+                        ? Ternary::tryFrom($state)?->label()
+                        : null;
 
-                    return blank($description) ? $result : $result . ' (' . $description . ')';
+                    $result ??= '-';
+
+                    $description = data_get($record->riskFactors->risk_factors, "{$key}.description");
+
+                    if (filled($description)) {
+                        $result .= " ({$description})";
+                    }
+
+                    return $result;
                 })
                 ->inlineLabel(false);
         }

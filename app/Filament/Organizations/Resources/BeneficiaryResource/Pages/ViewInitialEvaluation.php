@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\Notice;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
@@ -61,13 +62,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make()
                                 ->schema([
-                                    View::make('filament.notice')
-                                        ->viewData([
-                                            'icon' => $this->record->riskFactors->risk_level->icon(),
-                                            'iconColor' => $this->record->riskFactors->risk_level->color(),
-                                            'message' => $this->record->riskFactors->risk_level->label(),
-                                            'bgColor' => $this->record->riskFactors->risk_level->color(),
-                                        ])
+                                    Notice::make('riskFactors.risk_level')
                                         ->columnSpanFull(),
 
                                     View::make('filament.section-header')
