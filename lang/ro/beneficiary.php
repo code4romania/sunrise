@@ -245,12 +245,14 @@ return [
             'actions' => [
                 'add' => 'Încarcă document',
                 'create' => 'Adaugă document',
+                'delete' => 'Șterge document',
             ],
             'title' => [
                 'page' => 'Documente',
                 'table' => 'Arhivă documente',
                 'add_modal' => 'Adaugă document',
                 'edit_modal' => 'Actualizează detalii document',
+                'delete_modal' => 'Șterge document',
             ],
             'labels' => [
                 'type' => 'Tip document',
@@ -258,6 +260,7 @@ return [
                 'observations' => 'Observatii',
                 'date' => 'Data',
                 'document_file' => 'Încarcă document',
+                'delete_description' => 'Odată șters un document, acesta nu mai poate fi recuperat. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
             ],
         ],
     ],

@@ -11,7 +11,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -46,6 +48,15 @@ class ViewDocuments extends BaseWidget
                     ->modalHeading(__('beneficiary.section.documents.title.edit_modal'))
                     ->label(__('general.action.view_details'))
                     ->icon(null)
+                    ->extraModalFooterActions([
+                        DeleteAction::make()
+                            ->modalHeading(__('beneficiary.section.documents.title.delete_modal'))
+                            ->modalAlignment(Alignment::Left)
+                            ->modalDescription(__('beneficiary.section.documents.labels.delete_description'))
+                            ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.delete'))
+                            ->modalCancelActionLabel(__('general.action.cancel'))
+                            ->modalIcon(null),
+                    ])
                     ->modalSubmitActionLabel(__('general.action.save'))
                     ->modalCancelActionLabel(__('general.action.cancel')),
             ])
