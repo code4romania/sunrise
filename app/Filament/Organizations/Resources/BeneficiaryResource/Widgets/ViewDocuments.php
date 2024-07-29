@@ -86,7 +86,10 @@ class ViewDocuments extends BaseWidget
                 ->label(__('beneficiary.section.documents.labels.document_file'))
                 ->openable()
                 ->downloadable()
-                ->acceptedFileTypes(['application/pdf', 'pdf', 'doc', 'docx', 'xls', 'csv', 'png', 'tiff', 'jpg'])
+                ->acceptedFileTypes([
+                    'application/pdf', 'pdf',
+                    'application/msword','doc', 'docx', 'xls', 'csv',
+                    'image/*', 'tiff'])
                 ->maxSize(25000)
                 ->helperText(__('beneficiary.helper_text.document_file'))
                 ->required(),
