@@ -317,6 +317,7 @@ return [
         'check_beneficiary_exists' => 'Verifică dacă beneficiarul există în baza de date (Opțional)',
         'beneficiary_exists' => 'CNP-ul a fost identificat în această bază de date, asociat cazului Maria Popescu. <a href="#">Vezi detalii</a>',
         'beneficiary_not_exists' => '<i class="heroicon-check"></i>CNP-ul nu a fost identificat în această bază de date și nici în cea a altor centre ale instituției.',
+        'file_name' => 'Nume document',
 
     ],
     'helper_text' => [

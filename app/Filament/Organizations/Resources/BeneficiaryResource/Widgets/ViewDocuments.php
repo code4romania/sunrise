@@ -76,8 +76,10 @@ class ViewDocuments extends BaseWidget
 
             TextInput::make('name')
                 ->label(__('beneficiary.section.documents.labels.name'))
+                ->placeholder(__('beneficiary.placeholder.file_name'))
                 ->required(),
             Textarea::make('observations')
+                ->placeholder(__('beneficiary.placeholder.observations'))
                 ->label(__('beneficiary.section.documents.labels.observations')),
 
             SpatieMediaLibraryFileUpload::make('document_file')
