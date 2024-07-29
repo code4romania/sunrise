@@ -36,6 +36,7 @@ class ViewDetailedEvaluation extends ViewRecord
                         Tabs\Tab::make(__('beneficiary.wizard.detailed_evaluation.label'))
                             ->schema([
                                 Section::make(__('beneficiary.wizard.detailed_evaluation.label'))
+                                    ->maxWidth('3xl')
                                     ->headerActions([
                                         BeneficiaryResource\Actions\Edit::make('edit')
                                             ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -56,6 +57,7 @@ class ViewDetailedEvaluation extends ViewRecord
                             ->schema([
                                 Group::make()
                                     ->relationship('partner')
+                                    ->maxWidth('3xl')
                                     ->columns()
                                     ->schema([
                                         Section::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
@@ -73,6 +75,7 @@ class ViewDetailedEvaluation extends ViewRecord
                         Tabs\Tab::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
                             ->schema([
                                 Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
+                                    ->maxWidth('3xl')
                                     ->headerActions([
                                         BeneficiaryResource\Actions\Edit::make('edit')
                                             ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -87,6 +90,7 @@ class ViewDetailedEvaluation extends ViewRecord
                             ->schema([
                                 Group::make()
                                     ->relationship('detailedEvaluationResult')
+                                    ->maxWidth('3xl')
                                     ->schema([
                                         Section::make(__('beneficiary.wizard.results.label'))
                                             ->headerActions([
