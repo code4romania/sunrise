@@ -87,9 +87,14 @@ class ViewDocuments extends BaseWidget
                 ->openable()
                 ->downloadable()
                 ->acceptedFileTypes([
-                    'application/pdf', 'pdf',
-                    'application/msword','doc', 'docx', 'xls', 'csv',
-                    'image/*', 'tiff'])
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'text/csv',
+                    'application/vnd.ms-excel',
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'image/*',
+                ])
                 ->maxSize(25000)
                 ->helperText(__('beneficiary.helper_text.document_file'))
                 ->required(),
