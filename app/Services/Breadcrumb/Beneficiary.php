@@ -97,7 +97,7 @@ class Beneficiary
 
         return array_merge(
             $this->getBaseBreadcrumbs(),
-            [self::$resourcePath::getUrl('view_documents', ['record' => $this->record->id]) => $breadcrumb],
+            [self::$resourcePath::getUrl('documents.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
 }

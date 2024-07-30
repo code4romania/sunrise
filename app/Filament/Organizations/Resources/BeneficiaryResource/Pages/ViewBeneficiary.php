@@ -23,7 +23,6 @@ use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\FontWeight;
-
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -312,7 +311,7 @@ class ViewBeneficiary extends ViewRecord
             ->headerActions([
                 Action::make('edit')
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_documents', ['record' => $record]))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('documents.index', ['parent' => $record]))
                     ->link()
                     ->visible(fn ($record) => $record->documents->count()),
             ])

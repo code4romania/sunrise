@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Znck\Eloquent\Relations\BelongsToThrough as BelongsToThroughRelationship;
+use Znck\Eloquent\Traits\BelongsToThrough;
 
 class Document extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
     use BelongsToBeneficiary;
+    use BelongsToThrough;
 
     protected $fillable = [
         'date',
@@ -27,4 +30,9 @@ class Document extends Model implements HasMedia
     protected $casts = [
         'type' => DocumentType::class,
     ];
+
+    public function organization(): BelongsToThroughRelationship
+    {
+        return $this->belongsToThrough(Organization::class, Beneficiary::class);
+    }
 }

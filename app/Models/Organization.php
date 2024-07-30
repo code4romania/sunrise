@@ -8,10 +8,12 @@ use App\Concerns\HasBeneficiaries;
 use App\Concerns\HasLocation;
 use App\Concerns\HasSlug;
 use App\Concerns\HasUlid;
+use App\Database\Eloquent\Relations\HasManyThrough;
 use App\Enums\OrganizationType;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasCurrentTenantLabel;
 use Filament\Models\Contracts\HasName;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -61,6 +63,16 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
     public function interventions(): HasMany
     {
         return $this->hasMany(Intervention::class);
+    }
+
+    public function documents(): HasManyThrough
+    {
+        return $this->hasManyThrough(Document::class, Beneficiary::class);
+    }
+
+    protected function newHasManyThrough(Builder $query, Model $farParent, Model $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey): HasManyThrough
+    {
+        return new HasManyThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
     }
 
     public function communityProfile(): HasOne

@@ -246,6 +246,7 @@ return [
                 'add' => 'Încarcă document',
                 'create' => 'Adaugă document',
                 'delete' => 'Șterge document',
+                'download' => 'Descarcă document',
             ],
             'title' => [
                 'page' => 'Documente',
