@@ -32,45 +32,38 @@ class DocumentResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Select::make('type')
+                    ->label(__('beneficiary.section.documents.labels.type'))
+                    ->required()
+                    ->options(DocumentType::options())
+                    ->enum(DocumentType::class),
+
+                TextInput::make('name')
+                    ->label(__('beneficiary.section.documents.labels.name'))
+                    ->placeholder(__('beneficiary.placeholder.file_name'))
+                    ->required(),
+
+                Textarea::make('observations')
+                    ->placeholder(__('beneficiary.placeholder.observations'))
+                    ->label(__('beneficiary.section.documents.labels.observations')),
+
+                SpatieMediaLibraryFileUpload::make('document_file')
+                    ->label(__('beneficiary.section.documents.labels.document_file'))
+                    ->openable()
+                    ->downloadable()
+                    ->acceptedFileTypes([
+                        'application/pdf',
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'text/csv',
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'image/*',
+                    ])
+                    ->maxSize(config('media-library.max_file_size'))
+                    ->helperText(__('beneficiary.helper_text.document_file'))
+                    ->required(),
             ]);
-    }
-
-    public static function getSchema(): array
-    {
-        return [
-            Select::make('type')
-                ->label(__('beneficiary.section.documents.labels.type'))
-                ->required()
-                ->options(DocumentType::options())
-                ->enum(DocumentType::class),
-
-            TextInput::make('name')
-                ->label(__('beneficiary.section.documents.labels.name'))
-                ->placeholder(__('beneficiary.placeholder.file_name'))
-                ->required(),
-            Textarea::make('observations')
-                ->placeholder(__('beneficiary.placeholder.observations'))
-                ->label(__('beneficiary.section.documents.labels.observations')),
-
-            SpatieMediaLibraryFileUpload::make('document_file')
-                ->label(__('beneficiary.section.documents.labels.document_file'))
-                ->openable()
-                ->downloadable()
-                ->acceptedFileTypes([
-                    'application/pdf',
-                    'application/msword',
-                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                    'text/csv',
-                    'application/vnd.ms-excel',
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'image/*',
-                ])
-                ->maxSize(25000)
-                ->helperText(__('beneficiary.helper_text.document_file'))
-                ->required(),
-
-        ];
     }
 
     public static function getRelations(): array
