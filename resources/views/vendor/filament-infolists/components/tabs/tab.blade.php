@@ -2,7 +2,6 @@
     use Filament\Support\Enums\MaxWidth;
     
     $id = $getId();
-    $isContained = $getContainer()->getParentComponent()->isContained();
 
     $activeTabClasses = \Illuminate\Support\Arr::toCssClasses([
         'fi-active',
