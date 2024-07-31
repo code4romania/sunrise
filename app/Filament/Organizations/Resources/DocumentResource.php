@@ -60,11 +60,7 @@ class DocumentResource extends Resource
                         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                         'image/*',
                     ])
-                    ->maxSize(function () {
-                        debug('resource');
-
-                        return 1024 * 1024 * 50;
-                    })
+                    ->maxSize(config('media-library.max_file_size'))
                     ->helperText(__('beneficiary.helper_text.document_file'))
                     ->required(),
             ]);
