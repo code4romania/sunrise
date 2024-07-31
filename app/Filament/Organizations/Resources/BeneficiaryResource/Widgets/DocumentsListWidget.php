@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\DocumentResource;
+use App\Models\Beneficiary;
+use App\Models\Document;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Model;
 
-class DocumentsList extends BaseWidget
+class DocumentsListWidget extends BaseWidget
 {
-    public ?Model $record = null;
+    public ?Beneficiary $record = null;
 
     public function table(Table $table): Table
     {
@@ -21,12 +24,12 @@ class DocumentsList extends BaseWidget
             ->query(fn () => $this->record->documents()->limit(4))
             ->heading(__('beneficiary.section.documents.title.page'))
             ->headerActions([
-                Tables\Actions\Action::make('view')
+                Action::make('view')
                     ->label(__('general.action.view_details'))
-                    ->url(fn () => BeneficiaryResource::getUrl('view_documents', ['record' => $this->record]))
+                    ->url(fn () => BeneficiaryResource::getUrl('documents.index', ['parent' => $this->record]))
                     ->link()
-                    ->visible(fn() => $this->record->documents->count()),
-                ])
+                    ->visible(fn () => $this->record->documents->count()),
+            ])
             ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('type')
@@ -53,11 +56,23 @@ class DocumentsList extends BaseWidget
             ->emptyStateHeading(__('beneficiary.helper_text.documents'))
             ->emptyStateDescription(__('beneficiary.helper_text.documents_2'))
             ->emptyStateActions([
-                Tables\Actions\Action::make('edit')
+                Tables\Actions\CreateAction::make()
+                    ->form(DocumentResource::getSchema())
+                    ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                     ->label(__('beneficiary.section.documents.actions.add'))
-                    ->url(fn () => BeneficiaryResource::getUrl('view_documents', ['record' => $this->record]))
                     ->outlined()
-                    ->size(ActionSize::ExtraLarge),
+                    ->size(ActionSize::ExtraLarge)
+                    ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.create'))
+                    ->modalCancelActionLabel(__('general.action.cancel'))
+                    ->mutateFormDataUsing(function (array $data) {
+                        $data['beneficiary_id'] = $this->record->id;
+
+                        return $data;
+                    })
+                    ->successRedirectUrl(fn (Document $record) => BeneficiaryResource::getUrl('documents.view', [
+                        'parent' => $this->record,
+                        'record' => $record,
+                    ])),
             ]);
     }
 }

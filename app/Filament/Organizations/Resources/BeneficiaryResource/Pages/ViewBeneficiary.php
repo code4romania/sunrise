@@ -290,7 +290,7 @@ class ViewBeneficiary extends ViewRecord
     {
         return [
             BeneficiaryResource\Widgets\ListCaseTeam::class,
-            BeneficiaryResource\Widgets\DocumentsList::class,
+            BeneficiaryResource\Widgets\DocumentsListWidget::class,
         ];
     }
 }
