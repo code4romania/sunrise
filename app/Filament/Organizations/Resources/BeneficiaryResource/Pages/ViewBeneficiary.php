@@ -153,13 +153,11 @@ class ViewBeneficiary extends ViewRecord
                     ->url(fn ($state) => "tel:{$state}"),
 
                 RepeatableEntry::make('aggressor')
+                    ->columns()
+                    ->columnSpanFull()
                     ->schema([
                         EnumEntry::make('relationship')
                             ->label(__('field.aggressor_relationship')),
-
-                        EnumEntry::make('gender')
-                            ->label(__('field.aggressor_gender')),
-
                         EnumEntry::make('has_violence_history')
                             ->label(__('field.aggressor_has_violence_history')),
                     ]),
