@@ -334,7 +334,7 @@ class ViewBeneficiary extends ViewRecord
                         Actions::make([
                             Action::make('edit')
                                 ->label(__('beneficiary.section.documents.actions.add'))
-                                ->url(fn ($record) => BeneficiaryResource::getUrl('view_documents', ['record' => $record]))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('documents.index', ['parent' => $record]))
                                 ->badge()
                                 ->size(ActionSize::ExtraLarge),
                         ])
