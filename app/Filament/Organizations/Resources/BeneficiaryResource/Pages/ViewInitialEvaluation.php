@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Infolist;
@@ -17,7 +17,7 @@ class ViewInitialEvaluation extends ViewRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbsForInitialEvaluation();
     }
 
@@ -26,10 +26,12 @@ class ViewInitialEvaluation extends ViewRecord
         return $infolist->schema([
             Tabs::make()
                 ->persistTabInQueryString()
+                ->columnSpanFull()
                 ->schema([
                     Tabs\Tab::make(__('beneficiary.wizard.details.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.details.label'))
+                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -48,6 +50,7 @@ class ViewInitialEvaluation extends ViewRecord
                     Tabs\Tab::make(__('beneficiary.wizard.violence.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.violence.label'))
+                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -60,6 +63,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(fn ($record) => $record->riskFactors->risk_level->label() ??
                                 __('beneficiary.wizard.risk_factors.label'))
+                                ->maxWidth('3xl')
                                 ->schema([
                                     Section::make(__('beneficiary.wizard.risk_factors.label'))
                                         ->headerActions([
@@ -74,6 +78,7 @@ class ViewInitialEvaluation extends ViewRecord
                     Tabs\Tab::make(__('beneficiary.wizard.requested_services.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.requested_services.label'))
+                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -85,6 +90,7 @@ class ViewInitialEvaluation extends ViewRecord
                     Tabs\Tab::make(__('beneficiary.wizard.beneficiary_situation.label'))
                         ->schema([
                             Section::make(__('beneficiary.wizard.beneficiary_situation.label'))
+                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(

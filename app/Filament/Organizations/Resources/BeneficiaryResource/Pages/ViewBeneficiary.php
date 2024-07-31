@@ -9,7 +9,7 @@ use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -27,7 +27,7 @@ class ViewBeneficiary extends ViewRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBaseBreadcrumbs();
     }
 
@@ -148,13 +148,11 @@ class ViewBeneficiary extends ViewRecord
                     ->url(fn ($state) => "tel:{$state}"),
 
                 RepeatableEntry::make('aggressor')
+                    ->columns()
+                    ->columnSpanFull()
                     ->schema([
                         EnumEntry::make('relationship')
                             ->label(__('field.aggressor_relationship')),
-
-                        EnumEntry::make('gender')
-                            ->label(__('field.aggressor_gender')),
-
                         EnumEntry::make('has_violence_history')
                             ->label(__('field.aggressor_has_violence_history')),
                     ]),

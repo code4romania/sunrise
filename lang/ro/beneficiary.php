@@ -245,12 +245,16 @@ return [
         'documents' => [
             'actions' => [
                 'add' => 'Încarcă document',
+                'create' => 'Adaugă document',
+                'delete' => 'Șterge document',
+                'download' => 'Descarcă document',
             ],
             'title' => [
                 'page' => 'Documente',
                 'table' => 'Arhivă documente',
                 'add_modal' => 'Adaugă document',
                 'edit_modal' => 'Actualizează detalii document',
+                'delete_modal' => 'Șterge document',
             ],
             'labels' => [
                 'type' => 'Tip document',
@@ -259,6 +263,9 @@ return [
                 'date' => 'Data',
                 'document_file' => 'Încarcă document',
                 'summarize' => '{1} +:count alt document|[2,19] +:count alte documente|[20,*] +:count de alte documente',
+                'delete_description' => 'Odată șters un document, acesta nu mai poate fi recuperat. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
+                'empty_state_header' => 'Formatul documentului nu permite previzualizarea lui',
+                'empty_state_description' => 'Descărcați documentul pentru a-l putea vizualiza.',
             ],
         ],
     ],
@@ -318,6 +325,7 @@ return [
         'check_beneficiary_exists' => 'Verifică dacă beneficiarul există în baza de date (Opțional)',
         'beneficiary_exists' => 'CNP-ul a fost identificat în această bază de date, asociat cazului Maria Popescu. <a href="#">Vezi detalii</a>',
         'beneficiary_not_exists' => '<i class="heroicon-check"></i>CNP-ul nu a fost identificat în această bază de date și nici în cea a altor centre ale instituției.',
+        'file_name' => 'Nume document',
 
     ],
     'helper_text' => [
