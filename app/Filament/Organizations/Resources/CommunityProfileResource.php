@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\CommunityProfileResource\Pages;
+use App\Forms\Components\TableRepeater;
 use App\Models\CommunityProfile;
 use App\Models\Service;
-use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
