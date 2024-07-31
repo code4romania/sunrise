@@ -12,7 +12,7 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Model;
 
-class ListCaseTeam extends BaseWidget
+class CaseTeamListWidget extends BaseWidget
 {
     public ?Model $record = null;
 

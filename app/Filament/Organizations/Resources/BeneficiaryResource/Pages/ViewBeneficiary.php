@@ -289,7 +289,7 @@ class ViewBeneficiary extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            BeneficiaryResource\Widgets\ListCaseTeam::class,
+            BeneficiaryResource\Widgets\CaseTeamListWidget::class,
             BeneficiaryResource\Widgets\DocumentsListWidget::class,
         ];
     }
