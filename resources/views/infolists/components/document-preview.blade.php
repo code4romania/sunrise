@@ -24,11 +24,10 @@
                 @break
 
             @default
-{{--                TODO add empty state--}}
-{{--                <x-tables::empty-state--}}
-{{--                    icon="icon-empty-state"--}}
-{{--                    :heading="__('document.empty_preview.title')"--}}
-{{--                    :description="__('document.empty_preview.description')" />--}}
+                <x-filament-tables::empty-state
+                    icon="heroicon-o-eye-slash"
+                    :heading="__('beneficiary.section.documents.labels.empty_state_header')"
+                    :description="__('beneficiary.section.documents.labels.empty_state_description')" />
         @endswitch
     @endif
 

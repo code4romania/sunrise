@@ -262,6 +262,8 @@ return [
                 'date' => 'Data',
                 'document_file' => 'Încarcă document',
                 'delete_description' => 'Odată șters un document, acesta nu mai poate fi recuperat. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
+                'empty_state_header' => 'Formatul documentului nu permite previzualizarea lui',
+                'empty_state_description' => 'Descărcați documentul pentru a-l putea vizualiza.',
             ],
         ],
     ],

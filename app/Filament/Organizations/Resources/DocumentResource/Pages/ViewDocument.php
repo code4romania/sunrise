@@ -9,16 +9,25 @@ use App\Filament\Organizations\Resources\DocumentResource;
 use App\Infolists\Components\DocumentPreview;
 use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\Alignment;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ViewDocument extends ViewRecord
 {
     use HasParentResource;
 
     protected static string $resource = DocumentResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return $this->record->name;
+    }
 
     public function getBreadcrumbs(): array
     {
@@ -69,7 +78,17 @@ class ViewDocument extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            DocumentPreview::make(),
+            Section::make()
+                ->hiddenLabel()
+                ->columns()
+                ->schema([
+                    TextEntry::make('type')
+                        ->label(__('beneficiary.section.documents.labels.type')),
+                    TextEntry::make('observations')
+                        ->label(__('beneficiary.section.documents.labels.observations')),
+                ]),
+            DocumentPreview::make()
+                ->columnSpanFull(),
         ]);
     }
 }
