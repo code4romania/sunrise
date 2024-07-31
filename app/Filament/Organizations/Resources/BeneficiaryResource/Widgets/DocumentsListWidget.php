@@ -18,10 +18,12 @@ class DocumentsListWidget extends BaseWidget
 {
     public ?Beneficiary $record = null;
 
+    private int $limit = 4;
+
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => $this->record->documents()->limit(4))
+            ->query(fn () => $this->record->documents()->limit($this->limit))
             ->heading(__('beneficiary.section.documents.title.page'))
             ->headerActions([
                 Action::make('view')
@@ -34,24 +36,22 @@ class DocumentsListWidget extends BaseWidget
             ->columns([
                 Tables\Columns\TextColumn::make('type')
                     ->label(__('beneficiary.section.documents.labels.type'))
-                    ->formatStateUsing(fn ($state) => $state->label())
-                    ->summarize(
-                        Tables\Columns\Summarizers\Summarizer::make('aaaaa')
-
-                            ->label(
-                                function () {
-                                    $diff = $this->record->documents()->count() - 4;
-
-                                    return $diff <= 0 ? '' :
-                                    __('beneficiary.section.documents.labels.summarize', ['count' => $diff]);
-                                }
-                            )
-                            ->using(fn () => $this->record->documents()->count())
-                            ->visible(fn () => $this->record->documents()->count() - 4 > 0)
-                    ),
+                    ->formatStateUsing(fn ($state) => $state->label()),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('beneficiary.section.documents.labels.name')),
             ])
+            ->contentFooter(function () {
+                $diff = max(0, $this->record->documents()->count() - $this->limit);
+
+                if (! $diff) {
+                    return null;
+                }
+
+                return view('tables.footer', [
+                    'content' => trans_choice('beneficiary.section.documents.labels.summarize', $diff),
+                    'colspan' => 2,
+                ]);
+            })
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateHeading(__('beneficiary.helper_text.documents'))
             ->emptyStateDescription(__('beneficiary.helper_text.documents_2'))
