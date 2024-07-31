@@ -10,7 +10,7 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Livewire\Beneficiary\ListTeam;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
@@ -31,7 +31,7 @@ class ViewBeneficiary extends ViewRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBaseBreadcrumbs();
     }
 
@@ -154,13 +154,11 @@ class ViewBeneficiary extends ViewRecord
 
                 RepeatableEntry::make('aggressor')
                     ->label(__('beneficiary.section.personal_information.section.aggressor'))
+                    ->columns()
+                    ->columnSpanFull()
                     ->schema([
                         EnumEntry::make('relationship')
                             ->label(__('field.aggressor_relationship')),
-
-                        EnumEntry::make('gender')
-                            ->label(__('field.aggressor_gender')),
-
                         EnumEntry::make('has_violence_history')
                             ->label(__('field.aggressor_has_violence_history')),
                     ]),
@@ -312,7 +310,7 @@ class ViewBeneficiary extends ViewRecord
             ->headerActions([
                 Action::make('edit')
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_documents', ['record' => $record]))
+                    ->url(fn ($record) => BeneficiaryResource::getUrl('documents.index', ['parent' => $record]))
                     ->link()
                     ->visible(fn ($record) => $record->documents->count()),
             ])
@@ -335,7 +333,7 @@ class ViewBeneficiary extends ViewRecord
                         Actions::make([
                             Action::make('edit')
                                 ->label(__('beneficiary.section.documents.actions.add'))
-                                ->url(fn ($record) => BeneficiaryResource::getUrl('view_documents', ['record' => $record]))
+                                ->url(fn ($record) => BeneficiaryResource::getUrl('documents.index', ['parent' => $record]))
                                 ->badge()
                                 ->size(ActionSize::ExtraLarge),
                         ])

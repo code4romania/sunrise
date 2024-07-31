@@ -13,9 +13,9 @@ use App\Enums\IDType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Spacer;
+use App\Forms\Components\TableRepeater;
 use App\Rules\ValidCNP;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
-use Awcodes\FilamentTableRepeater\Components\TableRepeater;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -47,7 +47,7 @@ class EditBeneficiaryIdentity extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getIdentityBreadcrumbs();
     }
 
