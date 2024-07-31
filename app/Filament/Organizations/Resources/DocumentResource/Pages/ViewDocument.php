@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\DocumentResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Infolists\Components\DocumentPreview;
+use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -76,8 +77,9 @@ class ViewDocument extends ViewRecord
                 ->hiddenLabel()
                 ->columns()
                 ->schema([
-                    TextEntry::make('type')
+                    EnumEntry::make('type')
                         ->label(__('beneficiary.section.documents.labels.type')),
+
                     TextEntry::make('observations')
                         ->label(__('beneficiary.section.documents.labels.observations')),
                 ]),

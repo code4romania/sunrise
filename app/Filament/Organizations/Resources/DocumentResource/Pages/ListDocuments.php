@@ -45,6 +45,7 @@ class ListDocuments extends ListRecords
 
                     return $data;
                 })
+                ->relationship(null)
                 ->successRedirectUrl(fn (Document $record) => static::getParentResource()::getUrl('documents.view', [
                     'parent' => $this->parent,
                     'record' => $record,
