@@ -7,7 +7,7 @@ namespace App\Filament\Organizations\Resources\DocumentResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Infolists\Components\DocumentPreview;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;

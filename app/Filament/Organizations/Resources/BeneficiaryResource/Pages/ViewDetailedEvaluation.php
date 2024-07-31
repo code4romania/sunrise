@@ -6,7 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\Location;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -21,7 +21,7 @@ class ViewDetailedEvaluation extends ViewRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbsForDetailedEvaluation();
     }
 

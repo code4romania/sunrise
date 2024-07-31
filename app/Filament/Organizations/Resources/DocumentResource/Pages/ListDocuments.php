@@ -6,7 +6,7 @@ namespace App\Filament\Organizations\Resources\DocumentResource\Pages;
 
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\DocumentResource;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\ViewAction;

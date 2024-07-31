@@ -8,7 +8,7 @@ use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\Applicant;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Repeater;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
@@ -29,7 +29,7 @@ class EditMultidisciplinaryEvaluation extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbsForDetailedEvaluation();
     }
 
