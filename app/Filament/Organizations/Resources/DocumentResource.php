@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Enums\DocumentType;
+use App\Forms\Components\Select;
 use App\Models\Document;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
