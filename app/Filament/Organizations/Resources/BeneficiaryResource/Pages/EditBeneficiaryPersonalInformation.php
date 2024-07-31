@@ -11,7 +11,9 @@ use App\Enums\Occupation;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Forms\Components\Repeater;
+use App\Rules\MultipleIn;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -45,7 +47,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getPersonalInformationBreadcrumbs();
     }
 

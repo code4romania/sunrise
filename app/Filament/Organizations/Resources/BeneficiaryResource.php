@@ -8,11 +8,14 @@ use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
+use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
+use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
 class BeneficiaryResource extends Resource
@@ -24,6 +27,11 @@ class BeneficiaryResource extends Resource
     protected static ?string $slug = 'cases';
 
     protected static ?int $navigationSort = 10;
+
+    public static function getRecordTitle(?Model $record): string|null|Htmlable
+    {
+        return $record->full_name;
+    }
 
     public static function getNavigationGroup(): ?string
     {
@@ -141,7 +149,8 @@ class BeneficiaryResource extends Resource
 
             'view_specialists' => ListSpecialists::route('/{record}/specialists'),
 
-            'view_documents' => Pages\ListDocuments::route('/{record}/documents'),
+            'documents.index' => ListDocuments::route('/{parent}/documents'),
+            'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
         ];
     }
 }
