@@ -34,6 +34,7 @@ class ViewDetailedEvaluation extends ViewRecord
                     ->persistTabInQueryString()
                     ->tabs([
                         Tabs\Tab::make(__('beneficiary.wizard.detailed_evaluation.label'))
+                            ->maxWidth('3xl')
                             ->schema([
                                 Section::make(__('beneficiary.wizard.detailed_evaluation.label'))
                                     ->headerActions([
@@ -47,12 +48,15 @@ class ViewDetailedEvaluation extends ViewRecord
                             ]),
 
                         Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                            ->maxWidth('3xl')
                             ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->record)),
 
                         Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
+                            ->maxWidth('3xl')
                             ->schema(ViewBeneficiaryIdentity::childrenSchemaForOtherPage($this->record)),
 
                         Tabs\Tab::make(__('beneficiary.wizard.partner.label'))
+                            ->maxWidth('3xl')
                             ->schema([
                                 Group::make()
                                     ->relationship('partner')
@@ -71,6 +75,7 @@ class ViewDetailedEvaluation extends ViewRecord
                             ]),
 
                         Tabs\Tab::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
+                            ->maxWidth('3xl')
                             ->schema([
                                 Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
                                     ->headerActions([
@@ -84,6 +89,7 @@ class ViewDetailedEvaluation extends ViewRecord
                             ]),
 
                         Tabs\Tab::make(__('beneficiary.wizard.results.label'))
+                            ->maxWidth('3xl')
                             ->schema([
                                 Group::make()
                                     ->relationship('detailedEvaluationResult')
