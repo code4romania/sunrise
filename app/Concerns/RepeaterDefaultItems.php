@@ -4,8 +4,25 @@ declare(strict_types=1);
 
 namespace App\Concerns;
 
+use Filament\Forms\Components\Actions\Action;
+
 trait RepeaterDefaultItems
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->deletable(function () {
+            $count = collect($this->getState())->count();
+
+            $minItems = $this->getMinItems();
+
+            return $count > $minItems;
+        });
+
+        $this->deleteAction(fn (Action $action) => $action->requiresConfirmation());
+    }
+
     public function fillFromRelationship(): void
     {
         parent::fillFromRelationship();
