@@ -26,6 +26,7 @@
         "league/flysystem-aws-s3-v3": "^3.28",
         "sentry/sentry-laravel": "^4.7",
         "spatie/laravel-activitylog": "^4.8",
+        "staudenmeir/belongs-to-through": "^2.5",
         "stevegrunwell/time-constants": "^1.2",
         "tpetry/laravel-query-expressions": "^0.9"
     },

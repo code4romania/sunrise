@@ -24,7 +24,7 @@ use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Repeater;
 use App\Rules\MultipleIn;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
@@ -55,7 +55,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getPersonalInformationBreadcrumbs();
     }
 

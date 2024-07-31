@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace App\Services\Breadcrumb;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Models\Beneficiary as BeneficiaryModel;
+use App\Models\Beneficiary;
 
-class Beneficiary
+class BeneficiaryBreadcrumb
 {
-    protected BeneficiaryModel $record;
+    protected Beneficiary $record;
 
     protected static string $resourcePath = BeneficiaryResource::class;
 
-    public function __construct(BeneficiaryModel $record)
+    public function __construct(Beneficiary $record)
     {
         $this->record = $record;
     }
 
-    public static function make(BeneficiaryModel $record)
+    public static function make(Beneficiary $record)
     {
         return new static($record);
     }
@@ -97,7 +97,7 @@ class Beneficiary
 
         return array_merge(
             $this->getBaseBreadcrumbs(),
-            [self::$resourcePath::getUrl('view_documents', ['record' => $this->record->id]) => $breadcrumb],
+            [self::$resourcePath::getUrl('documents.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
 }

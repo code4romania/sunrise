@@ -10,6 +10,8 @@ return [
         'view_details' => 'Vezi detalii',
         'edit' => 'Editează',
         'actions' => 'Acțiuni',
+        'cancel' => 'Renunță',
+        'save' => 'Salvează modificările',
     ],
 
     'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',
