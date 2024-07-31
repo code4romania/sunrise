@@ -37,23 +37,18 @@ class ViewDocument extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('delete')
+            DeleteAction::make()
                 ->label(__('beneficiary.section.documents.actions.delete'))
                 ->outlined()
-                ->color('danger')
                 ->icon('heroicon-o-trash')
                 ->modalHeading(__('beneficiary.section.documents.title.delete_modal'))
                 ->modalAlignment(Alignment::Left)
                 ->modalDescription(__('beneficiary.section.documents.labels.delete_description'))
                 ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.delete'))
                 ->modalCancelActionLabel(__('general.action.cancel'))
-                ->modalIcon(null)
-                ->action(function ($record): void {
-                    $record->delete();
-                })
-                ->successRedirectUrl(fn () => self::getParentResource()::getUrl('documents.index', ['parent' => $this->parent])),
+                ->modalIcon(null),
 
-            EditAction::make('edit')
+            EditAction::make()
                 ->record($this->getRecord())
                 ->form(self::$resource::getSchema())
                 ->modalHeading(__('beneficiary.section.documents.title.edit_modal'))
@@ -90,5 +85,15 @@ class ViewDocument extends ViewRecord
             DocumentPreview::make()
                 ->columnSpanFull(),
         ]);
+    }
+
+    protected function configureDeleteAction(DeleteAction $action): void
+    {
+        $resource = static::getResource();
+
+        $action->authorize($resource::canDelete($this->getRecord()))
+            ->successRedirectUrl(static::getParentResource()::getUrl('documents.index', [
+                'parent' => $this->parent,
+            ]));
     }
 }
