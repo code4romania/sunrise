@@ -35,7 +35,6 @@ class ListDocuments extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->form(self::$resource::getSchema())
                 ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                 ->label(__('beneficiary.section.documents.actions.add'))
                 ->createAnother(false)

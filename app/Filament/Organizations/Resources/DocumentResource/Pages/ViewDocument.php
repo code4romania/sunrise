@@ -50,7 +50,6 @@ class ViewDocument extends ViewRecord
 
             EditAction::make()
                 ->record($this->getRecord())
-                ->form(self::$resource::getSchema())
                 ->modalHeading(__('beneficiary.section.documents.title.edit_modal'))
                 ->label(__('beneficiary.section.documents.title.edit_modal'))
                 ->icon('heroicon-o-pencil-square')
