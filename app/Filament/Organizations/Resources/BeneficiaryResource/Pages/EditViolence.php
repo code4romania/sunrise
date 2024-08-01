@@ -9,7 +9,6 @@ use App\Enums\Frequency;
 use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
-use Filament\Forms\Components\Grid;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
@@ -47,34 +46,35 @@ class EditViolence extends EditRecord
     {
         return [
             Section::make()
+                ->relationship('violence')
+                ->maxWidth('3xl')
+                ->columns()
                 ->schema([
-                    Grid::make()
-                        ->relationship('violence')
-                        ->maxWidth('3xl')
-                        ->schema([
-                            Select::make('violence_types')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                                ->placeholder(__('beneficiary.placeholder.violence_type'))
-                                ->options(Violence::options())
-                                ->multiple()
-                                ->required(),
-                            Select::make('violence_primary_type')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
-                                ->placeholder(__('beneficiary.placeholder.violence_primary_type'))
-                                ->options(Violence::options())
-                                ->required(),
-                            Select::make('frequency_violence')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
-                                ->placeholder(__('beneficiary.placeholder.frequency_violence'))
-                                ->options(Frequency::options())
-                                ->required(),
-                            RichEditor::make('description')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.description'))
-                                ->placeholder(__('beneficiary.placeholder.description'))
-                                ->helperText(__('beneficiary.helper_text.violence_description'))
-                                ->columnSpanFull()
-                                ->maxLength(5000),
-                        ]),
+                    Select::make('violence_types')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                        ->placeholder(__('beneficiary.placeholder.violence_type'))
+                        ->options(Violence::options())
+                        ->multiple()
+                        ->required(),
+
+                    Select::make('violence_primary_type')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
+                        ->placeholder(__('beneficiary.placeholder.violence_primary_type'))
+                        ->options(Violence::options())
+                        ->required(),
+
+                    Select::make('frequency_violence')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
+                        ->placeholder(__('beneficiary.placeholder.frequency_violence'))
+                        ->options(Frequency::options())
+                        ->required(),
+
+                    RichEditor::make('description')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.description'))
+                        ->placeholder(__('beneficiary.placeholder.description'))
+                        ->helperText(__('beneficiary.helper_text.violence_description'))
+                        ->columnSpanFull()
+                        ->maxLength(5000),
                 ]),
         ];
     }
@@ -86,17 +86,19 @@ class EditViolence extends EditRecord
                 ->relationship('violence')
                 ->columns()
                 ->schema([
-                    TextEntry::make('violence_types')
+                    EnumEntry::make('violence_types')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
                         ->badge()
-                        ->color(Color::Gray)
-                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                        ->color(Color::Gray),
+
                     EnumEntry::make('violence_primary_type')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
                         ->placeholder(__('beneficiary.placeholder.violence_primary_type')),
+
                     EnumEntry::make('frequency_violence')
                         ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
                         ->placeholder(__('beneficiary.placeholder.frequency_violence')),
+
                     TextEntry::make('description')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                         ->placeholder(__('beneficiary.placeholder.description'))
