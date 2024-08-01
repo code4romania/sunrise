@@ -187,7 +187,6 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         return [
             Repeater::make('aggressor')
                 ->relationship('aggressor')
-                ->minItems(1)
                 ->columnSpanFull()
                 ->hiddenLabel()
                 ->columns()
