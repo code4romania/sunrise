@@ -7,18 +7,15 @@ namespace App\Infolists\Components;
 use Filament\Infolists\Components\Concerns;
 use Filament\Infolists\Components\Entry;
 
-class Notice extends Entry
+class SectionHeader extends Entry
 {
-    use Concerns\HasColor;
     use Concerns\HasFontFamily;
-    use Concerns\HasIcon;
-    use Concerns\HasIconColor;
     use Concerns\HasWeight;
 
     /**
      * @var view-string
      */
-    protected string $view = 'components.notice';
+    protected string $view = 'components.section-header';
 
     protected function setUp(): void
     {

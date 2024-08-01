@@ -80,7 +80,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->icon('heroicon-s-information-circle')
                         ->state(__('beneficiary.section.identity.heading_description'))
                         ->color('primary')
-                        ->columnSpanFull()
                         ->action(
                             Action::make('view')
                                 ->label(__('beneficiary.section.identity.title'))
@@ -215,7 +214,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->icon('heroicon-s-information-circle')
                         ->state(__('beneficiary.section.identity.heading_description'))
                         ->color('primary')
-                        ->columnSpanFull()
                         ->action(
                             Action::make('view')
                                 ->label(__('beneficiary.section.identity.title'))
