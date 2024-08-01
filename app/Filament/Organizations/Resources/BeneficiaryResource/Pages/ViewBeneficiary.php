@@ -198,12 +198,10 @@ class ViewBeneficiary extends ViewRecord
                                 ->badge()
                                 ->color(Color::Gray)
                                 ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
-                            TextEntry::make('riskFactors.risk_level')
-                                ->label('')
-                                ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : '')
-                                ->hidden(fn ($state) => $state == '-')
+                            EnumEntry::make('riskFactors.risk_level')
+                                ->hiddenLabel()
                                 ->badge()
-                                ->colors(Level::colors()),
+                                ->icon(false),
                         ]),
                     Group::make()
                         ->visible(fn ($record) => ! $record->violence?->violence_types)
@@ -220,9 +218,10 @@ class ViewBeneficiary extends ViewRecord
                                 ->alignCenter()
                                 ->size(TextEntry\TextEntrySize::Medium),
                             Actions::make([
-                                BeneficiaryResource\Actions\EditExtraLarge::make('edit')
+                                BeneficiaryResource\Actions\EditExtraLarge::make('create_initial_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
-                                    ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record])),
+                                    ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                    ->outlined(),
                             ])
                                 ->alignCenter(),
                         ]),
@@ -278,9 +277,10 @@ class ViewBeneficiary extends ViewRecord
                                 ->alignCenter()
                                 ->size(TextEntry\TextEntrySize::Medium),
                             Actions::make([
-                                BeneficiaryResource\Actions\EditExtraLarge::make('edit')
+                                BeneficiaryResource\Actions\EditExtraLarge::make('create_detailed_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
-                                    ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record])),
+                                    ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                    ->outlined(),
                             ])
                                 ->alignCenter(),
                         ]),
