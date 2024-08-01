@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class EditRequestedServices extends EditRecord
@@ -20,6 +21,11 @@ class EditRequestedServices extends EditRecord
     use RedirectToInitialEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.edit_requested_services.title');
+    }
 
     public function getBreadcrumbs(): array
     {

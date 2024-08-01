@@ -12,7 +12,6 @@ use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Concerns\CanBeValidated;
 use Filament\Forms\Components\Concerns\EntanglesStateWithSingularRelationship;
 use Filament\Forms\Components\Contracts\CanEntangleWithSingularRelationships;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Forms\Set;

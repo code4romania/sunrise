@@ -12,6 +12,7 @@ use App\Enums\Gender;
 use App\Enums\IDType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
+use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
 use App\Forms\Components\TableRepeater;
 use App\Rules\ValidCNP;
@@ -19,7 +20,6 @@ use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -42,10 +42,7 @@ class EditBeneficiaryIdentity extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.edit_identity.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.page.edit_identity.title');
     }
 
     public function getBreadcrumbs(): array

@@ -8,16 +8,17 @@ use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\Applicant;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Repeater;
+use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -26,6 +27,11 @@ class EditMultidisciplinaryEvaluation extends EditRecord
     use RedirectToDetailedEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.edit_multidisciplinary_evaluation.title');
+    }
 
     public function getBreadcrumbs(): array
     {

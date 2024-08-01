@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Enums\Role;
+use App\Forms\Components\Select;
 use App\Models\CaseTeam as CaseTeamModel;
 use App\Models\User;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Select;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;

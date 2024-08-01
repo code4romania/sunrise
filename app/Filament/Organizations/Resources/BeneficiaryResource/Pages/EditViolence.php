@@ -8,16 +8,17 @@ use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\Frequency;
 use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Forms\Components\Select;
 use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class EditViolence extends EditRecord
@@ -25,6 +26,11 @@ class EditViolence extends EditRecord
     use RedirectToInitialEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.edit_violence.title');
+    }
 
     public function getBreadcrumbs(): array
     {
