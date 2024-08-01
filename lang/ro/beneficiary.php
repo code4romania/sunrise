@@ -39,7 +39,7 @@ return [
             'title' => 'Evaluare inițială',
         ],
         'edit_evaluation_details' => [
-            'title' => 'Editează detalile evaluării',
+            'title' => 'Editează detaliile evaluării',
         ],
         'edit_violence' => [
             'title' => 'Editează violența',
@@ -48,7 +48,7 @@ return [
             'title' => 'Editează factorii de risc',
         ],
         'edit_requested_services' => [
-            'title' => 'Editează servicile solicitate',
+            'title' => 'Editează serviciile solicitate',
         ],
         'edit_beneficiary_situation' => [
             'title' => 'Editează situația beneficiarului',
@@ -201,7 +201,7 @@ return [
 
         'detailed_evaluation' => [
             'labels' => [
-                'specialists' => 'Specialiști care au colaborat la realizarea evaluarii',
+                'specialists' => 'Specialiști care au colaborat la realizarea evaluării',
                 'full_name' => 'Nume si prenume',
                 'institution' => 'Institutia',
                 'relationship' => 'Relatia cu copilul/ familia',
@@ -249,7 +249,7 @@ return [
                 'recommendations_for_intervention_plan' => 'Listați toate eventualele recomandări pentru planul de intervenție',
             ],
             'heading' => [
-                'reasons_for_start_evaluation' => 'Motive pentru ințierea evaluarii multidisciplinare',
+                'reasons_for_start_evaluation' => 'Motive pentru inițierea evaluării multidisciplinare',
                 'historic_violence' => 'Istoricul violenței',
                 'beneficiary_needs' => 'Nevoile beneficiarului',
                 'family' => 'Factori de mediu și specifici familiei',
@@ -333,7 +333,7 @@ return [
         'date' => 'ZZ/LL/AN',
         'meet_location' => 'Locatia intrevederii',
         'relevant_details' => 'Detalii relevante pe scurt',
-        'partner_relevant_observations' => 'Adauga orice observație relevanta despre partener',
+        'partner_relevant_observations' => 'Adaugă orice observație relevantă despre partener',
         'occupation' => 'Alege tip ocupatie',
         'applicant' => 'Alege solicitantul',
         'reporting_by' => 'Introdu persoana și/sau instituția',
