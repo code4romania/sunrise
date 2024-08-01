@@ -136,16 +136,22 @@ class EditRiskFactors extends EditRecord
                 ->relationship('riskFactors')
                 ->schema([
                     InfolistSection::make(fn (Beneficiary $record) => self::getViolenceHeading($record))
+                        ->collapsed()
                         ->schema(self::getViolenceHistoryInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getViolencesTypesHeading($record))
+                        ->collapsed()
                         ->schema(self::getViolencesTypesInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getRiskFactorsHeading($record))
+                        ->collapsed()
                         ->schema(self::getRiskFactorsInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getVictimPerceptionOfTherRiskHeading($record))
+                        ->collapsed()
                         ->schema(self::getVictimPerceptionOfTheRiskInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getAggravatingFactorsHeading($record))
+                        ->collapsed()
                         ->schema(self::getAggravatingFactorsInfolistSchema()),
                     InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
+                        ->collapsed()
                         ->columns()
                         ->schema(self::getSocialSupportInfolistSchema()),
                 ]),
@@ -288,11 +294,22 @@ class EditRiskFactors extends EditRecord
         foreach ($enumOptions as $key => $value) {
             $fields[] = TextEntry::make('risk_factors.' . $key . '.value')
                 ->label($value)
-                ->formatStateUsing(fn ($state) => $state == '-' ? $state : Ternary::options()[$state])
+                ->formatStateUsing(function ($record, $state) use ($key) {
+                    $result = \is_int($state)
+                        ? Ternary::tryFrom($state)?->label()
+                        : null;
+
+                    $result ??= '-';
+
+                    $description = data_get($record->riskFactors->risk_factors, "{$key}.description");
+
+                    if (filled($description)) {
+                        $result .= " ({$description})";
+                    }
+
+                    return $result;
+                })
                 ->inlineLabel(false);
-            $fields[] = TextEntry::make('risk_factors.' . $key . '.description')
-                ->hiddenLabel()
-                ->placeholder(__('beneficiary.placeholder.observations'));
         }
 
         return $fields;

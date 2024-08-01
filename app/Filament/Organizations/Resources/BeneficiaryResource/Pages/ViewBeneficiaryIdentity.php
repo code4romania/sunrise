@@ -7,15 +7,16 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
+use App\Infolists\Components\Notice;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\View;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -75,14 +76,17 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->columnSpan(1)
                 ->columns()
                 ->schema([
-                    View::make('filament.notice')
-                        ->viewData([
-                            'icon' => 'heroicon-s-information-circle',
-                            'message' => __('beneficiary.section.identity.heading_description'),
-                            'actionUrl' => self::$resource::getUrl('view_identity', ['record' => $record]),
-                            'actionLabel' => __('beneficiary.section.identity.title'),
-                        ])
-                        ->columnSpanFull(),
+                    Notice::make('identity')
+                        ->icon('heroicon-s-information-circle')
+                        ->state(__('beneficiary.section.identity.heading_description'))
+                        ->color('primary')
+                        ->action(
+                            Action::make('view')
+                                ->label(__('beneficiary.section.identity.title'))
+                                ->url(self::$resource::getUrl('view_identity', ['record' => $record]))
+                                ->link(),
+                        ),
+
                     ...self::identitySchema(),
                 ]),
         ];
@@ -206,14 +210,17 @@ class ViewBeneficiaryIdentity extends ViewRecord
                 ->columnSpan(1)
                 ->columns()
                 ->schema([
-                    View::make('filament.notice')
-                        ->viewData([
-                            'icon' => 'heroicon-s-information-circle',
-                            'message' => __('beneficiary.section.identity.heading_description'),
-                            'actionUrl' => self::$resource::getUrl('view_identity', ['record' => $record]),
-                            'actionLabel' => __('beneficiary.section.identity.title'),
-                        ])
-                        ->columnSpanFull(),
+                    Notice::make('children')
+                        ->icon('heroicon-s-information-circle')
+                        ->state(__('beneficiary.section.identity.heading_description'))
+                        ->color('primary')
+                        ->action(
+                            Action::make('view')
+                                ->label(__('beneficiary.section.identity.title'))
+                                ->url(self::$resource::getUrl('view_identity', ['record' => $record]))
+                                ->link(),
+                        ),
+
                     ...self::childrenSchema(),
                 ]),
         ];

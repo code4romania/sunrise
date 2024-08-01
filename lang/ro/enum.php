@@ -204,6 +204,7 @@ return [
         'high' => 'Grad de risc crescut',
         'medium' => 'Grad de risc mediu',
         'low' => 'Grad de risc scăzut',
+        'none' => 'Fără risc documentat'
     ],
 
     'role' => [
