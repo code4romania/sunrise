@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Concerns\RedirectToInitialEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -43,20 +42,18 @@ class EditBeneficiarySituation extends EditRecord
     {
         return [
             Section::make()
+                ->relationship('beneficiarySituation')
+                ->maxWidth('3xl')
                 ->schema([
-                    Group::make()
-                        ->relationship('beneficiarySituation')
-                        ->maxWidth('3xl')
-                        ->schema([
-                            TextInput::make('moment_of_evaluation')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.moment_of_evaluation'))
-                                ->placeholder(__('beneficiary.placeholder.moment_of_evaluation'))
-                                ->maxLength(100),
-                            RichEditor::make('description_of_situation')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.description_of_situation'))
-                                ->placeholder(__('beneficiary.placeholder.description_of_situation'))
-                                ->maxLength(5000),
-                        ]),
+                    TextInput::make('moment_of_evaluation')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.moment_of_evaluation'))
+                        ->placeholder(__('beneficiary.placeholder.moment_of_evaluation'))
+                        ->maxLength(100),
+
+                    RichEditor::make('description_of_situation')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.description_of_situation'))
+                        ->placeholder(__('beneficiary.placeholder.description_of_situation'))
+                        ->maxLength(5000),
                 ]),
         ];
     }
