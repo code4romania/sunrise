@@ -131,7 +131,7 @@ class BeneficiaryResource extends Resource
             'view_initial_evaluation' => Pages\ViewInitialEvaluation::route('/{record}/initialEvaluation'),
             'create_initial_evaluation' => Pages\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
             'edit_initial_evaluation_details' => Pages\EditEvaluationDetails::route('/{record}/initialEvaluation/details/edit'),
-            'edit_initial_evaluation_violence' => Pages\EditViolence::route('/{record}/initialEvaluation/Violence/edit'),
+            'edit_initial_evaluation_violence' => Pages\EditViolence::route('/{record}/initialEvaluation/violence/edit'),
             'edit_initial_evaluation_risk_factors' => Pages\EditRiskFactors::route('/{record}/initialEvaluation/riskFactors/edit'),
             'edit_initial_evaluation_requested_services' => Pages\EditRequestedServices::route('/{record}/initialEvaluation/requestedServices/edit'),
             'edit_initial_evaluation_beneficiary_situation' => Pages\EditBeneficiarySituation::route('/{record}/initialEvaluation/beneficiarySituation/edit'),

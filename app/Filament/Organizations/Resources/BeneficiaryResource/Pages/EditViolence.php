@@ -11,10 +11,10 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
 use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Group as InfolistGroup;
+use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
@@ -51,8 +51,9 @@ class EditViolence extends EditRecord
     public static function getSchema(): array
     {
         return [
-            Group::make()
+            Section::make()
                 ->relationship('violence')
+                ->maxWidth('3xl')
                 ->columns()
                 ->schema([
                     Select::make('violence_types')
@@ -61,16 +62,19 @@ class EditViolence extends EditRecord
                         ->options(Violence::options())
                         ->multiple()
                         ->required(),
+
                     Select::make('violence_primary_type')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
                         ->placeholder(__('beneficiary.placeholder.violence_primary_type'))
                         ->options(Violence::options())
                         ->required(),
+
                     Select::make('frequency_violence')
                         ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
                         ->placeholder(__('beneficiary.placeholder.frequency_violence'))
                         ->options(Frequency::options())
                         ->required(),
+
                     RichEditor::make('description')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                         ->placeholder(__('beneficiary.placeholder.description'))
@@ -78,28 +82,29 @@ class EditViolence extends EditRecord
                         ->columnSpanFull()
                         ->maxLength(5000),
                 ]),
-
         ];
     }
 
     public static function getInfoListSchema(): array
     {
         return [
-            InfolistGroup::make()
+            Group::make()
                 ->relationship('violence')
                 ->columns()
                 ->schema([
-                    TextEntry::make('violence_types')
+                    EnumEntry::make('violence_types')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
                         ->badge()
-                        ->color(Color::Gray)
-                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                        ->color(Color::Gray),
+
                     EnumEntry::make('violence_primary_type')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
                         ->placeholder(__('beneficiary.placeholder.violence_primary_type')),
+
                     EnumEntry::make('frequency_violence')
                         ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
                         ->placeholder(__('beneficiary.placeholder.frequency_violence')),
+
                     TextEntry::make('description')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                         ->placeholder(__('beneficiary.placeholder.description'))
