@@ -11,6 +11,7 @@ class Select extends BaseSelect
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->native(false);
     }
 }
