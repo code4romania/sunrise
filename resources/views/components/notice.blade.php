@@ -15,27 +15,43 @@
     $iconStyles = \Illuminate\Support\Arr::toCssStyles([
         \Filament\Support\get_color_css_variables($iconColor, shades: [500]) => $iconColor !== 'gray',
     ]);
+
+    $content = $state instanceof BackedEnum ? $state->label() : $state;
+
+    $actions = array_filter(
+        $getActions(),
+        fn(\Filament\Infolists\Components\Actions\Action $action): bool => $action->isVisible(),
+    );
+
 @endphp
 
-<x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
-    <div
-        {{ $attributes->merge($getExtraAttributes(), escape: false)->class([
-            'flex items-center gap-3 p-4 -mx-6 -mt-6 rounded-xl',
-            //'ring-1 ring-inset',
-            'bg-custom-100/50 text-custom-700 ring-custom-700/10',
-        ]) }}
+<div
+    {{ $attributes->merge($getExtraAttributes(), escape: false)->class([
+        'flex items-center gap-3 p-4 -mx-6 -mt-6 rounded-xl',
+        //'ring-1 ring-inset',
+        'bg-custom-100/50 text-custom-700 ring-custom-700/10',
+    ]) }}
 
-        @style([
-            \Filament\Support\get_color_css_variables($color, shades: [100, 700]) => !in_array($color, [null, 'primary']),
-        ])>
+    @style([
+        \Filament\Support\get_color_css_variables($color, shades: [100, 700]) => !is_null($color),
+    ])>
 
-        <x-filament::icon
-            :icon="$icon"
-            :class="$iconClasses"
-            :style="$iconStyles" />
+    <x-filament::icon
+        :icon="$icon"
+        :class="$iconClasses"
+        :style="$iconStyles" />
 
-        <div class="flex-1 text-sm">
-            {{ $state?->label() }}
-        </div>
+    <div class="flex-1 text-sm">
+        {{ $content }}
+
+        @if (count($actions))
+            <div
+                class="inline-flex items-center gap-3 shrink-0">
+
+                @foreach ($actions as $action)
+                    {{ $action }}
+                @endforeach
+            </div>
+        @endif
     </div>
-</x-dynamic-component>
+</div>
