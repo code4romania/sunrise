@@ -9,7 +9,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -46,35 +45,34 @@ class EditEvaluationDetails extends EditRecord
     {
         return [
             Section::make()
+                ->relationship('evaluateDetails')
+                ->maxWidth('3xl')
+                ->columns()
                 ->schema([
-                    Grid::make()
-                        ->maxWidth('3xl')
-                        ->relationship('evaluateDetails')
-                        ->schema([
-                            DatePicker::make('registered_date')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
-                                ->native(false)
-                                ->required(),
+                    DatePicker::make('registered_date')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
+                        ->native(false)
+                        ->required(),
 
-                            TextInput::make('file_number')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.file_number'))
-                                ->placeholder(__('beneficiary.placeholder.file_number'))
-                                ->maxLength(50),
+                    TextInput::make('file_number')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.file_number'))
+                        ->placeholder(__('beneficiary.placeholder.file_number'))
+                        ->maxLength(50),
 
-                            Select::make('specialist_id')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.specialist'))
-                                ->placeholder(__('beneficiary.placeholder.specialist'))
-                                ->required()
-                                ->default(auth()->user()->id)
-                                ->options(fn ($record) => User::getTenantOrganizationUsers()),
+                    Select::make('specialist_id')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.specialist'))
+                        ->placeholder(__('beneficiary.placeholder.specialist'))
+                        ->required()
+                        ->default(auth()->user()->id)
+                        ->options(fn ($record) => User::getTenantOrganizationUsers()),
 
-                            Textarea::make('method_of_identifying_the_service')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.method_of_identifying_the_service'))
-                                ->placeholder(__('beneficiary.placeholder.method_of_identifying_the_service'))
-                                ->columnSpanFull()
-                                ->maxLength(2000),
-                        ]),
+                    Textarea::make('method_of_identifying_the_service')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.method_of_identifying_the_service'))
+                        ->placeholder(__('beneficiary.placeholder.method_of_identifying_the_service'))
+                        ->columnSpanFull()
+                        ->maxLength(2000),
                 ]),
+
         ];
     }
 
@@ -87,17 +85,15 @@ class EditEvaluationDetails extends EditRecord
                 ->schema([
                     TextEntry::make('registered_date')
                         ->label(__('beneficiary.section.initial_evaluation.labels.registered_date')),
+
                     TextEntry::make('file_number')
                         ->label(__('beneficiary.section.initial_evaluation.labels.file_number'))
                         ->placeholder(__('beneficiary.placeholder.file_number')),
-                    TextEntry::make('specialist_id')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.specialist'))
-                        ->placeholder(__('beneficiary.placeholder.specialist'))
-                        ->formatStateUsing(function ($state) {
-                            $user = User::find($state)->first();
 
-                            return $user->first_name . ' ' . $user->last_name;
-                        }),
+                    TextEntry::make('specialist.full_name')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.specialist'))
+                        ->placeholder(__('beneficiary.placeholder.specialist')),
+
                     TextEntry::make('method_of_identifying_the_service')
                         ->label(__('beneficiary.section.initial_evaluation.labels.method_of_identifying_the_service'))
                         ->placeholder(__('beneficiary.placeholder.method_of_identifying_the_service'))
