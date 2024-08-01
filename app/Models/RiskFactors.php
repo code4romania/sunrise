@@ -83,8 +83,8 @@ class RiskFactors extends Model
     private static function getTrueAnswersCount(array $riskFactors): int
     {
         $count = 0;
-        foreach ($riskFactors as $value) {
-            if (Ternary::isYes($value['value'])) {
+        foreach ($riskFactors as $riskFactor) {
+            if (Ternary::isYes($riskFactor['value'])) {
                 $count++;
             }
         }
