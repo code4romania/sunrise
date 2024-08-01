@@ -12,12 +12,12 @@ trait RepeaterDefaultItems
     {
         parent::setUp();
 
-        $this->deletable(function () {
-            $count = collect($this->getState())->count();
+        $this->deletable(function (?array $state) {
+            if ($this->getMinItems() === null) {
+                return true;
+            }
 
-            $minItems = $this->getMinItems();
-
-            return $count > $minItems;
+            return collect($state)->count() > $this->getMinItems();
         });
 
         $this->deleteAction(fn (Action $action) => $action->requiresConfirmation());
