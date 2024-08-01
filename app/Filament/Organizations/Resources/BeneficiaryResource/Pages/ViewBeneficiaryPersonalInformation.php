@@ -24,7 +24,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.section.personal_information.title');
+        return  __('beneficiary.page.personal_information.title');
     }
 
     public function getBreadcrumbs(): array

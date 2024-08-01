@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\InterventionResource\Pages;
+use App\Forms\Components\Select;
 use App\Models\Intervention;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;

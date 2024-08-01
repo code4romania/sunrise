@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use App\Enums\Level;
 use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -63,7 +62,7 @@ class ViewBeneficiary extends ViewRecord
 
     protected function identitySectionSection(): Section
     {
-        return Section::make(__('beneficiary.section.identity.title'))
+        return Section::make(__('beneficiary.page.identity.title'))
             ->columnSpan(1)
             ->columns()
             ->headerActions([
@@ -122,7 +121,7 @@ class ViewBeneficiary extends ViewRecord
 
     protected function personalInformationSection(): Section
     {
-        return Section::make(__('beneficiary.section.personal_information.title'))
+        return Section::make(__('beneficiary.page.personal_information.title'))
             ->columnSpan(1)
             ->columns()
             ->headerActions([
@@ -148,6 +147,7 @@ class ViewBeneficiary extends ViewRecord
                     ->url(fn ($state) => "tel:{$state}"),
 
                 RepeatableEntry::make('aggressor')
+                    ->label(__('beneficiary.section.personal_information.section.aggressor'))
                     ->columns()
                     ->columnSpanFull()
                     ->schema([
@@ -228,6 +228,7 @@ class ViewBeneficiary extends ViewRecord
                         ]),
                 ]);
     }
+
 
     private function detailedEvaluation(): Section
     {

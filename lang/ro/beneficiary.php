@@ -20,17 +20,53 @@ return [
         'view' => [
             'title' => '#:id :name',
         ],
+        'identity' => [
+            'title' => 'Date identitate',
+        ],
         'edit_identity' => [
-            'title' => 'Editeaza cazul #:id :name',
+            'title' => 'Editează identitate beneficiar',
+        ],
+        'personal_information' => [
+            'title' => 'Informații caz',
         ],
         'edit_personal_information' => [
-            'title' => 'Editeaza cazul #:id :name',
+            'title' => 'Editează informații caz',
+        ],
+        'initial_evaluation' => [
+            'title' => 'Evaluare inițială',
         ],
         'create_initial_evaluation' => [
             'title' => 'Evaluare inițială',
         ],
+        'edit_evaluation_details' => [
+            'title' => 'Editează detaliile evaluării',
+        ],
+        'edit_violence' => [
+            'title' => 'Editează violența',
+        ],
+        'edit_risk_factors' => [
+            'title' => 'Editează factorii de risc',
+        ],
+        'edit_requested_services' => [
+            'title' => 'Editează serviciile solicitate',
+        ],
+        'edit_beneficiary_situation' => [
+            'title' => 'Editează situația beneficiarului',
+        ],
         'create_detailed_evaluation' => [
             'title' => 'Evaluare detaliată',
+        ],
+        'view_detailed_evaluation' => [
+            'title' => 'Evaluare detaliată',
+        ],
+        'edit_beneficiary_partner' => [
+            'title' => 'Editează partener',
+        ],
+        'edit_multidisciplinary_evaluation' => [
+            'title' => 'Editează evaluarea multidisciplinară',
+        ],
+        'edit_detailed_evaluation_result' => [
+            'title' => 'Editează rezultate',
         ],
     ],
 
@@ -60,7 +96,7 @@ return [
             'label' => 'Partener',
         ],
         'multidisciplinary_evaluation' => [
-            'label' => 'Evaluare multidisciplinara',
+            'label' => 'Evaluare multidisciplinară',
         ],
         'results' => [
             'label' => 'Rezultate',
@@ -96,7 +132,6 @@ return [
         ],
 
         'personal_information' => [
-            'title' => 'Informații caz',
             'section' => [
                 'beneficiary' => 'Beneficiar',
                 'aggressor' => 'Informații despre agresor',
@@ -166,7 +201,7 @@ return [
 
         'detailed_evaluation' => [
             'labels' => [
-                'specialists' => 'Specialisti care au colaborat la realizarea evaluarii',
+                'specialists' => 'Specialiști care au colaborat la realizarea evaluării',
                 'full_name' => 'Nume si prenume',
                 'institution' => 'Institutia',
                 'relationship' => 'Relatia cu copilul/ familia',
@@ -175,10 +210,10 @@ return [
                 'specialist' => 'Specialist',
                 'date' => 'Data',
                 'location' => 'Locatia',
-                'observations' => 'Observatii',
+                'observations' => 'Observații',
                 'applicant' => 'Solicitant',
-                'reporting_by' => 'Semnalare de caz de catre',
-                'date_interval' => 'Data sau perioada raportata',
+                'reporting_by' => 'Semnalare de caz de către',
+                'date_interval' => 'Data sau perioada raportată',
                 'significant_events' => 'Evenimente semnificative de la respectiva data',
                 'medical_need' => 'Nevoi din punct de vedere medical',
                 'professional_need' => 'Nevoi din punct de vedere profesional',
@@ -214,12 +249,12 @@ return [
                 'recommendations_for_intervention_plan' => 'Listați toate eventualele recomandări pentru planul de intervenție',
             ],
             'heading' => [
-                'reasons_for_start_evaluation' => 'Motive pentru intierea evaluarii multidisciplinare',
-                'historic_violence' => 'Istoricul violentei',
+                'reasons_for_start_evaluation' => 'Motive pentru inițierea evaluării multidisciplinare',
+                'historic_violence' => 'Istoricul violenței',
                 'beneficiary_needs' => 'Nevoile beneficiarului',
-                'family' => 'Factori de mediu si specifici familiei',
+                'family' => 'Factori de mediu și specifici familiei',
                 'risk' => 'Riscuri',
-                'partner' => 'Sotul/ partenerul',
+                'partner' => 'Soțul/ partenerul',
                 'recommendations_for_intervention_plan' => 'Recomandari pentru planul de interventie',
                 'recommendation_services' => 'Servicii recomandate',
             ],
@@ -259,7 +294,7 @@ return [
             'labels' => [
                 'type' => 'Tip document',
                 'name' => 'Denumire document',
-                'observations' => 'Observatii',
+                'observations' => 'Observații',
                 'date' => 'Data',
                 'document_file' => 'Încarcă document',
                 'summarize' => '{1} +:count alt document|[2,19] +:count alte documente|[20,*] +:count de alte documente',
@@ -300,7 +335,7 @@ return [
         'date' => 'ZZ/LL/AN',
         'meet_location' => 'Locatia intrevederii',
         'relevant_details' => 'Detalii relevante pe scurt',
-        'partner_relevant_observations' => 'Adauga orice observatie relevanta despre partener',
+        'partner_relevant_observations' => 'Adaugă orice observație relevantă despre partener',
         'occupation' => 'Alege tip ocupatie',
         'applicant' => 'Alege solicitantul',
         'reporting_by' => 'Introdu persoana și/sau instituția',
