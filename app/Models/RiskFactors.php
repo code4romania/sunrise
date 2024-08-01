@@ -55,7 +55,10 @@ class RiskFactors extends Model
 
         if (self::hasLowRiskLevel($model->risk_factors)) {
             $model->risk_level = Level::LOW;
+
+            return;
         }
+        $model->risk_level = Level::NONE;
     }
 
     private static function hasHighRiskLevel(array $riskFactors): bool
@@ -80,8 +83,8 @@ class RiskFactors extends Model
     private static function getTrueAnswersCount(array $riskFactors): int
     {
         $count = 0;
-        foreach ($riskFactors as $value) {
-            if (Ternary::isYes($value)) {
+        foreach ($riskFactors as $riskFactor) {
+            if (Ternary::isYes($riskFactor['value'])) {
                 $count++;
             }
         }

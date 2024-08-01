@@ -5,15 +5,24 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\Notice;
+use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ViewInitialEvaluation extends ViewRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.initial_evaluation.title');
+    }
 
     public function getBreadcrumbs(): array
     {
@@ -61,19 +70,25 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema(EditViolence::getInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.risk_factors.label'))
                         ->schema([
-                            Section::make(fn ($record) => $record->riskFactors->risk_level->label() ??
-                                __('beneficiary.wizard.risk_factors.label'))
+                            Section::make()
                                 ->maxWidth('3xl')
                                 ->schema([
-                                    Section::make(__('beneficiary.wizard.risk_factors.label'))
-                                        ->headerActions([
-                                            BeneficiaryResource\Actions\Edit::make('edit')
-                                                ->url(fn ($record) => BeneficiaryResource::getUrl(
+                                    Notice::make('riskFactors.risk_level'),
+
+                                    SectionHeader::make('riskFactors')
+                                        ->state(__('beneficiary.wizard.risk_factors.label'))
+                                        ->action(
+                                            Action::make('view')
+                                                ->label(__('general.action.edit'))
+                                                ->url(BeneficiaryResource::getUrl(
                                                     'edit_initial_evaluation_risk_factors',
-                                                    ['record' => $record]
-                                                )),
-                                        ])
-                                        ->schema(EditRiskFactors::getInfoListSchema())]),
+                                                    ['record' => $this->getRecord()]
+                                                ))
+                                                ->link(),
+                                        ),
+
+                                    ...EditRiskFactors::getInfoListSchema(),
+                                ]),
                         ]),
                     Tabs\Tab::make(__('beneficiary.wizard.requested_services.label'))
                         ->schema([

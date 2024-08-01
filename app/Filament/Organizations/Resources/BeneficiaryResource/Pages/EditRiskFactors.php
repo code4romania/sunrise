@@ -13,13 +13,13 @@ use App\Enums\VictimPerceptionOfTheRiskSchema;
 use App\Enums\ViolenceHistorySchema;
 use App\Enums\ViolencesTypesSchema;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Forms\Components\Select;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Group as InfolistGroup;
@@ -27,6 +27,7 @@ use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class EditRiskFactors extends EditRecord
@@ -34,6 +35,11 @@ class EditRiskFactors extends EditRecord
     use RedirectToInitialEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.edit_risk_factors.title');
+    }
 
     public function getBreadcrumbs(): array
     {
@@ -130,16 +136,22 @@ class EditRiskFactors extends EditRecord
                 ->relationship('riskFactors')
                 ->schema([
                     InfolistSection::make(fn (Beneficiary $record) => self::getViolenceHeading($record))
+                        ->collapsed()
                         ->schema(self::getViolenceHistoryInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getViolencesTypesHeading($record))
+                        ->collapsed()
                         ->schema(self::getViolencesTypesInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getRiskFactorsHeading($record))
+                        ->collapsed()
                         ->schema(self::getRiskFactorsInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getVictimPerceptionOfTherRiskHeading($record))
+                        ->collapsed()
                         ->schema(self::getVictimPerceptionOfTheRiskInfolistSchema()),
                     InfolistSection::make(fn (Beneficiary $record) => self::getAggravatingFactorsHeading($record))
+                        ->collapsed()
                         ->schema(self::getAggravatingFactorsInfolistSchema()),
                     InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
+                        ->collapsed()
                         ->columns()
                         ->schema(self::getSocialSupportInfolistSchema()),
                 ]),
@@ -282,11 +294,22 @@ class EditRiskFactors extends EditRecord
         foreach ($enumOptions as $key => $value) {
             $fields[] = TextEntry::make('risk_factors.' . $key . '.value')
                 ->label($value)
-                ->formatStateUsing(fn ($state) => $state == '-' ? $state : Ternary::options()[$state])
+                ->formatStateUsing(function ($record, $state) use ($key) {
+                    $result = \is_int($state)
+                        ? Ternary::tryFrom($state)?->label()
+                        : null;
+
+                    $result ??= '-';
+
+                    $description = data_get($record->riskFactors->risk_factors, "{$key}.description");
+
+                    if (filled($description)) {
+                        $result .= " ({$description})";
+                    }
+
+                    return $result;
+                })
                 ->inlineLabel(false);
-            $fields[] = TextEntry::make('risk_factors.' . $key . '.description')
-                ->hiddenLabel()
-                ->placeholder(__('beneficiary.placeholder.observations'));
         }
 
         return $fields;

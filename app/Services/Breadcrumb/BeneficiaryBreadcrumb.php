@@ -33,7 +33,7 @@ class BeneficiaryBreadcrumb
 
     public function getIdentityBreadcrumbs(): array
     {
-        $breadcrumb = __('beneficiary.section.identity.title');
+        $breadcrumb = __('beneficiary.page.identity.title');
 
         return array_merge(
             $this->getBaseBreadcrumbs(),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\CommunityProfileResource\Pages;
+use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Models\CommunityProfile;
 use App\Models\Service;
@@ -12,7 +13,6 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
