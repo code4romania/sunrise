@@ -10,10 +10,16 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ViewInitialEvaluation extends ViewRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.initial_evaluation.title');
+    }
 
     public function getBreadcrumbs(): array
     {

@@ -97,11 +97,13 @@ class OrganizationPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
             ])
             ->bootUsing(function () {
+                Page::stickyFormActions();
                 Page::alignFormActionsEnd();
                 MountableAction::configureUsing(function (MountableAction $action) {
                     $action->modalFooterActionsAlignment(Alignment::Right);
                 });
             })
+            ->unsavedChangesAlerts()
             // ->databaseNotifications()
             ->plugins([
                 BreezyCore::make()

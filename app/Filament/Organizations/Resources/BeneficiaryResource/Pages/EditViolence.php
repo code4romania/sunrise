@@ -18,6 +18,7 @@ use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Colors\Color;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class EditViolence extends EditRecord
@@ -25,6 +26,11 @@ class EditViolence extends EditRecord
     use RedirectToInitialEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('beneficiary.page.edit_violence.title');
+    }
 
     public function getBreadcrumbs(): array
     {
