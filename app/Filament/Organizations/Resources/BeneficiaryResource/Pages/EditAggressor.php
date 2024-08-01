@@ -18,7 +18,8 @@ use App\Enums\Violence;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Repeater;
 use App\Rules\MultipleIn;
-use App\Services\Breadcrumb\Beneficiary as BeneficiaryBreadcrumb;
+use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -27,6 +28,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
@@ -86,6 +88,12 @@ class EditAggressor extends EditRecord
                         ->icon(null)
                         ->link()
                         ->color('primary')
+                        ->modalHeading(__('beneficiary.section.personal_information.heading.delete_aggressor'))
+                        ->modalDescription(__('beneficiary.section.personal_information.label.delete_aggressor_description'))
+                        ->modalAlignment(Alignment::Left)
+                        ->modalIcon()
+                        ->modalSubmitActionLabel(__('general.action.delete'))
+                        ->modalSubmitAction(fn (StaticAction $action) => $action->color('danger'))
                 )
                 ->itemLabel(function () {
                     static $index = 0;
