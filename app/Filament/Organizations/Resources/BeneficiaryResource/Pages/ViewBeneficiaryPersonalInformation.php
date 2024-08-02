@@ -15,7 +15,6 @@ use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiaryPersonalInformation extends ViewRecord
@@ -190,11 +189,13 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_has_violence_history'))
                                         ->placeholder(__('placeholder.select_one')),
 
-                                    EnumEntry::make('violence_types')
+                                    TextEntry::make('violence_types_string')
                                         ->label(__('field.aggressor_violence_types'))
-                                        ->placeholder(__('placeholder.select_many'))
-                                        ->color(Color::Gray)
-                                        ->badge(),
+                                        ->default(
+                                            fn ($record) => $record->violence_types
+                                                ?->map(fn ($item) => $item->label())
+                                                ->join(', ')
+                                        ),
 
                                 ]),
 
@@ -214,20 +215,24 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_has_drug_history'))
                                         ->placeholder(__('placeholder.select_one')),
 
-                                    EnumEntry::make('drugs')
+                                    TextEntry::make('drugs_string')
                                         ->label(__('field.aggressor_drugs'))
-                                        ->placeholder(__('placeholder.select_many'))
-                                        ->color(Color::Gray)
-                                        ->badge(),
+                                        ->default(
+                                            fn ($record) => $record->drugs
+                                                ?->map(fn ($item) => $item->label())
+                                                ->join(', ') ?? '-'
+                                        ),
                                 ]),
 
                             Grid::make()
                                 ->schema([
-                                    EnumEntry::make('legal_history')
+                                    TextEntry::make('legal_history_string')
                                         ->label(__('field.aggressor_legal_history'))
-                                        ->placeholder(__('placeholder.select_many'))
-                                        ->color(Color::Gray)
-                                        ->badge(),
+                                        ->default(
+                                            fn ($record) => $record->legal_history
+                                                ?->map(fn ($item) => $item->label())
+                                                ->join(', ') ?? '-'
+                                        ),
                                 ]),
 
                             Grid::make()
@@ -320,11 +325,13 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                     TextEntry::make('notifier_other')
                         ->label(__('field.notifier_other')),
 
-                    EnumEntry::make('act_location')
+                    TextEntry::make('act_location_string')
                         ->label(__('field.act_location'))
-                        ->placeholder(__('placeholder.select_many'))
-                        ->color(Color::Gray)
-                        ->badge(),
+                        ->default(
+                            fn ($record) => $record->act_location
+                                ?->map(fn ($item) => $item->label())
+                                ->join(', ') ?? '-'
+                        ),
 
                     TextEntry::make('act_location_other')
                         ->label(__('field.act_location_other')),
@@ -333,11 +340,13 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->label(__('field.first_called_institution'))
                         ->placeholder(__('placeholder.select_one')),
 
-                    TextEntry::make('otherCalledInstitution.name')
+                    TextEntry::make('otherCalledInstitution_string')
                         ->label(__('field.other_called_institutions'))
-                        ->color(Color::Gray)
-                        ->badge()
-                        ->placeholder(__('placeholder.select_one')),
+                        ->default(
+                            fn ($record) => $record->otherCalledInstitution
+                                ?->map(fn ($item) => $item->name)
+                                ->join(', ') ?? '-'
+                        ),
                 ]),
         ];
     }
