@@ -267,6 +267,7 @@ return [
             'heading' => [
                 'add_modal' => 'Adaugă specialist în echipă',
                 'edit_modal' => 'Modifică  specialist în echipă',
+                'delete_modal' => 'Elimină membrul din echipa de caz'
             ],
             'labels' => [
                 'name' => 'Nume specialist',
@@ -274,6 +275,9 @@ return [
                 'status' => 'Status',
                 'roles' => 'Rol în echipa de caz',
                 'summarize' => '{1} +:count alt specialist|[2,19] +:count alți specialiști|[20,*] +:count de alți specialiști',
+            ],
+            'action' => [
+                'delete' => 'Elimină din echipa de caz',
             ],
         ],
 

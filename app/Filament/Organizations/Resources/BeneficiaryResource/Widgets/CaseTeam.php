@@ -58,17 +58,23 @@ class CaseTeam extends BaseWidget
             ->headerActions([
                 CreateAction::make()
                     ->form($this->getFormSchema())
+                    ->label(__('beneficiary.section.specialists.add_action'))
                     ->modalHeading(__('beneficiary.section.specialists.heading.add_modal'))
-                    ->label(__('beneficiary.section.specialists.add_action')),
+                    ->createAnother(false)
+                    ->modalSubmitActionLabel(),
             ])
             ->actions([
                 EditAction::make()
                     ->form($this->getFormSchema())
+                    ->label(__('beneficiary.section.specialists.change_action'))
                     ->modalHeading(__('beneficiary.section.specialists.heading.edit_modal'))
                     ->extraModalFooterActions([
-                        DeleteAction::make(),
-                    ])
-                    ->label(__('beneficiary.section.specialists.change_action')),
+                        DeleteAction::make()
+                            ->cancelParentActions()
+                            ->label(__('beneficiary.section.specialists.action.delete'))
+                            ->modalHeading(__('beneficiary.section.specialists.heading.delete_modal'))
+                            ->icon(null),
+                    ]),
             ])
             ->heading(__('beneficiary.section.specialists.title'));
     }
@@ -81,12 +87,14 @@ class CaseTeam extends BaseWidget
         return [
             Select::make('user_id')
                 ->label(__('beneficiary.section.specialists.labels.name'))
-                ->options(fn () => User::getTenantOrganizationUsers()),
+                ->options(fn () => User::getTenantOrganizationUsers())
+                ->required(),
 
             Select::make('roles')
                 ->label(__('beneficiary.section.specialists.labels.roles'))
                 ->options(fn () => Role::options())
-                ->multiple(),
+                ->multiple()
+                ->required(),
 
             Hidden::make('beneficiary_id')
                 ->formatStateUsing(fn () => $this->record->id),
