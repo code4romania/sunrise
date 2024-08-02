@@ -31,11 +31,13 @@ class CaseTeamListWidget extends BaseWidget
                     ->url(fn () => BeneficiaryResource::getUrl('view_specialists', ['record' => $this->record])),
             ])
             ->columns([
-                TextColumn::make('roles')
+                TextColumn::make('roles_string')
                     ->label(__('beneficiary.section.specialists.labels.role'))
-                    ->badge()
-                    ->color(Color::Gray)
-                    ->formatStateUsing(fn ($state) => $state->label()),
+                    ->default(
+                        fn ($record) =>  $record->roles
+                            ?->map(fn ($item) => $item->label())
+                            ->join(', ') ?? '-'
+                    ),
 
                 TextColumn::make('user_id')
                     ->label(__('beneficiary.section.specialists.labels.name'))

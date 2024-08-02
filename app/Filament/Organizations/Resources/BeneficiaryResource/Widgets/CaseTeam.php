@@ -6,7 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Enums\Role;
 use App\Forms\Components\Select;
-use App\Models\CaseTeam as CaseTeamModel;
+use App\Models\Beneficiary;
 use App\Models\User;
 use Filament\Forms\Components\Hidden;
 use Filament\Support\Colors\Color;
@@ -16,11 +16,11 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class CaseTeam extends BaseWidget
 {
-    public ?Model $record = null;
+    public ?Beneficiary $record = null;
 
     public function table(Table $table): Table
     {
@@ -30,16 +30,29 @@ class CaseTeam extends BaseWidget
                 TextColumn::make('user.first_name')
                     ->label(__('beneficiary.section.specialists.labels.name'))
                     ->formatStateUsing(fn ($record) => $record->user->getFilamentName()),
-                TextColumn::make('roles')
+                TextColumn::make('roles_string')
+                    ->default(
+                        fn ($record) => $record->roles
+                            ->map(fn ($item) => $item->label())
+                            ->join(', ')
+                    )
                     ->label(__('beneficiary.section.specialists.labels.role'))
-                    ->badge()
                     ->color(Color::Gray)
-                    ->formatStateUsing(fn ($state) => $state->label()),
+                    ->sortable(
+                        query: fn (Builder $query, string $direction): Builder => $query
+                            ->orderBy('roles', $direction)
+                    ),
                 TextColumn::make('user.password_set_at')
                     ->label(__('beneficiary.section.specialists.labels.status'))
                     ->default(0)
                     ->formatStateUsing(
                         fn ($state) => $state ? __('user.status.active') : __('user.status.inactive')
+                    )
+                    ->sortable(
+                        query: fn (Builder $query, string $direction): Builder => $query
+                            ->select(['case_teams.*', 'users.password_set_at'])
+                            ->join('users', 'users.id', '=', 'user_id')
+                            ->orderBy('users.password_set_at', $direction)
                     ),
             ])
             ->headerActions([
