@@ -246,22 +246,26 @@ class ViewBeneficiary extends ViewRecord
                             ->relationship('detailedEvaluationResult')
                             ->visible(fn ($record) => $record->detailedEvaluationResult)
                             ->columns()
-                            ->schema(function ($state) {
-                                $fields = [];
-                                foreach (RecommendationService::options() as $key => $option) {
-                                    if (empty($state->$key)) {
-                                        continue;
-                                    }
+                            ->schema([
+                                EnumEntry::make('detailedEvaluationResult')
+                                    ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
+                                    ->default(function ($record) {
+                                        $state = $record->detailedEvaluationResult;
+                                        $fields = [];
+                                        foreach (RecommendationService::options() as $key => $option) {
+                                            if (empty($state->$key)) {
+                                                continue;
+                                            }
 
-                                    $fields[] = TextEntry::make($key)
-                                        ->hiddenLabel()
-                                        ->badge()
-                                        ->color(Color::Gray)
-                                        ->formatStateUsing(fn () => substr($option, 0, 50));
-                                }
+                                            $fields[] = substr($option, 0, 50);
+                                        }
 
-                                return $fields;
-                            }),
+                                        return $fields;
+                                    })
+                                    ->badge()
+                                    ->color(Color::Gray)
+                                    ->columnSpanFull(),
+                            ]),
                         Group::make()
                             ->visible(fn ($record) => ! $record->detailedEvaluationResult)
                             ->schema([
