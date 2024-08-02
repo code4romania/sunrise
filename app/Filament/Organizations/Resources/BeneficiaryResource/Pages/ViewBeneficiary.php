@@ -198,12 +198,14 @@ class ViewBeneficiary extends ViewRecord
                                     ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
                                     ->hidden(fn ($state) => $state == '-')
                                     ->date(),
-                                TextEntry::make('violence.violence_types')
+                                TextEntry::make('violence_types_string')
                                     ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                                    ->hidden(fn ($state) => $state == '-')
-                                    ->badge()
-                                    ->color(Color::Gray)
-                                    ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                                    ->default(
+                                        fn ($record) => $record->violence
+                                            ->violence_types
+                                            ?->map(fn ($item) => $item->label())
+                                            ->join(', ') ?? '-'
+                                    ),
                                 EnumEntry::make('riskFactors.risk_level')
                                     ->hiddenLabel()
                                     ->badge()
