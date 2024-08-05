@@ -10,6 +10,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetaile
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
+use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -147,6 +148,10 @@ class BeneficiaryResource extends Resource
 
             'documents.index' => ListDocuments::route('/{parent}/documents'),
             'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
+
+            'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create'),
+            'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
+            'monitorings.view' => MonitoringResourcePages\ViewMonitoring::route('/{parent}/monitoring/{record}'),
         ];
     }
 }
