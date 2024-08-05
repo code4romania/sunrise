@@ -45,9 +45,11 @@ class ViewBeneficiaryIdentity extends ViewRecord
                     ->columnSpanFull()
                     ->tabs([
                         Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                            ->maxWidth('3xl')
                             ->schema(static::getBeneficiaryIdentityFormSchema()),
 
                         Tab::make(__('beneficiary.section.identity.tab.children'))
+                            ->maxWidth('3xl')
                             ->schema(static::getChildrenIdentityFormSchema()),
                     ]),
             ]);
@@ -57,7 +59,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.identity.tab.beneficiary'))
-                ->maxWidth('3xl')
                 ->headerActions([
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record])),
@@ -188,7 +189,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.identity.tab.children'))
-                ->maxWidth('3xl')
                 ->headerActions([
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_children', ['record' => $record])),

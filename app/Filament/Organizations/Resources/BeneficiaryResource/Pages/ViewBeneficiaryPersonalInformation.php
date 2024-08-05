@@ -49,16 +49,20 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->tabs([
                     Tab::make(__('beneficiary.section.personal_information.section.beneficiary'))
                         ->columns()
+                        ->maxWidth('3xl')
                         ->schema(static::beneficiarySection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.aggressor'))
+                        ->maxWidth('3xl')
                         ->schema(static::aggressorSection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.antecedents'))
+                        ->maxWidth('3xl')
                         ->columns()
                         ->schema(static::antecedentsSection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.flow'))
+                        ->maxWidth('3xl')
                         ->columns()
                         ->schema(static::flowSection()),
                 ]),
@@ -70,7 +74,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns()
-                ->maxWidth('3xl')
                 ->headerActions([
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
@@ -142,7 +145,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns()
-                ->maxWidth('3xl')
                 ->headerActions([
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_aggressor', ['record' => $record])),
@@ -259,7 +261,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns()
-                ->maxWidth('3xl')
                 ->headerActions([
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
@@ -299,7 +300,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns()
-                ->maxWidth('3xl')
                 ->headerActions([
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
