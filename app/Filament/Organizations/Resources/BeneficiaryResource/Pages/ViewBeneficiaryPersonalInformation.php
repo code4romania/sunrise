@@ -158,13 +158,16 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                             TextEntry::make('aggressor_heading')
                                 ->hiddenLabel()
                                 ->columnSpanFull()
-                                ->default(function ($component) {
+                                ->default(function (TextEntry $component) {
                                     $index = (int) explode('.', $component->getStatePath())[1];
 
                                     return __('beneficiary.section.personal_information.heading.aggressor', [
                                         'number' => $index + 1,
                                     ]);
                                 })
+                                ->visible(
+                                    fn (TextEntry $component) => $component->getContainer()->getParentComponent()->getState()->count() > 1
+                                )
                                 ->size(TextEntry\TextEntrySize::Large),
 
                             EnumEntry::make('relationship')
