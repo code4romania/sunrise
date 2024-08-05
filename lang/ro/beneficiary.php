@@ -26,11 +26,24 @@ return [
         'edit_identity' => [
             'title' => 'Editează identitate beneficiar',
         ],
+
+        'edit_children' => [
+            'title' => 'Editează identitate copii',
+        ],
         'personal_information' => [
             'title' => 'Informații caz',
         ],
         'edit_personal_information' => [
-            'title' => 'Editează informații caz',
+            'title' => 'Editează informații beneficiar',
+        ],
+        'edit_aggressor' => [
+            'title' => 'Editează informații agresor',
+        ],
+        'edit_antecedents' => [
+            'title' => 'Editează antecedente de caz',
+        ],
+        'edit_flow_presentation' => [
+            'title' => 'Editează flux prezentare victimă',
         ],
         'initial_evaluation' => [
             'title' => 'Evaluare inițială',

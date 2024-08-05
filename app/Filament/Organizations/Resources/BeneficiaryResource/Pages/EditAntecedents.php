@@ -27,11 +27,7 @@ class EditAntecedents extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        // TODO change title after merge #83
-        return  __('beneficiary.page.edit_personal_information.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.page.edit_antecedents.title');
     }
 
     public function getBreadcrumbs(): array

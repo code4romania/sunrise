@@ -40,11 +40,7 @@ class EditAggressor extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        // TODO change title after merge #83
-        return  __('beneficiary.page.edit_personal_information.title', [
-            'name' => $this->record->full_name,
-            'id' => $this->record->id,
-        ]);
+        return  __('beneficiary.page.edit_aggressor.title');
     }
 
     public function getBreadcrumbs(): array
@@ -80,7 +76,13 @@ class EditAggressor extends EditRecord
                 ->maxWidth('3xl')
                 ->hiddenLabel()
                 ->columns()
-                ->addActionLabel(__('beneficiary.section.personal_information.actions.add_aggressor'))
+                ->addAction(
+                    fn (Action $action): Action => $action
+                        ->label(__('beneficiary.section.personal_information.actions.add_aggressor'))
+                        ->link()
+                        ->color('primary')
+                        ->extraAttributes(['class' => 'pull-left'])
+                )
                 ->minItems(1)
                 ->deleteAction(
                     fn (Action $action) => $action->label(__('beneficiary.section.personal_information.actions.delete_aggressor'))
@@ -95,7 +97,10 @@ class EditAggressor extends EditRecord
                         ->modalSubmitActionLabel(__('general.action.delete'))
                         ->modalSubmitAction(fn (StaticAction $action) => $action->color('danger'))
                 )
-                ->itemLabel(function () {
+                ->itemLabel(function ($get) {
+                    if (\count($get('aggressor')) <= 1) {
+                        return null;
+                    }
                     static $index = 0;
                     $index++;
 
