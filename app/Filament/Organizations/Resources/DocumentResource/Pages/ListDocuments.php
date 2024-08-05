@@ -79,6 +79,8 @@ class ListDocuments extends ListRecords
             ])
             ->actions([
                 ViewAction::make('view')
+                    ->label(__('general.action.view_details'))
+                    ->color('primary')
                     ->url(fn (Document $record) => self::getParentResource()::getUrl('documents.view', [
                         'parent' => $this->parent,
                         'record' => $record,
