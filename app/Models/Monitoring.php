@@ -37,6 +37,15 @@ class Monitoring extends Model
         'observation',
     ];
 
+    protected $casts = [
+        'protection_measures' => 'json',
+        'health_measures' => 'json',
+        'legal_measures' => 'json',
+        'psychological_measures' => 'json',
+        'aggressor_relationship' => 'json',
+        'others' => 'json',
+    ];
+
     public function beneficiary(): BelongsTo
     {
         return $this->belongsTo(Beneficiary::class);

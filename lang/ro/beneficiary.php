@@ -301,6 +301,13 @@ return [
                 'empty_state_description' => 'Descărcați documentul pentru a-l putea vizualiza.',
             ],
         ],
+        'monitoring' => [
+            'heading' => [
+                'list' => 'Monitorizare caz',
+                'create' => 'Fișă monitorizare'
+            ],
+            'breadcrumb' => 'Monitorizare caz',
+        ],
     ],
 
     'status' => [

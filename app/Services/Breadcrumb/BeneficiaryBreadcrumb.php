@@ -100,4 +100,14 @@ class BeneficiaryBreadcrumb
             [self::$resourcePath::getUrl('documents.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
+
+    public function getBreadcrumbsForMonitoring(): array
+    {
+        $breadcrumb = __('beneficiary.section.monitoring.breadcrumb');
+
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [self::$resourcePath::getUrl('monitorings.index', ['parent' => $this->record->id]) => $breadcrumb],
+        );
+    }
 }
