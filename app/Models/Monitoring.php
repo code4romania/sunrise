@@ -38,6 +38,7 @@ class Monitoring extends Model
     ];
 
     protected $casts = [
+        'team' => 'json',
         'protection_measures' => 'json',
         'health_measures' => 'json',
         'legal_measures' => 'json',
