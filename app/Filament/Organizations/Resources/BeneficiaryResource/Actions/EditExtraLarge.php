@@ -12,7 +12,6 @@ class EditExtraLarge extends Action
     protected function setUp(): void
     {
         parent::setUp();
-        $this->badge();
         $this->size(ActionSize::ExtraLarge);
     }
 }
