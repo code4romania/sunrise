@@ -198,12 +198,14 @@ class ViewBeneficiary extends ViewRecord
                                     ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
                                     ->hidden(fn ($state) => $state == '-')
                                     ->date(),
-                                TextEntry::make('violence.violence_types')
+                                TextEntry::make('violence_types_string')
                                     ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                                    ->hidden(fn ($state) => $state == '-')
-                                    ->badge()
-                                    ->color(Color::Gray)
-                                    ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                                    ->default(
+                                        fn ($record) => $record->violence
+                                            ->violence_types
+                                            ?->map(fn ($item) => $item->label())
+                                            ->join(', ') ?? '-'
+                                    ),
                                 EnumEntry::make('riskFactors.risk_level')
                                     ->hiddenLabel()
                                     ->badge()
@@ -246,22 +248,26 @@ class ViewBeneficiary extends ViewRecord
                             ->relationship('detailedEvaluationResult')
                             ->visible(fn ($record) => $record->detailedEvaluationResult)
                             ->columns()
-                            ->schema(function ($state) {
-                                $fields = [];
-                                foreach (RecommendationService::options() as $key => $option) {
-                                    if (empty($state->$key)) {
-                                        continue;
-                                    }
+                            ->schema([
+                                EnumEntry::make('detailedEvaluationResult')
+                                    ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
+                                    ->default(function ($record) {
+                                        $state = $record->detailedEvaluationResult;
+                                        $fields = [];
+                                        foreach (RecommendationService::options() as $key => $option) {
+                                            if (empty($state->$key)) {
+                                                continue;
+                                            }
 
-                                    $fields[] = TextEntry::make($key)
-                                        ->hiddenLabel()
-                                        ->badge()
-                                        ->color(Color::Gray)
-                                        ->formatStateUsing(fn () => substr($option, 0, 50));
-                                }
+                                            $fields[] = substr($option, 0, 50);
+                                        }
 
-                                return $fields;
-                            }),
+                                        return $fields;
+                                    })
+                                    ->badge()
+                                    ->color(Color::Gray)
+                                    ->columnSpanFull(),
+                            ]),
                         Group::make()
                             ->visible(fn ($record) => ! $record->detailedEvaluationResult)
                             ->schema([
