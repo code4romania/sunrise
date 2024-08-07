@@ -305,6 +305,9 @@ return [
             'titles' => [
                 'list' => 'Monitorizare caz',
                 'create' => 'Fișă monitorizare',
+                'view' => 'Fișă monitorizare',
+                'edit_details' => 'Editează detaliile fișei de monitorizare',
+                'edit_children' => 'Editează date copii',
             ],
             'headings' => [
                 'id' => 'ID',

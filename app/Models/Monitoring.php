@@ -23,7 +23,6 @@ class Monitoring extends Model
         'number',
         'start_date',
         'end_date',
-        'team',
         'admittance_date',
         'admittance_disposition',
         'services_in_center',
@@ -38,7 +37,6 @@ class Monitoring extends Model
     ];
 
     protected $casts = [
-        'team' => 'json',
         'protection_measures' => 'json',
         'health_measures' => 'json',
         'legal_measures' => 'json',
@@ -60,5 +58,10 @@ class Monitoring extends Model
     public function children(): HasMany
     {
         return $this->hasMany(MonitoringChild::class);
+    }
+
+    public function specialists(): HasMany
+    {
+        return $this->hasMany(MonitoringSpecialist::class);
     }
 }

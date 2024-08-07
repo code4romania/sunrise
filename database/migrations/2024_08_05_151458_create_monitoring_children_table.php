@@ -18,10 +18,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Monitoring::class)->constrained();
             $table->string('name')->nullable();
-            $table->string('state')->nullable();
+            $table->string('status')->nullable();
             $table->string('age')->nullable();
-            // TODO change in birthdate
-            $table->date('birth_date')->nullable();
+            $table->date('birthdate')->nullable();
             $table->string('aggressor_relationship')->nullable();
             $table->string('maintenance_sources')->nullable();
             $table->string('location')->nullable();

@@ -42,8 +42,9 @@ class ListMonitoring extends ListRecords
                     Actions\Action::make('crete_from_last')
                         ->label(__('beneficiary.section.monitoring.actions.create_from_last'))
                         ->url(
-                            fn () => self::getParentResource()::getUrl('monitorings.create', [
+                            fn () => self::getParentResource()::getUrl('monitorings.create_from_last', [
                                 'parent' => $this->parent,
+                                'copyLastFile' => 1,
                             ])
                         )
                 )

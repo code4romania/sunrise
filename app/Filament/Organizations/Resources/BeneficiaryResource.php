@@ -150,8 +150,12 @@ class BeneficiaryResource extends Resource
             'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
 
             'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create'),
+            'monitorings.create_from_last' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create/copyLastFile/{copyLastFile}'),
             'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
             'monitorings.view' => MonitoringResourcePages\ViewMonitoring::route('/{parent}/monitoring/{record}'),
+            'monitoring.edit_details' => MonitoringResourcePages\EditDetails::route('/{parent}/monitoring/{record}/editDetails'),
+            'monitoring.edit_children' => MonitoringResourcePages\EditChildren::route('/{parent}/monitoring/{record}/editChildren'),
+            'monitoring.edit_general' => MonitoringResourcePages\EditGeneral::route('/{parent}/monitoring/{record}/editGeneral'),
         ];
     }
 }

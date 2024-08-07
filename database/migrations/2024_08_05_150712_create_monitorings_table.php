@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('number')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->json('team')->nullable();
             $table->date('admittance_date')->nullable();
             $table->string('admittance_disposition')->nullable();
             $table->text('services_in_center')->nullable();
