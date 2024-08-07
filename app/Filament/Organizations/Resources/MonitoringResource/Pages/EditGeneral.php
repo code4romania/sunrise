@@ -20,7 +20,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
-use function Laravel\Prompts\select;
 
 class EditGeneral extends EditRecord
 {

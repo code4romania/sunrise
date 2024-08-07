@@ -5,22 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
 use App\Concerns\HasParentResource;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Filament\Organizations\Resources\MonitoringResource;
-use App\Infolists\Components\Actions\Edit;
-use App\Infolists\Components\EnumEntry;
-use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
-use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Support\Enums\Alignment;
-use Illuminate\Contracts\Support\Htmlable;
 
 class ViewMonitoring extends ViewRecord
 {
