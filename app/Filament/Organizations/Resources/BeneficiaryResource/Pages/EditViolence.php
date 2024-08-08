@@ -17,7 +17,6 @@ use Filament\Forms\Form;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
@@ -92,10 +91,8 @@ class EditViolence extends EditRecord
                 ->relationship('violence')
                 ->columns()
                 ->schema([
-                    EnumEntry::make('violence_types')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                        ->badge()
-                        ->color(Color::Gray),
+                    TextEntry::make('violence_types')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type')),
 
                     EnumEntry::make('violence_primary_type')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))

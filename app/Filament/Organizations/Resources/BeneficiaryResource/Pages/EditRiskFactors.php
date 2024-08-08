@@ -26,7 +26,6 @@ use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
@@ -198,11 +197,9 @@ class EditRiskFactors extends EditRecord
         return [
             EnumEntry::make('extended_family_can_provide')
                 ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
-                ->color(Color::Gray)
                 ->badge(),
             EnumEntry::make('friends_can_provide')
                 ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
-                ->color(Color::Gray)
                 ->badge(),
         ];
     }
