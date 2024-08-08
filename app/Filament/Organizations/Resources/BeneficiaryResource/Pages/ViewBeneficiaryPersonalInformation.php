@@ -189,13 +189,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_has_violence_history'))
                                         ->placeholder(__('placeholder.select_one')),
 
-                                    TextEntry::make('violence_types_string')
-                                        ->label(__('field.aggressor_violence_types'))
-                                        ->default(
-                                            fn ($record) => $record->violence_types
-                                                ?->map(fn ($item) => $item->label())
-                                                ->join(', ')
-                                        ),
+                                    TextEntry::make('violence_types')
+                                        ->label(__('field.aggressor_violence_types')),
 
                                 ]),
 
@@ -215,24 +210,14 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_has_drug_history'))
                                         ->placeholder(__('placeholder.select_one')),
 
-                                    TextEntry::make('drugs_string')
-                                        ->label(__('field.aggressor_drugs'))
-                                        ->default(
-                                            fn ($record) => $record->drugs
-                                                ?->map(fn ($item) => $item->label())
-                                                ->join(', ') ?? '-'
-                                        ),
+                                    TextEntry::make('drugs')
+                                        ->label(__('field.aggressor_drugs')),
                                 ]),
 
                             Grid::make()
                                 ->schema([
-                                    TextEntry::make('legal_history_string')
-                                        ->label(__('field.aggressor_legal_history'))
-                                        ->default(
-                                            fn ($record) => $record->legal_history
-                                                ?->map(fn ($item) => $item->label())
-                                                ->join(', ') ?? '-'
-                                        ),
+                                    TextEntry::make('legal_history')
+                                        ->label(__('field.aggressor_legal_history')),
                                 ]),
 
                             Grid::make()
@@ -325,13 +310,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                     TextEntry::make('notifier_other')
                         ->label(__('field.notifier_other')),
 
-                    TextEntry::make('act_location_string')
-                        ->label(__('field.act_location'))
-                        ->default(
-                            fn ($record) => $record->act_location
-                                ?->map(fn ($item) => $item->label())
-                                ->join(', ') ?? '-'
-                        ),
+                    TextEntry::make('act_location')
+                        ->label(__('field.act_location')),
 
                     TextEntry::make('act_location_other')
                         ->label(__('field.act_location_other')),
@@ -340,13 +320,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->label(__('field.first_called_institution'))
                         ->placeholder(__('placeholder.select_one')),
 
-                    TextEntry::make('otherCalledInstitution_string')
-                        ->label(__('field.other_called_institutions'))
-                        ->default(
-                            fn ($record) => $record->otherCalledInstitution
-                                ?->map(fn ($item) => $item->name)
-                                ->join(', ') ?? '-'
-                        ),
+                    TextEntry::make('otherCalledInstitution.name')
+                        ->label(__('field.other_called_institutions')),
                 ]),
         ];
     }
