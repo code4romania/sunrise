@@ -6,6 +6,7 @@ namespace App\Services\Breadcrumb;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
+use App\Models\Monitoring;
 
 class BeneficiaryBreadcrumb
 {
@@ -103,11 +104,32 @@ class BeneficiaryBreadcrumb
 
     public function getBreadcrumbsForMonitoring(): array
     {
-        $breadcrumb = __('beneficiary.section.monitoring.breadcrumb');
+        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.general');
 
         return array_merge(
             $this->getBaseBreadcrumbs(),
             [self::$resourcePath::getUrl('monitorings.index', ['parent' => $this->record->id]) => $breadcrumb],
+        );
+    }
+
+    public function getBreadcrumbsForMonitoringFileEdit(Monitoring $monitoringRecord): array
+    {
+        $breadcrumb = __('general.action.edit');
+
+        return array_merge(
+            $this->getBreadcrumbsForMonitoringFile($monitoringRecord),
+            [$breadcrumb]
+        );
+    }
+
+    public function getBreadcrumbsForMonitoringFile(Monitoring $monitoringRecord): array
+    {
+        $url = self::$resourcePath::getUrl('monitorings.view', ['parent' => $this->record, 'record' => $monitoringRecord]);
+        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.file');
+
+        return array_merge(
+            $this->getBreadcrumbsForMonitoring(),
+            [$url => $breadcrumb]
         );
     }
 }

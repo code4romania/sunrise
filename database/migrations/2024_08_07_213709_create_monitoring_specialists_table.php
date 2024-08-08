@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('monitoring_specialists', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Monitoring::class);
-            $table->foreignIdFor(CaseTeam::class);
+            $table->foreignIdFor(Monitoring::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(CaseTeam::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

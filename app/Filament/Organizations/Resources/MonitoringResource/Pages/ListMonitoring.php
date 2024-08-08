@@ -14,6 +14,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListMonitoring extends ListRecords
 {
@@ -36,6 +37,7 @@ class ListMonitoring extends ListRecords
         return [
             Actions\Action::make('open_modal')
                 ->label(__('beneficiary.section.monitoring.actions.create'))
+                ->visible(fn () => $this->parent->monitoring->count())
                 ->modalHeading(__('beneficiary.section.monitoring.headings.modal_create'))
                 ->modalDescription(__('beneficiary.section.monitoring.labels.modal_create_description'))
                 ->modalSubmitAction(
@@ -57,6 +59,15 @@ class ListMonitoring extends ListRecords
                             ])
                         )
                 ),
+
+            Actions\CreateAction::make()
+                ->label(__('beneficiary.section.monitoring.actions.create'))
+                ->hidden(fn () => $this->parent->monitoring->count())
+                ->url(
+                    fn () => self::getParentResource()::getUrl('monitorings.create', [
+                        'parent' => $this->parent,
+                    ])
+                ),
         ];
     }
 
@@ -75,9 +86,16 @@ class ListMonitoring extends ListRecords
                 ->label(__('beneficiary.section.monitoring.headings.interval'))
                 ->sortable()
                 ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
-//            TextColumn::make('team')
-//                ->sortable()
-//                ->label(__('beneficiary.section.monitoring.headings.team')),
+            TextColumn::make('specialists')
+                ->label(__('beneficiary.section.monitoring.headings.team'))
+                ->sortable()
+                ->limit(50)
+                ->formatStateUsing(
+                    fn ($record) => $record->specialists
+                        ->map(fn ($specialist) => $specialist->user->getFilamentName() . ' (' .
+                            $specialist->roles->map(fn ($role) => $role->label())->join(', ') . ')')
+                        ->join('; ')
+                ),
         ])
             ->actions([
                 ViewAction::make()
@@ -89,6 +107,7 @@ class ListMonitoring extends ListRecords
                     ]))),
             ])
             ->actionsColumnLabel(__('beneficiary.section.monitoring.headings.actions'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('specialists')->orderByDesc('id'))
             ->emptyStateHeading('aaaaaa');
     }
 }

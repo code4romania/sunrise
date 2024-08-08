@@ -19,6 +19,7 @@ use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewMonitoring extends ViewRecord
@@ -29,7 +30,7 @@ class ViewMonitoring extends ViewRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoring();
+        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoringFile($this->getRecord());
     }
 
     public function getTitle(): string|Htmlable
@@ -39,8 +40,17 @@ class ViewMonitoring extends ViewRecord
 
     protected function getHeaderActions(): array
     {
+        // modal cancel action label is fix in pr #105
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->label(__('beneficiary.section.monitoring.actions.delete'))
+                ->outlined()
+                ->icon('heroicon-o-trash')
+                ->modalHeading(__('beneficiary.section.monitoring.headings.modal_delete'))
+                ->modalDescription(__('beneficiary.section.monitoring.labels.modal_delete_description'))
+                ->modalSubmitActionLabel(__('beneficiary.section.monitoring.actions.delete'))
+                ->modalIcon()
+                ->modalAlignment(Alignment::Left),
         ];
     }
 

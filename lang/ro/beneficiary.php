@@ -308,7 +308,7 @@ return [
                 'view' => 'Fișă monitorizare',
                 'edit_details' => 'Editează detaliile fișei de monitorizare',
                 'edit_children' => 'Editează date copii',
-                'edit_general' => 'Editează date generale monitorizare'
+                'edit_general' => 'Editează date generale monitorizare',
             ],
             'headings' => [
                 'id' => 'ID',
@@ -329,7 +329,7 @@ return [
                 'others' => 'VI. ALTELE',
                 'progress' => 'VII. PROGRESELE ÎNREGISTRATE',
                 'observation' => 'VIII. OBSERVAȚII PRIVIND SITUAȚIA ACTUALĂ A BENEFICIARULUI',
-                '' => '',
+                'modal_delete' => 'Șterge fișă monitorizare',
                 '' => '',
             ],
             'labels' => [
@@ -354,13 +354,14 @@ return [
                 'conclusion' => 'Concluzii',
                 'progress' => 'Progresele înregistrate',
                 'observation' => 'Observații privind situația actuală a beneficiarului',
-                '' => '',
+                'modal_delete_description' => 'Odată ștearsă o fișă, acesta nu mai poate fi recuperată. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
                 'modal_create_description' => 'Poți alege să începi cu o fișă de monitorizare necompletată sau cu un duplicat al ultimei fișe de monitorizare realizată pe acest caz. Dacă vei porni de la un duplicat, va trebui să modifici informațiile care s-au schimbat de la o monitorizare la alta.',
             ],
             'actions' => [
                 'create' => 'Adaugă fișă de monitorizare',
                 'create_from_last' => 'Pornește de la un duplicat',
                 'create_simple' => 'Începe cu o fișă necompletată',
+                'delete' => 'Șterge fișă',
             ],
             'placeholders' => [
                 'number' => 'Adaugă un număr intern fișă',
@@ -375,7 +376,10 @@ return [
                 'observation' => 'Descrieți pe scurt situația actuală a beneficiarului',
 
             ],
-            'breadcrumb' => 'Monitorizare caz',
+            'breadcrumbs' => [
+                'general' => 'Monitorizare caz',
+                'file' => 'Fișă monitorizare',
+            ],
         ],
     ],
 

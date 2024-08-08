@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('monitoring_children', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Monitoring::class)->constrained();
+            $table->foreignIdFor(Monitoring::class)->constrained()->cascadeOnDelete();
             $table->string('name')->nullable();
             $table->string('status')->nullable();
             $table->string('age')->nullable();

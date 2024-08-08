@@ -30,7 +30,7 @@ class EditDetails extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoring();
+        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
     }
 
     public function getTitle(): string|Htmlable
@@ -85,7 +85,7 @@ class EditDetails extends EditRecord
                                 ->team
                                 ->filter(fn ($item) => $item->user_id == auth()->id())
                                 ->first()
-                                ->id,
+                                ?->id,
                         ])
                         ->relationship('specialists')
                         ->multiple()
