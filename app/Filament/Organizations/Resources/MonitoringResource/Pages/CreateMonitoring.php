@@ -23,7 +23,7 @@ class CreateMonitoring extends CreateRecord
 
     public function getBreadcrumbs(): array
     {
-        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.file');
+        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.file', ['file_number' => null]);
 
         return array_merge(
             BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoring(),
