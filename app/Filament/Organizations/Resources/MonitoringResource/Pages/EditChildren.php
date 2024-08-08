@@ -74,13 +74,12 @@ class EditChildren extends EditRecord
                         ->columnSpanFull()
                         ->default(
                             function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                static $indexChild = -1;
-                                $indexChild++;
+                                static $indexChild = 0;
 
                                 return self::getDefaultValueForChild(
                                     $children->get($indexChild),
                                     $copyLastFile,
-                                    $childrenFromLastFile?->get($indexChild),
+                                    $childrenFromLastFile?->get($indexChild++),
                                     'name'
                                 );
                             }
@@ -91,13 +90,12 @@ class EditChildren extends EditRecord
                             TextInput::make('status')
                                 ->label(__('beneficiary.section.monitoring.labels.status'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                    static $indexChild = -1;
-                                    $indexChild++;
+                                    static $indexChild = 0;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
                                         $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild),
+                                        $childrenFromLastFile?->get($indexChild++),
                                         'status'
                                     );
                                 }),
@@ -105,13 +103,12 @@ class EditChildren extends EditRecord
                             TextInput::make('age')
                                 ->label(__('beneficiary.section.monitoring.labels.age'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                    static $indexChild = -1;
-                                    $indexChild++;
+                                    static $indexChild = 0;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
                                         $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild),
+                                        $childrenFromLastFile?->get($indexChild++),
                                         'age'
                                     );
                                 }),
@@ -119,13 +116,12 @@ class EditChildren extends EditRecord
                             DatePicker::make('birthdate')
                                 ->label(__('beneficiary.section.monitoring.labels.birthdate'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                    static $indexChild = -1;
-                                    $indexChild++;
+                                    static $indexChild = 0;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
                                         $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild),
+                                        $childrenFromLastFile?->get($indexChild++),
                                         'birthdate'
                                     );
                                 }),
@@ -135,10 +131,8 @@ class EditChildren extends EditRecord
                                 ->placeholder(__('beneficiary.section.monitoring.placeholders.select_an_answer'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
-                                    $child = $childrenFromLastFile?->get($indexChild);
-                                    $indexChild++;
 
-                                    return $child?->aggressor_relationship;
+                                    return $childrenFromLastFile?->get($indexChild++)?->aggressor_relationship;
                                 })
                                 ->options(ChildAggressorRelationship::options()),
 
@@ -147,10 +141,8 @@ class EditChildren extends EditRecord
                                 ->placeholder(__('beneficiary.section.monitoring.placeholders.select_an_answer'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
-                                    $child = $childrenFromLastFile?->get($indexChild);
-                                    $indexChild++;
 
-                                    return $child?->maintenance_sources;
+                                    return $childrenFromLastFile?->get($indexChild++)?->maintenance_sources;
                                 })
                                 ->options(MaintenanceSources::options()),
 
@@ -159,10 +151,8 @@ class EditChildren extends EditRecord
                                 ->placeholder(__('beneficiary.section.monitoring.placeholders.location'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
-                                    $child = $childrenFromLastFile?->get($indexChild);
-                                    $indexChild++;
 
-                                    return $child?->location;
+                                    return $childrenFromLastFile?->get($indexChild++)?->location;
                                 })
                                 ->maxLength(100),
 
@@ -171,10 +161,8 @@ class EditChildren extends EditRecord
                                 ->placeholder(__('beneficiary.section.monitoring.placeholders.observations'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
-                                    $child = $childrenFromLastFile?->get($indexChild);
-                                    $indexChild++;
 
-                                    return $child?->observations;
+                                    return $childrenFromLastFile?->get($indexChild++)?->observations;
                                 })
                                 ->maxLength(500)
                                 ->columnSpanFull(),

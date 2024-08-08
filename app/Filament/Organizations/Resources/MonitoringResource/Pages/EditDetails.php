@@ -53,24 +53,30 @@ class EditDetails extends EditRecord
 
     public static function getSchema(): array
     {
+        $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load('children');
+        $copyLastFile = (bool) request('copyLastFile');
+
         return [
             Grid::make()
                 ->maxWidth('3xl')
                 ->schema([
                     DatePicker::make('date')
                         ->label(__('beneficiary.section.monitoring.labels.date'))
-                        ->default('now'),
+                        ->default($copyLastFile && $lastFile?->date ? $lastFile->date : null),
 
                     TextInput::make('number')
                         ->label(__('beneficiary.section.monitoring.labels.number'))
                         ->placeholder(__('beneficiary.section.monitoring.placeholders.number'))
+                        ->default($copyLastFile && $lastFile?->number ? $lastFile->number : null)
                         ->maxLength(100),
 
                     DatePicker::make('start_date')
-                        ->label(__('beneficiary.section.monitoring.labels.start_date')),
+                        ->label(__('beneficiary.section.monitoring.labels.start_date'))
+                        ->default($copyLastFile && $lastFile?->start_date ? $lastFile->start_date : null),
 
                     DatePicker::make('end_date')
-                        ->label(__('beneficiary.section.monitoring.labels.end_date')),
+                        ->label(__('beneficiary.section.monitoring.labels.end_date'))
+                        ->default($copyLastFile && $lastFile?->end_date ? $lastFile->end_date : null),
 
                     Hidden::make('parent_id')
                         ->default(fn ($record) => $record?->beneficiary_id ?? request('parent'))
@@ -80,13 +86,14 @@ class EditDetails extends EditRecord
                         ->label(__('beneficiary.section.monitoring.labels.team'))
                         ->placeholder(__('beneficiary.section.monitoring.placeholders.team'))
                         ->preload()
-                        ->default(fn (Get $get) => [
-                            Beneficiary::find($get('parent_id'))
-                                ->team
-                                ->filter(fn ($item) => $item->user_id == auth()->id())
-                                ->first()
-                                ?->id,
-                        ])
+                        ->default(fn (Get $get) => $copyLastFile && $lastFile?->specialists ?
+                            $lastFile->specialists->map(fn ($specialist) => $specialist->id)->toArray() : [
+                                Beneficiary::find($get('parent_id'))
+                                    ->team
+                                    ->filter(fn ($item) => $item->user_id == auth()->id())
+                                    ->first()
+                                    ?->id,
+                            ])
                         ->relationship('specialists')
                         ->multiple()
                         ->options(
