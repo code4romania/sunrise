@@ -20,6 +20,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
+use function Laravel\Prompts\select;
 
 class EditGeneral extends EditRecord
 {
@@ -64,7 +65,9 @@ class EditGeneral extends EditRecord
                         ->schema([
                             DatePicker::make('admittance_date')
                                 ->label(__('beneficiary.section.monitoring.labels.admittance_date'))
-                                ->default(self::getDefaultValue($copyLastFile, $lastFile, 'admittance_date')),
+                                ->default($copyLastFile ?
+                                    self::getDefaultValue($copyLastFile, $lastFile, 'admittance_date') :
+                                    self::getParent()?->created_at),
 
                             TextInput::make('admittance_disposition')
                                 ->label(__('beneficiary.section.monitoring.labels.admittance_disposition'))

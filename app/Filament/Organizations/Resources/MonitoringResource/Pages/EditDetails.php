@@ -62,7 +62,7 @@ class EditDetails extends EditRecord
                 ->schema([
                     DatePicker::make('date')
                         ->label(__('beneficiary.section.monitoring.labels.date'))
-                        ->default($copyLastFile && $lastFile?->date ? $lastFile->date : null),
+                        ->default($copyLastFile && $lastFile?->date ? $lastFile->date : 'now'),
 
                     TextInput::make('number')
                         ->label(__('beneficiary.section.monitoring.labels.number'))
