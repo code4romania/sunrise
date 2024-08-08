@@ -130,7 +130,7 @@ class EditChildrenIdentity extends EditRecord
                         ->addActionLabel(__('beneficiary.action.add_child'))
                         ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                         ->emptyLabel(false)
-                        ->defaultItems(fn ($get) => $get('doesnt_have_children') ? 0 : 1)
+                        ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
                         ->schema([
                             TextInput::make('name')
                                 ->label(__('field.child_name')),

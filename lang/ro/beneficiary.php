@@ -157,7 +157,7 @@ return [
             ],
             'actions' => [
                 'add_aggressor' => 'Adaugă încă un agresor',
-                'delete_aggressor' => 'Sterge agresor',
+                'delete_aggressor' => 'Șterge agresor',
             ],
             'label' => [
                 'delete_aggressor_description' => 'Acțiunea va șterge din această pagină întreaga secțiune cu informațiile introduse despre acest agresor. Datele șterse nu vor mai putea fi recuperate.',
