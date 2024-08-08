@@ -20,7 +20,6 @@ use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Rules\MultipleIn;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -28,7 +27,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Support\Enums\Alignment;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
@@ -76,6 +74,7 @@ class EditAggressor extends EditRecord
                 ->maxWidth('3xl')
                 ->hiddenLabel()
                 ->columns()
+                ->minItems(1)
                 ->addAction(
                     fn (Action $action): Action => $action
                         ->label(__('beneficiary.section.personal_information.actions.add_aggressor'))
@@ -83,29 +82,25 @@ class EditAggressor extends EditRecord
                         ->color('primary')
                         ->extraAttributes(['class' => 'pull-left'])
                 )
-                ->minItems(1)
                 ->deleteAction(
-                    fn (Action $action) => $action->label(__('beneficiary.section.personal_information.actions.delete_aggressor'))
-                        ->hiddenLabel(false)
+                    fn (Action $action) => $action
+                        ->label(__('beneficiary.section.personal_information.actions.delete_aggressor'))
                         ->icon(null)
                         ->link()
-                        ->color('primary')
+                        ->color('danger')
                         ->modalHeading(__('beneficiary.section.personal_information.heading.delete_aggressor'))
                         ->modalDescription(__('beneficiary.section.personal_information.label.delete_aggressor_description'))
-                        ->modalAlignment(Alignment::Left)
-                        ->modalIcon()
                         ->modalSubmitActionLabel(__('general.action.delete'))
-                        ->modalSubmitAction(fn (StaticAction $action) => $action->color('danger'))
                 )
-                ->itemLabel(function ($get) {
+                ->itemLabel(function (Get $get) {
                     if (\count($get('aggressor')) <= 1) {
                         return null;
                     }
+
                     static $index = 0;
-                    $index++;
 
                     return __('beneficiary.section.personal_information.heading.aggressor', [
-                        'number' => $index,
+                        'number' => ++$index,
                     ]);
                 })
                 ->schema([

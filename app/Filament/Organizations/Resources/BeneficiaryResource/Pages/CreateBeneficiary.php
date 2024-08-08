@@ -10,7 +10,6 @@ use App\Rules\ValidCNP;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -118,11 +117,8 @@ class CreateBeneficiary extends CreateRecord
                         ->schema(EditBeneficiaryPersonalInformation::beneficiarySection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.aggressor'))
-                        ->schema([
-                            Group::make()
-                                ->columns()
-                                ->schema(EditAggressor::aggressorSection()),
-                        ]),
+                        ->columns()
+                        ->schema(EditAggressor::aggressorSection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                         ->columns()
