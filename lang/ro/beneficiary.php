@@ -305,7 +305,7 @@ return [
             'titles' => [
                 'list' => 'Monitorizare caz',
                 'create' => 'Fișă monitorizare',
-                'view' => 'Fișă monitorizare',
+                'view' => 'Fișă monitorizare :file_number',
                 'edit_details' => 'Editează detaliile fișei de monitorizare',
                 'edit_children' => 'Editează date copii',
                 'edit_general' => 'Editează date generale monitorizare',
@@ -379,7 +379,7 @@ return [
             ],
             'breadcrumbs' => [
                 'general' => 'Monitorizare caz',
-                'file' => 'Fișă monitorizare',
+                'file' => 'Fișă monitorizare :file_number',
             ],
         ],
     ],

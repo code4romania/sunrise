@@ -35,7 +35,7 @@ class ViewMonitoring extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('beneficiary.section.monitoring.titles.view');
+        return __('beneficiary.section.monitoring.titles.view', ['file_number' => $this->getRecord()->number]);
     }
 
     protected function getHeaderActions(): array

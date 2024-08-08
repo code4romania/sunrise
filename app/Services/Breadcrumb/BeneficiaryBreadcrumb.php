@@ -125,7 +125,7 @@ class BeneficiaryBreadcrumb
     public function getBreadcrumbsForMonitoringFile(Monitoring $monitoringRecord): array
     {
         $url = self::$resourcePath::getUrl('monitorings.view', ['parent' => $this->record, 'record' => $monitoringRecord]);
-        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.file');
+        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.file', ['file_number' => $monitoringRecord->number]);
 
         return array_merge(
             $this->getBreadcrumbsForMonitoring(),
