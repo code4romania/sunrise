@@ -10,6 +10,7 @@ use App\Models\Monitoring;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -108,6 +109,17 @@ class ListMonitoring extends ListRecords
             ])
             ->actionsColumnLabel(__('beneficiary.section.monitoring.headings.actions'))
             ->modifyQueryUsing(fn (Builder $query) => $query->with('specialists')->orderByDesc('id'))
-            ->emptyStateHeading('aaaaaa');
+            ->emptyStateHeading(__('beneficiary.section.monitoring.headings.empty_state_table'))
+            ->emptyStateDescription(__('beneficiary.section.monitoring.labels.empty_state_table'))
+            ->emptyStateIcon('heroicon-o-document')
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->label(__('beneficiary.section.monitoring.actions.create'))
+                    ->url(
+                        fn () => self::getParentResource()::getUrl('monitorings.create', [
+                            'parent' => $this->parent,
+                        ])
+                    ),
+            ]);
     }
 }

@@ -330,7 +330,7 @@ return [
                 'progress' => 'VII. PROGRESELE ÎNREGISTRATE',
                 'observation' => 'VIII. OBSERVAȚII PRIVIND SITUAȚIA ACTUALĂ A BENEFICIARULUI',
                 'modal_delete' => 'Șterge fișă monitorizare',
-                '' => '',
+                'empty_state_table' => 'Nicio fișă de monitorizare încărcat',
             ],
             'labels' => [
                 'date' => 'Data realizării fișei de monitorizare',
@@ -356,6 +356,7 @@ return [
                 'observation' => 'Observații privind situația actuală a beneficiarului',
                 'modal_delete_description' => 'Odată ștearsă o fișă, acesta nu mai poate fi recuperată. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
                 'modal_create_description' => 'Poți alege să începi cu o fișă de monitorizare necompletată sau cu un duplicat al ultimei fișe de monitorizare realizată pe acest caz. Dacă vei porni de la un duplicat, va trebui să modifici informațiile care s-au schimbat de la o monitorizare la alta.',
+                'empty_state_table' => 'Adauga o fișa de monitorizare',
             ],
             'actions' => [
                 'create' => 'Adaugă fișă de monitorizare',
