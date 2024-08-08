@@ -68,7 +68,6 @@ class EditAntecedents extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->native(false)
                                 ->live(),
 
                             TextInput::make('police_report_count')
@@ -87,7 +86,6 @@ class EditAntecedents extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->native(false)
                                 ->live(),
 
                             TextInput::make('medical_report_count')

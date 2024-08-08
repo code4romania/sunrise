@@ -139,8 +139,7 @@ class EditChildrenIdentity extends EditRecord
                                 ->label(__('field.age')),
 
                             DatePicker::make('birthdate')
-                                ->label(__('field.birthdate'))
-                                ->native(false),
+                                ->label(__('field.birthdate')),
 
                             TextInput::make('address')
                                 ->label(__('field.current_address')),

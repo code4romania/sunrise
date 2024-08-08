@@ -72,7 +72,6 @@ class EditFlowPresentation extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(PresentationMode::options())
                                 ->enum(PresentationMode::class)
-                                ->native(false)
                                 ->live(),
 
                             Select::make('referring_institution_id')
@@ -83,7 +82,6 @@ class EditFlowPresentation extends EditRecord
                                     $get('presentation_mode'),
                                     PresentationMode::FORWARDED
                                 ))
-                                ->native(false)
                                 ->nullable(),
 
                             Select::make('referral_mode')
@@ -95,7 +93,6 @@ class EditFlowPresentation extends EditRecord
                                     $get('presentation_mode'),
                                     PresentationMode::FORWARDED
                                 ))
-                                ->native(false)
                                 ->nullable(),
                         ]),
 
@@ -106,14 +103,12 @@ class EditFlowPresentation extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Notifier::options())
                                 ->enum(Notifier::class)
-                                ->native(false)
                                 ->live(),
 
                             Select::make('notification_mode')
                                 ->label(__('field.notification_mode'))
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(NotificationMode::options())
-                                ->native(false)
                                 ->enum(NotificationMode::class),
 
                             TextInput::make('notifier_other')
@@ -146,7 +141,6 @@ class EditFlowPresentation extends EditRecord
                         ->label(__('field.first_called_institution'))
                         ->placeholder(__('placeholder.select_one'))
                         ->relationship('firstCalledInstitution', 'name')
-                        ->native(false)
                         ->nullable(),
 
                     Select::make('other_called_institutions')

@@ -114,7 +114,6 @@ class EditAggressor extends EditRecord
                         ->placeholder(__('placeholder.select_one'))
                         ->options(AggressorRelationship::options())
                         ->enum(AggressorRelationship::class)
-                        ->native(false)
                         ->live(),
 
                     TextInput::make('age')
@@ -128,36 +127,31 @@ class EditAggressor extends EditRecord
                         ->label(__('field.aggressor_gender'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Gender::options())
-                        ->enum(Gender::class)
-                        ->native(false),
+                        ->enum(Gender::class),
 
                     Select::make('citizenship')
                         ->label(__('field.aggressor_citizenship'))
                         ->placeholder(__('placeholder.citizenship'))
                         ->options(Citizenship::options())
-                        ->nullable()
-                        ->native(false),
+                        ->nullable(),
 
                     Select::make('civil_status')
                         ->label(__('field.aggressor_civil_status'))
                         ->placeholder(__('placeholder.civil_status'))
                         ->options(CivilStatus::options())
-                        ->enum(CivilStatus::class)
-                        ->native(false),
+                        ->enum(CivilStatus::class),
 
                     Select::make('studies')
                         ->label(__('field.aggressor_studies'))
                         ->placeholder(__('placeholder.studies'))
                         ->options(Studies::options())
-                        ->enum(Studies::class)
-                        ->native(false),
+                        ->enum(Studies::class),
 
                     Select::make('occupation')
                         ->label(__('field.aggressor_occupation'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Occupation::options())
-                        ->enum(Occupation::class)
-                        ->native(false),
+                        ->enum(Occupation::class),
 
                     Grid::make()
                         ->schema([
@@ -166,7 +160,6 @@ class EditAggressor extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->native(false)
                                 ->live(),
 
                             Select::make('violence_types')
@@ -186,7 +179,6 @@ class EditAggressor extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->native(false)
                                 ->live(),
 
                             TextInput::make('psychiatric_history_notes')
@@ -201,7 +193,6 @@ class EditAggressor extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->native(false)
                                 ->live(),
 
                             Select::make('drugs')
@@ -232,7 +223,6 @@ class EditAggressor extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->native(false)
                                 ->live(),
 
                             TextInput::make('protection_order_notes')

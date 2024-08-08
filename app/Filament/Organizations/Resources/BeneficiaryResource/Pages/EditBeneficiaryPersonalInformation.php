@@ -11,9 +11,7 @@ use App\Enums\Occupation;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
-use App\Rules\MultipleIn;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -81,8 +79,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Ternary::options())
                         ->enum(Ternary::class)
-                        ->live()
-                        ->native(false),
+                        ->live(),
 
                     TextInput::make('family_doctor_name')
                         ->label(__('field.family_doctor_name'))
@@ -101,8 +98,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->live()
-                                ->native(false),
+                                ->live(),
 
                             TextInput::make('psychiatric_notes')
                                 ->label(__('field.psychiatric_notes'))
@@ -116,8 +112,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
                                 ->enum(Ternary::class)
-                                ->live()
-                                ->native(false),
+                                ->live(),
 
                             TextInput::make('criminal_notes')
                                 ->label(__('field.criminal_notes'))
@@ -128,15 +123,13 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->label(__('field.studies'))
                         ->placeholder(__('placeholder.studies'))
                         ->options(Studies::options())
-                        ->enum(Studies::class)
-                        ->native(false),
+                        ->enum(Studies::class),
 
                     Select::make('occupation')
                         ->label(__('field.occupation'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Occupation::options())
-                        ->enum(Occupation::class)
-                        ->native(false),
+                        ->enum(Occupation::class),
 
                     TextInput::make('workplace')
                         ->label(__('field.workplace'))
@@ -147,8 +140,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->label(__('field.income'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Income::options())
-                        ->enum(Income::class)
-                        ->native(false),
+                        ->enum(Income::class),
 
                     TextInput::make('elder_care_count')
                         ->label(__('field.elder_care_count'))
@@ -161,8 +153,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->label(__('field.homeownership'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(HomeOwnership::options())
-                        ->enum(HomeOwnership::class)
-                        ->native(false),
+                        ->enum(HomeOwnership::class),
                 ]),
         ];
     }
