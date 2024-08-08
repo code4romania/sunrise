@@ -53,7 +53,7 @@ class EditDetails extends EditRecord
 
     public static function getSchema(): array
     {
-        $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load('children');
+        $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
         $copyLastFile = (bool) request('copyLastFile');
 
         return [

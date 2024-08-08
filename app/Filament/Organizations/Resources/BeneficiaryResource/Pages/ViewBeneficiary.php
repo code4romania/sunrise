@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
 use App\Livewire\Beneficiary\ListTeam;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -337,5 +338,12 @@ class ViewBeneficiary extends ViewRecord
                             ->alignCenter(),
                     ]),
             ]);
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            MonitoringWidget::class,
+        ];
     }
 }
