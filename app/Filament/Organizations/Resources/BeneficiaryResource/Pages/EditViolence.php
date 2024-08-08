@@ -91,14 +91,8 @@ class EditViolence extends EditRecord
                 ->relationship('violence')
                 ->columns()
                 ->schema([
-                    TextEntry::make('violence_types_string')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                        ->default(
-                            fn ($record) => $record->violence
-                                ->violence_types
-                                ?->map(fn ($item) => $item->label())
-                                ->join(', ') ?? '-'
-                        ),
+                    TextEntry::make('violence_types')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type')),
 
                     EnumEntry::make('violence_primary_type')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
