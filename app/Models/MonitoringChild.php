@@ -8,12 +8,14 @@ use App\Enums\ChildAggressorRelationship;
 use App\Enums\MaintenanceSources;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MonitoringChild extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'monitoring_id',
         'name',
         'status',
         'age',
@@ -28,4 +30,9 @@ class MonitoringChild extends Model
         'aggressor_relationship' => ChildAggressorRelationship::class,
         'maintenance_sources' => MaintenanceSources::class,
     ];
+
+    public function monitoring(): BelongsTo
+    {
+        return $this->belongsTo(Monitoring::class);
+    }
 }

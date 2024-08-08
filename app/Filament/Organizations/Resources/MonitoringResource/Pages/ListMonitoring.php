@@ -75,9 +75,9 @@ class ListMonitoring extends ListRecords
                 ->label(__('beneficiary.section.monitoring.headings.interval'))
                 ->sortable()
                 ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
-            TextColumn::make('team')
-                ->sortable()
-                ->label(__('beneficiary.section.monitoring.headings.team')),
+//            TextColumn::make('team')
+//                ->sortable()
+//                ->label(__('beneficiary.section.monitoring.headings.team')),
         ])
             ->actions([
                 ViewAction::make()

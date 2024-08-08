@@ -308,6 +308,7 @@ return [
                 'view' => 'Fișă monitorizare',
                 'edit_details' => 'Editează detaliile fișei de monitorizare',
                 'edit_children' => 'Editează date copii',
+                'edit_general' => 'Editează date generale monitorizare'
             ],
             'headings' => [
                 'id' => 'ID',

@@ -8,12 +8,15 @@ use App\Concerns\HasParentResource;
 use App\Concerns\RedirectToMonitoring;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Forms\Components\Select;
+use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -69,28 +72,32 @@ class EditDetails extends EditRecord
                     DatePicker::make('end_date')
                         ->label(__('beneficiary.section.monitoring.labels.end_date')),
 
-                    Select::make('team')
+                    Hidden::make('parent_id')
+                        ->default(fn ($record) => $record?->beneficiary_id ?? request('parent'))
+                        ->formatStateUsing(fn ($record, $state) => $state ?? $record->beneficiary_id),
+
+                    Select::make('specialists')
                         ->label(__('beneficiary.section.monitoring.labels.team'))
                         ->placeholder(__('beneficiary.section.monitoring.placeholders.team'))
-//                                        ->default(fn () => [auth()->user()->id => auth()->user()->first_name])
-//                        ->options(
-//                            self::getTeamSelectOptions()
-//                            fn () => self::$parent
-//                                ->team
-//                                ->each(fn ($item) => $item->full_name = $item->user->getFilamentName())
-//                                ->pluck('full_name', 'id')
-//                        )
-//                        ->relationship('specialists', 'full_name')
-                        ->multiple(),
-                ]),
-        ];
-    }
+                        ->preload()
+                        ->default(fn (Get $get) => [
+                            Beneficiary::find($get('parent_id'))
+                                ->team
+                                ->filter(fn ($item) => $item->user_id == auth()->id())
+                                ->first()
+                                ->id,
+                        ])
+                        ->relationship('specialists')
+                        ->multiple()
+                        ->options(
+                            fn (Get $get) => Beneficiary::find($get('parent_id'))
+                                ->team
+                                ->each(fn ($item) => $item->full_name = $item->user->getFilamentName())
+                                ->pluck('full_name', 'id')
+                        ),
 
-    private function getTeamSelectOptions()
-    {
-        return $this->parent
-            ->team
-            ->each(fn ($item) => $item->full_name = $item->user->getFilamentName())
-            ->pluck('full_name', 'id');
+                ]),
+
+        ];
     }
 }

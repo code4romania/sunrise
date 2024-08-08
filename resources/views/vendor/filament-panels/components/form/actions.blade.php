@@ -1,10 +1,14 @@
 @props(['actions', 'alignment' => null, 'fullWidth' => false])
-{{$visibleActions = false}}
-@foreach($actions as $action)
-    @if ($action->isVisible())
-        {{$visibleActions = true}}
-    @endif
-@endforeach
+@php
+    $visibleActions = false;
+    foreach($actions as $action)
+    {
+        if ($action->isVisible())
+        {
+            $visibleActions = true;
+        }
+    }
+@endphp
 @if ($visibleActions)
     <div @class([
         'fi-form-actions',

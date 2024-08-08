@@ -8,6 +8,7 @@ use App\Concerns\BelongsToBeneficiary;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
@@ -60,8 +61,13 @@ class Monitoring extends Model
         return $this->hasMany(MonitoringChild::class);
     }
 
-    public function specialists(): HasMany
+    public function specialists(): BelongsToMany
     {
-        return $this->hasMany(MonitoringSpecialist::class);
+        return $this->belongsToMany(CaseTeam::class, 'monitoring_specialists');
+    }
+
+    public function team()
+    {
+        return $this->beneficiary->team();
     }
 }

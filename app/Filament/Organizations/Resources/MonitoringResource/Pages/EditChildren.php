@@ -13,6 +13,7 @@ use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Models\MonitoringChild;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
@@ -115,7 +116,7 @@ class EditChildren extends EditRecord
                                     );
                                 }),
 
-                            TextInput::make('birthdate')
+                            DatePicker::make('birthdate')
                                 ->label(__('beneficiary.section.monitoring.labels.birthdate'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
                                     static $indexChild = -1;

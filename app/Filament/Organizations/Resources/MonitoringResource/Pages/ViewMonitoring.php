@@ -76,9 +76,13 @@ class ViewMonitoring extends ViewRecord
                                     TextEntry::make('end_date')
                                         ->label(__('beneficiary.section.monitoring.labels.end_date')),
 
-                                    TextEntry::make('team')
+                                    TextEntry::make('specialists')
                                         ->label(__('beneficiary.section.monitoring.labels.team'))
-                                        ->badge(),
+                                        ->listWithLineBreaks()
+                                        ->formatStateUsing(
+                                            fn ($state) => $state->user->getFilamentName() . ' (' .
+                                                $state->roles->map(fn ($item) => $item->label())->join(', ') . ')'
+                                        ),
                                 ]),
                         ]),
 
