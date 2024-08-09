@@ -19,4 +19,9 @@ trait HasLabel
 
         return __($label);
     }
+
+    public function getLabel(): string
+    {
+        return $this->label();
+    }
 }

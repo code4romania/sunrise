@@ -338,4 +338,11 @@ class ViewBeneficiary extends ViewRecord
                     ]),
             ]);
     }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            BeneficiaryResource\Widgets\CloseFileWidget::class,
+        ];
+    }
 }

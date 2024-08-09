@@ -204,7 +204,7 @@ return [
         'high' => 'Grad de risc crescut',
         'medium' => 'Grad de risc mediu',
         'low' => 'Grad de risc scăzut',
-        'none' => 'Fără risc documentat'
+        'none' => 'Fără risc documentat',
     ],
 
     'role' => [
@@ -282,6 +282,23 @@ return [
         'child_born_certificate' => 'Certificat de naștere copil',
         'standard_sheets' => 'Fișe standard',
         'document' => 'Document (nespecificat)',
-      ],
+    ],
 
+    'admittance_reason' => [
+        'security' => 'Siguranță pusă în pericol',
+        'eviction_from_home' => 'Alungare de la domiciliu',
+        'divorce' => 'Divorț/Separare',
+        'crisis_situation' => 'Situație de criză',
+        'other' => 'Altele',
+    ],
+
+    'close_method' => [
+        'according_to_interventional_program' => 'Conform programului personalizat de intervenție',
+        'transfer_to' => 'Transfer la instituția/serviciul',
+        'contract_expired' => 'Expirarea perioadei conform contractului de acordare servicii sociale',
+        'deregistration' => 'Exmatriculare',
+        'turn_to_relationship_with_aggressor' => 'Întoarcele în relația cu agresorul',
+        'beneficiary_request' => 'Solicitarea beneficiarei',
+        'other' => 'Altă situație',
+    ],
 ];
