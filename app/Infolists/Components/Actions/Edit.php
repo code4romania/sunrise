@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\BeneficiaryResource\Actions;
+namespace App\Infolists\Components\Actions;
 
 use Filament\Infolists\Components\Actions\Action;
 
