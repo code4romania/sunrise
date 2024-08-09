@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\ChildAggressorRelationship;
+use App\Enums\MaintenanceSources;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +21,10 @@ class MonitoringChildFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'aggressor_relationship' => $this->faker->randomElement(ChildAggressorRelationship::values()),
+            'maintenance_sources' => $this->faker->randomElement(MaintenanceSources::values()),
+            'location' => $this->faker->text(100),
+            'observations' => $this->faker->text(),
         ];
     }
 }
