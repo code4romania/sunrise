@@ -56,6 +56,7 @@ class ViewCloseFile extends ViewRecord
         return $infolist->schema([
             Tabs::make()
                 ->columnSpanFull()
+                ->persistTabInQueryString()
                 ->tabs([
                     Tabs\Tab::make(__('beneficiary.section.close_file.headings.file_details'))
                         ->maxWidth('3xl')

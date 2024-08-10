@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use App\Concerns\RedirectToCloseFile;
 use App\Enums\AdmittanceReason;
 use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -17,9 +18,12 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Str;
 
 class EditCloseFileGeneralDetails extends EditRecord
 {
+    use RedirectToCloseFile;
+
     protected static string $resource = BeneficiaryResource::class;
 
     public function getTitle(): string|Htmlable
@@ -35,9 +39,9 @@ class EditCloseFileGeneralDetails extends EditRecord
         );
     }
 
-    protected function getRedirectUrl(): ?string
+    protected function getTabSlug(): string
     {
-        return self::getResource()::getUrl('view_close_file', ['record' => $this->getRecord()]);
+        return Str::slug(__('beneficiary.section.close_file.headings.general_details'));
     }
 
     public function form(Form $form): Form
