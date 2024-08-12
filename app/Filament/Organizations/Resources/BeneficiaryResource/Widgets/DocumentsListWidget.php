@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
+use App\Concerns\HasViewContentFooter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Models\Beneficiary;
@@ -16,6 +17,8 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class DocumentsListWidget extends BaseWidget
 {
+    use HasViewContentFooter;
+
     public ?Beneficiary $record = null;
 
     private int $limit = 4;
@@ -40,18 +43,9 @@ class DocumentsListWidget extends BaseWidget
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('beneficiary.section.documents.labels.name')),
             ])
-            ->contentFooter(function () {
-                $diff = max(0, $this->record->documents()->count() - $this->limit);
-
-                if (! $diff) {
-                    return null;
-                }
-
-                return view('tables.footer', [
-                    'content' => trans_choice('beneficiary.section.documents.labels.summarize', $diff),
-                    'colspan' => 2,
-                ]);
-            })
+            ->contentFooter(
+                fn () => $this->viewContentFooter($this->record->documents()->count(), 'beneficiary.section.documents.labels.summarize')
+            )
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateHeading(__('beneficiary.helper_text.documents'))
             ->emptyStateDescription(__('beneficiary.helper_text.documents_2'))
