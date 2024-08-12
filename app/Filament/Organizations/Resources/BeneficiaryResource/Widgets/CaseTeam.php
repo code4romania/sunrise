@@ -30,18 +30,11 @@ class CaseTeam extends BaseWidget
                 TextColumn::make('user.first_name')
                     ->label(__('beneficiary.section.specialists.labels.name'))
                     ->formatStateUsing(fn ($record) => $record->user->getFilamentName()),
-                TextColumn::make('roles_string')
-                    ->default(
-                        fn ($record) => $record->roles
-                            ->map(fn ($item) => $item->label())
-                            ->join(', ')
-                    )
+
+                TextColumn::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
-                    ->color(Color::Gray)
-                    ->sortable(
-                        query: fn (Builder $query, string $direction): Builder => $query
-                            ->orderBy('roles', $direction)
-                    ),
+                    ->color(Color::Gray),
+
                 TextColumn::make('user.password_set_at')
                     ->label(__('beneficiary.section.specialists.labels.status'))
                     ->default(0)

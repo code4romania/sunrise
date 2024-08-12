@@ -70,7 +70,6 @@ class ListDocuments extends ListRecords
 
                 TextColumn::make('type')
                     ->label(__('beneficiary.section.documents.labels.type'))
-                    ->formatStateUsing(fn ($state) => $state->label())
                     ->sortable(),
 
                 TextColumn::make('observations')

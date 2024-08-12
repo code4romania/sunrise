@@ -38,8 +38,8 @@ class DocumentsListWidget extends BaseWidget
             ->paginated(false)
             ->columns([
                 Tables\Columns\TextColumn::make('type')
-                    ->label(__('beneficiary.section.documents.labels.type'))
-                    ->formatStateUsing(fn ($state) => $state->label()),
+                    ->label(__('beneficiary.section.documents.labels.type')),
+
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('beneficiary.section.documents.labels.name')),
             ])

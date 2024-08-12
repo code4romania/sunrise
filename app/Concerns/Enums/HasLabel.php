@@ -11,7 +11,13 @@ trait HasLabel
         return 'vulnerability.label';
     }
 
-    public function label(): string
+    /* @deprecated use getLabel() */
+    public function label()
+    {
+        return $this->getLabel();
+    }
+
+    public function getLabel(): string
     {
         $label = collect([$this->labelKeyPrefix(), $this->value])
             ->filter(fn ($value) => $value !== null)
