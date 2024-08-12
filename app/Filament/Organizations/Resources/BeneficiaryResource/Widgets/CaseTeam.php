@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Enums\Role;
+use App\Enums\UserStatus;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\User;
@@ -14,6 +15,7 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,7 +27,7 @@ class CaseTeam extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => $this->record->team())
+            ->query(fn () => $this->record->team()->with('user'))
             ->columns([
                 TextColumn::make('user.first_name')
                     ->label(__('beneficiary.section.specialists.labels.name'))
@@ -35,18 +37,9 @@ class CaseTeam extends BaseWidget
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->color(Color::Gray),
 
-                TextColumn::make('user.password_set_at')
+                TextColumn::make('user.status')
                     ->label(__('beneficiary.section.specialists.labels.status'))
-                    ->default(0)
-                    ->formatStateUsing(
-                        fn (?string $state) => $state ? __('user.status.active') : __('user.status.inactive')
-                    )
-                    ->sortable(
-                        query: fn (Builder $query, string $direction): Builder => $query
-                            ->select(['case_teams.*', 'users.password_set_at'])
-                            ->join('users', 'users.id', '=', 'user_id')
-                            ->orderBy('users.password_set_at', $direction)
-                    ),
+                    ->default(0),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -68,6 +61,28 @@ class CaseTeam extends BaseWidget
                             ->modalHeading(__('beneficiary.section.specialists.heading.delete_modal'))
                             ->icon(null),
                     ]),
+            ])
+            ->filters([
+                SelectFilter::make('status')
+                    ->label(__('beneficiary.section.specialists.labels.status'))
+                    ->options(UserStatus::options())
+                    ->modifyQueryUsing(
+                        fn (Builder $query, $state): Builder => $state['value'] ?
+                            $query->whereHas(
+                                'user',
+                                fn (Builder $query) => $query->where('status', $state['value'])
+                            ) :
+                            $query
+                    ),
+
+                SelectFilter::make('roles')
+                    ->label(__('beneficiary.section.specialists.labels.role'))
+                    ->options(Role::options())
+                    ->modifyQueryUsing(
+                        fn (Builder $query, $state): Builder => $state['value'] ?
+                        $query->whereJsonContains('roles', $state['value']) :
+                        $query
+                    ),
             ])
             ->heading(__('beneficiary.section.specialists.title'));
     }
