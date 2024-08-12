@@ -29,7 +29,7 @@ class CaseTeam extends BaseWidget
             ->columns([
                 TextColumn::make('user.first_name')
                     ->label(__('beneficiary.section.specialists.labels.name'))
-                    ->formatStateUsing(fn ($record) => $record->user->getFilamentName()),
+                    ->formatStateUsing(fn (\App\Models\CaseTeam $record) => $record->user->getFilamentName()),
 
                 TextColumn::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
@@ -39,7 +39,7 @@ class CaseTeam extends BaseWidget
                     ->label(__('beneficiary.section.specialists.labels.status'))
                     ->default(0)
                     ->formatStateUsing(
-                        fn ($state) => $state ? __('user.status.active') : __('user.status.inactive')
+                        fn (?string $state) => $state ? __('user.status.active') : __('user.status.inactive')
                     )
                     ->sortable(
                         query: fn (Builder $query, string $direction): Builder => $query

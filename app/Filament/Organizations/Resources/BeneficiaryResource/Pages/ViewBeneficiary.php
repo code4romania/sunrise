@@ -8,6 +8,7 @@ use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Group;
@@ -179,48 +180,46 @@ class ViewBeneficiary extends ViewRecord
                 ->headerActions(
                     [
                         BeneficiaryResource\Actions\ViewDetailsAction::make('view')
-                            ->url(fn ($record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
-                            ->visible(fn ($record) => $record->violence?->violence_types),
+                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
+                            ->visible(fn (Beneficiary $record) => $record->violence?->violence_types),
                     ]
                 )
                 ->schema([
                     Group::make()
                         ->columns()
-                        ->visible(fn ($record) => $record->violence?->violence_types)
+                        ->visible(fn (Beneficiary $record) => $record->violence?->violence_types)
                         ->schema([
                             TextEntry::make('evaluateDetails.registered_date')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
-                                ->hidden(fn ($state) => $state == '-')
                                 ->date(),
                             TextEntry::make('violence.violence_types')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                                ->hidden(fn ($state) => $state == '-')
                                 ->badge()
-                                ->color(Color::Gray)
-                                ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : ''),
+                                ->color(Color::Gray),
                             EnumEntry::make('riskFactors.risk_level')
                                 ->hiddenLabel()
                                 ->badge()
                                 ->icon(false),
                         ]),
                     Group::make()
-                        ->visible(fn ($record) => ! $record->violence?->violence_types)
+                        ->visible(fn (Beneficiary $record) => ! $record->violence?->violence_types)
                         ->schema([
-                            TextEntry::make('description')
+                            TextEntry::make('empty_state_heading')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.initial_evaluation'))
                                 ->alignCenter()
-                                ->weight(FontWeight::Bold)
-                                ->size(TextEntry\TextEntrySize::Large),
-                            TextEntry::make('description')
+                                ->weight(FontWeight::SemiBold)
+                                ->size(TextEntry\TextEntrySize::Medium),
+                            TextEntry::make('empty_state_description')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.initial_evaluation_2'))
                                 ->alignCenter()
-                                ->size(TextEntry\TextEntrySize::Medium),
+                                ->color(Color::Gray)
+                                ->size(TextEntry\TextEntrySize::Small),
                             Actions::make([
                                 BeneficiaryResource\Actions\EditExtraLarge::make('create_initial_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
-                                    ->url(fn ($record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                    ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
                                     ->outlined(),
                             ])
                                 ->alignCenter(),
@@ -236,41 +235,34 @@ class ViewBeneficiary extends ViewRecord
                 ->headerActions(
                     [
                         BeneficiaryResource\Actions\ViewDetailsAction::make('view')
-                            ->url(fn ($record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
-                            ->visible(fn ($record) => $record->detailedEvaluationResult),
+                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
+                            ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult),
                     ]
                 )
                 ->schema([
                     Group::make()
                         ->relationship('detailedEvaluationResult')
-                        ->visible(fn ($record) => $record->detailedEvaluationResult)
-                        ->columns()
-                        ->schema(function ($state) {
-                            $fields = [];
-                            foreach (RecommendationService::options() as $key => $option) {
-                                if (empty($state->$key)) {
-                                    continue;
-                                }
-
-                                $fields[] = TextEntry::make($key)
-                                    ->hiddenLabel()
-                                    ->badge()
-                                    ->color(Color::Gray)
-                                    ->formatStateUsing(fn () => substr($option, 0, 50));
-                            }
-
-                            return $fields;
-                        }),
-                    Group::make()
-                        ->visible(fn ($record) => ! $record->detailedEvaluationResult)
+                        ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult)
                         ->schema([
-                            TextEntry::make('description')
+                            TextEntry::make('detailedEvaluationResult')
+                                ->state(
+                                    fn (Beneficiary $record) => collect(RecommendationService::options())
+                                        ->filter(fn ($label, $key) => $record->detailedEvaluationResult?->$key)
+                                        ->all()
+                                )
+                                ->color(Color::Gray)
+                                ->badge(),
+                        ]),
+                    Group::make()
+                        ->visible(fn (Beneficiary $record) => ! $record->detailedEvaluationResult)
+                        ->schema([
+                            TextEntry::make('empty_state_heading')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.detailed_evaluation'))
                                 ->alignCenter()
                                 ->weight(FontWeight::SemiBold)
                                 ->size(TextEntry\TextEntrySize::Medium),
-                            TextEntry::make('description')
+                            TextEntry::make('empty_state_description')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.detailed_evaluation_2'))
                                 ->alignCenter()
@@ -279,7 +271,7 @@ class ViewBeneficiary extends ViewRecord
                             Actions::make([
                                 BeneficiaryResource\Actions\EditExtraLarge::make('create_detailed_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
-                                    ->url(fn ($record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                    ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
                                     ->outlined(),
                             ])
                                 ->alignCenter(),
