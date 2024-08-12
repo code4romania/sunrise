@@ -228,7 +228,6 @@ class ViewBeneficiary extends ViewRecord
                 ]);
     }
 
-
     private function detailedEvaluation(): Section
     {
         return
@@ -269,13 +268,14 @@ class ViewBeneficiary extends ViewRecord
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.detailed_evaluation'))
                                 ->alignCenter()
-                                ->weight(FontWeight::Bold)
-                                ->size(TextEntry\TextEntrySize::Large),
+                                ->weight(FontWeight::SemiBold)
+                                ->size(TextEntry\TextEntrySize::Medium),
                             TextEntry::make('description')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.detailed_evaluation_2'))
                                 ->alignCenter()
-                                ->size(TextEntry\TextEntrySize::Medium),
+                                ->color(Color::Gray)
+                                ->size(TextEntry\TextEntrySize::Small),
                             Actions::make([
                                 BeneficiaryResource\Actions\EditExtraLarge::make('create_detailed_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
