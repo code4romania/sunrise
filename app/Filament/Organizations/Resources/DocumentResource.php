@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Number;
 
 class DocumentResource extends Resource
 {
@@ -79,7 +80,9 @@ class DocumentResource extends Resource
                     'image/*',
                 ])
                 ->maxSize(config('media-library.max_file_size'))
-                ->helperText(__('beneficiary.helper_text.document_file'))
+                ->helperText(__('beneficiary.helper_text.document_file', [
+                    'size' => Number::fileSize(config('media-library.max_file_size')),
+                ]))
                 ->columnSpanFull()
                 ->required(),
         ];

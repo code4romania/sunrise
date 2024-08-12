@@ -267,7 +267,7 @@ return [
             'heading' => [
                 'add_modal' => 'Adaugă specialist în echipă',
                 'edit_modal' => 'Modifică  specialist în echipă',
-                'delete_modal' => 'Elimină membrul din echipa de caz'
+                'delete_modal' => 'Elimină membrul din echipa de caz',
             ],
             'labels' => [
                 'name' => 'Nume specialist',
@@ -378,7 +378,7 @@ return [
         'initial_evaluation_2' => 'Pentru oferirea de servicii imediate',
         'detailed_evaluation' => 'Evaluarea multidiciplinară',
         'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
-        'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls, .csv, .png, .tiff, .jpg. Dimensiunea maxima nu poate depăși 25 Mb',
+        'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls/xlsx, .csv, .png, .tiff, .jpg. Dimensiunea maximă nu poate depăși :size',
         'documents' => 'Niciun document încărcat',
         'documents_2' => 'Încarcă un prim document în fișa beneficiarei',
     ],
