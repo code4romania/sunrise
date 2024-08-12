@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\DocumentResource\Pages;
 
 use App\Concerns\HasParentResource;
+use App\Enums\DocumentType;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Models\Document;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -14,6 +15,7 @@ use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -84,6 +86,12 @@ class ListDocuments extends ListRecords
                         'parent' => $this->parent,
                         'record' => $record,
                     ])),
+            ])
+            ->filters([
+                SelectFilter::make('type')
+                    ->label(__('beneficiary.section.documents.labels.type'))
+                    ->options(DocumentType::options())
+                    ->searchable(),
             ])
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateHeading(__('beneficiary.helper_text.documents'))

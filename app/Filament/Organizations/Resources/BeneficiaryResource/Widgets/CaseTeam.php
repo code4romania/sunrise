@@ -66,6 +66,7 @@ class CaseTeam extends BaseWidget
                 SelectFilter::make('status')
                     ->label(__('beneficiary.section.specialists.labels.status'))
                     ->options(UserStatus::options())
+                    ->searchable()
                     ->modifyQueryUsing(
                         fn (Builder $query, $state): Builder => $state['value'] ?
                             $query->whereHas(
@@ -78,6 +79,7 @@ class CaseTeam extends BaseWidget
                 SelectFilter::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->options(Role::options())
+                    ->searchable()
                     ->modifyQueryUsing(
                         fn (Builder $query, $state): Builder => $state['value'] ?
                         $query->whereJsonContains('roles', $state['value']) :
