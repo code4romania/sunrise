@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Concerns\HasViewContentFooter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Models\CaseTeam;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -35,14 +34,14 @@ class CaseTeamListWidget extends BaseWidget
             ])
             ->columns([
                 TextColumn::make('roles')
-                    ->label(__('beneficiary.section.specialists.labels.role')),
+                    ->label(__('beneficiary.section.specialists.labels.role'))
+                    ->wrap(),
 
-                TextColumn::make('user_id')
-                    ->label(__('beneficiary.section.specialists.labels.name'))
-                    ->formatStateUsing(fn (CaseTeam $record) => $record->user->getFilamentName()),
+                TextColumn::make('user.full_name')
+                    ->label(__('beneficiary.section.specialists.labels.name')),
             ])
             ->contentFooter(
-                fn () => $this->viewContentFooter($this->record->team()->count(), 'beneficiary.section.specialists.labels.summarize')
+                $this->viewContentFooter($this->record->team()->count(), 'beneficiary.section.specialists.labels.summarize')
             );
     }
 }

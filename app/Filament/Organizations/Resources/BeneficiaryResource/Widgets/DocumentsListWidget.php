@@ -44,7 +44,7 @@ class DocumentsListWidget extends BaseWidget
                     ->label(__('beneficiary.section.documents.labels.name')),
             ])
             ->contentFooter(
-                fn () => $this->viewContentFooter($this->record->documents()->count(), 'beneficiary.section.documents.labels.summarize')
+                $this->viewContentFooter($this->record->documents()->count(), 'beneficiary.section.documents.labels.summarize')
             )
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateHeading(__('beneficiary.helper_text.documents'))

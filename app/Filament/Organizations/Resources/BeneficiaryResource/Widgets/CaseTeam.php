@@ -27,19 +27,18 @@ class CaseTeam extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => $this->record->team()->with('user'))
+            ->query(fn () => $this->record->team())
             ->columns([
-                TextColumn::make('user.first_name')
-                    ->label(__('beneficiary.section.specialists.labels.name'))
-                    ->formatStateUsing(fn (\App\Models\CaseTeam $record) => $record->user->getFilamentName()),
+                TextColumn::make('user.full_name')
+                    ->label(__('beneficiary.section.specialists.labels.name')),
 
                 TextColumn::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
+                    ->wrap()
                     ->color(Color::Gray),
 
                 TextColumn::make('user.status')
-                    ->label(__('beneficiary.section.specialists.labels.status'))
-                    ->default(0),
+                    ->label(__('beneficiary.section.specialists.labels.status')),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -68,12 +67,9 @@ class CaseTeam extends BaseWidget
                     ->options(UserStatus::options())
                     ->searchable()
                     ->modifyQueryUsing(
-                        fn (Builder $query, $state): Builder => $state['value'] ?
-                            $query->whereHas(
-                                'user',
-                                fn (Builder $query) => $query->where('status', $state['value'])
-                            ) :
-                            $query
+                        fn (Builder $query, array $state): Builder => $state['value']
+                            ? $query->whereRelation('user', 'status', $state['value'])
+                            : $query
                     ),
 
                 SelectFilter::make('roles')
@@ -81,9 +77,9 @@ class CaseTeam extends BaseWidget
                     ->options(Role::options())
                     ->searchable()
                     ->modifyQueryUsing(
-                        fn (Builder $query, $state): Builder => $state['value'] ?
-                        $query->whereJsonContains('roles', $state['value']) :
-                        $query
+                        fn (Builder $query, $state): Builder => $state['value']
+                            ? $query->whereJsonContains('roles', $state['value'])
+                            : $query
                     ),
             ])
             ->heading(__('beneficiary.section.specialists.title'));

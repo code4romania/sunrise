@@ -7,6 +7,8 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -15,6 +17,7 @@ use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Colors\Color;
@@ -67,7 +70,7 @@ class ViewBeneficiary extends ViewRecord
             ->columnSpan(1)
             ->columns()
             ->headerActions([
-                BeneficiaryResource\Actions\ViewDetailsAction::make('view')
+                ViewDetailsAction::make('view')
                     ->url(fn ($record) => BeneficiaryResource::getUrl('view_identity', ['record' => $record])),
             ])
             ->extraAttributes([
@@ -126,7 +129,7 @@ class ViewBeneficiary extends ViewRecord
             ->columnSpan(1)
             ->columns()
             ->headerActions([
-                BeneficiaryResource\Actions\ViewDetailsAction::make('view')
+                ViewDetailsAction::make('view')
                     ->url(fn ($record) => BeneficiaryResource::getUrl('view_personal_information', ['record' => $record])),
             ])
             ->extraAttributes([
@@ -179,7 +182,7 @@ class ViewBeneficiary extends ViewRecord
                 ->columnSpan(1)
                 ->headerActions(
                     [
-                        BeneficiaryResource\Actions\ViewDetailsAction::make('view')
+                        ViewDetailsAction::make('view')
                             ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
                             ->visible(fn (Beneficiary $record) => $record->violence?->violence_types),
                     ]
@@ -209,15 +212,15 @@ class ViewBeneficiary extends ViewRecord
                                 ->default(__('beneficiary.helper_text.initial_evaluation'))
                                 ->alignCenter()
                                 ->weight(FontWeight::SemiBold)
-                                ->size(TextEntry\TextEntrySize::Medium),
+                                ->size(TextEntrySize::Medium),
                             TextEntry::make('empty_state_description')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.initial_evaluation_2'))
                                 ->alignCenter()
                                 ->color(Color::Gray)
-                                ->size(TextEntry\TextEntrySize::Small),
+                                ->size(TextEntrySize::Small),
                             Actions::make([
-                                BeneficiaryResource\Actions\EditExtraLarge::make('create_initial_evaluation')
+                                EditExtraLarge::make('create_initial_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
                                     ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
                                     ->outlined(),
@@ -234,7 +237,7 @@ class ViewBeneficiary extends ViewRecord
                 ->columnSpan(1)
                 ->headerActions(
                     [
-                        BeneficiaryResource\Actions\ViewDetailsAction::make('view')
+                        ViewDetailsAction::make('view')
                             ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
                             ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult),
                     ]
@@ -261,15 +264,15 @@ class ViewBeneficiary extends ViewRecord
                                 ->default(__('beneficiary.helper_text.detailed_evaluation'))
                                 ->alignCenter()
                                 ->weight(FontWeight::SemiBold)
-                                ->size(TextEntry\TextEntrySize::Medium),
+                                ->size(TextEntrySize::Medium),
                             TextEntry::make('empty_state_description')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.detailed_evaluation_2'))
                                 ->alignCenter()
                                 ->color(Color::Gray)
-                                ->size(TextEntry\TextEntrySize::Small),
+                                ->size(TextEntrySize::Small),
                             Actions::make([
-                                BeneficiaryResource\Actions\EditExtraLarge::make('create_detailed_evaluation')
+                                EditExtraLarge::make('create_detailed_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
                                     ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
                                     ->outlined(),

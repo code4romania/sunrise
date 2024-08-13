@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditPersonalInformation;
 use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Grid;
@@ -71,7 +72,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -144,7 +145,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -250,7 +251,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -288,7 +289,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns(2)
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    EditPersonalInformation::make('edit'),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
