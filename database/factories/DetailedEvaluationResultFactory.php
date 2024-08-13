@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,21 +19,21 @@ class DetailedEvaluationResultFactory extends Factory
     public function definition(): array
     {
         return [
-            'psychological_advice' => fake()->randomElement(Ternary::values()),
-            'legal_advice' => fake()->randomElement(Ternary::values()),
-            'legal_assistance' => fake()->randomElement(Ternary::values()),
-            'prenatal_advice' => fake()->randomElement(Ternary::values()),
-            'social_advice' => fake()->randomElement(Ternary::values()),
-            'medical_services' => fake()->randomElement(Ternary::values()),
-            'medical_payment' => fake()->randomElement(Ternary::values()),
-            'securing_residential_spaces' => fake()->randomElement(Ternary::values()),
-            'occupational_program_services' => fake()->randomElement(Ternary::values()),
-            'educational_services_for_children' => fake()->randomElement(Ternary::values()),
-            'temporary_shelter_services' => fake()->randomElement(Ternary::values()),
-            'protection_order' => fake()->randomElement(Ternary::values()),
-            'crisis_assistance' => fake()->randomElement(Ternary::values()),
-            'safety_plan' => fake()->randomElement(Ternary::values()),
-            'other_services' => fake()->randomElement(Ternary::values()),
+            'psychological_advice' => fake()->boolean(),
+            'legal_advice' => fake()->boolean(),
+            'legal_assistance' => fake()->boolean(),
+            'prenatal_advice' => fake()->boolean(),
+            'social_advice' => fake()->boolean(),
+            'medical_services' => fake()->boolean(),
+            'medical_payment' => fake()->boolean(),
+            'securing_residential_spaces' => fake()->boolean(),
+            'occupational_program_services' => fake()->boolean(),
+            'educational_services_for_children' => fake()->boolean(),
+            'temporary_shelter_services' => fake()->boolean(),
+            'protection_order' => fake()->boolean(),
+            'crisis_assistance' => fake()->boolean(),
+            'safety_plan' => fake()->boolean(),
+            'other_services' => fake()->boolean(),
             'other_services_description' => fake()->text(),
             'recommendations_for_intervention_plan' => fake()->text(),
         ];

@@ -267,12 +267,17 @@ return [
             'heading' => [
                 'add_modal' => 'Adaugă specialist în echipă',
                 'edit_modal' => 'Modifică  specialist în echipă',
+                'delete_modal' => 'Elimină membrul din echipa de caz',
             ],
             'labels' => [
                 'name' => 'Nume specialist',
                 'role' => 'Rol',
                 'status' => 'Status',
                 'roles' => 'Rol în echipa de caz',
+                'summarize' => '{1} +:count alt specialist|[2,19] +:count alți specialiști|[20,*] +:count de alți specialiști',
+            ],
+            'action' => [
+                'delete' => 'Elimină din echipa de caz',
             ],
         ],
 
@@ -296,6 +301,7 @@ return [
                 'observations' => 'Observații',
                 'date' => 'Data',
                 'document_file' => 'Încarcă document',
+                'summarize' => '{1} +:count alt document|[2,19] +:count alte documente|[20,*] +:count de alte documente',
                 'delete_description' => 'Odată șters un document, acesta nu mai poate fi recuperat. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
                 'empty_state_header' => 'Formatul documentului nu permite previzualizarea lui',
                 'empty_state_description' => 'Descărcați documentul pentru a-l putea vizualiza.',
@@ -458,7 +464,7 @@ return [
         'initial_evaluation_2' => 'Pentru oferirea de servicii imediate',
         'detailed_evaluation' => 'Evaluarea multidiciplinară',
         'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
-        'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls, .csv, .png, .tiff, .jpg. Dimensiunea maxima nu poate depăși 25 Mb',
+        'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls/xlsx, .csv, .png, .tiff, .jpg. Dimensiunea maximă nu poate depăși :size',
         'documents' => 'Niciun document încărcat',
         'documents_2' => 'Încarcă un prim document în fișa beneficiarei',
     ],

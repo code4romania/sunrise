@@ -32,4 +32,22 @@ class DetailedEvaluationResult extends Model
         'other_services_description',
         'recommendations_for_intervention_plan',
     ];
+
+    protected $casts = [
+        'psychological_advice' => 'boolean',
+        'legal_advice' => 'boolean',
+        'legal_assistance' => 'boolean',
+        'prenatal_advice' => 'boolean',
+        'social_advice' => 'boolean',
+        'medical_services' => 'boolean',
+        'medical_payment' => 'boolean',
+        'securing_residential_spaces' => 'boolean',
+        'occupational_program_services' => 'boolean',
+        'educational_services_for_children' => 'boolean',
+        'temporary_shelter_services' => 'boolean',
+        'protection_order' => 'boolean',
+        'crisis_assistance' => 'boolean',
+        'safety_plan' => 'boolean',
+        'other_services' => 'boolean',
+    ];
 }

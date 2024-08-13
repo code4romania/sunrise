@@ -6,13 +6,14 @@ namespace App\Enums;
 
 use App\Concerns\Enums\Arrayable;
 use App\Concerns\Enums\Comparable;
-use App\Concerns\Enums\HasLabel;
+use App\Concerns\Enums\HasLabel as HasLabelTrait;
+use Filament\Support\Contracts\HasLabel;
 
-enum DocumentType: string
+enum DocumentType: string implements HasLabel
 {
     use Arrayable;
     use Comparable;
-    use HasLabel;
+    use HasLabelTrait;
 
     case CONTRACT = 'contract';
     case FORM = 'form';
