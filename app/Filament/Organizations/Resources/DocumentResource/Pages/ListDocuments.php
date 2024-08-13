@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\DocumentResource\Pages;
 
 use App\Concerns\HasParentResource;
+use App\Enums\DocumentType;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Models\Document;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Enums\ActionSize;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -68,7 +72,6 @@ class ListDocuments extends ListRecords
 
                 TextColumn::make('type')
                     ->label(__('beneficiary.section.documents.labels.type'))
-                    ->formatStateUsing(fn ($state) => $state->label())
                     ->sortable(),
 
                 TextColumn::make('observations')
@@ -77,7 +80,37 @@ class ListDocuments extends ListRecords
             ])
             ->actions([
                 ViewAction::make('view')
+                    ->label(__('general.action.view_details'))
+                    ->color('primary')
                     ->url(fn (Document $record) => self::getParentResource()::getUrl('documents.view', [
+                        'parent' => $this->parent,
+                        'record' => $record,
+                    ])),
+            ])
+            ->filters([
+                SelectFilter::make('type')
+                    ->label(__('beneficiary.section.documents.labels.type'))
+                    ->options(DocumentType::options())
+                    ->searchable(),
+            ])
+            ->emptyStateIcon('heroicon-o-document')
+            ->emptyStateHeading(__('beneficiary.helper_text.documents'))
+            ->emptyStateDescription(__('beneficiary.helper_text.documents_2'))
+            ->emptyStateActions([
+                CreateAction::make()
+                    ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
+                    ->label(__('beneficiary.section.documents.actions.add'))
+                    ->createAnother(false)
+                    ->outlined()
+                    ->size(ActionSize::ExtraLarge)
+                    ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.create'))
+                    ->modalCancelActionLabel(__('general.action.cancel'))
+                    ->mutateFormDataUsing(function (array $data) {
+                        $data[$this->getParentRelationshipKey()] = $this->parent->id;
+
+                        return $data;
+                    })
+                    ->successRedirectUrl(fn (Document $record) => static::getParentResource()::getUrl('documents.view', [
                         'parent' => $this->parent,
                         'record' => $record,
                     ])),

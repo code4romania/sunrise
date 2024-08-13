@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditPersonalInformation;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -79,6 +80,9 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
                 ])
+                ->extraAttributes([
+                    'class' => 'h-full',
+                ])
                 ->schema([
                     EnumEntry::make('has_family_doctor')
                         ->label(__('field.has_family_doctor'))
@@ -149,6 +153,9 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->headerActions([
                     BeneficiaryResource\Actions\Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_aggressor', ['record' => $record])),
+                ])
+                ->extraAttributes([
+                    'class' => 'h-full',
                 ])
                 ->schema([
                     RepeatableEntry::make('aggressor')
