@@ -26,11 +26,24 @@ return [
         'edit_identity' => [
             'title' => 'Editează identitate beneficiar',
         ],
+
+        'edit_children' => [
+            'title' => 'Editează identitate copii',
+        ],
         'personal_information' => [
             'title' => 'Informații caz',
         ],
         'edit_personal_information' => [
-            'title' => 'Editează informații caz',
+            'title' => 'Editează informații beneficiar',
+        ],
+        'edit_aggressor' => [
+            'title' => 'Editează informații agresor',
+        ],
+        'edit_antecedents' => [
+            'title' => 'Editează antecedente de caz',
+        ],
+        'edit_flow_presentation' => [
+            'title' => 'Editează flux prezentare victimă',
         ],
         'initial_evaluation' => [
             'title' => 'Evaluare inițială',
@@ -138,9 +151,16 @@ return [
                 'antecedents' => 'Antecedente caz',
                 'flow' => 'Flux prezentare victimă',
             ],
+            'heading' => [
+                'aggressor' => 'Agresor #:number',
+                'delete_aggressor' => 'Șterge informația despre agresor',
+            ],
             'actions' => [
                 'add_aggressor' => 'Adaugă încă un agresor',
-                'delete_aggressor' => 'Sterge agresor',
+                'delete_aggressor' => 'Șterge agresor',
+            ],
+            'label' => [
+                'delete_aggressor_description' => 'Acțiunea va șterge din această pagină întreaga secțiune cu informațiile introduse despre acest agresor. Datele șterse nu vor mai putea fi recuperate.',
             ],
         ],
 
