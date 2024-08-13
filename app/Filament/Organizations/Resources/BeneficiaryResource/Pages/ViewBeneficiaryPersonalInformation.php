@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
+use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -155,10 +156,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->columnSpanFull()
                         ->hiddenLabel()
                         ->schema([
-                            TextEntry::make('aggressor_heading')
-                                ->hiddenLabel()
-                                ->columnSpanFull()
-                                ->default(function (TextEntry $component) {
+                            SectionHeader::make('header')
+                                ->state(function (SectionHeader $component) {
                                     $index = (int) explode('.', $component->getStatePath())[1];
 
                                     return __('beneficiary.section.personal_information.heading.aggressor', [
@@ -166,9 +165,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     ]);
                                 })
                                 ->visible(
-                                    fn (TextEntry $component) => $component->getContainer()->getParentComponent()->getState()->count() > 1
-                                )
-                                ->size(TextEntry\TextEntrySize::Large),
+                                    fn (SectionHeader $component) => $component->getContainer()->getParentComponent()->getState()->count() > 1
+                                ),
 
                             EnumEntry::make('relationship')
                                 ->label(__('field.aggressor_relationship'))

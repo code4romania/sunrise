@@ -130,7 +130,7 @@ class BeneficiaryResource extends Resource
             'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal/edit'),
             'edit_aggressor' => Pages\EditAggressor::route('/{record}/aggressor/edit'),
             'edit_antecedents' => Pages\EditAntecedents::route('{record}/antecedents/edit'),
-            'edit_flow_presentation' => Pages\EditFlowPresentation::route('{record}/flow-presentation/edit'),
+            'edit_flow_presentation' => Pages\EditFlowPresentation::route('{record}/flowPresentation/edit'),
 
             'view_initial_evaluation' => Pages\ViewInitialEvaluation::route('/{record}/initialEvaluation'),
             'create_initial_evaluation' => Pages\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
