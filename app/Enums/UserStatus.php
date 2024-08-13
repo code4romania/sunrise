@@ -6,13 +6,14 @@ namespace App\Enums;
 
 use App\Concerns\Enums\Arrayable;
 use App\Concerns\Enums\Comparable;
-use App\Concerns\Enums\HasLabel;
+use App\Concerns\Enums\HasLabel as HasLabelTrait;
+use Filament\Support\Contracts\HasLabel;
 
-enum UserStatus: string
+enum UserStatus: string implements HasLabel
 {
     use Arrayable;
     use Comparable;
-    use HasLabel;
+    use HasLabelTrait;
 
     case ACTIVE = 'active';
     case INACTIVE = 'inactive';
