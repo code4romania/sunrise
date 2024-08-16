@@ -204,7 +204,7 @@ return [
         'high' => 'Grad de risc crescut',
         'medium' => 'Grad de risc mediu',
         'low' => 'Grad de risc scăzut',
-        'none' => 'Fără risc documentat'
+        'none' => 'Fără risc documentat',
     ],
 
     'role' => [
@@ -282,6 +282,12 @@ return [
         'child_born_certificate' => 'Certificat de naștere copil',
         'standard_sheets' => 'Fișe standard',
         'document' => 'Document (nespecificat)',
-      ],
+    ],
 
+    'activity_description' => [
+        'created' => 'Creat',
+        'updated' => 'Editat',
+        'deleted' => 'Șters',
+        'logged_in' => 'Authentificat',
+    ],
 ];

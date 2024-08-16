@@ -327,6 +327,34 @@ return [
                 'empty_state_description' => 'Descărcați documentul pentru a-l putea vizualiza.',
             ],
         ],
+
+        'history' => [
+            'titles' => [
+                'list' => 'Istoric',
+            ],
+
+            'headings' => [
+                'table' => 'Istoric modificări & accesare caz',
+            ],
+
+            'labels' => [
+                'date' => 'Data',
+                'time' => 'Ora',
+                'user' => 'Utilizator',
+                'description' => 'Acțiune',
+                'section' => 'Secțiune',
+                'subsection' => 'Sub-secțiune',
+                'view_action' => 'Detalii',
+            ],
+
+            'actions' => [
+                'view' => 'Istoric caz',
+            ],
+
+            'breadcrumbs' => [
+                'list' => 'Istoric modificări & accesare caz',
+            ],
+        ],
     ],
 
     'status' => [

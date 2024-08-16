@@ -100,4 +100,14 @@ class BeneficiaryBreadcrumb
             [self::$resourcePath::getUrl('documents.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
+
+    public function getHistoryBreadcrumbs(): array
+    {
+        $breadcrumb = __('beneficiary.section.history.breadcrumbs.list');
+
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [self::$resourcePath::getUrl('beneficiary-histories.index', ['parent' => $this->record->id]) => $breadcrumb],
+        );
+    }
 }

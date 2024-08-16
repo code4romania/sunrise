@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
+use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
+use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
@@ -151,6 +153,9 @@ class BeneficiaryResource extends Resource
 
             'documents.index' => ListDocuments::route('/{parent}/documents'),
             'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
+
+            'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
+            'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),
         ];
     }
 }

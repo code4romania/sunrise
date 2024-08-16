@@ -87,7 +87,7 @@ return [
     'psychiatric_history' => 'Antecedente psihiatrice',
     'psychiatric_notes' => 'Observații antecedente psihiatrice',
     'criminal_history' => 'Antecedente penale',
-    'criminal_notes' => 'Observații antecedente penale',
+    'criminal_history_notes' => 'Observații antecedente penale',
     'studies' => 'Studii absolvite',
     'occupation' => 'Ocupație',
     'workplace' => 'Locul de muncă',
