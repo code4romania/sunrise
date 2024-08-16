@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Concerns\Enums\Arrayable;
-use App\Concerns\Enums\Comparable;
-use App\Concerns\Enums\HasLabel;
+use App\Concerns\Enums;
 use Filament\Support\Colors\Color;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
+use Filament\Support\Contracts\HasLabel;
 
-enum Level: string implements HasColor, HasIcon
+enum Level: string implements HasColor, HasIcon, HasLabel
 {
-    use Arrayable;
-    use Comparable;
-    use HasLabel;
+    use Enums\Arrayable;
+    use Enums\Comparable;
+    use Enums\HasLabel;
 
     case HIGH = 'high';
     case MEDIUM = 'medium';
