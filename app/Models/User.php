@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
+use App\Concerns\UserPermissions;
+use App\Enums\CasePermission;
 use App\Enums\Role;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
@@ -46,6 +48,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasUserStatus;
+    use UserPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -208,5 +211,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return Filament::getTenant()
             ->users
             ->pluck('full_name', 'id');
+    }
+
+    public function canViewAnyBeneficiary(): bool
+    {
+        return $this->userIsCoordinatorOrChefService($this) ||
+            $this->userHasCasePermissions($this->case_permissions, CasePermission::HAS_ACCESS_TO_ALL_CASES);
     }
 }

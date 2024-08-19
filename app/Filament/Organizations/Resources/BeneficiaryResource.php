@@ -16,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class BeneficiaryResource extends Resource
@@ -61,6 +62,14 @@ class BeneficiaryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                if (auth()->user()->canViewAnyBeneficiary()) {
+                    return $query;
+                }
+
+                return $query->with('team')
+                    ->whereHas('team', fn (Builder $query) => $query->where('user_id', auth()->id()));
+            })
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id'))

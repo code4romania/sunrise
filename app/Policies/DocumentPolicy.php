@@ -6,9 +6,10 @@ namespace App\Policies;
 
 use App\Concerns\UserPermissions;
 use App\Models\Beneficiary;
+use App\Models\Document;
 use App\Models\User;
 
-class BeneficiaryPolicy
+class DocumentPolicy
 {
     use UserPermissions;
 
@@ -17,15 +18,15 @@ class BeneficiaryPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $this->userHasAccessToBeneficiary($user, Beneficiary::find(request('parent')));
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Beneficiary $beneficiary): bool
+    public function view(User $user, Document $document): bool
     {
-        return $this->userHasAccessToBeneficiary($user, $beneficiary);
+        return $this->userHasAccessToBeneficiary($user, $document->beneficiary) && $this->documentBelongsToBeneficiary($document);
     }
 
     /**
@@ -39,23 +40,23 @@ class BeneficiaryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Beneficiary $beneficiary): bool
+    public function update(User $user, Document $document): bool
     {
-        return $this->userHasAccessToBeneficiary($user, $beneficiary);
+        return $this->userHasAccessToBeneficiary($user, $document->beneficiary);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Beneficiary $beneficiary): bool
+    public function delete(User $user, Document $document): bool
     {
-        return false;
+        return $this->userHasAccessToBeneficiary($user, $document->beneficiary);
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Beneficiary $beneficiary): bool
+    public function restore(User $user, Document $document): bool
     {
         return false;
     }
@@ -63,8 +64,13 @@ class BeneficiaryPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Beneficiary $beneficiary): bool
+    public function forceDelete(User $user, Document $document): bool
     {
         return false;
+    }
+
+    private function documentBelongsToBeneficiary(Document $document): bool
+    {
+        return (int) $document->beneficiary->id === (int) request('parent');
     }
 }
