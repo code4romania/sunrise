@@ -90,7 +90,7 @@ class ViewBeneficiaryHistories extends ViewRecord
             return [];
         }
 
-        $castType = $record->subject->getCasts()[$field] ?? null;
+        $castType = $this->getCastType($record, $field);
 
         if ($castType) {
             if ($castType === 'json') {
@@ -299,5 +299,17 @@ class ViewBeneficiaryHistories extends ViewRecord
     private function convertToCounty(int $countyId): ?string
     {
         return County::find($countyId)->name;
+    }
+
+    public function getCastType(Activity $record, string $field): ?string
+    {
+        if ($record->subject)
+        {
+            return $record->subject->getCasts()[$field] ?? null;
+        }
+
+        $modelName = sprintf('\App\Models\%s', $record->subject_type);
+        $modelClass = new $modelName();
+        return $modelClass->getCasts()[$field] ?? null;
     }
 }
