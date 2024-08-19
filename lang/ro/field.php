@@ -70,6 +70,7 @@ return [
     'start_year' => 'Anul de început',
     'status' => 'Status',
 
+    'children' => 'Copii',
     'children_total_count' => 'Număr total copii',
     'children_care_count' => 'Număr copii în întreținere',
     'children_under_10_care_count' => 'Număr copii în întreținere cu vârsta < 10 ani',

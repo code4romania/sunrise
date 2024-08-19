@@ -150,11 +150,6 @@ class ViewBeneficiaryHistories extends ViewRecord
         return $field;
     }
 
-    /**
-     * @param  mixed $castType
-     * @param        $fieldValue
-     * @return array
-     */
     public function convertToEnum(mixed $castType, mixed $fieldValue): mixed
     {
         if (enum_exists($castType)) {
@@ -175,14 +170,13 @@ class ViewBeneficiaryHistories extends ViewRecord
         return $fieldValue;
     }
 
-    /**
-     * @param  string $field
-     * @param  mixed  $oldValue
-     * @param  mixed  $newValue
-     * @return array
-     */
-    public function getSchema(string $field, mixed $oldValue, mixed $newValue, mixed $oldDescription = null, mixed $newDescription = null): array
-    {
+    public function getSchema(
+        string $field,
+        mixed $oldValue,
+        mixed $newValue,
+        mixed $oldDescription = null,
+        mixed $newDescription = null
+    ): array {
         return [
             HistoryLine::make($field)
                 ->oldValue($oldValue)
@@ -217,6 +211,7 @@ class ViewBeneficiaryHistories extends ViewRecord
                     continue;
                 }
 
+                $subField = $this->mapSpecialFieldName($subField);
                 $schema = array_merge($schema, $this->getSchema($subField, $oldDataFiled, $v));
             }
 
@@ -226,6 +221,7 @@ class ViewBeneficiaryHistories extends ViewRecord
                         continue;
                     }
 
+                    $subField = $this->mapSpecialFieldName($subField);
                     $schema = array_merge($schema, $this->getSchema($subField, $v, $repeaterData[$subField]));
                 }
             }
@@ -241,11 +237,14 @@ class ViewBeneficiaryHistories extends ViewRecord
         return $sections;
     }
 
-    /**
-     * @param        $newValue
-     * @param        $oldValue
-     * @return array
-     */
+    private function mapSpecialFieldName(string $field): string
+    {
+        return match ($field) {
+            'name' => 'full_name',
+            default => $field,
+        };
+    }
+
     public function getSchemaForRiskFactors($newValue, $oldValue): array
     {
         $schema = [];

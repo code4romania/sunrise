@@ -73,10 +73,17 @@ class ListBeneficiaryHistories extends ListRecords
                                     $q->where('subject_type', (new $model)->getMorphClass())
                                         ->whereIn('subject_id', $record->{$relation}()->pluck('id'));
                                 });
+                                $query->orWhere(function (Builder $q) use ($record, $model, $relation) {
+                                    $q->whereJsonContains('properties', ['old' => ['beneficiary_id' => $record->id]])->get();
+                                });
                             }
                         });
                     })
-//                ->ddRawSql()
+                    ->orWhere(
+                        fn (Builder $q) => $q->whereJsonContains('properties', ['old' => ['beneficiary_id' => $record->id]])
+                            ->orWhereJsonContains('properties', ['attributes' => ['beneficiary_id' => $record->id]])
+                            ->whereIn('subject_type', $relatedClasses)
+                    )
             )
             ->heading(__('beneficiary.section.history.headings.table'))
             ->columns([
