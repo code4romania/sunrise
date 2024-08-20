@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource;
+use App\Infolists\Components\HistoryChanges;
 use App\Infolists\Components\HistoryLine;
 use App\Models\Activity;
 use App\Models\City;
@@ -42,41 +43,38 @@ class ViewBeneficiaryHistories extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
-        return $infolist->schema(function (Activity $record) {
-            return $this->getActivitySchema($record);
-        });
+        return $infolist->schema([
+            Section::make()
+                ->columns()
+                ->maxWidth('3xl')
+                ->schema([
+                    HistoryChanges::make('changes'),
+                ]),
+
+        ]);
     }
 
     private function getActivitySchema(Activity $record)
     {
         $schema = [];
 
-        $newValues = $record->properties->get('attributes');
-        if ($newValues) {
-            foreach ($newValues as $field => $value) {
-                $oldValue = $record->properties->get('old')[$field] ?? null;
-                $schema = array_merge($schema, $this->getFieldSchema($record, $field, $value, $oldValue));
-            }
-        }
-
-        $oldValues = $record->properties->get('old');
-
-        if ($oldValues) {
-            foreach ($oldValues as $field => $value) {
-                if (isset($newValues[$field])) {
-                    continue;
-                }
-                $newValue = $record->properties->get('attributes')[$field] ?? null;
-                $schema = array_merge($schema, $this->getFieldSchema($record, $field, $newValue, $value));
-            }
-        }
+        $oldValues = collect($record->properties->get('old'));
+        $newValues = collect($record->properties->get('attributes'));
 
         return [
             Section::make()
                 ->columns()
                 ->maxWidth('3xl')
-                ->schema($schema),
-
+                ->schema(
+                    $oldValues->keys()
+                        ->merge($newValues->keys())
+                        ->unique()
+                        ->flatMap(
+                            fn (string $field) => $this->getFieldSchema($record, $field, $newValues->get($field), $oldValues->get($field))
+                        )
+                        ->dd()
+                        ->all()
+                ),
         ];
     }
 
@@ -303,13 +301,13 @@ class ViewBeneficiaryHistories extends ViewRecord
 
     public function getCastType(Activity $record, string $field): ?string
     {
-        if ($record->subject)
-        {
+        if ($record->subject) {
             return $record->subject->getCasts()[$field] ?? null;
         }
 
-        $modelName = sprintf('\App\Models\%s', $record->subject_type);
+        $modelName = \sprintf('\App\Models\%s', $record->subject_type);
         $modelClass = new $modelName();
+
         return $modelClass->getCasts()[$field] ?? null;
     }
 }
