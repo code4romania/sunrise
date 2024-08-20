@@ -41,50 +41,8 @@ class ListBeneficiaryHistories extends ListRecords
 
     public function table(Table $table): Table
     {
-        $record = $this->parent;
-
-        $relatedClasses = [
-            'aggressor',
-            'meetings',
-            'partner',
-            'multidisciplinaryEvaluation',
-            'detailedEvaluationResult',
-            'evaluateDetails',
-            'violence',
-            'riskFactors',
-            'requestedServices',
-            'beneficiarySituation',
-            'team',
-            'violenceHistory',
-            'documents',
-        ];
-
         return $table
-            ->modifyQueryUsing(
-                fn () => Activity::query()
-                    ->where(function (Builder $query) use ($record, $relatedClasses) {
-                        $query->where(function (Builder $q) use ($record) {
-                            $q->where('subject_type', $record->getMorphClass())
-                                ->where('subject_id', $record->getKey());
-                        })->when($relatedClasses, function (Builder $query, array $relations) use ($record) {
-                            foreach ($relations as $relation) {
-                                $model = \get_class($record->{$relation}()->getRelated());
-                                $query->orWhere(function (Builder $q) use ($record, $model, $relation) {
-                                    $q->where('subject_type', (new $model)->getMorphClass())
-                                        ->whereIn('subject_id', $record->{$relation}()->pluck('id'));
-                                });
-                                $query->orWhere(function (Builder $q) use ($record, $model, $relation) {
-                                    $q->whereJsonContains('properties', ['old' => ['beneficiary_id' => $record->id]])->get();
-                                });
-                            }
-                        });
-                    })
-                    ->orWhere(
-                        fn (Builder $q) => $q->whereJsonContains('properties', ['old' => ['beneficiary_id' => $record->id]])
-                            ->orWhereJsonContains('properties', ['attributes' => ['beneficiary_id' => $record->id]])
-                            ->whereIn('subject_type', $relatedClasses)
-                    )
-            )
+            ->modifyQueryUsing(fn () => Activity::whereMorphedTo('subject', $this->parent))
             ->heading(__('beneficiary.section.history.headings.table'))
             ->columns([
                 TextColumn::make('created_at')
