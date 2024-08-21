@@ -133,4 +133,5 @@ return [
 
     'role' => 'Rol',
     'check' => 'Verifică',
+    'user' => 'Utilizator',
 ];

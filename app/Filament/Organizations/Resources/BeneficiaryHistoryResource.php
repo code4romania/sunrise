@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Enums\ActivityDescription;
 use App\Models\Activity;
 use App\Models\Beneficiary;
 use Filament\Facades\Filament;
@@ -52,5 +53,15 @@ class BeneficiaryHistoryResource extends Resource
     public static function getRecordTitle(Model|null $record): string|null|Htmlable
     {
         return $record->subject_type;
+    }
+
+    public static function getEventLabel(Activity $record): string
+    {
+        $description = __('beneficiary.section.history.labels.beneficiary');
+        if (ActivityDescription::tryFrom($record->event)) {
+            return $description;
+        }
+
+        return $description . ', ' . __('beneficiary.section.history.labels.' . $record->event);
     }
 }

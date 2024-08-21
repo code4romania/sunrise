@@ -60,9 +60,9 @@ class ListBeneficiaryHistories extends ListRecords
                 TextColumn::make('description')
                     ->label(__('beneficiary.section.history.labels.description')),
 
-                TextColumn::make('subject_type')
+                TextColumn::make('event')
                     ->label(__('beneficiary.section.history.labels.section'))
-                    ->formatStateUsing(fn ($state) => $state === 'beneficiary' ? ucfirst($state) : 'Beneficiary, ' . ucfirst($state)),
+                    ->formatStateUsing(fn ($record) => self::getResource()::getEventLabel($record)),
 
                 TextColumn::make('subsection')
                     ->label(__('beneficiary.section.history.labels.subsection')),
