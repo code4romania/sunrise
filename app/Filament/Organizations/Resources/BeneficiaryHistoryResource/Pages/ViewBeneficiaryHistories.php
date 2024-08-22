@@ -21,6 +21,11 @@ class ViewBeneficiaryHistories extends ViewRecord
 
     protected string $relationshipKey = 'subject_id';
 
+    public function __construct()
+    {
+        activity()->disableLogging();
+    }
+
     public function getBreadcrumbs(): array
     {
         return array_merge(

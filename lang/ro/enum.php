@@ -286,6 +286,7 @@ return [
 
     'activity_description' => [
         'created' => 'Creat',
+        'retrieved' => 'Vizualizat',
         'updated' => 'Editat',
         'deleted' => 'Șters',
         'logged_in' => 'Authentificat',

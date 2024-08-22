@@ -25,6 +25,11 @@ class ListBeneficiaryHistories extends ListRecords
 
     protected string $relationshipKey = 'subject_id';
 
+    public function __construct()
+    {
+        activity()->disableLogging();
+    }
+
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->parent)

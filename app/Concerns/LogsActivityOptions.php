@@ -12,6 +12,8 @@ trait LogsActivityOptions
 {
     use LogsActivity;
 
+    protected static $recordEvents = ['created', 'updated', 'deleted', 'retrieved'];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

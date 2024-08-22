@@ -15,6 +15,7 @@ enum ActivityDescription: string implements HasLabel
     use Comparable;
 
     case CREATED = 'created';
+    case RETRIEVED = 'retrieved';
     case UPDATED = 'updated';
 
     case DELETED = 'deleted';

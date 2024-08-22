@@ -361,7 +361,7 @@ return [
             ],
 
             'actions' => [
-                'view' => 'Istoric caz',
+                'view' => 'Istoric modificări',
             ],
 
             'breadcrumbs' => [
