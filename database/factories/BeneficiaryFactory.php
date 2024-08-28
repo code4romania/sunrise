@@ -6,14 +6,20 @@ namespace Database\Factories;
 
 use App\Enums\ActLocation;
 use App\Enums\CaseStatus;
+use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
+use App\Enums\Ethnicity;
 use App\Enums\Gender;
+use App\Enums\HomeOwnership;
 use App\Enums\IDType;
+use App\Enums\Income;
 use App\Enums\NotificationMode;
 use App\Enums\Notifier;
+use App\Enums\Occupation;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
+use App\Enums\Studies;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryPartner;
@@ -47,11 +53,14 @@ class BeneficiaryFactory extends Factory
      */
     public function definition(): array
     {
-        $birthdate = fake()
-            ->dateTimeBetween('1900-01-01', 'now')
-            ->format('Y-m-d');
+        $birthdate = fake()->boolean(75) ?
+            fake()->dateTimeBetween('1900-01-01', 'now')
+                ->format('Y-m-d') :
+            null;
 
-        $gender = fake()->randomElement(Gender::values());
+        $gender = fake()->boolean(75) ?
+            fake()->randomElement(Gender::values()) :
+            null;
 
         return [
             'first_name' => fake()->firstName(),
@@ -108,7 +117,9 @@ class BeneficiaryFactory extends Factory
                 'legal_residence_address' => fake()->address(),
                 'legal_residence_county_id' => $city->county_id,
                 'legal_residence_city_id' => $city->id,
-                'legal_residence_environment' => fake()->randomElement(ResidenceEnvironment::values()),
+                'legal_residence_environment' => fake()->boolean() ?
+                    fake()->randomElement(ResidenceEnvironment::values()) :
+                    null,
                 'same_as_legal_residence' => true,
             ];
         });
@@ -123,7 +134,8 @@ class BeneficiaryFactory extends Factory
                 'effective_residence_address' => fake()->address(),
                 'effective_residence_county_id' => $city->county_id,
                 'effective_residence_city_id' => $city->id,
-                'effective_residence_environment' => fake()->randomElement(ResidenceEnvironment::values()),
+                'effective_residence_environment' => fake()->boolean() ?
+                    fake()->randomElement(ResidenceEnvironment::values()) : null,
                 'same_as_legal_residence' => false,
             ];
         });
@@ -165,6 +177,60 @@ class BeneficiaryFactory extends Factory
             'police_report_count' => fake()->numberBetween(0, 300),
             'has_medical_reports' => fake()->boolean(),
             'medical_report_count' => fake()->numberBetween(0, 300),
+        ]);
+    }
+
+    public function withOccupation(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'occupation' => fake()->boolean(75) ?
+                fake()->randomElement(Occupation::values()) :
+                null,
+        ]);
+    }
+
+    public function withIncome(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'income' => fake()->boolean(75) ?
+                fake()->randomElement(Income::values()) :
+                null,
+        ]);
+    }
+
+    public function withStudies(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'studies' => fake()->boolean(75) ?
+                fake()->randomElement(Studies::values()) :
+                null,
+        ]);
+    }
+
+    public function withCitizenship(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'citizenship' => fake()->boolean(75) ?
+                fake()->randomElement(Citizenship::values()) :
+                null,
+        ]);
+    }
+
+    public function withEthnicity(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'ethnicity' => fake()->boolean(75) ?
+                fake()->randomElement(Ethnicity::values()) :
+                null,
+        ]);
+    }
+
+    public function withHomeOwnership(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'homeownership' => fake()->boolean(75) ?
+                fake()->randomElement(HomeOwnership::values()) :
+                null,
         ]);
     }
 
