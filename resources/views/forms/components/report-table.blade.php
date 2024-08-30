@@ -1,5 +1,6 @@
 @php
-    $composeReport();
+    use Filament\Support\Enums\Alignment;$composeReport();
+    $reportType = $getReportType();
     $reportData = $getReportData();
     $header = $getHorizontalHeader();
     $headerKey = '';
@@ -12,27 +13,37 @@
     $firstHeaderElementColSpan = $verticalSubHeader ? 2 : 1;
     $firstHeaderElementRowSpan = $subHeader ? 2 : 1;
 
-    $footer = 'Total cazuri'
+    $heading = $reportType ? __('report.table_heading.' . $reportType->value) : null;
+
+    $footer = __('report.labels.total');
 
 @endphp
 
-<div class="w-full overflow-x-auto border border-gray-200 rounded-lg dark:border-white/5">
+
+<div class="w-full overflow-x-auto border border-gray-200 rounded-lg dark:border-white/5 pt-4">
     <x-filament-tables::table>
+        <x-filament-tables::header
+            :actions-position="null"
+            :heading="$heading"
+        />
         <x-slot:header>
             <x-filament-tables::row>
                 @foreach($header as $key => $headerElement)
                     @if($key === 0)
-                        <x-filament-tables::header-cell class="!p-2" colspan="{{ $firstHeaderElementColSpan }}" rowspan="{{ $firstHeaderElementRowSpan }}">
+                        <x-filament-tables::header-cell :alignment="Alignment::Center" class="!p-2 text-center"
+                                                        colspan="{{ $firstHeaderElementColSpan }}"
+                                                        rowspan="{{ $firstHeaderElementRowSpan }}"
+                        >
                             {{ $headerElement }}
                         </x-filament-tables::header-cell>
                     @elseif($key === 1 && $subHeader)
 
-                        <x-filament-tables::header-cell class="!p-2" colspan="{{ count($subHeader) }}">
+                        <x-filament-tables::header-cell :alignment="Alignment::Center" class="!p-2" colspan="{{ count($subHeader) }}">
                             {{ $headerElement }}
                         </x-filament-tables::header-cell>
 
                     @else
-                        <x-filament-tables::header-cell class="!p-2" rowspan="{{ $firstHeaderElementRowSpan }}">
+                        <x-filament-tables::header-cell :alignment="Alignment::Center" class="!p-2" rowspan="{{ $firstHeaderElementRowSpan }}">
                             {{ $headerElement }}
                         </x-filament-tables::header-cell>
                     @endif
@@ -41,9 +52,9 @@
 
             <x-filament-tables::row>
                 @foreach($subHeader as $subheaderElement)
-                        <x-filament-tables::header-cell class="!p-2">
-                            {{ $subheaderElement }}
-                        </x-filament-tables::header-cell>
+                    <x-filament-tables::header-cell :alignment="Alignment::Center" class="!p-2">
+                        {{ $subheaderElement }}
+                    </x-filament-tables::header-cell>
                 @endforeach
             </x-filament-tables::row>
 
@@ -62,45 +73,45 @@
                             </x-filament-tables::header-cell>
                         @endif
 
-                            <x-filament-tables::header-cell class="p-2">
-                                {{ $subheader }}
-                            </x-filament-tables::header-cell>
+                        <x-filament-tables::header-cell class="p-2">
+                            {{ $subheader }}
+                        </x-filament-tables::header-cell>
 
                         @foreach($subHeader as $key => $subheaderElement)
-                                <x-filament-tables::cell class="p-2 whitespace-normal">
-                                    {{ $reportData->filter(function ($item) use ($subHeaderKey, $verticalHeaderKey, $verticalSubHeaderKey, $verticalKey, $verticalSubKey, $key) {
-                                            $subHeaderField = $key && $item->$subHeaderKey instanceof BackedEnum ?
-                                                $item->$subHeaderKey->value :
-                                                $item->$subHeaderKey;
-                                            $verticalHeaderField = $item->$verticalHeaderKey instanceof BackedEnum ?
-                                                $item->$verticalHeaderKey->value :
-                                                $item->$verticalHeaderKey;
-                                            $verticalSubHeaderField = $item->$verticalSubHeaderKey instanceof BackedEnum ?
-                                                $item->$verticalSubHeaderKey->value :
-                                                $item->$verticalSubHeaderKey;
+                            <x-filament-tables::cell class="p-2 whitespace-normal justify-center">
+                                {{ $reportData->filter(function ($item) use ($subHeaderKey, $verticalHeaderKey, $verticalSubHeaderKey, $verticalKey, $verticalSubKey, $key) {
+                                        $subHeaderField = $key && $item->$subHeaderKey instanceof BackedEnum ?
+                                            $item->$subHeaderKey->value :
+                                            $item->$subHeaderKey;
+                                        $verticalHeaderField = $item->$verticalHeaderKey instanceof BackedEnum ?
+                                            $item->$verticalHeaderKey->value :
+                                            $item->$verticalHeaderKey;
+                                        $verticalSubHeaderField = $item->$verticalSubHeaderKey instanceof BackedEnum ?
+                                            $item->$verticalSubHeaderKey->value :
+                                            $item->$verticalSubHeaderKey;
 
-                                            return $verticalHeaderField == $verticalKey &&
-                                                $verticalSubHeaderField == $verticalSubKey &&
-                                                $subHeaderField === $key;
-                                        })
-                                        ->first()?->total_cases ?? 0
-                                    }}
-                                </x-filament-tables::cell>
+                                        return $verticalHeaderField == $verticalKey &&
+                                            $verticalSubHeaderField == $verticalSubKey &&
+                                            $subHeaderField === $key;
+                                    })
+                                    ->first()?->total_cases ?? 0
+                                }}
+                            </x-filament-tables::cell>
                         @endforeach
 
-                            <x-filament-tables::cell class="p-2 whitespace-normal">
-                                {{ $reportData->filter(function ($item) use ($verticalHeaderKey,$verticalKey, $verticalSubHeaderKey, $verticalSubKey){
-                                        $verticalHeaderKeyValue = $item->$verticalHeaderKey instanceof BackedEnum ?
-                                                $item->$verticalHeaderKey->value :
-                                                $item->$verticalHeaderKey;
-                                        $verticalSubHeaderKeyValue = $item->$verticalSubHeaderKey instanceof BackedEnum ?
-                                                $item->$verticalSubHeaderKey->value :
-                                                $item->$verticalSubHeaderKey;
-                                        return $verticalHeaderKeyValue == $verticalKey &&
-                                        $verticalSubHeaderKeyValue == $verticalSubKey;
-                                    })
-                                    ->sum('total_cases') }}
-                            </x-filament-tables::cell>
+                        <x-filament-tables::cell class="p-2 whitespace-normal justify-center">
+                            {{ $reportData->filter(function ($item) use ($verticalHeaderKey,$verticalKey, $verticalSubHeaderKey, $verticalSubKey){
+                                    $verticalHeaderKeyValue = $item->$verticalHeaderKey instanceof BackedEnum ?
+                                            $item->$verticalHeaderKey->value :
+                                            $item->$verticalHeaderKey;
+                                    $verticalSubHeaderKeyValue = $item->$verticalSubHeaderKey instanceof BackedEnum ?
+                                            $item->$verticalSubHeaderKey->value :
+                                            $item->$verticalSubHeaderKey;
+                                    return $verticalHeaderKeyValue == $verticalKey &&
+                                    $verticalSubHeaderKeyValue == $verticalSubKey;
+                                })
+                                ->sum('total_cases') }}
+                        </x-filament-tables::cell>
                     </x-filament-tables::row>
                     @php
                         $firstSubHeaderRow = false
@@ -112,7 +123,7 @@
                         {{ $header }}
                     </x-filament-tables::header-cell>
                     @foreach($subHeader as $key => $subheaderElement)
-                        <x-filament-tables::cell class="p-2 whitespace-normal">
+                        <x-filament-tables::cell class="p-2 whitespace-normal justify-center">
                             {{ $reportData->filter(function ($item) use ($subHeaderKey, $verticalHeaderKey, $verticalKey, $key) {
                                     $subHeaderField = $item->$subHeaderKey instanceof BackedEnum ?
                                         $item->$subHeaderKey->value :
@@ -128,7 +139,7 @@
                             }}
                         </x-filament-tables::cell>
                     @endforeach
-                    <x-filament-tables::cell class="p-2 whitespace-normal">
+                    <x-filament-tables::cell class="p-2 whitespace-normal justify-center">
                         {{ $reportData->filter(function ($item) use ($verticalHeaderKey, $verticalKey) {
                                 $verticalHeaderField = $item->$verticalHeaderKey instanceof BackedEnum ?
                                         $item->$verticalHeaderKey->value :
@@ -146,7 +157,7 @@
                         {{ $header }}
                     </x-filament-tables::header-cell>
 
-                    <x-filament-tables::cell class="p-2 whitespace-normal">
+                    <x-filament-tables::cell class="p-2 whitespace-normal justify-center">
                         {{
                             $reportData->filter(fn ($item) => $item->$verticalHeaderKey instanceof BackedEnum ?
                                     $item->$verticalHeaderKey->value == $verticalKey :
@@ -165,7 +176,7 @@
             </x-filament-tables::header-cell>
 
             @foreach($subHeader as $key => $subheaderElement)
-                <x-filament-tables::cell class="p-2 whitespace-normal">
+                <x-filament-tables::cell class="p-2 whitespace-normal justify-center">
                     {{ $reportData->filter(function($item) use ($subHeaderKey, $key){
                             $subHeaderField = $item->$subHeaderKey instanceof BackedEnum ? $item->$subHeaderKey->value : $item->$subHeaderKey;
                             return $subHeaderField == $key;
@@ -173,7 +184,7 @@
                 </x-filament-tables::cell>
             @endforeach
 
-            <x-filament-tables::header-cell class="p-2" colspan="{{ $firstHeaderElementColSpan }}">
+            <x-filament-tables::header-cell class="p-2" :alignment="Alignment::Center" colspan="{{ $firstHeaderElementColSpan }}">
                 {{ $reportData->sum('total_cases') }}
             </x-filament-tables::header-cell>
         </x-filament-tables::row>
@@ -181,3 +192,9 @@
 
     </x-filament-tables::table>
 </div>
+
+<style>
+    tr {
+        text-align: center;
+    }
+</style>

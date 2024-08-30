@@ -23,7 +23,7 @@ use App\Enums\Studies;
 use App\Enums\Violence;
 use App\Models\Beneficiary;
 use App\Models\ReferringInstitution;
-use Filament\Forms\Components\Component;
+use Filament\Infolists\Components\Component;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -91,11 +91,12 @@ class ReportTable extends Component
 
         $this->setGroupBy();
 
-        $this->reportData = $this->query
-            ->get();
+        $this->setReportData();
+    }
 
-        // todo map data for violence types
-        debug($this->reportType, $this->reportData);
+    public function getReportType(): ?ReportType
+    {
+        return $this->reportType;
     }
 
     public function getReportData(): Collection
@@ -171,9 +172,9 @@ class ReportTable extends Component
         switch ($this->reportType) {
             case ReportType::CASES_BY_AGE_GENDER_AND_LEGAL_ADDRESS:
                 $this->header = [
-                    'Gen / Domiciliu legal',
-                    'Distribuţia cazurilor pe grupe de vârstă',
-                    'Total general cazuri',
+                    __('report.headers.gender_and_legal_address'),
+                    __('report.headers.cases_by_age_groups'),
+                    __('report.headers.total'),
                 ];
 
                 $this->setSubHeaderFor('age_group');
@@ -186,9 +187,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_AGE_GENDER_AND_EFFECTIVE_ADDRESS:
                 $this->header = [
-                    'Gen / Domiciliu legal',
-                    'Distribuţia cazurilor pe grupe de vârstă',
-                    'Total general cazuri',
+                    __('report.headers.gender_and_effective_address'),
+                    __('report.headers.cases_by_age_groups'),
+                    __('report.headers.total'),
                 ];
 
                 $this->setSubHeaderFor('age_group');
@@ -201,8 +202,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_ETHNICITY:
                 $this->header = [
-                    'Etnie',
-                    'Distribuția cazurilor',
+                    __('report.headers.ethnicity'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('ethnicity');
@@ -211,8 +212,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_CITIZENSHIP:
                 $this->header = [
-                    'Cetățenie',
-                    'Distribuția cazurilor',
+                    __('report.headers.citizenship'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('citizenship');
@@ -221,8 +222,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_STUDIES:
                 $this->header = [
-                    'Nivel de studii',
-                    'Distribuția cazurilor',
+                    __('report.headers.studies'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('studies');
@@ -231,9 +232,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_STUDIES_AND_EFFECTIVE_ADDRESS:
                 $this->header = [
-                    'Nivel de studii',
-                    'Distribuţia cazurilor după domiciliul efectiv al victimei',
-                    'Subtotal cazuri',
+                    __('report.headers.studies'),
+                    __('report.headers.cases_by_effective_address'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('effective_residence_environment');
@@ -244,9 +245,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_STUDIES_AND_GENDER:
                 $this->header = [
-                    'Nivel de studii',
-                    'Distribuţia cazurilor după genul victimei',
-                    'Subtotal cazuri',
+                    __('report.headers.studies'),
+                    __('report.headers.cases_by_gender'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('gender');
@@ -257,9 +258,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_STUDIES_AND_AGE:
                 $this->header = [
-                    'Nivel de studii',
-                    'Distribuţia cazurilor după vârsta victimei (minor/major)',
-                    'Subtotal cazuri',
+                    __('report.headers.studies'),
+                    __('report.headers.cases_by_age_segmentation'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('segmentation_by_age');
@@ -270,8 +271,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_OCCUPATION:
                 $this->header = [
-                    'Ocupație',
-                    'Distribuția cazurilor',
+                    __('report.headers.occupation'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('occupation');
@@ -280,9 +281,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_OCCUPATION_AND_EFFECTIVE_ADDRESS:
                 $this->header = [
-                    'Nivel de studii',
-                    'Distribuția cazurilor',
-                    'Subtotal cazuri',
+                    __('report.headers.occupation'),
+                    __('report.headers.cases_by_effective_address'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('effective_residence_environment');
@@ -293,9 +294,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_OCCUPATION_EFFECTIVE_ADDRESS_AND_GENDER:
                 $this->header = [
-                    'Ocupație / Domiciliu efectiv',
-                    'Distribuţia cazurilor după genul victimei',
-                    'Total general cazuri',
+                    __('report.headers.occupation_and_effective_address'),
+                    __('report.headers.cases_by_gender'),
+                    __('report.headers.total'),
                 ];
 
                 $this->setSubHeaderFor('gender');
@@ -308,8 +309,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_INCOME:
                 $this->header = [
-                    'Încadrare în venit',
-                    'Distribuția cazurilor',
+                    __('report.headers.income'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('income');
@@ -318,9 +319,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_INCOME_AND_EFFECTIVE_ADDRESS:
                 $this->header = [
-                    'Încadrare în venit / Domiciliu efectiv',
-                    'Distribuţia cazurilor după genul victimei',
-                    'Total general cazuri',
+                    __('report.headers.income'),
+                    __('report.headers.cases_by_effective_address'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('effective_residence_environment');
@@ -331,9 +332,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_INCOME_EFFECTIVE_ADDRESS_AND_GENDER:
                 $this->header = [
-                    'Nivel de studii',
-                    'Distribuția cazurilor',
-                    'Subtotal cazuri',
+                    __('report.headers.income_and_effective_address'),
+                    __('report.headers.cases_by_gender'),
+                    __('report.headers.total'),
                 ];
 
                 $this->setSubHeaderFor('gender');
@@ -346,8 +347,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_HOME_OWNERSHIP:
                 $this->header = [
-                    'Dreptul de proprietate asupra locuinței primare',
-                    'Distribuția cazurilor',
+                    __('report.headers.home_ownership'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('homeownership');
@@ -356,9 +357,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_HOME_OWNERSHIP_AND_EFFECTIVE_ADDRESS:
                 $this->header = [
-                    'Dreptul de proprietate asupra locuinței primare',
-                    'Distribuţia cazurilor după domiciliul efectiv al victimei',
-                    'Subtotal cazuri',
+                    __('report.headers.home_ownership'),
+                    __('report.headers.cases_by_effective_address'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('effective_residence_environment');
@@ -369,9 +370,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_HOME_OWNERSHIP_EFFECTIVE_ADDRESS_AND_GENDER:
                 $this->header = [
-                    'Încadrare în venit / Domiciliu efectiv',
-                    'Distribuţia cazurilor după genul victimei',
-                    'Total general cazuri',
+                    __('report.headers.home_ownership_and_effective_address'),
+                    __('report.headers.cases_by_gender'),
+                    __('report.headers.total'),
                 ];
 
                 $this->setSubHeaderFor('gender');
@@ -384,8 +385,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_CIVIL_STATUS:
                 $this->header = [
-                    'Stare civilă',
-                    'Distribuția cazurilor',
+                    __('report.headers.civil_status'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('civil_status');
@@ -394,9 +395,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_CIVIL_STATUS_AND_GENDER:
                 $this->header = [
-                    'Stare civilă',
-                    'Distribuţia cazurilor după genul victimei',
-                    'Total general cazuri',
+                    __('report.headers.civil_status'),
+                    __('report.headers.cases_by_gender'),
+                    __('report.headers.total'),
                 ];
 
                 $this->setSubHeaderFor('gender');
@@ -407,9 +408,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_CIVIL_STATUS_AND_AGE:
                 $this->header = [
-                    'Stare civilă',
-                    'Distribuţia cazurilor după grupa de vârstă',
-                    'Subtotal cazuri',
+                    __('report.headers.civil_status'),
+                    __('report.headers.cases_by_age_groups'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('age_group_2');
@@ -420,8 +421,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_AGGRESSOR_RELATIONSHIP:
                 $this->header = [
-                    'Relația cu agresorul',
-                    'Distribuția cazurilor',
+                    __('report.headers.aggressor_relationship'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('relationship');
@@ -430,9 +431,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_AGGRESSOR_RELATIONSHIP_AND_AGE:
                 $this->header = [
-                    'Relația cu agresorul',
-                    'Distribuţia cazurilor după vârsta victimei (minor/major)',
-                    'Subtotal cazuri',
+                    __('report.headers.aggressor_relationship'),
+                    __('report.headers.cases_by_age_segmentation'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('segmentation_by_age');
@@ -443,9 +444,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_AGGRESSOR_RELATIONSHIP_GENDER_AND_AGE:
                 $this->header = [
-                    'Relația cu agresorul / Vârsta victimei (minor/ major)',
-                    'Distribuţia cazurilor după genul victimei',
-                    'Total general cazuri',
+                    __('report.headers.aggressor_relationship_and_age'),
+                    __('report.headers.cases_by_gender'),
+                    __('report.headers.total'),
                 ];
 
                 $this->setSubHeaderFor('gender');
@@ -458,8 +459,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_PRIMARY_VIOLENCE_TYPE:
                 $this->header = [
-                    'Tipul de violență primară',
-                    'Distribuția cazurilor',
+                    __('report.headers.primary_violence'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('violence_primary_type');
@@ -468,8 +469,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_VIOLENCE_TYPES:
                 $this->header = [
-                    'Tipurile de violență',
-                    'Distribuția cazurilor',
+                    __('report.headers.violence_types'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('violence_types');
@@ -478,8 +479,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_GENDER:
                 $this->header = [
-                    'Genul victimei',
-                    'Distribuția cazurilor',
+                    __('report.headers.gender'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('gender');
@@ -488,8 +489,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_AGE:
                 $this->header = [
-                    'Vârsta victimei',
-                    'Distribuția cazurilor',
+                    __('report.headers.age'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('age_group');
@@ -498,9 +499,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_LEGAL_ADDRESS:
                 $this->header = [
-                    'Domiciliul legal',
-                    'Distribuția cazurilor',
-                    'Subtotal cazuri',
+                    __('report.headers.legal_address'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('legal_residence_environment');
@@ -509,8 +509,8 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_EFFECTIVE_ADDRESS:
                 $this->header = [
-                    'Domiciliul efectiv',
-                    'Distribuția cazurilor',
+                    __('report.headers.effective_address'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('effective_residence_environment');
@@ -519,9 +519,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_PRIMARY_VIOLENCE_TYPE_AND_AGE:
                 $this->header = [
-                    'Tipul de violență primară',
-                    'Distribuţia cazurilor după vârsta victimei (minor/major)',
-                    'Subtotal cazuri',
+                    __('report.headers.primary_violence'),
+                    __('report.headers.cases_by_age_segmentation'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('segmentation_by_age');
@@ -530,26 +530,10 @@ class ReportTable extends Component
 
                 break;
 
-//            case ReportType::CASES_BY_VIOLENCE_TYPES_AND_AGE:
-//                $this->header = [
-//                    'Nivel de studii',
-//                    'Distribuția cazurilor',
-//                    'Subtotal cazuri',
-//                ];
-//
-//                                $this->setSubHeaderFor('gender');
-//
-//                $this->verticalHeader = Studies::options();
-//                $this->verticalHeader[null] = 'Date lipsa';
-//                $this->verticalHeaderKey = 'studies';
-//
-//                break;
-
-                //31
             case ReportType::CASES_BY_VIOLENCE_FREQUENCY:
                 $this->header = [
-                    'Frecvența agresiunii',
-                    'Distribuția cazurilor',
+                    __('report.headers.frequency_violence'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('frequency_violence');
@@ -558,9 +542,9 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_PRIMARY_VIOLENCE_FREQUENCY_AND_AGE:
                 $this->header = [
-                    'Nivel de studii',
-                    'Distribuția cazurilor',
-                    'Subtotal cazuri',
+                    __('report.headers.primary_violence_and_age'),
+                    __('report.headers.cases_by_frequency_violence'),
+                    __('report.headers.subtotal'),
                 ];
 
                 $this->setSubHeaderFor('frequency_violence');
@@ -571,55 +555,10 @@ class ReportTable extends Component
 
                 break;
 
-//            case ReportType::CASES_BY_VIOLENCE_FREQUENCY_GENDER_AND_AGE:
-//                $this->header = [
-//                    'Nivel de studii',
-//                    'Distribuția cazurilor',
-//                    'Subtotal cazuri',
-//                ];
-//
-//                                $this->setSubHeaderFor('gender');
-//
-//                $this->verticalHeader = Studies::options();
-//                $this->verticalHeader[null] = 'Date lipsa';
-//                $this->verticalHeaderKey = 'studies';
-//
-//                break;
-
-//            case ReportType::CASES_BY_VIOLENCE_TYPE_AND_SERVICES_TYPES:
-//                $this->header = [
-//                    'Nivel de studii',
-//                    'Distribuția cazurilor',
-//                    'Subtotal cazuri',
-//                ];
-//
-//                                $this->setSubHeaderFor('gender');
-//
-//                $this->verticalHeader = Studies::options();
-//                $this->verticalHeader[null] = 'Date lipsa';
-//                $this->verticalHeaderKey = 'studies';
-//
-//                break;
-
-//            case ReportType::CASES_BY_VIOLENCE_TYPE_AND_SERVICES_TYPES_AND_AGE:
-//                $this->header = [
-//                    'Nivel de studii',
-//                    'Distribuția cazurilor',
-//                    'Subtotal cazuri',
-//                ];
-//
-//                                $this->setSubHeaderFor('gender');
-//
-//                $this->verticalHeader = Studies::options();
-//                $this->verticalHeader[null] = 'Date lipsa';
-//                $this->verticalHeaderKey = 'studies';
-//
-//                break;
-
             case ReportType::CASES_BY_PRESENTATION_MODE:
                 $this->header = [
-                    'Modalitatea de prezentare a victimei',
-                    'Distribuția cazurilor',
+                    __('report.headers.presentation_mode'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('presentation_mode');
@@ -628,11 +567,20 @@ class ReportTable extends Component
 
             case ReportType::CASES_BY_REFERRING_INSTITUTION:
                 $this->header = [
-                    'Instituția care trimite victima',
-                    'Distribuția cazurilor',
+                    __('report.headers.referring_institution'),
+                    __('report.headers.case_distribution'),
                 ];
 
                 $this->setVerticalHeaderFor('referring_institution_id');
+
+                break;
+            case ReportType::CASES_BY_AGE_SEGMENTATION:
+                $this->header = [
+                    __('report.headers.age'),
+                    __('report.headers.case_distribution'),
+                ];
+
+                $this->setVerticalHeaderFor('segmentation_by_age');
 
                 break;
         }
@@ -671,12 +619,12 @@ class ReportTable extends Component
 
         if ($this->showMissingValues) {
             if ($this->subHeaderKey == 'age_group') {
-                $this->subHeader['unknown'] = __('report.missing_values');
+                $this->subHeader['unknown'] = __('report.headers.missing_values');
 
                 return;
             }
 
-            $this->subHeader[null] = __('report.missing_values');
+            $this->subHeader[null] = __('report.headers.missing_values');
         }
     }
 
@@ -745,18 +693,24 @@ class ReportTable extends Component
             case 'referring_institution_id':
                 $this->verticalHeader = ReferringInstitution::all()->pluck('name', 'id')->toArray();
                 break;
+
+            case 'segmentation_by_age':
+                $this->verticalHeader = BeneficiarySegmentationByAge::options();
+                break;
         }
+
+        $field = $field === 'segmentation_by_age' ? 'age_group' : $field;
 
         $this->verticalHeaderKey = $field;
 
         if ($this->showMissingValues) {
             if ($this->verticalHeaderKey == 'age_group') {
-                $this->verticalHeader['unknown'] = __('report.missing_values');
+                $this->verticalHeader['unknown'] = __('report.headers.missing_values');
 
                 return;
             }
 
-            $this->verticalHeader[null] = __('report.missing_values');
+            $this->verticalHeader[null] = __('report.headers.missing_values');
         }
     }
 
@@ -778,12 +732,12 @@ class ReportTable extends Component
 
         if ($this->showMissingValues) {
             if ($this->verticalSubHeaderKey == 'age_group') {
-                $this->verticalSubHeader['unknown'] = __('report.missing_values');
+                $this->verticalSubHeader['unknown'] = __('report.headers.missing_values');
 
                 return;
             }
 
-            $this->verticalSubHeader[null] = __('report.missing_values');
+            $this->verticalSubHeader[null] = __('report.headers.missing_values');
         }
     }
 
@@ -834,6 +788,7 @@ class ReportTable extends Component
             case ReportType::CASES_BY_AGGRESSOR_RELATIONSHIP_GENDER_AND_AGE:
             case ReportType::CASES_BY_AGGRESSOR_RELATIONSHIP_AND_AGE:
             case ReportType::CASES_BY_STUDIES_AND_AGE:
+            case ReportType::CASES_BY_AGE_SEGMENTATION:
                 $this->query->selectRaw("CASE
                             WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 17 THEN 'minor'
                             WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) > 18 THEN 'major'
@@ -889,7 +844,7 @@ class ReportTable extends Component
         }
     }
 
-    private function addConditions()
+    private function addConditions(): void
     {
         if (! $this->showMissingValues) {
             if ($this->subHeaderKey) {
@@ -905,7 +860,13 @@ class ReportTable extends Component
             }
         }
 
-        // todo add date conditions
+        if ($this->endDate) {
+            $this->query->where('beneficiaries.created_at', '<=', $this->endDate);
+        }
+
+        if ($this->startDate) {
+//            $this->query->where('close_files.date', '>=', $this->startDate);
+        }
     }
 
     private function getFieldNameForHeaderKey(string $headerKey): string
@@ -919,5 +880,39 @@ class ReportTable extends Component
         }
 
         return $headerKey;
+    }
+
+    private function setReportData(): void
+    {
+        $this->reportData = $this->query
+            ->get();
+
+        if ($this->reportType === ReportType::CASES_BY_VIOLENCE_TYPES) {
+            $data = $this->reportData;
+            $this->reportData = collect();
+
+            foreach ($data as $row) {
+                $violenceTypes = json_decode($row->violence_types);
+                if (empty($violenceTypes) && $this->showMissingValues) {
+                    $this->addCasesForViolenceTypes($row);
+                }
+                foreach ($violenceTypes as $violenceType) {
+                    $this->addCasesForViolenceTypes($row, $violenceType);
+                }
+            }
+        }
+    }
+
+    private function addCasesForViolenceTypes($row, ?string $violenceType = null): void
+    {
+        $element = $this->reportData->filter(fn ($item) => $item->violence_types === $violenceType)->first();
+        if ($element) {
+            $element->total_cases += $row->total_cases;
+
+            return;
+        }
+        $element = clone $row;
+        $element->violence_types = $violenceType;
+        $this->reportData->add($element);
     }
 }

@@ -3,11 +3,19 @@
         <form wire:submit.prevent="submit" class="space-y-4">
             {{ $this->form }}
 
-            <x-filament::button type="submit">
-                Trimite
-            </x-filament::button>
+            <div >
+                <x-filament::button type="submit" class="float-right">
+                    {{ __('report.actions.generate') }}
+                </x-filament::button>
+            </div>
         </form>
-{{--        {{ $this->form }}--}}
-{{--        {{ $this->table }}--}}
+    </div>
+    <div>
+        <div>
+            @if ($this->report_type)
+                {{ $this->infolist }}
+            @endif
+        </div>
+
     </div>
 </x-filament-panels::page>
