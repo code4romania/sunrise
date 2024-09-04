@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Pages;
 
+use App\Actions\ExportReport;
 use App\Enums\ReportType;
 use App\Forms\Components\ReportTable;
 use Filament\Forms;
@@ -92,7 +93,13 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            Section::make()
+            Section::make(fn () => $this->report_type ? __('report.table_heading.' . $this->report_type) : null)
+                ->hiddenLabel()
+                ->headerActions([ExportReport::make('export_report')
+                    ->setReportType($this->report_type)
+                    ->setStartDate($this->start_date)
+                    ->setEndDate($this->end_date)
+                    ->setShowMissingValues($this->show_missing_values)])
                 ->schema([
                     $this->reportTable(),
                 ]),

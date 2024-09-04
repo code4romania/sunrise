@@ -1,6 +1,6 @@
 @php
-    use Filament\Support\Enums\Alignment;$composeReport();
-    $reportType = $getReportType();
+    use Filament\Support\Enums\Alignment;
+    $composeReport();
     $reportData = $getReportData();
     $header = $getHorizontalHeader();
     $headerKey = '';
@@ -13,8 +13,6 @@
     $firstHeaderElementColSpan = $verticalSubHeader ? 2 : 1;
     $firstHeaderElementRowSpan = $subHeader ? 2 : 1;
 
-    $heading = $reportType ? __('report.table_heading.' . $reportType->value) : null;
-
     $footer = __('report.labels.total');
 
 @endphp
@@ -22,10 +20,6 @@
 
 <div class="w-full overflow-x-auto border border-gray-200 rounded-lg dark:border-white/5 pt-4">
     <x-filament-tables::table>
-        <x-filament-tables::header
-            :actions-position="null"
-            :heading="$heading"
-        />
         <x-slot:header>
             <x-filament-tables::row>
                 @foreach($header as $key => $headerElement)
