@@ -18,7 +18,7 @@
 @endphp
 
 
-<div class="w-full overflow-x-auto border border-gray-200 rounded-lg dark:border-white/5 pt-4">
+<div class="w-full overflow-x-auto border border-gray-200 rounded-lg dark:border-white/5">
     <x-filament-tables::table>
         <x-slot:header>
             <x-filament-tables::row>

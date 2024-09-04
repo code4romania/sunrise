@@ -23,7 +23,7 @@ class ExportReport extends Action
     protected function setUp(): void
     {
         parent::setUp();
-        $this->label('Exportă date');
+        $this->label(__('report.actions.export'));
         $this->icon('heroicon-o-arrow-down-tray');
         $this->outlined();
         $this->action(fn () => $this->generateExport());

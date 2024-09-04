@@ -90,6 +90,7 @@ return [
     ],
 
     'actions' => [
-        'generate' => 'Generează raport'
-    ]
+        'generate' => 'Generează raport',
+        'export' => 'Exportă date',
+    ],
 ];
