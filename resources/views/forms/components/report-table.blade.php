@@ -44,13 +44,15 @@
                 @endforeach
             </x-filament-tables::row>
 
-            <x-filament-tables::row>
-                @foreach($subHeader as $subheaderElement)
-                    <x-filament-tables::header-cell :alignment="Alignment::Center" class="!p-2">
-                        {{ $subheaderElement }}
-                    </x-filament-tables::header-cell>
-                @endforeach
-            </x-filament-tables::row>
+            @if($subHeader)
+                <x-filament-tables::row>
+                    @foreach($subHeader as $subheaderElement)
+                        <x-filament-tables::header-cell :alignment="Alignment::Center" class="!p-2">
+                            {{ $subheaderElement }}
+                        </x-filament-tables::header-cell>
+                    @endforeach
+                </x-filament-tables::row>
+            @endif
 
         </x-slot:header>
 
@@ -157,7 +159,7 @@
                                     $item->$verticalHeaderKey->value == $verticalKey :
                                     $item->$verticalHeaderKey == $verticalKey)
                                 ->first()
-                                ?->total_cases
+                                ?->total_cases ?? 0
                         }}
                     </x-filament-tables::cell>
                 </x-filament-tables::row>

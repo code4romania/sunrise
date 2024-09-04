@@ -24,13 +24,15 @@
         @endforeach
     </tr>
 
-    <tr>
-        @foreach($subHeader as $subheaderElement)
-            <td>
-                {{ $subheaderElement }}
-            </td>
-        @endforeach
-    </tr>
+    @if($subHeader)
+        <tr>
+            @foreach($subHeader as $subheaderElement)
+                <td>
+                    {{ $subheaderElement }}
+                </td>
+            @endforeach
+        </tr>
+    @endif
 
 
     @foreach($verticalHeader as $verticalKey => $header)
@@ -136,7 +138,7 @@
                                 $item->$verticalHeaderKey->value == $verticalKey :
                                 $item->$verticalHeaderKey == $verticalKey)
                             ->first()
-                            ?->total_cases
+                            ?->total_cases ?? 0
                     }}
                 </td>
             </tr>
