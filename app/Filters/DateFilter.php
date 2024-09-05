@@ -36,11 +36,11 @@ class DateFilter extends BaseFilter
                 ->columns($this->getColumns())
                 ->schema([
                     DatePicker::make('date_from')
-                        ->label(__('activity.filter.logged_from'))
+                        ->label(__('general.filters.logged_from'))
                         ->placeholder(today()->subYear()->format('Y-m-d')),
 
                     DatePicker::make('date_until')
-                        ->label(__('activity.filter.logged_until'))
+                        ->label(__('general.filters.logged_until'))
                         ->placeholder(today()->format('Y-m-d')),
                 ]),
         ]);
@@ -61,7 +61,7 @@ class DateFilter extends BaseFilter
                     $value = data_get($state, $filter);
 
                     if (! \is_null($value)) {
-                        $value = __('activity.filter.' . $filter, [
+                        $value = __('general.filters.' . $filter, [
                             'date' => Carbon::parse($value)->format('Y-m-d'),
                         ]);
                     }

@@ -109,9 +109,8 @@ class BeneficiaryResource extends Resource
                                 fn ($item) => $item->roles
                                     ->contains(Role::MANGER)
                             )
-                            ->first()
-                            ?->user
-                            ->full_name
+                            ->map(fn ($item) => $item->user->full_name)
+                            ->join(', ')
                     )
                     ->searchable(true, fn (Builder $query, $search) => $query->where('users.full_name', 'LIKE', '%' . $search . '%')
                         ->whereJsonContains('case_teams.roles', Role::MANGER))
@@ -120,31 +119,25 @@ class BeneficiaryResource extends Resource
                 TextColumn::make('status')
                     ->label(__('field.status'))
                     ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        CaseStatus::ACTIVE => 'success',
-                        CaseStatus::REACTIVATED => 'success',
-                        CaseStatus::MONITORED => 'warning',
-                        CaseStatus::CLOSED => 'gray',
-                        default => dd($state)
-                    })
-                    ->formatStateUsing(fn ($state) => $state?->label())
-                    ->shrink(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
             ->filters([
                 SelectFilter::make('status')
+                    ->label(__('field.status'))
                     ->options(CaseStatus::options())
                     ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('beneficiaries.status', $state) : $query),
 
                 SelectFilter::make('case_manager')
+                    ->label(Role::MANGER->getLabel())
                     ->options(fn () => User::getTenantOrganizationUsers())
                     ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('case_teams.user_id', $state)
                         ->whereJsonContains('case_teams.roles', Role::MANGER)
                         : $query),
 
                 DateFilter::make('created_at')
+                    ->label(__('field.open_at'))
                     ->attribute('beneficiaries.created_at'),
 
                 //                DateFilter::make('last_evaluated_at')
