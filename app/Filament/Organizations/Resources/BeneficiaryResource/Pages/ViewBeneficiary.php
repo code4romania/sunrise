@@ -287,6 +287,7 @@ class ViewBeneficiary extends ViewRecord
         return [
             BeneficiaryResource\Widgets\CaseTeamListWidget::class,
             BeneficiaryResource\Widgets\DocumentsListWidget::class,
+            BeneficiaryResource\Widgets\RelatedCases::class,
         ];
     }
 }

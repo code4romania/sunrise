@@ -11,6 +11,7 @@ return [
 
     'labels' => [
         'registered_date' => 'Data înregistrării',
+        'related_cases' => 'Istoric caz (fișe conectate cazului)',
     ],
 
     'page' => [
