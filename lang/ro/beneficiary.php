@@ -11,6 +11,7 @@ return [
 
     'labels' => [
         'registered_date' => 'Data înregistrării',
+        'reactivated' => 'Reactivare de caz',
     ],
 
     'page' => [
@@ -330,10 +331,11 @@ return [
     ],
 
     'status' => [
-        'active' => 'Activ',
+        'active' => 'Deschis',
         'reactivated' => 'Reactivat',
-        'monitored' => 'În monitorizare',
+        'monitored' => 'Monitorizare',
         'closed' => 'Închis',
+        'archived' => 'Arhivat',
     ],
 
     'action' => [

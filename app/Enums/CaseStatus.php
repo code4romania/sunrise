@@ -16,6 +16,7 @@ enum CaseStatus: string
     case REACTIVATED = 'reactivated';
     case MONITORED = 'monitored';
     case CLOSED = 'closed';
+    case ARCHIVED = 'archived';
 
     protected function labelKeyPrefix(): ?string
     {
