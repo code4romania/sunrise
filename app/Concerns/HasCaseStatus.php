@@ -23,7 +23,7 @@ trait HasCaseStatus
 
     public function scopeWhereCaseIsReactivated(Builder $builder): Builder
     {
-        return $builder->where('status', CaseStatus::REACTIVATED);
+        return $builder->whereNotNull('initial_id');
     }
 
     public function scopeWhereCaseIsMonitored(Builder $builder): Builder

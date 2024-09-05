@@ -332,7 +332,6 @@ return [
 
     'status' => [
         'active' => 'Deschis',
-        'reactivated' => 'Reactivat',
         'monitored' => 'Monitorizare',
         'closed' => 'Închis',
         'archived' => 'Arhivat',

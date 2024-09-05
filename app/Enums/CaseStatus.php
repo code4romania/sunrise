@@ -16,7 +16,6 @@ enum CaseStatus: string implements HasLabel, HasColor
     use Concerns\Enums\HasLabel;
 
     case ACTIVE = 'active';
-    case REACTIVATED = 'reactivated';
     case MONITORED = 'monitored';
     case CLOSED = 'closed';
     case ARCHIVED = 'archived';
