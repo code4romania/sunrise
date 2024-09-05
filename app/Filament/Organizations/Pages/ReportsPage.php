@@ -77,7 +77,8 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
                         ->searchable(),
 
                     Forms\Components\DatePicker::make('start_date')
-                        ->label(__('report.labels.start_date')),
+                        ->label(__('report.labels.start_date'))
+                        ->default(now()->startOfMonth()),
 
                     Forms\Components\DatePicker::make('end_date')
                         ->label(__('report.labels.end_date'))
@@ -85,9 +86,15 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
 
                     Forms\Components\Checkbox::make('show_missing_values')
                         ->label(__('report.labels.show_missing_values'))
+                        ->default(true)
                         ->columnSpan(2),
                 ]),
         ];
+    }
+
+    public function mount(): void
+    {
+        $this->form->fill();
     }
 
     public function infolist(Infolist $infolist): Infolist
