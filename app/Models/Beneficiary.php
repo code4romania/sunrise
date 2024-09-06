@@ -45,6 +45,7 @@ class Beneficiary extends Model
     use HasEffectiveAddress;
 
     protected $fillable = [
+        'initial_id',
         'first_name',
         'last_name',
         'prior_name',

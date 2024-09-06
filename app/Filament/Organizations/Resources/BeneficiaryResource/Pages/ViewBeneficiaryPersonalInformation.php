@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditPersonalInformation;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -102,7 +101,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            TextEntry::make('psychiatric_notes')
+                            TextEntry::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_notes')),
                         ]),
 
@@ -112,7 +111,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.criminal_history'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            TextEntry::make('criminal_notes')
+                            TextEntry::make('criminal_history_notes')
                                 ->label(__('field.criminal_notes')),
                         ]),
 

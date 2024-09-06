@@ -28,11 +28,15 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     protected string | Closure | null $countyLabel = null;
 
+    protected int | null $defaultCountry = null;
+
     protected bool $hasCity = false;
 
     protected string | Closure | null $cityField = null;
 
     protected string | Closure | null $cityLabel = null;
+
+    protected int | null $defaultCity = null;
 
     protected bool $hasAddress = false;
 
@@ -40,11 +44,15 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     protected string | Closure | null $addressLabel = null;
 
+    protected string | null $defaultAddress = null;
+
     protected bool $hasEnvironment = false;
 
     protected string | Closure | null $environmentField = null;
 
     protected string | Closure | null $environmentLabel = null;
+
+    protected ResidenceEnvironment | null $defaultEnvironment = null;
 
     final public function __construct(string | null $id)
     {
@@ -88,6 +96,13 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             ->join('_'));
     }
 
+    public function setDefaultCountry(?int $defaultCountry): self
+    {
+        $this->defaultCountry = $defaultCountry;
+
+        return $this;
+    }
+
     public function city(bool | Closure $condition = true): static
     {
         $this->hasCity = $condition;
@@ -118,6 +133,13 @@ class Location extends Component implements CanEntangleWithSingularRelationships
         ])
             ->filter()
             ->join('_'));
+    }
+
+    public function setDefaultCity(?int $defaultCity): self
+    {
+        $this->defaultCity = $defaultCity;
+
+        return $this;
     }
 
     public function address(bool | Closure $condition = true): static
@@ -152,6 +174,13 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             ->join('_'));
     }
 
+    public function setDefaultAddress(?string $defaultAddress): self
+    {
+        $this->defaultAddress = $defaultAddress;
+
+        return $this;
+    }
+
     public function environment(bool | Closure $condition = true): static
     {
         $this->hasEnvironment = $condition;
@@ -184,6 +213,13 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             ->join('_'));
     }
 
+    public function setDefaultEnvironment(?ResidenceEnvironment $defaultEnvironment): self
+    {
+        $this->defaultEnvironment = $defaultEnvironment;
+
+        return $this;
+    }
+
     public function getChildComponents(): array
     {
         return [
@@ -201,6 +237,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->preload()
                 ->lazy()
                 ->required($this->isRequired())
+                ->default($this->defaultCountry)
                 ->disabled($this->isDisabled())
                 ->afterStateUpdated(function (Set $set) {
                     $set($this->getCityField(), null);
@@ -213,6 +250,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->lazy()
                 ->searchable(fn (Get $get) => $get($this->getCountyField()))
                 ->required($this->isRequired())
+                ->default($this->defaultCity)
                 ->disabled(fn (Get $get) => $this->isDisabled() || ! $get($this->getCountyField()))
                 ->getSearchResultsUsing(function (string $search, Get $get) {
                     return City::query()
@@ -229,6 +267,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->label($this->getAddressLabel())
                 ->placeholder(__('placeholder.address'))
                 ->required($this->isRequired())
+                ->default($this->defaultAddress)
                 ->disabled($this->isDisabled())
                 ->visible($this->hasAddress())
                 ->lazy(),
@@ -239,6 +278,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->options(ResidenceEnvironment::options())
                 ->enum(ResidenceEnvironment::class)
                 ->required($this->isRequired())
+                ->default($this->defaultEnvironment)
                 ->disabled($this->isDisabled())
                 ->visible($this->hasEnvironment())
                 ->lazy(),

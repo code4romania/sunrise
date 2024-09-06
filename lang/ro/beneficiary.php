@@ -343,6 +343,13 @@ return [
         'add_meet_row' => 'Adauga inca o intrevedere',
         'add_violence_history' => 'Adaugă încă o dată sau perioadă',
         'start_evaluation' => 'Începe evaluarea',
+        'case_actions' => 'Acțiuni caz',
+        'active' => 'Redeschide caz (dosar curent)',
+        'monitored' => 'Mută în monitorizare ',
+        'closed' => 'Închide caz',
+        'archived' => 'Arhivează caz',
+        'reactivate' => 'Reactivează caz (dosar nou)',
+        'delete' => 'Șterge dosar caz',
     ],
 
     'breadcrumb' => [

@@ -40,6 +40,13 @@ class CreateBeneficiary extends CreateRecord
 
     protected function getSteps(): array
     {
+        $parentBeneficiaryID = (int) request('parent');
+        if (! $parentBeneficiaryID) {
+            $refererUrl = request()->server('HTTP_REFERER');
+            $parentBeneficiaryID = (int) str_replace([self::getResource()::getUrl('create'), '/'], '', $refererUrl);
+        }
+        $parentBeneficiary = Beneficiary::find($parentBeneficiaryID);
+
         return [
             Step::make('consent')
                 ->label(__('beneficiary.wizard.consent.label'))
@@ -103,18 +110,18 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('beneficiary')
                 ->label(__('beneficiary.wizard.beneficiary.label'))
-                ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema()),
+                ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema($parentBeneficiary)),
 
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
-                ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema()),
+                ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema($parentBeneficiary)),
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
                 ->schema([
                     Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                         ->columns()
-                        ->schema(EditBeneficiaryPersonalInformation::beneficiarySection()),
+                        ->schema(EditBeneficiaryPersonalInformation::beneficiarySection($parentBeneficiary)),
 
                     Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                         ->columns()
