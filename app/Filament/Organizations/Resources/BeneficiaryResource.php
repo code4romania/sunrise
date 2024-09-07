@@ -14,11 +14,11 @@ use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
 use App\Filters\DateFilter;
 use App\Models\Beneficiary;
 use App\Models\User;
+use App\Tables\Filters\SelectFilter;
 use DB;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -118,7 +118,7 @@ class BeneficiaryResource extends Resource
 
                 TextColumn::make('status')
                     ->label(__('field.status'))
-                    ->badge()
+                    ->badge(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -132,8 +132,9 @@ class BeneficiaryResource extends Resource
                 SelectFilter::make('case_manager')
                     ->label(Role::MANGER->getLabel())
                     ->options(fn () => User::getTenantOrganizationUsers())
-                    ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('case_teams.user_id', $state)
-                        ->whereJsonContains('case_teams.roles', Role::MANGER)
+                    ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ?
+                            $query->where('case_teams.user_id', $state)
+                                ->whereJsonContains('case_teams.roles', Role::MANGER)
                         : $query),
 
                 DateFilter::make('created_at')
