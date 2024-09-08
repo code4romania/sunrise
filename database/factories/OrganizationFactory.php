@@ -54,6 +54,7 @@ class OrganizationFactory extends Factory
                     ->count($count)
                     ->sequence(fn (Sequence $sequence) => [
                         'email' => sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
+                        'is_org_admin' => $sequence->index === 0,
                     ])
                     ->create()
                     ->pluck('id')

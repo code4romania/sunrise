@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Concerns\UserPermissions;
+use App\Concerns\UserPermissionsForBeneficiary;
 use App\Models\Beneficiary;
 use App\Models\User;
 
 class BeneficiaryPolicy
 {
-    use UserPermissions;
+    use UserPermissionsForBeneficiary;
 
     /**
      * Determine whether the user can view any models.
