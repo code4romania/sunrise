@@ -8,4 +8,5 @@
     </x-filament-widgets::widget>
 @endif
 <div>
+    {{-- Required empty for Livewire --}}
 </div>

@@ -11,6 +11,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class RelatedCases extends BaseWidget
@@ -25,27 +26,32 @@ class RelatedCases extends BaseWidget
     {
         return $table
             ->query(
-                $this->record?->initial_id ?
-                        Beneficiary::query()
-                            ->with('team.user')
+                Beneficiary::query()
+                    ->with('team.user')
+                    ->when(
+                        $this->record?->initial_id,
+                        fn (Builder $query) => $query
                             ->whereNot('id', $this->record?->id)
                             ->where('initial_id', $this->record->initial_id)
-                            ->orWhere('id', $this->record->initial_id) :
-                        Beneficiary::query()
-                            ->with('team.user')
+                            ->orWhere('id', $this->record->initial_id),
+                        fn (Builder $query) => $query
                             ->where('initial_id', $this->record?->id)
+                    )
             )
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id')),
+
                 TextColumn::make('full_name')
                     ->label(__('field.beneficiary')),
+
                 TextColumn::make('created_at')
                     ->label(__('field.open_at')),
+
                 TextColumn::make('case_manager')
                     ->label(Role::MANGER->getLabel())
                     ->state(
-                        fn ($record) => $record->team
+                        fn (Beneficiary $record) => $record->team
                             ->filter(
                                 fn ($item) => $item->roles
                                     ->contains(Role::MANGER)
@@ -53,6 +59,7 @@ class RelatedCases extends BaseWidget
                             ->map(fn ($item) => $item->user->full_name)
                             ->join(', ')
                     ),
+
                 TextColumn::make('status'),
             ])
             ->heading(__('beneficiary.labels.related_cases'))
@@ -61,7 +68,8 @@ class RelatedCases extends BaseWidget
                 ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->color('primary')
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('view', ['record' => $record->id])),
-            ]);
+                    ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view', ['record' => $record->id])),
+            ])
+            ->defaultSort('id', 'desc');
     }
 }
