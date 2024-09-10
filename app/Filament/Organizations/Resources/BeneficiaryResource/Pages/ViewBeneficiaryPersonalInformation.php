@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditPersonalInformation;
 use App\Infolists\Components\EnumEntry;
+use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -15,7 +17,6 @@ use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiaryPersonalInformation extends ViewRecord
@@ -45,20 +46,24 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Tabs::make()
                 ->columnSpanFull()
-                ->maxWidth('3xl')
+                ->persistTabInQueryString()
                 ->tabs([
                     Tab::make(__('beneficiary.section.personal_information.section.beneficiary'))
                         ->columns()
+                        ->maxWidth('3xl')
                         ->schema(static::beneficiarySection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.aggressor'))
+                        ->maxWidth('3xl')
                         ->schema(static::aggressorSection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.antecedents'))
+                        ->maxWidth('3xl')
                         ->columns()
                         ->schema(static::antecedentsSection()),
 
                     Tab::make(__('beneficiary.section.personal_information.section.flow'))
+                        ->maxWidth('3xl')
                         ->columns()
                         ->schema(static::flowSection()),
                 ]),
@@ -69,9 +74,10 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
-                ->columns(2)
+                ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -142,9 +148,10 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
-                ->columns(2)
+                ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_aggressor', ['record' => $record])),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -155,6 +162,18 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->columnSpanFull()
                         ->hiddenLabel()
                         ->schema([
+                            SectionHeader::make('header')
+                                ->state(function (SectionHeader $component) {
+                                    $index = (int) explode('.', $component->getStatePath())[1];
+
+                                    return __('beneficiary.section.personal_information.heading.aggressor', [
+                                        'number' => $index + 1,
+                                    ]);
+                                })
+                                ->visible(
+                                    fn (SectionHeader $component) => $component->getContainer()->getParentComponent()->getState()->count() > 1
+                                ),
+
                             EnumEntry::make('relationship')
                                 ->label(__('field.aggressor_relationship'))
                                 ->placeholder(__('placeholder.select_one')),
@@ -190,11 +209,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_has_violence_history'))
                                         ->placeholder(__('placeholder.select_one')),
 
-                                    EnumEntry::make('violence_types')
-                                        ->label(__('field.aggressor_violence_types'))
-                                        ->placeholder(__('placeholder.select_many'))
-                                        ->color(Color::Gray)
-                                        ->badge(),
+                                    TextEntry::make('violence_types')
+                                        ->label(__('field.aggressor_violence_types')),
 
                                 ]),
 
@@ -214,20 +230,14 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_has_drug_history'))
                                         ->placeholder(__('placeholder.select_one')),
 
-                                    EnumEntry::make('drugs')
-                                        ->label(__('field.aggressor_drugs'))
-                                        ->placeholder(__('placeholder.select_many'))
-                                        ->color(Color::Gray)
-                                        ->badge(),
+                                    TextEntry::make('drugs')
+                                        ->label(__('field.aggressor_drugs')),
                                 ]),
 
                             Grid::make()
                                 ->schema([
-                                    EnumEntry::make('legal_history')
-                                        ->label(__('field.aggressor_legal_history'))
-                                        ->placeholder(__('placeholder.select_many'))
-                                        ->color(Color::Gray)
-                                        ->badge(),
+                                    TextEntry::make('legal_history')
+                                        ->label(__('field.aggressor_legal_history')),
                                 ]),
 
                             Grid::make()
@@ -248,9 +258,10 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
-                ->columns(2)
+                ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -286,9 +297,10 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
     {
         return [
             Section::make(__('beneficiary.section.personal_information.section.flow'))
-                ->columns(2)
+                ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\EditPersonalInformation::make('edit'),
+                    BeneficiaryResource\Actions\Edit::make('edit')
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -320,11 +332,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                     TextEntry::make('notifier_other')
                         ->label(__('field.notifier_other')),
 
-                    EnumEntry::make('act_location')
-                        ->label(__('field.act_location'))
-                        ->placeholder(__('placeholder.select_many'))
-                        ->color(Color::Gray)
-                        ->badge(),
+                    TextEntry::make('act_location')
+                        ->label(__('field.act_location')),
 
                     TextEntry::make('act_location_other')
                         ->label(__('field.act_location_other')),
@@ -334,10 +343,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->placeholder(__('placeholder.select_one')),
 
                     TextEntry::make('otherCalledInstitution.name')
-                        ->label(__('field.other_called_institutions'))
-                        ->color(Color::Gray)
-                        ->badge()
-                        ->placeholder(__('placeholder.select_one')),
+                        ->label(__('field.other_called_institutions')),
                 ]),
         ];
     }

@@ -38,9 +38,9 @@ class ViewInitialEvaluation extends ViewRecord
                 ->columnSpanFull()
                 ->schema([
                     Tabs\Tab::make(__('beneficiary.wizard.details.label'))
+                        ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.details.label'))
-                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -51,15 +51,17 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema(EditEvaluationDetails::getInfoListSchema())]),
 
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                        ->maxWidth('3xl')
                         ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->record)),
 
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
+                        ->maxWidth('3xl')
                         ->schema(ViewBeneficiaryIdentity::childrenSchemaForOtherPage($this->record)),
 
                     Tabs\Tab::make(__('beneficiary.wizard.violence.label'))
+                        ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.violence.label'))
-                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -69,9 +71,9 @@ class ViewInitialEvaluation extends ViewRecord
                                 ])
                                 ->schema(EditViolence::getInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.risk_factors.label'))
+                        ->maxWidth('3xl')
                         ->schema([
                             Section::make()
-                                ->maxWidth('3xl')
                                 ->schema([
                                     Notice::make('riskFactors.risk_level'),
 
@@ -91,9 +93,9 @@ class ViewInitialEvaluation extends ViewRecord
                                 ]),
                         ]),
                     Tabs\Tab::make(__('beneficiary.wizard.requested_services.label'))
+                        ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.requested_services.label'))
-                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
@@ -103,9 +105,9 @@ class ViewInitialEvaluation extends ViewRecord
                                 ])
                                 ->schema(EditRequestedServices::getInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.beneficiary_situation.label'))
+                        ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.beneficiary_situation.label'))
-                                ->maxWidth('3xl')
                                 ->headerActions([
                                     BeneficiaryResource\Actions\Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
