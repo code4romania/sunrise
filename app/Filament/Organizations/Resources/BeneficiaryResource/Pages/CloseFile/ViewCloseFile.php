@@ -45,7 +45,7 @@ class ViewCloseFile extends ViewRecord
                 ->modalSubmitActionLabel(__('beneficiary.section.close_file.actions.delete'))
                 ->modalIcon()
                 ->modalAlignment(Alignment::Left)
-                ->action(function ($action) {
+                ->action(function (DeleteAction $action) {
                     $this->getRecord()->closeFile->delete();
                     $action->redirect(self::getResource()::getUrl('view', ['record' => $this->getRecord()]));
                 }),
