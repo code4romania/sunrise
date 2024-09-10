@@ -14,7 +14,7 @@ trait HasLabel
     /**
      * @deprecated Use `getLabel()` instead.
      */
-    public function label(): string
+    public function label(): ?string
     {
         return $this->getLabel();
     }
