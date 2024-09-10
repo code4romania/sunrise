@@ -17,7 +17,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->userHasRights($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_STAFF, __FUNCTION__);
     }
 
     /**
@@ -25,7 +25,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $this->userHasRights($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_STAFF, __FUNCTION__);
     }
 
     /**
@@ -33,7 +33,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $this->userHasRights($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_STAFF, __FUNCTION__);
     }
 
     /**
@@ -41,7 +41,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $this->userHasRights($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_STAFF, __FUNCTION__);
     }
 
     /**
@@ -51,7 +51,7 @@ class UserPolicy
     {
         return false;
 
-        return $this->userHasRights($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_STAFF, __FUNCTION__);
     }
 
     /**
@@ -61,7 +61,7 @@ class UserPolicy
     {
         return false;
 
-        return $this->userHasRights($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_STAFF, __FUNCTION__);
     }
 
     /**
@@ -71,29 +71,6 @@ class UserPolicy
     {
         return false;
 
-        return $this->userHasRights($user, __FUNCTION__);
-    }
-
-    protected function userHasRights(User $user, ?string $function = null): bool
-    {
-        if ($this->userIsSuperAdmin($user)) {
-            return true;
-        }
-
-        if ($this->userIsOrgAdmin($user)) {
-            return true;
-        }
-
-        if ($function === 'view' &&
-            $this->userIsCoordinatorOrChefService($user)) {
-            return true;
-        }
-
-        if ($this->userIsCoordinatorOrChefService($user) &&
-            $this->userHasAdminPermissions($user->admin_permissions, AdminPermission::CAN_CHANGE_STAFF)) {
-            return true;
-        }
-
-        return false;
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_STAFF, __FUNCTION__);
     }
 }

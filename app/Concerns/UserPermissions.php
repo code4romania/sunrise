@@ -44,4 +44,27 @@ trait UserPermissions
             )
         ) > 0;
     }
+
+    public function userHasPermission(User $user, AdminPermission $adminPermission, ?string $function = null): bool
+    {
+        if ($this->userIsSuperAdmin($user)) {
+            return true;
+        }
+
+        if ($this->userIsOrgAdmin($user)) {
+            return true;
+        }
+
+        if ($function === 'view' &&
+            $this->userIsCoordinatorOrChefService($user)) {
+            return true;
+        }
+
+        if ($this->userIsCoordinatorOrChefService($user) &&
+            $this->userHasAdminPermissions($user->admin_permissions, $adminPermission)) {
+            return true;
+        }
+
+        return false;
+    }
 }

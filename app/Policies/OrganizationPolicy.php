@@ -18,7 +18,7 @@ class OrganizationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $this->userHasPermission($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE, __FUNCTION__);
     }
 
     /**
@@ -26,7 +26,7 @@ class OrganizationPolicy
      */
     public function view(User $user, Organization $organization): bool
     {
-        return $this->userHasPermission($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE, __FUNCTION__);
     }
 
     /**
@@ -34,7 +34,7 @@ class OrganizationPolicy
      */
     public function create(User $user): bool
     {
-        return $this->userHasPermission($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE, __FUNCTION__);
     }
 
     /**
@@ -42,7 +42,7 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization): bool
     {
-        return $this->userHasPermission($user, __FUNCTION__);
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE, __FUNCTION__);
     }
 
     /**
@@ -51,7 +51,8 @@ class OrganizationPolicy
     public function delete(User $user, Organization $organization): bool
     {
         return false;
-        return $this->userHasPermission($user, __FUNCTION__);
+
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE, __FUNCTION__);
     }
 
     /**
@@ -60,7 +61,8 @@ class OrganizationPolicy
     public function restore(User $user, Organization $organization): bool
     {
         return false;
-        return $this->userHasPermission($user, __FUNCTION__);
+
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE, __FUNCTION__);
     }
 
     /**
@@ -69,29 +71,7 @@ class OrganizationPolicy
     public function forceDelete(User $user, Organization $organization): bool
     {
         return false;
-        return $this->userHasPermission($user, __FUNCTION__);
-    }
 
-    protected function userHasPermission(User $user, ?string $function): bool
-    {
-        if ($this->userIsSuperAdmin($user)) {
-            return true;
-        }
-
-        if ($this->userIsOrgAdmin($user)) {
-            return true;
-        }
-
-        if ($function === 'view' &&
-            $this->userIsCoordinatorOrChefService($user)) {
-            return true;
-        }
-
-        if ($this->userIsCoordinatorOrChefService($user) &&
-            $this->userHasAdminPermissions($user->admin_permissions, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE)) {
-            return true;
-        }
-
-        return false;
+        return $this->userHasPermission($user, AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE, __FUNCTION__);
     }
 }
