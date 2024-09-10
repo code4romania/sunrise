@@ -12,6 +12,7 @@ return [
         'actions' => 'Acțiuni',
         'cancel' => 'Renunță',
         'save' => 'Salvează modificările',
+        'delete' => 'Șterge',
     ],
 
     'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',

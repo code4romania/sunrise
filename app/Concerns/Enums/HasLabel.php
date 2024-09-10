@@ -14,7 +14,7 @@ trait HasLabel
     /**
      * @deprecated Use `getLabel()` instead.
      */
-    public function label(): string
+    public function label(): ?string
     {
         return $this->getLabel();
     }
@@ -22,14 +22,9 @@ trait HasLabel
     public function getLabel(): ?string
     {
         $label = collect([$this->labelKeyPrefix(), $this->value])
-            ->filter(fn ($value) => $value !== null)
+            ->filter(fn (?string $value) => $value !== null)
             ->implode('.');
 
         return __($label);
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label();
     }
 }
