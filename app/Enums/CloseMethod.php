@@ -17,7 +17,7 @@ enum CloseMethod: string implements HasLabel
     case TRANSFER_TO = 'transfer_to';
     case CONTRACT_EXPIRED = 'contract_expired';
     case DEREGISTRATION = 'deregistration';
-    case TURN_TO_RELATIONSHIP_WITH_AGGRESSOR = 'turn_to_relationship_with_aggressor';
+    case RETURN_TO_RELATIONSHIP_WITH_AGGRESSOR = 'return_to_relationship_with_aggressor';
     case BENEFICIARY_REQUEST = 'beneficiary_request';
     case OTHER = 'other';
 

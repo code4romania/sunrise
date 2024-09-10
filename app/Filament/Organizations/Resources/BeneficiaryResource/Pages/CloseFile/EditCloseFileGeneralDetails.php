@@ -74,17 +74,17 @@ class EditCloseFileGeneralDetails extends EditRecord
             TextInput::make('institution_name')
                 ->label(__('beneficiary.section.close_file.labels.institution_name'))
                 ->placeholder(__('beneficiary.section.close_file.placeholders.institution_name'))
-                ->visible(fn (Get $get) => $get('close_method') == CloseMethod::TRANSFER_TO->value),
+                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::TRANSFER_TO)),
 
             TextInput::make('beneficiary_request')
                 ->label(__('beneficiary.section.close_file.labels.beneficiary_request'))
                 ->placeholder(__('beneficiary.section.close_file.placeholders.add_details'))
-                ->visible(fn (Get $get) => $get('close_method') == CloseMethod::BENEFICIARY_REQUEST->value),
+                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::BENEFICIARY_REQUEST)),
 
             TextInput::make('other_details')
                 ->label(__('beneficiary.section.close_file.labels.other_details'))
                 ->placeholder(__('beneficiary.section.close_file.placeholders.add_details'))
-                ->visible(fn (Get $get) => $get('close_method') == CloseMethod::OTHER->value),
+                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::OTHER)),
 
             RichEditor::make('close_situation')
                 ->label(__('beneficiary.section.close_file.labels.close_situation'))

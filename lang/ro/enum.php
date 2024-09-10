@@ -297,7 +297,7 @@ return [
         'transfer_to' => 'Transfer la instituția/serviciul',
         'contract_expired' => 'Expirarea perioadei conform contractului de acordare servicii sociale',
         'deregistration' => 'Exmatriculare',
-        'turn_to_relationship_with_aggressor' => 'Întoarcele în relația cu agresorul',
+        'return_to_relationship_with_aggressor' => 'Întoarcere în relația cu agresorul',
         'beneficiary_request' => 'Solicitarea beneficiarei',
         'other' => 'Altă situație',
     ],

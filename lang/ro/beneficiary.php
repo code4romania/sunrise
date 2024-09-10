@@ -352,7 +352,7 @@ return [
                 'admittance_details' => 'Detalii motiv admitere',
                 'close_method' => 'Modalitatea de închidere a cazului',
                 'institution_name' => 'Numele instituției',
-                'beneficiary_request' => ' Descrie motivul beneficiarei',
+                'beneficiary_request' => 'Descrie motivul beneficiarei',
                 'other_details' => 'Descrie altă situație',
                 'close_situation' => 'Situația cazului la închidere',
                 'close_date' => 'Închis la data',

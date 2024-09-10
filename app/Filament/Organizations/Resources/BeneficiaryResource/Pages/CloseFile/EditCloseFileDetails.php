@@ -10,6 +10,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\CaseTeam;
+use App\Models\CloseFile;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
@@ -59,22 +60,28 @@ class EditCloseFileDetails extends EditRecord
         return [
             DatePicker::make('date')
                 ->label(__('beneficiary.section.close_file.labels.date'))
-                ->default(now()),
+                ->default(now())
+                ->required(),
 
             TextInput::make('number')
-                ->label(__('beneficiary.section.close_file.labels.number')),
+                ->label(__('beneficiary.section.close_file.labels.number'))
+                ->required(),
 
             DatePicker::make('admittance_date')
-                ->label(__('beneficiary.section.close_file.labels.admittance_date')),
+                ->label(__('beneficiary.section.close_file.labels.admittance_date'))
+                ->default(fn (?CaseTeam $record) => $record ? $record->beneficiary->created_at : $recordParam->created_at)
+                ->required(),
 
             DatePicker::make('exit_date')
-                ->label(__('beneficiary.section.close_file.labels.exit_date')),
+                ->label(__('beneficiary.section.close_file.labels.exit_date'))
+                ->default(now())
+                ->required(),
 
             Select::make('case_team_id')
                 ->label(__('beneficiary.section.close_file.labels.case_manager'))
                 ->columnSpanFull()
                 ->options(
-                    function ($record) use ($recordParam) {
+                    function (?CloseFile $record) use ($recordParam) {
                         $team = $record ? $record->beneficiary->team : $recordParam->team;
 
                         return $team
@@ -83,19 +90,20 @@ class EditCloseFileDetails extends EditRecord
                     }
                 )
                 ->default(
-                    function ($record) use ($recordParam) {
+                    function (?CloseFile $record) use ($recordParam) {
                         $team = $record ? $record->beneficiary->team : $recordParam->team;
 
                         return $team
                             ->filter(
-                                fn ($item) => $item->roles
-                                    ->filter(fn ($role) => Role::isValue($role, Role::MANGER))
+                                fn (CaseTeam $item) => $item->roles
+                                    ->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
                                     ->count()
                             )
                             ->first()
                             ?->id;
                     }
-                ),
+                )
+                ->required(),
 
         ];
     }

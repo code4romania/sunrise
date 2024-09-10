@@ -7,8 +7,10 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFi
 use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
+use App\Models\Beneficiary;
+use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
@@ -34,11 +36,10 @@ class ViewCloseFile extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('delete')
+            DeleteAction::make()
                 ->label(__('beneficiary.section.close_file.actions.delete'))
                 ->outlined()
                 ->icon('heroicon-o-trash')
-                ->color('danger')
                 ->modalHeading(__('beneficiary.section.close_file.headings.modal_delete'))
                 ->modalDescription(__('beneficiary.section.close_file.labels.modal_delete_description'))
                 ->modalSubmitActionLabel(__('beneficiary.section.close_file.actions.delete'))
@@ -84,7 +85,7 @@ class ViewCloseFile extends ViewRecord
 
                                     TextEntry::make('caseManager.user')
                                         ->label(__('beneficiary.section.close_file.labels.case_manager'))
-                                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->getFilamentName() : $state),
+                                        ->formatStateUsing(fn (string | User $state) => $state !== '-' ? $state->getFilamentName() : $state),
 
                                 ]), ]),
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
@@ -115,17 +116,17 @@ class ViewCloseFile extends ViewRecord
                                     TextEntry::make('institution_name')
                                         ->label(__('beneficiary.section.close_file.labels.institution_name'))
                                         ->placeholder(__('beneficiary.section.close_file.placeholders.institution_name'))
-                                        ->visible(fn ($record) => $record->closeFile->close_method == CloseMethod::TRANSFER_TO->value),
+                                        ->visible(fn (Beneficiary $record) => CloseMethod::isValue($record->closeFile->close_method, CloseMethod::TRANSFER_TO)),
 
                                     TextEntry::make('beneficiary_request')
                                         ->label(__('beneficiary.section.close_file.labels.beneficiary_request'))
                                         ->placeholder(__('beneficiary.section.close_file.placeholders.add_details'))
-                                        ->visible(fn ($record) => $record->closeFile->close_method == CloseMethod::BENEFICIARY_REQUEST->value),
+                                        ->visible(fn (Beneficiary $record) => CloseMethod::isValue($record->closeFile->close_method, CloseMethod::BENEFICIARY_REQUEST)),
 
                                     TextEntry::make('other_details')
                                         ->label(__('beneficiary.section.close_file.labels.other_details'))
                                         ->placeholder(__('beneficiary.section.close_file.placeholders.add_details'))
-                                        ->visible(fn ($record) => $record->closeFile->close_method == CloseMethod::OTHER->value),
+                                        ->visible(fn (Beneficiary $record) => CloseMethod::isValue($record->closeFile->close_method, CloseMethod::OTHER)),
 
                                     TextEntry::make('close_situation')
                                         ->label(__('beneficiary.section.close_file.labels.close_situation'))

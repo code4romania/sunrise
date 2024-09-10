@@ -287,12 +287,6 @@ class ViewBeneficiary extends ViewRecord
         return [
             BeneficiaryResource\Widgets\CaseTeamListWidget::class,
             BeneficiaryResource\Widgets\DocumentsListWidget::class,
-        ];
-    }
-
-    protected function getFooterWidgets(): array
-    {
-        return [
             BeneficiaryResource\Widgets\CloseFileWidget::class,
         ];
     }
