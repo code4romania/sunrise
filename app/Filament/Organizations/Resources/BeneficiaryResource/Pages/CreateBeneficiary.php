@@ -10,7 +10,6 @@ use App\Rules\ValidCNP;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -108,7 +107,7 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
-                ->schema(EditBeneficiaryIdentity::getChildrenIdentityFormSchema()),
+                ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema()),
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
@@ -118,19 +117,16 @@ class CreateBeneficiary extends CreateRecord
                         ->schema(EditBeneficiaryPersonalInformation::beneficiarySection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.aggressor'))
-                        ->schema([
-                            Group::make()
-                                ->columns()
-                                ->schema(EditBeneficiaryPersonalInformation::aggressorSection()),
-                        ]),
+                        ->columns()
+                        ->schema(EditAggressor::aggressorSection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                         ->columns()
-                        ->schema(EditBeneficiaryPersonalInformation::antecedentsSection()),
+                        ->schema(EditAntecedents::antecedentsSection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.flow'))
                         ->columns()
-                        ->schema(EditBeneficiaryPersonalInformation::flowSection()),
+                        ->schema(EditFlowPresentation::flowSection()),
                 ]),
         ];
     }
