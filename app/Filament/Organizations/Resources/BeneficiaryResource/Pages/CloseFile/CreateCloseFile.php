@@ -8,15 +8,15 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Form;
+use Filament\Forms\Components\Wizard\Step;
+use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\HtmlString;
 
 class CreateCloseFile extends EditRecord
 {
+    use HasWizard;
+
     protected static string $resource = BeneficiaryResource::class;
 
     /**
@@ -37,43 +37,35 @@ class CreateCloseFile extends EditRecord
         return self::getResource()::getUrl('view_close_file', ['record' => $this->getRecord()]);
     }
 
-    protected function configureAction(Action $action): void
+    protected function getSteps(): array
     {
-        $action->hidden();
+        return [
+            Step::make(__('beneficiary.section.close_file.headings.file_details'))
+                ->schema([
+                    Group::make()
+                        ->label(__('beneficiary.section.close_file.headings.file_details_simple'))
+                        ->maxWidth('3xl')
+                        ->columns()
+                        ->relationship('closeFile')
+                        ->schema(EditCloseFileDetails::getSchema($this->getRecord())),
+                ]),
+
+            Step::make(__('beneficiary.section.close_file.headings.general_details'))
+                ->schema([
+                    Group::make()
+                        ->maxWidth('3xl')
+                        ->label(__('beneficiary.section.close_file.labels.general_details'))
+                        ->relationship('closeFile')
+                        ->schema(EditCloseFileGeneralDetails::getSchema()),
+                ]),
+        ];
     }
 
-    public function form(Form $form): Form
+    protected function getSubmitFormAction(): Action
     {
-        return $form->schema([
-            Wizard::make()
-                ->submitAction(new HtmlString(Blade::render(<<<'BLADE'
-                    <x-filament::button
-                        type="submit"
-                        size="sm"
-                    >
-                        {{__('filament-panels::resources/pages/create-record.form.actions.create.label')}}
-                    </x-filament::button>
-                BLADE)))
-                ->columnSpanFull()
-                ->steps([
-                    Wizard\Step::make(__('beneficiary.section.close_file.headings.file_details'))
-                        ->schema([
-                            Group::make()
-                                ->label(__('beneficiary.section.close_file.headings.file_details_simple'))
-                                ->maxWidth('3xl')
-                                ->columns()
-                                ->relationship('closeFile')
-                                ->schema(EditCloseFileDetails::getSchema($this->getRecord())),
-                        ]),
-                    Wizard\Step::make(__('beneficiary.section.close_file.headings.general_details'))
-                        ->schema([
-                            Group::make()
-                                ->maxWidth('3xl')
-                                ->label(__('beneficiary.section.close_file.labels.general_details'))
-                                ->relationship('closeFile')
-                                ->schema(EditCloseFileGeneralDetails::getSchema()),
-                        ]),
-                ]),
-        ]);
+        return Action::make('create')
+            ->label(__('filament-panels::resources/pages/create-record.form.actions.create.label'))
+            ->submit('create')
+            ->keyBindings(['mod+s']);
     }
 }
