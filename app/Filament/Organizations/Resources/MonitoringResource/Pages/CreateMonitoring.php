@@ -9,14 +9,14 @@ use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Wizard;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\HtmlString;
+use Illuminate\Support\Js;
 
 class CreateMonitoring extends CreateRecord
 {
+    use HasWizard;
     use HasParentResource;
 
     protected static string $resource = MonitoringResource::class;
@@ -49,31 +49,35 @@ class CreateMonitoring extends CreateRecord
         $action->hidden();
     }
 
-    public function form(Form $form): Form
+    public function getSteps(): array
     {
-        return $form->schema([
-            Wizard::make()
-                ->submitAction(new HtmlString(Blade::render(<<<'BLADE'
-                    <x-filament::button
-                        type="submit"
-                        size="sm"
-                    >
-                        {{__('filament-panels::resources/pages/create-record.form.actions.create.label')}}
-                    </x-filament::button>
-                BLADE)))
-                ->columnSpanFull()
-                ->steps([
-                    Wizard\Step::make(__('beneficiary.section.monitoring.headings.details'))
-                        ->schema(EditDetails::getSchema()),
+        return [
+            Wizard\Step::make(__('beneficiary.section.monitoring.headings.details'))
+                ->schema(EditDetails::getSchema()),
 
-                    Wizard\Step::make(__('beneficiary.section.monitoring.headings.child_info'))
-                        ->schema(EditChildren::getSchema()),
+            Wizard\Step::make(__('beneficiary.section.monitoring.headings.child_info'))
+                ->schema(EditChildren::getSchema()),
 
-                    Wizard\Step::make(__('beneficiary.section.monitoring.headings.general'))
-                        ->schema(EditGeneral::getSchema()),
+            Wizard\Step::make(__('beneficiary.section.monitoring.headings.general'))
+                ->schema(EditGeneral::getSchema()),
 
-                ]),
-        ]);
+        ];
+    }
+
+    protected function getSubmitFormAction(): Action
+    {
+        return Action::make('create')
+            ->label(__('filament-panels::resources/pages/create-record.form.actions.create.label'))
+            ->submit('create')
+            ->keyBindings(['mod+s']);
+    }
+
+    protected function getCancelFormAction(): Action
+    {
+        return Action::make('cancel')
+            ->label(__('filament-panels::resources/pages/create-record.form.actions.cancel.label'))
+            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from($this->previousUrl ?? static::getParentResource()::getUrl('monitorings.index', ['parent' => $this->parent])) . ')')
+            ->color('gray');
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array
