@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Enums\Role;
+use App\Enums\UserStatus;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
 use App\Models\User;
@@ -20,6 +21,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
@@ -65,24 +67,35 @@ class UserResource extends Resource
                     ->sortable()
                     ->label(__('user.labels.first_name'))
                     ->searchable(),
+
                 TextColumn::make('last_name')
                     ->label(__('user.labels.last_name'))
                     ->searchable(),
+
                 TextColumn::make('roles')
                     ->sortable()
-                    ->badge()
-                    ->label(__('user.labels.roles'))
-                    ->formatStateUsing(fn ($state) => $state->label()),
+                    ->label(__('user.labels.roles')),
+
                 TextColumn::make('status')
                     ->sortable()
                     ->label(__('user.labels.account_status'))
                     ->formatStateUsing(fn ($state) => $state->label()),
+
                 TextColumn::make('last_login_at')
                     ->sortable()
                     ->label(__('user.labels.last_login_at')),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(UserStatus::options()),
+
+                Tables\Filters\SelectFilter::make('roles')
+                    ->options(Role::options())
+                    ->modifyQueryUsing(
+                        fn (Builder $query, $state) => $state['value'] ?
+                            $query->whereJsonContains('roles', $state['value']) :
+                            $query
+                    ),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -115,35 +128,44 @@ class UserResource extends Resource
         return [
             Section::make()
                 ->columns()
+                ->maxWidth('3xl')
                 ->schema([
                     TextInput::make('first_name')
                         ->label(__('user.labels.first_name'))
                         ->required(),
+
                     TextInput::make('last_name')
                         ->label(__('user.labels.last_name'))
                         ->required(),
+
                     TextInput::make('email')
                         ->label(__('user.labels.email'))
                         ->required(),
+
                     TextInput::make('phone_number')
                         ->label(__('user.labels.phone_number'))
                         ->tel()
                         ->required(),
+
                     Select::make('roles')
                         ->label(__('user.labels.select_roles'))
                         ->options(Role::options())
                         ->multiple()
                         ->required(),
+
                     Checkbox::make('can_be_case_manager')
                         ->label(__('user.labels.can_be_case_manager')),
-                    Placeholder::make('obs')
-                        ->content(__('user.placeholders.obs'))
-                        ->label('')
-                        ->columnSpanFull(),
+
+//                    Placeholder::make('obs')
+//                        ->content(__('user.placeholders.obs'))
+//                        ->label('')
+//                        ->columnSpanFull(),
+
                     CheckboxList::make('case_permissions')
                         ->label(__('user.labels.case_permissions'))
                         ->options(CasePermission::options())
                         ->columnSpanFull(),
+
                     CheckboxList::make('admin_permissions')
                         ->label(__('user.labels.admin_permissions'))
                         ->options(AdminPermission::options())

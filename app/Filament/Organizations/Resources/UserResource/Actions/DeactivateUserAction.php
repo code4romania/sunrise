@@ -22,6 +22,8 @@ class DeactivateUserAction extends Action
 
         $this->label(__('user.actions.deactivate'));
 
+        $this->outlined();
+
         $this->color('danger');
 
         $this->icon('heroicon-o-user-minus');

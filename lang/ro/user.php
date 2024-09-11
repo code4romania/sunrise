@@ -14,6 +14,10 @@ return [
         'plural' => 'Specialiști',
     ],
 
+    'titles' => [
+        'create_specialist' => 'Adaugă specialist',
+    ],
+
     'labels' => [
         'first_name' => 'Nume',
         'last_name' => 'Prenume',
@@ -24,8 +28,8 @@ return [
         'phone_number' => 'Număr telefon',
         'select_roles' => 'Rol specialitate',
         'can_be_case_manager' => 'Poate lua rol de manager de caz',
-        'case_permissions' => 'Permisiuni cazuri',
-        'admin_permissions' => 'Permisiuni administrare',
+        'case_permissions' => 'Permisiuni suplimentare cazuri',
+        'admin_permissions' => 'Permisiuni suplimentare administrare',
     ],
 
     'stats' => [
@@ -43,6 +47,7 @@ return [
 
     'heading' => [
         'table' => 'Echipa interdisciplinară',
+        'specialist_section' => 'Detalii specialist',
     ],
 
     'placeholders' => [
@@ -51,6 +56,7 @@ return [
 
     'actions' => [
         'deactivate' => 'Deactivează cont',
+        'reactivate' => 'Reactivează cont',
         'reset_password' => 'Resetează parola',
         'resend_invitation' => 'Retrimite invitația',
     ],
@@ -61,10 +67,24 @@ return [
         'failure_title' => 'Eroare la retrimiterea invitației!',
         'failure_body' => 'A aparut o eroare la retrimiterea invitației',
     ],
+
     'action_deactivate_confirm' => [
         'title' => 'Deactivează cont',
         'success' => 'Cont dezactivat cu succes',
     ],
+
+    'action_reactivate_confirm' => [
+        'title' => 'Reactivează cont',
+        'success' => 'Contul a fost reactivat cu succes',
+    ],
+
+    'action_reset_password_confirm' => [
+        'title' => 'Resetează parola',
+        'success' => 'Email-ul a fost trimis cu succes',
+        'failure_title' => 'Eroare la trimiterea email-ului!',
+        'failure_body' => 'A aparut o eroare la trimiterea email-ului de resetare a parolei',
+    ],
+
     'status' => [
         'active' => 'Activ',
         'inactive' => 'Inactiv',

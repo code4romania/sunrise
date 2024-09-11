@@ -8,6 +8,7 @@ use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
 use App\Enums\Role;
+use App\Enums\Ternary;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
@@ -87,6 +88,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'can_be_case_manager' => Ternary::class,
         'roles' => AsEnumCollection::class . ':' . Role::class,
         'case_permissions' => 'json',
         'admin_permissions' => 'json',
@@ -155,7 +157,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             return $this->is_admin;
         }
 
-        return $this->getTenants($panel)->isNotEmpty();
+        return $this->getTenants($panel)->isNotEmpty() && UserStatus::isValue($this->status, UserStatus::ACTIVE);
     }
 
     public function getTenants(Panel $panel): Collection

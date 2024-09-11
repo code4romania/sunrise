@@ -24,6 +24,8 @@ class ResendInvitationAction extends Action
 
         $this->label(__('user.actions.resend_invitation'));
 
+        $this->outlined();
+
         $this->icon('heroicon-o-envelope-open');
 
         $this->modalHeading(__('user.action_resend_invitation_confirm.title'));
@@ -35,7 +37,8 @@ class ResendInvitationAction extends Action
             $maxAttempts = 1;
 
             if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
-                return $this->failure();
+                $this->failure();
+                return;
             }
 
             RateLimiter::increment($key, HOUR_IN_SECONDS);
