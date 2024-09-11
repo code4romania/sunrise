@@ -204,7 +204,7 @@ return [
         'high' => 'Grad de risc crescut',
         'medium' => 'Grad de risc mediu',
         'low' => 'Grad de risc scăzut',
-        'none' => 'Fără risc documentat'
+        'none' => 'Fără risc documentat',
     ],
 
     'role' => [
@@ -282,6 +282,16 @@ return [
         'child_born_certificate' => 'Certificat de naștere copil',
         'standard_sheets' => 'Fișe standard',
         'document' => 'Document (nespecificat)',
-      ],
+    ],
 
+    'child_aggressor_relationships' => [
+        'child' => 'Fiu/Fiică',
+        'other_relationship' => 'Alt grad de rudenie',
+        'from_another_relationship' => 'Provenit din afara relației',
+    ],
+
+    'maintenance_sources' => [
+        'relationship_income' => 'Venitul existent în cadrul relației',
+        'alimony' => 'Pensie alimentară',
+    ],
 ];

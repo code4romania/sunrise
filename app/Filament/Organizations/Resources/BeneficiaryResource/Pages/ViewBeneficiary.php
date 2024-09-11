@@ -9,6 +9,9 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
+use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -285,8 +288,9 @@ class ViewBeneficiary extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            BeneficiaryResource\Widgets\CaseTeamListWidget::class,
-            BeneficiaryResource\Widgets\DocumentsListWidget::class,
+            CaseTeamListWidget::class,
+            DocumentsListWidget::class,
+            MonitoringWidget::class,
         ];
     }
 }

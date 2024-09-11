@@ -24,6 +24,7 @@ use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\Meeting;
+use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
 use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
@@ -153,8 +154,7 @@ class BeneficiaryFactory extends Factory
                     'age' => fake()->boolean() ? fake()->numberBetween(0, 20) : null,
                     'current_address' => fake()->boolean() ? fake()->address() : null,
                     'status' => fake()->boolean() ? fake()->words(asText: true) : null,
-                ])
-                ->toJson(),
+                ]),
         ]);
     }
 
@@ -266,6 +266,10 @@ class BeneficiaryFactory extends Factory
                 $beneficiary->otherCalledInstitution()->sync(
                     $referringInstitutions->random(fake()->numberBetween(1, 4)),
                 );
+
+                Monitoring::factory()
+                    ->for($beneficiary)
+                    ->create();
             });
     }
 }
