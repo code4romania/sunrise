@@ -63,9 +63,8 @@ return [
 
     'action_resend_invitation_confirm' => [
         'title' => 'Retrimite invitația',
-        'success' => 'Invitația a fost trimisata cu succes.',
-        'failure_title' => 'Eroare la retrimiterea invitației!',
-        'failure_body' => 'A aparut o eroare la retrimiterea invitației',
+        'success' => 'Invitația a fost trimisă cu succes.',
+        'failure' => 'Te rugăm să aștepți înainte de a încerca din nou.',
     ],
 
     'action_deactivate_confirm' => [
@@ -81,8 +80,6 @@ return [
     'action_reset_password_confirm' => [
         'title' => 'Resetează parola',
         'success' => 'Email-ul a fost trimis cu succes',
-        'failure_title' => 'Eroare la trimiterea email-ului!',
-        'failure_body' => 'A aparut o eroare la trimiterea email-ului de resetare a parolei',
     ],
 
     'status' => [

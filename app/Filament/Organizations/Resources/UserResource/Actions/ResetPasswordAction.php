@@ -9,10 +9,8 @@ use Exception;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Notifications\Auth\ResetPassword as ResetPasswordNotification;
-use Filament\Notifications\Notification;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\RateLimiter;
 
 class ResetPasswordAction extends Action
 {
@@ -53,61 +51,28 @@ class ResetPasswordAction extends Action
         $this->modalWidth('md');
 
         $this->action(function (User $record) {
-            $key = $this->getRateLimiterKey($record);
-            $maxAttempts = 1;
+            $status = Password::broker(Filament::getAuthPasswordBroker())->sendResetLink(['email' => $record->email], function (CanResetPassword $user, string $token): void {
+                if (! method_exists($user, 'notify')) {
+                    $userClass = $user::class;
 
-            if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
+                    throw new Exception("Model [{$userClass}] does not have a [notify()] method.");
+                }
+
+                $notification = new ResetPasswordNotification($token);
+                $notification->url = Filament::getResetPasswordUrl($token, $user);
+
+                $user->notify($notification);
+            });
+
+            if ($status !== Password::RESET_LINK_SENT) {
+                $this->failureNotificationTitle(__($status));
                 $this->failure();
 
                 return;
             }
 
-            RateLimiter::increment($key, HOUR_IN_SECONDS);
-
-            $data = ['email' => $record->email];
-            $status = Password::broker(Filament::getAuthPasswordBroker())->sendResetLink(
-                $data,
-                function (CanResetPassword $user, string $token): void {
-                    if (! method_exists($user, 'notify')) {
-                        $userClass = $user::class;
-
-                        throw new Exception("Model [{$userClass}] does not have a [notify()] method.");
-                    }
-
-                    $notification = new ResetPasswordNotification($token);
-                    $notification->url = Filament::getResetPasswordUrl($token, $user);
-
-                    $user->notify($notification);
-                },
-            );
-
-            if ($status !== Password::RESET_LINK_SENT) {
-                Notification::make()
-                    ->title(__($status))
-                    ->danger()
-                    ->send();
-
-                return;
-            }
-
-            Notification::make()
-                ->title(__($status))
-                ->success()
-                ->send();
+            $this->successNotificationTitle(__($status));
+            $this->success();
         });
-
-        $this->successNotificationTitle(__('user.action_reset_password_confirm.success'));
-
-        $this->failureNotification(
-            fn (Notification $notification) => $notification
-                ->danger()
-                ->title(__('user.action_reset_password_confirm.failure_title'))
-                ->body(__('user.action_reset_password_confirm.failure_body'))
-        );
-    }
-
-    private function getRateLimiterKey(User $user): string
-    {
-        return 'reset-password:' . $user->id;
     }
 }
