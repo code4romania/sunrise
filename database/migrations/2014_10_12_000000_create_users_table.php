@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
-            $table->string('status')->nullable();
             $table->json('roles')->nullable();
             $table->boolean('can_be_case_manager')->nullable();
             $table->boolean('has_access_to_all_cases')->nullable();
@@ -25,6 +24,7 @@ return new class extends Migration
             $table->json('admin_permissions')->nullable();
             $table->boolean('is_admin')->default(false);
             $table->timestamp('password_set_at')->nullable();
+            $table->timestamp('deactivated_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

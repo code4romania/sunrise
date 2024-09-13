@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\UserResource\Actions;
 
 use App\Models\User;
 use Filament\Actions\Action;
+use Filament\Facades\Filament;
 
 class DeactivateUserAction extends Action
 {
@@ -18,7 +19,22 @@ class DeactivateUserAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isActive());
+        $this->visible(function (User $record) {
+            if (! $record->hasSetPassword()) {
+                return false;
+            }
+
+            if ($record->isInactive()) {
+                return false;
+            }
+
+            if (Filament::auth()->user()->is($record)) {
+                return false;
+            }
+
+            // TODO: check for permissions
+            return Filament::auth()->user()->can('delete', $record);
+        });
 
         $this->label(__('user.actions.deactivate'));
 

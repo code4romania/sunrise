@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\UserStatus;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -29,19 +28,23 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'status' => fake()->randomElement(UserStatus::values()),
             'password' => static::$password ??= Hash::make('password'),
+            'password_set_at' => fake()->dateTime(),
             'remember_token' => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function invited(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'password_set_at' => null,
+        ]);
+    }
+
+    public function deactivated(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'deactivated_at' => fake()->dateTime(),
         ]);
     }
 

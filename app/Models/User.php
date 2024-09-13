@@ -100,10 +100,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         static::addGlobalScope('withLastLogin', function (Builder $query) {
             return $query->withLastLoginAt();
         });
-
-        static::creating(function (User $model) {
-            $model->setPendingStatus();
-        });
     }
 
     public function organizations(): MorphToMany
@@ -157,7 +153,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             return $this->is_admin;
         }
 
-        return $this->getTenants($panel)->isNotEmpty() && UserStatus::isValue($this->status, UserStatus::ACTIVE);
+        return $this->getTenants($panel)->isNotEmpty();
     }
 
     public function getTenants(Panel $panel): Collection

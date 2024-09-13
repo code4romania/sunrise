@@ -14,7 +14,7 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 
-class ResetPassword extends Action
+class ResetPasswordAction extends Action
 {
     public static function getDefaultName(): ?string
     {
@@ -25,7 +25,22 @@ class ResetPassword extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isActive());
+        $this->visible(function (User $record) {
+            if (! $record->hasSetPassword()) {
+                return false;
+            }
+
+            if ($record->isInactive()) {
+                return false;
+            }
+
+            if (Filament::auth()->user()->is($record)) {
+                return false;
+            }
+
+            // TODO: check for permissions
+            return Filament::auth()->user()->can('update', $record);
+        });
 
         $this->label(__('user.actions.reset_password'));
 
@@ -43,6 +58,7 @@ class ResetPassword extends Action
 
             if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
                 $this->failure();
+
                 return;
             }
 

@@ -20,7 +20,7 @@ class ResendInvitationAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isPending());
+        $this->hidden(fn (User $record) => $record->hasSetPassword());
 
         $this->label(__('user.actions.resend_invitation'));
 
@@ -38,6 +38,7 @@ class ResendInvitationAction extends Action
 
             if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
                 $this->failure();
+
                 return;
             }
 

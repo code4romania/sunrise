@@ -89,4 +89,6 @@ return [
         'active' => 'Activ',
         'inactive' => 'Inactiv',
     ],
+
+    'inactive_error' => 'Contul tău nu este activ. Pentru mai multe detalii te rugăm să contactezi un administrator.',
 ];

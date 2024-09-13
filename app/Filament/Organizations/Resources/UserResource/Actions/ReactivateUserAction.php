@@ -18,7 +18,7 @@ class ReactivateUserAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isDeactivate());
+        $this->visible(fn (User $record) => $record->isInactive());
 
         $this->label(__('user.actions.reactivate'));
 
@@ -33,7 +33,7 @@ class ReactivateUserAction extends Action
         $this->modalWidth('md');
 
         $this->action(function (User $record) {
-            $record->reactivate();
+            $record->activate();
             $this->success();
         });
 
