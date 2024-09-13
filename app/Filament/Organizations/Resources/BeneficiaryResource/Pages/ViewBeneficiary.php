@@ -197,7 +197,6 @@ class ViewBeneficiary extends ViewRecord
                                 ->date(),
                             TextEntry::make('violence.violence_types')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                                ->badge()
                                 ->color(Color::Gray),
                             TextEntry::make('riskFactors.risk_level')
                                 ->hiddenLabel()
