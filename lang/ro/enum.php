@@ -283,7 +283,25 @@ return [
         'standard_sheets' => 'Fișe standard',
         'document' => 'Document (nespecificat)',
     ],
+    
+    'admittance_reason' => [
+        'security' => 'Siguranță pusă în pericol',
+        'eviction_from_home' => 'Alungare de la domiciliu',
+        'divorce' => 'Divorț/Separare',
+        'crisis_situation' => 'Situație de criză',
+        'other' => 'Altele',
+    ],
 
+    'close_method' => [
+        'according_to_interventional_program' => 'Conform programului personalizat de intervenție',
+        'transfer_to' => 'Transfer la instituția/serviciul',
+        'contract_expired' => 'Expirarea perioadei conform contractului de acordare servicii sociale',
+        'deregistration' => 'Exmatriculare',
+        'return_to_relationship_with_aggressor' => 'Întoarcere în relația cu agresorul',
+        'beneficiary_request' => 'Solicitarea beneficiarei',
+        'other' => 'Altă situație',
+    ],
+  
     'general_status' => [
         0 => 'Inactiv',
         1 => 'Activ',
