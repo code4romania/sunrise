@@ -11,6 +11,7 @@ return [
 
     'labels' => [
         'registered_date' => 'Data înregistrării',
+        'related_cases' => 'Istoric caz (fișe conectate cazului)',
     ],
 
     'page' => [
@@ -366,6 +367,52 @@ return [
 
             'breadcrumbs' => [
                 'list' => 'Istoric modificări & accesare caz',
+            ],
+        ],
+   
+        'close_file' => [
+            'titles' => [
+                'create' => 'Fișă de închidere a cazului',
+                'edit_details' => 'Editează detaliile fișei de închidere',
+                'edit_general_details' => 'Editează date generale de închidere',
+            ],
+            'headings' => [
+                'file_details' => 'Detalii fișă de închidere a cazului',
+                'file_details_simple' => 'Detalii fișă de închidere',
+                'general_details' => 'Date generale despre închiderea cazului',
+                'widget' => 'Închidere caz',
+                'widget_empty_state' => 'După ce cazul este mutat în status Închis, vei putea completa Fișa de Închidere',
+                'modal_delete' => 'Șterge fișă de închidere a cazului',
+            ],
+            'labels' => [
+                'date' => 'Data realizării fișei de închidere',
+                'number' => 'Număr fișă',
+                'admittance_date' => 'Data admiterii în centru',
+                'exit_date' => 'Data ieșirii din centru',
+                'case_manager' => 'Manager de caz',
+                'admittance_reason' => 'Motivul admiterii în Centru',
+                'admittance_details' => 'Detalii motiv admitere',
+                'close_method' => 'Modalitatea de închidere a cazului',
+                'institution_name' => 'Numele instituției',
+                'beneficiary_request' => 'Descrie motivul beneficiarei',
+                'other_details' => 'Descrie altă situație',
+                'close_situation' => 'Situația cazului la închidere',
+                'close_date' => 'Închis la data',
+                'close_method_widget' => 'Modalitatea de închidere',
+                'modal_delete_description' => 'Odată ștearsă o fișă, acesta nu mai poate fi recuperată. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
+            ],
+            'actions' => [
+                'create_widget' => 'Completează fișa de închidere',
+                'delete' => 'Șterge fișă',
+            ],
+            'breadcrumbs' => [
+
+            ],
+            'placeholders' => [
+                'admittance_details' => 'Adaugă detalii referitoare la motivul admiterii',
+                'institution_name' => 'Adaugă numele instituției la care s-a transferat beneficiara',
+                'add_details' => 'Adaugă detalii',
+                'close_situation' => 'Descrieți situația cazului la închidere',
             ],
         ],
     ],

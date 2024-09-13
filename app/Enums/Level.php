@@ -10,7 +10,7 @@ use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 
-enum Level: string implements HasColor, HasIcon, HasLabel
+enum Level: string implements HasLabel, HasColor, HasIcon
 {
     use Enums\Arrayable;
     use Enums\Comparable;

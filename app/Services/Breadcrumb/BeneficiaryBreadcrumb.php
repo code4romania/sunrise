@@ -110,4 +110,22 @@ class BeneficiaryBreadcrumb
             [self::$resourcePath::getUrl('beneficiary-histories.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
+ 
+    public function getBreadcrumbsCloseFile(): array
+    {
+        $breadcrumb = __('beneficiary.section.close_file.titles.create');
+
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [self::$resourcePath::getUrl('view_close_file', ['record' => $this->record]) => $breadcrumb],
+        );
+    }
+
+    public function getBreadcrumbsCreateCloseFile(): array
+    {
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [__('beneficiary.section.close_file.titles.create')],
+        );
+    }
 }

@@ -8,6 +8,7 @@ use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
@@ -156,6 +157,12 @@ class BeneficiaryResource extends Resource
 
             'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
             'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),
+
+            'create_close_file' => CloseFile\CreateCloseFile::route('/{record}/createCloseFile'),
+            'view_close_file' => CloseFile\ViewCloseFile::route('/{record}/closeFile'),
+            'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record}/closeFile/editDetails'),
+            'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
+
         ];
     }
 }
