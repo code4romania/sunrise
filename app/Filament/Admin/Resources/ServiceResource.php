@@ -5,30 +5,24 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ServiceResource\Pages;
+use App\Filament\Admin\Resources\ServiceResource\Pages\CreateService;
+use App\Forms\Components\Select;
+use App\Forms\Components\TableRepeater;
 use App\Models\Service;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-view-columns';
-
-    public static function getNavigationGroup(): ?string
-    {
-        return __('navigation.configurations._group');
-    }
-
-    public static function getNavigationLabel(): string
-    {
-        return __('navigation.configurations.services');
-    }
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function getModelLabel(): string
     {
@@ -44,17 +38,47 @@ class ServiceResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->label(__('service.field.name'))
-                    ->columnSpanFull()
-                    ->required(),
+                Section::make()
+                    ->maxWidth('3xl')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label(__('service.field.name'))
+                            ->columnSpanFull()
+                            ->required(),
 
-                Textarea::make('description')
-                    ->label(__('service.field.description'))
-                    ->placeholder(__('placeholder.service_description'))
-                    ->rows(5)
+                        Select::make('counseling_sheet')
+                            ->label(__('nomenclature.labels.counseling_sheet')),
+
+                    ]),
+                TableRepeater::make('serviceInterventions')
+                    ->relationship('serviceInterventions')
+                    ->label(__('nomenclature.headings.service_intervention'))
                     ->columnSpanFull()
-                    ->nullable(),
+                    ->hideLabels()
+                    ->addActionLabel(__('nomenclature.actions.add_intervention'))
+                    ->schema([
+                        Placeholder::make('id')
+                            ->label(__('nomenclature.labels.nr'))
+                            ->content(function () {
+                                static $index = 1;
+
+                                return $index++;
+                            })
+                            ->hiddenLabel(),
+                        TextInput::make('name')
+                            ->label(__('nomenclature.labels.intervention_name')),
+                        Toggle::make('status'),
+                    ])
+                    ->deleteAction(
+                        fn (Action $action) => $action
+                            ->disabled(function (array $arguments, TableRepeater $component): bool {
+                                $items = $component->getState();
+                                $currentItem = $items[$arguments['item']];
+                                // TODO disable if intervention is used
+
+                                return $currentItem['status'];
+                            })
+                    ),
             ]);
     }
 
@@ -62,25 +86,21 @@ class ServiceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label(__('service.field.name'))
-                    ->searchable(),
 
-                TextColumn::make('interventions_count')
-                    ->counts('interventions'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
-                    ->visible(fn (Service $record) => ! $record->interventions_count),
+
             ]);
     }
 
     public static function getPages(): array
     {
         return [
+            // TODO remove index and page
             'index' => Pages\ManageServices::route('/'),
+            'create' => CreateService::route('/create'),
+            'view' => Pages\ViewService::route('/{record}'),
+            'edit' => Pages\EditService::route('/{record}/edit'),
         ];
     }
 }

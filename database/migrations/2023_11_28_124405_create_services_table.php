@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('counseling_sheet')->nullable();
+            $table->boolean('status')->default(false);
+            $table->timestamps();
         });
 
         Schema::create('model_has_services', function (Blueprint $table) {
