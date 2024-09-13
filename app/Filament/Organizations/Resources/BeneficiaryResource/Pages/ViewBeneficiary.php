@@ -197,9 +197,8 @@ class ViewBeneficiary extends ViewRecord
                                 ->date(),
                             TextEntry::make('violence.violence_types')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                                ->badge()
                                 ->color(Color::Gray),
-                            EnumEntry::make('riskFactors.risk_level')
+                            TextEntry::make('riskFactors.risk_level')
                                 ->hiddenLabel()
                                 ->badge()
                                 ->icon(false),
@@ -287,6 +286,7 @@ class ViewBeneficiary extends ViewRecord
         return [
             BeneficiaryResource\Widgets\CaseTeamListWidget::class,
             BeneficiaryResource\Widgets\DocumentsListWidget::class,
+            BeneficiaryResource\Widgets\CloseFileWidget::class,
             BeneficiaryResource\Widgets\RelatedCases::class,
         ];
     }
