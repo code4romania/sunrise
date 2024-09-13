@@ -92,9 +92,9 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('roles')
                     ->options(Role::options())
                     ->modifyQueryUsing(
-                        fn (Builder $query, $state) => $state['value'] ?
-                            $query->whereJsonContains('roles', $state['value']) :
-                            $query
+                        fn (Builder $query, $state) => $state['value']
+                            ? $query->whereJsonContains('roles', $state['value'])
+                            : $query
                     ),
             ])
             ->actions([
@@ -156,10 +156,10 @@ class UserResource extends Resource
                     Checkbox::make('can_be_case_manager')
                         ->label(__('user.labels.can_be_case_manager')),
 
-//                    Placeholder::make('obs')
-//                        ->content(__('user.placeholders.obs'))
-//                        ->label('')
-//                        ->columnSpanFull(),
+                    //                    Placeholder::make('obs')
+                    //                        ->content(__('user.placeholders.obs'))
+                    //                        ->label('')
+                    //                        ->columnSpanFull(),
 
                     CheckboxList::make('case_permissions')
                         ->label(__('user.labels.case_permissions'))
