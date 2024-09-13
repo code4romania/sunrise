@@ -287,6 +287,7 @@ class ViewBeneficiary extends ViewRecord
             BeneficiaryResource\Widgets\CaseTeamListWidget::class,
             BeneficiaryResource\Widgets\DocumentsListWidget::class,
             BeneficiaryResource\Widgets\CloseFileWidget::class,
+            BeneficiaryResource\Widgets\RelatedCases::class,
         ];
     }
 }
