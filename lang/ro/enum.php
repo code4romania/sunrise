@@ -283,7 +283,7 @@ return [
         'standard_sheets' => 'Fișe standard',
         'document' => 'Document (nespecificat)',
     ],
-    
+
     'admittance_reason' => [
         'security' => 'Siguranță pusă în pericol',
         'eviction_from_home' => 'Alungare de la domiciliu',
@@ -301,9 +301,14 @@ return [
         'beneficiary_request' => 'Solicitarea beneficiarei',
         'other' => 'Altă situație',
     ],
-  
+
     'general_status' => [
         0 => 'Inactiv',
         1 => 'Activ',
+    ],
+
+    'counseling_sheet' => [
+        'psychological_assistance' => 'Asistență psihologică',
+        'legal assistance' => 'Asistența juridică',
     ],
 ];

@@ -11,6 +11,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ViewService extends ViewRecord
 {
@@ -24,10 +25,16 @@ class ViewService extends ViewRecord
         ];
     }
 
+    public function getTitle(): string|Htmlable
+    {
+        return $this->getRecord()->name;
+    }
+
     protected function getActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            Actions\EditAction::make()
+                ->label(__('nomenclature.actions.edit_service')),
         ];
     }
 

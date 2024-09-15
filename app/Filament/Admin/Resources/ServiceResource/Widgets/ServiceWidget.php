@@ -48,7 +48,10 @@ class ServiceWidget extends BaseWidget
                 SelectFilter::make('status')
                     ->options(GeneralStatus::options()),
             ])
-            ->heading(__('nomenclature.headings.service_table'));
+            ->heading(__('nomenclature.headings.service_table'))
+            ->emptyStateHeading(__('nomenclature.labels.empty_state_service_table'))
+            ->emptyStateDescription(null)
+            ->emptyStateIcon('heroicon-o-clipboard-document-check');
     }
 
     public function getDisplayName(): string

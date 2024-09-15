@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\CounselingSheet;
 use App\Enums\GeneralStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ class Service extends Model
 
     protected $casts = [
         'status' => GeneralStatus::class,
+        'counseling_sheet' => CounselingSheet::class,
     ];
 
 //    public function counselingSheet(): HasOne

@@ -17,6 +17,7 @@ return [
         'nr' => 'Nr.',
         'intervention_name' => 'Nume intervenție',
         'service_name' => 'Nume serviciu',
+        'empty_state_service_table' => 'Niciun serviciu identificat. Adaugă un prim serviciu pentru ca acesta să fie disponibil organizațiilor Sunrise'
     ],
 
     'headings' => [
@@ -40,6 +41,7 @@ return [
         ],
         'add_service' => 'Adaugă serviciu',
         'add_intervention' => 'Adaugă încă o intervenție',
+        'edit_service' => 'Modifică serviciu',
     ],
 
 ];

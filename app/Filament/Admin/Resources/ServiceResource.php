@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
+use App\Enums\CounselingSheet;
+use App\Enums\GeneralStatus;
 use App\Filament\Admin\Resources\ServiceResource\Pages;
 use App\Filament\Admin\Resources\ServiceResource\Pages\CreateService;
 use App\Forms\Components\Select;
@@ -47,7 +49,8 @@ class ServiceResource extends Resource
                             ->required(),
 
                         Select::make('counseling_sheet')
-                            ->label(__('nomenclature.labels.counseling_sheet')),
+                            ->label(__('nomenclature.labels.counseling_sheet'))
+                            ->options(CounselingSheet::options()),
 
                     ]),
                 TableRepeater::make('serviceInterventions')
