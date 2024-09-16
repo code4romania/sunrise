@@ -22,16 +22,18 @@ return [
         'role_name' => 'Nume rol specialist',
         'case_permissions' => 'Permisiuni suplimentare cazuri',
         'ngo_admin_permissions' => 'Permisiuni suplimentare administrare',
+        'users' => 'Utilizatori',
     ],
 
     'headings' => [
         'service' => 'Servicii',
         'service_table' => 'Toate serviciile',
         'service_intervention' => 'Intervenții asociate serviciului',
-        //        'service' => '',
+        'roles' => 'Specialiști',
+        'roles_table' => 'Toate rolurile de specialiști',
 
         'inactivate_service_modal' => 'Inactivează serviciul pentru toate nomenclatoarele',
-        'inactivate_role_modal' => 'Inactivează rol pentru toate nomenclatoarele'
+        'inactivate_role_modal' => 'Inactivează rol pentru toate nomenclatoarele',
     ],
 
     'helper_texts' => [
@@ -53,6 +55,7 @@ return [
         'edit_service' => 'Modifică serviciu',
         'add_role' => 'Adaugă rol specialist',
         'edit_role' => 'Modifică rol specialist',
+        'delete_role' => 'Șterge rol',
     ],
 
 ];

@@ -41,6 +41,9 @@ class EditRole extends EditRecord
 
             //TODO disable if is used
             DeleteAction::make()
+                ->label(__('nomenclature.actions.delete_role'))
+                ->outlined()
+                ->icon('heroicon-o-trash')
                 ->disabled(fn () => GeneralStatus::isValue($this->getRecord()->status, GeneralStatus::ACTIVE))
                 ->successRedirectUrl(NomenclatureList::getUrl()),
         ];
