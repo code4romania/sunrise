@@ -2,25 +2,30 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Admin\Resources\ServiceResource\Pages;
+namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
 use App\Enums\GeneralStatus;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Pages\NomenclatureList;
-use App\Filament\Admin\Resources\ServiceResource;
+use App\Filament\Admin\Resources\RoleResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
-class EditService extends EditRecord
+class EditRole extends EditRecord
 {
-    protected static string $resource = ServiceResource::class;
+    protected static string $resource = RoleResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return $this->getRecord()->name;
+    }
 
     public function getBreadcrumbs(): array
     {
         return [
             NomenclatureList::getUrl() => __('nomenclature.titles.list'),
-            ServiceResource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
+            RoleResource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
         ];
     }
 
@@ -29,12 +34,7 @@ class EditService extends EditRecord
         return self::$resource::getUrl('view', ['record' => $this->getRecord()]);
     }
 
-    public function getTitle(): string|Htmlable
-    {
-        return  $this->getRecord()->name;
-    }
-
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             ChangeNomenclatureStatusAction::make(),

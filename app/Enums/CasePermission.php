@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Concerns\Enums\Arrayable;
-use App\Concerns\Enums\Comparable;
-use App\Concerns\Enums\HasLabel;
+use App\Concerns\Enums;
+use Filament\Support\Contracts\HasLabel;
 
-enum CasePermission: string
+enum CasePermission: string implements HasLabel
 {
-    use Arrayable;
-    use Comparable;
-    use HasLabel;
+    use Enums\Arrayable;
+    use Enums\Comparable;
+    use Enums\HasLabel;
 
     case HAS_ACCESS_TO_ALL_CASES = 'has_access_to_all_cases';
     case CAN_SEARCH_CASES_IN_ALL_CENTERS = 'can_search_cases_in_all_centers';
