@@ -12,7 +12,7 @@ class NomenclaturesWidget extends MultiWidget
 {
     public array $widgets = [
         ServiceWidget::class,
-        BenefitWidget::class,
+//        BenefitWidget::class,
 
     ];
 
