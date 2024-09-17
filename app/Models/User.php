@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
-use App\Enums\Role;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
@@ -21,6 +20,7 @@ use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -58,7 +58,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'email',
         'phone_number',
         'status',
-        'roles',
         'can_be_case_manager',
         'case_permissions',
         'admin_permissions',
@@ -87,7 +86,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
-        'roles' => AsEnumCollection::class . ':' . Role::class,
         'case_permissions' => 'json',
         'admin_permissions' => 'json',
         'status' => UserStatus::class,
@@ -112,6 +110,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function latestOrganization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'latest_organization_id');
+    }
+
+    public function rolesInOrganization(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->withPivot('organization_id')
+            ->wherePivot('organization_id', Filament::getTenant()->id)
+            ->active();
     }
 
     public function getActivitylogOptions(): LogOptions
