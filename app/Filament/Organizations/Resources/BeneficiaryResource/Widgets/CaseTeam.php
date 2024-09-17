@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
-use App\Enums\Role;
 use App\Enums\UserStatus;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
+use App\Models\Role;
 use App\Models\User;
 use Filament\Forms\Components\Hidden;
 use Filament\Support\Colors\Color;
@@ -32,7 +32,7 @@ class CaseTeam extends BaseWidget
                 TextColumn::make('user.full_name')
                     ->label(__('beneficiary.section.specialists.labels.name')),
 
-                TextColumn::make('roles')
+                TextColumn::make('rolesString')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->wrap()
                     ->color(Color::Gray),
@@ -53,6 +53,7 @@ class CaseTeam extends BaseWidget
                     ->form($this->getFormSchema())
                     ->label(__('beneficiary.section.specialists.change_action'))
                     ->modalHeading(__('beneficiary.section.specialists.heading.edit_modal'))
+//                    ->using(function ($data) {dd($data);})
                     ->extraModalFooterActions([
                         DeleteAction::make()
                             ->cancelParentActions()
@@ -74,7 +75,11 @@ class CaseTeam extends BaseWidget
 
                 SelectFilter::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
-                    ->options(Role::options())
+                    ->options(
+                        Role::query()
+                            ->active()
+                            ->pluck('name', 'id')
+                    )
                     ->searchable()
                     ->modifyQueryUsing(
                         fn (Builder $query, $state): Builder => $state['value']
@@ -98,7 +103,12 @@ class CaseTeam extends BaseWidget
 
             Select::make('roles')
                 ->label(__('beneficiary.section.specialists.labels.roles'))
-                ->options(fn () => Role::options())
+                ->options(
+                    Role::query()
+                        ->active()
+                        ->get()
+                        ->pluck('name', 'id')
+                )
                 ->multiple()
                 ->required(),
 

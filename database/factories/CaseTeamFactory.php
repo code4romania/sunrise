@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\Role;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,7 @@ class CaseTeamFactory extends Factory
     public function definition(): array
     {
         return  [
-            'roles' => collect(fake()->randomElements(Role::values(), rand(1, 5))),
+            'roles' => collect(fake()->randomElements(Role::all()->pluck('id'), rand(1, 5))),
         ];
     }
 }
