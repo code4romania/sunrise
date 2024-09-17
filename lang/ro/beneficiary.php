@@ -374,6 +374,12 @@ return [
                 'close_situation' => 'Descrieți situația cazului la închidere',
             ],
         ],
+
+        'related_cases' => [
+            'labels' => [
+                'case_manager' => 'Manager de caz',
+            ],
+        ],
     ],
 
     'status' => [
