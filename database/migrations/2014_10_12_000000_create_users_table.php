@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
             $table->string('status')->nullable();
-            $table->json('roles')->nullable();
             $table->boolean('can_be_case_manager')->nullable();
             $table->boolean('has_access_to_all_cases')->nullable();
             $table->json('case_permissions')->nullable();

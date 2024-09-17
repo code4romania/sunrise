@@ -6,9 +6,9 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
+use App\Models\Role;
 use App\Models\User;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
@@ -16,10 +16,13 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
@@ -60,23 +63,25 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('roles'))
             ->columns([
                 TextColumn::make('first_name')
                     ->sortable()
                     ->label(__('user.labels.first_name'))
                     ->searchable(),
+
                 TextColumn::make('last_name')
                     ->label(__('user.labels.last_name'))
                     ->searchable(),
-                TextColumn::make('roles')
+
+                TextColumn::make('roles.name')
                     ->sortable()
-                    ->badge()
-                    ->label(__('user.labels.roles'))
-                    ->formatStateUsing(fn ($state) => $state->label()),
+                    ->label(__('user.labels.roles')),
+
                 TextColumn::make('status')
                     ->sortable()
-                    ->label(__('user.labels.account_status'))
-                    ->formatStateUsing(fn ($state) => $state->label()),
+                    ->label(__('user.labels.account_status')),
+
                 TextColumn::make('last_login_at')
                     ->sortable()
                     ->label(__('user.labels.last_login_at')),
@@ -119,36 +124,97 @@ class UserResource extends Resource
                     TextInput::make('first_name')
                         ->label(__('user.labels.first_name'))
                         ->required(),
+
                     TextInput::make('last_name')
                         ->label(__('user.labels.last_name'))
                         ->required(),
+
                     TextInput::make('email')
                         ->label(__('user.labels.email'))
                         ->required(),
+
                     TextInput::make('phone_number')
                         ->label(__('user.labels.phone_number'))
                         ->tel()
                         ->required(),
-                    Select::make('roles')
+
+                    Select::make('role_id')
                         ->label(__('user.labels.select_roles'))
-                        ->options(Role::options())
+                        ->relationship('rolesInOrganization', 'name')
+                        ->preload()
                         ->multiple()
-                        ->required(),
+                        ->live()
+                        ->required()
+                        ->afterStateHydrated(self::setDefaultCaseAndNgoAdminPermissions())
+                        ->afterStateUpdated(self::setDefaultCaseAndNgoAdminPermissions()),
+
                     Checkbox::make('can_be_case_manager')
                         ->label(__('user.labels.can_be_case_manager')),
+
                     Placeholder::make('obs')
                         ->content(__('user.placeholders.obs'))
                         ->label('')
                         ->columnSpanFull(),
+
                     CheckboxList::make('case_permissions')
                         ->label(__('user.labels.case_permissions'))
                         ->options(CasePermission::options())
+                        ->disableOptionWhen(function (Get $get, string $value) {
+                            foreach ($get('role_id') as $roleID) {
+                                $role = Role::find($roleID);
+
+                                $permission = $role->case_permissions
+                                    ->filter(fn ($item) => CasePermission::isValue($value, $item));
+                                if ($permission->count()) {
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        })
                         ->columnSpanFull(),
+
                     CheckboxList::make('admin_permissions')
                         ->label(__('user.labels.admin_permissions'))
                         ->options(AdminPermission::options())
+                        ->disableOptionWhen(function (Get $get, string $value) {
+                            foreach ($get('role_id') as $roleID) {
+                                $role = Role::find($roleID);
+
+                                $permission = $role->ngo_admin_permissions
+                                    ->filter(fn ($item) => AdminPermission::isValue($value, $item));
+                                if ($permission->count()) {
+                                    return true;
+                                }
+                            }
+
+                            return false;
+                        })
                         ->columnSpanFull(),
                 ]),
         ];
+    }
+
+    public static function setDefaultCaseAndNgoAdminPermissions(): \Closure
+    {
+        return function (Set $set, Get $get, $state) {
+            $casePermissions = $get('case_permissions') ?: [];
+            $adminPermissions = $get('admin_permissions') ?: [];
+            foreach ($state as $roleID) {
+                $role = Role::find($roleID);
+                $defaultCasePermissions = $role->case_permissions->map(fn ($item) => $item->value)->toArray();
+                $defaultNgoAdminPermissions = $role->ngo_admin_permissions->map(fn ($item) => $item->value)->toArray();
+
+                $casePermissions = array_merge($casePermissions, $defaultCasePermissions);
+                $adminPermissions = array_merge($adminPermissions, $defaultNgoAdminPermissions);
+            }
+            $casePermissions = array_unique($casePermissions);
+            $adminPermissions = array_unique($adminPermissions);
+            sort($casePermissions);
+            sort($adminPermissions);
+
+            $set('case_permissions', $casePermissions);
+            $set('admin_permissions', $adminPermissions);
+        };
     }
 }
