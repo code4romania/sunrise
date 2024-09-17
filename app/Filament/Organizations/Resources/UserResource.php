@@ -63,7 +63,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('roles'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('rolesInOrganization'))
             ->columns([
                 TextColumn::make('first_name')
                     ->sortable()
@@ -74,7 +74,7 @@ class UserResource extends Resource
                     ->label(__('user.labels.last_name'))
                     ->searchable(),
 
-                TextColumn::make('roles.name')
+                TextColumn::make('rolesInOrganization.name')
                     ->sortable()
                     ->label(__('user.labels.roles')),
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
 use App\Concerns\RedirectToCloseFile;
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
@@ -95,9 +94,7 @@ class EditCloseFileDetails extends EditRecord
 
                         return $team
                             ->filter(
-                                fn (CaseTeam $item) => $item->roles
-                                    ->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
-                                    ->count()
+                                fn (CaseTeam $item) => $item->user->can_be_case_manager
                             )
                             ->first()
                             ?->id;

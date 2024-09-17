@@ -49,12 +49,11 @@ class RelatedCases extends BaseWidget
                     ->label(__('field.open_at')),
 
                 TextColumn::make('case_manager')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(__('beneficiary.section.related_cases.labels.case_manager'))
                     ->state(
                         fn (Beneficiary $record) => $record->team
                             ->filter(
-                                fn ($item) => $item->roles
-                                    ->contains(Role::MANGER)
+                                fn ($item) => $item->user->can_be_case_manager
                             )
                             ->map(fn ($item) => $item->user->full_name)
                             ->join(', ')
