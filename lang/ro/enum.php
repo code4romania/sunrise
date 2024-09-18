@@ -167,9 +167,9 @@ return [
     ],
 
     'case_permissions' => [
+        'can_be_case_manager' => 'Poate lua rol de manager de caz',
         'has_access_to_all_cases' => 'Are acces la toate cazurile din Centru',
-        'can_search_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției',
-        'can_copy_cases_in_all_centers' => 'Poate copia date identificare beneficiar dintr-o bază de date în alta  a instituției',
+        'can_search_and_copy_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției si poate copia date identificare beneficiar dintr-o bază de date în alta a instituției',
         'has_access_to_statistics' => 'Are acces la rapoarte statistice',
     ],
 

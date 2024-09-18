@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
+use App\Enums\CasePermission;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
@@ -16,7 +17,6 @@ use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -58,7 +58,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'email',
         'phone_number',
         'status',
-        'can_be_case_manager',
         'case_permissions',
         'admin_permissions',
         'password',
@@ -214,5 +213,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return Filament::getTenant()
             ->users
             ->pluck('full_name', 'id');
+    }
+
+    public function canBeCaseManager(): bool
+    {
+        return $this->case_permissions && \in_array(CasePermission::CAN_BE_CASE_MANAGER->value, $this->case_permissions);
     }
 }

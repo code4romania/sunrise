@@ -94,7 +94,7 @@ class EditCloseFileDetails extends EditRecord
 
                         return $team
                             ->filter(
-                                fn (CaseTeam $item) => $item->user->can_be_case_manager
+                                fn (CaseTeam $item) => $item->user->canBeCaseManager()
                             )
                             ->first()
                             ?->id;

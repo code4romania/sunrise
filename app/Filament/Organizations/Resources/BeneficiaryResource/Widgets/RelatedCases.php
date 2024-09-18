@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
 use Filament\Tables\Actions\ViewAction;
@@ -53,7 +52,7 @@ class RelatedCases extends BaseWidget
                     ->state(
                         fn (Beneficiary $record) => $record->team
                             ->filter(
-                                fn ($item) => $item->user->can_be_case_manager
+                                fn ($item) => $item->user->canBeCaseManager()
                             )
                             ->map(fn ($item) => $item->user->full_name)
                             ->join(', ')

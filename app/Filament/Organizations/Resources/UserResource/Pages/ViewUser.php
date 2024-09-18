@@ -48,12 +48,8 @@ class ViewUser extends ViewRecord
                         ->label(__('user.labels.phone_number')),
 
                     TextEntry::make('rolesInOrganization.name')
-                        ->label(__('user.labels.select_roles')),
-
-                    TextEntry::make('can_be_case_manager')
-                        ->label(__('user.labels.can_be_case_manager'))
-                        ->default('0')
-                        ->formatStateUsing(fn ($state) => $state != '-' ? __('enum.ternary.' . $state) : $state),
+                        ->label(__('user.labels.select_roles'))
+                        ->columnSpanFull(),
 
                     TextEntry::make('obs')
                         ->default(

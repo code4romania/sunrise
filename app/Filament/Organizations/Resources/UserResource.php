@@ -10,7 +10,6 @@ use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
 use App\Models\Role;
 use App\Models\User;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -147,9 +146,6 @@ class UserResource extends Resource
                         ->required()
                         ->afterStateHydrated(self::setDefaultCaseAndNgoAdminPermissions())
                         ->afterStateUpdated(self::setDefaultCaseAndNgoAdminPermissions()),
-
-                    Checkbox::make('can_be_case_manager')
-                        ->label(__('user.labels.can_be_case_manager')),
 
                     Placeholder::make('obs')
                         ->content(__('user.placeholders.obs'))
