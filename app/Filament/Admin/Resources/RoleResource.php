@@ -7,6 +7,7 @@ namespace App\Filament\Admin\Resources;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Filament\Admin\Resources\RoleResource\Pages;
+use App\Forms\Components\Spacer;
 use App\Models\Role;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
@@ -37,6 +38,8 @@ class RoleResource extends Resource
                         TextInput::make('name')
                             ->label(__('nomenclature.labels.role_name')),
 
+                        Spacer::make(),
+
                         Placeholder::make(__('nomenclature.helper_texts.role_page_default_permissions')),
 
                         CheckboxList::make('case_permissions')
@@ -48,6 +51,7 @@ class RoleResource extends Resource
                             ->label(__('nomenclature.labels.ngo_admin_permissions'))
                             ->options(AdminPermission::options())
                             ->columnSpanFull(),
+
                     ]),
             ]);
     }
