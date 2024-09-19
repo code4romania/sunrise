@@ -45,6 +45,7 @@ class EditRole extends EditRecord
                 ->outlined()
                 ->icon('heroicon-o-trash')
                 ->disabled(fn () => GeneralStatus::isValue($this->getRecord()->status, GeneralStatus::ACTIVE))
+                ->modalHeading(__('nomenclature.actions.delete_role'))
                 ->successRedirectUrl(NomenclatureList::getUrl()),
         ];
     }

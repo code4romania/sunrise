@@ -46,7 +46,7 @@ return [
     'actions' => [
         'change_status' => [
             'activate' => 'Activează',
-            'inactivate' => 'Dezactivează',
+            'inactivate' => 'Inactivează',
             'inactivate_service_modal' => 'Inactivează serviciu',
             'inactivate_role_modal' => 'Inactivează rol',
         ],
