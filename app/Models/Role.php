@@ -32,7 +32,12 @@ class Role extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_roles');
+        return $this->belongsToMany(User::class, 'user_roles')->wherePivotNotNull('organization_id');
+    }
+
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, 'user_roles');
     }
 
     public function scopeActive(Builder $query): Builder

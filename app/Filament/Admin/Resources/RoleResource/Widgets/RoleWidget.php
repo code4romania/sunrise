@@ -8,7 +8,7 @@ use App\Enums\GeneralStatus;
 use App\Filament\Admin\Resources\RoleResource;
 use App\Models\Role;
 use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -21,22 +21,33 @@ class RoleWidget extends BaseWidget
         return $table
             ->query(
                 Role::query()
+                    ->withCount(['users'])
+                    ->with(['organizations'])
             )
             ->columns([
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.role_name')),
+
                 TextColumn::make('institutions')
-                    ->label(__('nomenclature.labels.institutions')),
-                TextColumn::make('centers')
-                    ->label(__('nomenclature.labels.centers')),
+                    ->label(__('nomenclature.labels.institutions'))
+                    ->default(0),
+
+                TextColumn::make('organizations')
+                    ->label(__('nomenclature.labels.centers'))
+                    ->default(0)
+                    ->formatStateUsing(fn ($record) => $record->organizations?->unique()->count()),
+
                 TextColumn::make('users_count')
                     ->label(__('nomenclature.labels.users')),
+
                 TextColumn::make('status')
                     ->label(__('nomenclature.labels.status')),
             ])
             ->actions([
-                ViewAction::make()
-                    ->url(fn (Role $record) => RoleResource::getUrl('view', ['record' => $record])),
+                EditAction::make()
+                    ->label(__('nomenclature.actions.edit'))
+                    ->icon(null)
+                    ->url(fn (Role $record) => RoleResource::getUrl('edit', ['record' => $record])),
             ])
             ->headerActions([
                 CreateAction::make()

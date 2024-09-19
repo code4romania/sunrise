@@ -36,7 +36,8 @@ class RoleResource extends Resource
                             ->content(__('nomenclature.helper_texts.role_page_description')),
 
                         TextInput::make('name')
-                            ->label(__('nomenclature.labels.role_name')),
+                            ->label(__('nomenclature.labels.role_name'))
+                            ->placeholder(__('nomenclature.placeholders.role_name')),
 
                         Spacer::make(),
 

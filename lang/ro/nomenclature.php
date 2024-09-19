@@ -56,6 +56,10 @@ return [
         'add_role' => 'Adaugă rol specialist',
         'edit_role' => 'Modifică rol specialist',
         'delete_role' => 'Șterge rol',
+        'edit' => 'Modifică',
     ],
 
+    'placeholders' => [
+        'role_name' => 'Adaugă o denumire pentru rolul de specialist',
+    ],
 ];
