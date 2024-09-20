@@ -198,8 +198,8 @@ class UserResource extends Resource
             $adminPermissions = $get('admin_permissions') ?: [];
             foreach ($state as $roleID) {
                 $role = Role::find($roleID);
-                $defaultCasePermissions = $role->case_permissions->map(fn ($item) => $item->value)->toArray();
-                $defaultNgoAdminPermissions = $role->ngo_admin_permissions->map(fn ($item) => $item->value)->toArray();
+                $defaultCasePermissions = $role->case_permissions?->map(fn ($item) => $item->value)->toArray();
+                $defaultNgoAdminPermissions = $role->ngo_admin_permissions?->map(fn ($item) => $item->value)->toArray();
 
                 $casePermissions = array_merge($casePermissions, $defaultCasePermissions);
                 $adminPermissions = array_merge($adminPermissions, $defaultNgoAdminPermissions);
