@@ -53,6 +53,11 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
         return $this->morphedByMany(User::class, 'model', 'model_has_organizations');
     }
 
+    public function organizationServices(): HasMany
+    {
+        return $this->hasMany(OrganizationService::class);
+    }
+
     public function services(): HasMany
     {
         return $this->hasMany(Service::class);
