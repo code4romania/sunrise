@@ -14,7 +14,7 @@ enum CounselingSheet: string implements HasLabel
     use Enums\Comparable;
 
     case PSYCHOLOGICAL_ASSISTANCE = 'psychological_assistance';
-    case LEGAL_ASSISTANCE = 'legal assistance';
+    case LEGAL_ASSISTANCE = 'legal_assistance';
 
     protected function labelKeyPrefix(): ?string
     {
