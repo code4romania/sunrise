@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Pages;
 
-use App\Filament\Admin\Widgets\NomenclaturesWidget;
+use App\Filament\Admin\Resources\ServiceResource\Widgets\NomenclaturesWidget;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 
