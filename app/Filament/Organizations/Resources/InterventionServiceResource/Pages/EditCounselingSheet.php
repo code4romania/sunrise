@@ -10,6 +10,7 @@ use App\Enums\Frequency;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
+use App\Forms\Components\RadioTable;
 use App\Forms\Components\Select;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
@@ -189,6 +190,18 @@ class EditCounselingSheet extends EditRecord
                     Textarea::make('data.violence_history_forms')
                         ->label(__('intervention_plan.labels.violence_history_forms'))
                         ->maxLength(1500),
+//                    RadioTable::make('radio_options')
+//                        ->setRadioOptions(Frequency::options())
+//                        ->setFields([
+//                            'data.physics' => __('intervention_plan.labels.physics'),
+//                            'data.sexed' => __('intervention_plan.labels.sexed'),
+//                            'data.psychological' => __('intervention_plan.labels.psychological'),
+//                            'data.verbal' => __('intervention_plan.labels.verbal'),
+//                            'data.sociable' => __('intervention_plan.labels.sociable'),
+//                            'data.economic' => __('intervention_plan.labels.economic'),
+//                            'data.cybernetics' => __('intervention_plan.labels.cybernetics'),
+//                            'data.spiritual' => __('intervention_plan.labels.spiritual'),
+//                        ]),
                     //TODO radio table, maybe custom component
                     Select::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
