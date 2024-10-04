@@ -275,4 +275,9 @@ class Beneficiary extends Model
     {
         return $this->hasOne(CloseFile::class);
     }
+
+    public function interventionPlans(): HasMany
+    {
+        return $this->hasMany(InterventionPlan::class);
+    }
 }

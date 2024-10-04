@@ -11,6 +11,8 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetaile
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\CreateInterventionPlan;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\ViewInterventionPlan;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -157,6 +159,9 @@ class BeneficiaryResource extends Resource
             'view_close_file' => CloseFile\ViewCloseFile::route('/{record}/closeFile'),
             'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record}/closeFile/editDetails'),
             'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
+
+            'create_intervention_plan' => CreateInterventionPlan::route('/{parent}/createInterventionPlan'),
+            'view_intervention_plan' => ViewInterventionPlan::route('/{parent}/interventionPlan/{record}'),
         ];
     }
 }
