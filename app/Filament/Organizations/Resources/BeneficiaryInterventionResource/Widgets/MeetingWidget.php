@@ -20,7 +20,6 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 
@@ -42,7 +41,8 @@ class MeetingWidget extends InfolistWidget
             TimePicker::make('time')
                 ->label(__('intervention_plan.labels.time')),
             TextInput::make('duration')
-                ->label(__('intervention_plan.labels.duration')),
+                ->label(__('intervention_plan.labels.duration'))
+                ->numeric(),
             Select::make('user_id')
                 ->label(__('intervention_plan.labels.responsible_specialist'))
                 ->options(User::getTenantOrganizationUsers()),
@@ -61,40 +61,37 @@ class MeetingWidget extends InfolistWidget
         return [
             RepeatableEntry::make('meetings')
                 ->hiddenLabel()
+                ->columns(3)
                 ->schema([
-                    Section::make()
-                        ->columns(3)
-                        ->schema([
-                            SectionHeader::make('header')
-                                ->state(function (SectionHeader $component, $record) {
-                                    $index = (int) explode('.', $component->getStatePath())[1];
+                    SectionHeader::make('header')
+                        ->state(function (SectionHeader $component, $record) {
+                            $index = (int) explode('.', $component->getStatePath())[1];
 
-                                    return __('intervention_plan.headings.meeting_repeater', [
-                                        'number' => $index + 1,
-                                    ]) . ' ' . $record->status?->getLabel();
-                                })
-                                ->action(
-                                    \Filament\Infolists\Components\Actions\Action::make('edit')
-                                        ->label(__('general.action.edit'))
-                                        ->icon('heroicon-o-pencil')
-                                        ->link()
-                                        ->modalHeading(__('general.action.edit'))
-                                        ->form($this->getFormSchema())
-                                        ->fillForm(fn ($record) => $record)
-                                        ->action(fn () => dd('aaaa'))
-                                ),
-                            TextEntry::make('date')
-                                ->label(__('intervention_plan.labels.date'))
-                                ->formatStateUsing(fn (InterventionMeeting $record, $state) => $state . ' ' . $record->time),
-                            TextEntry::make('duration')
-                                ->label(__('intervention_plan.labels.duration')),
-                            TextEntry::make('user.full_name')
-                                ->label(__('intervention_plan.labels.responsible_specialist')),
-                            TextEntry::make('observations')
-                                ->label(__('intervention_plan.labels.observations'))
-                                ->html()
-                                ->columnSpanFull(),
-                        ]),
+                            return __('intervention_plan.headings.meeting_repeater', [
+                                'number' => $index + 1,
+                            ]) . ' ' . $record->status?->getLabel();
+                        })
+                        ->action(
+                            \Filament\Infolists\Components\Actions\Action::make('edit')
+                                ->label(__('general.action.edit'))
+                                ->icon('heroicon-o-pencil')
+                                ->link()
+                                ->modalHeading(__('general.action.edit'))
+                                ->form($this->getFormSchema())
+                                ->fillForm(fn ($record) => $record)
+                                ->action(fn () => dd('aaaa'))
+                        ),
+                    TextEntry::make('date')
+                        ->label(__('intervention_plan.labels.date'))
+                        ->formatStateUsing(fn (InterventionMeeting $record, $state) => $state . ' ' . $record->time),
+                    TextEntry::make('duration')
+                        ->label(__('intervention_plan.labels.duration')),
+                    TextEntry::make('user.full_name')
+                        ->label(__('intervention_plan.labels.responsible_specialist')),
+                    TextEntry::make('observations')
+                        ->label(__('intervention_plan.labels.observations'))
+                        ->html()
+                        ->columnSpanFull(),
                 ]),
         ];
     }
@@ -108,15 +105,19 @@ class MeetingWidget extends InfolistWidget
                 ->model(InterventionMeeting::class)
                 ->relationship(fn () => $this->record->meetings())
                 ->modalHeading(__('intervention_plan.actions.add_meeting'))
-                ->form($this->getFormSchema()),
+                ->form($this->getFormSchema())
+                ->link(),
         ];
     }
 
     protected function configureAction(Action $action): void
     {
-//        dd('aaaa');
         $action
             ->record($this->record);
-//            ->recordTitle($this->getRecordTitle());
+    }
+
+    public function getDisplayName(): string
+    {
+        return __('intervention_plan.headings.intervention_meetings');
     }
 }

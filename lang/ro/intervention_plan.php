@@ -86,6 +86,7 @@ return [
         'time' => 'Ora',
         'duration' => 'Durata',
         'observations' => 'Observatii',
+        'meet_number' => 'Nr ședință',
     ],
 
     'headings' => [
@@ -118,6 +119,9 @@ return [
         'empty_state_service_intervention_table' => 'Nici o interventie planificată pentru acest serviciu',
         'add_intervention' => 'Adaugă Intervenție de :name',
         'meeting_repeater' => 'Ședința sau activitate #:number',
+        'intervention_meetings' => 'Observații ședințe/ activități',
+        'unfolded' => 'Desfășurător',
+        'unfolded_table' => 'Evidență ședințe și activități',
     ],
 
     'actions' => [
@@ -128,5 +132,6 @@ return [
         'add_intervention' => 'Adaugă intervenție',
         'delete_service' => 'Șterge serviciu',
         'add_meeting' => 'Adaugă o ședință sau o activitate',
+        'add_institution' => 'Adaugă încă o instituție',
     ],
 ];

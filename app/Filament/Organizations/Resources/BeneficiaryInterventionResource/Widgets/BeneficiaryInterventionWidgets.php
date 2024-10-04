@@ -11,6 +11,7 @@ class BeneficiaryInterventionWidgets extends MultiWidget
     public array $widgets = [
         MeetingWidget::class,
         InterventionWidget::class,
+        UnfoldedWidget::class,
     ];
 
     public function shouldPersistMultiWidgetTabsInSession(): bool

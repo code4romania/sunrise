@@ -316,4 +316,33 @@ return [
         'planed' => 'Planificată',
         'realized' => 'Realizată',
     ],
+
+    'patrimony' => [
+        'apartment' => 'Apartament',
+        'house' => 'Casă',
+        'without' => 'Nu deține locuință',
+        'unknown' => 'Nu știe/ nu răspunde',
+    ],
+
+    'possession_mode' => [
+        'exclusive_property' => 'Proprietate exclusivă',
+        'devalmasie' => 'Devălmășie',
+        'co_ownership' => 'Coproprietate',
+        'rental_state_housing' => 'Închiriere locuință de stat',
+        'private_housing_rental' => 'Închiriere locuință privată',
+        'commode' => 'Comodat',
+        'donation' => 'Donație',
+        'usufruct' => 'Uzufruct',
+        'other' => 'Altele',
+    ],
+
+    'file_document_type' => [
+        'marriage_certificate' => 'Certificat căsătorie',
+        'children_birth_certificate' => 'Certificat(e) naștere minor(i)',
+        'land_deed_extract' => 'Extras CF',
+        'rental_agreement' => 'Contract închiriere',
+        'sale_purchase_agreement' => 'Contract vânzare-cumpărare',
+        'iml_certificate' => 'Certificat IML',
+        'other' => 'Altele',
+    ],
 ];
