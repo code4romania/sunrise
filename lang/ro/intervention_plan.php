@@ -77,6 +77,15 @@ return [
         'external_resources' => 'Resurse externe',
         'requests_description' => 'Descrierea solicitărilor',
         'first_meeting_psychological_evaluation' => 'Evaluarea psihologică la prima ședință',
+        'beneficiary_name' => 'Nume beneficiar',
+        'empty_state_service_table' => 'Poți adăuga servicii acum sau oricând după crearea planului',
+        'interventions_count' => 'Nr intervenții',
+        'empty_state_service_intervention_table' => 'Adaugă intervenții în planul beneficiarului, pentru a putea documenta activitățile și ședințele realizate în cadrul serviciului.',
+        'status' => 'Status',
+        'date' => 'Data',
+        'time' => 'Ora',
+        'duration' => 'Durata',
+        'observations' => 'Observatii',
     ],
 
     'headings' => [
@@ -104,6 +113,11 @@ return [
         'request' => 'Solicitări',
         'psychological_evaluation' => 'Evaluare psihologică',
         'intervention_indicators' => 'Indicatori intervenție',
+        'edit_intervention_plan' => 'Actualizează detalii plan intervenție',
+        'empty_state_service_table' => 'Nici un serviciu adăugat',
+        'empty_state_service_intervention_table' => 'Nici o interventie planificată pentru acest serviciu',
+        'add_intervention' => 'Adaugă Intervenție de :name',
+        'meeting_repeater' => 'Ședința sau activitate #:number',
     ],
 
     'actions' => [
@@ -113,5 +127,6 @@ return [
         'add_service' => 'Adaugă serviciu',
         'add_intervention' => 'Adaugă intervenție',
         'delete_service' => 'Șterge serviciu',
+        'add_meeting' => 'Adaugă o ședință sau o activitate',
     ],
 ];

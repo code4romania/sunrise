@@ -42,7 +42,12 @@ class BeneficiaryInterventionResource extends Resource
             Select::make('organization_service_intervention_id')
                 ->label(__('intervention_plan.labels.intervention_type'))
                 ->relationship('interventionService', 'name')
-                ->options(OrganizationServiceIntervention::with('serviceIntervention')->get()->pluck('serviceIntervention.name', 'id')),
+                ->options(
+                    OrganizationServiceIntervention::with('serviceIntervention')
+                        ->get()
+                        ->pluck('serviceIntervention.name', 'id')
+                )
+                ->required(),
 
             Select::make('user_id')
                 ->label(__('intervention_plan.labels.responsible_specialist'))
@@ -53,26 +58,32 @@ class BeneficiaryInterventionResource extends Resource
                 ->label(__('intervention_plan.labels.start_date')),
             DatePicker::make('end_date')
                 ->label(__('intervention_plan.labels.end_date')),
-            Textarea::make('objections')
-                ->label(__('intervention_plan.labels.objections'))
-                ->maxLength(1000)
-                ->columnSpanFull(),
-            Textarea::make('expected_results')
-                ->label(__('intervention_plan.labels.expected_results'))
-                ->maxLength(1000)
-                ->columnSpanFull(),
-            Textarea::make('procedure')
-                ->label(__('intervention_plan.labels.procedure'))
-                ->maxLength(1000)
-                ->columnSpanFull(),
-            Textarea::make('indicators')
-                ->label(__('intervention_plan.labels.indicators'))
-                ->maxLength(1000)
-                ->columnSpanFull(),
-            Textarea::make('achievement_degree')
-                ->label(__('intervention_plan.labels.achievement_degree'))
-                ->maxLength(1000)
-                ->columnSpanFull(),
+
+            Section::make(__('intervention_plan.headings.intervention_indicators'))
+                ->collapsible()
+                ->collapsed()
+                ->schema([
+                    Textarea::make('objections')
+                        ->label(__('intervention_plan.labels.objections'))
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+                    Textarea::make('expected_results')
+                        ->label(__('intervention_plan.labels.expected_results'))
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+                    Textarea::make('procedure')
+                        ->label(__('intervention_plan.labels.procedure'))
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+                    Textarea::make('indicators')
+                        ->label(__('intervention_plan.labels.indicators'))
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+                    Textarea::make('achievement_degree')
+                        ->label(__('intervention_plan.labels.achievement_degree'))
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+                ]),
 
         ];
     }

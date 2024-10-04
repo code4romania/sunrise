@@ -12,4 +12,9 @@ class BeneficiaryInterventionWidgets extends MultiWidget
         MeetingWidget::class,
         InterventionWidget::class,
     ];
+
+    public function shouldPersistMultiWidgetTabsInSession(): bool
+    {
+        return true;
+    }
 }

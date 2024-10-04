@@ -311,4 +311,9 @@ return [
         'psychological_assistance' => 'Asistență psihologică',
         'legal assistance' => 'Asistența juridică',
     ],
+
+    'meeting_status' => [
+        'planed' => 'Planificată',
+        'realized' => 'Realizată',
+    ],
 ];

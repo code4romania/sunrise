@@ -32,6 +32,7 @@ class InterventionsWidget extends BaseWidget
                 CreateAction::make()
                     ->label(__('intervention_plan.actions.add_intervention'))
                     ->createAnother(false)
+                    ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationService->service->name]))
                     ->form([
                         Hidden::make('intervention_service_id')
                             ->default($this->record->id),
@@ -45,7 +46,10 @@ class InterventionsWidget extends BaseWidget
                         'parent' => $this->record,
                         'record' => $record,
                     ])),
-            ]);
+            ])
+            ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_intervention_table'))
+            ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_intervention_table'))
+            ->emptyStateIcon('heroicon-o-document');
     }
 
     public function getDisplayName(): string

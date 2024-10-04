@@ -190,42 +190,50 @@ class EditCounselingSheet extends EditRecord
                     Textarea::make('data.violence_history_forms')
                         ->label(__('intervention_plan.labels.violence_history_forms'))
                         ->maxLength(1500),
-//                    RadioTable::make('radio_options')
-//                        ->setRadioOptions(Frequency::options())
-//                        ->setFields([
-//                            'data.physics' => __('intervention_plan.labels.physics'),
-//                            'data.sexed' => __('intervention_plan.labels.sexed'),
-//                            'data.psychological' => __('intervention_plan.labels.psychological'),
-//                            'data.verbal' => __('intervention_plan.labels.verbal'),
-//                            'data.sociable' => __('intervention_plan.labels.sociable'),
-//                            'data.economic' => __('intervention_plan.labels.economic'),
-//                            'data.cybernetics' => __('intervention_plan.labels.cybernetics'),
-//                            'data.spiritual' => __('intervention_plan.labels.spiritual'),
-//                        ]),
+                    //                    RadioTable::make('radio_options')
+                    //                        ->setRadioOptions(Frequency::options())
+                    //                        ->setFields([
+                    //                            'data.physics' => __('intervention_plan.labels.physics'),
+                    //                            'data.sexed' => __('intervention_plan.labels.sexed'),
+                    //                            'data.psychological' => __('intervention_plan.labels.psychological'),
+                    //                            'data.verbal' => __('intervention_plan.labels.verbal'),
+                    //                            'data.sociable' => __('intervention_plan.labels.sociable'),
+                    //                            'data.economic' => __('intervention_plan.labels.economic'),
+                    //                            'data.cybernetics' => __('intervention_plan.labels.cybernetics'),
+                    //                            'data.spiritual' => __('intervention_plan.labels.spiritual'),
+                    //                        ]),
                     //TODO radio table, maybe custom component
-                    Select::make('data.physics')
+                    Radio::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
+                        ->inline()
                         ->options(Frequency::options()),
-                    Select::make('data.sexed')
+                    Radio::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
+                        ->inline()
                         ->options(Frequency::options()),
-                    Select::make('data.psychological')
+                    Radio::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
+                        ->inline()
                         ->options(Frequency::options()),
-                    Select::make('data.verbal')
+                    Radio::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
+                        ->inline()
                         ->options(Frequency::options()),
-                    Select::make('data.sociable')
+                    Radio::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
+                        ->inline()
                         ->options(Frequency::options()),
-                    Select::make('data.economic')
+                    Radio::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
+                        ->inline()
                         ->options(Frequency::options()),
-                    Select::make('data.cybernetics')
+                    Radio::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
+                        ->inline()
                         ->options(Frequency::options()),
-                    Select::make('data.spiritual')
+                    Radio::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
+                        ->inline()
                         ->options(Frequency::options()),
                     Textarea::make('data.physical_violence_description')
                         ->label(__('intervention_plan.labels.physical_violence_description'))

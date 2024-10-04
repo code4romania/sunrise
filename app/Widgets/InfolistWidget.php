@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 namespace App\Widgets;
 
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
+use Filament\Pages\Concerns\InteractsWithHeaderActions;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Str;
 
-class InfolistWidget extends Widget implements HasInfolists
+class InfolistWidget extends Widget implements HasInfolists, HasForms, HasActions
 {
     use InteractsWithInfolists;
+    use InteractsWithActions;
+    use InteractsWithForms;
+    use InteractsWithHeaderActions;
 
     protected static string $view = 'widgets.infolist-widget';
 
@@ -37,5 +45,10 @@ class InfolistWidget extends Widget implements HasInfolists
             ->replace('-', ' ')
             ->title()
             ->toString();
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [];
     }
 }

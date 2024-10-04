@@ -8,7 +8,8 @@ use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Actions;
-use Filament\Forms\Components\Group;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -45,17 +46,34 @@ class ViewInterventionPlan extends ViewRecord
                 ->outlined()
                 ->modal()
                 ->form([
-                    Group::make()
+                    Grid::make()
                         ->relationship('beneficiary')
                         ->schema([
                             TextInput::make('full_name')
+                                ->label(__('intervention_plan.labels.beneficiary_name'))
                                 ->disabled(),
                             TextInput::make('cnp')
+                                ->label(__('intervention_plan.labels.cnp'))
                                 ->disabled(),
                             TextInput::make('address')
+                                ->label(__('intervention_plan.labels.address'))
                                 ->disabled(),
                         ]),
-                ]),
+
+                    Grid::make()
+                        ->schema([
+                            DatePicker::make('admit_date_in_center')
+                                ->label(__('intervention_plan.labels.admit_date'))
+                                ->native(false),
+                            DatePicker::make('plan_date')
+                                ->label(__('intervention_plan.labels.plan_date'))
+                                ->native(false),
+                            DatePicker::make('last_revise_date')
+                                ->label(__('intervention_plan.labels.last_revise_date'))
+                                ->native(false),
+                        ]),
+                ])
+                ->modalHeading(__('intervention_plan.headings.edit_intervention_plan')),
         ];
     }
 
@@ -76,7 +94,7 @@ class ViewInterventionPlan extends ViewRecord
                                 $record->beneficiary->legalResidenceCity->name . ', ' .
                                 $record->beneficiary->legalResidenceCounty->name
                         ),
-                    TextEntry::make('admit_date')
+                    TextEntry::make('admit_date_in_center')
                         ->label(__('intervention_plan.labels.admit_date')),
                     TextEntry::make('plan_date')
                         ->label(__('intervention_plan.labels.plan_date')),
