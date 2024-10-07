@@ -154,8 +154,7 @@ class BeneficiaryFactory extends Factory
                     'age' => fake()->boolean() ? fake()->numberBetween(0, 20) : null,
                     'current_address' => fake()->boolean() ? fake()->address() : null,
                     'status' => fake()->boolean() ? fake()->words(asText: true) : null,
-                ])
-                ->toJson(),
+                ]),
         ]);
     }
 

@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Concerns\RedirectToIdentity;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\TableRepeater;
+use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
@@ -34,7 +35,7 @@ class EditChildrenIdentity extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getIdentityBreadcrumbs();
     }
 
@@ -53,7 +54,7 @@ class EditChildrenIdentity extends EditRecord
             ]);
     }
 
-    public static function getChildrenIdentityFormSchema(): array
+    public static function getChildrenIdentityFormSchema(?Beneficiary $parentBeneficiary = null): array
     {
         return [
             Grid::make()
@@ -63,6 +64,7 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.doesnt_have_children'))
                         ->live()
                         ->columnSpanFull()
+                        ->default($parentBeneficiary?->doesnt_have_children)
                         ->afterStateUpdated(function (bool $state, Set $set) {
                             if ($state) {
                                 $set('children_total_count', null);
@@ -84,42 +86,48 @@ class EditChildrenIdentity extends EditRecord
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric()
                                 ->minValue(0)
-                                ->maxValue(99),
+                                ->maxValue(99)
+                                ->default($parentBeneficiary?->children_total_count),
 
                             TextInput::make('children_care_count')
                                 ->label(__('field.children_care_count'))
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric()
                                 ->minValue(0)
-                                ->maxValue(99),
+                                ->maxValue(99)
+                                ->default($parentBeneficiary?->children_care_count),
 
                             TextInput::make('children_under_10_care_count')
                                 ->label(__('field.children_under_10_care_count'))
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric()
                                 ->minValue(0)
-                                ->maxValue(99),
+                                ->maxValue(99)
+                                ->default($parentBeneficiary?->children_under_10_care_count),
 
                             TextInput::make('children_10_18_care_count')
                                 ->label(__('field.children_10_18_care_count'))
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric()
                                 ->minValue(0)
-                                ->maxValue(99),
+                                ->maxValue(99)
+                                ->default($parentBeneficiary?->children_10_18_care_count),
 
                             TextInput::make('children_18_care_count')
                                 ->label(__('field.children_18_care_count'))
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric()
                                 ->minValue(0)
-                                ->maxValue(99),
+                                ->maxValue(99)
+                                ->default($parentBeneficiary?->children_18_care_count),
 
                             TextInput::make('children_accompanying_count')
                                 ->label(__('field.children_accompanying_count'))
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric()
                                 ->minValue(0)
-                                ->maxValue(99),
+                                ->maxValue(99)
+                                ->default($parentBeneficiary?->children_accompanying_count),
                         ]),
 
                     TableRepeater::make('children')
@@ -131,6 +139,7 @@ class EditChildrenIdentity extends EditRecord
                         ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                         ->emptyLabel(false)
                         ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
+                        ->default($parentBeneficiary?->children)
                         ->schema([
                             TextInput::make('name')
                                 ->label(__('field.child_name')),
@@ -152,6 +161,7 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.children_notes'))
                         ->placeholder(__('placeholder.other_relevant_details'))
                         ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                        ->default($parentBeneficiary?->children_notes)
                         ->nullable()
                         ->columnSpanFull(),
                 ]),
