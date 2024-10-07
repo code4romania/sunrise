@@ -10,7 +10,7 @@ trait RedirectToDetailedEvaluation
     {
         return self::$resource::getUrl('view_detailed_evaluation', [
             'record' => $this->record->id,
-            'tab' => sprintf('-%s-tab', $this->getTabSlug()),
+            'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
     }
 }

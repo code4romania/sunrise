@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
+use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
+use App\Filters\DateFilter;
 use App\Models\Beneficiary;
+use App\Tables\Filters\SelectFilter;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class BeneficiaryResource extends Resource
@@ -61,52 +65,62 @@ class BeneficiaryResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table
+        return $table->modifyQueryUsing(fn (Builder $query) => $query->with('managerTeam'))
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id'))
-                    ->shrink()
                     ->sortable()
-                    ->searchable(),
+                    ->searchable(true, fn (Builder $query, $search) => $query->where('beneficiaries.id', 'LIKE', '%' . $search . '%')),
 
                 TextColumn::make('full_name')
                     ->label(__('field.beneficiary'))
-                    ->searchable(),
+                    ->description(fn ($record) => $record->initial_id ? __('beneficiary.labels.reactivated') : '')
+                    ->sortable()
+                    ->searchable(true, fn (Builder $query, $search) => $query->where('beneficiaries.full_name', 'LIKE', '%' . $search . '%')),
 
                 TextColumn::make('created_at')
                     ->label(__('field.open_at'))
                     ->date()
-                    ->shrink()
+                    ->toggleable()
                     ->sortable(),
 
                 TextColumn::make('last_evaluated_at')
                     ->label(__('field.last_evaluated_at'))
                     ->date()
-                    ->shrink()
-                    ->sortable(),
+                    ->toggleable(),
+                //                    ->sortable(),
 
-                TextColumn::make('last_serviced_at')
-                    ->label(__('field.last_serviced_at'))
-                    ->date()
-                    ->shrink()
-                    ->sortable(),
+                TextColumn::make('managerTeam.user.full_name')
+                    ->label(Role::MANGER->getLabel())
+                    ->toggleable(),
 
                 TextColumn::make('status')
                     ->label(__('field.status'))
-                    ->badge()
-                    ->color(fn ($state) => match ($state) {
-                        CaseStatus::ACTIVE => 'success',
-                        CaseStatus::REACTIVATED => 'success',
-                        CaseStatus::MONITORED => 'warning',
-                        CaseStatus::CLOSED => 'gray',
-                        default => dd($state)
-                    })
-                    ->formatStateUsing(fn ($state) => $state?->label())
-                    ->shrink(),
+                    ->badge(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
             ])
+            ->filters([
+                SelectFilter::make('status')
+                    ->label(__('field.status'))
+                    ->options(CaseStatus::options())
+                    ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('beneficiaries.status', $state) : $query),
+
+                SelectFilter::make('case_manager')
+                    ->label(Role::MANGER->getLabel())
+                    ->searchable()
+                    ->preload()
+                    ->relationship('managerTeam.user', 'full_name'),
+
+                DateFilter::make('created_at')
+                    ->label(__('field.open_at'))
+                    ->attribute('beneficiaries.created_at'),
+
+                //                DateFilter::make('last_evaluated_at')
+            ])
+            ->paginationPageOptions([10, 20, 40, 60, 80, 100])
+            ->defaultPaginationPageOption(20)
             ->defaultSort('id', 'desc');
     }
 

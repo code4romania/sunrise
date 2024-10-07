@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
 use App\Enums\Role;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,9 @@ class CaseTeam extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)
+            ->whereHas('organizations', function ($query) {
+                $query->where('organization_id', Filament::getTenant()->id);
+            });
     }
 }

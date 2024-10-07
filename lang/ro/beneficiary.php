@@ -11,6 +11,7 @@ return [
 
     'labels' => [
         'registered_date' => 'Data înregistrării',
+        'reactivated' => 'Reactivare de caz',
         'related_cases' => 'Istoric caz (fișe conectate cazului)',
     ],
 
@@ -377,10 +378,10 @@ return [
     ],
 
     'status' => [
-        'active' => 'Activ',
-        'reactivated' => 'Reactivat',
-        'monitored' => 'În monitorizare',
+        'active' => 'Deschis',
+        'monitored' => 'Monitorizare',
         'closed' => 'Închis',
+        'archived' => 'Arhivat',
     ],
 
     'action' => [
