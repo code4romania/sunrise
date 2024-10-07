@@ -130,9 +130,9 @@ class BeneficiaryBreadcrumb
         return array_merge(
             $this->getBreadcrumbsForMonitoring(),
             [$url => $breadcrumb]
-          );
+        );
     }
-    
+
     public function getBreadcrumbsCloseFile(): array
     {
         $breadcrumb = __('beneficiary.section.close_file.titles.create');

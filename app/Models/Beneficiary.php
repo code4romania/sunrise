@@ -275,7 +275,7 @@ class Beneficiary extends Model
     {
         return $this->hasMany(Monitoring::class);
     }
-    
+
     public function closeFile(): HasOne
     {
         return $this->hasOne(CloseFile::class);

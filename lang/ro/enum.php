@@ -293,8 +293,8 @@ return [
     'maintenance_sources' => [
         'relationship_income' => 'Venitul existent în cadrul relației',
         'alimony' => 'Pensie alimentară',
-      ],
-    
+    ],
+
     'admittance_reason' => [
         'security' => 'Siguranță pusă în pericol',
         'eviction_from_home' => 'Alungare de la domiciliu',

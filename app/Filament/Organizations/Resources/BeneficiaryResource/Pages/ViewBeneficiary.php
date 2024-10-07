@@ -10,7 +10,9 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
 use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
@@ -286,13 +288,12 @@ class ViewBeneficiary extends ViewRecord
 
     protected function getFooterWidgets(): array
     {
-      // case team??
         return [
             CaseTeamListWidget::class,
             DocumentsListWidget::class,
             MonitoringWidget::class,
-            BeneficiaryResource\Widgets\CloseFileWidget::class,
-            BeneficiaryResource\Widgets\RelatedCases::class,
+            CloseFileWidget::class,
+            RelatedCases::class,
         ];
     }
 }

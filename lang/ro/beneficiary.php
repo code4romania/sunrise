@@ -413,8 +413,8 @@ return [
             'breadcrumbs' => [
                 'general' => 'Monitorizare caz',
                 'file' => 'Fișă monitorizare :file_number',
-              ],
-          ],
+            ],
+        ],
 
         'close_file' => [
             'titles' => [
