@@ -261,7 +261,7 @@ class Beneficiary extends Model
         return $this->hasMany(CaseTeam::class);
     }
 
-    public function managerTeam()
+    public function managerTeam(): HasMany
     {
         return $this->team()->whereJsonContains('roles', Role::MANGER);
     }

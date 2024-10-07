@@ -67,7 +67,7 @@ class BeneficiaryResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->modifyQueryUsing(fn(Builder $query)=> $query->with('managerTeam'))
+        return $table->modifyQueryUsing(fn (Builder $query) => $query->with('managerTeam'))
 //            ->modifyQueryUsing(
 //                fn (Builder $query) => $query->with('team.user')
 //                    ->leftJoin('case_teams', 'beneficiaries.id', '=', 'case_teams.beneficiary_id')
@@ -102,8 +102,7 @@ class BeneficiaryResource extends Resource
                     ->toggleable(),
                 //                    ->sortable(),
 
-                //TODO Change WIth FULL name
-                TextColumn::make('managerTeam.user.first_name')
+                TextColumn::make('managerTeam.user.full_name')
                     ->label(Role::MANGER->getLabel())
                     ->toggleable(),
 
@@ -122,11 +121,9 @@ class BeneficiaryResource extends Resource
 
                 SelectFilter::make('case_manager')
                     ->label(Role::MANGER->getLabel())
-                    ->options(fn () => User::getTenantOrganizationUsers())
-                    ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ?
-                            $query->where('case_teams.user_id', $state)
-                                ->whereJsonContains('case_teams.roles', Role::MANGER)
-                        : $query),
+                    ->searchable()
+                    ->preload()
+                    ->relationship('managerTeam.user', 'full_name'),
 
                 DateFilter::make('created_at')
                     ->label(__('field.open_at'))
