@@ -11,6 +11,7 @@ use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
 use App\Models\City;
+use App\Models\CloseFile;
 use App\Models\CommunityProfile;
 use App\Models\County;
 use App\Models\DetailedEvaluationResult;
@@ -93,6 +94,7 @@ class AppServiceProvider extends ServiceProvider
             'beneficiarySituation' => BeneficiarySituation::class,
             'team' => CaseTeam::class,
             'violenceHistory' => ViolenceHistory::class,
+            'closeFile' => CloseFile::class,
         ]);
     }
 
