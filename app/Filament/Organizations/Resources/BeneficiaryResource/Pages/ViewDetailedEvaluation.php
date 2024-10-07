@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Group;
@@ -44,7 +45,7 @@ class ViewDetailedEvaluation extends ViewRecord
                             ->schema([
                                 Section::make(__('beneficiary.wizard.detailed_evaluation.label'))
                                     ->headerActions([
-                                        BeneficiaryResource\Actions\Edit::make('edit')
+                                        Edit::make('edit')
                                             ->url(fn ($record) => BeneficiaryResource::getUrl(
                                                 'edit_detailed_evaluation',
                                                 ['record' => $record]
@@ -70,7 +71,7 @@ class ViewDetailedEvaluation extends ViewRecord
                                     ->schema([
                                         Section::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
                                             ->headerActions([
-                                                BeneficiaryResource\Actions\Edit::make('edit')
+                                                Edit::make('edit')
                                                     ->url(fn ($record) => BeneficiaryResource::getUrl(
                                                         'edit_beneficiary_partner',
                                                         ['record' => $record]
@@ -85,7 +86,7 @@ class ViewDetailedEvaluation extends ViewRecord
                             ->schema([
                                 Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
                                     ->headerActions([
-                                        BeneficiaryResource\Actions\Edit::make('edit')
+                                        Edit::make('edit')
                                             ->url(fn ($record) => BeneficiaryResource::getUrl(
                                                 'edit_multidisciplinary_evaluation',
                                                 ['record' => $record]
@@ -102,7 +103,7 @@ class ViewDetailedEvaluation extends ViewRecord
                                     ->schema([
                                         Section::make(__('beneficiary.wizard.results.label'))
                                             ->headerActions([
-                                                BeneficiaryResource\Actions\Edit::make('edit')
+                                                Edit::make('edit')
                                                     ->url(fn ($record) => BeneficiaryResource::getUrl(
                                                         'edit_detailed_evaluation_result',
                                                         ['record' => $record]
