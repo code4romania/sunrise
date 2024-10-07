@@ -359,6 +359,7 @@ return [
                 'team' => 'Echipa de caz',
                 'beneficiarySituation' => 'Situatie beneficiar',
                 'beneficiaryPartner' => 'Partener',
+                'requestedServices' => 'Servicii solicitate',
             ],
 
             'actions' => [
@@ -369,7 +370,7 @@ return [
                 'list' => 'Istoric modificări & accesare caz',
             ],
         ],
-   
+
         'close_file' => [
             'titles' => [
                 'create' => 'Fișă de închidere a cazului',
