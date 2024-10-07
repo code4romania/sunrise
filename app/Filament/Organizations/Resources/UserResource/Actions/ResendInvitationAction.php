@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources\UserResource\Actions;
 
 use App\Models\User;
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\RateLimiter;
 
 class ResendInvitationAction extends Action
@@ -20,9 +19,11 @@ class ResendInvitationAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isPending());
+        $this->hidden(fn (User $record) => $record->hasSetPassword());
 
         $this->label(__('user.actions.resend_invitation'));
+
+        $this->outlined();
 
         $this->icon('heroicon-o-envelope-open');
 
@@ -35,7 +36,9 @@ class ResendInvitationAction extends Action
             $maxAttempts = 1;
 
             if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
-                return $this->failure();
+                $this->failure();
+
+                return;
             }
 
             RateLimiter::increment($key, HOUR_IN_SECONDS);
@@ -45,13 +48,7 @@ class ResendInvitationAction extends Action
         });
 
         $this->successNotificationTitle(__('user.action_resend_invitation_confirm.success'));
-
-        $this->failureNotification(
-            fn (Notification $notification) => $notification
-                ->danger()
-                ->title(__('user.action_resend_invitation_confirm.failure_title'))
-                ->body(__('user.action_resend_invitation_confirm.failure_body'))
-        );
+        $this->failureNotificationTitle(__('user.action_resend_invitation_confirm.failure'));
     }
 
     private function getRateLimiterKey(User $user): string

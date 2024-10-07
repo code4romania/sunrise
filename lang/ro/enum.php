@@ -162,7 +162,7 @@ return [
 
     'user_status' => [
         'active' => 'Activ',
-        'inactive' => 'Dezactivat',
+        'inactive' => 'Suspendat',
         'pending' => 'În așteptare',
     ],
 

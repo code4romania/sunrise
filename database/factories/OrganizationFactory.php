@@ -53,7 +53,31 @@ class OrganizationFactory extends Factory
                 User::factory()
                     ->count($count)
                     ->sequence(fn (Sequence $sequence) => [
-                        'email' => sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
+                        'email' => \sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
+                    ])
+                    ->create()
+                    ->pluck('id')
+                    ->toArray()
+            );
+
+            $organization->users()->attach(
+                User::factory()
+                    ->count($count)
+                    ->sequence(fn (Sequence $sequence) => [
+                        'email' => \sprintf('invited-%d-%d@example.com', $organization->id, $sequence->index + 1),
+                    ])
+                    ->invited()
+                    ->create()
+                    ->pluck('id')
+                    ->toArray()
+            );
+
+            $organization->users()->attach(
+                User::factory()
+                    ->count($count)
+                    ->deactivated()
+                    ->sequence(fn (Sequence $sequence) => [
+                        'email' => \sprintf('deactivated-%d-%d@example.com', $organization->id, $sequence->index + 1),
                     ])
                     ->create()
                     ->pluck('id')
