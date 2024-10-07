@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListDocuments extends ListRecords
 {
@@ -60,6 +61,7 @@ class ListDocuments extends ListRecords
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('beneficiary'))
             ->heading(__('beneficiary.section.documents.title.table'))
             ->actionsColumnLabel(__('general.action.actions'))
             ->columns([

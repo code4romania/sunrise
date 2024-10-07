@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Concerns\UserPermissions;
+use App\Enums\AdminPermission;
 use App\Filament\Organizations\Resources\CommunityProfileResource\Pages;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
@@ -21,6 +23,8 @@ use Filament\Resources\Resource;
 
 class CommunityProfileResource extends Resource
 {
+    use UserPermissions;
+
     protected static ?string $model = CommunityProfile::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-at-symbol';
@@ -30,6 +34,11 @@ class CommunityProfileResource extends Resource
     protected static ?string $slug = 'community-profile';
 
     protected static ?int $navigationSort = 21;
+
+    public static function canAccess(): bool
+    {
+        return (new self)->userHasPermission(auth()->user(), AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE);
+    }
 
     public static function getNavigationGroup(): ?string
     {

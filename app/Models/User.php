@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
+use App\Concerns\UserPermissionsForBeneficiary;
+use App\Enums\CasePermission;
 use App\Enums\Role;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
@@ -46,6 +48,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasUserStatus;
+    use UserPermissionsForBeneficiary;
 
     /**
      * The attributes that are mass assignable.
@@ -66,6 +69,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at',
         'latest_organization_id',
         'is_admin',
+        'is_org_admin',
     ];
 
     /**
@@ -87,6 +91,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'is_org_admin' => 'boolean',
         'roles' => AsEnumCollection::class . ':' . Role::class,
         'case_permissions' => 'json',
         'admin_permissions' => 'json',
@@ -208,5 +213,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return Filament::getTenant()
             ->users
             ->pluck('full_name', 'id');
+    }
+
+    public function canViewAnyBeneficiary(): bool
+    {
+        return $this->is_org_admin || $this->userIsCoordinatorOrChefService($this) ||
+            $this->userHasCasePermissions($this->case_permissions, CasePermission::HAS_ACCESS_TO_ALL_CASES);
     }
 }
