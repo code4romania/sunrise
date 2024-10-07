@@ -73,7 +73,6 @@ return new class extends Migration
             $table->tinyInteger('children_10_18_care_count')->unsigned()->nullable();
             $table->tinyInteger('children_18_care_count')->unsigned()->nullable();
             $table->tinyInteger('children_accompanying_count')->unsigned()->nullable();
-            $table->json('children')->nullable();
 
             $table->text('children_notes')->nullable();
 

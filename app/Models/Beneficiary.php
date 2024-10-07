@@ -78,7 +78,6 @@ class Beneficiary extends Model
         'children_10_18_care_count',
         'children_18_care_count',
         'children_accompanying_count',
-        'children',
         'children_notes',
 
         'has_family_doctor',
@@ -118,7 +117,6 @@ class Beneficiary extends Model
         'children_care_count' => 'integer',
         'children_total_count' => 'integer',
         'children_under_10_care_count' => 'integer',
-        'children' => 'collection',
         'civil_status' => CivilStatus::class,
         'criminal_history' => Ternary::class,
         'doesnt_have_children' => 'boolean',
@@ -162,7 +160,12 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        return sprintf('#%d %s', $this->id, $this->full_name);
+        return \sprintf('#%d %s', $this->id, $this->full_name);
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Children::class);
     }
 
     public function aggressor(): HasMany
