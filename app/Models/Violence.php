@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\Frequency;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Violence extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use LogsActivity;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'violence_types',

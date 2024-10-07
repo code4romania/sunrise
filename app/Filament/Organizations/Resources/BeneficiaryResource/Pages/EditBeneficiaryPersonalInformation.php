@@ -114,8 +114,8 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->enum(Ternary::class)
                                 ->live(),
 
-                            TextInput::make('criminal_notes')
-                                ->label(__('field.criminal_notes'))
+                            TextInput::make('criminal_history_notes')
+                                ->label(__('field.criminal_history_notes'))
                                 ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
                         ]),
 

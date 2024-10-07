@@ -284,6 +284,14 @@ return [
         'document' => 'Document (nespecificat)',
     ],
 
+    'activity_description' => [
+        'created' => 'Creat',
+        'retrieved' => 'Vizualizat',
+        'updated' => 'Editat',
+        'deleted' => 'Șters',
+        'logged_in' => 'Authentificat',
+    ],
+
     'admittance_reason' => [
         'security' => 'Siguranță pusă în pericol',
         'eviction_from_home' => 'Alungare de la domiciliu',

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
+use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
+use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
@@ -153,10 +155,14 @@ class BeneficiaryResource extends Resource
             'documents.index' => ListDocuments::route('/{parent}/documents'),
             'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
 
+            'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
+            'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),
+
             'create_close_file' => CloseFile\CreateCloseFile::route('/{record}/createCloseFile'),
             'view_close_file' => CloseFile\ViewCloseFile::route('/{record}/closeFile'),
             'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record}/closeFile/editDetails'),
             'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
+
         ];
     }
 }
