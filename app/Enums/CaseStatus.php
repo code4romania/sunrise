@@ -28,11 +28,11 @@ enum CaseStatus: string implements HasLabel, HasColor
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::ACTIVE => 'success',
-            self::MONITORED => 'warning',
+            self::ACTIVE => Color::Green,
+            self::MONITORED => Color::Yellow,
             self::CLOSED => Color::Gray,
-            self::ARCHIVED => 'primary',
-            default => 'danger',
+            self::ARCHIVED => Color::Purple,
+            default => Color::Red,
         };
     }
 }
