@@ -42,6 +42,23 @@ trait HasParentResource
         return $parentResource;
     }
 
+    public static function getParent(): Model|int|string|null
+    {
+        if ($parentKey = (request()->route('parent') ?? request()->input('parent'))) {
+            $parentResource = self::getParentResource();
+
+            $parent = $parentResource::resolveRecordRouteBinding($parentKey);
+
+            if (! $parent) {
+                throw new ModelNotFoundException();
+            }
+
+            return $parent;
+        }
+
+        return null;
+    }
+
     protected function applyFiltersToTableQuery(Builder $query): Builder
     {
         // Apply any filters before the parent relationship key is applied.
