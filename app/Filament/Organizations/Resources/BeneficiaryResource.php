@@ -67,17 +67,17 @@ class BeneficiaryResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->modifyQueryUsing(
-                fn (Builder $query) => $query->with('team.user')
-                    ->leftJoin('case_teams', 'beneficiaries.id', '=', 'case_teams.beneficiary_id')
-                    ->leftJoin('users', 'case_teams.user_id', '=', 'users.id')
-                    ->distinct('beneficiaries.id')
-                    ->select('beneficiaries.*')
-                    ->addSelect(DB::raw("
-            IF(JSON_CONTAINS(case_teams.roles, '\"manager\"'), CONCAT_WS(' ', users.first_name, users.last_name), NULL) as manager_name
-        "))
-            )
+        return $table->modifyQueryUsing(fn(Builder $query)=> $query->with('managerTeam'))
+//            ->modifyQueryUsing(
+//                fn (Builder $query) => $query->with('team.user')
+//                    ->leftJoin('case_teams', 'beneficiaries.id', '=', 'case_teams.beneficiary_id')
+//                    ->leftJoin('users', 'case_teams.user_id', '=', 'users.id')
+//                    ->distinct('beneficiaries.id')
+//                    ->select('beneficiaries.*')
+//                    ->addSelect(DB::raw("
+//            IF(JSON_CONTAINS(case_teams.roles, '\"manager\"'), CONCAT_WS(' ', users.first_name, users.last_name), NULL) as manager_name
+//        "))
+//            )
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id'))
@@ -102,19 +102,9 @@ class BeneficiaryResource extends Resource
                     ->toggleable(),
                 //                    ->sortable(),
 
-                TextColumn::make('manager_name')
+                //TODO Change WIth FULL name
+                TextColumn::make('managerTeam.user.first_name')
                     ->label(Role::MANGER->getLabel())
-                    ->state(
-                        fn ($record) => $record->team
-                            ->filter(
-                                fn ($item) => $item->roles
-                                    ->contains(Role::MANGER)
-                            )
-                            ->map(fn ($item) => $item->user->full_name)
-                            ->join(', ')
-                    )
-                    ->searchable(true, fn (Builder $query, $search) => $query->where('users.full_name', 'LIKE', '%' . $search . '%')
-                        ->whereJsonContains('case_teams.roles', Role::MANGER))
                     ->toggleable(),
 
                 TextColumn::make('status')
