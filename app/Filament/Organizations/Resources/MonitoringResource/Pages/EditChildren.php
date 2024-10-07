@@ -11,6 +11,7 @@ use App\Enums\MaintenanceSources;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
+use App\Models\Children;
 use App\Models\MonitoringChild;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
@@ -74,12 +75,13 @@ class EditChildren extends EditRecord
                         ->columnSpanFull()
                         ->default(
                             function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                static $indexChild = 0;
+                                static $indexChild = -1;
 
+                                $indexChild++;
                                 return self::getDefaultValueForChild(
                                     $children->get($indexChild),
                                     $copyLastFile,
-                                    $childrenFromLastFile?->get($indexChild++),
+                                    $childrenFromLastFile?->get($indexChild),
                                     'name'
                                 );
                             }
@@ -90,12 +92,13 @@ class EditChildren extends EditRecord
                             TextInput::make('status')
                                 ->label(__('beneficiary.section.monitoring.labels.status'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                    static $indexChild = 0;
+                                    static $indexChild = -1;
+                                    $indexChild++;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
                                         $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild++),
+                                        $childrenFromLastFile?->get($indexChild),
                                         'status'
                                     );
                                 }),
@@ -103,12 +106,13 @@ class EditChildren extends EditRecord
                             TextInput::make('age')
                                 ->label(__('beneficiary.section.monitoring.labels.age'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                    static $indexChild = 0;
+                                    static $indexChild = -1;
+                                    $indexChild++;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
                                         $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild++),
+                                        $childrenFromLastFile?->get($indexChild),
                                         'age'
                                     );
                                 }),
@@ -116,12 +120,13 @@ class EditChildren extends EditRecord
                             DatePicker::make('birthdate')
                                 ->label(__('beneficiary.section.monitoring.labels.birthdate'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
-                                    static $indexChild = 0;
+                                    static $indexChild = -1;
+                                    $indexChild++;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
                                         $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild++),
+                                        $childrenFromLastFile?->get($indexChild),
                                         'birthdate'
                                     );
                                 }),
@@ -171,10 +176,10 @@ class EditChildren extends EditRecord
         ];
     }
 
-    private static function getDefaultValueForChild(array $child, bool $copyLastFile, ?MonitoringChild $childFromLastFile, string $field): string | int | null
+    private static function getDefaultValueForChild(Children $child, bool $copyLastFile, ?MonitoringChild $childFromLastFile, string $field): string | int | null
     {
         return $copyLastFile && isset($childFromLastFile?->$field) ?
             $childFromLastFile->$field :
-            ($child[$field] ?? null);
+            ($child->$field ?? null);
     }
 }
