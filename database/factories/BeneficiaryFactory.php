@@ -20,6 +20,7 @@ use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
 use App\Models\City;
+use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
@@ -270,6 +271,14 @@ class BeneficiaryFactory extends Factory
                 Monitoring::factory()
                     ->for($beneficiary)
                     ->create();
+
+                if (CaseStatus::isValue($beneficiary->status, CaseStatus::CLOSED)) {
+                    CloseFile::factory()
+                        ->for($beneficiary)
+                        ->create([
+                            'case_team_id' => $this->faker->randomElement($beneficiary->team)->id,
+                        ]);
+                }
             });
     }
 }
