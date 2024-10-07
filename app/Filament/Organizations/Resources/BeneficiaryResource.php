@@ -14,9 +14,7 @@ use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
 use App\Filters\DateFilter;
 use App\Models\Beneficiary;
-use App\Models\User;
 use App\Tables\Filters\SelectFilter;
-use DB;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -68,16 +66,6 @@ class BeneficiaryResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->modifyQueryUsing(fn (Builder $query) => $query->with('managerTeam'))
-//            ->modifyQueryUsing(
-//                fn (Builder $query) => $query->with('team.user')
-//                    ->leftJoin('case_teams', 'beneficiaries.id', '=', 'case_teams.beneficiary_id')
-//                    ->leftJoin('users', 'case_teams.user_id', '=', 'users.id')
-//                    ->distinct('beneficiaries.id')
-//                    ->select('beneficiaries.*')
-//                    ->addSelect(DB::raw("
-//            IF(JSON_CONTAINS(case_teams.roles, '\"manager\"'), CONCAT_WS(' ', users.first_name, users.last_name), NULL) as manager_name
-//        "))
-//            )
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id'))
