@@ -9,22 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CaseTeam extends Model
+class CaseTeamMember extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
 
     protected $fillable = [
         'user_id',
-        'roles',
-    ];
-
-    protected $casts = [
-        'roles' => 'json',
-    ];
-
-    protected $with = [
-        'user',
+        'role_id',
     ];
 
     public function user(): BelongsTo
@@ -44,5 +36,10 @@ class CaseTeam extends Model
             ->active()
             ->get()
             ->pluck('name');
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 }

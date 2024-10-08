@@ -23,7 +23,10 @@ class CaseTeamListWidget extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => $this->record->team()->limit($this->limit))
+            ->query(fn () => $this->record
+                ->team()
+                ->with('role')
+                ->limit($this->limit))
             ->heading(__('beneficiary.section.specialists.title'))
             ->paginated(false)
             ->headerActions([
@@ -33,7 +36,7 @@ class CaseTeamListWidget extends BaseWidget
                     ->url(fn () => BeneficiaryResource::getUrl('view_specialists', ['record' => $this->record])),
             ])
             ->columns([
-                TextColumn::make('rolesString')
+                TextColumn::make('role.name')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->wrap(),
 

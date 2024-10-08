@@ -8,9 +8,9 @@ use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CaseTeam>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CaseTeamMember>
  */
-class CaseTeamFactory extends Factory
+class CaseTeamMemberFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,7 +20,7 @@ class CaseTeamFactory extends Factory
     public function definition(): array
     {
         return  [
-            'roles' => collect(fake()->randomElements(Role::all()->pluck('id'), rand(1, 5))),
+            'role_id' => fake()->randomElement(Role::all()->pluck('id')),
         ];
     }
 }
