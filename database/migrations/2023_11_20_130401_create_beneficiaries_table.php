@@ -96,12 +96,6 @@ return new class extends Migration
 
             $table->string('homeownership')->nullable();
 
-            $table->string('has_police_reports')->nullable();
-            $table->smallInteger('police_report_count')->unsigned()->nullable();
-
-            $table->string('has_medical_reports')->nullable();
-            $table->smallInteger('medical_report_count')->unsigned()->nullable();
-
             $table->string('presentation_mode')->nullable();
             $table->string('referral_mode')->nullable();
             $table->string('notification_mode')->nullable();

@@ -16,6 +16,7 @@ use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryAntecedents;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
@@ -161,12 +162,12 @@ class BeneficiaryFactory extends Factory
 
     public function withAntecedents(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'has_police_reports' => fake()->boolean(),
-            'police_report_count' => fake()->numberBetween(0, 300),
-            'has_medical_reports' => fake()->boolean(),
-            'medical_report_count' => fake()->numberBetween(0, 300),
-        ]);
+        return $this
+            ->afterCreating(function (Beneficiary $beneficiary) {
+                BeneficiaryAntecedents::factory()
+                    ->for($beneficiary)
+                    ->create();
+            });
     }
 
     public function configure(): static
