@@ -33,7 +33,7 @@ class CaseTeamListWidget extends BaseWidget
                     ->url(fn () => BeneficiaryResource::getUrl('view_specialists', ['record' => $this->record])),
             ])
             ->columns([
-                TextColumn::make('roles')
+                TextColumn::make('rolesString')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->wrap(),
 

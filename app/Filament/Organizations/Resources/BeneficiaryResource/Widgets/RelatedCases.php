@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
 use Filament\Tables\Actions\ViewAction;
@@ -49,12 +48,11 @@ class RelatedCases extends BaseWidget
                     ->label(__('field.open_at')),
 
                 TextColumn::make('case_manager')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(__('beneficiary.section.related_cases.labels.case_manager'))
                     ->state(
                         fn (Beneficiary $record) => $record->team
                             ->filter(
-                                fn ($item) => $item->roles
-                                    ->contains(Role::MANGER)
+                                fn ($item) => $item->user->canBeCaseManager()
                             )
                             ->map(fn ($item) => $item->user->full_name)
                             ->join(', ')

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
-use App\Enums\Role;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,7 +20,7 @@ class CaseTeam extends Model
     ];
 
     protected $casts = [
-        'roles' => AsEnumCollection::class . ':' . Role::class,
+        'roles' => 'json',
     ];
 
     protected $with = [
@@ -32,5 +30,19 @@ class CaseTeam extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getRolesStringAttribute()
+    {
+        $roleIds = $this->attributes['roles'] ?? [];
+
+        if (\is_string($roleIds)) {
+            $roleIds = json_decode($roleIds, true);
+        }
+
+        return Role::whereIn('id', $roleIds)
+            ->active()
+            ->get()
+            ->pluck('name');
     }
 }

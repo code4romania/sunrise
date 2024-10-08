@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Country;
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -34,6 +35,10 @@ class DatabaseSeeder extends Seeder
 
         Service::factory()
             ->count(20)
+            ->create();
+
+        Role::factory()
+            ->count(16)
             ->create();
 
         Organization::factory()
