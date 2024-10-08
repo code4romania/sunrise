@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Beneficiary;
-use App\Models\CaseTeam;
+use App\Models\CaseTeamMember;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('close_files', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Beneficiary::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(CaseTeam::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(CaseTeamMember::class)->nullable()->constrained()->cascadeOnDelete();
             $table->date('date')->nullable();
             $table->string('number')->nullable();
             $table->date('admittance_date')->nullable();

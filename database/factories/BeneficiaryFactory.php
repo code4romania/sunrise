@@ -18,7 +18,7 @@ use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
-use App\Models\CaseTeam;
+use App\Models\CaseTeamMember;
 use App\Models\City;
 use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
@@ -206,7 +206,7 @@ class BeneficiaryFactory extends Factory
                     ->map(fn ($item) => ['user_id' => $item->id])
                     ->toArray();
 
-                CaseTeam::factory()
+                CaseTeamMember::factory()
                     ->for($beneficiary)
                     ->state(new Sequence(...$users))
                     ->count($count)
@@ -272,7 +272,7 @@ class BeneficiaryFactory extends Factory
                     CloseFile::factory()
                         ->for($beneficiary)
                         ->create([
-                            'case_team_id' => $this->faker->randomElement($beneficiary->team)->id,
+                            'case_team_member_id' => $this->faker->randomElement($beneficiary->team)->id,
                         ]);
                 }
             });

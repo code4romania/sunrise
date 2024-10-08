@@ -12,6 +12,7 @@ use App\Models\Intervention;
 use App\Models\Organization;
 use App\Models\Service;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
@@ -53,11 +54,18 @@ class OrganizationFactory extends Factory
                 User::factory()
                     ->count($count)
                     ->sequence(fn (Sequence $sequence) => [
-                        'email' => sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
+                        'email' => \sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
                     ])
                     ->create()
                     ->pluck('id')
                     ->toArray()
+            );
+            $organization->users->each(
+                fn (User $user) => UserRole::factory()
+                    ->for($user)
+                    ->for($organization)
+                    ->count(rand(1, 5))
+                    ->create()
             );
         });
     }

@@ -8,7 +8,7 @@ use App\Concerns\RedirectToCloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
-use App\Models\CaseTeam;
+use App\Models\CaseTeamMember;
 use App\Models\CloseFile;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
@@ -68,7 +68,7 @@ class EditCloseFileDetails extends EditRecord
 
             DatePicker::make('admittance_date')
                 ->label(__('beneficiary.section.close_file.labels.admittance_date'))
-                ->default(fn (?CaseTeam $record) => $record ? $record->beneficiary->created_at : $recordParam->created_at)
+                ->default(fn (?CaseTeamMember $record) => $record ? $record->beneficiary->created_at : $recordParam->created_at)
                 ->required(),
 
             DatePicker::make('exit_date')
@@ -76,7 +76,7 @@ class EditCloseFileDetails extends EditRecord
                 ->default(now())
                 ->required(),
 
-            Select::make('case_team_id')
+            Select::make('case_team_member_id')
                 ->label(__('beneficiary.section.close_file.labels.case_manager'))
                 ->columnSpanFull()
                 ->options(
@@ -84,7 +84,7 @@ class EditCloseFileDetails extends EditRecord
                         $team = $record ? $record->beneficiary->team : $recordParam->team;
 
                         return $team
-                            ->map(fn (CaseTeam $item) => ['id' => $item->id, 'full_name' => $item->user->getFilamentName()])
+                            ->map(fn (CaseTeamMember $item) => ['id' => $item->id, 'full_name' => $item->user->getFilamentName()])
                             ->pluck('full_name', 'id');
                     }
                 )
@@ -94,7 +94,7 @@ class EditCloseFileDetails extends EditRecord
 
                         return $team
                             ->filter(
-                                fn (CaseTeam $item) => $item->user->canBeCaseManager()
+                                fn (CaseTeamMember $item) => $item->user->canBeCaseManager()
                             )
                             ->first()
                             ?->id;

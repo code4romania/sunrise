@@ -165,7 +165,7 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        return sprintf('#%d %s', $this->id, $this->full_name);
+        return \sprintf('#%d %s', $this->id, $this->full_name);
     }
 
     public function aggressor(): HasMany
@@ -261,7 +261,7 @@ class Beneficiary extends Model
 
     public function team(): HasMany
     {
-        return $this->hasMany(CaseTeam::class);
+        return $this->hasMany(CaseTeamMember::class);
     }
 
     public function violenceHistory(): HasMany
