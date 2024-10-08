@@ -69,7 +69,7 @@
                             </x-filament-tables::header-cell>
                         @endif
 
-                        <x-filament-tables::header-cell class="p-2">
+                        <x-filament-tables::header-cell :samePaddingForFirstAndLastCell="true" class="p-2 ps-6">
                             {{ $subheader }}
                         </x-filament-tables::header-cell>
 
