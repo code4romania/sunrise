@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\ActLocation;
+use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
@@ -13,14 +14,13 @@ use App\Enums\NotificationMode;
 use App\Enums\Notifier;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
-use App\Enums\ResidenceEnvironment;
+use App\Models\Address;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryAntecedents;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
-use App\Models\City;
 use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
@@ -103,31 +103,27 @@ class BeneficiaryFactory extends Factory
 
     public function withLegalResidence(): static
     {
-        return $this->state(function (array $attributes) {
-            $city = City::query()->inRandomOrder()->first();
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            $beneficiary->same_as_legal_residence = true;
+            $beneficiary->save();
 
-            return [
-                'legal_residence_address' => fake()->address(),
-                'legal_residence_county_id' => $city->county_id,
-                'legal_residence_city_id' => $city->id,
-                'legal_residence_environment' => fake()->randomElement(ResidenceEnvironment::values()),
-                'same_as_legal_residence' => true,
-            ];
+            Address::factory()
+                ->for($beneficiary, 'addressable')
+                ->state(['address_type' => AddressType::LEGAL_RESIDENCE])
+                ->create();
         });
     }
 
     public function withEffectiveResidence(): static
     {
-        return $this->state(function (array $attributes) {
-            $city = City::query()->inRandomOrder()->first();
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            $beneficiary->same_as_legal_residence = true;
+            $beneficiary->save();
 
-            return [
-                'effective_residence_address' => fake()->address(),
-                'effective_residence_county_id' => $city->county_id,
-                'effective_residence_city_id' => $city->id,
-                'effective_residence_environment' => fake()->randomElement(ResidenceEnvironment::values()),
-                'same_as_legal_residence' => false,
-            ];
+            Address::factory()
+                ->for($beneficiary, 'addressable')
+                ->state(['address_type' => AddressType::EFFECTIVE_RESIDENCE])
+                ->create();
         });
     }
 

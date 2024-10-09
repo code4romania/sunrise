@@ -130,4 +130,13 @@ class CreateBeneficiary extends CreateRecord
                 ]),
         ];
     }
+
+    public function afterCreate(): void
+    {
+        $record = $this->getRecord();
+        if ($record->same_as_legal_residence) {
+            $record->load(['legal_residence', 'effective_residence']);
+            Beneficiary::copyLegalResidenceToEffectiveResidence($record);
+        }
+    }
 }

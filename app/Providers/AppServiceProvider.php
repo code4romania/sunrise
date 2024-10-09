@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Http\Responses\LoginResponse;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryPartner;
 use App\Models\City;
 use App\Models\CommunityProfile;
 use App\Models\County;
@@ -69,6 +70,7 @@ class AppServiceProvider extends ServiceProvider
             'service' => Service::class,
             'user' => User::class,
             'document' => Document::class,
+            'beneficiaryPartner' => BeneficiaryPartner::class,
         ]);
     }
 

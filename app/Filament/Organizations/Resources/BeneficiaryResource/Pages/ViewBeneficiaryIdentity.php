@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
@@ -143,12 +144,14 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->label(__('field.id_number'))
                         ->placeholder(__('placeholder.id_number')),
 
-                    Location::make('legal_residence')
+                    Location::make(AddressType::LEGAL_RESIDENCE->value)
+                        ->relationship(AddressType::LEGAL_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->environment(),
 
-                    Location::make('effective_residence')
+                    Location::make(AddressType::EFFECTIVE_RESIDENCE->value)
+                        ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->environment(),
