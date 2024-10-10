@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -281,7 +282,8 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->formatStateUsing(fn ($state) => $state == '-' ? $state : $state->label())
                 ->placeholder(__('beneficiary.placeholder.occupation')),
 
-            Location::make('legal_residence')
+            Location::make(AddressType::LEGAL_RESIDENCE->value)
+                ->relationship(AddressType::LEGAL_RESIDENCE->value)
                 ->city()
                 ->address()
                 ->environment(false),
@@ -291,7 +293,8 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->label(__('field.same_as_legal_residence'))
                 ->columnSpanFull(),
 
-            Location::make('effective_residence')
+            Location::make(AddressType::EFFECTIVE_RESIDENCE->value)
+                ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                 ->city()
                 ->address(),
 
