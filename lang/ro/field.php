@@ -110,6 +110,7 @@ return [
     'aggressor_drugs' => 'Tip de substanțe consumate',
     'aggressor_legal_history' => 'Aspecte legale agresor',
     'has_protection_order' => 'Ordin de protecție',
+    'electronically_monitored' => 'Monitorizat electronic',
     'protection_order_notes' => 'Observații ordin de protecție',
 
     'has_police_reports' => 'Sesizare la poliție',

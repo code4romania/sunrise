@@ -21,7 +21,6 @@ use App\Enums\Notifier;
 use App\Enums\Occupation;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
-use App\Enums\ResidenceEnvironment;
 use App\Enums\Role;
 use App\Enums\Studies;
 use App\Enums\Ternary;
@@ -61,9 +60,6 @@ class Beneficiary extends Model
         'id_serial',
         'id_number',
 
-        'legal_residence_environment',
-        'effective_residence_environment',
-
         'primary_phone',
         'backup_phone',
         'email',
@@ -95,11 +91,6 @@ class Beneficiary extends Model
         'elder_care_count',
         'homeownership',
 
-        'has_police_reports',
-        'police_report_count',
-        'has_medical_reports',
-        'medical_report_count',
-
         'presentation_mode',
         'referral_mode',
         'notification_mode',
@@ -122,13 +113,9 @@ class Beneficiary extends Model
         'civil_status' => CivilStatus::class,
         'criminal_history' => Ternary::class,
         'doesnt_have_children' => 'boolean',
-        'effective_residence_environment' => ResidenceEnvironment::class,
-        'legal_residence_environment' => ResidenceEnvironment::class,
         'elder_care_count' => 'integer',
         'gender' => Gender::class,
         'has_family_doctor' => Ternary::class,
-        'has_medical_reports' => Ternary::class,
-        'has_police_reports' => Ternary::class,
         'homeownership' => HomeOwnership::class,
         'income' => Income::class,
         'occupation' => Occupation::class,
@@ -274,5 +261,10 @@ class Beneficiary extends Model
     public function closeFile(): HasOne
     {
         return $this->hasOne(CloseFile::class);
+    }
+
+    public function antecedents(): HasOne
+    {
+        return $this->hasOne(BeneficiaryAntecedents::class);
     }
 }

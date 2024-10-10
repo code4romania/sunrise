@@ -13,6 +13,7 @@ use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -160,18 +161,26 @@ class ViewBeneficiary extends ViewRecord
                         EnumEntry::make('has_violence_history')
                             ->label(__('field.aggressor_has_violence_history')),
                     ]),
-                EnumEntry::make('has_police_reports')
-                    ->label(__('field.has_police_reports'))
-                    ->suffix(fn ($record) => Ternary::isYes($record->has_police_reports)
-                        ? " ({$record->police_report_count})" : null),
 
-                EnumEntry::make('has_medical_reports')
-                    ->label(__('field.has_medical_reports'))
-                    ->suffix(fn ($record) => Ternary::isYes($record->has_medical_reports)
-                        ? " ({$record->medical_report_count})" : null),
+                Grid::make()
+                    ->relationship('antecedents')
+                    ->schema([
+                        EnumEntry::make('has_police_reports')
+                            ->label(__('field.has_police_reports'))
+                            ->suffix(fn (Beneficiary $record, $state) => Ternary::isYes($state)
+                                ? " ({$record->antecedents->police_report_count})" : null),
 
-                EnumEntry::make('has_protection_order')
-                    ->label(__('field.has_protection_order')),
+                        EnumEntry::make('has_medical_reports')
+                            ->label(__('field.has_medical_reports'))
+                            ->suffix(fn (Beneficiary $record, $state) => Ternary::isYes($state)
+                                ? " ({$record->antecedents->medical_report_count})" : null),
+
+                        EnumEntry::make('has_protection_order')
+                            ->label(__('field.has_protection_order')),
+
+                        TextEntry::make('protection_order_notes')
+                            ->label(__('field.protection_order_notes')),
+                    ]),
             ]);
     }
 
