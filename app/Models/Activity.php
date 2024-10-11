@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\ActivityDescription;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Activitylog\Models\Activity as BaseActivity;
 
@@ -18,6 +19,11 @@ class Activity extends BaseActivity
      */
     protected $with = [
         'causer', 'subject',
+    ];
+
+    protected $casts = [
+        'properties' => 'collection',
+        'description' => ActivityDescription::class,
     ];
 
     /**
@@ -41,5 +47,14 @@ class Activity extends BaseActivity
             ->when($until, function (Builder $query, string $date) {
                 $query->whereDate('created_at', '<=', $date);
             });
+    }
+
+    public function organization()
+    {
+        if (method_exists($this->subject, 'organization')) {
+            return $this->subject->organization();
+        }
+
+        return null;
     }
 }

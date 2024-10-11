@@ -70,6 +70,7 @@ return [
     'start_year' => 'Anul de început',
     'status' => 'Status',
 
+    'children' => 'Copii',
     'children_total_count' => 'Număr total copii',
     'children_care_count' => 'Număr copii în întreținere',
     'children_under_10_care_count' => 'Număr copii în întreținere cu vârsta < 10 ani',
@@ -87,7 +88,7 @@ return [
     'psychiatric_history' => 'Antecedente psihiatrice',
     'psychiatric_notes' => 'Observații antecedente psihiatrice',
     'criminal_history' => 'Antecedente penale',
-    'criminal_notes' => 'Observații antecedente penale',
+    'criminal_history_notes' => 'Observații antecedente penale',
     'studies' => 'Studii absolvite',
     'occupation' => 'Ocupație',
     'workplace' => 'Locul de muncă',
@@ -133,4 +134,5 @@ return [
 
     'role' => 'Rol',
     'check' => 'Verifică',
+    'user' => 'Utilizator',
 ];
