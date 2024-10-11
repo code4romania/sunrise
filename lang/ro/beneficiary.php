@@ -412,7 +412,48 @@ return [
             ],
             'breadcrumbs' => [
                 'general' => 'Monitorizare caz',
-                'file' => 'Fișă monitorizare :file_number',
+                'file' => 'Fișă monitorizare :file_number'
+              ],
+          
+        'history' => [
+            'titles' => [
+                'list' => 'Istoric',
+            ],
+
+            'headings' => [
+                'table' => 'Istoric modificări & accesare caz',
+            ],
+
+            'labels' => [
+                'date' => 'Data',
+                'time' => 'Ora',
+                'user' => 'Utilizator',
+                'description' => 'Acțiune',
+                'section' => 'Secțiune',
+                'subsection' => 'Sub-secțiune',
+                'view_action' => 'Detalii',
+                'beneficiary' => 'Beneficiar',
+                'meeting' => 'Întâlniri',
+                'multidisciplinaryEvaluation' => 'Evaluare multidisciplinară',
+                'riskFactors' => 'Factori de risc',
+                'violence' => 'Violență',
+                'violenceHistory' => 'Istoric violență',
+                'document' => 'Documente',
+                'aggressor' => 'Agresor',
+                'evaluateDetails' => 'Detalii evaluare',
+                'detailedEvaluationResult' => 'Rezultate evalaure detaliată',
+                'team' => 'Echipa de caz',
+                'beneficiarySituation' => 'Situatie beneficiar',
+                'beneficiaryPartner' => 'Partener',
+                'requestedServices' => 'Servicii solicitate',
+            ],
+
+            'actions' => [
+                'view' => 'Istoric modificări',
+            ],
+
+            'breadcrumbs' => [
+                'list' => 'Istoric modificări & accesare caz',
             ],
         ],
 

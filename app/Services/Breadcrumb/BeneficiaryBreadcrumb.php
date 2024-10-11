@@ -101,7 +101,7 @@ class BeneficiaryBreadcrumb
             [self::$resourcePath::getUrl('documents.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
-
+  
     public function getBreadcrumbsForMonitoring(): array
     {
         $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.general');
@@ -133,6 +133,17 @@ class BeneficiaryBreadcrumb
         );
     }
 
+
+    public function getHistoryBreadcrumbs(): array
+    {
+        $breadcrumb = __('beneficiary.section.history.breadcrumbs.list');
+
+        return array_merge(
+            $this->getBaseBreadcrumbs(),
+            [self::$resourcePath::getUrl('beneficiary-histories.index', ['parent' => $this->record->id]) => $breadcrumb],
+        );
+    }
+ 
     public function getBreadcrumbsCloseFile(): array
     {
         $breadcrumb = __('beneficiary.section.close_file.titles.create');

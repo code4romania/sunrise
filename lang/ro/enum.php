@@ -293,6 +293,13 @@ return [
     'maintenance_sources' => [
         'relationship_income' => 'Venitul existent în cadrul relației',
         'alimony' => 'Pensie alimentară',
+      ],
+    'activity_description' => [
+        'created' => 'Creat',
+        'retrieved' => 'Vizualizat',
+        'updated' => 'Editat',
+        'deleted' => 'Șters',
+        'logged_in' => 'Authentificat',
     ],
 
     'admittance_reason' => [
