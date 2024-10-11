@@ -284,6 +284,7 @@ return [
         'document' => 'Document (nespecificat)',
     ],
 
+
     'report_type' => [
         'cases_by_age' => 'Vârsta victimei (grupe de vârstă)',
         'cases_by_age_segmentation' => 'Vârsta victimei (statut de minor/major)',
@@ -339,7 +340,16 @@ return [
 
     'beneficiary_segmentation_by_age' => [
         'minor' => '0-17 ani (minor)',
-        'major' => '18 ani + (major)',
+        'major' => '18 ani + (major)'
+      ],
+
+    'activity_description' => [
+        'created' => 'Creat',
+        'retrieved' => 'Vizualizat',
+        'updated' => 'Editat',
+        'deleted' => 'Șters',
+        'logged_in' => 'Authentificat',
+
     ],
 
     'admittance_reason' => [
