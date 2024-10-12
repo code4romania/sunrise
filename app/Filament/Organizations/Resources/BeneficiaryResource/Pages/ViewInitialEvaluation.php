@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\RecommendationService;
+use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\Notice;
 use App\Infolists\Components\SectionHeader;
@@ -11,6 +13,7 @@ use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -103,7 +106,7 @@ class ViewInitialEvaluation extends ViewRecord
                                             ['record' => $record]
                                         )),
                                 ])
-                                ->schema(EditRequestedServices::getInfoListSchema())]),
+                                ->schema($this->getRequestedServicesInfoListSchema())]),
                     Tabs\Tab::make(__('beneficiary.wizard.beneficiary_situation.label'))
                         ->maxWidth('3xl')
                         ->schema([
@@ -118,5 +121,34 @@ class ViewInitialEvaluation extends ViewRecord
                                 ->schema(EditBeneficiarySituation::getInfoListSchema())]),
                 ]),
         ]);
+    }
+
+    public function getRequestedServicesInfoListSchema(): array
+    {
+        $fields = [];
+        $record = $this->getRecord();
+        foreach (RecommendationService::options() as $key => $value) {
+            $fields[] = TextEntry::make($key)
+                ->label($value)
+                ->state(
+                    $record->requestedServices
+                        ->requested_services
+                        ->contains(RecommendationService::tryFrom($key)) ?
+                        Ternary::YES->getLabel() :
+                        Ternary::NO->getLabel()
+                );
+        }
+
+        return [
+            Section::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
+                ->relationship('requestedServices')
+                ->schema([
+                    ...$fields,
+                    TextEntry::make('other_services_description')
+                        ->hiddenLabel()
+                        ->placeholder(__('beneficiary.placeholder.other_services')),
+                ]),
+
+        ];
     }
 }

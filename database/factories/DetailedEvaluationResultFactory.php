@@ -28,7 +28,7 @@ class DetailedEvaluationResultFactory extends Factory
 
         return [
             'recommendation_services' => $recommendationServices,
-            'other_services_description' => fake()->text(),
+            'other_services_description' => fake()->text(100),
             'recommendations_for_intervention_plan' => fake()->text(),
         ];
     }
