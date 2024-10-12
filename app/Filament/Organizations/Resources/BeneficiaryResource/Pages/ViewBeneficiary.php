@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
@@ -246,12 +245,8 @@ class ViewBeneficiary extends ViewRecord
                         ->relationship('detailedEvaluationResult')
                         ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult)
                         ->schema([
-                            TextEntry::make('detailedEvaluationResult')
-                                ->state(
-                                    fn (Beneficiary $record) => collect(RecommendationService::options())
-                                        ->filter(fn ($label, $key) => $record->detailedEvaluationResult?->$key)
-                                        ->all()
-                                )
+                            TextEntry::make('recommendation_services')
+                                ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
                                 ->color(Color::Gray)
                                 ->badge(),
                         ]),
