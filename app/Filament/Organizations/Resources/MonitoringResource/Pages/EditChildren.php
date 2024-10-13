@@ -37,12 +37,12 @@ class EditChildren extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('beneficiary.section.monitoring.titles.edit_children');
+        return __('monitoring.titles.edit_children');
     }
 
     protected function getTabSlug(): string
     {
-        return Str::slug(__('beneficiary.section.monitoring.headings.child_info'));
+        return Str::slug(__('monitoring.headings.child_info'));
     }
 
     public function form(Form $form): Form
@@ -70,7 +70,7 @@ class EditChildren extends EditRecord
                 ->addAction(fn ($action) => $action->hidden())
                 ->schema([
                     TextInput::make('name')
-                        ->label(__('beneficiary.section.monitoring.labels.child_name'))
+                        ->label(__('monitoring.labels.child_name'))
                         ->columnSpanFull()
                         ->default(
                             function () use ($children, $copyLastFile, $childrenFromLastFile) {
@@ -88,7 +88,7 @@ class EditChildren extends EditRecord
                     Grid::make()
                         ->schema([
                             TextInput::make('status')
-                                ->label(__('beneficiary.section.monitoring.labels.status'))
+                                ->label(__('monitoring.labels.status'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
                                     static $indexChild = 0;
 
@@ -101,7 +101,7 @@ class EditChildren extends EditRecord
                                 }),
 
                             TextInput::make('age')
-                                ->label(__('beneficiary.section.monitoring.labels.age'))
+                                ->label(__('monitoring.labels.age'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
                                     static $indexChild = 0;
 
@@ -114,7 +114,7 @@ class EditChildren extends EditRecord
                                 }),
 
                             DatePicker::make('birthdate')
-                                ->label(__('beneficiary.section.monitoring.labels.birthdate'))
+                                ->label(__('monitoring.labels.birthdate'))
                                 ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
                                     static $indexChild = 0;
 
@@ -127,8 +127,8 @@ class EditChildren extends EditRecord
                                 }),
 
                             Select::make('aggressor_relationship')
-                                ->label(__('beneficiary.section.monitoring.labels.aggressor_relationship'))
-                                ->placeholder(__('beneficiary.section.monitoring.placeholders.select_an_answer'))
+                                ->label(__('monitoring.labels.aggressor_relationship'))
+                                ->placeholder(__('monitoring.placeholders.select_an_answer'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
 
@@ -137,8 +137,8 @@ class EditChildren extends EditRecord
                                 ->options(ChildAggressorRelationship::options()),
 
                             Select::make('maintenance_sources')
-                                ->label(__('beneficiary.section.monitoring.labels.maintenance_sources'))
-                                ->placeholder(__('beneficiary.section.monitoring.placeholders.select_an_answer'))
+                                ->label(__('monitoring.labels.maintenance_sources'))
+                                ->placeholder(__('monitoring.placeholders.select_an_answer'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
 
@@ -147,8 +147,8 @@ class EditChildren extends EditRecord
                                 ->options(MaintenanceSources::options()),
 
                             TextInput::make('location')
-                                ->label(__('beneficiary.section.monitoring.labels.location'))
-                                ->placeholder(__('beneficiary.section.monitoring.placeholders.location'))
+                                ->label(__('monitoring.labels.location'))
+                                ->placeholder(__('monitoring.placeholders.location'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
 
@@ -157,8 +157,8 @@ class EditChildren extends EditRecord
                                 ->maxLength(100),
 
                             Textarea::make('observations')
-                                ->label(__('beneficiary.section.monitoring.labels.observations'))
-                                ->placeholder(__('beneficiary.section.monitoring.placeholders.observations'))
+                                ->label(__('monitoring.labels.observations'))
+                                ->placeholder(__('monitoring.placeholders.observations'))
                                 ->default(function () use ($childrenFromLastFile) {
                                     static $indexChild = 0;
 

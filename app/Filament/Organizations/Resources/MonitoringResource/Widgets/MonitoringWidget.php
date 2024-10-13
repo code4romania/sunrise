@@ -25,7 +25,7 @@ class MonitoringWidget extends BaseWidget
                     ->limit(1)
             )
             ->paginated(false)
-            ->heading(__('beneficiary.section.monitoring.headings.widget_table'))
+            ->heading(__('monitoring.headings.widget_table'))
             ->headerActions([
                 Tables\Actions\Action::make('view_monitoring')
                     ->label(__('general.action.view_details'))
@@ -35,15 +35,15 @@ class MonitoringWidget extends BaseWidget
             ])
             ->columns([
                 Tables\Columns\TextColumn::make('date')
-                    ->label(__('beneficiary.section.monitoring.labels.last_monitoring_date')),
+                    ->label(__('monitoring.labels.last_monitoring_date')),
                 Tables\Columns\TextColumn::make('count')
-                    ->label(__('beneficiary.section.monitoring.labels.count'))
+                    ->label(__('monitoring.labels.count'))
                     ->default(fn () => $this->record->monitoring()->count()),
             ])
-            ->emptyStateHeading(__('beneficiary.section.monitoring.headings.widget_empty_state'))
+            ->emptyStateHeading(__('monitoring.headings.widget_empty_state'))
             ->emptyStateActions([
                 Tables\Actions\Action::make('create_monitoring')
-                    ->label(__('beneficiary.section.monitoring.actions.create_widget'))
+                    ->label(__('monitoring.actions.create_widget'))
                     ->url(BeneficiaryResource::getUrl('monitorings.create', ['parent' => $this->record])),
             ])
             ->emptyStateIcon('heroicon-o-clipboard-document-check');

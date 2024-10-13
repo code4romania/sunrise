@@ -34,20 +34,19 @@ class ViewMonitoring extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('beneficiary.section.monitoring.titles.view', ['file_number' => $this->getRecord()->number]);
+        return __('monitoring.titles.view', ['file_number' => $this->getRecord()->number]);
     }
 
     protected function getHeaderActions(): array
     {
-        // modal cancel action label is fix in pr #105
         return [
             Actions\DeleteAction::make()
-                ->label(__('beneficiary.section.monitoring.actions.delete'))
+                ->label(__('monitoring.actions.delete'))
                 ->outlined()
                 ->icon('heroicon-o-trash')
-                ->modalHeading(__('beneficiary.section.monitoring.headings.modal_delete'))
-                ->modalDescription(__('beneficiary.section.monitoring.labels.modal_delete_description'))
-                ->modalSubmitActionLabel(__('beneficiary.section.monitoring.actions.delete'))
+                ->modalHeading(__('monitoring.headings.modal_delete'))
+                ->modalDescription(__('monitoring.labels.modal_delete_description'))
+                ->modalSubmitActionLabel(__('monitoring.actions.delete'))
                 ->modalIcon()
                 ->modalAlignment(Alignment::Left),
         ];
@@ -60,10 +59,10 @@ class ViewMonitoring extends ViewRecord
                 ->columnSpanFull()
                 ->persistTabInQueryString()
                 ->schema([
-                    Tabs\Tab::make(__('beneficiary.section.monitoring.headings.details'))
+                    Tabs\Tab::make(__('monitoring.headings.details'))
                         ->maxWidth('3xl')
                         ->schema([
-                            Section::make(__('beneficiary.section.monitoring.headings.details'))
+                            Section::make(__('monitoring.headings.details'))
                                 ->headerActions([
                                     Edit::make('edit_details')
                                         ->url(self::getParentResource()::getUrl('monitoring.edit_details', [
@@ -74,19 +73,19 @@ class ViewMonitoring extends ViewRecord
                                 ->columns()
                                 ->schema([
                                     TextEntry::make('date')
-                                        ->label(__('beneficiary.section.monitoring.labels.date')),
+                                        ->label(__('monitoring.labels.date')),
 
                                     TextEntry::make('number')
-                                        ->label(__('beneficiary.section.monitoring.labels.number')),
+                                        ->label(__('monitoring.labels.number')),
 
                                     TextEntry::make('start_date')
-                                        ->label(__('beneficiary.section.monitoring.labels.start_date')),
+                                        ->label(__('monitoring.labels.start_date')),
 
                                     TextEntry::make('end_date')
-                                        ->label(__('beneficiary.section.monitoring.labels.end_date')),
+                                        ->label(__('monitoring.labels.end_date')),
 
                                     TextEntry::make('specialists')
-                                        ->label(__('beneficiary.section.monitoring.labels.team'))
+                                        ->label(__('monitoring.labels.team'))
                                         ->listWithLineBreaks()
                                         ->formatStateUsing(
                                             fn ($state) => $state->user->getFilamentName() . ' (' .
@@ -102,10 +101,10 @@ class ViewMonitoring extends ViewRecord
                                 ->relationship('beneficiary')
                                 ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->parent))]),
 
-                    Tabs\Tab::make(__('beneficiary.section.monitoring.headings.child_info'))
+                    Tabs\Tab::make(__('monitoring.headings.child_info'))
                         ->maxWidth('3xl')
                         ->schema([
-                            Section::make(__('beneficiary.section.monitoring.headings.child_info'))
+                            Section::make(__('monitoring.headings.child_info'))
                                 ->headerActions([
                                     Edit::make('edit_details')
                                         ->url(self::getParentResource()::getUrl('monitoring.edit_children', [
@@ -119,41 +118,41 @@ class ViewMonitoring extends ViewRecord
                                         ->maxWidth('3xl')
                                         ->schema([
                                             TextEntry::make('name')
-                                                ->label(__('beneficiary.section.monitoring.labels.child_name'))
+                                                ->label(__('monitoring.labels.child_name'))
                                                 ->columnSpanFull(),
 
                                             Grid::make()
                                                 ->schema([
                                                     TextEntry::make('status')
-                                                        ->label(__('beneficiary.section.monitoring.labels.status')),
+                                                        ->label(__('monitoring.labels.status')),
 
                                                     TextEntry::make('age')
-                                                        ->label(__('beneficiary.section.monitoring.labels.age')),
+                                                        ->label(__('monitoring.labels.age')),
 
                                                     TextEntry::make('birthdate')
-                                                        ->label(__('beneficiary.section.monitoring.labels.birthdate')),
+                                                        ->label(__('monitoring.labels.birthdate')),
 
                                                     TextEntry::make('aggressor_relationship')
-                                                        ->label(__('beneficiary.section.monitoring.labels.aggressor_relationship')),
+                                                        ->label(__('monitoring.labels.aggressor_relationship')),
 
                                                     TextEntry::make('maintenance_sources')
-                                                        ->label(__('beneficiary.section.monitoring.labels.maintenance_sources')),
+                                                        ->label(__('monitoring.labels.maintenance_sources')),
 
                                                     TextEntry::make('location')
-                                                        ->label(__('beneficiary.section.monitoring.labels.location')),
+                                                        ->label(__('monitoring.labels.location')),
 
                                                     TextEntry::make('observations')
-                                                        ->label(__('beneficiary.section.monitoring.labels.observations'))
+                                                        ->label(__('monitoring.labels.observations'))
                                                         ->columnSpanFull(),
                                                 ]),
                                         ]),
                                 ]),
                         ]),
 
-                    Tabs\Tab::make(__('beneficiary.section.monitoring.headings.general'))
+                    Tabs\Tab::make(__('monitoring.headings.general'))
                         ->maxWidth('3xl')
                         ->schema([
-                            Section::make(__('beneficiary.section.monitoring.headings.general'))
+                            Section::make(__('monitoring.headings.general'))
                                 ->headerActions([
                                     Edit::make('edit_details')
                                         ->url(self::getParentResource()::getUrl('monitoring.edit_general', [
@@ -165,32 +164,32 @@ class ViewMonitoring extends ViewRecord
                                     Grid::make()
                                         ->schema([
                                             TextEntry::make('admittance_date')
-                                                ->label(__('beneficiary.section.monitoring.labels.admittance_date')),
+                                                ->label(__('monitoring.labels.admittance_date')),
 
                                             TextEntry::make('admittance_disposition')
-                                                ->label(__('beneficiary.section.monitoring.labels.admittance_disposition')),
+                                                ->label(__('monitoring.labels.admittance_disposition')),
                                         ]),
 
                                     TextEntry::make('services_in_center')
-                                        ->label(__('beneficiary.section.monitoring.labels.services_in_center')),
+                                        ->label(__('monitoring.labels.services_in_center')),
 
                                     ...$this->getGeneralMonitoringDataFields(),
 
                                     TextEntry::make('progress_placeholder')
                                         ->hiddenLabel()
-                                        ->default(__('beneficiary.section.monitoring.headings.progress'))
+                                        ->default(__('monitoring.headings.progress'))
                                         ->size(TextEntry\TextEntrySize::Medium),
 
                                     TextEntry::make('progress')
-                                        ->label(__('beneficiary.section.monitoring.labels.progress')),
+                                        ->label(__('monitoring.labels.progress')),
 
                                     TextEntry::make('progress_placeholder')
                                         ->hiddenLabel()
-                                        ->default(__('beneficiary.section.monitoring.headings.observation'))
+                                        ->default(__('monitoring.headings.observation'))
                                         ->size(TextEntry\TextEntrySize::Medium),
 
                                     TextEntry::make('observation')
-                                        ->label(__('beneficiary.section.monitoring.labels.observation')),
+                                        ->label(__('monitoring.labels.observation')),
 
                                 ]),
                         ]),
@@ -214,17 +213,17 @@ class ViewMonitoring extends ViewRecord
         foreach ($fields as $field) {
             $formFields[] = TextEntry::make('progress_placeholder')
                 ->hiddenLabel()
-                ->default(__(sprintf('beneficiary.section.monitoring.headings.%s', $field)))
+                ->default(__(\sprintf('monitoring.headings.%s', $field)))
                 ->size(TextEntry\TextEntrySize::Medium);
 
             $formFields[] = TextEntry::make($field . '.objection')
-                ->label(__('beneficiary.section.monitoring.labels.objection'));
+                ->label(__('monitoring.labels.objection'));
 
             $formFields[] = TextEntry::make($field . '.activity')
-                ->label(__('beneficiary.section.monitoring.labels.activity'));
+                ->label(__('monitoring.labels.activity'));
 
             $formFields[] = TextEntry::make($field . '.conclusion')
-                ->label(__('beneficiary.section.monitoring.labels.conclusion'));
+                ->label(__('monitoring.labels.conclusion'));
         }
 
         return $formFields;

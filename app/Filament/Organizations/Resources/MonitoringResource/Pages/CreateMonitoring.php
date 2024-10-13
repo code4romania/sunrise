@@ -23,7 +23,7 @@ class CreateMonitoring extends CreateRecord
 
     public function getBreadcrumbs(): array
     {
-        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.file', ['file_number' => null]);
+        $breadcrumb = __('monitoring.breadcrumbs.file', ['file_number' => null]);
 
         return array_merge(
             BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoring(),
@@ -33,7 +33,7 @@ class CreateMonitoring extends CreateRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('beneficiary.section.monitoring.titles.create');
+        return __('monitoring.titles.create');
     }
 
     protected function getRedirectUrl(): string
@@ -52,13 +52,13 @@ class CreateMonitoring extends CreateRecord
     public function getSteps(): array
     {
         return [
-            Wizard\Step::make(__('beneficiary.section.monitoring.headings.details'))
+            Wizard\Step::make(__('monitoring.headings.details'))
                 ->schema(EditDetails::getSchema()),
 
-            Wizard\Step::make(__('beneficiary.section.monitoring.headings.child_info'))
+            Wizard\Step::make(__('monitoring.headings.child_info'))
                 ->schema(EditChildren::getSchema()),
 
-            Wizard\Step::make(__('beneficiary.section.monitoring.headings.general'))
+            Wizard\Step::make(__('monitoring.headings.general'))
                 ->schema(EditGeneral::getSchema()),
 
         ];

@@ -30,30 +30,30 @@ class ListMonitoring extends ListRecords
 
     public function getTitle(): string|Htmlable
     {
-        return __('beneficiary.section.monitoring.titles.list');
+        return __('monitoring.titles.list');
     }
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\Action::make('open_modal')
-                ->label(__('beneficiary.section.monitoring.actions.create'))
+                ->label(__('monitoring.actions.create'))
                 ->visible(fn () => $this->parent->monitoring->count())
-                ->modalHeading(__('beneficiary.section.monitoring.headings.modal_create'))
-                ->modalDescription(__('beneficiary.section.monitoring.labels.modal_create_description'))
+                ->modalHeading(__('monitoring.headings.modal_create'))
+                ->modalDescription(__('monitoring.labels.modal_create_description'))
                 ->modalSubmitAction(
                     Actions\Action::make('crete_from_last')
-                        ->label(__('beneficiary.section.monitoring.actions.create_from_last'))
+                        ->label(__('monitoring.actions.create_from_last'))
                         ->url(
-                            fn () => self::getParentResource()::getUrl('monitorings.create_from_last', [
+                            fn () => self::getParentResource()::getUrl('monitorings.create', [
                                 'parent' => $this->parent,
-                                'copyLastFile' => 1,
+                                'copyLastFile' => 'copyLastFile',
                             ])
                         )
                 )
                 ->modalCancelAction(
                     Actions\Action::make('create_simple')
-                        ->label(__('beneficiary.section.monitoring.actions.create_simple'))
+                        ->label(__('monitoring.actions.create_simple'))
                         ->url(
                             fn () => self::getParentResource()::getUrl('monitorings.create', [
                                 'parent' => $this->parent,
@@ -62,7 +62,7 @@ class ListMonitoring extends ListRecords
                 ),
 
             Actions\CreateAction::make()
-                ->label(__('beneficiary.section.monitoring.actions.create'))
+                ->label(__('monitoring.actions.create'))
                 ->hidden(fn () => $this->parent->monitoring->count())
                 ->url(
                     fn () => self::getParentResource()::getUrl('monitorings.create', [
@@ -76,19 +76,19 @@ class ListMonitoring extends ListRecords
     {
         return $table->columns([
             TextColumn::make('id')
-                ->label(__('beneficiary.section.monitoring.headings.id')),
+                ->label(__('monitoring.headings.id')),
             TextColumn::make('number')
-                ->label(__('beneficiary.section.monitoring.headings.file_number'))
+                ->label(__('monitoring.headings.file_number'))
                 ->sortable(),
             TextColumn::make('date')
-                ->label(__('beneficiary.section.monitoring.headings.date'))
+                ->label(__('monitoring.headings.date'))
                 ->sortable(),
             TextColumn::make('start_date')
-                ->label(__('beneficiary.section.monitoring.headings.interval'))
+                ->label(__('monitoring.headings.interval'))
                 ->sortable()
                 ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
             TextColumn::make('specialists')
-                ->label(__('beneficiary.section.monitoring.headings.team'))
+                ->label(__('monitoring.headings.team'))
                 ->sortable()
                 ->limit(50)
                 ->formatStateUsing(
@@ -107,14 +107,14 @@ class ListMonitoring extends ListRecords
                         'record' => $record,
                     ]))),
             ])
-            ->actionsColumnLabel(__('beneficiary.section.monitoring.headings.actions'))
+            ->actionsColumnLabel(__('monitoring.headings.actions'))
             ->modifyQueryUsing(fn (Builder $query) => $query->with('specialists')->orderByDesc('id'))
-            ->emptyStateHeading(__('beneficiary.section.monitoring.headings.empty_state_table'))
-            ->emptyStateDescription(__('beneficiary.section.monitoring.labels.empty_state_table'))
+            ->emptyStateHeading(__('monitoring.headings.empty_state_table'))
+            ->emptyStateDescription(__('monitoring.labels.empty_state_table'))
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateActions([
                 CreateAction::make()
-                    ->label(__('beneficiary.section.monitoring.actions.create'))
+                    ->label(__('monitoring.actions.create'))
                     ->url(
                         fn () => self::getParentResource()::getUrl('monitorings.create', [
                             'parent' => $this->parent,

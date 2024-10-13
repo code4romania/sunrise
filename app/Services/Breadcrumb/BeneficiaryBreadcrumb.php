@@ -101,10 +101,10 @@ class BeneficiaryBreadcrumb
             [self::$resourcePath::getUrl('documents.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
-  
+
     public function getBreadcrumbsForMonitoring(): array
     {
-        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.general');
+        $breadcrumb = __('monitoring.breadcrumbs.general');
 
         return array_merge(
             $this->getBaseBreadcrumbs(),
@@ -125,14 +125,13 @@ class BeneficiaryBreadcrumb
     public function getBreadcrumbsForMonitoringFile(Monitoring $monitoringRecord): array
     {
         $url = self::$resourcePath::getUrl('monitorings.view', ['parent' => $this->record, 'record' => $monitoringRecord]);
-        $breadcrumb = __('beneficiary.section.monitoring.breadcrumbs.file', ['file_number' => $monitoringRecord->number]);
+        $breadcrumb = __('monitoring.breadcrumbs.file', ['file_number' => $monitoringRecord->number]);
 
         return array_merge(
             $this->getBreadcrumbsForMonitoring(),
             [$url => $breadcrumb]
         );
     }
-
 
     public function getHistoryBreadcrumbs(): array
     {
@@ -143,7 +142,7 @@ class BeneficiaryBreadcrumb
             [self::$resourcePath::getUrl('beneficiary-histories.index', ['parent' => $this->record->id]) => $breadcrumb],
         );
     }
- 
+
     public function getBreadcrumbsCloseFile(): array
     {
         $breadcrumb = __('beneficiary.section.close_file.titles.create');

@@ -35,12 +35,12 @@ class EditDetails extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('beneficiary.section.monitoring.titles.edit_details');
+        return __('monitoring.titles.edit_details');
     }
 
     protected function getTabSlug(): string
     {
-        return Str::slug(__('beneficiary.section.monitoring.headings.details'));
+        return Str::slug(__('monitoring.headings.details'));
     }
 
     public function form(Form $form): Form
@@ -61,21 +61,21 @@ class EditDetails extends EditRecord
                 ->maxWidth('3xl')
                 ->schema([
                     DatePicker::make('date')
-                        ->label(__('beneficiary.section.monitoring.labels.date'))
+                        ->label(__('monitoring.labels.date'))
                         ->default($copyLastFile && $lastFile?->date ? $lastFile->date : 'now'),
 
                     TextInput::make('number')
-                        ->label(__('beneficiary.section.monitoring.labels.number'))
-                        ->placeholder(__('beneficiary.section.monitoring.placeholders.number'))
+                        ->label(__('monitoring.labels.number'))
+                        ->placeholder(__('monitoring.placeholders.number'))
                         ->default($copyLastFile && $lastFile?->number ? $lastFile->number : null)
                         ->maxLength(100),
 
                     DatePicker::make('start_date')
-                        ->label(__('beneficiary.section.monitoring.labels.start_date'))
+                        ->label(__('monitoring.labels.start_date'))
                         ->default($copyLastFile && $lastFile?->start_date ? $lastFile->start_date : null),
 
                     DatePicker::make('end_date')
-                        ->label(__('beneficiary.section.monitoring.labels.end_date'))
+                        ->label(__('monitoring.labels.end_date'))
                         ->default($copyLastFile && $lastFile?->end_date ? $lastFile->end_date : null),
 
                     Hidden::make('parent_id')
@@ -83,8 +83,8 @@ class EditDetails extends EditRecord
                         ->formatStateUsing(fn ($record, $state) => $state ?? $record->beneficiary_id),
 
                     Select::make('specialists')
-                        ->label(__('beneficiary.section.monitoring.labels.team'))
-                        ->placeholder(__('beneficiary.section.monitoring.placeholders.team'))
+                        ->label(__('monitoring.labels.team'))
+                        ->placeholder(__('monitoring.placeholders.team'))
                         ->preload()
                         ->default(fn (Get $get) => $copyLastFile && $lastFile?->specialists ?
                             $lastFile->specialists->map(fn ($specialist) => $specialist->id)->toArray() : [

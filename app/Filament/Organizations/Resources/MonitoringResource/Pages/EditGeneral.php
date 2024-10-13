@@ -35,12 +35,12 @@ class EditGeneral extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('beneficiary.section.monitoring.titles.edit_general');
+        return __('monitoring.titles.edit_general');
     }
 
     protected function getTabSlug(): string
     {
-        return Str::slug(__('beneficiary.section.monitoring.headings.general'));
+        return Str::slug(__('monitoring.headings.general'));
     }
 
     public function form(Form $form): Form
@@ -63,41 +63,41 @@ class EditGeneral extends EditRecord
                     Grid::make()
                         ->schema([
                             DatePicker::make('admittance_date')
-                                ->label(__('beneficiary.section.monitoring.labels.admittance_date'))
+                                ->label(__('monitoring.labels.admittance_date'))
                                 ->default($copyLastFile ?
                                     self::getDefaultValue($copyLastFile, $lastFile, 'admittance_date') :
                                     self::getParent()?->created_at),
 
                             TextInput::make('admittance_disposition')
-                                ->label(__('beneficiary.section.monitoring.labels.admittance_disposition'))
-                                ->placeholder(__('beneficiary.section.monitoring.placeholders.admittance_disposition'))
+                                ->label(__('monitoring.labels.admittance_disposition'))
+                                ->placeholder(__('monitoring.placeholders.admittance_disposition'))
                                 ->default(self::getDefaultValue($copyLastFile, $lastFile, 'admittance_disposition'))
                                 ->maxLength(100),
                         ]),
 
                     Textarea::make('services_in_center')
-                        ->label(__('beneficiary.section.monitoring.labels.services_in_center'))
-                        ->placeholder(__('beneficiary.section.monitoring.placeholders.services_in_center'))
+                        ->label(__('monitoring.labels.services_in_center'))
+                        ->placeholder(__('monitoring.placeholders.services_in_center'))
                         ->default(self::getDefaultValue($copyLastFile, $lastFile, 'services_in_center'))
                         ->maxLength(2500),
 
                     ...self::getGeneralMonitoringDataFields($lastFile, $copyLastFile),
 
                     Placeholder::make('progress_placeholder')
-                        ->label(__('beneficiary.section.monitoring.headings.progress')),
+                        ->label(__('monitoring.headings.progress')),
 
                     Textarea::make('progress')
-                        ->label(__('beneficiary.section.monitoring.labels.progress'))
-                        ->placeholder(__('beneficiary.section.monitoring.placeholders.progress'))
+                        ->label(__('monitoring.labels.progress'))
+                        ->placeholder(__('monitoring.placeholders.progress'))
                         ->default(self::getDefaultValue($copyLastFile, $lastFile, 'progress'))
                         ->maxLength(2500),
 
                     Placeholder::make('observation_placeholder')
-                        ->label(__('beneficiary.section.monitoring.headings.observation')),
+                        ->label(__('monitoring.headings.observation')),
 
                     Textarea::make('observation')
-                        ->label(__('beneficiary.section.monitoring.labels.observation'))
-                        ->placeholder(__('beneficiary.section.monitoring.placeholders.observation'))
+                        ->label(__('monitoring.labels.observation'))
+                        ->placeholder(__('monitoring.placeholders.observation'))
                         ->default(self::getDefaultValue($copyLastFile, $lastFile, 'observation'))
                         ->maxLength(2500),
 
@@ -123,23 +123,23 @@ class EditGeneral extends EditRecord
                 $lastFieldData = $lastFile?->$field;
             }
             $formFields[] = Placeholder::make($field)
-                ->label(__(sprintf('beneficiary.section.monitoring.headings.%s', $field)));
+                ->label(__(\sprintf('monitoring.headings.%s', $field)));
 
             $formFields[] = Textarea::make($field . '.objection')
-                ->label(__('beneficiary.section.monitoring.labels.objection'))
-                ->placeholder(__('beneficiary.section.monitoring.placeholders.add_details'))
+                ->label(__('monitoring.labels.objection'))
+                ->placeholder(__('monitoring.placeholders.add_details'))
                 ->default($lastFieldData['objection'] ?? null)
                 ->maxLength(1500);
 
             $formFields[] = Textarea::make($field . '.activity')
-                ->label(__('beneficiary.section.monitoring.labels.activity'))
-                ->placeholder(__('beneficiary.section.monitoring.placeholders.add_details'))
+                ->label(__('monitoring.labels.activity'))
+                ->placeholder(__('monitoring.placeholders.add_details'))
                 ->default($lastFieldData['activity'] ?? null)
                 ->maxLength(1500);
 
             $formFields[] = Textarea::make($field . '.conclusion')
-                ->label(__('beneficiary.section.monitoring.labels.conclusion'))
-                ->placeholder(__('beneficiary.section.monitoring.placeholders.add_details'))
+                ->label(__('monitoring.labels.conclusion'))
+                ->placeholder(__('monitoring.placeholders.add_details'))
                 ->default($lastFieldData['conclusion'] ?? null)
                 ->maxLength(1500);
         }
