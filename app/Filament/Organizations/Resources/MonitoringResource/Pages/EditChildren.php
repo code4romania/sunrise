@@ -54,106 +54,45 @@ class EditChildren extends EditRecord
 
     public static function getSchema(): array
     {
-        $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load('children');
-        $childrenFromLastFile = $lastFile?->children;
-        $children = self::getParent()?->children;
-
         return [
             Repeater::make('children')
                 ->relationship('children')
-                ->defaultItems($children?->count() ?? 0)
                 ->hiddenLabel()
                 ->maxWidth('3xl')
-                ->deletable(false)
-                ->addAction(fn ($action) => $action->hidden())
                 ->schema([
                     TextInput::make('name')
                         ->label(__('monitoring.labels.child_name'))
-                        ->columnSpanFull()
-                        ->default(
-                            function () use ($children, $childrenFromLastFile) {
-                                static $indexChild = 0;
-
-                                return self::getDefaultValueForChild(
-                                    $children->get($indexChild),
-                                    'name'
-                                );
-                            }
-                        ),
+                        ->columnSpanFull(),
 
                     Grid::make()
                         ->schema([
                             TextInput::make('status')
-                                ->label(__('monitoring.labels.status'))
-                                ->default(function () use ($children) {
-                                    static $indexChild = 0;
-
-                                    return self::getDefaultValueForChild(
-                                        $children->get($indexChild),
-                                        'status'
-                                    );
-                                }),
+                                ->label(__('monitoring.labels.status')),
 
                             TextInput::make('age')
-                                ->label(__('monitoring.labels.age'))
-                                ->default(function () use ($children) {
-                                    static $indexChild = 0;
-
-                                    return self::getDefaultValueForChild(
-                                        $children->get($indexChild),
-                                        'age'
-                                    );
-                                }),
+                                ->label(__('monitoring.labels.age')),
 
                             DatePicker::make('birthdate')
-                                ->label(__('monitoring.labels.birthdate'))
-                                ->default(function () use ($children) {
-                                    static $indexChild = 0;
-
-                                    return self::getDefaultValueForChild(
-                                        $children->get($indexChild),
-                                        'birthdate'
-                                    );
-                                }),
+                                ->label(__('monitoring.labels.birthdate')),
 
                             Select::make('aggressor_relationship')
                                 ->label(__('monitoring.labels.aggressor_relationship'))
                                 ->placeholder(__('monitoring.placeholders.select_an_answer'))
-                                ->default(function () use ($childrenFromLastFile) {
-                                    static $indexChild = 0;
-
-                                    return $childrenFromLastFile?->get($indexChild++)?->aggressor_relationship;
-                                })
                                 ->options(ChildAggressorRelationship::options()),
 
                             Select::make('maintenance_sources')
                                 ->label(__('monitoring.labels.maintenance_sources'))
                                 ->placeholder(__('monitoring.placeholders.select_an_answer'))
-                                ->default(function () use ($childrenFromLastFile) {
-                                    static $indexChild = 0;
-
-                                    return $childrenFromLastFile?->get($indexChild++)?->maintenance_sources;
-                                })
                                 ->options(MaintenanceSources::options()),
 
                             TextInput::make('location')
                                 ->label(__('monitoring.labels.location'))
                                 ->placeholder(__('monitoring.placeholders.location'))
-                                ->default(function () use ($childrenFromLastFile) {
-                                    static $indexChild = 0;
-
-                                    return $childrenFromLastFile?->get($indexChild++)?->location;
-                                })
                                 ->maxLength(100),
 
                             Textarea::make('observations')
                                 ->label(__('monitoring.labels.observations'))
                                 ->placeholder(__('monitoring.placeholders.observations'))
-                                ->default(function () use ($childrenFromLastFile) {
-                                    static $indexChild = 0;
-
-                                    return $childrenFromLastFile?->get($indexChild++)?->observations;
-                                })
                                 ->maxLength(500)
                                 ->columnSpanFull(),
                         ]),
