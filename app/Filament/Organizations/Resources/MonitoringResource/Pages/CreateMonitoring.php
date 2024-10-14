@@ -51,6 +51,8 @@ class CreateMonitoring extends CreateRecord
 
     protected function fillForm(): void
     {
+        $this->callHook('beforeFill');
+
         $copyLastFile = (bool) request('copyLastFile');
         $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
 
@@ -64,6 +66,8 @@ class CreateMonitoring extends CreateRecord
         }
 
         $this->form->fill();
+
+        $this->callHook('afterFill');
     }
 
     public function getSteps(): array
