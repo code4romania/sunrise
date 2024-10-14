@@ -16,4 +16,8 @@ return [
     ],
 
     'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',
+
+    'old' => 'Vechi',
+    'new' => 'Nou',
+    'field' => 'Câmp',
 ];
