@@ -25,6 +25,11 @@ class ListDocuments extends ListRecords
 
     protected static string $resource = DocumentResource::class;
 
+    public function __construct()
+    {
+        activity()->disableLogging();
+    }
+
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForDocuments();

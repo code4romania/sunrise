@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetails
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -37,7 +38,12 @@ class ViewBeneficiary extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            //
+            Action::make('view_history')
+                ->label(__('beneficiary.section.history.actions.view'))
+                ->icon('heroicon-o-arrow-uturn-left')
+                ->outlined()
+                ->link()
+                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
         ];
     }
 
