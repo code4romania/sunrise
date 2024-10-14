@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Concerns\RedirectToMonitoring;
 use App\Filament\Organizations\Resources\MonitoringResource;
-use App\Models\Monitoring;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -53,9 +52,6 @@ class EditGeneral extends EditRecord
 
     public static function getSchema(): array
     {
-        $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load('children');
-        $copyLastFile = (bool) request('copyLastFile');
-
         return [
             Group::make()
                 ->maxWidth('3xl')
@@ -64,24 +60,20 @@ class EditGeneral extends EditRecord
                         ->schema([
                             DatePicker::make('admittance_date')
                                 ->label(__('monitoring.labels.admittance_date'))
-                                ->default($copyLastFile ?
-                                    self::getDefaultValue($copyLastFile, $lastFile, 'admittance_date') :
-                                    self::getParent()?->created_at),
+                                ->default(self::getParent()?->created_at),
 
                             TextInput::make('admittance_disposition')
                                 ->label(__('monitoring.labels.admittance_disposition'))
                                 ->placeholder(__('monitoring.placeholders.admittance_disposition'))
-                                ->default(self::getDefaultValue($copyLastFile, $lastFile, 'admittance_disposition'))
                                 ->maxLength(100),
                         ]),
 
                     Textarea::make('services_in_center')
                         ->label(__('monitoring.labels.services_in_center'))
                         ->placeholder(__('monitoring.placeholders.services_in_center'))
-                        ->default(self::getDefaultValue($copyLastFile, $lastFile, 'services_in_center'))
                         ->maxLength(2500),
 
-                    ...self::getGeneralMonitoringDataFields($lastFile, $copyLastFile),
+                    ...self::getGeneralMonitoringDataFields(),
 
                     Placeholder::make('progress_placeholder')
                         ->label(__('monitoring.headings.progress')),
@@ -89,7 +81,6 @@ class EditGeneral extends EditRecord
                     Textarea::make('progress')
                         ->label(__('monitoring.labels.progress'))
                         ->placeholder(__('monitoring.placeholders.progress'))
-                        ->default(self::getDefaultValue($copyLastFile, $lastFile, 'progress'))
                         ->maxLength(2500),
 
                     Placeholder::make('observation_placeholder')
@@ -98,14 +89,13 @@ class EditGeneral extends EditRecord
                     Textarea::make('observation')
                         ->label(__('monitoring.labels.observation'))
                         ->placeholder(__('monitoring.placeholders.observation'))
-                        ->default(self::getDefaultValue($copyLastFile, $lastFile, 'observation'))
                         ->maxLength(2500),
 
                 ]),
         ];
     }
 
-    private static function getGeneralMonitoringDataFields(?Monitoring $lastFile, bool $copyLastFile = false): array
+    private static function getGeneralMonitoringDataFields(): array
     {
         $formFields = [];
         $fields = [
@@ -118,41 +108,25 @@ class EditGeneral extends EditRecord
         ];
 
         foreach ($fields as $field) {
-            $lastFieldData = null;
-            if ($copyLastFile) {
-                $lastFieldData = $lastFile?->$field;
-            }
             $formFields[] = Placeholder::make($field)
                 ->label(__(\sprintf('monitoring.headings.%s', $field)));
 
             $formFields[] = Textarea::make($field . '.objection')
                 ->label(__('monitoring.labels.objection'))
                 ->placeholder(__('monitoring.placeholders.add_details'))
-                ->default($lastFieldData['objection'] ?? null)
                 ->maxLength(1500);
 
             $formFields[] = Textarea::make($field . '.activity')
                 ->label(__('monitoring.labels.activity'))
                 ->placeholder(__('monitoring.placeholders.add_details'))
-                ->default($lastFieldData['activity'] ?? null)
                 ->maxLength(1500);
 
             $formFields[] = Textarea::make($field . '.conclusion')
                 ->label(__('monitoring.labels.conclusion'))
                 ->placeholder(__('monitoring.placeholders.add_details'))
-                ->default($lastFieldData['conclusion'] ?? null)
                 ->maxLength(1500);
         }
 
         return $formFields;
-    }
-
-    private static function getDefaultValue(bool $copyLastFile, ?Monitoring $lastFile, string $field): string | int | null
-    {
-        if (! $copyLastFile) {
-            return null;
-        }
-
-        return $lastFile?->$field ?? null;
     }
 }

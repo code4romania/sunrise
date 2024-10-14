@@ -11,7 +11,6 @@ use App\Enums\MaintenanceSources;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
-use App\Models\MonitoringChild;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -56,7 +55,6 @@ class EditChildren extends EditRecord
     public static function getSchema(): array
     {
         $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load('children');
-        $copyLastFile = (bool) request('copyLastFile');
         $childrenFromLastFile = $lastFile?->children;
         $children = self::getParent()?->children;
 
@@ -73,13 +71,11 @@ class EditChildren extends EditRecord
                         ->label(__('monitoring.labels.child_name'))
                         ->columnSpanFull()
                         ->default(
-                            function () use ($children, $copyLastFile, $childrenFromLastFile) {
+                            function () use ($children, $childrenFromLastFile) {
                                 static $indexChild = 0;
 
                                 return self::getDefaultValueForChild(
                                     $children->get($indexChild),
-                                    $copyLastFile,
-                                    $childrenFromLastFile?->get($indexChild++),
                                     'name'
                                 );
                             }
@@ -89,39 +85,33 @@ class EditChildren extends EditRecord
                         ->schema([
                             TextInput::make('status')
                                 ->label(__('monitoring.labels.status'))
-                                ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
+                                ->default(function () use ($children) {
                                     static $indexChild = 0;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
-                                        $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild++),
                                         'status'
                                     );
                                 }),
 
                             TextInput::make('age')
                                 ->label(__('monitoring.labels.age'))
-                                ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
+                                ->default(function () use ($children) {
                                     static $indexChild = 0;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
-                                        $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild++),
                                         'age'
                                     );
                                 }),
 
                             DatePicker::make('birthdate')
                                 ->label(__('monitoring.labels.birthdate'))
-                                ->default(function () use ($children, $copyLastFile, $childrenFromLastFile) {
+                                ->default(function () use ($children) {
                                     static $indexChild = 0;
 
                                     return self::getDefaultValueForChild(
                                         $children->get($indexChild),
-                                        $copyLastFile,
-                                        $childrenFromLastFile?->get($indexChild++),
                                         'birthdate'
                                     );
                                 }),
@@ -171,10 +161,8 @@ class EditChildren extends EditRecord
         ];
     }
 
-    private static function getDefaultValueForChild(array $child, bool $copyLastFile, ?MonitoringChild $childFromLastFile, string $field): string | int | null
+    private static function getDefaultValueForChild(array $child, string $field): string | int | null
     {
-        return $copyLastFile && isset($childFromLastFile?->$field) ?
-            $childFromLastFile->$field :
-            ($child[$field] ?? null);
+        return $child[$field] ?? null;
     }
 }

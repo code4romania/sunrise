@@ -49,6 +49,23 @@ class CreateMonitoring extends CreateRecord
         $action->hidden();
     }
 
+    protected function fillForm(): void
+    {
+        $copyLastFile = (bool) request('copyLastFile');
+        $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
+
+        if ($copyLastFile && $lastFile) {
+            $data = $lastFile->toArray();
+            $data['specialists'] = $lastFile->specialists->map(fn ($specialist) => $specialist->id);
+
+            $this->form->fill($data);
+
+            return;
+        }
+
+        $this->form->fill();
+    }
+
     public function getSteps(): array
     {
         return [
