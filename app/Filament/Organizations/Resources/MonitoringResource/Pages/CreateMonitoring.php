@@ -49,22 +49,34 @@ class CreateMonitoring extends CreateRecord
         $action->hidden();
     }
 
-    protected function afterFill(): void
+    protected function fillForm(): void
     {
-
+        // if I use afterFill hook, children repeater doesn't work because I have child items with statePath
+        $this->callHook('beforeFill');
 
         $copyLastFile = (bool) request('copyLastFile');
         $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
 
-        if (!$copyLastFile || !$lastFile) {
-            return;
-        }
-            $data = $lastFile->toArray();
+        $data = [
+            'date' => now(),
+            'children' => $this->parent->children,
+            'specialists' => [
+                $this->parent
+                    ->team
+                    ->filter(fn ($teamMember) => $teamMember->user_id === auth()->user()->id)
+                    ->first()
+                    ?->id,
+            ],
+        ];
+
+        if ($copyLastFile && $lastFile) {
+            $data = array_merge($data, $lastFile->toArray());
             $data['specialists'] = $lastFile->specialists->map(fn ($specialist) => $specialist->id);
+        }
 
-            $this->form->fill($data);
+        $this->form->fill($data);
 
-
+        $this->callHook('afterFill');
     }
 
     public function getSteps(): array

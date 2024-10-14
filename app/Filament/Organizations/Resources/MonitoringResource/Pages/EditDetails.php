@@ -58,8 +58,7 @@ class EditDetails extends EditRecord
                 ->maxWidth('3xl')
                 ->schema([
                     DatePicker::make('date')
-                        ->label(__('monitoring.labels.date'))
-                        ->default(now()),
+                        ->label(__('monitoring.labels.date')),
 
                     TextInput::make('number')
                         ->label(__('monitoring.labels.number'))
@@ -78,14 +77,8 @@ class EditDetails extends EditRecord
                     Select::make('specialists')
                         ->label(__('monitoring.labels.team'))
                         ->placeholder(__('monitoring.placeholders.team'))
+                        ->columnSpanFull()
                         ->preload()
-                        ->default(fn (Get $get) => [
-                            Beneficiary::find($get('parent_id'))
-                                ->team
-                                ->filter(fn ($item) => $item->user_id == auth()->id())
-                                ->first()
-                                ?->id,
-                        ])
                         ->relationship('specialists')
                         ->multiple()
                         ->options(
