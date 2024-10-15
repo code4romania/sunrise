@@ -12,7 +12,6 @@ use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -61,7 +60,7 @@ class EditChildren extends EditRecord
                 ->hiddenLabel()
                 ->maxWidth('3xl')
                 ->deletable(false)
-                ->addAction(fn (Action $action) => $action->hidden())
+                ->addable(false)
                 ->schema([
                     TextInput::make('name')
                         ->label(__('monitoring.labels.child_name'))

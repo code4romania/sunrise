@@ -74,6 +74,7 @@ class EditDetails extends EditRecord
                     Hidden::make('parent_id')
                         ->formatStateUsing(fn ($record, $state) => $state ?? ($record?->beneficiary_id ?? request('parent'))),
 
+                    //TODO refactoring after roles implementation
                     Select::make('specialists')
                         ->label(__('monitoring.labels.team'))
                         ->placeholder(__('monitoring.placeholders.team'))

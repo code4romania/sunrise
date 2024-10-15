@@ -6,9 +6,11 @@ namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
+use App\Models\Monitoring;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Wizard;
+use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Illuminate\Contracts\Support\Htmlable;
@@ -20,6 +22,10 @@ class CreateMonitoring extends CreateRecord
     use HasParentResource;
 
     protected static string $resource = MonitoringResource::class;
+
+    public ?Monitoring $lastFile;
+
+    public array $children = [];
 
     public function getBreadcrumbs(): array
     {
@@ -49,17 +55,15 @@ class CreateMonitoring extends CreateRecord
         $action->hidden();
     }
 
-    protected function fillForm(): void
+    protected function afterFill(): void
     {
-        // if I use afterFill hook, children repeater doesn't work because I have child items with statePath
-        $this->callHook('beforeFill');
-
         $copyLastFile = (bool) request('copyLastFile');
-        $lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
+        $this->lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
+        $this->children = $this->getChildren();
 
         $data = [
             'date' => now(),
-            'children' => $this->parent->children,
+            'children' => $this->children,
             'specialists' => [
                 $this->parent
                     ->team
@@ -69,24 +73,25 @@ class CreateMonitoring extends CreateRecord
             ],
         ];
 
-        if ($copyLastFile && $lastFile) {
-            $data = array_merge($data, $lastFile->toArray());
-            $data['specialists'] = $lastFile->specialists->map(fn ($specialist) => $specialist->id);
+        if ($copyLastFile && $this->lastFile) {
+            $data = array_merge($data, $this->lastFile->toArray());
+            $data['specialists'] = $this->lastFile->specialists->map(fn ($specialist) => $specialist->id);
         }
-
         $this->form->fill($data);
-
-        $this->callHook('afterFill');
     }
 
     public function getSteps(): array
     {
         return [
+
             Wizard\Step::make(__('monitoring.headings.details'))
                 ->schema(EditDetails::getSchema()),
 
             Wizard\Step::make(__('monitoring.headings.child_info'))
-                ->schema(EditChildren::getSchema()),
+                ->schema(EditChildren::getSchema())
+                ->afterStateHydrated(function (Set $set) {
+                    $set('children', $this->children);
+                }),
 
             Wizard\Step::make(__('monitoring.headings.general'))
                 ->schema(EditGeneral::getSchema()),
@@ -116,5 +121,14 @@ class CreateMonitoring extends CreateRecord
         $data[$this->getParentRelationshipKey()] = $this->parent->id;
 
         return $data;
+    }
+
+    private function getChildren(): array
+    {
+        if ($this->lastFile && $this->lastFile->children->isNotEmpty()) {
+            return $this->lastFile->children->toArray();
+        }
+
+        return $this->parent->children->toArray();
     }
 }
