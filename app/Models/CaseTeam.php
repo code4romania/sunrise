@@ -26,7 +26,7 @@ class CaseTeam extends Model
     ];
 
     protected $casts = [
-        'roles' => AsEnumCollection::class . ':' . Role::class,
+        'roles' => 'json',
     ];
 
     protected $with = [
@@ -36,5 +36,19 @@ class CaseTeam extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getRolesStringAttribute()
+    {
+        $roleIds = $this->attributes['roles'] ?? [];
+
+        if (\is_string($roleIds)) {
+            $roleIds = json_decode($roleIds, true);
+        }
+
+        return Role::whereIn('id', $roleIds)
+            ->active()
+            ->get()
+            ->pluck('name');
     }
 }

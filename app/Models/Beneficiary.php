@@ -12,6 +12,7 @@ use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
 use App\Concerns\LogsActivityOptions;
 use App\Enums\ActLocation;
+use App\Enums\CasePermission;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
@@ -24,7 +25,6 @@ use App\Enums\Occupation;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
-use App\Enums\Role;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -159,9 +159,12 @@ class Beneficiary extends Model
             $user = auth()->user();
             $beneficiary->team()->create([
                 'user_id' => $user->id,
-                'roles' => $user->can_be_case_manager
-                    ? [Role::MANGER]
-                    : $user->roles,
+                'roles' => $user->canBeCaseManager()
+                    ? $user->rolesInOrganization
+                        ->filter(fn ($role) => $role->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER))
+                        ->pluck('id')
+                    : $user->rolesInOrganization
+                        ->pluck('id'),
             ]);
         });
     }

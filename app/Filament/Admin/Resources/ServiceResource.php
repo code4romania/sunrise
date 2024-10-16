@@ -24,7 +24,17 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static bool $shouldRegisterNavigation = false;
+    protected static bool $shouldRegisterNavigation =false;
+
+    public static function getNavigationLabel(): string
+    {
+        return __('service.label.plural');
+    }
+
+    public static function getNavigationParentItem(): ?string
+    {
+        return __('nomenclature.titles.list');
+    }
 
     public static function getModelLabel(): string
     {
@@ -99,7 +109,6 @@ class ServiceResource extends Resource
     public static function getPages(): array
     {
         return [
-            // TODO remove index and page
             'index' => Pages\ManageServices::route('/'),
             'create' => CreateService::route('/create'),
             'view' => Pages\ViewService::route('/{record}'),
