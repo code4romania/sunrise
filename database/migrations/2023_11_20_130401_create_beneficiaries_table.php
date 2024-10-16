@@ -50,16 +50,7 @@ return new class extends Migration
             $table->string('citizenship')->nullable();
             $table->string('ethnicity')->nullable();
 
-            $table->county('legal_residence');
-            $table->city('legal_residence');
-            $table->string('legal_residence_address')->nullable();
-            $table->string('legal_residence_environment')->nullable();
-
             $table->boolean('same_as_legal_residence')->default(false);
-            $table->county('effective_residence');
-            $table->city('effective_residence');
-            $table->string('effective_residence_address')->nullable();
-            $table->string('effective_residence_environment')->nullable();
 
             $table->string('primary_phone')->nullable();
             $table->string('backup_phone')->nullable();
@@ -95,12 +86,6 @@ return new class extends Migration
             $table->tinyInteger('elder_care_count')->unsigned()->nullable();
 
             $table->string('homeownership')->nullable();
-
-            $table->string('has_police_reports')->nullable();
-            $table->smallInteger('police_report_count')->unsigned()->nullable();
-
-            $table->string('has_medical_reports')->nullable();
-            $table->smallInteger('medical_report_count')->unsigned()->nullable();
 
             $table->string('presentation_mode')->nullable();
             $table->string('referral_mode')->nullable();

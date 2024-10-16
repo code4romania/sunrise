@@ -268,6 +268,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ])
                 ->schema([
                     Grid::make()
+                        ->relationship('antecedents')
                         ->schema([
                             EnumEntry::make('has_police_reports')
                                 ->label(__('field.has_police_reports'))
@@ -279,6 +280,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ]),
 
                     Grid::make()
+                        ->relationship('antecedents')
                         ->schema([
                             EnumEntry::make('has_medical_reports')
                                 ->label(__('field.has_medical_reports'))
@@ -289,6 +291,20 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric(),
                         ]),
+
+                    Grid::make()
+                        ->relationship('antecedents')
+                        ->schema([
+                            TextEntry::make('has_protection_order')
+                                ->label(__('field.has_protection_order')),
+
+                            //                            TextEntry::make('electronically_monitored')
+                            //                                ->label(__('field.electronically_monitored')),
+
+                            TextEntry::make('protection_order_notes')
+                                ->label(__('field.protection_order_notes')),
+                        ]),
+
                 ]),
         ];
     }

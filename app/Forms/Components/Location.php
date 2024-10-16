@@ -12,6 +12,7 @@ use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Concerns\CanBeValidated;
 use Filament\Forms\Components\Concerns\EntanglesStateWithSingularRelationship;
 use Filament\Forms\Components\Contracts\CanEntangleWithSingularRelationships;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -70,7 +71,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getCountyField(): string
     {
-        return collect([
+        return $this->getRelationshipName() ? 'county_id' : collect([
             $this->getId(),
             'county_id',
         ])
@@ -102,7 +103,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getCityField(): string
     {
-        return collect([
+        return $this->getRelationshipName() ? 'city_id' : collect([
             $this->getId(),
             'city_id',
         ])
@@ -134,7 +135,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getAddressField(): string
     {
-        return collect([
+        return $this->getRelationshipName() ? 'address' : collect([
             $this->getId(),
             'address',
         ])
@@ -166,7 +167,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getEnvironmentField(): string
     {
-        return collect([
+        return $this->getRelationshipName() ? 'environment' : collect([
             $this->getId(),
             'environment',
         ])
@@ -199,10 +200,10 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 })
                 ->searchable()
                 ->preload()
-                ->lazy()
+                ->live()
                 ->required($this->isRequired())
                 ->disabled($this->isDisabled())
-                ->afterStateUpdated(function (Set $set) {
+                ->afterStateUpdated(function (Set $set, Get $get) {
                     $set($this->getCityField(), null);
                 })
                 ->when(! $this->hasCity(), fn (Select $component) => $component->columnSpanFull()),
@@ -210,8 +211,8 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             Select::make($this->getCityField())
                 ->label($this->getCityLabel())
                 ->placeholder(__('placeholder.city'))
-                ->lazy()
-                ->searchable(fn (Get $get) => $get($this->getCountyField()))
+                ->live()
+                ->searchable()
                 ->required($this->isRequired())
                 ->disabled(fn (Get $get) => $this->isDisabled() || ! $get($this->getCountyField()))
                 ->getSearchResultsUsing(function (string $search, Get $get) {
@@ -242,6 +243,9 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->disabled($this->isDisabled())
                 ->visible($this->hasEnvironment())
                 ->lazy(),
+
+            Hidden::make('address_type')
+                ->default($this->getRelationshipName()),
         ];
     }
 }

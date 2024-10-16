@@ -20,13 +20,7 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->string('age')->nullable();
             $table->string('occupation')->nullable();
-            $table->county('legal_residence');
-            $table->city('legal_residence');
-            $table->string('legal_residence_address')->nullable();
             $table->boolean('same_as_legal_residence')->default(false);
-            $table->county('effective_residence');
-            $table->city('effective_residence');
-            $table->string('effective_residence_address')->nullable();
             $table->text('observations')->nullable();
             $table->timestamps();
         });

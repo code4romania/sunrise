@@ -8,10 +8,13 @@ use App\Models\City;
 use App\Models\County;
 use Closure;
 use Filament\Infolists\Components\Component;
+use Filament\Infolists\Components\Concerns\EntanglesStateWithSingularRelationship;
 use Filament\Infolists\Components\TextEntry;
 
 class Location extends Component
 {
+    use EntanglesStateWithSingularRelationship;
+
     protected string $view = 'filament-forms::components.grid';
 
     protected string | Closure | null $countyField = null;
@@ -60,7 +63,7 @@ class Location extends Component
 
     public function getCountyField(): string
     {
-        return collect([
+        return $this->getStatePath() ? 'county_id' : collect([
             $this->getId(),
             'county_id',
         ])
@@ -92,7 +95,7 @@ class Location extends Component
 
     public function getCityField(): string
     {
-        return collect([
+        return $this->getStatePath() ? 'city_id' : collect([
             $this->getId(),
             'city_id',
         ])
@@ -124,7 +127,7 @@ class Location extends Component
 
     public function getAddressField(): string
     {
-        return collect([
+        return $this->getStatePath() ? 'address' : collect([
             $this->getId(),
             'address',
         ])
@@ -156,7 +159,7 @@ class Location extends Component
 
     public function getEnvironmentField(): string
     {
-        return collect([
+        return $this->getStatePath() ? 'environment' : collect([
             $this->getId(),
             'environment',
         ])
