@@ -13,6 +13,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetaile
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
+use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
 use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -155,6 +156,13 @@ class BeneficiaryResource extends Resource
             'documents.index' => ListDocuments::route('/{parent}/documents'),
             'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
 
+
+            'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create/{copyLastFile?}'),
+            'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
+            'monitorings.view' => MonitoringResourcePages\ViewMonitoring::route('/{parent}/monitoring/{record}'),
+            'monitoring.edit_details' => MonitoringResourcePages\EditDetails::route('/{parent}/monitoring/{record}/editDetails'),
+            'monitoring.edit_children' => MonitoringResourcePages\EditChildren::route('/{parent}/monitoring/{record}/editChildren'),
+            'monitoring.edit_general' => MonitoringResourcePages\EditGeneral::route('/{parent}/monitoring/{record}/editGeneral'),
             'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
             'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),
 

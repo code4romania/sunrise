@@ -284,6 +284,16 @@ return [
         'document' => 'Document (nespecificat)',
     ],
 
+    'child_aggressor_relationships' => [
+        'child' => 'Fiu/Fiică',
+        'other_relationship' => 'Alt grad de rudenie',
+        'from_another_relationship' => 'Provenit din afara relației',
+    ],
+
+    'maintenance_sources' => [
+        'relationship_income' => 'Venitul existent în cadrul relației',
+        'alimony' => 'Pensie alimentară',
+      ],
     'activity_description' => [
         'created' => 'Creat',
         'retrieved' => 'Vizualizat',
