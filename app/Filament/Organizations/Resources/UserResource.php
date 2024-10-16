@@ -25,6 +25,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class UserResource extends Resource
 {
@@ -153,7 +154,7 @@ class UserResource extends Resource
                         ->options(CasePermission::options())
                         ->disableOptionWhen(function (Get $get, string $value) {
                             foreach ($get('role_id') as $roleID) {
-                                $role = Role::find($roleID);
+                                $role = self::getRole($roleID);
 
                                 $permission = $role->case_permissions
                                     ->filter(fn ($item) => CasePermission::isValue($value, $item));
@@ -171,7 +172,7 @@ class UserResource extends Resource
                         ->options(AdminPermission::options())
                         ->disableOptionWhen(function (Get $get, string $value) {
                             foreach ($get('role_id') as $roleID) {
-                                $role = Role::find($roleID);
+                                $role = self::getRole($roleID);
 
                                 $permission = $role->ngo_admin_permissions
                                     ->filter(fn ($item) => AdminPermission::isValue($value, $item));
@@ -193,7 +194,7 @@ class UserResource extends Resource
             $casePermissions = $get('case_permissions') ?: [];
             $adminPermissions = $get('admin_permissions') ?: [];
             foreach ($state as $roleID) {
-                $role = Role::find($roleID);
+                $role = self::getRole($roleID);
                 $defaultCasePermissions = $role->case_permissions?->map(fn ($item) => $item->value)->toArray();
                 $defaultNgoAdminPermissions = $role->ngo_admin_permissions?->map(fn ($item) => $item->value)->toArray();
 
@@ -208,5 +209,14 @@ class UserResource extends Resource
             $set('case_permissions', $casePermissions);
             $set('admin_permissions', $adminPermissions);
         };
+    }
+
+    protected static function getRole(mixed $roleID)
+    {
+        return Cache::driver('array')
+            ->rememberForever(
+                'role_' . $roleID,
+                fn() => Role::find($roleID)
+            );
     }
 }
