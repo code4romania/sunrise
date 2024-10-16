@@ -9,10 +9,17 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class UserRole extends Pivot
 {
+    public function getTable()
+    {
+        return 'user_roles';
+    }
+
     public static function booted(): void
     {
         static::creating(function ($record) {
-            $record->organization_id = Filament::getTenant()?->id;
+            if (! $record->organization_id && Filament::getTenant()?->id) {
+                $record->organization_id = Filament::getTenant()?->id;
+            }
         });
     }
 }

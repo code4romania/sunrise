@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Enums\UserStatus;
 use App\Models\Organization;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -62,6 +63,21 @@ class UserFactory extends Factory
                 Organization::factory()
                     ->create()
             );
+        });
+    }
+
+    public function withRoles(int $organizationID)
+    {
+        return $this->afterCreating(function (User $user) use ($organizationID) {
+            $roles = Role::query()
+                ->active()
+                ->inRandomOrder()
+                ->limit(rand(1, 5))
+                ->get();
+
+            foreach ($roles as $role) {
+                $user->roles()->attach($role->id, ['organization_id' => $organizationID]);
+            }
         });
     }
 }
