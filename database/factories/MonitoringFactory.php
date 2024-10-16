@@ -6,7 +6,6 @@ namespace Database\Factories;
 
 use App\Models\Monitoring;
 use App\Models\MonitoringChild;
-use App\Models\MonitoringSpecialist;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -79,18 +78,7 @@ class MonitoringFactory extends Factory
                             'birthdate' => $child['birthdate'] ?? null,
                         ]);
                 }
-
-                $team = $monitoring->beneficiary->team;
-
-                MonitoringSpecialist::factory()
-                    ->for($monitoring)
-                    ->state(function (array $attributes) use ($team) {
-                        $attributes['case_team_id'] = $this->faker->randomElement($team)->id;
-
-                        return $attributes;
-                    })
-                    ->count(rand(1, $team->count()))
-                    ->create();
+                // TODO add specialists
             });
     }
 }
