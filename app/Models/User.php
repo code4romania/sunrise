@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -111,12 +112,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return $this->belongsTo(Organization::class, 'latest_organization_id');
     }
 
-    public function rolesInOrganization(): BelongsToMany
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_roles')
-            ->withPivot('organization_id')
-            ->wherePivot('organization_id', Filament::getTenant()->id)
-            ->active();
+            ->using(UserRole::class)
+            ->withPivot(['organization_id']);
+    }
+
+    public function rolesInOrganization(): BelongsToMany
+    {
+        return $this->roles()
+            ->wherePivot('organization_id', Filament::getTenant()?->id);
     }
 
     public function getActivitylogOptions(): LogOptions

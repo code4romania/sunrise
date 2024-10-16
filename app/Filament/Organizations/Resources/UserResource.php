@@ -10,7 +10,10 @@ use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
 use App\Models\Role;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -92,13 +95,6 @@ class UserResource extends Resource
                 Tables\Actions\ViewAction::make(),
             ])
             ->heading(__('user.heading.table'));
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
