@@ -93,8 +93,8 @@ class ListMonitoring extends ListRecords
                 ->sortable()
                 ->listWithLineBreaks()
                 ->formatStateUsing(
-                    fn (Specialist $state) => $state->user->getFilamentName() .
-                         ' (' . $state->role?->name . ')'
+                    fn (Specialist $state) => $state->user->getFilamentName()
+                    // ' (' . $state->role?->name . ')'
                 ),
         ])
             ->actions([
@@ -107,7 +107,13 @@ class ListMonitoring extends ListRecords
                     ]))),
             ])
             ->actionsColumnLabel(__('monitoring.headings.actions'))
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['specialistsTeam.user', 'specialistsTeam.role'])->orderByDesc('id'))
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query->with([
+                    'specialistsTeam.user',
+                    // 'specialistsTeam.role',
+                ])
+                    ->orderByDesc('id')
+            )
             ->emptyStateHeading(__('monitoring.headings.empty_state_table'))
             ->emptyStateDescription(__('monitoring.labels.empty_state_table'))
             ->emptyStateIcon('heroicon-o-document')
