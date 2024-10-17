@@ -6,7 +6,9 @@ namespace Database\Factories;
 
 use App\Models\Monitoring;
 use App\Models\MonitoringChild;
+use App\Models\Specialist;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Monitoring>
@@ -78,7 +80,17 @@ class MonitoringFactory extends Factory
                             'birthdate' => $child['birthdate'] ?? null,
                         ]);
                 }
-                // TODO add specialists
+
+                $specialists = $monitoring->beneficiary->specialistsTeam;
+                $specialists = collect(fake()->randomElements($specialists, rand(1, $specialists->count())));
+                $specialists = $specialists->map(fn (Specialist $specialist) => ['user_id' => $specialist->user_id, 'role_id' => $specialist->role_id])
+                    ->toArray();
+
+                Specialist::factory()
+                    ->for($monitoring, 'specialistable')
+                    ->state(new Sequence(...$specialists))
+                    ->count(\count($specialists))
+                    ->create();
             });
     }
 }

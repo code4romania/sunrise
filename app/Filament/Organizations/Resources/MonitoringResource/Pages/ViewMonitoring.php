@@ -54,6 +54,9 @@ class ViewMonitoring extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
+        $this->getRecord()
+            ->load(['specialistsTeam.user', 'specialistsTeam.role']);
+
         return $infolist->schema([
             Tabs::make()
                 ->columnSpanFull()
