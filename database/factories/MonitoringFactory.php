@@ -6,8 +6,9 @@ namespace Database\Factories;
 
 use App\Models\Monitoring;
 use App\Models\MonitoringChild;
-use App\Models\MonitoringSpecialist;
+use App\Models\Specialist;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Monitoring>
@@ -80,16 +81,15 @@ class MonitoringFactory extends Factory
                         ]);
                 }
 
-                $team = $monitoring->beneficiary->team;
+                $specialists = $monitoring->beneficiary->specialistsTeam;
+                $specialists = collect(fake()->randomElements($specialists, rand(1, $specialists->count())));
+                $specialists = $specialists->map(fn (Specialist $specialist) => ['user_id' => $specialist->user_id, 'role_id' => $specialist->role_id])
+                    ->toArray();
 
-                MonitoringSpecialist::factory()
-                    ->for($monitoring)
-                    ->state(function (array $attributes) use ($team) {
-                        $attributes['case_team_id'] = $this->faker->randomElement($team)->id;
-
-                        return $attributes;
-                    })
-                    ->count(rand(1, $team->count()))
+                Specialist::factory()
+                    ->for($monitoring, 'specialistable')
+                    ->state(new Sequence(...$specialists))
+                    ->count(\count($specialists))
                     ->create();
             });
     }

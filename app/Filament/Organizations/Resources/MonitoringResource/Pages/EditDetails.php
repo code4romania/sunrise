@@ -75,17 +75,17 @@ class EditDetails extends EditRecord
                         ->formatStateUsing(fn ($record, $state) => $state ?? ($record?->beneficiary_id ?? request('parent'))),
 
                     //TODO refactoring after roles implementation
+                    // Probably use repeater table to select user and role
                     Select::make('specialists')
                         ->label(__('monitoring.labels.team'))
                         ->placeholder(__('monitoring.placeholders.team'))
                         ->columnSpanFull()
                         ->preload()
-                        ->relationship('specialists')
+                        ->relationship('specialistsMembers')
                         ->multiple()
                         ->options(
                             fn (Get $get) => Beneficiary::find($get('parent_id'))
-                                ->team
-                                ->each(fn ($item) => $item->full_name = $item->user->getFilamentName())
+                                ->specialistsMembers
                                 ->pluck('full_name', 'id')
                         ),
 
