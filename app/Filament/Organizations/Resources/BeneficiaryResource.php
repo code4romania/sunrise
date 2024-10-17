@@ -96,7 +96,6 @@ class BeneficiaryResource extends Resource
                     ->label(__('field.last_evaluated_at'))
                     ->date()
                     ->toggleable(),
-                //                    ->sortable(),
 
                 TextColumn::make('managerTeam.user.full_name')
                     ->label(Role::MANGER->getLabel())
