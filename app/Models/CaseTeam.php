@@ -36,9 +36,9 @@ class CaseTeam extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class)
-            ->whereHas('organizations', function ($query) {
-                $query->where('organization_id', Filament::getTenant()->id);
-            });
+        return $this->belongsTo(User::class);
+//            ->whereHas('organizations', function ($query) {
+//                $query->where('organization_id', Filament::getTenant()->id);
+//            });
     }
 }

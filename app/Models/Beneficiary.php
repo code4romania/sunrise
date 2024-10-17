@@ -287,6 +287,11 @@ class Beneficiary extends Model
         return $this->hasMany(Monitoring::class);
     }
 
+    public function lastMonitoring(): HasOne
+    {
+        return $this->hasOne(Monitoring::class)->orderByDesc('date');
+    }
+
     public function closeFile(): HasOne
     {
         return $this->hasOne(CloseFile::class);

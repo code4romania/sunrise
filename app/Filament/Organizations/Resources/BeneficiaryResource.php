@@ -14,8 +14,8 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetaile
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
-use App\Filters\DateFilter;
 use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
+use App\Filters\DateFilter;
 use App\Models\Beneficiary;
 use App\Tables\Filters\SelectFilter;
 use Filament\Resources\Resource;
@@ -68,7 +68,12 @@ class BeneficiaryResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->modifyQueryUsing(fn (Builder $query) => $query->with('managerTeam'))
+        return $table->modifyQueryUsing(
+            fn (Builder $query) => $query
+                ->leftJoin('monitorings', 'monitorings.beneficiary_id', '=', 'beneficiaries.id')
+                ->select(['beneficiaries.*', 'monitorings.date'])
+                ->with(['managerTeam', 'lastMonitoring'])
+        )
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id'))
@@ -87,7 +92,7 @@ class BeneficiaryResource extends Resource
                     ->toggleable()
                     ->sortable(),
 
-                TextColumn::make('last_evaluated_at')
+                TextColumn::make('lastMonitoring.date')
                     ->label(__('field.last_evaluated_at'))
                     ->date()
                     ->toggleable(),
@@ -120,7 +125,20 @@ class BeneficiaryResource extends Resource
                     ->label(__('field.open_at'))
                     ->attribute('beneficiaries.created_at'),
 
-                //                DateFilter::make('last_evaluated_at')
+                DateFilter::make('monitorings.date')
+                    ->label(__('field.last_evaluated_at'))
+                    ->attribute('monitorings.date')
+                    ->query(function (Builder $query, array $state) {
+                        return
+                            $query->join('monitorings', 'beneficiaries.id', '=', 'monitorings.beneficiary_id')
+                                ->when(data_get($state, 'date_from'), function (Builder $query, string $date) {
+                                    $query->whereDate('monitorings.date', '>=', $date);
+                                })
+                                ->when(data_get($state, 'date_until'), function (Builder $query, string $date) {
+                                    $query->whereDate('monitorings.date', '<=', $date);
+                                });
+                    }),
+                //                    ->modifyQueryUsing(fn (Builder $query) => $query->join('monitorings', 'beneficiaries.id', '=', 'monitorings.beneficiary_id')),
             ])
             ->paginationPageOptions([10, 20, 40, 60, 80, 100])
             ->defaultPaginationPageOption(20)
@@ -169,7 +187,6 @@ class BeneficiaryResource extends Resource
 
             'documents.index' => ListDocuments::route('/{parent}/documents'),
             'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
-
 
             'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create/{copyLastFile?}'),
             'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
