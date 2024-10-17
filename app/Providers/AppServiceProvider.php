@@ -30,7 +30,9 @@ use App\Models\Violence;
 use App\Models\ViolenceHistory;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Facades\FilamentView;
 use Filament\Tables\Columns\Column;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
@@ -67,6 +69,11 @@ class AppServiceProvider extends ServiceProvider
         TextEntry::configureUsing(function (TextEntry $entry) {
             return $entry->default('-');
         });
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::AUTH_LOGIN_FORM_BEFORE,
+            fn () => view('filament.login-form-before')
+        );
     }
 
     protected function enforceMorphMap(): void

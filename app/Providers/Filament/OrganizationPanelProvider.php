@@ -6,6 +6,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Organizations\Pages;
 use App\Filament\Organizations\Pages\Profile\UserPersonalInfo;
+use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\UpdateDefaultTenant;
 use App\Livewire\Welcome;
 use App\Models\Organization;
@@ -139,6 +140,7 @@ class OrganizationPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                EnsureUserIsActive::class,
             ])
             ->tenant(Organization::class, 'slug')
             ->tenantProfile(Pages\Tenancy\EditOrganizationProfile::class)
