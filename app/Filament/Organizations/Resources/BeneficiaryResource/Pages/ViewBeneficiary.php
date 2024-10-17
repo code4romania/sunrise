@@ -295,10 +295,10 @@ class ViewBeneficiary extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            CaseTeamListWidget::class,
-            DocumentsListWidget::class,
             MonitoringWidget::class,
             CloseFileWidget::class,
+            CaseTeamListWidget::class,
+            DocumentsListWidget::class,
             RelatedCases::class,
         ];
     }
