@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\Role;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class CaseTeam extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use LogsActivity;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'user_id',

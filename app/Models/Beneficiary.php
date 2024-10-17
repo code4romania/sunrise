@@ -10,11 +10,13 @@ use App\Concerns\HasCitizenship;
 use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\ActLocation;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\HomeOwnership;
+use App\Enums\IDType;
 use App\Enums\Income;
 use App\Enums\NotificationMode;
 use App\Enums\Notifier;
@@ -33,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Beneficiary extends Model
 {
@@ -43,6 +46,8 @@ class Beneficiary extends Model
     use HasFactory;
     use HasUlid;
     use HasEffectiveAddress;
+    use LogsActivity;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'first_name',
@@ -111,6 +116,7 @@ class Beneficiary extends Model
     ];
 
     protected $casts = [
+        'id_type' => IDType::class,
         'birthdate' => 'date',
         'children_10_18_care_count' => 'integer',
         'children_18_care_count' => 'integer',
@@ -274,6 +280,11 @@ class Beneficiary extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function monitoring(): HasMany
+    {
+        return $this->hasMany(Monitoring::class);
     }
 
     public function closeFile(): HasOne

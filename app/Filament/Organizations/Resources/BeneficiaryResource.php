@@ -6,6 +6,8 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
 use App\Enums\Role;
+use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
+use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateDetailedEvaluation;
@@ -13,6 +15,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialis
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
 use App\Filters\DateFilter;
+use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
 use App\Models\Beneficiary;
 use App\Tables\Filters\SelectFilter;
 use Filament\Resources\Resource;
@@ -167,10 +170,21 @@ class BeneficiaryResource extends Resource
             'documents.index' => ListDocuments::route('/{parent}/documents'),
             'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
 
+
+            'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create/{copyLastFile?}'),
+            'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
+            'monitorings.view' => MonitoringResourcePages\ViewMonitoring::route('/{parent}/monitoring/{record}'),
+            'monitoring.edit_details' => MonitoringResourcePages\EditDetails::route('/{parent}/monitoring/{record}/editDetails'),
+            'monitoring.edit_children' => MonitoringResourcePages\EditChildren::route('/{parent}/monitoring/{record}/editChildren'),
+            'monitoring.edit_general' => MonitoringResourcePages\EditGeneral::route('/{parent}/monitoring/{record}/editGeneral'),
+            'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
+            'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),
+
             'create_close_file' => CloseFile\CreateCloseFile::route('/{record}/createCloseFile'),
             'view_close_file' => CloseFile\ViewCloseFile::route('/{record}/closeFile'),
             'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record}/closeFile/editDetails'),
             'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
+
         ];
     }
 }
