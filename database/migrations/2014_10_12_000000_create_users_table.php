@@ -15,6 +15,7 @@ return new class extends Migration
             $table->ulid()->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('full_name')->virtualAs('CONCAT(first_name, " ", last_name)');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
             $table->string('status')->nullable();

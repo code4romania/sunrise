@@ -10,7 +10,7 @@ trait RedirectToCloseFile
     {
         return self::$resource::getUrl('view_close_file', [
             'record' => $this->getRecord(),
-            'tab' => sprintf('-%s-tab', $this->getTabSlug()),
+            'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
     }
 }
