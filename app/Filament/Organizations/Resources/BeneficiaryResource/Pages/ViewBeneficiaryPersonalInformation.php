@@ -101,7 +101,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            TextEntry::make('psychiatric_notes')
+                            TextEntry::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_notes')),
                         ]),
 

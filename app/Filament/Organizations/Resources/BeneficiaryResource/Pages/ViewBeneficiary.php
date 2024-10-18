@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\CaseStatus;
+use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
@@ -17,6 +19,7 @@ use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -27,6 +30,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\IconPosition;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiary extends ViewRecord
@@ -42,7 +46,40 @@ class ViewBeneficiary extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Action::make('view_history')
+            ActionGroup::make([])
+                ->label(__('beneficiary.action.case_actions'))
+                ->button()
+                ->iconPosition(IconPosition::After)
+                ->icon('heroicon-s-chevron-down')
+                ->actions([
+                    ActionGroup::make([])
+                        ->dropdown(false)
+                        ->actions([
+                            BeneficiaryResource\Actions\ChangeStatus::make('active'),
+                            BeneficiaryResource\Actions\ChangeStatus::make('monitored'),
+                            BeneficiaryResource\Actions\ChangeStatus::make('closed'),
+                            //                            BeneficiaryResource\Actions\ChangeStatus::make('archived'),
+                        ]),
+
+                    ActionGroup::make([])
+                        ->dropdown(false)
+                        ->actions([
+                            Action::make('reactivate')
+                                ->label(__('beneficiary.action.reactivate'))
+                                ->disabled(
+                                    fn (Beneficiary $record): bool => $record->status !== CaseStatus::CLOSED
+//                                    && $record->status !== CaseStatus::ARCHIVED
+                                )
+                                ->url(fn ($record) => self::getResource()::getUrl('reactivate', ['parent' => $record->id])),
+
+                            Action::make('delete')
+                                ->label(__('beneficiary.action.delete'))
+                                ->color('danger')
+                                ->disabled(),
+                        ]),
+                ]),
+
+          Action::make('view_history')
                 ->label(__('beneficiary.section.history.actions.view'))
                 ->icon('heroicon-o-arrow-uturn-left')
                 ->outlined()
