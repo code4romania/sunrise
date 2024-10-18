@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Benefit;
+use App\Models\BenefitType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,5 +24,15 @@ class BenefitFactory extends Factory
             'name' => fake()->word(),
             'status' => fake()->boolean(),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Benefit $benefit) {
+            BenefitType::factory()
+                ->for($benefit)
+                ->count(5)
+                ->create();
+        });
     }
 }
