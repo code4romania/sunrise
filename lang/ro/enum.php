@@ -319,4 +319,11 @@ return [
         'beneficiary_request' => 'Solicitarea beneficiarei',
         'other' => 'Altă situație',
     ],
+
+    'protection_order' => [
+        'temporary' => 'Provizoriu',
+        'issued_by_court' => 'Emis de instanta',
+        'no' => 'Nu',
+        'unknown' => 'Nu știe/ Nu răspunde',
+    ],
 ];
