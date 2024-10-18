@@ -261,7 +261,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
             RepeatableEntry::make('children')
                 ->label(__('enum.notifier.child'))
                 ->columnSpanFull()
-                ->columns(2)
+                ->columns()
                 ->schema([
                     TextEntry::make('name')
                         ->label(__('field.child_name')),
@@ -272,7 +272,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                     TextEntry::make('birthdate')
                         ->label(__('field.birthdate')),
 
-                    TextEntry::make('address')
+                    TextEntry::make('current_address')
                         ->label(__('field.current_address')),
 
                     TextEntry::make('status')
