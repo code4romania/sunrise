@@ -6,7 +6,6 @@ namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
 use App\Enums\GeneralStatus;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
-use App\Filament\Admin\Pages\NomenclatureList;
 use App\Filament\Admin\Resources\ServiceResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -19,8 +18,8 @@ class EditService extends EditRecord
     public function getBreadcrumbs(): array
     {
         return [
-            NomenclatureList::getUrl() => __('nomenclature.titles.list'),
-            ServiceResource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
+            self::$resource::getUrl() => __('nomenclature.titles.list'),
+            self::$resource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
         ];
     }
 
@@ -42,7 +41,7 @@ class EditService extends EditRecord
             //TODO disable if is used
             DeleteAction::make()
                 ->disabled(fn () => GeneralStatus::isValue($this->getRecord()->status, GeneralStatus::ACTIVE))
-                ->successRedirectUrl(NomenclatureList::getUrl()),
+                ->successRedirectUrl(self::$resource::getUrl()),
         ];
     }
 }
