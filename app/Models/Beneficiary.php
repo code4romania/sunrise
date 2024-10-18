@@ -9,9 +9,11 @@ use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
 use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
+use App\Concerns\HasSpecialistsTeam;
 use App\Concerns\HasUlid;
 use App\Concerns\LogsActivityOptions;
 use App\Enums\ActLocation;
+use App\Enums\CasePermission;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
@@ -24,7 +26,6 @@ use App\Enums\Occupation;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
 use App\Enums\ResidenceEnvironment;
-use App\Enums\Role;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -48,6 +49,7 @@ class Beneficiary extends Model
     use HasEffectiveAddress;
     use LogsActivity;
     use LogsActivityOptions;
+    use HasSpecialistsTeam;
 
     protected $fillable = [
         'first_name',
@@ -156,12 +158,19 @@ class Beneficiary extends Model
                 return;
             }
 
+            /** @var User $user */
             $user = auth()->user();
-            $beneficiary->team()->create([
+            $beneficiary->specialistsTeam()->create([
                 'user_id' => $user->id,
-                'roles' => $user->can_be_case_manager
-                    ? [Role::MANGER]
-                    : $user->roles,
+                'role_id' => $user->canBeCaseManager()
+                    ? $user->rolesInOrganization
+                        ->filter(fn ($role) => $role->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER))
+                        ->first()
+                        ?->id
+                    : $user->rolesInOrganization
+                        ->first()
+                        ?->id,
+                'specialistable_type' => $beneficiary->getMorphClass(),
             ]);
         });
     }
@@ -212,11 +221,6 @@ class Beneficiary extends Model
         );
     }
 
-    public function specialists(): HasMany
-    {
-        return $this->hasMany(Specialist::class);
-    }
-
     public function meetings(): HasMany
     {
         return $this->hasMany(Meeting::class);
@@ -260,11 +264,6 @@ class Beneficiary extends Model
     public function beneficiarySituation(): HasOne
     {
         return $this->hasOne(BeneficiarySituation::class);
-    }
-
-    public function team(): HasMany
-    {
-        return $this->hasMany(CaseTeam::class);
     }
 
     public function violenceHistory(): HasMany

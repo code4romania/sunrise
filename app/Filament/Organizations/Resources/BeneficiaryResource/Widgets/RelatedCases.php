@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
+use App\Models\User;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -27,7 +27,7 @@ class RelatedCases extends BaseWidget
         return $table
             ->query(
                 Beneficiary::query()
-                    ->with('team.user')
+                    ->with('specialistsMembers')
                     ->when(
                         $this->record?->initial_id,
                         fn (Builder $query) => $query
@@ -49,14 +49,14 @@ class RelatedCases extends BaseWidget
                     ->label(__('field.open_at')),
 
                 TextColumn::make('case_manager')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(__('beneficiary.section.related_cases.labels.case_manager'))
                     ->state(
-                        fn (Beneficiary $record) => $record->team
+                        fn (Beneficiary $record) => $record->specialistsMembers
+                            ->unique()
                             ->filter(
-                                fn ($item) => $item->roles
-                                    ->contains(Role::MANGER)
+                                fn (User $item) => $item->canBeCaseManager()
                             )
-                            ->map(fn ($item) => $item->user->full_name)
+                            ->map(fn (User $item) => $item->full_name)
                             ->join(', ')
                     ),
 

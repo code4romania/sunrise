@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\Beneficiary;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,11 +17,10 @@ return new class extends Migration
     {
         Schema::create('specialists', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Beneficiary::class);
-            $table->string('full_name')->nullable();
-            $table->string('institution')->nullable();
-            $table->string('relationship')->nullable();
-            $table->date('date')->nullable();
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Role::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('specialistable_id')->nullable();
+            $table->string('specialistable_type')->nullable();
             $table->timestamps();
         });
     }

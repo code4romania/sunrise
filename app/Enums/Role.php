@@ -9,6 +9,7 @@ use App\Concerns\Enums\Comparable;
 use App\Concerns\Enums\HasLabel as HasLabelTrait;
 use Filament\Support\Contracts\HasLabel;
 
+/** @deprecated  use App\Models\Role */
 enum Role: string implements HasLabel
 {
     use Arrayable;

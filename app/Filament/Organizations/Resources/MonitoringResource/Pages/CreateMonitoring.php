@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
+use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Wizard;
@@ -58,7 +59,11 @@ class CreateMonitoring extends CreateRecord
     protected function afterFill(): void
     {
         $copyLastFile = (bool) request('copyLastFile');
-        $this->lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
+        $this->lastFile = self::getParent()
+            ?->monitoring
+            ->sortByDesc('id')
+            ->first()
+            ?->load(['children', 'specialistsMembers']);
         $this->children = $this->getChildren();
 
         $data = [
@@ -66,8 +71,8 @@ class CreateMonitoring extends CreateRecord
             'children' => $this->children,
             'specialists' => [
                 $this->parent
-                    ->team
-                    ->filter(fn ($teamMember) => $teamMember->user_id === auth()->user()->id)
+                    ->specialistsMembers
+                    ->filter(fn (User $specialistMember) => $specialistMember->id === auth()->user()->id)
                     ->first()
                     ?->id,
             ],

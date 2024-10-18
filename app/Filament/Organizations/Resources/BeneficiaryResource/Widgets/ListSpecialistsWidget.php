@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
-use App\Enums\Role;
 use App\Enums\UserStatus;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
+use App\Models\Role;
 use App\Models\User;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -19,22 +22,26 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
-class CaseTeam extends BaseWidget
+class ListSpecialistsWidget extends BaseWidget
 {
     public ?Beneficiary $record = null;
 
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => $this->record->team())
+            ->query(
+                fn () => $this->record
+                    ->specialistsTeam()
+                    ->with(['user', 'role'])
+            )
             ->columns([
                 TextColumn::make('user.full_name')
                     ->label(__('beneficiary.section.specialists.labels.name')),
 
-                TextColumn::make('roles')
+                TextColumn::make('role.name')
                     ->label(__('beneficiary.section.specialists.labels.role'))
-                    ->wrap()
                     ->color(Color::Gray),
 
                 TextColumn::make('user.status')
@@ -74,7 +81,11 @@ class CaseTeam extends BaseWidget
 
                 SelectFilter::make('roles')
                     ->label(__('beneficiary.section.specialists.labels.role'))
-                    ->options(Role::options())
+                    ->options(
+                        Role::query()
+                            ->active()
+                            ->pluck('name', 'id')
+                    )
                     ->searchable()
                     ->modifyQueryUsing(
                         fn (Builder $query, $state): Builder => $state['value']
@@ -85,25 +96,47 @@ class CaseTeam extends BaseWidget
             ->heading(__('beneficiary.section.specialists.title'));
     }
 
-    /**
-     * @return array
-     */
     public function getFormSchema(): array
     {
         return [
+            Select::make('role_id')
+                ->label(__('beneficiary.section.specialists.labels.roles'))
+                ->options(
+                    Role::query()
+                        ->active()
+                        ->get()
+                        ->pluck('name', 'id')
+                )
+                ->afterStateUpdated(fn (Set $set) => $set('user_id', null))
+                ->live()
+                ->required(),
+
             Select::make('user_id')
                 ->label(__('beneficiary.section.specialists.labels.name'))
-                ->options(fn () => User::getTenantOrganizationUsers())
+                ->options(
+                    function (Get $get) {
+                        if (! $roleID = (int) $get('role_id')) {
+                            return [];
+                        }
+                        $users = Cache::driver('array')
+                            ->rememberForever(
+                                'tenant_users',
+                                fn () => Filament::getTenant()
+                                    ->users
+                                    ->load('rolesInOrganization')
+                            );
+
+                        return $users->filter(fn (User $user) => $user->hasRoleInOrganization($roleID))
+                            ->pluck('full_name', 'id');
+                    }
+                )
                 ->required(),
 
-            Select::make('roles')
-                ->label(__('beneficiary.section.specialists.labels.roles'))
-                ->options(fn () => Role::options())
-                ->multiple()
-                ->required(),
-
-            Hidden::make('beneficiary_id')
+            Hidden::make('specialistable_id')
                 ->formatStateUsing(fn () => $this->record->id),
+
+            Hidden::make('specialistable_type')
+                ->formatStateUsing(fn () => $this->record->getMorphClass()),
         ];
     }
 }
