@@ -26,6 +26,7 @@ use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\Meeting;
+use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
 use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
@@ -264,6 +265,10 @@ class BeneficiaryFactory extends Factory
                 $beneficiary->otherCalledInstitution()->sync(
                     $referringInstitutions->random(fake()->numberBetween(1, 4)),
                 );
+
+                Monitoring::factory()
+                    ->for($beneficiary)
+                    ->create();
 
                 if (CaseStatus::isValue($beneficiary->status, CaseStatus::CLOSED)) {
                     CloseFile::factory()

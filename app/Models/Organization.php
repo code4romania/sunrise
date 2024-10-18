@@ -71,6 +71,11 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
             });
     }
 
+    public function monitorings()
+    {
+        return $this->hasManyThrough(Monitoring::class, Beneficiary::class);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('logo')
