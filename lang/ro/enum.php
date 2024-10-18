@@ -284,6 +284,24 @@ return [
         'document' => 'Document (nespecificat)',
     ],
 
+    'child_aggressor_relationships' => [
+        'child' => 'Fiu/Fiică',
+        'other_relationship' => 'Alt grad de rudenie',
+        'from_another_relationship' => 'Provenit din afara relației',
+    ],
+
+    'maintenance_sources' => [
+        'relationship_income' => 'Venitul existent în cadrul relației',
+        'alimony' => 'Pensie alimentară',
+      ],
+    'activity_description' => [
+        'created' => 'Creat',
+        'retrieved' => 'Vizualizat',
+        'updated' => 'Editat',
+        'deleted' => 'Șters',
+        'logged_in' => 'Authentificat',
+    ],
+
     'admittance_reason' => [
         'security' => 'Siguranță pusă în pericol',
         'eviction_from_home' => 'Alungare de la domiciliu',

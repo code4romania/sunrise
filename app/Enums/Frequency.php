@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Concerns\Enums\Arrayable;
-use App\Concerns\Enums\Comparable;
-use App\Concerns\Enums\HasLabel;
+use App\Concerns\Enums;
+use Filament\Support\Contracts\HasLabel;
 
-enum Frequency: string
+enum Frequency: string implements HasLabel
 {
-    use Arrayable;
-    use Comparable;
-    use HasLabel;
+    use Enums\Arrayable;
+    use Enums\Comparable;
+    use Enums\HasLabel;
 
     case DAILY = 'daily';
     case WEEKLY = 'weekly';
