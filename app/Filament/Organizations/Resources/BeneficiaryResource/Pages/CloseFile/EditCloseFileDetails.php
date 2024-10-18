@@ -9,7 +9,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\CloseFile;
-use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
@@ -59,7 +58,6 @@ class EditCloseFileDetails extends EditRecord
         return [
             DatePicker::make('date')
                 ->label(__('beneficiary.section.close_file.labels.date'))
-                ->default(now())
                 ->required(),
 
             TextInput::make('number')
@@ -68,12 +66,10 @@ class EditCloseFileDetails extends EditRecord
 
             DatePicker::make('admittance_date')
                 ->label(__('beneficiary.section.close_file.labels.admittance_date'))
-                ->default(fn (?CloseFile $record) => $record ? $record->beneficiary->created_at : $recordParam->created_at)
                 ->required(),
 
             DatePicker::make('exit_date')
                 ->label(__('beneficiary.section.close_file.labels.exit_date'))
-                ->default(now())
                 ->required(),
 
             Select::make('user_id')
@@ -85,18 +81,6 @@ class EditCloseFileDetails extends EditRecord
 
                         return $specialists
                             ->pluck('full_name', 'id');
-                    }
-                )
-                ->default(
-                    function (?CloseFile $record) use ($recordParam) {
-                        $specialists = $record ? $record->beneficiary->specialistsMembers : $recordParam->specialistsMembers;
-
-                        return $specialists
-                            ->filter(
-                                fn (User $item) => $item->canBeCaseManager()
-                            )
-                            ->first()
-                            ?->id;
                     }
                 )
                 ->required(),
