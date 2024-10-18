@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
 use App\Filament\Admin\Resources\RoleResource;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ManageRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListRoles extends ManageRecords
 {
@@ -15,10 +14,8 @@ class ListRoles extends ManageRecords
 
     protected static string $view = 'filament.admin.pages.nomenclature-list';
 
-    protected function getHeaderActions(): array
+    public function getTitle(): string|Htmlable
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        return __('nomenclature.headings.roles');
     }
 }

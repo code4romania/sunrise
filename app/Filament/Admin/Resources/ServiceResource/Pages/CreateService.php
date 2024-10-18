@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
-use App\Filament\Admin\Pages\NomenclatureList;
 use App\Filament\Admin\Resources\ServiceResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -23,8 +22,8 @@ class CreateService extends CreateRecord
     public function getBreadcrumbs(): array
     {
         return [
-            NomenclatureList::getUrl() => __('nomenclature.titles.list'),
-            ServiceResource::getUrl('create') => __('nomenclature.actions.add_service'),
+            self::$resource::getUrl() => __('nomenclature.titles.list'),
+            self::$resource::getUrl('create') => __('nomenclature.actions.add_service'),
         ];
     }
 }

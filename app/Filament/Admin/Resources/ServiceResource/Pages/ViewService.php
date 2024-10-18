@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
-use App\Filament\Admin\Pages\NomenclatureList;
 use App\Filament\Admin\Resources\ServiceResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Section;
@@ -20,8 +19,8 @@ class ViewService extends ViewRecord
     public function getBreadcrumbs(): array
     {
         return [
-            NomenclatureList::getUrl() => __('nomenclature.titles.list'),
-            ServiceResource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
+            self::$resource::getUrl() => __('nomenclature.titles.list'),
+            self::$resource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
         ];
     }
 

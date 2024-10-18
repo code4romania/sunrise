@@ -90,7 +90,11 @@ class AdminPanelProvider extends PanelProvider
             })
             ->navigationItems([
                 NavigationItem::make(__('nomenclature.titles.list'))
-                    ->isActiveWhen(fn () => request()->routeIs('filament.admin.resources.roles.*')||request()->routeIs('filament.admin.resources.services.*'))
+                    ->icon('heroicon-o-document-text')
+                    ->isActiveWhen(
+                        fn () => request()->routeIs('filament.admin.resources.roles.*') ||
+                            request()->routeIs('filament.admin.resources.services.*') ||
+                            request()->routeIs('filament.admin.resources.benefits.*'))
                     ->url(fn()=>ServiceResource::getUrl()),
             ])
             ->unsavedChangesAlerts()

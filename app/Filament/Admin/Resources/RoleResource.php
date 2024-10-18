@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Resources;
 
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
+use App\Enums\GeneralStatus;
 use App\Filament\Admin\Resources\RoleResource\Pages;
 use App\Forms\Components\Spacer;
 use App\Models\Role;
@@ -16,7 +17,11 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class RoleResource extends Resource
 {
@@ -60,20 +65,47 @@ class RoleResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query
+                    ->withCount(['users'])
+                    ->with(['organizations'])
+            )
+            ->heading(__('nomenclature.headings.roles_table'))
+            ->headerActions([
+                CreateAction::make()
+                    ->label(__('nomenclature.actions.add_role')),
+
+            ])
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->label(__('nomenclature.labels.role_name')),
+
+                TextColumn::make('institutions')
+                    ->label(__('nomenclature.labels.institutions'))
+                    ->default(0),
+
+                TextColumn::make('organizations')
+                    ->label(__('nomenclature.labels.centers'))
+                    ->default(0)
+                    ->formatStateUsing(fn ($record) => $record->organizations?->unique()->count()),
+
+                TextColumn::make('users_count')
+                    ->label(__('nomenclature.labels.users')),
+
+                TextColumn::make('status')
+                    ->label(__('nomenclature.labels.status')),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options(GeneralStatus::options()),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('nomenclature.actions.edit')),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->emptyStateHeading(__('nomenclature.labels.empty_state_role_table'))
+            ->emptyStateDescription(null)
+            ->emptyStateIcon('heroicon-o-clipboard-document-check');
     }
 
     public static function getRelations(): array

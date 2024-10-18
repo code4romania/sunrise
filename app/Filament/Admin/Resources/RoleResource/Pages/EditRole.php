@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
-use App\Enums\GeneralStatus;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
-use App\Filament\Admin\Pages\NomenclatureList;
 use App\Filament\Admin\Resources\RoleResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -24,7 +22,7 @@ class EditRole extends EditRecord
     public function getBreadcrumbs(): array
     {
         return [
-            NomenclatureList::getUrl() => __('nomenclature.titles.list'),
+            self::$resource::getUrl() => __('nomenclature.titles.list'),
             RoleResource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
         ];
     }
@@ -39,14 +37,13 @@ class EditRole extends EditRecord
         return [
             ChangeNomenclatureStatusAction::make(),
 
-            //TODO disable if is used
             DeleteAction::make()
                 ->label(__('nomenclature.actions.delete_role'))
                 ->outlined()
                 ->icon('heroicon-o-trash')
-                ->disabled(fn () => GeneralStatus::isValue($this->getRecord()->status, GeneralStatus::ACTIVE))
+                ->disabled(fn () => $this->getRecord()->users->count())
                 ->modalHeading(__('nomenclature.actions.delete_role'))
-                ->successRedirectUrl(NomenclatureList::getUrl()),
+                ->successRedirectUrl(self::$resource::getUrl()),
         ];
     }
 }

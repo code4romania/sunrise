@@ -8,7 +8,15 @@
                 <x-filament::tabs.item
                     :active="request()->routeIs('filament.admin.resources.services.index')"
                 >
-                    Services
+                    {{ __('nomenclature.headings.service') }}
+                </x-filament::tabs.item>
+            </a>
+
+            <a href="{{route('filament.admin.resources.benefits.index')}}">
+                <x-filament::tabs.item
+                    :active="request()->routeIs('filament.admin.resources.benefits.index')"
+                >
+                    {{ __('nomenclature.headings.benefits') }}
                 </x-filament::tabs.item>
             </a>
 
@@ -16,7 +24,7 @@
                 <x-filament::tabs.item
                     :active="request()->routeIs('filament.admin.resources.roles.index')"
                 >
-                    Roles
+                    {{ __('nomenclature.headings.roles') }}
                 </x-filament::tabs.item>
             </a>
 

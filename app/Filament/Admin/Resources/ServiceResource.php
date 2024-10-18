@@ -18,13 +18,17 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
-    protected static bool $shouldRegisterNavigation =false;
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function getNavigationLabel(): string
     {
@@ -99,17 +103,41 @@ class ServiceResource extends Resource
     {
         return $table
             ->columns([
-
+                TextColumn::make('name')
+                    ->label(__('nomenclature.labels.name'))
+                    ->searchable(),
+                TextColumn::make('institutions')
+                    ->label(__('nomenclature.labels.institutions')),
+                TextColumn::make('centers')
+                    ->label(__('nomenclature.labels.centers')),
+                TextColumn::make('status')
+                    ->label(__('nomenclature.labels.status'))
+                    ->badge(),
             ])
             ->actions([
-
-            ]);
+                ViewAction::make()
+                    ->label(__('general.action.view_details'))
+                    ->url(fn (Service $record) => ServiceResource::getUrl('view', ['record' => $record])),
+            ])
+            ->headerActions([
+                CreateAction::make()
+                    ->label(__('nomenclature.actions.add_service'))
+                    ->url(self::getUrl('create')),
+            ])
+            ->filters([
+                SelectFilter::make('status')
+                    ->options(GeneralStatus::options()),
+            ])
+            ->heading(__('nomenclature.headings.service_table'))
+            ->emptyStateHeading(__('nomenclature.labels.empty_state_service_table'))
+            ->emptyStateDescription(null)
+            ->emptyStateIcon('heroicon-o-clipboard-document-check');
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageServices::route('/'),
+            'index' => Pages\ListServices::route('/'),
             'create' => CreateService::route('/create'),
             'view' => Pages\ViewService::route('/{record}'),
             'edit' => Pages\EditService::route('/{record}/edit'),
