@@ -11,6 +11,7 @@ return [
 
     'labels' => [
         'registered_date' => 'Data înregistrării',
+        'reactivated' => 'Reactivare de caz',
         'related_cases' => 'Istoric caz (fișe conectate cazului)',
     ],
 
@@ -329,6 +330,48 @@ return [
             ],
         ],
 
+        'history' => [
+            'titles' => [
+                'list' => 'Istoric',
+            ],
+
+            'headings' => [
+                'table' => 'Istoric modificări & accesare caz',
+            ],
+
+            'labels' => [
+                'date' => 'Data',
+                'time' => 'Ora',
+                'user' => 'Utilizator',
+                'description' => 'Acțiune',
+                'section' => 'Secțiune',
+                'subsection' => 'Sub-secțiune',
+                'view_action' => 'Detalii',
+                'beneficiary' => 'Beneficiar',
+                'meeting' => 'Întâlniri',
+                'multidisciplinaryEvaluation' => 'Evaluare multidisciplinară',
+                'riskFactors' => 'Factori de risc',
+                'violence' => 'Violență',
+                'violenceHistory' => 'Istoric violență',
+                'document' => 'Documente',
+                'aggressor' => 'Agresor',
+                'evaluateDetails' => 'Detalii evaluare',
+                'detailedEvaluationResult' => 'Rezultate evalaure detaliată',
+                'team' => 'Echipa de caz',
+                'beneficiarySituation' => 'Situatie beneficiar',
+                'beneficiaryPartner' => 'Partener',
+                'requestedServices' => 'Servicii solicitate',
+            ],
+
+            'actions' => [
+                'view' => 'Istoric modificări',
+            ],
+
+            'breadcrumbs' => [
+                'list' => 'Istoric modificări & accesare caz',
+            ],
+        ],
+
         'close_file' => [
             'titles' => [
                 'create' => 'Fișă de închidere a cazului',
@@ -377,10 +420,10 @@ return [
     ],
 
     'status' => [
-        'active' => 'Activ',
-        'reactivated' => 'Reactivat',
-        'monitored' => 'În monitorizare',
+        'active' => 'Deschis',
+        'monitored' => 'Monitorizare',
         'closed' => 'Închis',
+        'archived' => 'Arhivat',
     ],
 
     'action' => [

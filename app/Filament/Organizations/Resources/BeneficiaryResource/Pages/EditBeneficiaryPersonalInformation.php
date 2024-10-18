@@ -122,8 +122,8 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->live(),
 
                             TextInput::make('criminal_history_notes')
-                                ->label(__('field.criminal_notes'))
                                 ->default($parentBeneficiary?->criminal_history_notes)
+                                ->label(__('field.criminal_history_notes'))
                                 ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
                         ]),
 

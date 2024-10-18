@@ -19,12 +19,14 @@ use App\Models\Beneficiary;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
+use App\Models\Children;
 use App\Models\City;
 use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\Meeting;
+use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
 use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
@@ -147,14 +149,6 @@ class BeneficiaryFactory extends Factory
             'children_10_18_care_count' => fake()->numberBetween(1, 10),
             'children_18_care_count' => fake()->numberBetween(1, 10),
             'children_accompanying_count' => fake()->numberBetween(1, 10),
-
-            'children' => collect(range(1, 10))
-                ->map(fn () => [
-                    'name' => fake()->name(),
-                    'age' => fake()->boolean() ? fake()->numberBetween(0, 20) : null,
-                    'current_address' => fake()->boolean() ? fake()->address() : null,
-                    'status' => fake()->boolean() ? fake()->words(asText: true) : null,
-                ]),
         ]);
     }
 
@@ -185,6 +179,11 @@ class BeneficiaryFactory extends Factory
                 );
             })
             ->afterCreating(function (Beneficiary $beneficiary) use ($referringInstitutions) {
+                Children::factory()
+                    ->for($beneficiary)
+                    ->count(rand(1, 5))
+                    ->create();
+
                 BeneficiaryPartner::factory()
                     ->for($beneficiary)
                     ->create();
@@ -266,6 +265,10 @@ class BeneficiaryFactory extends Factory
                 $beneficiary->otherCalledInstitution()->sync(
                     $referringInstitutions->random(fake()->numberBetween(1, 4)),
                 );
+
+                Monitoring::factory()
+                    ->for($beneficiary)
+                    ->create();
 
                 if (CaseStatus::isValue($beneficiary->status, CaseStatus::CLOSED)) {
                     CloseFile::factory()

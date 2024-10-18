@@ -10,6 +10,11 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
+use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -73,6 +78,13 @@ class ViewBeneficiary extends ViewRecord
                                 ->disabled(),
                         ]),
                 ]),
+
+          Action::make('view_history')
+                ->label(__('beneficiary.section.history.actions.view'))
+                ->icon('heroicon-o-arrow-uturn-left')
+                ->outlined()
+                ->link()
+                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
         ];
     }
 
@@ -281,12 +293,8 @@ class ViewBeneficiary extends ViewRecord
                         ->relationship('detailedEvaluationResult')
                         ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult)
                         ->schema([
-                            TextEntry::make('detailedEvaluationResult')
-                                ->state(
-                                    fn (Beneficiary $record) => collect(RecommendationService::options())
-                                        ->filter(fn ($label, $key) => $record->detailedEvaluationResult?->$key)
-                                        ->all()
-                                )
+                            TextEntry::make('recommendation_services')
+                                ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
                                 ->color(Color::Gray)
                                 ->badge(),
                         ]),
@@ -319,10 +327,11 @@ class ViewBeneficiary extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            BeneficiaryResource\Widgets\CaseTeamListWidget::class,
-            BeneficiaryResource\Widgets\DocumentsListWidget::class,
-            BeneficiaryResource\Widgets\CloseFileWidget::class,
-            BeneficiaryResource\Widgets\RelatedCases::class,
+            MonitoringWidget::class,
+            CloseFileWidget::class,
+            CaseTeamListWidget::class,
+            DocumentsListWidget::class,
+            RelatedCases::class,
         ];
     }
 }
