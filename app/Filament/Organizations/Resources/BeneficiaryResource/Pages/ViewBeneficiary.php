@@ -8,9 +8,15 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
+use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -36,7 +42,12 @@ class ViewBeneficiary extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            //
+            Action::make('view_history')
+                ->label(__('beneficiary.section.history.actions.view'))
+                ->icon('heroicon-o-arrow-uturn-left')
+                ->outlined()
+                ->link()
+                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
         ];
     }
 
@@ -279,10 +290,11 @@ class ViewBeneficiary extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            BeneficiaryResource\Widgets\CaseTeamListWidget::class,
-            BeneficiaryResource\Widgets\DocumentsListWidget::class,
-            BeneficiaryResource\Widgets\CloseFileWidget::class,
-            BeneficiaryResource\Widgets\RelatedCases::class,
+            MonitoringWidget::class,
+            CloseFileWidget::class,
+            CaseTeamListWidget::class,
+            DocumentsListWidget::class,
+            RelatedCases::class,
         ];
     }
 }

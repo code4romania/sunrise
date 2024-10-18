@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Infolists\Components\Notice;
@@ -60,7 +61,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
         return [
             Section::make(__('beneficiary.section.identity.tab.beneficiary'))
                 ->headerActions([
-                    BeneficiaryResource\Actions\Edit::make('edit')
+                    Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record])),
                 ])
                 ->schema(self::identitySchema()),
@@ -190,7 +191,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
         return [
             Section::make(__('beneficiary.section.identity.tab.children'))
                 ->headerActions([
-                    BeneficiaryResource\Actions\Edit::make('edit')
+                    Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_children', ['record' => $record])),
                 ])
                 ->schema(self::childrenSchema()),
@@ -260,7 +261,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
             RepeatableEntry::make('children')
                 ->label(__('enum.notifier.child'))
                 ->columnSpanFull()
-                ->columns(2)
+                ->columns()
                 ->schema([
                     TextEntry::make('name')
                         ->label(__('field.child_name')),
@@ -271,7 +272,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                     TextEntry::make('birthdate')
                         ->label(__('field.birthdate')),
 
-                    TextEntry::make('address')
+                    TextEntry::make('current_address')
                         ->label(__('field.current_address')),
 
                     TextEntry::make('status')

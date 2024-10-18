@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\Notice;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -45,7 +46,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.details.label'))
                                 ->headerActions([
-                                    BeneficiaryResource\Actions\Edit::make('edit')
+                                    Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_details',
                                             ['record' => $record]
@@ -66,7 +67,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.violence.label'))
                                 ->headerActions([
-                                    BeneficiaryResource\Actions\Edit::make('edit')
+                                    Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_violence',
                                             ['record' => $record]
@@ -100,7 +101,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.requested_services.label'))
                                 ->headerActions([
-                                    BeneficiaryResource\Actions\Edit::make('edit')
+                                    Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_requested_services',
                                             ['record' => $record]
@@ -112,7 +113,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.beneficiary_situation.label'))
                                 ->headerActions([
-                                    BeneficiaryResource\Actions\Edit::make('edit')
+                                    Edit::make('edit')
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_beneficiary_situation',
                                             ['record' => $record]

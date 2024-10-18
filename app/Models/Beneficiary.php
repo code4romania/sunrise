@@ -10,11 +10,13 @@ use App\Concerns\HasCitizenship;
 use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\ActLocation;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\HomeOwnership;
+use App\Enums\IDType;
 use App\Enums\Income;
 use App\Enums\NotificationMode;
 use App\Enums\Notifier;
@@ -33,6 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Beneficiary extends Model
 {
@@ -43,6 +46,8 @@ class Beneficiary extends Model
     use HasFactory;
     use HasUlid;
     use HasEffectiveAddress;
+    use LogsActivity;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'first_name',
@@ -78,7 +83,6 @@ class Beneficiary extends Model
         'children_10_18_care_count',
         'children_18_care_count',
         'children_accompanying_count',
-        'children',
         'children_notes',
 
         'has_family_doctor',
@@ -111,6 +115,7 @@ class Beneficiary extends Model
     ];
 
     protected $casts = [
+        'id_type' => IDType::class,
         'birthdate' => 'date',
         'children_10_18_care_count' => 'integer',
         'children_18_care_count' => 'integer',
@@ -118,7 +123,6 @@ class Beneficiary extends Model
         'children_care_count' => 'integer',
         'children_total_count' => 'integer',
         'children_under_10_care_count' => 'integer',
-        'children' => 'collection',
         'civil_status' => CivilStatus::class,
         'criminal_history' => Ternary::class,
         'doesnt_have_children' => 'boolean',
@@ -162,7 +166,13 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        return sprintf('#%d %s', $this->id, $this->full_name);
+        return \sprintf('#%d %s', $this->id, $this->full_name);
+
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Children::class);
     }
 
     public function aggressor(): HasMany
@@ -261,6 +271,11 @@ class Beneficiary extends Model
         return $this->hasMany(CaseTeam::class);
     }
 
+    public function managerTeam(): HasMany
+    {
+        return $this->team()->whereJsonContains('roles', Role::MANGER);
+    }
+
     public function violenceHistory(): HasMany
     {
         return $this->hasMany(ViolenceHistory::class);
@@ -269,6 +284,16 @@ class Beneficiary extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function monitoring(): HasMany
+    {
+        return $this->hasMany(Monitoring::class);
+    }
+
+    public function lastMonitoring(): HasOne
+    {
+        return $this->hasOne(Monitoring::class)->orderByDesc('date');
     }
 
     public function closeFile(): HasOne
