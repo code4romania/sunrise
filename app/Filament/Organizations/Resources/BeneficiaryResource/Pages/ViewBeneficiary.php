@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Enums\CaseStatus;
-use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
@@ -20,6 +19,9 @@ use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Actions\StaticAction;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -32,6 +34,7 @@ use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
 
 class ViewBeneficiary extends ViewRecord
 {
@@ -58,7 +61,7 @@ class ViewBeneficiary extends ViewRecord
                             BeneficiaryResource\Actions\ChangeStatus::make('active'),
                             BeneficiaryResource\Actions\ChangeStatus::make('monitored'),
                             BeneficiaryResource\Actions\ChangeStatus::make('closed'),
-                            //                            BeneficiaryResource\Actions\ChangeStatus::make('archived'),
+                            BeneficiaryResource\Actions\ChangeStatus::make('archived'),
                         ]),
 
                     ActionGroup::make([])
@@ -68,9 +71,33 @@ class ViewBeneficiary extends ViewRecord
                                 ->label(__('beneficiary.action.reactivate'))
                                 ->disabled(
                                     fn (Beneficiary $record): bool => $record->status !== CaseStatus::CLOSED
-//                                    && $record->status !== CaseStatus::ARCHIVED
+                                    && $record->status !== CaseStatus::ARCHIVED
                                 )
-                                ->url(fn ($record) => self::getResource()::getUrl('reactivate', ['parent' => $record->id])),
+                                ->modalHeading(__('beneficiary.section.identity.headings.reactivate_modal'))
+                                ->form([
+                                    Placeholder::make('reactivate_text_1')
+                                        ->hiddenLabel()
+                                        ->content(__('beneficiary.placeholder.reactivate_text_1')),
+
+                                    Placeholder::make('reactivate_text_2')
+                                        ->hiddenLabel()
+                                        ->content(__('beneficiary.placeholder.reactivate_text_2')),
+
+                                    Placeholder::make('reactivate_text_3')
+                                        ->hiddenLabel()
+                                        ->content(__('beneficiary.placeholder.reactivate_text_3')),
+
+                                    Checkbox::make('confirm')
+                                        ->label(__('beneficiary.section.identity.labels.beneficiary_agreement'))
+                                        ->required(),
+                                ])
+                                ->modalSubmitActionLabel(__('beneficiary.action.reactivate_modal'))
+                                ->modalSubmitAction(
+                                    fn (StaticAction $action, $record) => $action->url(
+                                        fn () => self::getResource()::getUrl('create', ['parent' => $record->id])
+                                    )
+                                        ->label(__('beneficiary.action.reactivate_modal'))
+                                ),
 
                             Action::make('delete')
                                 ->label(__('beneficiary.action.delete'))
@@ -79,7 +106,7 @@ class ViewBeneficiary extends ViewRecord
                         ]),
                 ]),
 
-          Action::make('view_history')
+            Action::make('view_history')
                 ->label(__('beneficiary.section.history.actions.view'))
                 ->icon('heroicon-o-arrow-uturn-left')
                 ->outlined()
@@ -96,8 +123,21 @@ class ViewBeneficiary extends ViewRecord
         return  __('beneficiary.page.view.title', [
             'name' => $this->record->full_name,
             'id' => $this->record->id,
-        ]);
+        ]) . ' ' . $this->record->status->getLabel();
     }
+
+//    public function getHeader(): ?View
+//    {
+//        return view('infolists.header-page-with-badge', [
+//            'title' => $this->getTitle(),
+//            'enum' => $this->getRecord()->status,
+//            'actions' => $this->getHeaderActions(),
+//            'record' => $this->getRecord(),
+//            //            'statusColor' => $statusColor,
+//        ]);
+//
+//        return parent::getHeader(); // TODO: Change the autogenerated stub
+//    }
 
     public function infolist(Infolist $infolist): Infolist
     {

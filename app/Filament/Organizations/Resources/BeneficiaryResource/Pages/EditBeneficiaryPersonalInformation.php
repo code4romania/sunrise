@@ -12,7 +12,6 @@ use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
-use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -69,7 +68,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         ];
     }
 
-    public static function beneficiarySection(?Beneficiary $parentBeneficiary = null): array
+    public static function beneficiarySection(): array
     {
         return [
             Grid::make()
@@ -79,20 +78,17 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->label(__('field.has_family_doctor'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Ternary::options())
-                        ->default($parentBeneficiary?->has_family_doctor)
                         ->enum(Ternary::class)
                         ->live(),
 
                     TextInput::make('family_doctor_name')
                         ->label(__('field.family_doctor_name'))
                         ->placeholder(__('placeholder.name'))
-                        ->default($parentBeneficiary?->family_doctor_name)
                         ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
 
                     TextInput::make('family_doctor_contact')
                         ->label(__('field.family_doctor_contact'))
                         ->placeholder(__('placeholder.phone_or_email'))
-                        ->default($parentBeneficiary?->family_doctor_contact)
                         ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
 
                     Grid::make()
@@ -101,13 +97,11 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
-                                ->default($parentBeneficiary?->psychiatric_history)
                                 ->enum(Ternary::class)
                                 ->live(),
 
                             TextInput::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_notes'))
-                                ->default($parentBeneficiary?->psychiatric_history_notes)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
                         ]),
 
@@ -117,12 +111,10 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->label(__('field.criminal_history'))
                                 ->placeholder(__('placeholder.select_one'))
                                 ->options(Ternary::options())
-                                ->default($parentBeneficiary?->criminal_history)
                                 ->enum(Ternary::class)
                                 ->live(),
 
                             TextInput::make('criminal_history_notes')
-                                ->default($parentBeneficiary?->criminal_history_notes)
                                 ->label(__('field.criminal_history_notes'))
                                 ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
                         ]),
@@ -131,33 +123,28 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->label(__('field.studies'))
                         ->placeholder(__('placeholder.studies'))
                         ->options(Studies::options())
-                        ->default($parentBeneficiary?->studies)
                         ->enum(Studies::class),
 
                     Select::make('occupation')
                         ->label(__('field.occupation'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Occupation::options())
-                        ->default($parentBeneficiary?->occupation)
                         ->enum(Occupation::class),
 
                     TextInput::make('workplace')
                         ->label(__('field.workplace'))
                         ->placeholder(__('placeholder.workplace'))
-                        ->default($parentBeneficiary?->workplace)
                         ->columnSpanFull(),
 
                     Select::make('income')
                         ->label(__('field.income'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Income::options())
-                        ->default($parentBeneficiary?->income)
                         ->enum(Income::class),
 
                     TextInput::make('elder_care_count')
                         ->label(__('field.elder_care_count'))
                         ->placeholder(__('placeholder.number'))
-                        ->default($parentBeneficiary?->elder_care_count)
                         ->numeric()
                         ->minValue(0)
                         ->maxValue(99),
@@ -166,7 +153,6 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->label(__('field.homeownership'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(HomeOwnership::options())
-                        ->default($parentBeneficiary?->homeownership)
                         ->enum(HomeOwnership::class),
                 ]),
         ];

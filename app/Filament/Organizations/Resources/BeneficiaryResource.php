@@ -155,8 +155,7 @@ class BeneficiaryResource extends Resource
     {
         return [
             'index' => Pages\ListBeneficiaries::route('/'),
-            'create' => Pages\CreateBeneficiary::route('/create'),
-            'reactivate' => Pages\CreateBeneficiary::route('/create/{parent}'),
+            'create' => Pages\CreateBeneficiary::route('/create/{parent?}'),
             'view' => Pages\ViewBeneficiary::route('/{record}'),
 
             'view_identity' => Pages\ViewBeneficiaryIdentity::route('/{record}/identity'),

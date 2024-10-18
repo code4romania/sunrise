@@ -17,34 +17,29 @@ class ChangeStatus extends Action
         $status = CaseStatus::tryFrom($this->getName());
 
         $this->disabled(function ($record) use ($status) {
-            debug($record->status, $status);
             if ($record->status === $status) {
                 return true;
             }
 
-//            TODO after merge #162 uncomment this
-//            if (CaseStatus::isValue($record->status, CaseStatus::ACTIVE) &&
-//                $status === CaseStatus::ARCHIVE)
-//            {
-//                return true;
-//            }
+            if (CaseStatus::isValue($record->status, CaseStatus::ACTIVE) &&
+                $status === CaseStatus::ARCHIVED) {
+                return true;
+            }
 
-//            if (CaseStatus::isValue($record->status, CaseStatus::MONITORED) &&
-//                $status === CaseStatus::ARCHIVE)
-//            {
-//                return true;
-//            }
+            if (CaseStatus::isValue($record->status, CaseStatus::MONITORED) &&
+                $status === CaseStatus::ARCHIVED) {
+                return true;
+            }
 
             if (CaseStatus::isValue($record->status, CaseStatus::CLOSED) &&
                 $status === CaseStatus::MONITORED) {
                 return true;
             }
 
-//            if (CaseStatus::isValue($record->status, CaseStatus::ARCHIVE) &&
-//                ($status === CaseStatus::MONITORED || $status === CaseStatus::ACTIVE))
-//            {
-//                return true;
-//            }
+            if (CaseStatus::isValue($record->status, CaseStatus::ARCHIVED) &&
+                ($status === CaseStatus::MONITORED || $status === CaseStatus::ACTIVE)) {
+                return true;
+            }
 
             return false;
         });

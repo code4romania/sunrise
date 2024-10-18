@@ -143,6 +143,10 @@ return [
             ],
             'labels' => [
                 'email' => 'Email beneficiar',
+                'beneficiary_agreement' => '*Confirm că s-a obținut acordul beneficiarului pentru înregistrarea datelor personale și utilizarea datelor rezultate din evaluare și intervenție în scopul oferirii serviciilor de management de caz.',
+            ],
+            'headings' => [
+                'reactivate_modal' => 'Reactivează cazul',
             ],
         ],
 
@@ -439,6 +443,7 @@ return [
         'closed' => 'Închide caz',
         'archived' => 'Arhivează caz',
         'reactivate' => 'Reactivează caz (dosar nou)',
+        'reactivate_modal' => 'Reactivează',
         'delete' => 'Șterge dosar caz',
     ],
 
@@ -482,6 +487,9 @@ return [
         'beneficiary_exists' => 'CNP-ul a fost identificat în această bază de date, asociat cazului Maria Popescu. <a href="#">Vezi detalii</a>',
         'beneficiary_not_exists' => '<i class="heroicon-check"></i>CNP-ul nu a fost identificat în această bază de date și nici în cea a altor centre ale instituției.',
         'file_name' => 'Nume document',
+        'reactivate_text_1' => 'Prin reactivarea unui caz se va duplica dosarului beneficiarului pentru a putea fi completat cu informații noi, fără a pierde informațiile despre evaluările și managementul de caz anterior.',
+        'reactivate_text_2' => 'Toate datele de identitate se vor copia din dosarul curent și pot fi actualizate manual pentru această nouă reactivare. Toate formularele vor fi disponibile pentru a fi completate cu informații noi.',
+        'reactivate_text_3' => 'Nicio modificare făcută în dosarul de reactivare nu va afecta informațiile introduse în cazul inițial.',
 
     ],
     'helper_text' => [

@@ -79,41 +79,35 @@ class EditBeneficiaryIdentity extends EditRecord
             Grid::make()
                 ->maxWidth('3xl')
                 ->schema([
-                    Hidden::make('initial_id')
-                        ->default($parentBeneficiary?->initial_id ?? $parentBeneficiary?->id),
+                    Hidden::make('initial_id'),
 
                     TextInput::make('last_name')
                         ->label(__('field.last_name'))
                         ->placeholder(__('placeholder.last_name'))
                         ->maxLength(50)
-                        ->default($parentBeneficiary?->last_name)
                         ->required(),
 
                     TextInput::make('first_name')
                         ->label(__('field.first_name'))
                         ->placeholder(__('placeholder.first_name'))
                         ->maxLength(50)
-                        ->default($parentBeneficiary?->first_name)
                         ->required(),
 
                     TextInput::make('prior_name')
                         ->label(__('field.prior_name'))
                         ->placeholder(__('placeholder.prior_name'))
                         ->maxLength(50)
-                        ->default($parentBeneficiary?->prior_name)
                         ->nullable(),
 
                     Select::make('civil_status')
                         ->label(__('field.civil_status'))
                         ->placeholder(__('placeholder.civil_status'))
                         ->options(CivilStatus::options())
-                        ->enum(CivilStatus::class)
-                        ->default($parentBeneficiary?->civil_status),
+                        ->enum(CivilStatus::class),
 
                     TextInput::make('cnp')
                         ->label(__('field.cnp'))
                         ->placeholder(__('placeholder.cnp'))
-                        ->default($parentBeneficiary?->cnp)
                         ->unique(
                             ignorable: $parentBeneficiary,
                             ignoreRecord: true,
@@ -149,21 +143,18 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.gender'))
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Gender::options())
-                        ->default($parentBeneficiary?->gender)
                         ->enum(Gender::class),
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
                         ->maxDate(today()->endOfDay())
                         ->nullable()
-                        ->default($parentBeneficiary?->birthdate)
                         ->live(),
 
                     TextInput::make('birthplace')
                         ->label(__('field.birthplace'))
                         ->placeholder(__('placeholder.birthplace'))
                         ->maxLength(50)
-                        ->default($parentBeneficiary?->birthplace)
                         ->nullable(),
 
                     Spacer::make(),
@@ -172,21 +163,18 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.citizenship'))
                         ->placeholder(__('placeholder.citizenship'))
                         ->options(Citizenship::options())
-                        ->default($parentBeneficiary?->citizenship)
                         ->nullable(),
 
                     Select::make('ethnicity')
                         ->label(__('field.ethnicity'))
                         ->placeholder(__('placeholder.ethnicity'))
                         ->options(Ethnicity::options())
-                        ->default($parentBeneficiary?->ethnicity)
                         ->nullable(),
 
                     Select::make('id_type')
                         ->label(__('field.id_type'))
                         ->placeholder(__('placeholder.id_type'))
                         ->options(IDType::options())
-                        ->default($parentBeneficiary?->id_type)
                         ->enum(IDType::class)
                         ->live()
                         ->afterStateUpdated(function ($state, Set $set) {
@@ -199,7 +187,6 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('id_serial')
                         ->label(__('field.id_serial'))
                         ->placeholder(__('placeholder.id_serial'))
-                        ->default($parentBeneficiary?->id_serial)
                         ->disabled(function (Get $get) {
                             if (! $get('id_type')) {
                                 return true;
@@ -211,7 +198,6 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('id_number')
                         ->label(__('field.id_number'))
                         ->placeholder(__('placeholder.id_number'))
-                        ->default($parentBeneficiary?->id_number)
                         ->disabled(function (Get $get) {
                             if (! $get('id_type')) {
                                 return true;
@@ -234,7 +220,6 @@ class EditBeneficiaryIdentity extends EditRecord
                     Checkbox::make('same_as_legal_residence')
                         ->label(__('field.same_as_legal_residence'))
                         ->live()
-                        ->default($parentBeneficiary?->same_as_legal_residence)
                         ->afterStateUpdated(function (bool $state, Set $set) {
                             if ($state) {
                                 $set('effective_residence_county_id', null);
@@ -265,28 +250,24 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.primary_phone'))
                         ->placeholder(__('placeholder.phone'))
                         ->tel()
-                        ->default($parentBeneficiary?->primary_phone)
                         ->nullable(),
 
                     TextInput::make('backup_phone')
                         ->label(__('field.backup_phone'))
                         ->placeholder(__('placeholder.phone'))
                         ->tel()
-                        ->default($parentBeneficiary?->backup_phone)
                         ->nullable(),
 
                     TextInput::make('email')
                         ->label(__('beneficiary.section.identity.labels.email'))
                         ->placeholder(__('beneficiary.placeholder.email'))
                         ->email()
-                        ->default($parentBeneficiary?->email)
                         ->nullable(),
 
                     Textarea::make('contact_notes')
                         ->label(__('field.contact_notes'))
                         ->placeholder(__('placeholder.contact_notes'))
                         ->nullable()
-                        ->default($parentBeneficiary?->contact_notes)
                         ->columnSpanFull(),
                 ]),
         ];
