@@ -9,6 +9,7 @@ use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
 use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
+use App\Concerns\HasSpecialistsTeam;
 use App\Concerns\HasUlid;
 use App\Concerns\LogsActivityOptions;
 use App\Enums\ActLocation;
@@ -48,6 +49,7 @@ class Beneficiary extends Model
     use HasEffectiveAddress;
     use LogsActivity;
     use LogsActivityOptions;
+    use HasSpecialistsTeam;
 
     protected $fillable = [
         'first_name',
@@ -156,15 +158,19 @@ class Beneficiary extends Model
                 return;
             }
 
+            /** @var User $user */
             $user = auth()->user();
-            $beneficiary->team()->create([
+            $beneficiary->specialistsTeam()->create([
                 'user_id' => $user->id,
-                'roles' => $user->canBeCaseManager()
+                'role_id' => $user->canBeCaseManager()
                     ? $user->rolesInOrganization
                         ->filter(fn ($role) => $role->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER))
-                        ->pluck('id')
+                        ->first()
+                        ?->id
                     : $user->rolesInOrganization
-                        ->pluck('id'),
+                        ->first()
+                        ?->id,
+                'specialistable_type' => $beneficiary->getMorphClass(),
             ]);
         });
     }
@@ -215,11 +221,6 @@ class Beneficiary extends Model
         );
     }
 
-    public function specialists(): HasMany
-    {
-        return $this->hasMany(Specialist::class);
-    }
-
     public function meetings(): HasMany
     {
         return $this->hasMany(Meeting::class);
@@ -263,11 +264,6 @@ class Beneficiary extends Model
     public function beneficiarySituation(): HasOne
     {
         return $this->hasOne(BeneficiarySituation::class);
-    }
-
-    public function team(): HasMany
-    {
-        return $this->hasMany(CaseTeam::class);
     }
 
     public function violenceHistory(): HasMany

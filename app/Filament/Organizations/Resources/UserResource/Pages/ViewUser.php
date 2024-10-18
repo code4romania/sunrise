@@ -66,10 +66,10 @@ class ViewUser extends ViewRecord
                             $fields = [];
                             $fields[] = SectionHeader::make('case_permissions_group')
                                 ->state(__('user.labels.case_permissions'));
-                            foreach (CasePermission::options() as $key => $option) {
-                                $fields[] = TextEntry::make($key)
-                                    ->label($option)
-                                    ->state($record->case_permissions && \in_array($key, $record->case_permissions) ?
+                            foreach (CasePermission::cases() as $option) {
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->case_permissions->contains($option) ?
                                         Ternary::YES : Ternary::NO);
                             }
 
@@ -82,10 +82,10 @@ class ViewUser extends ViewRecord
                             $fields = [];
                             $fields[] = SectionHeader::make('admin_permissions')
                                 ->state(__('user.labels.admin_permissions'));
-                            foreach (AdminPermission::options() as $key => $option) {
-                                $fields[] = TextEntry::make($key)
-                                    ->label($option)
-                                    ->state($record->admin_permissions && \in_array($key, $record->admin_permissions) ?
+                            foreach (AdminPermission::cases() as $option) {
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->admin_permissions->contains($option) ?
                                         Ternary::YES : Ternary::NO);
                             }
 

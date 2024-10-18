@@ -75,9 +75,28 @@ class UserFactory extends Factory
                 ->limit(rand(1, 5))
                 ->get();
 
+            $casePermissions = [];
+            $adminPermissions = [];
+
             foreach ($roles as $role) {
                 $user->roles()->attach($role->id, ['organization_id' => $organizationID]);
+                $casePermissions = array_merge(
+                    $casePermissions,
+                    $role->case_permissions
+                        ->map(fn ($permission) => $permission->value)
+                        ->toArray()
+                );
+                $adminPermissions = array_merge(
+                    $adminPermissions,
+                    $role->ngo_admin_permissions
+                        ->map(fn ($permission) => $permission->value)
+                        ->toArray()
+                );
             }
+
+            $user->case_permissions = array_unique($casePermissions);
+            $user->admin_permissions = array_unique($adminPermissions);
+            $user->save();
         });
     }
 }
