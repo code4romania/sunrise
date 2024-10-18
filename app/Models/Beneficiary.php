@@ -168,7 +168,7 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        return sprintf('#%d %s', $this->id, $this->full_name);
+        return \sprintf('#%d %s', $this->id, $this->full_name);
     }
 
     public function aggressor(): HasMany
@@ -267,6 +267,11 @@ class Beneficiary extends Model
         return $this->hasMany(CaseTeam::class);
     }
 
+    public function managerTeam(): HasMany
+    {
+        return $this->team()->whereJsonContains('roles', Role::MANGER);
+    }
+
     public function violenceHistory(): HasMany
     {
         return $this->hasMany(ViolenceHistory::class);
@@ -280,6 +285,11 @@ class Beneficiary extends Model
     public function monitoring(): HasMany
     {
         return $this->hasMany(Monitoring::class);
+    }
+
+    public function lastMonitoring(): HasOne
+    {
+        return $this->hasOne(Monitoring::class)->orderByDesc('date');
     }
 
     public function closeFile(): HasOne
