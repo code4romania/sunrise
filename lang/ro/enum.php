@@ -319,4 +319,14 @@ return [
         'beneficiary_request' => 'Solicitarea beneficiarei',
         'other' => 'Altă situație',
     ],
+
+    'general_status' => [
+        0 => 'Inactiv',
+        1 => 'Activ',
+    ],
+
+    'counseling_sheet' => [
+        'psychological_assistance' => 'Asistență psihologică',
+        'legal assistance' => 'Asistența juridică',
+    ],
 ];
