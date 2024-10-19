@@ -14,13 +14,8 @@ use App\Concerns\LogsActivityOptions;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
-use App\Enums\HomeOwnership;
 use App\Enums\IDType;
-use App\Enums\Income;
-use App\Enums\Occupation;
 use App\Enums\Role;
-use App\Enums\Studies;
-use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -73,19 +68,6 @@ class Beneficiary extends Model
         'children_accompanying_count',
         'children_notes',
 
-        'has_family_doctor',
-        'family_doctor_name',
-        'family_doctor_contact',
-        'psychiatric_history',
-        'psychiatric_history_notes',
-        'criminal_history',
-        'criminal_history_notes',
-        'studies',
-        'occupation',
-        'workplace',
-        'income',
-        'elder_care_count',
-        'homeownership',
     ];
 
     protected $casts = [
@@ -98,18 +80,10 @@ class Beneficiary extends Model
         'children_total_count' => 'integer',
         'children_under_10_care_count' => 'integer',
         'civil_status' => CivilStatus::class,
-        'criminal_history' => Ternary::class,
         'doesnt_have_children' => 'boolean',
-        'elder_care_count' => 'integer',
         'gender' => Gender::class,
-        'has_family_doctor' => Ternary::class,
-        'homeownership' => HomeOwnership::class,
-        'income' => Income::class,
-        'occupation' => Occupation::class,
-        'psychiatric_history' => Ternary::class,
         'same_as_legal_residence' => 'boolean',
         'status' => CaseStatus::class,
-        'studies' => Studies::class,
     ];
 
     protected static function booted()
@@ -244,5 +218,10 @@ class Beneficiary extends Model
     public function flowPresentation(): HasOne
     {
         return $this->hasOne(FlowPresentation::class);
+    }
+
+    public function details(): HasOne
+    {
+        return $this->hasOne(BeneficiaryDetails::class);
     }
 }

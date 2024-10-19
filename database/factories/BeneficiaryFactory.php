@@ -13,6 +13,7 @@ use App\Models\Address;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryAntecedents;
+use App\Models\BeneficiaryDetails;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
@@ -152,6 +153,15 @@ class BeneficiaryFactory extends Factory
     {
         return $this->afterCreating(function (Beneficiary $beneficiary) {
             FlowPresentation::factory()
+                ->for($beneficiary)
+                ->create();
+        });
+    }
+
+    public function withBeneficiaryDetails(): static
+    {
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            BeneficiaryDetails::factory()
                 ->for($beneficiary)
                 ->create();
         });

@@ -75,6 +75,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns()
+                ->relationship('details')
                 ->headerActions([
                     Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
@@ -101,8 +102,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            TextEntry::make('psychiatric_notes')
-                                ->label(__('field.psychiatric_notes')),
+                            TextEntry::make('psychiatric_history_notes')
+                                ->label(__('field.psychiatric_history_notes')),
                         ]),
 
                     Grid::make()

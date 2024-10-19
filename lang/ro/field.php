@@ -86,7 +86,7 @@ return [
     'family_doctor_name' => 'Nume medic de familie',
     'family_doctor_contact' => 'Contact medic de familie',
     'psychiatric_history' => 'Antecedente psihiatrice',
-    'psychiatric_notes' => 'Observații antecedente psihiatrice',
+    'psychiatric_history_notes' => 'Observații antecedente psihiatrice',
     'criminal_history' => 'Antecedente penale',
     'criminal_history_notes' => 'Observații antecedente penale',
     'studies' => 'Studii absolvite',
