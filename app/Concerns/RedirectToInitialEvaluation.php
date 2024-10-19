@@ -10,7 +10,7 @@ trait RedirectToInitialEvaluation
     {
         return self::$resource::getUrl('view_initial_evaluation', [
             'record' => $this->record->id,
-            'tab' => sprintf('-%s-tab', $this->getTabSlug()),
+            'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
     }
 }

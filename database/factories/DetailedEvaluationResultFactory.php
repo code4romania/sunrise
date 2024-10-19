@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\RecommendationService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,23 +19,16 @@ class DetailedEvaluationResultFactory extends Factory
      */
     public function definition(): array
     {
+        $recommendationServices = [];
+        foreach (RecommendationService::values() as $service) {
+            if (fake()->boolean) {
+                $recommendationServices[] = $service;
+            }
+        }
+
         return [
-            'psychological_advice' => fake()->boolean(),
-            'legal_advice' => fake()->boolean(),
-            'legal_assistance' => fake()->boolean(),
-            'prenatal_advice' => fake()->boolean(),
-            'social_advice' => fake()->boolean(),
-            'medical_services' => fake()->boolean(),
-            'medical_payment' => fake()->boolean(),
-            'securing_residential_spaces' => fake()->boolean(),
-            'occupational_program_services' => fake()->boolean(),
-            'educational_services_for_children' => fake()->boolean(),
-            'temporary_shelter_services' => fake()->boolean(),
-            'protection_order' => fake()->boolean(),
-            'crisis_assistance' => fake()->boolean(),
-            'safety_plan' => fake()->boolean(),
-            'other_services' => fake()->boolean(),
-            'other_services_description' => fake()->text(),
+            'recommendation_services' => $recommendationServices,
+            'other_services_description' => fake()->text(100),
             'recommendations_for_intervention_plan' => fake()->text(),
         ];
     }

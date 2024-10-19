@@ -7,15 +7,13 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Infolists\Components\EnumEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -63,18 +61,16 @@ class EditDetailedEvaluationResult extends EditRecord
 
     public static function getRecommendationServicesSchema(): array
     {
-        $fields = [];
-        foreach (RecommendationService::options() as $key => $value) {
-            $fields[] = Checkbox::make($key)
-                ->label($value);
-        }
+        return [
+            CheckboxList::make('recommendation_services')
+                ->hiddenLabel()
+                ->options(RecommendationService::options()),
 
-        $fields[] = Textarea::make('other_services_description')
-            ->hiddenLabel()
-            ->placeholder(__('beneficiary.placeholder.other_services'))
-            ->maxLength(100);
-
-        return $fields;
+            Textarea::make('other_services_description')
+                ->hiddenLabel()
+                ->placeholder(__('beneficiary.placeholder.other_services'))
+                ->maxLength(100),
+        ];
     }
 
     public static function getInterventionPlanSchema(): Section
@@ -87,20 +83,5 @@ class EditDetailedEvaluationResult extends EditRecord
                     ->placeholder(__('beneficiary.placeholder.recommendations_for_intervention_plan'))
                     ->maxLength(5000),
             ]);
-    }
-
-    public static function getRecommendationServicesInfolistSchema(): array
-    {
-        $fields = [];
-        foreach (RecommendationService::options() as $key => $value) {
-            $fields[] = EnumEntry::make($key)
-                ->label($value);
-        }
-
-        $fields[] = TextEntry::make('other_services_description')
-            ->hiddenLabel()
-            ->placeholder(__('beneficiary.placeholder.other_services'));
-
-        return $fields;
     }
 }

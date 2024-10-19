@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -75,7 +76,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\Edit::make('edit')
+                    Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -149,7 +150,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\Edit::make('edit')
+                    Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_aggressor', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -259,7 +260,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\Edit::make('edit')
+                    Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -314,7 +315,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns()
                 ->headerActions([
-                    BeneficiaryResource\Actions\Edit::make('edit')
+                    Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
                 ])
                 ->extraAttributes([

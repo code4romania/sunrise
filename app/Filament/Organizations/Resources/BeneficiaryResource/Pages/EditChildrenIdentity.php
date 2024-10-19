@@ -124,6 +124,7 @@ class EditChildrenIdentity extends EditRecord
 
                     TableRepeater::make('children')
                         ->reorderable(false)
+                        ->relationship('children')
                         ->columnSpanFull()
                         ->hiddenLabel()
                         ->hideLabels()
@@ -141,7 +142,7 @@ class EditChildrenIdentity extends EditRecord
                             DatePicker::make('birthdate')
                                 ->label(__('field.birthdate')),
 
-                            TextInput::make('address')
+                            TextInput::make('current_address')
                                 ->label(__('field.current_address')),
 
                             TextInput::make('status')
