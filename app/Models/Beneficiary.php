@@ -11,29 +11,21 @@ use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
 use App\Concerns\HasUlid;
 use App\Concerns\LogsActivityOptions;
-use App\Enums\ActLocation;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\HomeOwnership;
 use App\Enums\IDType;
 use App\Enums\Income;
-use App\Enums\NotificationMode;
-use App\Enums\Notifier;
 use App\Enums\Occupation;
-use App\Enums\PresentationMode;
-use App\Enums\ReferralMode;
 use App\Enums\Role;
 use App\Enums\Studies;
 use App\Enums\Ternary;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Beneficiary extends Model
@@ -94,15 +86,6 @@ class Beneficiary extends Model
         'income',
         'elder_care_count',
         'homeownership',
-
-        'presentation_mode',
-        'referral_mode',
-        'notification_mode',
-        'notifier',
-        'notifier_other',
-
-        'act_location',
-        'act_location_other',
     ];
 
     protected $casts = [
@@ -127,11 +110,6 @@ class Beneficiary extends Model
         'same_as_legal_residence' => 'boolean',
         'status' => CaseStatus::class,
         'studies' => Studies::class,
-        'presentation_mode' => PresentationMode::class,
-        'referral_mode' => ReferralMode::class,
-        'notification_mode' => NotificationMode::class,
-        'notifier' => Notifier::class,
-        'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
     protected static function booted()
@@ -154,7 +132,6 @@ class Beneficiary extends Model
     public function getBreadcrumb(): string
     {
         return \sprintf('#%d %s', $this->id, $this->full_name);
-
     }
 
     public function children(): HasMany
@@ -165,35 +142,6 @@ class Beneficiary extends Model
     public function aggressor(): HasMany
     {
         return $this->hasMany(Aggressor::class);
-    }
-
-    public function institutions(): MorphToMany
-    {
-        return $this->morphToMany(
-            ReferringInstitution::class,
-            'model',
-            'model_has_referring_institutions',
-            relatedPivotKey: 'institution_id'
-        )
-
-            ->orderBy('order');
-    }
-
-    public function referringInstitution(): BelongsTo
-    {
-        return $this->belongsTo(ReferringInstitution::class)
-            ->orderBy('order');
-    }
-
-    public function firstCalledInstitution(): BelongsTo
-    {
-        return $this->belongsTo(ReferringInstitution::class, 'first_called_institution_id')
-            ->orderBy('order');
-    }
-
-    public function otherCalledInstitution()
-    {
-        return $this->institutions();
     }
 
     public function age(): Attribute
@@ -291,5 +239,10 @@ class Beneficiary extends Model
     public function antecedents(): HasOne
     {
         return $this->hasOne(BeneficiaryAntecedents::class);
+    }
+
+    public function flowPresentation(): HasOne
+    {
+        return $this->hasOne(FlowPresentation::class);
     }
 }

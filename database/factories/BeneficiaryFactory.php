@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\ActLocation;
 use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
-use App\Enums\NotificationMode;
-use App\Enums\Notifier;
-use App\Enums\PresentationMode;
-use App\Enums\ReferralMode;
 use App\Models\Address;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
@@ -22,15 +17,14 @@ use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
 use App\Models\Children;
-use App\Models\City;
 use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
+use App\Models\FlowPresentation;
 use App\Models\Meeting;
 use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
-use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
 use App\Models\User;
@@ -75,12 +69,6 @@ class BeneficiaryFactory extends Factory
             'status' => fake()->randomElement(CaseStatus::values()),
             'doesnt_have_children' => true,
 
-            'presentation_mode' => fake()->randomElement(PresentationMode::values()),
-            'referral_mode' => fake()->randomElement(ReferralMode::values()),
-            'notifier' => fake()->randomElement(Notifier::values()),
-            'notification_mode' => fake()->randomElement(NotificationMode::values()),
-
-            'act_location' => fake()->randomElement(ActLocation::values()),
         ];
     }
 
@@ -160,23 +148,19 @@ class BeneficiaryFactory extends Factory
             });
     }
 
+    public function withFlowPresentation(): static
+    {
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            FlowPresentation::factory()
+                ->for($beneficiary)
+                ->create();
+        });
+    }
+
     public function configure(): static
     {
-        $referringInstitutions = ReferringInstitution::all();
-
         return $this
-            ->afterMaking(function (Beneficiary $beneficiary) use ($referringInstitutions) {
-                if (PresentationMode::isValue($beneficiary->presentation_method, PresentationMode::FORWARDED)) {
-                    $beneficiary->referringInstitution()->attach(
-                        $referringInstitutions->random()
-                    );
-                }
-
-                $beneficiary->firstCalledInstitution()->associate(
-                    $referringInstitutions->random()
-                );
-            })
-            ->afterCreating(function (Beneficiary $beneficiary) use ($referringInstitutions) {
+            ->afterCreating(function (Beneficiary $beneficiary) {
                 Children::factory()
                     ->for($beneficiary)
                     ->count(rand(1, 5))
@@ -259,10 +243,6 @@ class BeneficiaryFactory extends Factory
                 Aggressor::factory()
                     ->for($beneficiary)
                     ->create();
-
-                $beneficiary->otherCalledInstitution()->sync(
-                    $referringInstitutions->random(fake()->numberBetween(1, 4)),
-                );
 
                 Monitoring::factory()
                     ->for($beneficiary)

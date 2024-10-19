@@ -259,6 +259,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns()
+                ->relationship('antecedents')
                 ->headerActions([
                     Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
@@ -268,7 +269,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ])
                 ->schema([
                     Grid::make()
-                        ->relationship('antecedents')
                         ->schema([
                             EnumEntry::make('has_police_reports')
                                 ->label(__('field.has_police_reports'))
@@ -280,7 +280,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ]),
 
                     Grid::make()
-                        ->relationship('antecedents')
                         ->schema([
                             EnumEntry::make('has_medical_reports')
                                 ->label(__('field.has_medical_reports'))
@@ -293,7 +292,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ]),
 
                     Grid::make()
-                        ->relationship('antecedents')
                         ->schema([
                             TextEntry::make('has_protection_order')
                                 ->label(__('field.has_protection_order')),
@@ -314,6 +312,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns()
+                ->relationship('flowPresentation')
                 ->headerActions([
                     Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
@@ -328,7 +327,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.presentation_mode'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            EnumEntry::make('referring_institution_id')
+                            EnumEntry::make('referringInstitution.name')
                                 ->label(__('field.referring_institution'))
                                 ->placeholder(__('placeholder.select_one')),
 

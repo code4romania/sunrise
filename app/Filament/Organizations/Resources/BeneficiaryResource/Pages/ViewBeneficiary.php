@@ -147,11 +147,15 @@ class ViewBeneficiary extends ViewRecord
                 'class' => 'h-full',
             ])
             ->schema([
-                EnumEntry::make('presentation_mode')
-                    ->label(__('field.presentation_mode')),
+                Grid::make()
+                    ->relationship('flowPresentation')
+                    ->schema([
+                        EnumEntry::make('presentation_mode')
+                            ->label(__('field.presentation_mode')),
 
-                TextEntry::make('referringInstitution.name')
-                    ->label(__('field.referring_institution')),
+                        TextEntry::make('referringInstitution.name')
+                            ->label(__('field.referring_institution')),
+                    ]),
 
                 TextEntry::make('family_doctor_name')
                     ->label(__('field.family_doctor_name')),
