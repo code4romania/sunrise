@@ -34,7 +34,7 @@ class EditAntecedents extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
-            ->getPersonalInformationBreadcrumbs();
+            ->getBreadcrumbs('view_personal_information');
     }
 
     protected function getTabSlug(): string

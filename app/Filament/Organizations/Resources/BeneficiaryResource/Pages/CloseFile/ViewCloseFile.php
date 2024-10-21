@@ -31,7 +31,8 @@ class ViewCloseFile extends ViewRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->getRecord())->getBreadcrumbsCloseFile();
+        return BeneficiaryBreadcrumb::make($this->getRecord())
+            ->getBreadcrumbs('view_close_file');
     }
 
     protected function getHeaderActions(): array

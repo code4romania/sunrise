@@ -34,7 +34,8 @@ class EditCloseFileDetails extends EditRecord
     public function getBreadcrumbs(): array
     {
         return array_merge(
-            BeneficiaryBreadcrumb::make($this->getRecord())->getBreadcrumbsCloseFile(),
+            BeneficiaryBreadcrumb::make($this->getRecord())
+                ->getBreadcrumbs('view_close_file'),
             [__('beneficiary.section.close_file.headings.file_details')]
         );
     }

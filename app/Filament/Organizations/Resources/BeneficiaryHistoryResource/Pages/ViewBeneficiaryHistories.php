@@ -30,7 +30,7 @@ class ViewBeneficiaryHistories extends ViewRecord
     {
         return array_merge(
             BeneficiaryBreadcrumb::make($this->parent)
-                ->getHistoryBreadcrumbs(),
+                ->getBreadcrumbs('beneficiary-histories.index'),
             [self::getResource()::getEventLabel($this->getRecord())]
         );
     }

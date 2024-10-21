@@ -30,7 +30,7 @@ class CreateInitialEvaluation extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getBreadcrumbsForCreateInitialEvaluation();
+            ->getBreadcrumbs('create_initial_evaluation');
     }
 
     public function getSteps(): array

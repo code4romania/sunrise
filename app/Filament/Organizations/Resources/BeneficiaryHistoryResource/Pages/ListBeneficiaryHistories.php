@@ -35,7 +35,7 @@ class ListBeneficiaryHistories extends ListRecords
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->parent)
-            ->getHistoryBreadcrumbs();
+            ->getBreadcrumbs('beneficiary-histories.index');
     }
 
     /**
