@@ -36,6 +36,7 @@ class Beneficiary extends Model
     use LogsActivityOptions;
 
     protected $fillable = [
+        'initial_id',
         'first_name',
         'last_name',
         'prior_name',
