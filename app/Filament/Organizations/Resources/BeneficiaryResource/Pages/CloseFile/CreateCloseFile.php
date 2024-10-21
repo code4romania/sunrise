@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Models\CaseTeam;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -18,6 +21,8 @@ class CreateCloseFile extends EditRecord
     use HasWizard;
 
     protected static string $resource = BeneficiaryResource::class;
+
+    private array $prefillFormData = [];
 
     /**
      * @return string|Htmlable
@@ -37,6 +42,24 @@ class CreateCloseFile extends EditRecord
         return self::getResource()::getUrl('view_close_file', ['record' => $this->getRecord()]);
     }
 
+    public function beforeFill(): void
+    {
+        $this->prefillFormData = [
+            'date' => now()->format('Y-m-d'),
+            'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
+            'exit_date' => now()->format('Y-m-d'),
+            'case_team_id' => $this->getRecord()
+                ->team
+                ->filter(
+                    fn (CaseTeam $item) => $item->roles
+                        ?->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
+                        ->count()
+                )
+                ->first()
+                ?->id,
+        ];
+    }
+
     protected function getSteps(): array
     {
         return [
@@ -48,7 +71,13 @@ class CreateCloseFile extends EditRecord
                         ->columns()
                         ->relationship('closeFile')
                         ->schema(EditCloseFileDetails::getSchema($this->getRecord())),
-                ]),
+                ])
+                ->afterStateHydrated(function (Set $set) {
+                    $set('closeFile.date', $this->prefillFormData['date']);
+                    $set('closeFile.admittance_date', $this->prefillFormData['admittance_date']);
+                    $set('closeFile.exit_date', $this->prefillFormData['exit_date']);
+                    $set('closeFile.case_team_id', $this->prefillFormData['case_team_id']);
+                }),
 
             Step::make(__('beneficiary.section.close_file.headings.general_details'))
                 ->schema([
