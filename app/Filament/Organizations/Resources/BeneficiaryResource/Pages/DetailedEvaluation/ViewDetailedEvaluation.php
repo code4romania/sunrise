@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
 use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;

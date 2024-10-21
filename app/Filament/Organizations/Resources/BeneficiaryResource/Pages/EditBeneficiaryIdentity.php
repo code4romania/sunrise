@@ -15,11 +15,13 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
+use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -28,7 +30,9 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Unique;
 
 class EditBeneficiaryIdentity extends EditRecord
 {
@@ -69,12 +73,14 @@ class EditBeneficiaryIdentity extends EditRecord
             ]);
     }
 
-    public static function getBeneficiaryIdentityFormSchema(): array
+    public static function getBeneficiaryIdentityFormSchema(?Beneficiary $parentBeneficiary = null): array
     {
         return [
             Grid::make()
                 ->maxWidth('3xl')
                 ->schema([
+                    Hidden::make('initial_id'),
+
                     TextInput::make('last_name')
                         ->label(__('field.last_name'))
                         ->placeholder(__('placeholder.last_name'))
@@ -102,7 +108,24 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('cnp')
                         ->label(__('field.cnp'))
                         ->placeholder(__('placeholder.cnp'))
-                        ->unique(ignoreRecord: true)
+                        ->unique(
+                            ignorable: $parentBeneficiary,
+                            ignoreRecord: true,
+                            modifyRuleUsing: function (Unique $rule, ?Beneficiary $record) use ($parentBeneficiary) {
+                                $initialID = 0;
+                                if ($parentBeneficiary?->id) {
+                                    $initialID = $parentBeneficiary->initial_id ?? $parentBeneficiary->id;
+                                }
+                                if (! $initialID && $record) {
+                                    $initialID = $record->initial_id ?? $record->id;
+                                }
+
+                                return
+                                    $rule->where(fn (Builder $query) => $query->whereNot('id', $initialID)
+                                        ->where(fn (Builder $query) => $query->whereNot('initial_id', $initialID)
+                                            ->orWhereNull('initial_id')));
+                            }
+                        )
                         ->nullable()
                         ->rule(new ValidCNP)
                         ->lazy()

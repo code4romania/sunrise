@@ -34,7 +34,7 @@ class EditChildrenIdentity extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
+        return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbs('view_identity');
     }
 
