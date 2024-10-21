@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
@@ -135,7 +136,13 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('beneficiary')
                 ->label(__('beneficiary.wizard.beneficiary.label'))
-                ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema($this->parentBeneficiary)),
+                ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema($this->parentBeneficiary))
+                ->afterStateHydrated(function (Set $set){
+                    $legalResidence = AddressType::LEGAL_RESIDENCE->value;
+                    $effectiveResidence = AddressType::EFFECTIVE_RESIDENCE->value;
+                    $set($legalResidence, $this->parentBeneficiary?->$legalResidence->toArray());
+                    $set($effectiveResidence, $this->parentBeneficiary?->$effectiveResidence->toArray());
+                }),
 
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
