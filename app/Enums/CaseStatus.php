@@ -35,9 +35,4 @@ enum CaseStatus: string implements HasLabel, HasColor
             default => Color::Red,
         };
     }
-
-    public function canBeArchived(): bool
-    {
-
-    }
 }
