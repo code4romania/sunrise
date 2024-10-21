@@ -32,7 +32,8 @@ class ListDocuments extends ListRecords
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForDocuments();
+        return BeneficiaryBreadcrumb::make($this->parent)
+            ->getBreadcrumbs('documents.index');
     }
 
     public function getTitle(): string|Htmlable

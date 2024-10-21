@@ -36,7 +36,7 @@ class EditMultidisciplinaryEvaluation extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getBreadcrumbsForDetailedEvaluation();
+            ->getBreadcrumbs('view_detailed_evaluation');
     }
 
     public function form(Form $form): Form

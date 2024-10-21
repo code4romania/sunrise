@@ -31,7 +31,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getPersonalInformationBreadcrumbs();
+            ->getBreadcrumbs('view_personal_information');
     }
 
     public function infolist(Infolist $infolist): Infolist

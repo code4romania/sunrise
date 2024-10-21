@@ -34,7 +34,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getIdentityBreadcrumbs();
+            ->getBreadcrumbs('view_identity');
     }
 
     public function infolist(Infolist $infolist): Infolist

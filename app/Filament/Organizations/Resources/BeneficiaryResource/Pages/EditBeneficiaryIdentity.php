@@ -51,7 +51,7 @@ class EditBeneficiaryIdentity extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getIdentityBreadcrumbs();
+            ->getBreadcrumbs('view_identity');
     }
 
     protected function getTabSlug(): string
