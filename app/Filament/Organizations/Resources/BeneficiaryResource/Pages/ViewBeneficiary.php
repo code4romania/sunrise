@@ -19,7 +19,6 @@ use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
-use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\Actions;
@@ -34,7 +33,6 @@ use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 
@@ -94,12 +92,7 @@ class ViewBeneficiary extends ViewRecord
                                         ->required(),
                                 ])
                                 ->modalSubmitActionLabel(__('beneficiary.action.reactivate_modal'))
-                                ->modalSubmitAction(
-                                    fn (StaticAction $action, $record) => $action->url(
-                                        fn () => self::getResource()::getUrl('create', ['parent' => $record->id])
-                                    )
-                                        ->label(__('beneficiary.action.reactivate_modal'))
-                                ),
+                                ->action(fn (Action $action, Beneficiary $record) => redirect(self::getResource()::getUrl('create', ['parent' => $record->id]))),
 
                             Action::make('delete')
                                 ->label(__('beneficiary.action.delete'))
