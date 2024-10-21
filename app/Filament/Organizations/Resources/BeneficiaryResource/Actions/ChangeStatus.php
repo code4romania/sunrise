@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Actions;
 
 use App\Enums\CaseStatus;
+use App\Models\Beneficiary;
 use Filament\Actions\Action;
 
 class ChangeStatus extends Action
@@ -16,10 +17,11 @@ class ChangeStatus extends Action
         $this->label(__('beneficiary.action.' . $this->getName()));
         $status = CaseStatus::tryFrom($this->getName());
 
-        $this->disabled(function ($record) use ($status) {
+        $this->disabled(function (Beneficiary $record) use ($status) {
             if ($record->status === $status) {
                 return true;
             }
+
 
             if (CaseStatus::isValue($record->status, CaseStatus::ACTIVE) &&
                 $status === CaseStatus::ARCHIVED) {

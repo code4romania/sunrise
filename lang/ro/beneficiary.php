@@ -20,7 +20,7 @@ return [
             'title' => 'Înregistrează caz nou',
         ],
         'view' => [
-            'title' => '#:id :name',
+            'title' => '<p class="flex flex-wrap"> #:id :name :badge</p>',
         ],
         'identity' => [
             'title' => 'Date identitate',
