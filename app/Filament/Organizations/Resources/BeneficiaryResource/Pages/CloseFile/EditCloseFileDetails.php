@@ -96,7 +96,7 @@ class EditCloseFileDetails extends EditRecord
                         return $team
                             ->filter(
                                 fn (CaseTeam $item) => $item->roles
-                                    ->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
+                                    ?->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
                                     ->count()
                             )
                             ->first()
