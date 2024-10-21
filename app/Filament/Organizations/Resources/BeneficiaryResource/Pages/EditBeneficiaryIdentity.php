@@ -211,11 +211,7 @@ class EditBeneficiaryIdentity extends EditRecord
                     Location::make('legal_residence')
                         ->city()
                         ->address()
-                        ->environment()
-                        ->setDefaultCountry($parentBeneficiary?->legal_residence_county_id)
-                        ->setDefaultCity($parentBeneficiary?->legal_residence_city_id)
-                        ->setDefaultAddress($parentBeneficiary?->legal_residence_address)
-                        ->setDefaultEnvironment($parentBeneficiary?->legal_residence_environment),
+                        ->environment(),
 
                     Checkbox::make('same_as_legal_residence')
                         ->label(__('field.same_as_legal_residence'))
@@ -238,11 +234,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->environment()
                         ->visible(function (Get $get) {
                             return ! $get('same_as_legal_residence');
-                        })
-                        ->setDefaultCountry($parentBeneficiary?->effective_residence_county_id)
-                        ->setDefaultCity($parentBeneficiary?->effective_residence_city_id)
-                        ->setDefaultAddress($parentBeneficiary?->effective_residence_address)
-                        ->setDefaultEnvironment($parentBeneficiary?->effective_residence_environment),
+                        }),
 
                     Spacer::make(),
 
