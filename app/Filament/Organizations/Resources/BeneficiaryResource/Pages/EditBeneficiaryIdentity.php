@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use alcea\cnp\Cnp;
 use App\Concerns\RedirectToIdentity;
+use App\Enums\AddressType;
 use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
 use App\Enums\Ethnicity;
@@ -208,7 +209,8 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     Spacer::make(),
 
-                    Location::make('legal_residence')
+                    Location::make(AddressType::LEGAL_RESIDENCE->value)
+                        ->relationship(AddressType::LEGAL_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->environment(),
@@ -218,17 +220,18 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->live()
                         ->afterStateUpdated(function (bool $state, Set $set) {
                             if ($state) {
-                                $set('effective_residence_county_id', null);
-                                $set('effective_residence_city_id', null);
-                                $set('effective_residence_address', null);
-                                $set('effective_residence_environment', null);
+                                $set('effective_residence.county_id', null);
+                                $set('effective_residence.city_id', null);
+                                $set('effective_residence.address', null);
+                                $set('effective_residence.environment', null);
                             }
                         })
                         ->columnSpanFull(),
 
                     Spacer::make(),
 
-                    Location::make('effective_residence')
+                    Location::make(AddressType::EFFECTIVE_RESIDENCE->value)
+                        ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->environment()

@@ -39,7 +39,6 @@ class AggressorFactory extends Factory
             'has_psychiatric_history' => fake()->randomElement(Ternary::values()),
             'has_drug_history' => fake()->randomElement(Ternary::values()),
             'legal_history' => fake()->randomElements(AggressorLegalHistory::values()),
-            'has_protection_order' => fake()->randomElement(Ternary::values()),
         ];
     }
 
@@ -56,10 +55,6 @@ class AggressorFactory extends Factory
 
             if (Ternary::isYes($aggressor->has_drug_history)) {
                 $aggressor->drugs = fake()->randomElements(Drug::values());
-            }
-
-            if (Ternary::isYes($aggressor->has_protection_order)) {
-                $aggressor->protection_order_notes = fake()->sentence();
             }
         });
     }
