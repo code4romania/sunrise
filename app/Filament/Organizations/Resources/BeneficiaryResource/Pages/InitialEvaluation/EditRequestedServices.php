@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
 use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\RecommendationService;
