@@ -16,7 +16,7 @@ class ListSpecialists extends ViewRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getBreadcrumbsForSpecialists();
+            ->getBreadcrumbs('view_specialists');
     }
 
     protected function getHeaderWidgets(): array

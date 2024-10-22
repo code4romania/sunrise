@@ -26,7 +26,8 @@ class ListMonitoring extends ListRecords
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoring();
+        return BeneficiaryBreadcrumb::make($this->parent)
+            ->getBreadcrumbs('monitorings.index');
     }
 
     public function getTitle(): string|Htmlable

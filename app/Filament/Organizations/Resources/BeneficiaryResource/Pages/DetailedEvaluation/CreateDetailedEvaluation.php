@@ -31,7 +31,7 @@ class CreateDetailedEvaluation extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getBreadcrumbsForDetailedEvaluation();
+            ->getBreadcrumbs('create_detailed_evaluation');
     }
 
     /**
