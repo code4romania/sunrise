@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetails
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\IntervetnionPlanWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
 use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
@@ -368,7 +369,7 @@ class ViewBeneficiary extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            BeneficiaryResource\Widgets\IntervetnionPlanWidget::class,
+            IntervetnionPlanWidget::class,
             MonitoringWidget::class,
             CloseFileWidget::class,
             CaseTeamListWidget::class,
