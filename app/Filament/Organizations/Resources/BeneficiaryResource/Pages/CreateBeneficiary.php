@@ -31,6 +31,12 @@ class CreateBeneficiary extends CreateRecord
 
     public ?Beneficiary $parentBeneficiary = null;
 
+    public function mount(): void
+    {
+        $this->setParentBeneficiary();
+        parent::mount();
+    }
+
     public function getTitle(): string|Htmlable
     {
         return __('beneficiary.page.create.title');
@@ -43,8 +49,6 @@ class CreateBeneficiary extends CreateRecord
 
     protected function afterFill(): void
     {
-        $this->setParentBeneficiary();
-
         if (! $this->parentBeneficiary) {
             return;
         }
@@ -137,11 +141,16 @@ class CreateBeneficiary extends CreateRecord
             Step::make('beneficiary')
                 ->label(__('beneficiary.wizard.beneficiary.label'))
                 ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema($this->parentBeneficiary))
-                ->afterStateHydrated(function (Set $set){
+                ->afterStateHydrated(function (Set $set) {
                     $legalResidence = AddressType::LEGAL_RESIDENCE->value;
                     $effectiveResidence = AddressType::EFFECTIVE_RESIDENCE->value;
-                    $set($legalResidence, $this->parentBeneficiary?->$legalResidence->toArray());
-                    $set($effectiveResidence, $this->parentBeneficiary?->$effectiveResidence->toArray());
+
+                    if (filled($this->parentBeneficiary?->$legalResidence)) {
+                        $set($legalResidence, $this->parentBeneficiary?->$legalResidence->toArray());
+                    }
+                    if (filled($this->parentBeneficiary?->$effectiveResidence)) {
+                        $set($effectiveResidence, $this->parentBeneficiary?->$effectiveResidence->toArray());
+                    }
                 }),
 
             Step::make('children')

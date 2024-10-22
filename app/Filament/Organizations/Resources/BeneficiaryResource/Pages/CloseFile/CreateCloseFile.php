@@ -73,10 +73,7 @@ class CreateCloseFile extends EditRecord
                         ->schema(EditCloseFileDetails::getSchema($this->getRecord())),
                 ])
                 ->afterStateHydrated(function (Set $set) {
-                    $set('closeFile.date', $this->prefillFormData['date']);
-                    $set('closeFile.admittance_date', $this->prefillFormData['admittance_date']);
-                    $set('closeFile.exit_date', $this->prefillFormData['exit_date']);
-                    $set('closeFile.case_team_id', $this->prefillFormData['case_team_id']);
+                    $set('closeFile', $this->prefillFormData);
                 }),
 
             Step::make(__('beneficiary.section.close_file.headings.general_details'))
