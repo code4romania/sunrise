@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
 use App\Concerns\RedirectToDetailedEvaluation;
+use App\Enums\AddressType;
 use App\Enums\Occupation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
@@ -77,7 +78,8 @@ class EditBeneficiaryPartner extends EditRecord
                         ->options(Occupation::options())
                         ->enum(Occupation::class),
 
-                    Location::make('legal_residence')
+                    Location::make(AddressType::LEGAL_RESIDENCE->value)
+                        ->relationship(AddressType::LEGAL_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->environment(false),
@@ -87,15 +89,16 @@ class EditBeneficiaryPartner extends EditRecord
                         ->live()
                         ->afterStateUpdated(function (bool $state, Set $set) {
                             if ($state) {
-                                $set('effective_residence_county_id', null);
-                                $set('effective_residence_city_id', null);
-                                $set('effective_residence_address', null);
-                                $set('effective_residence_environment', null);
+                                $set('effective_residence.county_id', null);
+                                $set('effective_residence.city_id', null);
+                                $set('effective_residence.address', null);
+                                $set('effective_residence.environment', null);
                             }
                         })
                         ->columnSpanFull(),
 
-                    Location::make('effective_residence')
+                    Location::make(AddressType::EFFECTIVE_RESIDENCE->value)
+                        ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->hidden(function (Get $get) {

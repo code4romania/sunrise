@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\AddressType;
 use App\Enums\Occupation;
-use App\Models\City;
+use App\Models\Address;
+use App\Models\BeneficiaryPartner;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,8 +22,6 @@ class BeneficiaryPartnerFactory extends Factory
      */
     public function definition(): array
     {
-        $city = City::query()->inRandomOrder()->first();
-        $effectiveCity = City::query()->inRandomOrder()->first();
         $sameAddress = fake()->boolean();
 
         return [
@@ -29,14 +29,25 @@ class BeneficiaryPartnerFactory extends Factory
             'first_name' => fake()->firstName(),
             'age' => fake()->numberBetween(10, 99),
             'occupation' => fake()->randomElement(Occupation::values()),
-            'legal_residence_address' => fake()->address(),
-            'legal_residence_county_id' => $city->county_id,
-            'legal_residence_city_id' => $city->id,
             'same_as_legal_residence' => $sameAddress,
-            'effective_residence_address' => $sameAddress ? null : fake()->address(),
-            'effective_residence_county_id' => $sameAddress ? null : $effectiveCity->county_id,
-            'effective_residence_city_id' => $sameAddress ? null : $effectiveCity->id,
             'observations' => fake()->text(),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (BeneficiaryPartner $beneficiaryPartner) {
+            Address::factory()
+                ->for($beneficiaryPartner, 'addressable')
+                ->state(['address_type' => AddressType::LEGAL_RESIDENCE])
+                ->create();
+
+            if (! $beneficiaryPartner->same_as_legal_residence) {
+                Address::factory()
+                    ->for($beneficiaryPartner, 'addressable')
+                    ->state(['address_type' => AddressType::EFFECTIVE_RESIDENCE])
+                    ->create();
+            }
+        });
     }
 }

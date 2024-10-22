@@ -73,6 +73,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         return [
             Grid::make()
                 ->maxWidth('3xl')
+                ->relationship('details')
                 ->schema([
                     Select::make('has_family_doctor')
                         ->label(__('field.has_family_doctor'))
@@ -101,7 +102,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->live(),
 
                             TextInput::make('psychiatric_history_notes')
-                                ->label(__('field.psychiatric_notes'))
+                                ->label(__('field.psychiatric_history_notes'))
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
                         ]),
 

@@ -17,6 +17,7 @@ use App\Models\County;
 use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
+use App\Models\FlowPresentation;
 use App\Models\Intervention;
 use App\Models\Meeting;
 use App\Models\MultidisciplinaryEvaluation;
@@ -95,6 +96,7 @@ class AppServiceProvider extends ServiceProvider
             'team' => CaseTeam::class,
             'violenceHistory' => ViolenceHistory::class,
             'closeFile' => CloseFile::class,
+            'flowPresentation' => FlowPresentation::class,
         ]);
     }
 

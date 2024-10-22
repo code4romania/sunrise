@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Models\BeneficiaryPartner;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
@@ -56,5 +57,14 @@ class CreateDetailedEvaluation extends EditRecord
             Step::make(__('beneficiary.wizard.results.label'))
                 ->schema(EditDetailedEvaluationResult::getSchema()),
         ];
+    }
+
+    public function afterSave(): void
+    {
+        $partnerRecord = $this->getRecord()->partner;
+        if ($partnerRecord->same_as_legal_residence) {
+            $partnerRecord->load(['legal_residence', 'effective_residence']);
+            BeneficiaryPartner::copyLegalResidenceToEffectiveResidence($partnerRecord);
+        }
     }
 }

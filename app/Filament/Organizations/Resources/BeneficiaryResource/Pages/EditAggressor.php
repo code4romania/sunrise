@@ -210,20 +210,6 @@ class EditAggressor extends EditRecord
                                 ->multiple()
                                 ->live(),
                         ]),
-
-                    Grid::make()
-                        ->schema([
-                            Select::make('has_protection_order')
-                                ->label(__('field.has_protection_order'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(Ternary::options())
-                                ->enum(Ternary::class)
-                                ->live(),
-
-                            TextInput::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('has_protection_order'))),
-                        ]),
                 ]),
         ];
     }
