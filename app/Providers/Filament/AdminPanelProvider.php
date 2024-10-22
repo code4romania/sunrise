@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages;
+use App\Filament\Admin\Resources\ServiceResource;
 use App\Livewire\Welcome;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Infolists\Infolist;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -86,6 +88,15 @@ class AdminPanelProvider extends PanelProvider
                 Page::stickyFormActions();
                 Page::alignFormActionsEnd();
             })
+            ->navigationItems([
+                NavigationItem::make(__('nomenclature.titles.list'))
+                    ->icon('heroicon-o-document-text')
+                    ->isActiveWhen(
+                        fn () => request()->routeIs('filament.admin.resources.roles.*') ||
+                            request()->routeIs('filament.admin.resources.services.*') ||
+                            request()->routeIs('filament.admin.resources.benefits.*'))
+                    ->url(fn()=>ServiceResource::getUrl()),
+            ])
             ->unsavedChangesAlerts()
             ->plugins([
                 BreezyCore::make()

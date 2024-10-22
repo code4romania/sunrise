@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\AdmittanceReason;
 use App\Enums\CloseMethod;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -16,13 +17,14 @@ class CloseFile extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'date',
         'number',
         'admittance_date',
         'exit_date',
-        'case_team_id',
+        'user_id',
         'admittance_reason',
         'admittance_details',
         'close_method',
@@ -39,6 +41,6 @@ class CloseFile extends Model
 
     public function caseManager(): BelongsTo
     {
-        return $this->belongsTo(CaseTeam::class, 'case_team_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

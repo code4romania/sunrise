@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use App\Enums\RecommendationService;
+use App\Enums\CaseStatus;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
+use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\Actions;
+use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -22,7 +32,10 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\IconPosition;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\HtmlString;
 
 class ViewBeneficiary extends ViewRecord
 {
@@ -37,7 +50,64 @@ class ViewBeneficiary extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            //
+            ActionGroup::make([])
+                ->label(__('beneficiary.action.case_actions'))
+                ->button()
+                ->iconPosition(IconPosition::After)
+                ->icon('heroicon-s-chevron-down')
+                ->actions([
+                    ActionGroup::make([])
+                        ->dropdown(false)
+                        ->actions([
+                            BeneficiaryResource\Actions\ChangeStatus::make('active'),
+                            BeneficiaryResource\Actions\ChangeStatus::make('monitored'),
+                            BeneficiaryResource\Actions\ChangeStatus::make('closed'),
+                            BeneficiaryResource\Actions\ChangeStatus::make('archived'),
+                        ]),
+
+                    ActionGroup::make([])
+                        ->dropdown(false)
+                        ->actions([
+                            Action::make('reactivate')
+                                ->label(__('beneficiary.action.reactivate'))
+                                ->disabled(
+                                    fn (Beneficiary $record): bool => $record->status !== CaseStatus::CLOSED
+                                    && $record->status !== CaseStatus::ARCHIVED
+                                )
+                                ->modalHeading(__('beneficiary.section.identity.headings.reactivate_modal'))
+                                ->form([
+                                    Placeholder::make('reactivate_text_1')
+                                        ->hiddenLabel()
+                                        ->content(__('beneficiary.placeholder.reactivate_text_1')),
+
+                                    Placeholder::make('reactivate_text_2')
+                                        ->hiddenLabel()
+                                        ->content(__('beneficiary.placeholder.reactivate_text_2')),
+
+                                    Placeholder::make('reactivate_text_3')
+                                        ->hiddenLabel()
+                                        ->content(__('beneficiary.placeholder.reactivate_text_3')),
+
+                                    Checkbox::make('confirm')
+                                        ->label(__('beneficiary.section.identity.labels.beneficiary_agreement'))
+                                        ->required(),
+                                ])
+                                ->modalSubmitActionLabel(__('beneficiary.action.reactivate_modal'))
+                                ->action(fn (Action $action, Beneficiary $record) => redirect(self::getResource()::getUrl('create', ['parent' => $record->id]))),
+
+                            Action::make('delete')
+                                ->label(__('beneficiary.action.delete'))
+                                ->color('danger')
+                                ->disabled(),
+                        ]),
+                ]),
+
+            Action::make('view_history')
+                ->label(__('beneficiary.section.history.actions.view'))
+                ->icon('heroicon-o-arrow-uturn-left')
+                ->outlined()
+                ->link()
+                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
         ];
     }
 
@@ -46,10 +116,16 @@ class ViewBeneficiary extends ViewRecord
      */
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.view.title', [
+        $statusBadge = Blade::render('<x-filament::badge :color="$color">{{$name}}</x-filament::badge>', [
+            'name' => $this->record->status->getLabel(),
+            'color' => $this->record->status->getColor(),
+        ]);
+
+        return new HtmlString(__('beneficiary.page.view.title', [
             'name' => $this->record->full_name,
             'id' => $this->record->id,
-        ]);
+            'badge' => $statusBadge,
+        ]));
     }
 
     public function infolist(Infolist $infolist): Infolist
@@ -136,11 +212,15 @@ class ViewBeneficiary extends ViewRecord
                 'class' => 'h-full',
             ])
             ->schema([
-                EnumEntry::make('presentation_mode')
-                    ->label(__('field.presentation_mode')),
+                Grid::make()
+                    ->relationship('flowPresentation')
+                    ->schema([
+                        EnumEntry::make('presentation_mode')
+                            ->label(__('field.presentation_mode')),
 
-                TextEntry::make('referringInstitution.name')
-                    ->label(__('field.referring_institution')),
+                        TextEntry::make('referringInstitution.name')
+                            ->label(__('field.referring_institution')),
+                    ]),
 
                 TextEntry::make('family_doctor_name')
                     ->label(__('field.family_doctor_name')),
@@ -160,18 +240,26 @@ class ViewBeneficiary extends ViewRecord
                         EnumEntry::make('has_violence_history')
                             ->label(__('field.aggressor_has_violence_history')),
                     ]),
-                EnumEntry::make('has_police_reports')
-                    ->label(__('field.has_police_reports'))
-                    ->suffix(fn ($record) => Ternary::isYes($record->has_police_reports)
-                        ? " ({$record->police_report_count})" : null),
 
-                EnumEntry::make('has_medical_reports')
-                    ->label(__('field.has_medical_reports'))
-                    ->suffix(fn ($record) => Ternary::isYes($record->has_medical_reports)
-                        ? " ({$record->medical_report_count})" : null),
+                Grid::make()
+                    ->relationship('antecedents')
+                    ->schema([
+                        EnumEntry::make('has_police_reports')
+                            ->label(__('field.has_police_reports'))
+                            ->suffix(fn (Beneficiary $record, $state) => Ternary::isYes($state)
+                                ? " ({$record->antecedents->police_report_count})" : null),
 
-                EnumEntry::make('has_protection_order')
-                    ->label(__('field.has_protection_order')),
+                        EnumEntry::make('has_medical_reports')
+                            ->label(__('field.has_medical_reports'))
+                            ->suffix(fn (Beneficiary $record, $state) => Ternary::isYes($state)
+                                ? " ({$record->antecedents->medical_report_count})" : null),
+
+                        EnumEntry::make('has_protection_order')
+                            ->label(__('field.has_protection_order')),
+
+                        TextEntry::make('protection_order_notes')
+                            ->label(__('field.protection_order_notes')),
+                    ]),
             ]);
     }
 
@@ -246,12 +334,8 @@ class ViewBeneficiary extends ViewRecord
                         ->relationship('detailedEvaluationResult')
                         ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult)
                         ->schema([
-                            TextEntry::make('detailedEvaluationResult')
-                                ->state(
-                                    fn (Beneficiary $record) => collect(RecommendationService::options())
-                                        ->filter(fn ($label, $key) => $record->detailedEvaluationResult?->$key)
-                                        ->all()
-                                )
+                            TextEntry::make('recommendation_services')
+                                ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
                                 ->color(Color::Gray)
                                 ->badge(),
                         ]),
@@ -285,10 +369,11 @@ class ViewBeneficiary extends ViewRecord
     {
         return [
             BeneficiaryResource\Widgets\IntervetnionPlanWidget::class,
-            BeneficiaryResource\Widgets\CaseTeamListWidget::class,
-            BeneficiaryResource\Widgets\DocumentsListWidget::class,
-            BeneficiaryResource\Widgets\CloseFileWidget::class,
-            BeneficiaryResource\Widgets\RelatedCases::class,
+            MonitoringWidget::class,
+            CloseFileWidget::class,
+            CaseTeamListWidget::class,
+            DocumentsListWidget::class,
+            RelatedCases::class,
         ];
     }
 }

@@ -9,6 +9,7 @@ use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -47,7 +48,8 @@ class CreateCloseFile extends EditRecord
                         ->maxWidth('3xl')
                         ->columns()
                         ->relationship('closeFile')
-                        ->schema(EditCloseFileDetails::getSchema($this->getRecord())),
+                        ->schema(EditCloseFileDetails::getSchema($this->getRecord()))
+                        ->afterStateHydrated(fn (Set $set) => $set('closeFile', $this->getCloseFilePreFillData())),
                 ]),
 
             Step::make(__('beneficiary.section.close_file.headings.general_details'))
@@ -67,5 +69,18 @@ class CreateCloseFile extends EditRecord
             ->label(__('filament-panels::resources/pages/create-record.form.actions.create.label'))
             ->submit('create')
             ->keyBindings(['mod+s']);
+    }
+
+    public function getCloseFilePreFillData(): array
+    {
+        return [
+            'date' => now()->format('Y-m-d'),
+            'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
+            'exit_date' => now()->format('Y-m-d'),
+            'user_id' => $this->getRecord()
+                ->managerTeam
+                ->first()
+                ?->user_id,
+        ];
     }
 }

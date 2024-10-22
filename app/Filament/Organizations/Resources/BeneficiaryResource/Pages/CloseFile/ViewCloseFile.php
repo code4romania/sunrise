@@ -7,8 +7,8 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFi
 use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
+use App\Infolists\Components\Actions\Edit;
 use App\Models\Beneficiary;
-use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\Section;
@@ -66,7 +66,7 @@ class ViewCloseFile extends ViewRecord
                                 ->columns()
                                 ->relationship('closeFile')
                                 ->headerActions([
-                                    BeneficiaryResource\Actions\Edit::make('edit_details')
+                                    Edit::make('edit_details')
                                         ->url(self::getResource()::getUrl('edit_close_file_details', ['record' => $this->getRecord()])),
                                 ])
                                 ->schema([
@@ -82,11 +82,11 @@ class ViewCloseFile extends ViewRecord
                                     TextEntry::make('exit_date')
                                         ->label(__('beneficiary.section.close_file.labels.exit_date')),
 
-                                    TextEntry::make('caseManager.user')
-                                        ->label(__('beneficiary.section.close_file.labels.case_manager'))
-                                        ->formatStateUsing(fn (string | User $state) => $state !== '-' ? $state->getFilamentName() : $state),
+                                    TextEntry::make('caseManager.full_name')
+                                        ->label(__('beneficiary.section.close_file.labels.case_manager')),
 
-                                ]), ]),
+                                ]),
+                        ]),
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
                         ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->getRecord())),
@@ -98,7 +98,7 @@ class ViewCloseFile extends ViewRecord
                                 ->columns()
                                 ->relationship('closeFile')
                                 ->headerActions([
-                                    BeneficiaryResource\Actions\Edit::make('edit_details')
+                                    Edit::make('edit_details')
                                         ->url(self::getResource()::getUrl('edit_close_file_general_details', ['record' => $this->getRecord()])),
                                 ])
                                 ->schema([

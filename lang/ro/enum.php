@@ -167,9 +167,9 @@ return [
     ],
 
     'case_permissions' => [
+        'can_be_case_manager' => 'Poate lua rol de manager de caz',
         'has_access_to_all_cases' => 'Are acces la toate cazurile din Centru',
-        'can_search_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției',
-        'can_copy_cases_in_all_centers' => 'Poate copia date identificare beneficiar dintr-o bază de date în alta  a instituției',
+        'can_search_and_copy_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției si poate copia date identificare beneficiar dintr-o bază de date în alta a instituției',
         'has_access_to_statistics' => 'Are acces la rapoarte statistice',
     ],
 
@@ -284,6 +284,24 @@ return [
         'document' => 'Document (nespecificat)',
     ],
 
+    'child_aggressor_relationships' => [
+        'child' => 'Fiu/Fiică',
+        'other_relationship' => 'Alt grad de rudenie',
+        'from_another_relationship' => 'Provenit din afara relației',
+    ],
+
+    'maintenance_sources' => [
+        'relationship_income' => 'Venitul existent în cadrul relației',
+        'alimony' => 'Pensie alimentară',
+      ],
+    'activity_description' => [
+        'created' => 'Creat',
+        'retrieved' => 'Vizualizat',
+        'updated' => 'Editat',
+        'deleted' => 'Șters',
+        'logged_in' => 'Authentificat',
+    ],
+
     'admittance_reason' => [
         'security' => 'Siguranță pusă în pericol',
         'eviction_from_home' => 'Alungare de la domiciliu',
@@ -344,5 +362,12 @@ return [
         'sale_purchase_agreement' => 'Contract vânzare-cumpărare',
         'iml_certificate' => 'Certificat IML',
         'other' => 'Altele',
+    ],
+
+    'protection_order' => [
+        'temporary' => 'Provizoriu',
+        'issued_by_court' => 'Emis de instanta',
+        'no' => 'Nu',
+        'unknown' => 'Nu știe/ Nu răspunde',
     ],
 ];

@@ -5,16 +5,30 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Http\Responses\LoginResponse;
+use App\Models\Aggressor;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryPartner;
+use App\Models\BeneficiarySituation;
 use App\Models\City;
+use App\Models\CloseFile;
 use App\Models\CommunityProfile;
 use App\Models\County;
+use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
+use App\Models\EvaluateDetails;
+use App\Models\FlowPresentation;
 use App\Models\Intervention;
+use App\Models\Meeting;
+use App\Models\Monitoring;
+use App\Models\MultidisciplinaryEvaluation;
 use App\Models\Organization;
 use App\Models\ReferringInstitution;
+use App\Models\RequestedServices;
+use App\Models\RiskFactors;
 use App\Models\Service;
 use App\Models\User;
+use App\Models\Violence;
+use App\Models\ViolenceHistory;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Columns\Column;
@@ -69,6 +83,20 @@ class AppServiceProvider extends ServiceProvider
             'service' => Service::class,
             'user' => User::class,
             'document' => Document::class,
+            'aggressor' => Aggressor::class,
+            'beneficiaryPartner' => BeneficiaryPartner::class,
+            'meeting' => Meeting::class,
+            'multidisciplinaryEvaluation' => MultidisciplinaryEvaluation::class,
+            'detailedEvaluationResult' => DetailedEvaluationResult::class,
+            'evaluateDetails' => EvaluateDetails::class,
+            'violence' => Violence::class,
+            'riskFactors' => RiskFactors::class,
+            'requestedServices' => RequestedServices::class,
+            'beneficiarySituation' => BeneficiarySituation::class,
+            'violenceHistory' => ViolenceHistory::class,
+            'closeFile' => CloseFile::class,
+            'monitoring' => Monitoring::class,
+            'flowPresentation' => FlowPresentation::class,
         ]);
     }
 

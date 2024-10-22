@@ -42,8 +42,6 @@ return new class extends Migration
             $table->json('drugs')->nullable();
 
             $table->json('legal_history')->nullable();
-            $table->string('has_protection_order')->nullable();
-            $table->string('protection_order_notes')->nullable();
         });
     }
 };

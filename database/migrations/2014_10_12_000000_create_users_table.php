@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\UserStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,14 +16,11 @@ return new class extends Migration
             $table->ulid()->unique();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('full_name')->virtualAs('CONCAT(first_name, " ", last_name)');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
-            $table->string('status')->nullable();
-            $table->json('roles')->nullable();
-            $table->boolean('can_be_case_manager')->nullable();
+            $table->string('status')->default(UserStatus::PENDING);
             $table->boolean('has_access_to_all_cases')->nullable();
-            $table->json('case_permissions')->nullable();
-            $table->json('admin_permissions')->nullable();
             $table->boolean('is_admin')->default(false);
             $table->timestamp('password_set_at')->nullable();
             $table->string('password');

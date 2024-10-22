@@ -11,6 +11,7 @@ return [
 
     'labels' => [
         'registered_date' => 'Data înregistrării',
+        'reactivated' => 'Reactivare de caz',
         'related_cases' => 'Istoric caz (fișe conectate cazului)',
     ],
 
@@ -19,7 +20,7 @@ return [
             'title' => 'Înregistrează caz nou',
         ],
         'view' => [
-            'title' => '#:id :name',
+            'title' => '<p class="flex flex-wrap"> #:id :name :badge</p>',
         ],
         'identity' => [
             'title' => 'Date identitate',
@@ -142,6 +143,10 @@ return [
             ],
             'labels' => [
                 'email' => 'Email beneficiar',
+                'beneficiary_agreement' => '*Confirm că s-a obținut acordul beneficiarului pentru înregistrarea datelor personale și utilizarea datelor rezultate din evaluare și intervenție în scopul oferirii serviciilor de management de caz.',
+            ],
+            'headings' => [
+                'reactivate_modal' => 'Reactivează cazul',
             ],
         ],
 
@@ -329,6 +334,48 @@ return [
             ],
         ],
 
+        'history' => [
+            'titles' => [
+                'list' => 'Istoric',
+            ],
+
+            'headings' => [
+                'table' => 'Istoric modificări & accesare caz',
+            ],
+
+            'labels' => [
+                'date' => 'Data',
+                'time' => 'Ora',
+                'user' => 'Utilizator',
+                'description' => 'Acțiune',
+                'section' => 'Secțiune',
+                'subsection' => 'Sub-secțiune',
+                'view_action' => 'Detalii',
+                'beneficiary' => 'Beneficiar',
+                'meeting' => 'Întâlniri',
+                'multidisciplinaryEvaluation' => 'Evaluare multidisciplinară',
+                'riskFactors' => 'Factori de risc',
+                'violence' => 'Violență',
+                'violenceHistory' => 'Istoric violență',
+                'document' => 'Documente',
+                'aggressor' => 'Agresor',
+                'evaluateDetails' => 'Detalii evaluare',
+                'detailedEvaluationResult' => 'Rezultate evalaure detaliată',
+                'team' => 'Echipa de caz',
+                'beneficiarySituation' => 'Situatie beneficiar',
+                'beneficiaryPartner' => 'Partener',
+                'requestedServices' => 'Servicii solicitate',
+            ],
+
+            'actions' => [
+                'view' => 'Istoric modificări',
+            ],
+
+            'breadcrumbs' => [
+                'list' => 'Istoric modificări & accesare caz',
+            ],
+        ],
+
         'close_file' => [
             'titles' => [
                 'create' => 'Fișă de închidere a cazului',
@@ -374,13 +421,19 @@ return [
                 'close_situation' => 'Descrieți situația cazului la închidere',
             ],
         ],
+
+        'related_cases' => [
+            'labels' => [
+                'case_manager' => 'Manager de caz',
+            ],
+        ],
     ],
 
     'status' => [
-        'active' => 'Activ',
-        'reactivated' => 'Reactivat',
-        'monitored' => 'În monitorizare',
+        'active' => 'Deschis',
+        'monitored' => 'Monitorizare',
         'closed' => 'Închis',
+        'archived' => 'Arhivat',
     ],
 
     'action' => [
@@ -390,6 +443,14 @@ return [
         'add_meet_row' => 'Adauga inca o intrevedere',
         'add_violence_history' => 'Adaugă încă o dată sau perioadă',
         'start_evaluation' => 'Începe evaluarea',
+        'case_actions' => 'Acțiuni caz',
+        'active' => 'Redeschide caz (dosar curent)',
+        'monitored' => 'Mută în monitorizare ',
+        'closed' => 'Închide caz',
+        'archived' => 'Arhivează caz',
+        'reactivate' => 'Reactivează caz (dosar nou)',
+        'reactivate_modal' => 'Reactivează',
+        'delete' => 'Șterge dosar caz',
     ],
 
     'breadcrumb' => [
@@ -432,6 +493,9 @@ return [
         'beneficiary_exists' => 'CNP-ul a fost identificat în această bază de date, asociat cazului Maria Popescu. <a href="#">Vezi detalii</a>',
         'beneficiary_not_exists' => '<i class="heroicon-check"></i>CNP-ul nu a fost identificat în această bază de date și nici în cea a altor centre ale instituției.',
         'file_name' => 'Nume document',
+        'reactivate_text_1' => 'Prin reactivarea unui caz se va duplica dosarului beneficiarului pentru a putea fi completat cu informații noi, fără a pierde informațiile despre evaluările și managementul de caz anterior.',
+        'reactivate_text_2' => 'Toate datele de identitate se vor copia din dosarul curent și pot fi actualizate manual pentru această nouă reactivare. Toate formularele vor fi disponibile pentru a fi completate cu informații noi.',
+        'reactivate_text_3' => 'Nicio modificare făcută în dosarul de reactivare nu va afecta informațiile introduse în cazul inițial.',
 
     ],
     'helper_text' => [

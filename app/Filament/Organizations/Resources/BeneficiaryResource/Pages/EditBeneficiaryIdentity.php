@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use alcea\cnp\Cnp;
 use App\Concerns\RedirectToIdentity;
+use App\Enums\AddressType;
 use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
 use App\Enums\Ethnicity;
@@ -15,11 +16,13 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
+use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -28,7 +31,9 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Unique;
 
 class EditBeneficiaryIdentity extends EditRecord
 {
@@ -69,12 +74,14 @@ class EditBeneficiaryIdentity extends EditRecord
             ]);
     }
 
-    public static function getBeneficiaryIdentityFormSchema(): array
+    public static function getBeneficiaryIdentityFormSchema(?Beneficiary $parentBeneficiary = null): array
     {
         return [
             Grid::make()
                 ->maxWidth('3xl')
                 ->schema([
+                    Hidden::make('initial_id'),
+
                     TextInput::make('last_name')
                         ->label(__('field.last_name'))
                         ->placeholder(__('placeholder.last_name'))
@@ -102,7 +109,24 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('cnp')
                         ->label(__('field.cnp'))
                         ->placeholder(__('placeholder.cnp'))
-                        ->unique(ignoreRecord: true)
+                        ->unique(
+                            ignorable: $parentBeneficiary,
+                            ignoreRecord: true,
+                            modifyRuleUsing: function (Unique $rule, ?Beneficiary $record) use ($parentBeneficiary) {
+                                $initialID = 0;
+                                if ($parentBeneficiary?->id) {
+                                    $initialID = $parentBeneficiary->initial_id ?? $parentBeneficiary->id;
+                                }
+                                if (! $initialID && $record) {
+                                    $initialID = $record->initial_id ?? $record->id;
+                                }
+
+                                return
+                                    $rule->where(fn (Builder $query) => $query->whereNot('id', $initialID)
+                                        ->where(fn (Builder $query) => $query->whereNot('initial_id', $initialID)
+                                            ->orWhereNull('initial_id')));
+                            }
+                        )
                         ->nullable()
                         ->rule(new ValidCNP)
                         ->lazy()
@@ -185,7 +209,8 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     Spacer::make(),
 
-                    Location::make('legal_residence')
+                    Location::make(AddressType::LEGAL_RESIDENCE->value)
+                        ->relationship(AddressType::LEGAL_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->environment(),
@@ -195,17 +220,18 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->live()
                         ->afterStateUpdated(function (bool $state, Set $set) {
                             if ($state) {
-                                $set('effective_residence_county_id', null);
-                                $set('effective_residence_city_id', null);
-                                $set('effective_residence_address', null);
-                                $set('effective_residence_environment', null);
+                                $set('effective_residence.county_id', null);
+                                $set('effective_residence.city_id', null);
+                                $set('effective_residence.address', null);
+                                $set('effective_residence.environment', null);
                             }
                         })
                         ->columnSpanFull(),
 
                     Spacer::make(),
 
-                    Location::make('effective_residence')
+                    Location::make(AddressType::EFFECTIVE_RESIDENCE->value)
+                        ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                         ->city()
                         ->address()
                         ->environment()
