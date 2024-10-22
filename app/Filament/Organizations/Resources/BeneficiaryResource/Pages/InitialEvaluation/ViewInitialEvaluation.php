@@ -32,7 +32,7 @@ class ViewInitialEvaluation extends ViewRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getBreadcrumbsForInitialEvaluation();
+            ->getBreadcrumbs('view_initial_evaluation');
     }
 
     public function infolist(Infolist $infolist): Infolist

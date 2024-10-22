@@ -31,7 +31,7 @@ class EditBeneficiarySituation extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getBreadcrumbsForInitialEvaluation();
+            ->getBreadcrumbs('view_initial_evaluation');
     }
 
     protected function getTabSlug(): string

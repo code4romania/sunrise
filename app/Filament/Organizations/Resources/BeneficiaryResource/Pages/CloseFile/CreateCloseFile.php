@@ -34,7 +34,8 @@ class CreateCloseFile extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->getRecord())->getBreadcrumbsCreateCloseFile();
+        return BeneficiaryBreadcrumb::make($this->getRecord())
+            ->getBreadcrumbs('create_close_file');
     }
 
     protected function getRedirectUrl(): ?string
