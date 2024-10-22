@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
-use App\Filament\Admin\Pages\NomenclatureList;
 use App\Filament\Admin\Resources\RoleResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Section;
@@ -25,8 +24,8 @@ class ViewRole extends ViewRecord
     public function getBreadcrumbs(): array
     {
         return [
-            NomenclatureList::getUrl() => __('nomenclature.titles.list'),
-            RoleResource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
+            self::$resource::getUrl() => __('nomenclature.titles.list'),
+            self::$resource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
         ];
     }
 
@@ -50,10 +49,12 @@ class ViewRole extends ViewRecord
                         ->columnSpanFull(),
 
                     TextEntry::make('case_permissions')
-                        ->label(__('nomenclature.labels.case_permissions')),
+                        ->label(__('nomenclature.labels.case_permissions'))
+                        ->listWithLineBreaks(),
 
                     TextEntry::make('ngo_admin_permissions')
-                        ->label(__('nomenclature.labels.ngo_admin_permissions')),
+                        ->label(__('nomenclature.labels.ngo_admin_permissions'))
+                        ->listWithLineBreaks(),
 
                 ]),
 

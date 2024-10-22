@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
-use App\Filament\Admin\Pages\NomenclatureList;
 use App\Filament\Admin\Resources\RoleResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -23,7 +22,7 @@ class CreateRole extends CreateRecord
     public function getBreadcrumbs(): array
     {
         return [
-            NomenclatureList::getUrl() => __('nomenclature.titles.list'),
+            self::$resource::getUrl() => __('nomenclature.titles.list'),
             RoleResource::getUrl('create') => __('nomenclature.actions.add_role'),
         ];
     }
