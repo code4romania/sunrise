@@ -54,6 +54,13 @@ class ViewMonitoring extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
+        $this->getRecord()
+            ->load([
+                'specialistsTeam.user',
+                // after design change
+                // 'specialistsTeam.role'
+            ]);
+
         return $infolist->schema([
             Tabs::make()
                 ->columnSpanFull()
@@ -84,12 +91,12 @@ class ViewMonitoring extends ViewRecord
                                     TextEntry::make('end_date')
                                         ->label(__('monitoring.labels.end_date')),
 
-                                    TextEntry::make('specialists')
+                                    TextEntry::make('specialistsTeam')
                                         ->label(__('monitoring.labels.team'))
                                         ->listWithLineBreaks()
                                         ->formatStateUsing(
-                                            fn ($state) => $state->user->getFilamentName() . ' (' .
-                                                $state->roles->map(fn ($item) => $item->label())->join(', ') . ')'
+                                            fn ($state) => $state->user->getFilamentName()
+                                                // ' (' . $state->role?->name . ')'
                                         ),
                                 ]),
                         ]),

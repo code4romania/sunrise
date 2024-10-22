@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\CaseTeam;
-use App\Models\Monitoring;
+use App\Models\Service;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('monitoring_specialists', function (Blueprint $table) {
+        Schema::create('service_interventions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Monitoring::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(CaseTeam::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Service::class)->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('monitoring_specialists');
+        Schema::dropIfExists('service_interventions');
     }
 };

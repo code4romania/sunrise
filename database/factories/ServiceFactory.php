@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\Service;
+use App\Models\ServiceIntervention;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +22,18 @@ class ServiceFactory extends Factory
     {
         return [
             'name' => fake()->words(asText: true),
-            'description' => fake()->paragraph(),
+            'status' => fake()->boolean(),
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this
+            ->afterCreating(function (Service $service) {
+                ServiceIntervention::factory()
+                    ->for($service)
+                    ->count(5)
+                    ->create();
+            });
     }
 }

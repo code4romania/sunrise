@@ -18,6 +18,7 @@ use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
 use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
 use App\Filters\DateFilter;
 use App\Models\Beneficiary;
+use App\Models\User;
 use App\Tables\Filters\SelectFilter;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -100,7 +101,13 @@ class BeneficiaryResource extends Resource
 
                 TextColumn::make('managerTeam.user.full_name')
                     ->label(Role::MANGER->getLabel())
-                    ->toggleable(),
+                    ->toggleable()
+                    ->formatStateUsing(
+                        fn ($state) => collect(explode(',', $state))
+                            ->map(fn ($item) => trim($item))
+                            ->unique()
+                            ->join(', ')
+                    ),
 
                 TextColumn::make('status')
                     ->label(__('field.status'))

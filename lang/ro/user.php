@@ -23,7 +23,6 @@ return [
         'email' => 'Email',
         'phone_number' => 'Număr telefon',
         'select_roles' => 'Rol specialitate',
-        'can_be_case_manager' => 'Poate lua rol de manager de caz',
         'case_permissions' => 'Permisiuni cazuri',
         'admin_permissions' => 'Permisiuni administrare',
     ],

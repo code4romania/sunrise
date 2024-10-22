@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Beneficiary;
+use App\Models\Benefit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,13 +14,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('specialists', function (Blueprint $table) {
+        Schema::create('benefit_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Beneficiary::class);
-            $table->string('full_name')->nullable();
-            $table->string('institution')->nullable();
-            $table->string('relationship')->nullable();
-            $table->date('date')->nullable();
+            $table->foreignIdFor(Benefit::class);
+            $table->string('name');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('specialists');
+        Schema::dropIfExists('benefit_types');
     }
 };

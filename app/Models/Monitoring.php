@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\HasSpecialistsTeam;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
@@ -16,6 +16,7 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 class Monitoring extends Model
 {
     use HasFactory;
+    use HasSpecialistsTeam;
     use BelongsToBeneficiary;
     use BelongsToThroughTrait;
 
@@ -59,15 +60,5 @@ class Monitoring extends Model
     public function children(): HasMany
     {
         return $this->hasMany(MonitoringChild::class);
-    }
-
-    public function specialists(): BelongsToMany
-    {
-        return $this->belongsToMany(CaseTeam::class, 'monitoring_specialists');
-    }
-
-    public function team()
-    {
-        return $this->beneficiary->team();
     }
 }

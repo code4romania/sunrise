@@ -22,7 +22,7 @@ class ListSpecialists extends ViewRecord
     protected function getHeaderWidgets(): array
     {
         return [
-            BeneficiaryResource\Widgets\CaseTeam::class,
+            BeneficiaryResource\Widgets\ListSpecialistsWidget::class,
         ];
     }
 

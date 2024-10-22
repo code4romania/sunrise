@@ -7,9 +7,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MonitoringSpecialist>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ServiceIntervention>
  */
-class MonitoringSpecialistFactory extends Factory
+class ServiceInterventionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,7 +19,8 @@ class MonitoringSpecialistFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->word(),
+            'status' => fake()->boolean(),
         ];
     }
 }

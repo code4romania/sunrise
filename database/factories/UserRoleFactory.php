@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CaseTeam>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserRole>
  */
-class CaseTeamFactory extends Factory
+class UserRoleFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +18,8 @@ class CaseTeamFactory extends Factory
      */
     public function definition(): array
     {
-        return  [
-            'roles' => collect(fake()->randomElements(Role::values(), rand(1, 5))),
+        return [
+            //
         ];
     }
 }
