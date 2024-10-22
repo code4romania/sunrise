@@ -41,6 +41,7 @@ trait HasEffectiveAddress
         }
     }
 
+    //TODO: Clean up the code
     public function effective_residence(): MorphOne
     {
         return $this->morphOne(Address::class, 'addressable')

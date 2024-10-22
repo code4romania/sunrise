@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Models\CaseTeam;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Group;
@@ -20,6 +22,8 @@ class CreateCloseFile extends EditRecord
 
     protected static string $resource = BeneficiaryResource::class;
 
+    private array $prefillFormData = [];
+
     /**
      * @return string|Htmlable
      */
@@ -30,12 +34,31 @@ class CreateCloseFile extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->getRecord())->getBreadcrumbsCreateCloseFile();
+        return BeneficiaryBreadcrumb::make($this->getRecord())
+            ->getBreadcrumbs('create_close_file');
     }
 
     protected function getRedirectUrl(): ?string
     {
         return self::getResource()::getUrl('view_close_file', ['record' => $this->getRecord()]);
+    }
+
+    public function beforeFill(): void
+    {
+        $this->prefillFormData = [
+            'date' => now()->format('Y-m-d'),
+            'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
+            'exit_date' => now()->format('Y-m-d'),
+            'case_team_id' => $this->getRecord()
+                ->team
+                ->filter(
+                    fn (CaseTeam $item) => $item->roles
+                        ?->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
+                        ->count()
+                )
+                ->first()
+                ?->id,
+        ];
     }
 
     protected function getSteps(): array
@@ -48,9 +71,11 @@ class CreateCloseFile extends EditRecord
                         ->maxWidth('3xl')
                         ->columns()
                         ->relationship('closeFile')
-                        ->schema(EditCloseFileDetails::getSchema($this->getRecord()))
-                        ->afterStateHydrated(fn (Set $set) => $set('closeFile', $this->getCloseFilePreFillData())),
-                ]),
+                        ->schema(EditCloseFileDetails::getSchema($this->getRecord())),
+                ])
+                ->afterStateHydrated(function (Set $set) {
+                    $set('closeFile', $this->prefillFormData);
+                }),
 
             Step::make(__('beneficiary.section.close_file.headings.general_details'))
                 ->schema([

@@ -32,7 +32,8 @@ class ViewDocument extends ViewRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForDocuments();
+        return BeneficiaryBreadcrumb::make($this->parent)
+            ->getBreadcrumbs('documents.index');
     }
 
     protected function getHeaderActions(): array
