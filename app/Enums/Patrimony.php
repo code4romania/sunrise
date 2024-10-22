@@ -7,17 +7,19 @@ namespace App\Enums;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
-enum CounselingSheet: string implements HasLabel
+enum Patrimony: string implements HasLabel
 {
     use Enums\HasLabel;
     use Enums\Arrayable;
     use Enums\Comparable;
 
-    case PSYCHOLOGICAL_ASSISTANCE = 'psychological_assistance';
-    case LEGAL_ASSISTANCE = 'legal_assistance';
+    case APARTMENT = 'apartment';
+    case HOUSE = 'house';
+    case WITHOUT = 'without';
+    case UNKNOWN = 'unknown';
 
     protected function labelKeyPrefix(): ?string
     {
-        return 'enum.counseling_sheet';
+        return 'enum.patrimony';
     }
 }
