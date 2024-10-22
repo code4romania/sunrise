@@ -80,7 +80,7 @@ class CreateMonitoring extends CreateRecord
 
         if ($copyLastFile && $this->lastFile) {
             $data = array_merge($data, $this->lastFile->toArray());
-            $data['specialists'] = $this->lastFile->specialists->map(fn ($specialist) => $specialist->id);
+            $data['specialists'] = $this->lastFile->specialistsMembers->map(fn ($specialist) => $specialist->id);
         }
         $this->form->fill($data);
     }
