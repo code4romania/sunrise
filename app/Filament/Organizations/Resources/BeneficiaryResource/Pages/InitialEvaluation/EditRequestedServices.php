@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
 use App\Concerns\RedirectToInitialEvaluation;
+use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Group as InfolistGroup;
-use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -52,20 +53,22 @@ class EditRequestedServices extends EditRecord
                 ->relationship('requestedServices')
                 ->schema([
                     Section::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
-                        ->schema(EditDetailedEvaluationResult::getRecommendationServicesSchema()),
+                        ->schema(self::getRequestedServicesSchema()),
                 ]),
         ];
     }
 
-    public static function getInfoListSchema(): array
+    public static function getRequestedServicesSchema(): array
     {
         return [
-            InfolistGroup::make()
-                ->relationship('requestedServices')
-                ->schema([
-                    InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
-                        ->schema(EditDetailedEvaluationResult::getRecommendationServicesInfolistSchema()),
-                ]),
+            CheckboxList::make('requested_services')
+                ->hiddenLabel()
+                ->options(RecommendationService::options()),
+
+            Textarea::make('other_services_description')
+                ->hiddenLabel()
+                ->placeholder(__('beneficiary.placeholder.other_services'))
+                ->maxLength(100),
         ];
     }
 }

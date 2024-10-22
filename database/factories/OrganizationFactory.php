@@ -53,7 +53,7 @@ class OrganizationFactory extends Factory
                 User::factory()
                     ->count($count)
                     ->sequence(fn (Sequence $sequence) => [
-                        'email' => sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
+                        'email' => \sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
                     ])
                     ->withRoles($organization->id)
                     ->create()
@@ -84,6 +84,8 @@ class OrganizationFactory extends Factory
                 ->withContactNotes()
                 ->withChildren()
                 ->withAntecedents()
+                ->withFlowPresentation()
+                ->withBeneficiaryDetails()
                 ->for($organization)
                 ->create();
         });

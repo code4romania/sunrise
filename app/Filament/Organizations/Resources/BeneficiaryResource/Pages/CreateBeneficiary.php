@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
@@ -28,6 +29,8 @@ class CreateBeneficiary extends CreateRecord
 
     protected static string $resource = BeneficiaryResource::class;
 
+    public ?Beneficiary $parentBeneficiary = null;
+
     public function getTitle(): string|Htmlable
     {
         return __('beneficiary.page.create.title');
@@ -36,6 +39,36 @@ class CreateBeneficiary extends CreateRecord
     public function getBreadcrumb(): string
     {
         return $this->getTitle();
+    }
+
+    protected function afterFill(): void
+    {
+        $this->setParentBeneficiary();
+
+        if (! $this->parentBeneficiary) {
+            return;
+        }
+
+        $data = $this->parentBeneficiary->toArray();
+        $data['initial_id'] = $this->parentBeneficiary->initial_id ?: $this->parentBeneficiary->id;
+        $data['consent'] = true;
+        $this->form->fill($data);
+    }
+
+    protected function setParentBeneficiary(): void
+    {
+        $parentBeneficiaryID = (int) request('parent');
+        if (! $parentBeneficiaryID) {
+            $refererUrl = request()->server('HTTP_REFERER');
+            $parentBeneficiaryID = (int) str_replace([self::getResource()::getUrl('create'), '/'], '', $refererUrl);
+        }
+
+        $this->parentBeneficiary = $parentBeneficiaryID ? Beneficiary::find($parentBeneficiaryID) : null;
+    }
+
+    public function getStartStep(): int
+    {
+        return $this->parentBeneficiary ? 2 : 1;
     }
 
     protected function getSteps(): array
@@ -103,11 +136,18 @@ class CreateBeneficiary extends CreateRecord
 
             Step::make('beneficiary')
                 ->label(__('beneficiary.wizard.beneficiary.label'))
-                ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema()),
+                ->schema(EditBeneficiaryIdentity::getBeneficiaryIdentityFormSchema($this->parentBeneficiary))
+                ->afterStateHydrated(function (Set $set){
+                    $legalResidence = AddressType::LEGAL_RESIDENCE->value;
+                    $effectiveResidence = AddressType::EFFECTIVE_RESIDENCE->value;
+                    $set($legalResidence, $this->parentBeneficiary?->$legalResidence->toArray());
+                    $set($effectiveResidence, $this->parentBeneficiary?->$effectiveResidence->toArray());
+                }),
 
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
-                ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema()),
+                ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema())
+                ->afterStateHydrated(fn (Set $set) => $set('children', $this->parentBeneficiary?->children->toArray())),
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
@@ -129,5 +169,14 @@ class CreateBeneficiary extends CreateRecord
                         ->schema(EditFlowPresentation::flowSection()),
                 ]),
         ];
+    }
+
+    public function afterCreate(): void
+    {
+        $record = $this->getRecord();
+        if ($record->same_as_legal_residence) {
+            $record->load(['legal_residence', 'effective_residence']);
+            Beneficiary::copyLegalResidenceToEffectiveResidence($record);
+        }
     }
 }

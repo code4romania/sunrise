@@ -329,4 +329,11 @@ return [
         'psychological_assistance' => 'Asistență psihologică',
         'legal assistance' => 'Asistența juridică',
     ],
+
+    'protection_order' => [
+        'temporary' => 'Provizoriu',
+        'issued_by_court' => 'Emis de instanta',
+        'no' => 'Nu',
+        'unknown' => 'Nu știe/ Nu răspunde',
+    ],
 ];

@@ -16,6 +16,7 @@ use App\Models\County;
 use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
+use App\Models\FlowPresentation;
 use App\Models\Intervention;
 use App\Models\Meeting;
 use App\Models\Monitoring;
@@ -95,6 +96,7 @@ class AppServiceProvider extends ServiceProvider
             'violenceHistory' => ViolenceHistory::class,
             'closeFile' => CloseFile::class,
             'monitoring' => Monitoring::class,
+            'flowPresentation' => FlowPresentation::class,
         ]);
     }
 

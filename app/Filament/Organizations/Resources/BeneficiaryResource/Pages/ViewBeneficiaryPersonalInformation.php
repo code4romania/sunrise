@@ -75,6 +75,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns()
+                ->relationship('details')
                 ->headerActions([
                     Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
@@ -101,8 +102,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            TextEntry::make('psychiatric_notes')
-                                ->label(__('field.psychiatric_notes')),
+                            TextEntry::make('psychiatric_history_notes')
+                                ->label(__('field.psychiatric_history_notes')),
                         ]),
 
                     Grid::make()
@@ -259,6 +260,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns()
+                ->relationship('antecedents')
                 ->headerActions([
                     Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
@@ -289,6 +291,19 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric(),
                         ]),
+
+                    Grid::make()
+                        ->schema([
+                            TextEntry::make('has_protection_order')
+                                ->label(__('field.has_protection_order')),
+
+                            //                            TextEntry::make('electronically_monitored')
+                            //                                ->label(__('field.electronically_monitored')),
+
+                            TextEntry::make('protection_order_notes')
+                                ->label(__('field.protection_order_notes')),
+                        ]),
+
                 ]),
         ];
     }
@@ -298,6 +313,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         return [
             Section::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns()
+                ->relationship('flowPresentation')
                 ->headerActions([
                     Edit::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
@@ -312,7 +328,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.presentation_mode'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            EnumEntry::make('referring_institution_id')
+                            EnumEntry::make('referringInstitution.name')
                                 ->label(__('field.referring_institution'))
                                 ->placeholder(__('placeholder.select_one')),
 

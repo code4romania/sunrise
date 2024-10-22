@@ -17,18 +17,8 @@ use App\Enums\CasePermission;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
-use App\Enums\HomeOwnership;
 use App\Enums\IDType;
-use App\Enums\Income;
-use App\Enums\NotificationMode;
-use App\Enums\Notifier;
-use App\Enums\Occupation;
-use App\Enums\PresentationMode;
-use App\Enums\ReferralMode;
-use App\Enums\ResidenceEnvironment;
-use App\Enums\Studies;
-use App\Enums\Ternary;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
+use App\Enums\Role;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -52,6 +42,7 @@ class Beneficiary extends Model
     use HasSpecialistsTeam;
 
     protected $fillable = [
+        'initial_id',
         'first_name',
         'last_name',
         'prior_name',
@@ -68,9 +59,6 @@ class Beneficiary extends Model
         'id_serial',
         'id_number',
 
-        'legal_residence_environment',
-        'effective_residence_environment',
-
         'primary_phone',
         'backup_phone',
         'email',
@@ -85,36 +73,8 @@ class Beneficiary extends Model
         'children_10_18_care_count',
         'children_18_care_count',
         'children_accompanying_count',
-        'children',
         'children_notes',
 
-        'has_family_doctor',
-        'family_doctor_name',
-        'family_doctor_contact',
-        'psychiatric_history',
-        'psychiatric_history_notes',
-        'criminal_history',
-        'criminal_history_notes',
-        'studies',
-        'occupation',
-        'workplace',
-        'income',
-        'elder_care_count',
-        'homeownership',
-
-        'has_police_reports',
-        'police_report_count',
-        'has_medical_reports',
-        'medical_report_count',
-
-        'presentation_mode',
-        'referral_mode',
-        'notification_mode',
-        'notifier',
-        'notifier_other',
-
-        'act_location',
-        'act_location_other',
     ];
 
     protected $casts = [
@@ -126,29 +86,11 @@ class Beneficiary extends Model
         'children_care_count' => 'integer',
         'children_total_count' => 'integer',
         'children_under_10_care_count' => 'integer',
-        'children' => 'collection',
         'civil_status' => CivilStatus::class,
-        'criminal_history' => Ternary::class,
         'doesnt_have_children' => 'boolean',
-        'effective_residence_environment' => ResidenceEnvironment::class,
-        'legal_residence_environment' => ResidenceEnvironment::class,
-        'elder_care_count' => 'integer',
         'gender' => Gender::class,
-        'has_family_doctor' => Ternary::class,
-        'has_medical_reports' => Ternary::class,
-        'has_police_reports' => Ternary::class,
-        'homeownership' => HomeOwnership::class,
-        'income' => Income::class,
-        'occupation' => Occupation::class,
-        'psychiatric_history' => Ternary::class,
         'same_as_legal_residence' => 'boolean',
         'status' => CaseStatus::class,
-        'studies' => Studies::class,
-        'presentation_mode' => PresentationMode::class,
-        'referral_mode' => ReferralMode::class,
-        'notification_mode' => NotificationMode::class,
-        'notifier' => Notifier::class,
-        'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
     ];
 
     protected static function booted()
@@ -177,7 +119,12 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        return sprintf('#%d %s', $this->id, $this->full_name);
+        return \sprintf('#%d %s', $this->id, $this->full_name);
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Children::class);
     }
 
     public function aggressor(): HasMany
@@ -185,40 +132,16 @@ class Beneficiary extends Model
         return $this->hasMany(Aggressor::class);
     }
 
-    public function institutions(): MorphToMany
-    {
-        return $this->morphToMany(
-            ReferringInstitution::class,
-            'model',
-            'model_has_referring_institutions',
-            relatedPivotKey: 'institution_id'
-        )
-
-            ->orderBy('order');
-    }
-
-    public function referringInstitution(): BelongsTo
-    {
-        return $this->belongsTo(ReferringInstitution::class)
-            ->orderBy('order');
-    }
-
-    public function firstCalledInstitution(): BelongsTo
-    {
-        return $this->belongsTo(ReferringInstitution::class, 'first_called_institution_id')
-            ->orderBy('order');
-    }
-
-    public function otherCalledInstitution()
-    {
-        return $this->institutions();
-    }
-
     public function age(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->birthdate?->age,
         );
+    }
+
+    public function specialists(): HasMany
+    {
+        return $this->hasMany(Specialist::class);
     }
 
     public function meetings(): HasMany
@@ -266,6 +189,12 @@ class Beneficiary extends Model
         return $this->hasOne(BeneficiarySituation::class);
     }
 
+    // TODO fix this after final specialist decisions
+    public function managerTeam(): MorphToMany
+    {
+        return $this->specialistsMembers()->whereJsonContains('case_permissions', CasePermission::CAN_BE_CASE_MANAGER);
+    }
+
     public function violenceHistory(): HasMany
     {
         return $this->hasMany(ViolenceHistory::class);
@@ -281,8 +210,28 @@ class Beneficiary extends Model
         return $this->hasMany(Monitoring::class);
     }
 
+    public function lastMonitoring(): HasOne
+    {
+        return $this->hasOne(Monitoring::class)->orderByDesc('date');
+    }
+
     public function closeFile(): HasOne
     {
         return $this->hasOne(CloseFile::class);
+    }
+
+    public function antecedents(): HasOne
+    {
+        return $this->hasOne(BeneficiaryAntecedents::class);
+    }
+
+    public function flowPresentation(): HasOne
+    {
+        return $this->hasOne(FlowPresentation::class);
+    }
+
+    public function details(): HasOne
+    {
+        return $this->hasOne(BeneficiaryDetails::class);
     }
 }

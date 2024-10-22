@@ -64,6 +64,7 @@ class EditFlowPresentation extends EditRecord
         return [
             Grid::make()
                 ->maxWidth('3xl')
+                ->relationship('flowPresentation')
                 ->schema([
                     Grid::make()
                         ->schema([

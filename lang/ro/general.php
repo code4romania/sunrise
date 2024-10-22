@@ -15,6 +15,13 @@ return [
         'delete' => 'Șterge',
     ],
 
+    'filters' => [
+        'logged_from' => 'Dată început',
+        'logged_until' => 'Dată sfârșit',
+        'date_from' => 'Dată început: :date',
+        'date_until' => 'Dată sfârșit: :date',
+    ],
+
     'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',
 
     'old' => 'Vechi',

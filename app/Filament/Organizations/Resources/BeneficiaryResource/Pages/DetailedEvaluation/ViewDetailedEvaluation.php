@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use App\Enums\AddressType;
+use App\Enums\RecommendationService;
+use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -119,51 +123,24 @@ class ViewDetailedEvaluation extends ViewRecord
 
     private function getResultSchema(): array
     {
+        $fields = [];
+        $record = $this->getRecord();
+        foreach (RecommendationService::options() as $key => $value) {
+            $fields[] = TextEntry::make($key)
+                ->label($value)
+                ->state(
+                    $record->detailedEvaluationResult
+                        ->recommendation_services
+                        ->contains(RecommendationService::tryFrom($key)) ?
+                        Ternary::YES->getLabel() :
+                    Ternary::NO->getLabel()
+                );
+        }
+
         return [
-            TextEntry::make('psychological_advice')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.psychological_advice')),
-            TextEntry::make('legal_advice')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.legal_advice')),
-            TextEntry::make('legal_assistance')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.legal_assistance')),
-            TextEntry::make('prenatal_advice')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.prenatal_advice')),
-            TextEntry::make('social_advice')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.social_advice')),
-            TextEntry::make('medical_services')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.medical_services')),
-            TextEntry::make('medical_payment')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.medical_payment')),
-            TextEntry::make('securing_residential_spaces')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.securing_residential_spaces')),
-            TextEntry::make('occupational_program_services')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.occupational_program_services')),
-            TextEntry::make('educational_services_for_children')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.educational_services_for_children')),
-            TextEntry::make('temporary_shelter_services')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.temporary_shelter_services')),
-            TextEntry::make('protection_order')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.protection_order')),
-            TextEntry::make('crisis_assistance')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.crisis_assistance')),
-            TextEntry::make('safety_plan')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.safety_plan')),
-            TextEntry::make('other_services')
-                ->formatStateUsing(fn ($state) => $state ? __('enum.ternary.1') : __('enum.ternary.0'))
+            ...$fields,
+            TextEntry::make('recommendation_services.other_services')
+                ->formatStateUsing(fn ($state) => $record ? __('enum.ternary.1') : __('enum.ternary.0'))
                 ->label(__('beneficiary.section.detailed_evaluation.labels.other_services')),
             TextEntry::make('other_services_description')
                 ->label(__('beneficiary.section.detailed_evaluation.labels.other_services'))
@@ -282,7 +259,8 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->formatStateUsing(fn ($state) => $state == '-' ? $state : $state->label())
                 ->placeholder(__('beneficiary.placeholder.occupation')),
 
-            Location::make('legal_residence')
+            Location::make(AddressType::LEGAL_RESIDENCE->value)
+                ->relationship(AddressType::LEGAL_RESIDENCE->value)
                 ->city()
                 ->address()
                 ->environment(false),
@@ -292,7 +270,8 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->label(__('field.same_as_legal_residence'))
                 ->columnSpanFull(),
 
-            Location::make('effective_residence')
+            Location::make(AddressType::EFFECTIVE_RESIDENCE->value)
+                ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                 ->city()
                 ->address(),
 
