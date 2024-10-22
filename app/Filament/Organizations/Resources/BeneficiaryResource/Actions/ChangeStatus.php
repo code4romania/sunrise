@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Actions;
 use App\Enums\CaseStatus;
 use App\Models\Beneficiary;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 
 class ChangeStatus extends Action
 {
@@ -21,7 +22,6 @@ class ChangeStatus extends Action
             if ($record->status === $status) {
                 return true;
             }
-
 
             if (CaseStatus::isValue($record->status, CaseStatus::ACTIVE) &&
                 $status === CaseStatus::ARCHIVED) {
@@ -46,6 +46,14 @@ class ChangeStatus extends Action
             return false;
         });
 
-        $this->action(fn ($record) => $record->update(['status' => $status]));
+        $this->action(function ($record) use ($status) {
+            $record->update(['status' => $status]);
+            Notification::make()
+                ->title(__('beneficiary.notification.change_status.title'))
+                ->success()
+                ->body(__('beneficiary.notification.change_status.body', [
+                    'status' => $status->getLabel(),
+                ]))->send();
+        });
     }
 }

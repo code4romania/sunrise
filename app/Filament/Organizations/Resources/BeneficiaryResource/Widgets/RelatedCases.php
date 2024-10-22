@@ -54,7 +54,7 @@ class RelatedCases extends BaseWidget
                         fn (Beneficiary $record) => $record->team
                             ->filter(
                                 fn ($item) => $item->roles
-                                    ->contains(Role::MANGER)
+                                    ?->contains(Role::MANGER)
                             )
                             ->map(fn ($item) => $item->user->full_name)
                             ->join(', ')

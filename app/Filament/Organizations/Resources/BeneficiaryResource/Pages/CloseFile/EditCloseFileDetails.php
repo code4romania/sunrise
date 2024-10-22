@@ -60,7 +60,6 @@ class EditCloseFileDetails extends EditRecord
         return [
             DatePicker::make('date')
                 ->label(__('beneficiary.section.close_file.labels.date'))
-                ->default(now())
                 ->required(),
 
             TextInput::make('number')
@@ -69,12 +68,10 @@ class EditCloseFileDetails extends EditRecord
 
             DatePicker::make('admittance_date')
                 ->label(__('beneficiary.section.close_file.labels.admittance_date'))
-                ->default(fn (?CaseTeam $record) => $record ? $record->beneficiary->created_at : $recordParam->created_at)
                 ->required(),
 
             DatePicker::make('exit_date')
                 ->label(__('beneficiary.section.close_file.labels.exit_date'))
-                ->default(now())
                 ->required(),
 
             Select::make('case_team_id')
@@ -87,20 +84,6 @@ class EditCloseFileDetails extends EditRecord
                         return $team
                             ->map(fn (CaseTeam $item) => ['id' => $item->id, 'full_name' => $item->user->getFilamentName()])
                             ->pluck('full_name', 'id');
-                    }
-                )
-                ->default(
-                    function (?CloseFile $record) use ($recordParam) {
-                        $team = $record ? $record->beneficiary->team : $recordParam->team;
-
-                        return $team
-                            ->filter(
-                                fn (CaseTeam $item) => $item->roles
-                                    ->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
-                                    ->count()
-                            )
-                            ->first()
-                            ?->id;
                     }
                 )
                 ->required(),

@@ -507,4 +507,12 @@ return [
         'documents' => 'Niciun document încărcat',
         'documents_2' => 'Încarcă un prim document în fișa beneficiarei',
     ],
+
+    'notification' => [
+        'change_status' => [
+            'title' => 'Schimbare status caz',
+            'body' => 'Statusul cazului a fost schimbat cu succes în :status',
+        ],
+    ],
+
 ];
