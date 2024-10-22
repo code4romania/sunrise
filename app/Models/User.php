@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
-use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
@@ -18,11 +17,11 @@ use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -60,8 +59,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'email',
         'phone_number',
         'status',
-        'case_permissions',
-        'admin_permissions',
         'password',
         'password_set_at',
         'latest_organization_id',
@@ -87,8 +84,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
-        'case_permissions' => AsEnumCollection::class . ':' . CasePermission::class,
-        'admin_permissions' => AsEnumCollection::class . ':' . AdminPermission::class,
         'status' => UserStatus::class,
     ];
 
@@ -125,6 +120,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return $this->roles()
             ->wherePivot('organization_id', Filament::getTenant()?->id)
             ->active();
+    }
+
+    public function permissions(): HasOne
+    {
+        return $this->hasOne(OrganizationUserPermissions::class);
     }
 
     public function getActivitylogOptions(): LogOptions
@@ -225,7 +225,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function canBeCaseManager(): bool
     {
-        return $this->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER);
+        return $this->permissions->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER);
     }
 
     public function hasRoleInOrganization(Role | int $role): bool

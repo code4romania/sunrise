@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Group;
@@ -79,10 +78,9 @@ class CreateCloseFile extends EditRecord
             'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
             'exit_date' => now()->format('Y-m-d'),
             'user_id' => $this->getRecord()
-                ->specialistsMembers
-                ->filter(fn (User $user) => $user->canBeCaseManager())
+                ->managerTeam
                 ->first()
-                ?->id,
+                ?->user_id,
         ];
     }
 }

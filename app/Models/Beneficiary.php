@@ -12,20 +12,17 @@ use App\Concerns\HasEthnicity;
 use App\Concerns\HasSpecialistsTeam;
 use App\Concerns\HasUlid;
 use App\Concerns\LogsActivityOptions;
-use App\Enums\ActLocation;
 use App\Enums\CasePermission;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
-use App\Enums\Role;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Beneficiary extends Model
@@ -189,10 +186,13 @@ class Beneficiary extends Model
         return $this->hasOne(BeneficiarySituation::class);
     }
 
-    // TODO fix this after final specialist decisions
-    public function managerTeam(): MorphToMany
+    public function managerTeam(): HasMany
     {
-        return $this->specialistsMembers()->whereJsonContains('case_permissions', CasePermission::CAN_BE_CASE_MANAGER);
+        return $this->specialistsTeam()
+            ->whereHas(
+                'role',
+                fn (Builder $query) => $query->whereJsonContains('case_permissions', CasePermission::CAN_BE_CASE_MANAGER)
+            );
     }
 
     public function violenceHistory(): HasMany

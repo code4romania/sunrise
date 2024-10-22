@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\ActLocation;
 use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
@@ -17,7 +16,6 @@ use App\Models\BeneficiaryAntecedents;
 use App\Models\BeneficiaryDetails;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
-use App\Models\CaseTeam;
 use App\Models\Children;
 use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
@@ -63,7 +61,7 @@ class BeneficiaryFactory extends Factory
             'civil_status' => fake()->randomElement(CivilStatus::values()),
 
             'gender' => $gender,
-            'birthplace' => fake()->sentence(),
+            'birthplace' => fake()->text(50),
             'birthdate' => $birthdate,
 
             'primary_phone' => fake()->phoneNumber(),

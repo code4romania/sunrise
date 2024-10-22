@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Enums\UserStatus;
 use App\Models\Organization;
+use App\Models\OrganizationUserPermissions;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -66,7 +67,7 @@ class UserFactory extends Factory
         });
     }
 
-    public function withRoles(int $organizationID)
+    public function withRolesAndPermissions(int $organizationID)
     {
         return $this->afterCreating(function (User $user) use ($organizationID) {
             $roles = Role::query()
@@ -94,9 +95,13 @@ class UserFactory extends Factory
                 );
             }
 
-            $user->case_permissions = array_unique($casePermissions);
-            $user->admin_permissions = array_unique($adminPermissions);
-            $user->save();
+            OrganizationUserPermissions::factory()
+                ->for($user)
+                ->create([
+                    'organization_id' => $organizationID,
+                    'case_permissions' => $casePermissions,
+                    'admin_permissions' => $adminPermissions,
+                ]);
         });
     }
 }

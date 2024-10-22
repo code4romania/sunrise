@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
-use App\Models\User;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -27,7 +26,7 @@ class RelatedCases extends BaseWidget
         return $table
             ->query(
                 Beneficiary::query()
-                    ->with('specialistsMembers')
+                    ->with('managerTeam')
                     ->when(
                         $this->record?->initial_id,
                         fn (Builder $query) => $query
@@ -48,15 +47,12 @@ class RelatedCases extends BaseWidget
                 TextColumn::make('created_at')
                     ->label(__('field.open_at')),
 
-                TextColumn::make('case_manager')
+                TextColumn::make('managerTeam.user.full_name')
                     ->label(__('beneficiary.section.related_cases.labels.case_manager'))
-                    ->state(
-                        fn (Beneficiary $record) => $record->specialistsMembers
+                    ->formatStateUsing(
+                        fn ($state) => collect(explode(',', $state))
+                            ->map(fn ($item) => trim($item))
                             ->unique()
-                            ->filter(
-                                fn (User $item) => $item->canBeCaseManager()
-                            )
-                            ->map(fn (User $item) => $item->full_name)
                             ->join(', ')
                     ),
 

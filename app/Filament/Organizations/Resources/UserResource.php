@@ -149,41 +149,48 @@ class UserResource extends Resource
                         ->label('')
                         ->columnSpanFull(),
 
-                    CheckboxList::make('case_permissions')
-                        ->label(__('user.labels.case_permissions'))
-                        ->options(CasePermission::options())
-                        ->disableOptionWhen(function (Get $get, string $value) {
-                            foreach ($get('role_id') as $roleID) {
-                                $role = self::getRole($roleID);
+                    Group::make()
+                        ->relationship('permissions')
+                        ->schema([
+                            CheckboxList::make('case_permissions')
+                                ->label(__('user.labels.case_permissions'))
+                                ->options(CasePermission::options())
+                                ->disableOptionWhen(function (Get $get, string $value) {
+                                    foreach ($get('../role_id') as $roleID) {
+                                        $role = self::getRole($roleID);
 
-                                $permission = $role->case_permissions
-                                    ->filter(fn ($item) => CasePermission::isValue($value, $item));
-                                if ($permission->count()) {
-                                    return true;
-                                }
-                            }
+                                        $permission = $role->case_permissions
+                                            ->filter(fn ($item) => CasePermission::isValue($value, $item));
+                                        if ($permission->count()) {
+                                            return true;
+                                        }
+                                    }
 
-                            return false;
-                        })
-                        ->columnSpanFull(),
+                                    return false;
+                                })
+                                ->columnSpanFull(),
 
-                    CheckboxList::make('admin_permissions')
-                        ->label(__('user.labels.admin_permissions'))
-                        ->options(AdminPermission::options())
-                        ->disableOptionWhen(function (Get $get, string $value) {
-                            foreach ($get('role_id') as $roleID) {
-                                $role = self::getRole($roleID);
+                            CheckboxList::make('admin_permissions')
+                                ->label(__('user.labels.admin_permissions'))
+                                ->options(AdminPermission::options())
+                                ->disableOptionWhen(function (Get $get, string $value) {
+                                    foreach ($get('../role_id') as $roleID) {
+                                        $role = self::getRole($roleID);
 
-                                $permission = $role->ngo_admin_permissions
-                                    ->filter(fn ($item) => AdminPermission::isValue($value, $item));
-                                if ($permission->count()) {
-                                    return true;
-                                }
-                            }
+                                        $permission = $role->ngo_admin_permissions
+                                            ->filter(fn ($item) => AdminPermission::isValue($value, $item));
+                                        if ($permission->count()) {
+                                            return true;
+                                        }
+                                    }
 
-                            return false;
-                        })
-                        ->columnSpanFull(),
+                                    return false;
+                                })
+                                ->columnSpanFull(),
+
+                            Hidden::make('organization_id')
+                                ->default(Filament::getTenant()->id),
+                        ]),
                 ]),
         ];
     }
@@ -191,8 +198,8 @@ class UserResource extends Resource
     public static function setDefaultCaseAndNgoAdminPermissions(): \Closure
     {
         return function (Set $set, Get $get, $state) {
-            $casePermissions = $get('case_permissions') ?: [];
-            $adminPermissions = $get('admin_permissions') ?: [];
+            $casePermissions = $get('permissions.case_permissions') ?: [];
+            $adminPermissions = $get('permissions.admin_permissions') ?: [];
             foreach ($state as $roleID) {
                 $role = self::getRole($roleID);
                 $defaultCasePermissions = $role->case_permissions?->map(fn ($item) => $item->value)->toArray();
@@ -206,8 +213,8 @@ class UserResource extends Resource
             sort($casePermissions);
             sort($adminPermissions);
 
-            $set('case_permissions', $casePermissions);
-            $set('admin_permissions', $adminPermissions);
+            $set('permissions.case_permissions', $casePermissions);
+            $set('permissions.admin_permissions', $adminPermissions);
         };
     }
 
@@ -216,7 +223,7 @@ class UserResource extends Resource
         return Cache::driver('array')
             ->rememberForever(
                 'role_' . $roleID,
-                fn() => Role::find($roleID)
+                fn () => Role::find($roleID)
             );
     }
 }
