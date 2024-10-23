@@ -70,9 +70,9 @@ class UnfoldedWidget extends BaseWidget
             ->actions([
                 ViewAction::make()
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_meetings', [
-                        'parent' => $this->record,
-                        'record' => $record,
+                    ->url(fn () => InterventionServiceResource::getUrl('view_meetings', [
+                        'parent' => $this->record->interventionService,
+                        'record' => $this->record,
                     ])),
             ])
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_table'))
