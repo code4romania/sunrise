@@ -90,9 +90,9 @@ class ViewInterventionPlan extends ViewRecord
                     TextEntry::make('beneficiary.address')
                         ->label(__('intervention_plan.labels.address'))
                         ->formatStateUsing(
-                            fn ($record) => $record->beneficiary->legal_residence->address . ', ' .
-                                $record->beneficiary->legal_residence->city->name . ', ' .
-                                $record->beneficiary->legal_residence->county->name
+                            fn ($record) => $record->beneficiary->legal_residence?->address . ', ' .
+                                $record->beneficiary->legal_residence?->city->name . ', ' .
+                                $record->beneficiary->legal_residence?->county->name
                         ),
                     TextEntry::make('admit_date_in_center')
                         ->label(__('intervention_plan.labels.admit_date')),

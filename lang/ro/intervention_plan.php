@@ -87,6 +87,9 @@ return [
         'duration' => 'Durata',
         'observations' => 'Observatii',
         'meet_number' => 'Nr ședință',
+        'empty_state_benefit_table' => 'Înregistrează aici toate beneficiile sociale ale beneficiarei.',
+        'benefit_category' => 'Categorie beneficiu social',
+        'benefit_types' => 'Tipuri de beneficiu social (marcați toate care se aplică)',
     ],
 
     'headings' => [
@@ -122,6 +125,13 @@ return [
         'intervention_meetings' => 'Observații ședințe/ activități',
         'unfolded' => 'Desfășurător',
         'unfolded_table' => 'Evidență ședințe și activități',
+        'benefit_services' => 'Beneficii sociale',
+        'empty_state_benefit_table' => 'Nici un beneficiu înregistrat',
+        'add_benefit_modal' => 'Adaugă beneficiu social',
+        'benefit_name' => 'Categorie',
+        'benefit_type' => 'Beneficii sociale',
+        'benefit_description' => 'Descriere',
+        'delete_benefit_modal' => 'Șterge beneficiu social',
     ],
 
     'actions' => [
@@ -132,6 +142,13 @@ return [
         'add_intervention' => 'Adaugă intervenție',
         'delete_service' => 'Șterge serviciu',
         'add_meeting' => 'Adaugă o ședință sau o activitate',
+        'delete_meeting' => 'Șterge ședința',
         'add_institution' => 'Adaugă încă o instituție',
+        'add_benefit' => 'Adaugă beneficiu',
+        'delete_benefit' => 'Sterge beneficiu',
+    ],
+
+    'placeholders' => [
+        'benefit_description' => 'Descrieți pe scurt orice alte informații relevante legate de acordarea beneficiului social',
     ],
 ];

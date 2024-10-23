@@ -33,7 +33,7 @@ class CounselingSheetWidget extends InfolistWidget
         $parameters = explode('/', $previousUrl);
         $beneficiaryIntervention = BeneficiaryIntervention::find(end($parameters));
 
-        return (bool) $beneficiaryIntervention->interventionService->organizationService->service->counseling_sheet;
+        return (bool) $beneficiaryIntervention?->interventionService->organizationService->service->counseling_sheet;
     }
 
     protected function getInfoListSchema(): array

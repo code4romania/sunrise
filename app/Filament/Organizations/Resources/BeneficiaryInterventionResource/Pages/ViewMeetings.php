@@ -13,6 +13,7 @@ use App\Infolists\Components\Actions\CreateAction;
 use App\Models\InterventionMeeting;
 use App\Models\User;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
+use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
@@ -105,7 +106,16 @@ class ViewMeetings extends ViewRecord
                                         ->link()
                                         ->modalHeading(__('general.action.edit'))
                                         ->form($this->getFormSchema())
-                                        ->fillForm(fn (InterventionMeeting $record) => $record->toArray()),
+                                        ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
+                                        ->extraModalFooterActions(
+                                            fn ($record) => [
+                                                DeleteAction::make()
+                                                    ->record($record)
+                                                    ->label(__('intervention_plan.actions.delete_meeting'))
+                                                    ->outlined()
+                                                    ->cancelParentActions(),
+                                            ]
+                                        ),
                                 ])
                                 ->columns(3)
                                 ->schema([
