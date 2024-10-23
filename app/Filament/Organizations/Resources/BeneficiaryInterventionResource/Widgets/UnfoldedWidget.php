@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Widgets;
 
-use App\Filament\Organizations\Resources\InterventionPlanResource;
+use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\BeneficiaryIntervention;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -17,6 +17,8 @@ use pxlrbt\FilamentExcel\Exports\ExcelExport;
 class UnfoldedWidget extends BaseWidget
 {
     public ?BeneficiaryIntervention $record = null;
+
+    protected int | string | array $columnSpan = 2;
 
     public function table(Table $table): Table
     {
@@ -68,7 +70,7 @@ class UnfoldedWidget extends BaseWidget
             ->actions([
                 ViewAction::make()
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => InterventionPlanResource::getUrl('view_intervention_service', [
+                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_meetings', [
                         'parent' => $this->record,
                         'record' => $record,
                     ])),

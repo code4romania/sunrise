@@ -6,6 +6,8 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\EditBeneficiaryIntervention;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewBeneficiaryIntervention;
+use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewMeetings;
+use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewUnfoldedMeetings;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 use App\Models\InterventionService;
 use Filament\Forms\Form;
@@ -61,6 +63,8 @@ class InterventionServiceResource extends Resource
             'index' => Pages\ListInterventionServices::route('/'),
             'view_intervention' => ViewBeneficiaryIntervention::route('/{parent}/beneficiaryIntervention/{record}'),
             'edit_intervention' => EditBeneficiaryIntervention::route('/{parent}/beneficiaryIntervention/{record}/edit'),
+            'view_meetings' => ViewMeetings::route('/{parent}/meetings/{record}'),
+            'list_meetings' => ViewUnfoldedMeetings::route('/{parent}/unfoldedMeetings/{record}'),
             //            'create' => Pages\ViewInterventionService::route('/create'),
             //            'edit' => Pages\EditInterventionService::route('/{record}/edit'),
         ];

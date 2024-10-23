@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
 use App\Forms\Components\Select;
 use App\Models\BeneficiaryIntervention;
+use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
 use App\Models\User;
 use Filament\Forms\Components\DatePicker;
@@ -113,6 +114,17 @@ class BeneficiaryInterventionResource extends Resource
             'index' => Pages\ListBeneficiaryInterventions::route('/'),
             //            'create' => Pages\CreateBeneficiaryIntervention::route('/create'),
             //            'edit' => Pages\EditBeneficiaryIntervention::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getGroupPages(InterventionService $parent, BeneficiaryIntervention$record): array
+    {
+        $params = ['parent' => $parent, 'record' => $record];
+
+        return [
+            __('intervention_plan.headings.intervention_meetings') => InterventionServiceResource::getUrl('view_meetings', $params),
+            __('intervention_plan.headings.intervention_indicators') => InterventionServiceResource::getUrl('view_intervention', $params),
+            __('intervention_plan.headings.unfolded') => InterventionServiceResource::getUrl('list_meetings', $params),
         ];
     }
 }
