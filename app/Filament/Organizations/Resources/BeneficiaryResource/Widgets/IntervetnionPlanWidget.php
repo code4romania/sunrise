@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\Beneficiary;
 use App\Models\InterventionPlan;
 use Filament\Tables\Actions\Action;
@@ -22,16 +23,42 @@ class IntervetnionPlanWidget extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => $this->record->interventionPlans())
+            ->query(
+                fn () => $this->record
+                    ->interventionPlan
+                    ->beneficiaryInterventions()
+                    ->with([
+                        'organizationServiceIntervention.serviceIntervention',
+                        'organizationServiceIntervention.organizationService.service',
+                        'user',
+                        'nextMeeting',
+                    ])
+                    ->withCount('meetings')
+            )
             ->columns([
-                TextColumn::make('plan_date'),
+                TextColumn::make('organizationServiceIntervention.serviceIntervention.name')
+                    ->label(__('intervention_plan.labels.intervention')),
+
+                TextColumn::make('organizationServiceIntervention.organizationService.service.name')
+                    ->label(__('intervention_plan.labels.service')),
+
+                TextColumn::make('user.full_name')
+                    ->label(__('intervention_plan.labels.specialist')),
+
+                TextColumn::make('meetings_count')
+                    ->label(__('intervention_plan.labels.meetings_count')),
+
+                TextColumn::make('nextMeeting.date')
+                    ->label(__('intervention_plan.labels.next_meeting')),
             ])
+            ->defaultPaginationPageOption(5)
+            ->paginationPageOptions([5])
             ->heading(__('intervention_plan.headings.table'))
             ->actions([
-                ViewAction::make('view_intervention_plan')
-                    ->url(fn ($record) => BeneficiaryResource::getUrl('view_intervention_plan', [
-                        //                        ''
-                        'parent' => $this->record,
+                ViewAction::make('view_intervention')
+                    ->label(__('intervention_plan.actions.view_intervention'))
+                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_intervention', [
+                        'parent' => $record->intervention_service_id,
                         'record' => $record,
                     ])),
             ])
@@ -46,7 +73,7 @@ class IntervetnionPlanWidget extends BaseWidget
                         $this->redirect(
                             BeneficiaryResource::getUrl('view_intervention_plan', [
                                 'parent' => $this->record,
-                                'record' => InterventionPlan::create([
+                                'record' => $this->record->interventionPlan ?? InterventionPlan::create([
                                     'beneficiary_id' => $this->record->id,
                                     'admit_date_in_center' => $this->record->created_at,
                                     'plan_date' => date('Y-m-d'),

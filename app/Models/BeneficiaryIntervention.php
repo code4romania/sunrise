@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
@@ -53,5 +54,12 @@ class BeneficiaryIntervention extends Model
     public function meetings(): HasMany
     {
         return $this->hasMany(InterventionMeeting::class);
+    }
+
+    public function nextMeeting(): HasOne
+    {
+        return $this->hasOne(InterventionMeeting::class)
+            ->where('date', '>', now()->format('Y-m-d'))
+            ->orderBy('date');
     }
 }

@@ -95,6 +95,7 @@ return [
         'meetings_count' => 'Nr ședințe/ activități',
         'interval' => 'Perioada de acordare',
         'benefit_description' => 'Observații beneficii',
+        'next_meeting' => 'Următoarea',
     ],
 
     'headings' => [
@@ -153,6 +154,7 @@ return [
         'add_benefit' => 'Adaugă beneficiu',
         'delete_benefit' => 'Sterge beneficiu',
         'delete_beneficiary_intervention' => 'Șterge intervenția',
+        'view_intervention' => 'Vezi intervenția',
     ],
 
     'placeholders' => [
