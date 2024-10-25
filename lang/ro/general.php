@@ -14,6 +14,7 @@ return [
         'save' => 'Salvează modificările',
         'delete' => 'Șterge',
         'view_observations' => 'Vezi observații',
+        'change' => 'Modifică',
     ],
 
     'filters' => [

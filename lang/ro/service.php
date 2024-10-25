@@ -22,6 +22,8 @@ return [
         ],
         'create' => 'Adaugă serviciu',
         'delete' => 'Șterge serviciu',
+        'change_service' => 'Modică serviciu',
+        'view_counseling_sheet' => 'Vezi fișa',
     ],
 
     'labels' => [
@@ -48,6 +50,6 @@ return [
         'before_form' => 'Configurează serviciul și intervențiile oferite în cadrul acestuia. Ele vor fi disponibile pentru a fi incluse în planurile de intervenție ale beneficiarilor Centrului, atât timp cât serviciul este menținut cu status activ..',
         'interventions' => 'Selectează toate intervențiile care dorești să fie disponibile în cadrul acestui serviciu.*',
         'inactivate_modal' => 'Prin inactivarea serviciului acesta nu va mai fi disponibil pentru fi adăugat în planurile de intervenție ale benficiarilor, de la momentul inactivării. Pentru cazurile în care s-a folosit deja acest serviciu în fișele de beneficiar, informația nu se va ștearge din istoricul cazurilor în care a fost folosit.',
-        'counseling_sheet' => 'Serviciul conține și o fișă de consiliere care poate fi completată pentru fiecare beneficiar, atunci când serviciul este inclus în planul de consiliere. Vezi fișa',
+        'counseling_sheet' => 'Serviciul conține și o fișă de consiliere care poate fi completată pentru fiecare beneficiar, atunci când serviciul este inclus în planul de consiliere.',
     ],
 ];

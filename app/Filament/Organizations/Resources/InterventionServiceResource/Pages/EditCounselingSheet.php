@@ -50,11 +50,11 @@ class EditCounselingSheet extends EditRecord
         $schema = [];
 
         if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {
-            $schema = $this->getLegalAssistanceForm();
+            $schema = self::getLegalAssistanceForm();
         }
 
         if (CounselingSheet::isValue($counselingSheet, CounselingSheet::PSYCHOLOGICAL_ASSISTANCE)) {
-            $schema = $this->getSchemaForPsychologicalAssistance();
+            $schema = self::getSchemaForPsychologicalAssistance();
         }
 
         return $form->schema([
@@ -64,7 +64,7 @@ class EditCounselingSheet extends EditRecord
         ]);
     }
 
-    private function getLegalAssistanceForm(): array
+    public static function getLegalAssistanceForm(): array
     {
         return [
             Section::make(__('intervention_plan.headings.patrimony_data'))
@@ -140,7 +140,7 @@ class EditCounselingSheet extends EditRecord
         ];
     }
 
-    private function getSchemaForPsychologicalAssistance(): array
+    public static function getSchemaForPsychologicalAssistance(): array
     {
         return [
             Section::make(__('intervention_plan.headings.medical_details'))

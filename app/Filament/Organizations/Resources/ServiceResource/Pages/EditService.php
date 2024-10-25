@@ -21,7 +21,7 @@ class EditService extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('service.headings.edit_page', ['name' => $this->getRecord()->service?->name]);
+        return __('service.headings.edit_page', ['name' => $this->getRecord()->serviceWithoutStatusCondition?->name]);
     }
 
     public function getBreadcrumbs(): array
@@ -35,12 +35,14 @@ class EditService extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            ChangeStatusAction::make(),
+            ChangeStatusAction::make()
+                ->disabled(fn () => ! $this->getRecord()->service),
 
             Actions\DeleteAction::make()
                 ->label(__('service.actions.delete'))
                 ->icon('heroicon-s-trash')
-                ->outlined(),
+                ->outlined()
+                ->disabled(fn () => $this->getRecord()->interventionServices->count()),
         ];
     }
 

@@ -4,18 +4,27 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Enums\CounselingSheet;
+use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Filament\Organizations\Resources\ServiceResource\Pages;
+use App\Forms\Components\Notice;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
+use App\Models\InterventionService;
 use App\Models\OrganizationService;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -43,7 +52,7 @@ class ServiceResource extends Resource
 
                         Select::make('service_id')
                             ->label(__('service.labels.name'))
-                            ->disabled(fn (string $operation) => $operation === 'edit')
+                            ->visible(fn (string $operation) => $operation === 'create')
                             ->relationship(
                                 'service',
                                 'name',
@@ -57,15 +66,53 @@ class ServiceResource extends Resource
                             ->afterStateUpdated(self::populateTable())
                             ->live(),
 
-                        Placeholder::make('before_interventions')
-                            ->hiddenLabel()
+                        Placeholder::make('service')
+                            ->label(__('service.labels.name'))
+                            ->content(fn ($record) => $record->serviceWithoutStatusCondition->name)
+                            ->visible(fn (string $operation) => $operation === 'edit'),
+
+                        Notice::make('counseling_sheet_placeholder')
                             ->content(function (Forms\Get $get) {
                                 $service = Service::find($get('service_id'));
 
                                 return $service?->counseling_sheet ? __('service.helper_texts.counseling_sheet') : null;
-                            }),
+                            })
+                            ->icon('heroicon-o-document-text')
+                            ->key('counseling_sheet_placeholder')
+                            ->visible(fn (Forms\Get $get) => Service::find($get('service_id'))
+                                ?->counseling_sheet)
+                            ->registerActions([
+                                Action::make('view_counseling_sheet')
+                                    ->label(__('service.actions.view_counseling_sheet'))
+                                    ->modalHeading(
+                                        fn (Forms\Get $get) => Service::find($get('service_id'))
+                                            ?->counseling_sheet
+                                            ?->getLabel()
+                                    )
+                                    ->form(function (Forms\Get $get) {
+                                        $service = Service::find($get('service_id'));
 
-                        Forms\Components\Group::make()
+                                        $counselingSheet = $service?->counseling_sheet;
+
+                                        if (! $counselingSheet) {
+                                            return null;
+                                        }
+
+                                        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {
+                                            return EditCounselingSheet::getLegalAssistanceForm();
+                                        }
+
+                                        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::PSYCHOLOGICAL_ASSISTANCE)) {
+                                            return EditCounselingSheet::getSchemaForPsychologicalAssistance();
+                                        }
+
+                                        return [];
+                                    })
+                                    ->disabledForm()
+                                    ->link(),
+                            ]),
+
+                        Group::make()
                             ->visible(fn (Forms\Get $get) => $get('service_id'))
                             ->schema(
                                 [
@@ -74,11 +121,11 @@ class ServiceResource extends Resource
                                         ->label(__('service.headings.interventions'))
                                         ->helperText(__('service.helper_texts.interventions'))
                                         ->relationship('interventions')
-                                        ->addAction(fn (Forms\Components\Actions\Action $action) => $action->hidden())
+                                        ->addAction(fn (Action $action) => $action->hidden())
                                         ->deletable(false)
                                         ->reorderable(false)
                                         ->schema([
-                                            Forms\Components\Checkbox::make('active')
+                                            Checkbox::make('active')
                                                 ->label(__('service.labels.select'))
                                                 ->live(),
                                             Placeholder::make('name')
@@ -99,8 +146,8 @@ class ServiceResource extends Resource
                                                         return ! $state['active'];
                                                     }
                                                 ),
-                                            Forms\Components\Hidden::make('id'),
-                                            Forms\Components\Hidden::make('service_intervention_id'),
+                                            Hidden::make('id'),
+                                            Hidden::make('service_intervention_id'),
                                         ])
                                         ->afterStateHydrated(self::populateTable()),
                                 ]
@@ -133,14 +180,28 @@ class ServiceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query
+                    ->with(['serviceWithoutStatusCondition', 'interventionServices.beneficiary'])
+                    ->withCount(['interventions'])
+            )
             ->columns([
-                Tables\Columns\TextColumn::make('service.name')
+                TextColumn::make('serviceWithoutStatusCondition.name')
                     ->label(__('service.labels.name')),
-                //                Tables\Columns\TextColumn::make('interventions')
-                //->label(__('service.labels.interventions'),
-                Tables\Columns\TextColumn::make('cases')
-                    ->label(__('service.labels.cases')),
-                Tables\Columns\TextColumn::make('status')
+
+                TextColumn::make('interventions_count')
+                    ->label(__('service.labels.interventions')),
+
+                TextColumn::make('beneficiary')
+                    ->label(__('service.labels.cases'))
+                    ->default(
+                        fn (OrganizationService $record) => $record->interventionServices
+                            ->map(fn (InterventionService $item) => $item->beneficiary)
+                            ->unique()
+                            ->count()
+                    ),
+
+                TextColumn::make('status')
                     ->label(__('service.labels.status')),
             ])
             ->filters([

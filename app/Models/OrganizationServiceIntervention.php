@@ -9,6 +9,7 @@ use App\Concerns\HasGeneralStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrganizationServiceIntervention extends Model
 {
@@ -30,5 +31,10 @@ class OrganizationServiceIntervention extends Model
     public function organizationService(): BelongsTo
     {
         return $this->belongsTo(OrganizationService::class);
+    }
+
+    public function beneficiaryInterventions(): HasMany
+    {
+        return $this->hasMany(BeneficiaryIntervention::class);
     }
 }

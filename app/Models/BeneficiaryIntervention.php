@@ -62,4 +62,9 @@ class BeneficiaryIntervention extends Model
             ->where('date', '>', now()->format('Y-m-d'))
             ->orderBy('date');
     }
+
+    public function interventionPlan(): BelongsToThrough
+    {
+        return $this->belongsToThrough(InterventionPlan::class, InterventionService::class);
+    }
 }
