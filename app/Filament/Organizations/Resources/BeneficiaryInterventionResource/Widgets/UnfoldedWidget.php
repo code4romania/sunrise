@@ -69,7 +69,7 @@ class UnfoldedWidget extends BaseWidget
             ])
             ->actions([
                 ViewAction::make()
-                    ->label(__('general.action.view_details'))
+                    ->label(__('general.action.view_observations'))
                     ->url(fn () => InterventionServiceResource::getUrl('view_meetings', [
                         'parent' => $this->record->interventionService,
                         'record' => $this->record,

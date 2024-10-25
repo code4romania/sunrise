@@ -11,6 +11,8 @@ use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
 use App\Models\User;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
@@ -40,25 +42,41 @@ class BeneficiaryInterventionResource extends Resource
     public static function getSchema(): array
     {
         return [
-            Select::make('organization_service_intervention_id')
-                ->label(__('intervention_plan.labels.intervention_type'))
-                ->relationship('interventionService', 'name')
-                ->options(
-                    OrganizationServiceIntervention::with('serviceIntervention')
-                        ->get()
-                        ->pluck('serviceIntervention.name', 'id')
-                )
-                ->required(),
+            Grid::make()
+                ->schema([
+                    Group::make()
+                        ->schema([
+                            Select::make('organization_service_intervention_id')
+                                ->label(__('intervention_plan.labels.intervention_type'))
+                                ->relationship('interventionService', 'name')
+                                ->options(
+                                    OrganizationServiceIntervention::with('serviceIntervention')
+                                        ->active()
+                                        ->get()
+                                        ->pluck('serviceIntervention.name', 'id')
+                                )
+                                ->required(),
 
-            Select::make('user_id')
-                ->label(__('intervention_plan.labels.responsible_specialist'))
-                ->relationship('user', 'full_name')
-                ->options(User::all()->pluck('full_name', 'id')),
+                            Select::make('user_id')
+                                ->label(__('intervention_plan.labels.responsible_specialist'))
+                                ->relationship('user', 'full_name')
+                                ->options(User::all()->pluck('full_name', 'id')),
 
-            DatePicker::make('start_date')
-                ->label(__('intervention_plan.labels.start_date')),
-            DatePicker::make('end_date')
-                ->label(__('intervention_plan.labels.end_date')),
+                            DatePicker::make('start_date')
+                                ->label(__('intervention_plan.labels.start_date')),
+                        ]),
+                ]),
+
+            Grid::make()
+                ->schema([
+                    DatePicker::make('start_date_interval')
+                        ->label(__('intervention_plan.labels.start_date_interval'))
+                        ->native(false),
+
+                    DatePicker::make('end_date_interval')
+                        ->label(__('intervention_plan.labels.end_date_interval'))
+                        ->native(false),
+                ]),
 
             Section::make(__('intervention_plan.headings.intervention_indicators'))
                 ->collapsible()
@@ -117,7 +135,7 @@ class BeneficiaryInterventionResource extends Resource
         ];
     }
 
-    public static function getGroupPages(InterventionService $parent, BeneficiaryIntervention$record): array
+    public static function getGroupPages(InterventionService $parent, BeneficiaryIntervention $record): array
     {
         $params = ['parent' => $parent, 'record' => $record];
 

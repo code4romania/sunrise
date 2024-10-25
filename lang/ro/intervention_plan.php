@@ -17,6 +17,8 @@ return [
         'responsible_institution' => 'Instituție responsabilă',
         'responsible_specialist' => 'Specialist responsabil',
         'start_date' => 'Dată începere',
+        'start_date_interval' => 'Început perioada de acordare',
+        'end_date_interval' => 'Sfârșit perioada de acordare',
         'end_date' => 'Dată sfârșit',
         'date_interval' => 'Perioada de acordare',
         'objections' => 'Obiective specifice',
@@ -90,6 +92,9 @@ return [
         'empty_state_benefit_table' => 'Înregistrează aici toate beneficiile sociale ale beneficiarei.',
         'benefit_category' => 'Categorie beneficiu social',
         'benefit_types' => 'Tipuri de beneficiu social (marcați toate care se aplică)',
+        'meetings_count' => 'Nr ședințe/ activități',
+        'interval' => 'Perioada de acordare',
+        'benefit_description' => 'Observații beneficii',
     ],
 
     'headings' => [
@@ -132,6 +137,7 @@ return [
         'benefit_type' => 'Beneficii sociale',
         'benefit_description' => 'Descriere',
         'delete_benefit_modal' => 'Șterge beneficiu social',
+        'delete_beneficiary_intervention_modal' => 'Șterge intervenția',
     ],
 
     'actions' => [
@@ -146,9 +152,15 @@ return [
         'add_institution' => 'Adaugă încă o instituție',
         'add_benefit' => 'Adaugă beneficiu',
         'delete_benefit' => 'Sterge beneficiu',
+        'delete_beneficiary_intervention' => 'Șterge intervenția',
     ],
 
     'placeholders' => [
         'benefit_description' => 'Descrieți pe scurt orice alte informații relevante legate de acordarea beneficiului social',
+        'organization_service' => 'Alege un serviciu',
+        'institution' => 'Introdu numele organizației',
+        'specialist' => 'Alege un specialist',
+        'objections' => 'Descrieți pe scurt obiectivele acordării serviciului',
+        'benefit_category' => 'Alege o categorie',
     ],
 ];

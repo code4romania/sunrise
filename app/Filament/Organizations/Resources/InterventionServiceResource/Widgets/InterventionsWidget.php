@@ -20,13 +20,22 @@ class InterventionsWidget extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => $this->record->beneficiaryInterventions())
+            ->query(fn () => $this->record->beneficiaryInterventions()
+                ->with('user')
+                ->withCount('meetings'))
             ->heading(__('intervention_plan.headings.interventions'))
             ->columns([
                 Tables\Columns\TextColumn::make('organizationServiceIntervention.serviceIntervention.name')
                     ->label(__('intervention_plan.labels.intervention')),
+
                 Tables\Columns\TextColumn::make('user.full_name')
                     ->label(__('intervention_plan.labels.specialist')),
+
+                Tables\Columns\TextColumn::make('interval')
+                    ->label(__('intervention_plan.labels.interval')),
+
+                Tables\Columns\TextColumn::make('meetings_count')
+                    ->label(__('intervention_plan.labels.meetings_count')),
             ])
             ->headerActions([
                 CreateAction::make()

@@ -44,8 +44,8 @@ class ServiceDescriptionWidget extends InfolistWidget
                         ->label(__('intervention_plan.labels.responsible_specialist')),
                     TextEntry::make('start_date')
                         ->label(__('intervention_plan.labels.start_date')),
-                    TextEntry::make('end_date')
-                        ->label(__('intervention_plan.labels.end_date')),
+                    TextEntry::make('interval')
+                        ->label(__('intervention_plan.labels.interval')),
                     TextEntry::make('objections')
                         ->label(__('intervention_plan.labels.objections'))
                         ->columnSpanFull()

@@ -23,7 +23,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('institution')->nullable();
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->date('start_date_interval')->nullable();
+            $table->date('end_date_interval')->nullable();
             $table->text('objections')->nullable();
             $table->timestamps();
         });

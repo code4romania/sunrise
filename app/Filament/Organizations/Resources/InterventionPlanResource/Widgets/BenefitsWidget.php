@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Widgets;
 
 use App\Forms\Components\Select;
-use App\Models\Benefit;
 use App\Models\BenefitType;
 use App\Models\InterventionPlan;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -18,6 +18,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\Cache;
 
 class BenefitsWidget extends BaseWidget
 {
@@ -33,7 +34,7 @@ class BenefitsWidget extends BaseWidget
             ->heading(__('intervention_plan.headings.benefit_services'))
             ->headerActions([
                 CreateAction::make()
-                    ->label(__('intervention_plan.actions.add_service'))
+                    ->label(__('intervention_plan.actions.add_benefit'))
                     ->modalHeading(__('intervention_plan.headings.add_benefit_modal'))
                     ->form($this->getBenefitSchema())
                     ->createAnother(false),
@@ -78,6 +79,7 @@ class BenefitsWidget extends BaseWidget
         return [
             Select::make('benefit_id')
                 ->label(__('intervention_plan.labels.benefit_category'))
+                ->placeholder(__('intervention_plan.placeholders.benefit_category'))
                 ->relationship('benefit', 'name')
                 ->searchable()
                 ->preload()
@@ -85,23 +87,39 @@ class BenefitsWidget extends BaseWidget
 
             CheckboxList::make('benefit_types')
                 ->label(__('intervention_plan.labels.benefit_types'))
+                ->visible(fn (Get $get) => (int) $get('benefit_id') && self::getBenefitTypes((int) $get('benefit_id')))
                 ->options(function (Get $get) {
                     $benefitID = (int) $get('benefit_id');
 
                     return $benefitID ?
-                        Benefit::find($benefitID)
-                            ->benefitTypes
+                        self::getBenefitTypes($benefitID)
                             ->pluck('name', 'id') :
                         [];
                 }),
 
+            TextInput::make('another_benefit_type')
+                ->label(__('intervention_plan.labels.benefit_type'))
+                ->visible(fn (Get $get) => (int) $get('benefit_id') && ! self::getBenefitTypes((int) $get('benefit_id'))),
+
             RichEditor::make('description')
-                ->hiddenLabel()
+                ->label(__('intervention_plan.labels.benefit_description'))
                 ->placeholder(__('intervention_plan.placeholders.benefit_description')),
 
             Hidden::make('intervention_plan_id')
                 ->default(fn () => $this->record->id),
         ];
+    }
+
+    protected static function getBenefitTypes(int $benefitID)
+    {
+        return Cache::driver('array')
+            ->rememberForever(
+                'benefit_types_' . $benefitID,
+                fn () => BenefitType::query()
+                    ->where('benefit_id', $benefitID)
+                    ->active()
+                    ->get()
+            );
     }
 
     public function getDisplayName(): string

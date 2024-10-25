@@ -22,7 +22,8 @@ return new class extends Migration
             $table->foreignIdFor(OrganizationServiceIntervention::class);
             $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->date('start_date_interval')->nullable();
+            $table->date('end_date_interval')->nullable();
             $table->text('objections')->nullable();
             $table->text('expected_results')->nullable();
             $table->text('procedure')->nullable();

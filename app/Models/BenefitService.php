@@ -30,6 +30,7 @@ class BenefitService extends Model
 
     public function benefit(): BelongsTo
     {
-        return $this->belongsTo(Benefit::class);
+        return $this->belongsTo(Benefit::class)
+            ->active();
     }
 }

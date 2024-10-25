@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasIntervalAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,13 +16,13 @@ class BeneficiaryIntervention extends Model
 {
     use HasFactory;
     use BelongsToThroughTrait;
+    use HasIntervalAttribute;
 
     protected $fillable = [
         'organization_service_intervention_id',
         'intervention_service_id',
         'user_id',
         'start_date',
-        'end_date',
         'objections',
         'expected_results',
         'procedure',

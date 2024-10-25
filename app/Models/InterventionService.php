@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasIntervalAttribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
@@ -16,6 +18,7 @@ class InterventionService extends Model
 {
     use HasFactory;
     use BelongsToThroughTrait;
+    use HasIntervalAttribute;
 
     protected $fillable = [
         'intervention_plan_id',
@@ -23,7 +26,6 @@ class InterventionService extends Model
         'user_id',
         'institution',
         'start_date',
-        'end_date',
         'objections',
     ];
 
@@ -34,7 +36,8 @@ class InterventionService extends Model
 
     public function organizationService(): BelongsTo
     {
-        return $this->belongsTo(OrganizationService::class);
+        return $this->belongsTo(OrganizationService::class)
+            ->active();
     }
 
     public function user(): BelongsTo
@@ -55,5 +58,10 @@ class InterventionService extends Model
     public function counselingSheet(): HasOne
     {
         return $this->hasOne(ServiceCounselingSheet::class);
+    }
+
+    public function meetings(): HasManyThrough
+    {
+        return $this->hasManyThrough(InterventionMeeting::class, BeneficiaryIntervention::class);
     }
 }

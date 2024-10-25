@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\P
 
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
+use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Actions;
@@ -40,7 +41,14 @@ class EditBeneficiaryIntervention extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->label(__('intervention_plan.actions.delete_beneficiary_intervention'))
+                ->outlined()
+                ->modalHeading(__('intervention_plan.headings.delete_beneficiary_intervention_modal'))
+                ->successRedirectUrl(InterventionPlanResource::getUrl('view_intervention_service', [
+                    'parent' => $this->getRecord()->interventionService,
+                    'record' => $this->getRecord(),
+                ])),
         ];
     }
 }

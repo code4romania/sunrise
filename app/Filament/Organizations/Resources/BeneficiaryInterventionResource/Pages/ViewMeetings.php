@@ -10,6 +10,7 @@ use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Forms\Components\Select;
 use App\Infolists\Components\Actions\CreateAction;
+use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionMeeting;
 use App\Models\User;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
@@ -85,52 +86,49 @@ class ViewMeetings extends ViewRecord
                         ->relationship(fn () => $this->record->meetings())
                         ->modalHeading(__('intervention_plan.actions.add_meeting'))
                         ->form($this->getFormSchema())
-                        ->link(),
+                        ->icon('heroicon-o-plus-circle'),
                 ])
                 ->schema([
                     RepeatableEntry::make('meetings')
                         ->hiddenLabel()
+                        ->columns(3)
                         ->schema([
-                            Section::make('meeting')
-                                ->heading(function (Section $component, $record) {
+                            SectionHeader::make('meeting')
+                                ->state(function (SectionHeader $component, $record) {
                                     $index = (int) explode('.', $component->getStatePath())[1];
 
                                     return __('intervention_plan.headings.meeting_repeater', [
                                         'number' => $index + 1,
                                     ]) . ' ' . $record->status?->getLabel();
                                 })
-                                ->headerActions([
-                                    Action::make('edit')
-                                        ->label(__('general.action.edit'))
-                                        ->icon('heroicon-o-pencil')
-                                        ->link()
-                                        ->modalHeading(__('general.action.edit'))
-                                        ->form($this->getFormSchema())
-                                        ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
-                                        ->extraModalFooterActions(
-                                            fn ($record) => [
-                                                DeleteAction::make()
-                                                    ->record($record)
-                                                    ->label(__('intervention_plan.actions.delete_meeting'))
-                                                    ->outlined()
-                                                    ->cancelParentActions(),
-                                            ]
-                                        ),
-                                ])
-                                ->columns(3)
-                                ->schema([
-                                    TextEntry::make('date')
-                                        ->label(__('intervention_plan.labels.date'))
-                                        ->formatStateUsing(fn (InterventionMeeting $record, $state) => $state . ' ' . $record->time),
-                                    TextEntry::make('duration')
-                                        ->label(__('intervention_plan.labels.duration')),
-                                    TextEntry::make('user.full_name')
-                                        ->label(__('intervention_plan.labels.responsible_specialist')),
-                                    TextEntry::make('observations')
-                                        ->label(__('intervention_plan.labels.observations'))
-                                        ->html()
-                                        ->columnSpanFull(),
-                                ]),
+                                ->action(Action::make('edit')
+                                    ->label(__('general.action.edit'))
+                                    ->icon('heroicon-o-pencil')
+                                    ->link()
+                                    ->modalHeading(__('general.action.edit'))
+                                    ->form($this->getFormSchema())
+                                    ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
+                                    ->extraModalFooterActions(
+                                        fn ($record) => [
+                                            DeleteAction::make()
+                                                ->record($record)
+                                                ->label(__('intervention_plan.actions.delete_meeting'))
+                                                ->outlined()
+                                                ->cancelParentActions(),
+                                        ]
+                                    )),
+
+                            TextEntry::make('date')
+                                ->label(__('intervention_plan.labels.date'))
+                                ->formatStateUsing(fn (InterventionMeeting $record, $state) => $state . ' ' . $record->time),
+                            TextEntry::make('duration')
+                                ->label(__('intervention_plan.labels.duration')),
+                            TextEntry::make('user.full_name')
+                                ->label(__('intervention_plan.labels.responsible_specialist')),
+                            TextEntry::make('observations')
+                                ->label(__('intervention_plan.labels.observations'))
+                                ->html()
+                                ->columnSpanFull(),
                         ]),
                 ]),
         ]);

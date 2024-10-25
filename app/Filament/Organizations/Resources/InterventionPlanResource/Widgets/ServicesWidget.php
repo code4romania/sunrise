@@ -32,7 +32,7 @@ class ServicesWidget extends BaseWidget
             ->query(
                 fn () => $this->record->services()
                     ->with('organizationService.service', 'user')
-                    ->withCount('beneficiaryInterventions')
+                    ->withCount(['beneficiaryInterventions', 'meetings'])
             )
             ->heading(__('intervention_plan.headings.services'))
             ->columns([
@@ -42,8 +42,11 @@ class ServicesWidget extends BaseWidget
                 TextColumn::make('user_id')
                     ->label(__('intervention_plan.labels.specialist'))
                     ->formatStateUsing(fn ($record) => $record->user?->full_name),
-                TextColumn::make('beneficiaryInterventions_count')
+                TextColumn::make('beneficiary_interventions_count')
                     ->label(__('intervention_plan.labels.interventions_count')),
+
+                TextColumn::make('meetings_count')
+                    ->label(__('intervention_plan.labels.meetings_count')),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -74,26 +77,51 @@ class ServicesWidget extends BaseWidget
                         ->schema([
                             Select::make('organization_service_id')
                                 ->label(__('intervention_plan.labels.service_type'))
+                                ->placeholder(__('intervention_plan.placeholders.organization_service'))
                                 ->relationship('organizationService')
-                                ->options(OrganizationService::with('service')->get()->pluck('service.name', 'id')),
+                                ->options(
+                                    OrganizationService::with('service')
+                                        ->active()
+                                        ->get()
+                                        ->filter(fn (OrganizationService $item) => $item->service)
+                                        ->pluck('service.name', 'id')
+                                ),
+
                             TextInput::make('institution')
                                 ->label(__('intervention_plan.labels.responsible_institution'))
-                                ->default(Filament::getTenant()->name),
+                                ->placeholder(__('intervention_plan.placeholders.institution'))
+                                ->default(Filament::getTenant()->name)
+                                ->maxLength(100),
+
                             Select::make('user_id')
                                 ->label(__('intervention_plan.labels.responsible_specialist'))
+                                ->placeholder(__('intervention_plan.placeholders.specialist'))
                                 ->relationship('user')
                                 ->options(User::all()->pluck('full_name', 'id')),
+
                             DatePicker::make('start_date')
                                 ->label(__('intervention_plan.labels.start_date'))
-                                ->native(false),
-                            DatePicker::make('end_date')
-                                ->label(__('intervention_plan.labels.end_date'))
                                 ->native(false),
                         ]),
                 ]),
 
+            Grid::make()
+                ->columnSpanFull()
+                ->schema([
+                    DatePicker::make('start_date_interval')
+                        ->label(__('intervention_plan.labels.start_date_interval'))
+                        ->native(false),
+
+                    DatePicker::make('end_date_interval')
+                        ->label(__('intervention_plan.labels.end_date_interval'))
+                        ->native(false),
+                ]),
+
             RichEditor::make('objections')
-                ->label(__('intervention_plan.labels.objections')),
+                ->label(__('intervention_plan.labels.objections'))
+                ->placeholder(__('intervention_plan.placeholders.objections'))
+                ->maxLength(1000),
+
             Hidden::make('intervention_plan_id')
                 ->default($interventionPlanID),
         ];

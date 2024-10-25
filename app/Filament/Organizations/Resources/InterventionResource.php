@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 
+// TODO: remove this resource
 class InterventionResource extends Resource
 {
     protected static ?string $model = Intervention::class;

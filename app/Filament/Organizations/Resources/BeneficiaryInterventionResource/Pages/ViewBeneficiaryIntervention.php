@@ -45,10 +45,10 @@ class ViewBeneficiaryIntervention extends ViewRecord
                         Action::make('edit_intervention')
                             ->label(__('general.action.edit'))
                             ->icon('heroicon-o-pencil')
-                            ->outlined()
-                            ->url(fn ($record) => InterventionServiceResource::getUrl('edit_intervention', [
-                                'parent' => $this->record,
-                                'record' => $record,
+                            ->link()
+                            ->url(fn () => InterventionServiceResource::getUrl('edit_intervention', [
+                                'parent' => $this->record->interventionService,
+                                'record' => $this->record,
                             ])),
                     ])
                     ->maxWidth('3xl')
