@@ -95,7 +95,7 @@ class ListMonitoring extends ListRecords
                 ->formatStateUsing(
                     fn ($record) => $record->specialists
                         ->map(fn ($specialist) => $specialist->user->getFilamentName() . ' (' .
-                            $specialist->roles->map(fn ($role) => $role->label())->join(', ') . ')')
+                            $specialist->roles?->map(fn ($role) => $role->label())->join(', ') . ')')
                         ->join('; ')
                 ),
         ])
