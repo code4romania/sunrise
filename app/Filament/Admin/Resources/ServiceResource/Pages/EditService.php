@@ -36,11 +36,11 @@ class EditService extends EditRecord
     protected function getActions(): array
     {
         return [
-            ChangeNomenclatureStatusAction::make(),
+            ChangeNomenclatureStatusAction::make()
+                ->relationship('organizationServices'),
 
-            //TODO disable if is used
             DeleteAction::make()
-                ->disabled(fn () => GeneralStatus::isValue($this->getRecord()->status, GeneralStatus::ACTIVE))
+                ->disabled(fn () => $this->getRecord()->organizationServices()->count() > 0)
                 ->successRedirectUrl(self::$resource::getUrl()),
         ];
     }

@@ -22,4 +22,9 @@ class Benefit extends Model
     {
         return $this->hasMany(BenefitType::class);
     }
+
+    public function benefitServices(): HasMany
+    {
+        return $this->hasMany(BenefitService::class);
+    }
 }

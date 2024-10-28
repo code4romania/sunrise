@@ -39,4 +39,9 @@ class Service extends Model
     {
         return $this->hasMany(Intervention::class);
     }
+
+    public function organizationServices(): HasMany
+    {
+        return $this->hasMany(OrganizationService::class);
+    }
 }

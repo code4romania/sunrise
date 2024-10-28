@@ -8,6 +8,7 @@ use App\Enums\GeneralStatus;
 use App\Filament\Admin\Resources\BenefitResource\Pages;
 use App\Forms\Components\TableRepeater;
 use App\Models\Benefit;
+use App\Models\BenefitService;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -53,9 +54,14 @@ class BenefitResource extends Resource
                                     ->disabled(function (array $arguments, TableRepeater $component): bool {
                                         $items = $component->getState();
                                         $currentItem = $items[$arguments['item']];
-                                        // TODO disable if intervention is used
 
-                                        return $currentItem['status'];
+                                        if (! $currentItem['id']) {
+                                            return false;
+                                        }
+
+                                        return (bool) BenefitService::query()
+                                            ->whereJsonContains('benefit_types', \sprintf('%s', $currentItem['id']))
+                                            ->count();
                                     })
                             ),
                     ]),

@@ -38,12 +38,11 @@ class EditBenefit extends EditRecord
         return [
             ChangeNomenclatureStatusAction::make(),
 
-            // TODO make disable if is use
             Actions\DeleteAction::make()
                 ->label(__('nomenclature.actions.delete_benefit'))
                 ->icon('heroicon-s-trash')
                 ->outlined()
-                ->disabled(fn () => GeneralStatus::isValue($this->getRecord()->status, GeneralStatus::ACTIVE))
+                ->disabled(fn () => $this->getRecord()->benefitServices()->count())
                 ->successRedirectUrl(self::$resource::getUrl())
                 // tooltip doesn't work if action is disabled
                 ->tooltip(fn (Actions\DeleteAction $action) => $action->isDisabled() ? __('nomenclature.helper_texts.delete_benefit') : ''),
