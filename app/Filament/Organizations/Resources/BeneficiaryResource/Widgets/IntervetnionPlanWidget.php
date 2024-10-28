@@ -26,14 +26,15 @@ class IntervetnionPlanWidget extends BaseWidget
             ->query(
                 fn () => $this->record
                     ->interventionPlan
-                    ->beneficiaryInterventions()
+                    ?->beneficiaryInterventions()
                     ->with([
                         'organizationServiceIntervention.serviceIntervention',
                         'organizationServiceIntervention.organizationService.service',
                         'user',
                         'nextMeeting',
                     ])
-                    ->withCount('meetings')
+                    ->withCount('meetings') ?:
+                    $this->record->interventionPlan()
             )
             ->columns([
                 TextColumn::make('organizationServiceIntervention.serviceIntervention.name')

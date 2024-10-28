@@ -78,8 +78,17 @@ class BenefitResource extends Resource
             ])
             ->heading(__('nomenclature.headings.benefit_table'))
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('status'),
+                TextColumn::make('name')
+                    ->label(__('nomenclature.labels.benefit')),
+
+                TextColumn::make('institutions')
+                    ->label(__('nomenclature.labels.institutions')),
+
+                TextColumn::make('organizations_count')
+                    ->label(__('nomenclature.labels.centers')),
+
+                TextColumn::make('status')
+                    ->label(__('nomenclature.labels.status')),
             ])
             ->actions([
                 ViewAction::make()
