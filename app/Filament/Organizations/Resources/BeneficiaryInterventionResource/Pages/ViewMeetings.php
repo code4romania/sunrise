@@ -45,7 +45,7 @@ class ViewMeetings extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return $this->getRecord()->organizationServiceIntervention->serviceIntervention->name;
+        return $this->getRecord()->organizationServiceIntervention->serviceInterventionWithoutStatusCondition->name;
     }
 
     protected function getFormSchema(): array

@@ -31,14 +31,14 @@ class ServicesWidget extends BaseWidget
         return $table
             ->query(
                 fn () => $this->record->services()
-                    ->with('organizationService.service', 'user')
+                    ->with('organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition', 'user')
                     ->withCount(['beneficiaryInterventions', 'meetings'])
             )
             ->heading(__('intervention_plan.headings.services'))
             ->columns([
                 TextColumn::make('organization_service_id')
                     ->label(__('intervention_plan.labels.service'))
-                    ->formatStateUsing(fn ($record) => ($record->organizationService?->service->name)),
+                    ->formatStateUsing(fn ($record) => ($record->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name)),
                 TextColumn::make('user_id')
                     ->label(__('intervention_plan.labels.specialist'))
                     ->formatStateUsing(fn ($record) => $record->user?->full_name),

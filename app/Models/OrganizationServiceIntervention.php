@@ -28,6 +28,11 @@ class OrganizationServiceIntervention extends Model
             ->active();
     }
 
+    public function serviceInterventionWithoutStatusCondition(): BelongsTo
+    {
+        return $this->belongsTo(ServiceIntervention::class, 'service_intervention_id');
+    }
+
     public function organizationService(): BelongsTo
     {
         return $this->belongsTo(OrganizationService::class);

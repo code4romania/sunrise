@@ -28,7 +28,7 @@ class EditService extends EditRecord
     {
         return [
             self::getResource()::getUrl() => __('service.headings.navigation'),
-            self::getResource()::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->service?->name,
+            self::getResource()::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->serviceWithoutStatusCondition?->name,
         ];
     }
 

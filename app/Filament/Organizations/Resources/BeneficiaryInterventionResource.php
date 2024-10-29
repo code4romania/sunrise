@@ -39,7 +39,7 @@ class BeneficiaryInterventionResource extends Resource
             ]);
     }
 
-    public static function getSchema(): array
+    public static function getSchema(?int $organizationServiceID = null): array
     {
         return [
             Grid::make()
@@ -48,12 +48,20 @@ class BeneficiaryInterventionResource extends Resource
                         ->schema([
                             Select::make('organization_service_intervention_id')
                                 ->label(__('intervention_plan.labels.intervention_type'))
-                                ->relationship('interventionService', 'name')
+                                ->relationship('organizationServiceIntervention', 'name')
                                 ->options(
-                                    OrganizationServiceIntervention::with('serviceIntervention')
-                                        ->active()
-                                        ->get()
-                                        ->pluck('serviceIntervention.name', 'id')
+                                    function (?BeneficiaryIntervention $record) use ($organizationServiceID) {
+                                        $organizationServiceID = $record?->interventionService->organization_service_id ?? $organizationServiceID;
+
+                                        return OrganizationServiceIntervention::with('serviceIntervention')
+                                            ->where('organization_service_id', $organizationServiceID)
+                                            ->active()
+                                            ->get()
+                                            ->filter(
+                                                fn (OrganizationServiceIntervention $organizationServiceIntervention) => $organizationServiceIntervention->serviceIntervention
+                                            )
+                                            ->pluck('serviceIntervention.name', 'id');
+                                    }
                                 )
                                 ->required(),
 

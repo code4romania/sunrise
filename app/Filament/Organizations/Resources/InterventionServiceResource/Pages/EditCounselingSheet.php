@@ -46,7 +46,7 @@ class EditCounselingSheet extends EditRecord
 
     public function form(Form $form): Form
     {
-        $counselingSheet = $this->record->organizationService->service->counseling_sheet;
+        $counselingSheet = $this->record->organizationService->serviceWithoutStatusCondition->counseling_sheet;
         $schema = [];
 
         if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {

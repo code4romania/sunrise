@@ -40,6 +40,11 @@ class InterventionService extends Model
             ->active();
     }
 
+    public function organizationServiceWithoutStatusCondition(): BelongsTo
+    {
+        return $this->belongsTo(OrganizationService::class, 'organization_service_id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

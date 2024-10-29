@@ -25,7 +25,7 @@ class InterventionsWidget extends BaseWidget
                 ->withCount('meetings'))
             ->heading(__('intervention_plan.headings.interventions'))
             ->columns([
-                Tables\Columns\TextColumn::make('organizationServiceIntervention.serviceIntervention.name')
+                Tables\Columns\TextColumn::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
                     ->label(__('intervention_plan.labels.intervention')),
 
                 Tables\Columns\TextColumn::make('user.full_name')
@@ -41,11 +41,11 @@ class InterventionsWidget extends BaseWidget
                 CreateAction::make()
                     ->label(__('intervention_plan.actions.add_intervention'))
                     ->createAnother(false)
-                    ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationService->service->name]))
+                    ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name]))
                     ->form([
                         Hidden::make('intervention_service_id')
                             ->default($this->record->id),
-                        ...BeneficiaryInterventionResource::getSchema(),
+                        ...BeneficiaryInterventionResource::getSchema($this->record->organization_service_id),
                     ]),
             ])
             ->actions([

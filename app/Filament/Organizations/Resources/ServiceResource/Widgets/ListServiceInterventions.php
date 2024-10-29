@@ -22,12 +22,12 @@ class ListServiceInterventions extends BaseWidget
             ->query(
                 fn () => $this->record->interventions()
                     ->with([
-                        'serviceIntervention',
+                        'serviceInterventionWithoutStatusCondition',
                         'beneficiaryInterventions.interventionPlan',
                     ])
             )
             ->columns([
-                TextColumn::make('serviceIntervention.name')
+                TextColumn::make('serviceInterventionWithoutStatusCondition.name')
                     ->label(__('service.labels.interventions')),
 
                 TextColumn::make('cases')
