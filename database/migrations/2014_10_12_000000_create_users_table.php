@@ -25,6 +25,7 @@ return new class extends Migration
             $table->json('case_permissions')->nullable();
             $table->json('admin_permissions')->nullable();
             $table->boolean('is_admin')->default(false);
+            $table->boolean('ngo_admin')->default(false);
             $table->timestamp('password_set_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -18,6 +18,7 @@ use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\FlowPresentation;
+use App\Models\Institution;
 use App\Models\Intervention;
 use App\Models\Meeting;
 use App\Models\MultidisciplinaryEvaluation;
@@ -73,6 +74,7 @@ class AppServiceProvider extends ServiceProvider
     protected function enforceMorphMap(): void
     {
         Relation::enforceMorphMap([
+            'institution' => Institution::class,
             'beneficiary' => Beneficiary::class,
             'city' => City::class,
             'community_profile' => CommunityProfile::class,

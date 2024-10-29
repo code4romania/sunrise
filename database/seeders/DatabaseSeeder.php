@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\Country;
-use App\Models\Organization;
+use App\Models\Institution;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -36,12 +36,9 @@ class DatabaseSeeder extends Seeder
             ->count(20)
             ->create();
 
-        Organization::factory()
+        Institution::factory()
             ->count(2)
-            ->withUsers()
-            ->withBeneficiaries()
-            ->withCommunityProfile()
-            ->withInterventions()
+            ->withOrganization()
             ->create();
     }
 }

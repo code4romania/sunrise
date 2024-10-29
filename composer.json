@@ -27,6 +27,7 @@
         "sentry/sentry-laravel": "^4.7",
         "spatie/laravel-activitylog": "^4.8",
         "staudenmeir/belongs-to-through": "^2.5",
+        "staudenmeir/eloquent-has-many-deep": "^1.7",
         "stevegrunwell/time-constants": "^1.2",
         "tpetry/laravel-query-expressions": "^0.9"
     },
