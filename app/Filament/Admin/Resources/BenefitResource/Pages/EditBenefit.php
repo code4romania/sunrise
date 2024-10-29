@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
-use App\Enums\GeneralStatus;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Resources\BenefitResource;
 use Filament\Actions;

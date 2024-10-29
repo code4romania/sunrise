@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Organizations\Resources\ServiceResource\Actions;
 
 use App\Enums\GeneralStatus;

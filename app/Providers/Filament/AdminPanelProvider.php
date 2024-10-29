@@ -63,6 +63,7 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/common/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('3rem')
+            ->darkMode(false)
             ->discoverResources(
                 in: app_path('Filament/Admin/Resources'),
                 for: 'App\\Filament\\Admin\\Resources'
@@ -94,8 +95,9 @@ class AdminPanelProvider extends PanelProvider
                     ->isActiveWhen(
                         fn () => request()->routeIs('filament.admin.resources.roles.*') ||
                             request()->routeIs('filament.admin.resources.services.*') ||
-                            request()->routeIs('filament.admin.resources.benefits.*'))
-                    ->url(fn()=>ServiceResource::getUrl()),
+                            request()->routeIs('filament.admin.resources.benefits.*')
+                    )
+                    ->url(fn () => ServiceResource::getUrl()),
             ])
             ->unsavedChangesAlerts()
             ->plugins([

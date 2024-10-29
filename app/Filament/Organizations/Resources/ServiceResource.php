@@ -41,7 +41,6 @@ class ServiceResource extends Resource
         return __('navigation.configurations._group');
     }
 
-
     public static function getNavigationLabel(): string
     {
         return __('service.headings.navigation');

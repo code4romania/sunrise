@@ -94,8 +94,15 @@ class ServiceResource extends Resource
                                 $items = $component->getState();
                                 $currentItem = $items[$arguments['item']];
 
-                                return (bool) ServiceIntervention::find($currentItem['id'])
-                                    ->organizationIntervention()->count();
+                                $serviceIntervention = ServiceIntervention::where('id', $currentItem['id'])
+                                    ->withCount('organizationIntervention')
+                                    ->first();
+
+                                if (! $serviceIntervention) {
+                                    return false;
+                                }
+
+                                return  $serviceIntervention->organization_intervention_count > 0;
                             })
                     ),
             ]);

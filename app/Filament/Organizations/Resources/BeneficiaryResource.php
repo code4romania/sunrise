@@ -20,7 +20,6 @@ use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\ViewInte
 use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
 use App\Filters\DateFilter;
 use App\Models\Beneficiary;
-use App\Models\User;
 use App\Tables\Filters\SelectFilter;
 use Filament\Resources\Resource;
 use Filament\Tables;

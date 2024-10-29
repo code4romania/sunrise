@@ -35,17 +35,20 @@ class EnumEntry extends TextEntry
                 $returnType = $reflectionClass->getBackingtype();
 
                 debug($returnType->getName(), $this->enumClass);
+
                 return $state->map(
                     function ($item) use ($returnType) {
                         $item = match ($returnType->getName()) {
-                            'string' => trim((string)$item),
-                            'int' => (int)$item,
+                            'string' => trim((string) $item),
+                            'int' => (int) $item,
                         };
+
                         return $this->enumClass::tryFrom($item)?->getLabel();
                     }
                 )->join(', ');
 
                 debug($state);
+
                 return $state;
             }
 
