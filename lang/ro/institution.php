@@ -31,6 +31,9 @@ return [
         'email' => 'Email',
         'phone' => 'Telefon',
         'inactivate' => 'Odată dezactivată o organizație, utilizatorii acesteia nu vor mai ave acces în platformă. Toate datele asociate organizației vor rămâne în baza de date. Pentru a oferi din nou acces utilizatorilor, organizația va trebui Reactivată din profilul acesteia.',
+        'roles' => 'Roluri',
+        'account_status' => 'Cont',
+        'last_login_at' => 'Ultima accesare',
     ],
 
     'actions' => [

@@ -66,6 +66,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at',
         'latest_organization_id',
         'is_admin',
+        'ngo_admin',
     ];
 
     /**
@@ -102,6 +103,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         static::creating(function (User $model) {
             $model->setPendingStatus();
         });
+
+        static::created(function (User $model) {
+            if ($model->institution) {
+                $model->organizations()
+                    ->attach(
+                        $model->institution
+                            ->organizations
+                            ?->pluck('id')
+                    );
+            }
+        });
     }
 
     public function organizations(): MorphToMany
@@ -112,6 +124,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function latestOrganization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'latest_organization_id');
+    }
+
+    public function institution(): BelongsTo
+    {
+        return $this->belongsTo(Institution::class);
     }
 
     public function getActivitylogOptions(): LogOptions

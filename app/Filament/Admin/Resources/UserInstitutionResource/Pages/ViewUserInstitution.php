@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\UserInstitutionResource\Pages;
 
 use App\Concerns\HasParentResource;
+use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\ActivateUserAction;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\DeactivateUserAction;
@@ -23,10 +24,24 @@ class ViewUserInstitution extends ViewRecord
 
     protected static string $resource = UserInstitutionResource::class;
 
+    protected function getRedirectUrl(): ?string
+    {
+        return self::getParentResource()::getUrl('view', [
+            'record' => $this->parent,
+            'activeRelationManager' => 'admins',
+        ]);
+    }
+
     public function getBreadcrumbs(): array
     {
-        // TODO: add breadcrumb institution -> user
-        return [];
+        return [
+            InstitutionResource::getUrl() => __('institution.headings.list_title'),
+            InstitutionResource::getUrl('view', ['record' => $this->parent]) => $this->parent->name,
+            InstitutionResource::getUrl('user.view', [
+                'parent' => $this->parent,
+                'record' => $this->getRecord(),
+            ]) => $this->getRecord()->full_name,
+        ];
     }
 
     public function getTitle(): string|Htmlable

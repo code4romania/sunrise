@@ -14,6 +14,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditInstitutionDetails extends EditRecord
 {
@@ -22,6 +23,19 @@ class EditInstitutionDetails extends EditRecord
     protected function getRedirectUrl(): ?string
     {
         return self::$resource::getUrl('view', ['record' => $this->getRecord()]);
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            InstitutionResource::getUrl() => __('institution.headings.list_title'),
+            InstitutionResource::getUrl('view', ['record' => $this->getRecord()]) => $this->getRecord()->name,
+        ];
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return $this->getRecord()->name;
     }
 
     public function form(Form $form): Form
