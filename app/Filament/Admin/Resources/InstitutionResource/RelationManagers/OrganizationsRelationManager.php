@@ -20,6 +20,11 @@ class OrganizationsRelationManager extends RelationManager
 
     protected static string $view = 'infolists.infolist-relation-manager';
 
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('institution.headings.center_details');
+    }
+
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
@@ -39,36 +44,36 @@ class OrganizationsRelationManager extends RelationManager
                     RepeatableEntry::make('organizations')
                         ->hiddenLabel()
                         ->columns()
-                        ->schema([
-                            TextEntry::make('name')
-                                ->label(__('institution.labels.center_name')),
-
-                            TextEntry::make('short_name')
-                                ->label(__('organization.field.short_name')),
-
-                            TextEntry::make('main_activity')
-                                ->label(__('organization.field.main_activity'))
-                                ->columnSpanFull(),
-
-                            TextEntry::make('social_service_licensing_certificate')
-                                ->label(__('institution.labels.social_service_licensing_certificate'))
-                                ->columnSpanFull(),
-
-                            TextEntry::make('logo')
-                                ->label(__('institution.labels.logo_center'))
-                                ->columnSpanFull(),
-
-                            TextEntry::make('organization_header')
-                                ->label(__('institution.labels.organization_header'))
-                                ->columnSpanFull(),
-                        ]),
+                        ->schema($this->getOrganizationInfolistSchema()),
                 ]),
 
         ])->state(['organizations' => $this->getOwnerRecord()->organizations->toArray()]);
     }
 
-    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    public static function getOrganizationInfolistSchema(): array
     {
-        return __('institution.headings.center_details');
+        return [
+            TextEntry::make('name')
+                ->label(__('institution.labels.center_name')),
+
+            TextEntry::make('short_name')
+                ->label(__('organization.field.short_name')),
+
+            TextEntry::make('main_activity')
+                ->label(__('organization.field.main_activity'))
+                ->columnSpanFull(),
+
+            TextEntry::make('social_service_licensing_certificate')
+                ->label(__('institution.labels.social_service_licensing_certificate'))
+                ->columnSpanFull(),
+
+            TextEntry::make('logo')
+                ->label(__('institution.labels.logo_center'))
+                ->columnSpanFull(),
+
+            TextEntry::make('organization_header')
+                ->label(__('institution.labels.organization_header'))
+                ->columnSpanFull(),
+        ];
     }
 }

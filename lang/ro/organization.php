@@ -37,4 +37,8 @@ return [
             'placeholder' => 'Național',
         ],
     ],
+
+    'helper_texts' => [
+        'view_tenant_info' => 'Pentru a modifica/ actualiza informațiile din această secțiune, vă rugăm contactați echipa de administrare Sunrise via email la admin@stopviolențeidomestice.ro ',
+    ],
 ];
