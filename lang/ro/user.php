@@ -53,6 +53,7 @@ return [
         'deactivate' => 'Deactivează cont',
         'reset_password' => 'Resetează parola',
         'resend_invitation' => 'Retrimite invitația',
+        'activate' => 'Reactivează cont',
     ],
 
     'action_resend_invitation_confirm' => [

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\InstitutionStatus;
 use App\Models\City;
 use App\Models\County;
 use Illuminate\Database\Migrations\Migration;
@@ -34,6 +35,8 @@ return new class extends Migration
             $table->string('reprezentative_email')->nullable();
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
+
+            $table->string('status')->default(InstitutionStatus::PENDING->value);
 
             $table->timestamps();
         });

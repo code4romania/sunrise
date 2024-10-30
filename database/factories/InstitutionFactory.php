@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\InstitutionStatus;
 use App\Enums\OrganizationType;
 use App\Models\City;
 use App\Models\Institution;
@@ -38,6 +39,8 @@ class InstitutionFactory extends Factory
 
             'reprezentative_name' => fake()->name(),
             'reprezentative_email' => fake()->safeEmail(),
+
+            'status' => fake()->randomElement(InstitutionStatus::values()),
         ];
     }
 

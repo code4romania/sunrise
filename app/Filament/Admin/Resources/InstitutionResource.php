@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\InstitutionResource\Pages;
+use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
+use App\Filament\Admin\Resources\UserInstitutionResource\Pages\ViewUserInstitution;
 use App\Models\Institution;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -58,8 +60,12 @@ class InstitutionResource extends Resource
                 //
             ])
             ->actions([
-                ViewAction::make(),
-            ]);
+                ViewAction::make()
+                    ->label(__('general.action.view_details')),
+            ])
+            ->emptyStateIcon('heroicon-o-clipboard-document-list')
+            ->emptyStateHeading(__('institution.headings.empty_state'))
+            ->emptyStateDescription(null);
     }
 
     public static function getPages(): array
@@ -67,7 +73,11 @@ class InstitutionResource extends Resource
         return [
             'index' => Pages\ListInstitutions::route('/'),
             'create' => Pages\CreateInstitution::route('/create'),
-            'edit' => Pages\EditInstitution::route('/{record}/edit'),
+            'view' => Pages\ViewInstitution::route('/{record}'),
+            'edit_institution_details' => Pages\EditInstitutionDetails::route('/{record}/editInstitutionDetails'),
+            'edit_institution_centers' => Pages\EditInstitutionCenters::route('/{record}/editCenters'),
+            'user.view' => ViewUserInstitution::route('{parent}/user/{record}'),
+            'user.edit' => EditUserInstitution::route('{parent}/user/{record}/edit'),
         ];
     }
 }

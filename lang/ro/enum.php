@@ -293,7 +293,7 @@ return [
     'maintenance_sources' => [
         'relationship_income' => 'Venitul existent în cadrul relației',
         'alimony' => 'Pensie alimentară',
-      ],
+    ],
     'activity_description' => [
         'created' => 'Creat',
         'retrieved' => 'Vizualizat',
@@ -325,5 +325,11 @@ return [
         'issued_by_court' => 'Emis de instanta',
         'no' => 'Nu',
         'unknown' => 'Nu știe/ Nu răspunde',
+    ],
+
+    'institution_status' => [
+        'active' => 'Activ',
+        'inactive' => 'Suspendat',
+        'pending' => 'În așteptare',
     ],
 ];
