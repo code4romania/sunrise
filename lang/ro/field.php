@@ -70,6 +70,7 @@ return [
     'start_year' => 'Anul de început',
     'status' => 'Status',
 
+    'children' => 'Copii',
     'children_total_count' => 'Număr total copii',
     'children_care_count' => 'Număr copii în întreținere',
     'children_under_10_care_count' => 'Număr copii în întreținere cu vârsta < 10 ani',
@@ -85,9 +86,9 @@ return [
     'family_doctor_name' => 'Nume medic de familie',
     'family_doctor_contact' => 'Contact medic de familie',
     'psychiatric_history' => 'Antecedente psihiatrice',
-    'psychiatric_notes' => 'Observații antecedente psihiatrice',
+    'psychiatric_history_notes' => 'Observații antecedente psihiatrice',
     'criminal_history' => 'Antecedente penale',
-    'criminal_notes' => 'Observații antecedente penale',
+    'criminal_history_notes' => 'Observații antecedente penale',
     'studies' => 'Studii absolvite',
     'occupation' => 'Ocupație',
     'workplace' => 'Locul de muncă',
@@ -110,6 +111,7 @@ return [
     'aggressor_drugs' => 'Tip de substanțe consumate',
     'aggressor_legal_history' => 'Aspecte legale agresor',
     'has_protection_order' => 'Ordin de protecție',
+    'electronically_monitored' => 'Monitorizat electronic',
     'protection_order_notes' => 'Observații ordin de protecție',
 
     'has_police_reports' => 'Sesizare la poliție',
@@ -132,4 +134,5 @@ return [
 
     'role' => 'Rol',
     'check' => 'Verifică',
+    'user' => 'Utilizator',
 ];

@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\ActLocation;
+use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
-use App\Enums\NotificationMode;
-use App\Enums\Notifier;
-use App\Enums\PresentationMode;
-use App\Enums\ReferralMode;
-use App\Enums\ResidenceEnvironment;
+use App\Models\Address;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryAntecedents;
+use App\Models\BeneficiaryDetails;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
 use App\Models\CaseTeam;
-use App\Models\City;
+use App\Models\Children;
+use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
+use App\Models\FlowPresentation;
 use App\Models\Meeting;
+use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
-use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
 use App\Models\User;
@@ -70,12 +70,6 @@ class BeneficiaryFactory extends Factory
             'status' => fake()->randomElement(CaseStatus::values()),
             'doesnt_have_children' => true,
 
-            'presentation_mode' => fake()->randomElement(PresentationMode::values()),
-            'referral_mode' => fake()->randomElement(ReferralMode::values()),
-            'notifier' => fake()->randomElement(Notifier::values()),
-            'notification_mode' => fake()->randomElement(NotificationMode::values()),
-
-            'act_location' => fake()->randomElement(ActLocation::values()),
         ];
     }
 
@@ -101,31 +95,27 @@ class BeneficiaryFactory extends Factory
 
     public function withLegalResidence(): static
     {
-        return $this->state(function (array $attributes) {
-            $city = City::query()->inRandomOrder()->first();
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            $beneficiary->same_as_legal_residence = true;
+            $beneficiary->save();
 
-            return [
-                'legal_residence_address' => fake()->address(),
-                'legal_residence_county_id' => $city->county_id,
-                'legal_residence_city_id' => $city->id,
-                'legal_residence_environment' => fake()->randomElement(ResidenceEnvironment::values()),
-                'same_as_legal_residence' => true,
-            ];
+            Address::factory()
+                ->for($beneficiary, 'addressable')
+                ->state(['address_type' => AddressType::LEGAL_RESIDENCE])
+                ->create();
         });
     }
 
     public function withEffectiveResidence(): static
     {
-        return $this->state(function (array $attributes) {
-            $city = City::query()->inRandomOrder()->first();
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            $beneficiary->same_as_legal_residence = true;
+            $beneficiary->save();
 
-            return [
-                'effective_residence_address' => fake()->address(),
-                'effective_residence_county_id' => $city->county_id,
-                'effective_residence_city_id' => $city->id,
-                'effective_residence_environment' => fake()->randomElement(ResidenceEnvironment::values()),
-                'same_as_legal_residence' => false,
-            ];
+            Address::factory()
+                ->for($beneficiary, 'addressable')
+                ->state(['address_type' => AddressType::EFFECTIVE_RESIDENCE])
+                ->create();
         });
     }
 
@@ -146,45 +136,46 @@ class BeneficiaryFactory extends Factory
             'children_10_18_care_count' => fake()->numberBetween(1, 10),
             'children_18_care_count' => fake()->numberBetween(1, 10),
             'children_accompanying_count' => fake()->numberBetween(1, 10),
-
-            'children' => collect(range(1, 10))
-                ->map(fn () => [
-                    'name' => fake()->name(),
-                    'age' => fake()->boolean() ? fake()->numberBetween(0, 20) : null,
-                    'current_address' => fake()->boolean() ? fake()->address() : null,
-                    'status' => fake()->boolean() ? fake()->words(asText: true) : null,
-                ])
-                ->toJson(),
         ]);
     }
 
     public function withAntecedents(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'has_police_reports' => fake()->boolean(),
-            'police_report_count' => fake()->numberBetween(0, 300),
-            'has_medical_reports' => fake()->boolean(),
-            'medical_report_count' => fake()->numberBetween(0, 300),
-        ]);
+        return $this
+            ->afterCreating(function (Beneficiary $beneficiary) {
+                BeneficiaryAntecedents::factory()
+                    ->for($beneficiary)
+                    ->create();
+            });
+    }
+
+    public function withFlowPresentation(): static
+    {
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            FlowPresentation::factory()
+                ->for($beneficiary)
+                ->create();
+        });
+    }
+
+    public function withBeneficiaryDetails(): static
+    {
+        return $this->afterCreating(function (Beneficiary $beneficiary) {
+            BeneficiaryDetails::factory()
+                ->for($beneficiary)
+                ->create();
+        });
     }
 
     public function configure(): static
     {
-        $referringInstitutions = ReferringInstitution::all();
-
         return $this
-            ->afterMaking(function (Beneficiary $beneficiary) use ($referringInstitutions) {
-                if (PresentationMode::isValue($beneficiary->presentation_method, PresentationMode::FORWARDED)) {
-                    $beneficiary->referringInstitution()->attach(
-                        $referringInstitutions->random()
-                    );
-                }
+            ->afterCreating(function (Beneficiary $beneficiary) {
+                Children::factory()
+                    ->for($beneficiary)
+                    ->count(rand(1, 5))
+                    ->create();
 
-                $beneficiary->firstCalledInstitution()->associate(
-                    $referringInstitutions->random()
-                );
-            })
-            ->afterCreating(function (Beneficiary $beneficiary) use ($referringInstitutions) {
                 BeneficiaryPartner::factory()
                     ->for($beneficiary)
                     ->create();
@@ -263,9 +254,17 @@ class BeneficiaryFactory extends Factory
                     ->for($beneficiary)
                     ->create();
 
-                $beneficiary->otherCalledInstitution()->sync(
-                    $referringInstitutions->random(fake()->numberBetween(1, 4)),
-                );
+                Monitoring::factory()
+                    ->for($beneficiary)
+                    ->create();
+
+                if (CaseStatus::isValue($beneficiary->status, CaseStatus::CLOSED)) {
+                    CloseFile::factory()
+                        ->for($beneficiary)
+                        ->create([
+                            'case_team_id' => $this->faker->randomElement($beneficiary->team)->id,
+                        ]);
+                }
             });
     }
 }

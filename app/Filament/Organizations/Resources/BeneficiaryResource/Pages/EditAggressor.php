@@ -44,7 +44,7 @@ class EditAggressor extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
-            ->getPersonalInformationBreadcrumbs();
+            ->getBreadcrumbs('view_personal_information');
     }
 
     protected function getTabSlug(): string
@@ -209,20 +209,6 @@ class EditAggressor extends EditRecord
                                 ->rule(new MultipleIn(AggressorLegalHistory::values()))
                                 ->multiple()
                                 ->live(),
-                        ]),
-
-                    Grid::make()
-                        ->schema([
-                            Select::make('has_protection_order')
-                                ->label(__('field.has_protection_order'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(Ternary::options())
-                                ->enum(Ternary::class)
-                                ->live(),
-
-                            TextInput::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('has_protection_order'))),
                         ]),
                 ]),
         ];

@@ -4,25 +4,17 @@ declare(strict_types=1);
 
 namespace App\Concerns;
 
+use App\Enums\AddressType;
+use App\Models\Address;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryPartner;
-use App\Models\City;
-use App\Models\County;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait HasEffectiveAddress
 {
     public function initializeHasEffectiveAddress(): void
     {
-        $this->fillable[] = 'legal_residence_county_id';
-        $this->fillable[] = 'legal_residence_city_id';
-        $this->fillable[] = 'legal_residence_address';
-
         $this->fillable[] = 'same_as_legal_residence';
-
-        $this->fillable[] = 'effective_residence_county_id';
-        $this->fillable[] = 'effective_residence_city_id';
-        $this->fillable[] = 'effective_residence_address';
     }
 
     protected static function bootHasEffectiveAddress(): void
@@ -32,35 +24,33 @@ trait HasEffectiveAddress
         static::updating(fn (Beneficiary | BeneficiaryPartner $model) => self::copyLegalResidenceToEffectiveResidence($model));
     }
 
-    public function legalResidenceCounty(): BelongsTo
+    public static function copyLegalResidenceToEffectiveResidence(Beneficiary | BeneficiaryPartner $model): void
     {
-        return $this->belongsTo(County::class, 'legal_residence_county_id');
-    }
+        if ($model->same_as_legal_residence && $model->legal_residence) {
+            $address = $model->effective_residence ?? new Address();
 
-    public function legalResidenceCity(): BelongsTo
-    {
-        return $this->belongsTo(City::class, 'legal_residence_city_id');
-    }
-
-    public function effectiveResidenceCounty(): BelongsTo
-    {
-        return $this->belongsTo(County::class, 'effective_residence_county_id');
-    }
-
-    public function effectiveResidenceCity(): BelongsTo
-    {
-        return $this->belongsTo(City::class, 'effective_residence_city_id');
-    }
-
-    protected static function copyLegalResidenceToEffectiveResidence(Beneficiary | BeneficiaryPartner $model): void
-    {
-        if ($model->same_as_legal_residence) {
-            $model->effective_residence_county_id = $model->legal_residence_county_id;
-            $model->effective_residence_city_id = $model->legal_residence_city_id;
-            $model->effective_residence_address = $model->legal_residence_address;
-            if (isset($model->legal_residence_environment)) {
-                $model->effective_residence_environment = $model->legal_residence_environment;
-            }
+            $address->country_id = $model->legal_residence->country_id;
+            $address->county_id = $model->legal_residence->county_id;
+            $address->city_id = $model->legal_residence->city_id;
+            $address->address = $model->legal_residence->address;
+            $address->addressable_id = $model->legal_residence->addressable_id;
+            $address->addressable_type = $model->legal_residence->addressable_type;
+            $address->environment = $model->legal_residence->environment;
+            $address->address_type = AddressType::EFFECTIVE_RESIDENCE;
+            $address->save();
         }
+    }
+
+    //TODO: Clean up the code
+    public function effective_residence(): MorphOne
+    {
+        return $this->morphOne(Address::class, 'addressable')
+            ->where('address_type', AddressType::EFFECTIVE_RESIDENCE);
+    }
+
+    public function legal_residence(): MorphOne
+    {
+        return $this->morphOne(Address::class, 'addressable')
+            ->where('address_type', AddressType::LEGAL_RESIDENCE);
     }
 }

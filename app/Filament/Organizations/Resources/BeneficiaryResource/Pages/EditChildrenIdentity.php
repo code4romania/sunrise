@@ -34,8 +34,8 @@ class EditChildrenIdentity extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->record)
-            ->getIdentityBreadcrumbs();
+        return BeneficiaryBreadcrumb::make($this->getRecord())
+            ->getBreadcrumbs('view_identity');
     }
 
     protected function getTabSlug(): string
@@ -124,6 +124,7 @@ class EditChildrenIdentity extends EditRecord
 
                     TableRepeater::make('children')
                         ->reorderable(false)
+                        ->relationship('children')
                         ->columnSpanFull()
                         ->hiddenLabel()
                         ->hideLabels()
@@ -141,7 +142,7 @@ class EditChildrenIdentity extends EditRecord
                             DatePicker::make('birthdate')
                                 ->label(__('field.birthdate')),
 
-                            TextInput::make('address')
+                            TextInput::make('current_address')
                                 ->label(__('field.current_address')),
 
                             TextInput::make('status')

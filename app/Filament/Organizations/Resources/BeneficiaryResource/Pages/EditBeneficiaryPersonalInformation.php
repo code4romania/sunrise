@@ -46,7 +46,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
-            ->getPersonalInformationBreadcrumbs();
+            ->getBreadcrumbs('view_personal_information');
     }
 
     protected function getTabSlug(): string
@@ -73,6 +73,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
         return [
             Grid::make()
                 ->maxWidth('3xl')
+                ->relationship('details')
                 ->schema([
                     Select::make('has_family_doctor')
                         ->label(__('field.has_family_doctor'))
@@ -100,8 +101,8 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->enum(Ternary::class)
                                 ->live(),
 
-                            TextInput::make('psychiatric_notes')
-                                ->label(__('field.psychiatric_notes'))
+                            TextInput::make('psychiatric_history_notes')
+                                ->label(__('field.psychiatric_history_notes'))
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
                         ]),
 
@@ -114,8 +115,8 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->enum(Ternary::class)
                                 ->live(),
 
-                            TextInput::make('criminal_notes')
-                                ->label(__('field.criminal_notes'))
+                            TextInput::make('criminal_history_notes')
+                                ->label(__('field.criminal_history_notes'))
                                 ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
                         ]),
 

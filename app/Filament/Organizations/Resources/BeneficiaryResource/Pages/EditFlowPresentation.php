@@ -37,7 +37,7 @@ class EditFlowPresentation extends EditRecord
     public function getBreadcrumbs(): array
     {
         return BeneficiaryBreadcrumb::make($this->record)
-            ->getPersonalInformationBreadcrumbs();
+            ->getBreadcrumbs('view_personal_information');
     }
 
     protected function getTabSlug(): string
@@ -64,6 +64,7 @@ class EditFlowPresentation extends EditRecord
         return [
             Grid::make()
                 ->maxWidth('3xl')
+                ->relationship('flowPresentation')
                 ->schema([
                     Grid::make()
                         ->schema([
