@@ -85,6 +85,8 @@ class OrganizationFactory extends Factory
                 ->withAntecedents()
                 ->withFlowPresentation()
                 ->withBeneficiaryDetails()
+                ->withCitizenship()
+                ->withEthnicity()
                 ->for($organization)
                 ->create();
         });
