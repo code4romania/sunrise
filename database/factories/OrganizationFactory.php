@@ -55,6 +55,7 @@ class OrganizationFactory extends Factory
                     ->sequence(fn (Sequence $sequence) => [
                         'email' => \sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
                     ])
+                    ->withRolesAndPermissions($organization->id)
                     ->create()
                     ->pluck('id')
                     ->toArray()

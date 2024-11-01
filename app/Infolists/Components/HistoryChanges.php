@@ -114,7 +114,7 @@ class HistoryChanges extends Entry
             }
         }
 
-        $modelName = sprintf('\App\Models\%s', ucfirst($record->event));
+        $modelName = \sprintf('\App\Models\%s', ucfirst($record->event));
         $modelClass = new $modelName();
 
         return $modelClass->getCasts()[$field] ?? null;
