@@ -53,7 +53,7 @@ class BeneficiariesV2
         $generatorClass = str_replace(' ', '', ucwords(str_replace('_', ' ', $this->reportType->value)));
         $generatorClass = 'App\\Services\\Reports\\BeneficiariesReports\\' . $generatorClass;
 
-        if (!class_exists($generatorClass)) {
+        if (! class_exists($generatorClass)) {
             return;
         }
 
@@ -71,36 +71,36 @@ class BeneficiariesV2
 
     public function getHorizontalHeader(): array
     {
-        return $this->generator->getHorizontalHeader();
+        return $this->generator?->getHorizontalHeader() ?: [];
     }
 
     public function getHorizontalSubHeader(): array
     {
-        return $this->generator->getHorizontalSubHeader();
+        return $this->generator?->getHorizontalSubHeader() ?: [];
     }
 
     public function getSubHeaderKey(): ?string
     {
-        return $this->generator->getHorizontalSubHeaderKey();
+        return $this->generator?->getHorizontalSubHeaderKey();
     }
 
     public function getVerticalHeader(): array
     {
-        return $this->generator->getVerticalHeader();
+        return $this->generator?->getVerticalHeader() ?: [];
     }
 
     public function getVerticalHeaderKey(): ?string
     {
-        return $this->generator->getVerticalHeaderKey();
+        return $this->generator?->getVerticalHeaderKey();
     }
 
     public function getVerticalSubHeader(): array
     {
-        return $this->generator->getVerticalSubHeader();
+        return $this->generator?->getVerticalSubHeader() ?: [];
     }
 
     public function getVerticalSubHeaderKey(): ?string
     {
-        return $this->generator->getVerticalSubHeaderKey();
+        return $this->generator?->getVerticalSubHeaderKey();
     }
 }
