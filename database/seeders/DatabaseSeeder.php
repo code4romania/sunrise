@@ -46,9 +46,9 @@ class DatabaseSeeder extends Seeder
             ->count(20)
             ->create();
 
-        Institution::factory()        
-            ->count(2)
-            ->withOrganization()
-            ->create();
+//        Institution::factory()
+//            ->count(0)
+//            ->withOrganization()
+//            ->create();
     }
 }

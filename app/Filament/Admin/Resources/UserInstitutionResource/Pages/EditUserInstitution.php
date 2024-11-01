@@ -58,15 +58,21 @@ class EditUserInstitution extends EditRecord
     {
         return [
             TextInput::make('first_name')
+                ->required()
                 ->label(__('institution.labels.first_name')),
 
             TextInput::make('last_name')
+                ->required()
                 ->label(__('institution.labels.last_name')),
 
             TextInput::make('email')
+                ->required()
+                ->email()
                 ->label(__('institution.labels.email')),
 
             TextInput::make('phone')
+                ->required()
+                ->tel()
                 ->label(__('institution.labels.phone')),
         ];
     }

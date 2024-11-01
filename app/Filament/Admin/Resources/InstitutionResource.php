@@ -21,6 +21,21 @@ class InstitutionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getModelLabel(): string
+    {
+        return __('institution.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('institution.plural');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('institution.headings.list_title');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -63,6 +78,8 @@ class InstitutionResource extends Resource
                 ViewAction::make()
                     ->label(__('general.action.view_details')),
             ])
+            ->heading(__('institution.headings.all_institutions'))
+            ->description(trans_choice('institution.headings.count', Institution::count(), ['count' => Institution::count()]))
             ->emptyStateIcon('heroicon-o-clipboard-document-list')
             ->emptyStateHeading(__('institution.headings.empty_state'))
             ->emptyStateDescription(null);

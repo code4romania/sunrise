@@ -115,6 +115,9 @@ class OrganizationPanelProvider extends PanelProvider
                     ->myProfileComponents([
                         'personal_info' => UserPersonalInfo::class,
                     ])
+                    ->passwordUpdateRules([
+                        'password' => 'required|confirmed|min:8',
+                    ])
                     ->enableTwoFactorAuthentication(),
             ])
             ->navigationItems([

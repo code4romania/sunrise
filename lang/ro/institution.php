@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 return [
+
+    'singular' => 'Instituție',
+    'plural' => 'instituții',
     'headings' => [
         'institution_name' => 'Nume instituție',
         'registered_office' => 'Sediu social',
@@ -11,9 +14,11 @@ return [
         'specialists' => 'Specialiști',
         'status' => 'Status',
         'list_title' => 'Utilizatori instituționali',
+        'all_institutions' => 'Toate instituțiile',
         'empty_state' => 'Niciun utilizator instituțional identificat.',
         'institution_details' => 'Detalii organizație',
         'center_details' => 'Centre',
+        'count' => '{0} Nu existǎ instituții |{1} O instituție |[2,*] :count instituții',
         'ngo_admin' => 'Administrator',
         'inactivate' => 'Dezactivează organizație',
         'admin_users' => 'Utilizatori de tip administrator',

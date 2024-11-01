@@ -257,4 +257,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
         return false;
     }
+
+    public function activate():void
+    {
+        $this->update(['status' => UserStatus::ACTIVE]);
+    }
 }
