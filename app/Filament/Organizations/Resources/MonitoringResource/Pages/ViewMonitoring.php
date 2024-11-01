@@ -96,7 +96,7 @@ class ViewMonitoring extends ViewRecord
                                         ->listWithLineBreaks()
                                         ->formatStateUsing(
                                             fn ($state) => $state->user->getFilamentName()
-                                                // ' (' . $state->role?->name . ')'
+                                            // ' (' . $state->role?->name . ')'
                                         ),
                                 ]),
                         ]),

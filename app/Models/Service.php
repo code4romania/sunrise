@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasGeneralStatus;
 use App\Enums\CounselingSheet;
-use App\Enums\GeneralStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,15 +14,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Service extends Model
 {
     use HasFactory;
+    use HasGeneralStatus;
 
     protected $fillable = [
         'name',
         'counseling_sheet',
-        'status',
     ];
 
     protected $casts = [
-        'status' => GeneralStatus::class,
         'counseling_sheet' => CounselingSheet::class,
     ];
 
@@ -39,5 +38,10 @@ class Service extends Model
     public function interventions(): HasMany
     {
         return $this->hasMany(Intervention::class);
+    }
+
+    public function organizationServices(): HasMany
+    {
+        return $this->hasMany(OrganizationService::class);
     }
 }

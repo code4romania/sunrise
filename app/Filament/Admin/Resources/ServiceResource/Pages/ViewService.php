@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
 use App\Filament\Admin\Resources\ServiceResource;
 use Filament\Actions;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -47,15 +48,23 @@ class ViewService extends ViewRecord
                         ->label(__('nomenclature.labels.service_name')),
                     TextEntry::make('counseling_sheet')
                         ->label(__('nomenclature.labels.counseling_sheet')),
+                    RepeatableEntry::make('serviceInterventions')
+                        ->label(__('nomenclature.headings.service_intervention'))
+                        ->schema([
+                            TextEntry::make('name')
+                                ->label(__('nomenclature.labels.intervention_name')),
 
+                            TextEntry::make('institutions_count')
+                                ->label(__('nomenclature.labels.institutions')),
+
+                            TextEntry::make('centers_count')
+                                ->label(__('nomenclature.labels.institutions')),
+
+                            TextEntry::make('status')
+                                ->label(__('nomenclature.labels.status')),
+                        ])->columns(4),
                 ]),
-        ]);
-    }
 
-    protected function getFooterWidgets(): array
-    {
-        return [
-            ServiceResource\Widgets\ServiceInterventionsWidget::class,
-        ];
+        ]);
     }
 }

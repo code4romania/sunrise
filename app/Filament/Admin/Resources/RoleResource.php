@@ -118,7 +118,6 @@ class RoleResource extends Resource
     public static function getPages(): array
     {
         return [
-            // TODO remove index and page
             'index' => Pages\ListRoles::route('/'),
             'create' => Pages\CreateRole::route('/create'),
             'view' => Pages\ViewRole::route('/{record}'),

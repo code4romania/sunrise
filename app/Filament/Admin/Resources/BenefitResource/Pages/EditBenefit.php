@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
-use App\Enums\GeneralStatus;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Resources\BenefitResource;
 use Filament\Actions;
@@ -38,12 +37,11 @@ class EditBenefit extends EditRecord
         return [
             ChangeNomenclatureStatusAction::make(),
 
-            // TODO make disable if is use
             Actions\DeleteAction::make()
                 ->label(__('nomenclature.actions.delete_benefit'))
                 ->icon('heroicon-s-trash')
                 ->outlined()
-                ->disabled(fn () => GeneralStatus::isValue($this->getRecord()->status, GeneralStatus::ACTIVE))
+                ->disabled(fn () => $this->getRecord()->benefitServices()->count())
                 ->successRedirectUrl(self::$resource::getUrl())
                 // tooltip doesn't work if action is disabled
                 ->tooltip(fn (Actions\DeleteAction $action) => $action->isDisabled() ? __('nomenclature.helper_texts.delete_benefit') : ''),

@@ -11,7 +11,7 @@ trait RedirectToMonitoring
         return self::getParentResource()::getUrl('monitorings.view', [
             'parent' => $this->getRecord()->beneficiary_id,
             'record' => $this->getRecord(),
-            'tab' => sprintf('-%s-tab', $this->getTabSlug()),
+            'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
     }
 }

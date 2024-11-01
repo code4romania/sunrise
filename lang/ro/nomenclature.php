@@ -25,6 +25,7 @@ return [
         'users' => 'Utilizatori',
         'benefit_name' => 'Categorie beneficiu social',
         'benefit_type_name' => 'Nume beneficiu',
+        'benefit' => 'Beneficiu',
     ],
 
     'headings' => [

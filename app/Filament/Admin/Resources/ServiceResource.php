@@ -11,6 +11,7 @@ use App\Filament\Admin\Resources\ServiceResource\Pages\CreateService;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Models\Service;
+use App\Models\ServiceIntervention;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -23,6 +24,7 @@ use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ServiceResource extends Resource
 {
@@ -91,9 +93,16 @@ class ServiceResource extends Resource
                             ->disabled(function (array $arguments, TableRepeater $component): bool {
                                 $items = $component->getState();
                                 $currentItem = $items[$arguments['item']];
-                                // TODO disable if intervention is used
 
-                                return $currentItem['status'];
+                                $serviceIntervention = ServiceIntervention::where('id', $currentItem['id'])
+                                    ->withCount('organizationIntervention')
+                                    ->first();
+
+                                if (! $serviceIntervention) {
+                                    return false;
+                                }
+
+                                return  $serviceIntervention->organization_intervention_count > 0;
                             })
                     ),
             ]);
@@ -102,13 +111,14 @@ class ServiceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->withCount(['organizationServices']))
             ->columns([
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.name'))
                     ->searchable(),
                 TextColumn::make('institutions')
                     ->label(__('nomenclature.labels.institutions')),
-                TextColumn::make('centers')
+                TextColumn::make('organization_services_count')
                     ->label(__('nomenclature.labels.centers')),
                 TextColumn::make('status')
                     ->label(__('nomenclature.labels.status'))

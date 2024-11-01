@@ -112,7 +112,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     {
         return $this->belongsToMany(Role::class, 'user_roles')
             ->using(UserRole::class)
-            ->withPivot(['organization_id']);
+            ->withPivot(['organization_id'])
+            ->active();
     }
 
     public function rolesInOrganization(): BelongsToMany
