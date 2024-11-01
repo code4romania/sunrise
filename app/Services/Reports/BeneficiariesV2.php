@@ -12,7 +12,7 @@ class BeneficiariesV2
 {
     protected ReportType | string | null $reportType;
 
-    protected ReportGenerator $generator;
+    protected ReportGenerator | null $generator = null;
 
     protected string | null $startDate = null;
 
@@ -53,6 +53,10 @@ class BeneficiariesV2
         $generatorClass = str_replace(' ', '', ucwords(str_replace('_', ' ', $this->reportType->value)));
         $generatorClass = 'App\\Services\\Reports\\BeneficiariesReports\\' . $generatorClass;
 
+        if (!class_exists($generatorClass)) {
+            return;
+        }
+
         $this->generator = new $generatorClass();
         $this->generator
             ->setStartDate($this->startDate)
@@ -62,7 +66,7 @@ class BeneficiariesV2
 
     public function getReportData(): Collection
     {
-        return $this->generator->getReportData();
+        return $this->generator?->getReportData() ?: collect();
     }
 
     public function getHorizontalHeader(): array

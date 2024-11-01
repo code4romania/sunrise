@@ -190,75 +190,6 @@ class Beneficiaries
 
                 break;
 
-            case ReportType::CASES_BY_ETHNICITY:
-                $this->header = [
-                    __('report.headers.ethnicity'),
-                    __('report.headers.case_distribution'),
-                ];
-
-                $this->setVerticalHeaderFor('ethnicity');
-
-                break;
-
-            case ReportType::CASES_BY_CITIZENSHIP:
-                $this->header = [
-                    __('report.headers.citizenship'),
-                    __('report.headers.case_distribution'),
-                ];
-
-                $this->setVerticalHeaderFor('citizenship');
-
-                break;
-
-            case ReportType::CASES_BY_STUDIES:
-                $this->header = [
-                    __('report.headers.studies'),
-                    __('report.headers.case_distribution'),
-                ];
-
-                $this->setVerticalHeaderFor('studies');
-
-                break;
-
-            case ReportType::CASES_BY_STUDIES_AND_EFFECTIVE_ADDRESS:
-                $this->header = [
-                    __('report.headers.studies'),
-                    __('report.headers.cases_by_effective_address'),
-                    __('report.headers.subtotal'),
-                ];
-
-                $this->setSubHeaderFor('effective_residence_environment');
-
-                $this->setVerticalHeaderFor('studies');
-
-                break;
-
-            case ReportType::CASES_BY_STUDIES_AND_GENDER:
-                $this->header = [
-                    __('report.headers.studies'),
-                    __('report.headers.cases_by_gender'),
-                    __('report.headers.subtotal'),
-                ];
-
-                $this->setSubHeaderFor('gender');
-
-                $this->setVerticalHeaderFor('studies');
-
-                break;
-
-            case ReportType::CASES_BY_STUDIES_AND_AGE:
-                $this->header = [
-                    __('report.headers.studies'),
-                    __('report.headers.cases_by_age_segmentation'),
-                    __('report.headers.subtotal'),
-                ];
-
-                $this->setSubHeaderFor('segmentation_by_age');
-
-                $this->setVerticalHeaderFor('studies');
-
-                break;
-
             case ReportType::CASES_BY_OCCUPATION:
                 $this->header = [
                     __('report.headers.occupation'),
@@ -370,42 +301,6 @@ class Beneficiaries
                 $this->setVerticalHeaderFor('homeownership');
 
                 $this->setVerticalSubHeaderFor('effective_residence_environment');
-
-                break;
-
-            case ReportType::CASES_BY_CIVIL_STATUS:
-                $this->header = [
-                    __('report.headers.civil_status'),
-                    __('report.headers.case_distribution'),
-                ];
-
-                $this->setVerticalHeaderFor('civil_status');
-
-                break;
-
-            case ReportType::CASES_BY_CIVIL_STATUS_AND_GENDER:
-                $this->header = [
-                    __('report.headers.civil_status'),
-                    __('report.headers.cases_by_gender'),
-                    __('report.headers.total'),
-                ];
-
-                $this->setSubHeaderFor('gender');
-
-                $this->setVerticalHeaderFor('civil_status');
-
-                break;
-
-            case ReportType::CASES_BY_CIVIL_STATUS_AND_AGE:
-                $this->header = [
-                    __('report.headers.civil_status'),
-                    __('report.headers.cases_by_age_groups'),
-                    __('report.headers.subtotal'),
-                ];
-
-                $this->setSubHeaderFor('age_group_2');
-
-                $this->setVerticalHeaderFor('civil_status');
 
                 break;
 
@@ -730,24 +625,10 @@ class Beneficiaries
                         END as age_group");
                 break;
 
-            case ReportType::CASES_BY_CIVIL_STATUS_AND_AGE:
-                $this->query->selectRaw("CASE
-                            WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) BETWEEN 14 AND 17 THEN 'between_14_and_17_years'
-                            WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) BETWEEN 18 AND 25 THEN 'between_18_and_25_years'
-                            WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) BETWEEN 26 AND 35 THEN 'between_26_and_35_years'
-                            WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) BETWEEN 36 AND 45 THEN 'between_36_and_45_years'
-                            WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) BETWEEN 46 AND 55 THEN 'between_46_and_55_years'
-                            WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) BETWEEN 56 AND 65 THEN 'between_56_and_65_years'
-                            WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) > 65 THEN 'over_65_years'
-                            ELSE 'unknown'
-                        END as age_group");
-                break;
-
             case ReportType::CASES_BY_PRIMARY_VIOLENCE_TYPE_AND_AGE:
             case ReportType::CASES_BY_PRIMARY_VIOLENCE_FREQUENCY_AND_AGE:
             case ReportType::CASES_BY_AGGRESSOR_RELATIONSHIP_GENDER_AND_AGE:
             case ReportType::CASES_BY_AGGRESSOR_RELATIONSHIP_AND_AGE:
-            case ReportType::CASES_BY_STUDIES_AND_AGE:
                 $this->query->selectRaw("CASE
                             WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 17 THEN 'minor'
                             WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) > 18 THEN 'major'

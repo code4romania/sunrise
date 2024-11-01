@@ -49,14 +49,28 @@ abstract class BaseGenerator
 
     public function getReportData(): Collection
     {
-        $this->query
-            ->selectRaw($this->getSelectedFields())
-            ->groupBy($this->getGroupBy());
-
+        $this->setSelectedFields();
         $this->addConditions();
+        $this->addRelatedTables();
+        $this->query
+            ->groupBy($this->getGroupBy());
 
         return $this->query
             ->get();
+    }
+
+    private function setSelectedFields(): void
+    {
+        $selectedFields = $this->getSelectedFields();
+        if (\is_array($selectedFields)) {
+            foreach ($selectedFields as $field) {
+                $this->query->selectRaw($field);
+            }
+
+            return;
+        }
+
+        $this->query->selectRaw($selectedFields);
     }
 
     public function addConditions(): void
@@ -85,6 +99,10 @@ abstract class BaseGenerator
                     ->orWhereNull('close_files.date')
             );
         }
+    }
+
+    public function addRelatedTables(): void
+    {
     }
 
     protected function getGroupBy(): array

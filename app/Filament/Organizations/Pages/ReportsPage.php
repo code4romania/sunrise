@@ -65,12 +65,6 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
 
     protected function getFormSchema(): array
     {
-        $reports = [
-            ReportType::CASES_BY_AGE->value => ReportType::CASES_BY_AGE->getLabel(),
-            ReportType::CASES_BY_AGE_SEGMENTATION->value => ReportType::CASES_BY_AGE_SEGMENTATION->getLabel(),
-            ReportType::CASES_BY_GENDER->value => ReportType::CASES_BY_GENDER->getLabel(),
-        ];
-
         return [
             Forms\Components\Section::make()
                 ->columns(4)
@@ -79,7 +73,7 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
                         ->key('report_type')
                         ->label(__('report.labels.report_type'))
                         ->columnSpan(2)
-                        ->options($reports)
+                        ->options(ReportType::options())
                         ->searchable(),
 
                     Forms\Components\DatePicker::make('start_date')
