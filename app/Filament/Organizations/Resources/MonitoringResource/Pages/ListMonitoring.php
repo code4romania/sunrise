@@ -94,8 +94,10 @@ class ListMonitoring extends ListRecords
                 ->sortable()
                 ->listWithLineBreaks()
                 ->formatStateUsing(
-                    fn (Specialist $state) => $state->user->getFilamentName()
-                    // ' (' . $state->role?->name . ')'
+                    fn ($record) => $record->specialists
+                        ->map(fn ($specialist) => $specialist->user->getFilamentName() . ' (' .
+                            $specialist->roles?->map(fn ($role) => $role->label())->join(', ') . ')')
+                        ->join('; ')
                 ),
         ])
             ->actions([

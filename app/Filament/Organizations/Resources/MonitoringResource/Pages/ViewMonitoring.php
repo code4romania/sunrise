@@ -95,8 +95,8 @@ class ViewMonitoring extends ViewRecord
                                         ->label(__('monitoring.labels.team'))
                                         ->listWithLineBreaks()
                                         ->formatStateUsing(
-                                            fn ($state) => $state->user->getFilamentName()
-                                            // ' (' . $state->role?->name . ')'
+                                            fn ($state) => $state === '-' ? $state : $state->user->getFilamentName() . ' (' .
+                                                $state->roles?->map(fn ($item) => $item->label())->join(', ') . ')'
                                         ),
                                 ]),
                         ]),
