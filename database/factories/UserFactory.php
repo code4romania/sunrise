@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\UserStatus;
+use App\Models\Institution;
 use App\Models\Organization;
 use App\Models\OrganizationUserPermissions;
 use App\Models\Role;
@@ -60,8 +61,11 @@ class UserFactory extends Factory
     public function withOrganization(): static
     {
         return $this->afterCreating(function (User $user) {
+            $institution = Institution::factory()
+                ->create();
             $user->organizations()->attach(
                 Organization::factory()
+                    ->for($institution)
                     ->create()
             );
         });

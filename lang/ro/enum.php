@@ -370,4 +370,10 @@ return [
         'no' => 'Nu',
         'unknown' => 'Nu știe/ Nu răspunde',
     ],
+
+    'institution_status' => [
+        'active' => 'Activ',
+        'inactive' => 'Suspendat',
+        'pending' => 'În așteptare',
+    ],
 ];

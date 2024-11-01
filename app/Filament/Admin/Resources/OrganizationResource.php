@@ -22,11 +22,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
+// TODO: remove this
 class OrganizationResource extends Resource
 {
     protected static ?string $model = Organization::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function infolist(Infolist $infolist): Infolist
     {
