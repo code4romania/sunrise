@@ -95,4 +95,17 @@ class CreateCloseFile extends EditRecord
             ->submit('create')
             ->keyBindings(['mod+s']);
     }
+
+    public function getCloseFilePreFillData(): array
+    {
+        return [
+            'date' => now()->format('Y-m-d'),
+            'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
+            'exit_date' => now()->format('Y-m-d'),
+            'user_id' => $this->getRecord()
+                ->managerTeam
+                ->first()
+                ?->user_id,
+        ];
+    }
 }

@@ -62,6 +62,7 @@ class BeneficiaryBreadcrumb
     public function getBreadcrumbsForCreateMonitoring(): array
     {
         $breadcrumb = __('monitoring.titles.create');
+
         return array_merge(
             $this->getBreadcrumbs('monitorings.index'),
             [self::$resourcePath::getUrl('monitorings.create', ['parent' => $this->record]) => $breadcrumb]
@@ -88,5 +89,4 @@ class BeneficiaryBreadcrumb
             [$breadcrumb]
         );
     }
-
 }

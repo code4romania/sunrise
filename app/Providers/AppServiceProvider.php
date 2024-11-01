@@ -9,7 +9,6 @@ use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
-use App\Models\CaseTeam;
 use App\Models\City;
 use App\Models\CloseFile;
 use App\Models\CommunityProfile;
@@ -21,6 +20,7 @@ use App\Models\FlowPresentation;
 use App\Models\Institution;
 use App\Models\Intervention;
 use App\Models\Meeting;
+use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
 use App\Models\Organization;
 use App\Models\ReferringInstitution;
@@ -95,9 +95,9 @@ class AppServiceProvider extends ServiceProvider
             'riskFactors' => RiskFactors::class,
             'requestedServices' => RequestedServices::class,
             'beneficiarySituation' => BeneficiarySituation::class,
-            'team' => CaseTeam::class,
             'violenceHistory' => ViolenceHistory::class,
             'closeFile' => CloseFile::class,
+            'monitoring' => Monitoring::class,
             'flowPresentation' => FlowPresentation::class,
         ]);
     }

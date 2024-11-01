@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
+use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -88,10 +89,10 @@ class ListMonitoring extends ListRecords
                 ->label(__('monitoring.headings.interval'))
                 ->sortable()
                 ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
-            TextColumn::make('specialists')
+            TextColumn::make('specialistsTeam')
                 ->label(__('monitoring.headings.team'))
                 ->sortable()
-                ->limit(50)
+                ->listWithLineBreaks()
                 ->formatStateUsing(
                     fn ($record) => $record->specialists
                         ->map(fn ($specialist) => $specialist->user->getFilamentName() . ' (' .
@@ -109,7 +110,13 @@ class ListMonitoring extends ListRecords
                     ]))),
             ])
             ->actionsColumnLabel(__('monitoring.headings.actions'))
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('specialists')->orderByDesc('id'))
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query->with([
+                    'specialistsTeam.user',
+                    // 'specialistsTeam.role',
+                ])
+                    ->orderByDesc('id')
+            )
             ->emptyStateHeading(__('monitoring.headings.empty_state_table'))
             ->emptyStateDescription(__('monitoring.labels.empty_state_table'))
             ->emptyStateIcon('heroicon-o-document')

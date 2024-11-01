@@ -155,27 +155,27 @@ class HistoryLine extends Component
 
     protected function getHeadingId(): string
     {
-        return sprintf('%s_heading', $this->id);
+        return \sprintf('%s_heading', $this->id);
     }
 
     protected function getOldValueId(): string
     {
-        return sprintf('%s_old', $this->id);
+        return \sprintf('%s_old', $this->id);
     }
 
     protected function getNewValueId(): string
     {
-        return sprintf('%s_new', $this->id);
+        return \sprintf('%s_new', $this->id);
     }
 
     protected function getOldDescriptionId(): string
     {
-        return sprintf('%s_old_description', $this->id);
+        return \sprintf('%s_old_description', $this->id);
     }
 
     protected function getNewDescriptionId(): string
     {
-        return sprintf('%s_new_description', $this->id);
+        return \sprintf('%s_new_description', $this->id);
     }
 
     public function getChildComponents(): array

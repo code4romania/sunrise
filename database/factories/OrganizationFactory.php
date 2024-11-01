@@ -44,6 +44,7 @@ class OrganizationFactory extends Factory
                         'institution_id' => $sequence->index === 0 ? $organization->institution_id : null,
                         'ngo_admin' => $sequence->index === 0,
                     ])
+                    ->withRolesAndPermissions($organization->id)
                     ->create()
                     ->pluck('id')
                     ->toArray()
