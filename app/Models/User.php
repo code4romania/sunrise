@@ -7,7 +7,7 @@ namespace App\Models;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
-use App\Enums\Role;
+use App\Enums\CasePermission;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
@@ -17,10 +17,11 @@ use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -58,14 +59,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'email',
         'phone_number',
         'status',
-        'roles',
-        'can_be_case_manager',
-        'case_permissions',
-        'admin_permissions',
         'password',
         'password_set_at',
         'latest_organization_id',
         'is_admin',
+        'ngo_admin',
     ];
 
     /**
@@ -87,9 +85,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
-        'roles' => AsEnumCollection::class . ':' . Role::class,
-        'case_permissions' => 'json',
-        'admin_permissions' => 'json',
         'status' => UserStatus::class,
     ];
 
@@ -102,6 +97,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         static::creating(function (User $model) {
             $model->setPendingStatus();
         });
+
+        static::created(function (User $model) {
+            if ($model->institution) {
+                $model->organizations()
+                    ->attach(
+                        $model->institution
+                            ->organizations
+                            ?->pluck('id')
+                    );
+            }
+        });
     }
 
     public function organizations(): MorphToMany
@@ -112,6 +118,31 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function latestOrganization(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'latest_organization_id');
+    }
+
+    public function institution(): BelongsTo
+    {
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->using(UserRole::class)
+            ->withPivot(['organization_id'])
+            ->active();
+    }
+
+    public function rolesInOrganization(): BelongsToMany
+    {
+        return $this->roles()
+            ->wherePivot('organization_id', Filament::getTenant()?->id)
+            ->active();
+    }
+
+    public function permissions(): HasOne
+    {
+        return $this->hasOne(OrganizationUserPermissions::class);
     }
 
     public function getActivitylogOptions(): LogOptions
@@ -208,5 +239,27 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return Filament::getTenant()
             ->users
             ->pluck('full_name', 'id');
+    }
+
+    public function canBeCaseManager(): bool
+    {
+        return $this->permissions->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER);
+    }
+
+    public function hasRoleInOrganization(Role | int $role): bool
+    {
+        $roleID = \is_int($role) ? $role : $role->id;
+        foreach ($this->rolesInOrganization as $roleInOrganization) {
+            if ($roleInOrganization->id === $roleID) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function activate():void
+    {
+        $this->update(['status' => UserStatus::ACTIVE]);
     }
 }

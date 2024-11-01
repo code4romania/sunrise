@@ -75,6 +75,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/common/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('3rem')
+            ->darkMode(false)
             ->discoverResources(
                 in: app_path('Filament/Organizations/Resources'),
                 for: 'App\\Filament\\Organizations\\Resources'
@@ -113,6 +114,9 @@ class OrganizationPanelProvider extends PanelProvider
                     )
                     ->myProfileComponents([
                         'personal_info' => UserPersonalInfo::class,
+                    ])
+                    ->passwordUpdateRules([
+                        'password' => 'required|confirmed|min:8',
                     ])
                     ->enableTwoFactorAuthentication(),
             ])

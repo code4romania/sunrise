@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
+use App\Enums\AdminPermission;
+use App\Enums\CasePermission;
+use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\UserResource;
+use App\Infolists\Components\SectionHeader;
+use App\Models\User;
 use Filament\Actions;
+use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -31,20 +37,20 @@ class ViewUser extends ViewRecord
                 ->schema([
                     TextEntry::make('first_name')
                         ->label(__('user.labels.first_name')),
+
                     TextEntry::make('last_name')
                         ->label(__('user.labels.last_name')),
+
                     TextEntry::make('email')
                         ->label(__('user.labels.email')),
+
                     TextEntry::make('phone_number')
                         ->label(__('user.labels.phone_number')),
-                    TextEntry::make('roles')
+
+                    TextEntry::make('rolesInOrganization.name')
                         ->label(__('user.labels.select_roles'))
-                        ->badge(fn ($state) => $state != '-')
-                        ->formatStateUsing(fn ($state) => $state != '-' ? $state->label() : $state),
-                    TextEntry::make('can_be_case_manager')
-                        ->label(__('user.labels.can_be_case_manager'))
-                        ->default('0')
-                        ->formatStateUsing(fn ($state) => $state != '-' ? __('enum.ternary.' . $state) : $state),
+                        ->columnSpanFull(),
+
                     TextEntry::make('obs')
                         ->default(
                             Str::of(__('user.placeholders.obs'))
@@ -53,16 +59,38 @@ class ViewUser extends ViewRecord
                         )
                         ->hiddenLabel()
                         ->columnSpanFull(),
-                    TextEntry::make('case_permissions')
-                        ->label(__('user.labels.case_permissions'))
-                        ->badge(fn ($state) => $state != '-')
-                        ->formatStateUsing(fn ($state) => $state != '-' ? __('enum.case_permissions.' . $state) : $state)
-                        ->columnSpanFull(),
-                    TextEntry::make('admin_permissions')
-                        ->label(__('user.labels.admin_permissions'))
-                        ->badge(fn ($state) => $state != '-')
-                        ->formatStateUsing(fn ($state) => $state != '-' ? __('enum.admin_permission.' . $state) : $state)
-                        ->columnSpanFull(),
+
+                    Group::make()
+                        ->columnSpanFull()
+                        ->schema(function (User $record) {
+                            $fields = [];
+                            $fields[] = SectionHeader::make('case_permissions_group')
+                                ->state(__('user.labels.case_permissions'));
+                            foreach (CasePermission::cases() as $option) {
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->permissions->case_permissions->contains($option) ?
+                                        Ternary::YES : Ternary::NO);
+                            }
+
+                            return $fields;
+                        }),
+
+                    Group::make()
+                        ->columnSpanFull()
+                        ->schema(function (User $record) {
+                            $fields = [];
+                            $fields[] = SectionHeader::make('admin_permissions')
+                                ->state(__('user.labels.admin_permissions'));
+                            foreach (AdminPermission::cases() as $option) {
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->permissions->admin_permissions->contains($option) ?
+                                        Ternary::YES : Ternary::NO);
+                            }
+
+                            return $fields;
+                        }),
                 ]),
         ]);
     }

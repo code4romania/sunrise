@@ -14,6 +14,7 @@ use Filament\Models\Contracts\HasCurrentTenantLabel;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -34,23 +35,26 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
         'name',
         'slug',
         'short_name',
-        'type',
-        'cif',
         'main_activity',
-        'address',
-        'reprezentative_name',
-        'reprezentative_email',
-        'phone',
-        'website',
     ];
 
     protected $casts = [
         'type' => OrganizationType::class,
     ];
 
+    public function institution(): BelongsTo
+    {
+        return $this->belongsTo(Institution::class);
+    }
+
     public function users(): MorphToMany
     {
         return $this->morphedByMany(User::class, 'model', 'model_has_organizations');
+    }
+
+    public function organizationServices(): HasMany
+    {
+        return $this->hasMany(OrganizationService::class);
     }
 
     public function services(): HasMany

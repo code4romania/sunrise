@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\UserStatus;
+use App\Models\Institution;
 use App\Models\Organization;
+use App\Models\OrganizationUserPermissions;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -58,10 +61,51 @@ class UserFactory extends Factory
     public function withOrganization(): static
     {
         return $this->afterCreating(function (User $user) {
+            $institution = Institution::factory()
+                ->create();
             $user->organizations()->attach(
                 Organization::factory()
+                    ->for($institution)
                     ->create()
             );
+        });
+    }
+
+    public function withRolesAndPermissions(int $organizationID)
+    {
+        return $this->afterCreating(function (User $user) use ($organizationID) {
+            $roles = Role::query()
+                ->active()
+                ->inRandomOrder()
+                ->limit(rand(1, 5))
+                ->get();
+
+            $casePermissions = [];
+            $adminPermissions = [];
+
+            foreach ($roles as $role) {
+                $user->roles()->attach($role->id, ['organization_id' => $organizationID]);
+                $casePermissions = array_merge(
+                    $casePermissions,
+                    $role->case_permissions
+                        ->map(fn ($permission) => $permission->value)
+                        ->toArray()
+                );
+                $adminPermissions = array_merge(
+                    $adminPermissions,
+                    $role->ngo_admin_permissions
+                        ->map(fn ($permission) => $permission->value)
+                        ->toArray()
+                );
+            }
+
+            OrganizationUserPermissions::factory()
+                ->for($user)
+                ->create([
+                    'organization_id' => $organizationID,
+                    'case_permissions' => $casePermissions,
+                    'admin_permissions' => $adminPermissions,
+                ]);
         });
     }
 }

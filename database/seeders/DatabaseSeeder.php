@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Benefit;
 use App\Models\Country;
-use App\Models\Organization;
+use App\Models\Institution;
+use App\Models\Role;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -36,12 +38,17 @@ class DatabaseSeeder extends Seeder
             ->count(20)
             ->create();
 
-        Organization::factory()
-            ->count(2)
-            ->withUsers()
-            ->withBeneficiaries()
-            ->withCommunityProfile()
-            ->withInterventions()
+        Role::factory()
+            ->count(16)
             ->create();
+
+        Benefit::factory()
+            ->count(20)
+            ->create();
+
+//        Institution::factory()
+//            ->count(0)
+//            ->withOrganization()
+//            ->create();
     }
 }

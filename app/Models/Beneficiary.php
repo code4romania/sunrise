@@ -9,13 +9,15 @@ use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
 use App\Concerns\HasEffectiveAddress;
 use App\Concerns\HasEthnicity;
+use App\Concerns\HasSpecialistsTeam;
 use App\Concerns\HasUlid;
 use App\Concerns\LogsActivityOptions;
+use App\Enums\CasePermission;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
-use App\Enums\Role;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +36,7 @@ class Beneficiary extends Model
     use HasEffectiveAddress;
     use LogsActivity;
     use LogsActivityOptions;
+    use HasSpecialistsTeam;
 
     protected $fillable = [
         'initial_id',
@@ -94,12 +97,19 @@ class Beneficiary extends Model
                 return;
             }
 
+            /** @var User $user */
             $user = auth()->user();
-            $beneficiary->team()->create([
+            $beneficiary->specialistsTeam()->create([
                 'user_id' => $user->id,
-                'roles' => $user->can_be_case_manager
-                    ? [Role::MANGER]
-                    : $user->roles,
+                'role_id' => $user->canBeCaseManager()
+                    ? $user->rolesInOrganization
+                        ->filter(fn ($role) => $role->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER))
+                        ->first()
+                        ?->id
+                    : $user->rolesInOrganization
+                        ->first()
+                        ?->id,
+                'specialistable_type' => $beneficiary->getMorphClass(),
             ]);
         });
     }
@@ -176,14 +186,13 @@ class Beneficiary extends Model
         return $this->hasOne(BeneficiarySituation::class);
     }
 
-    public function team(): HasMany
-    {
-        return $this->hasMany(CaseTeam::class);
-    }
-
     public function managerTeam(): HasMany
     {
-        return $this->team()->whereJsonContains('roles', Role::MANGER);
+        return $this->specialistsTeam()
+            ->whereHas(
+                'role',
+                fn (Builder $query) => $query->whereJsonContains('case_permissions', CasePermission::CAN_BE_CASE_MANAGER)
+            );
     }
 
     public function violenceHistory(): HasMany
@@ -209,6 +218,11 @@ class Beneficiary extends Model
     public function closeFile(): HasOne
     {
         return $this->hasOne(CloseFile::class);
+    }
+
+    public function interventionPlan(): HasOne
+    {
+        return $this->hasOne(InterventionPlan::class);
     }
 
     public function antecedents(): HasOne
