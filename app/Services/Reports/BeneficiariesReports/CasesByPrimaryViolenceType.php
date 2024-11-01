@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Services\Reports\BeneficiariesReports;
 
 use App\Concerns\Reports\HasVerticalHeaderViolence;
+use App\Concerns\Reports\InteractWithViolence;
 use App\Interfaces\ReportGenerator;
 
 class CasesByPrimaryViolenceType extends BaseGenerator implements ReportGenerator
 {
     use HasVerticalHeaderViolence;
+    use InteractWithViolence;
 
     public function getHorizontalHeader(): array
     {
@@ -19,18 +21,8 @@ class CasesByPrimaryViolenceType extends BaseGenerator implements ReportGenerato
         ];
     }
 
-    public function getVerticalHeaderKey(): string
-    {
-        return 'violence_primary_type';
-    }
-
     public function getSelectedFields(): array|string
     {
         return 'violence_primary_type';
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('violences', 'violences.beneficiary_id', '=', 'beneficiaries.id');
     }
 }

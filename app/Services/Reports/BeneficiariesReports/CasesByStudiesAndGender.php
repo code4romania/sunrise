@@ -23,7 +23,15 @@ class CasesByStudiesAndGender extends BaseGenerator implements ReportGenerator
 
     public function getHorizontalSubHeader(): ?array
     {
-        return Gender::options();
+        $header = Gender::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getHorizontalSubHeaderKey(): ?string

@@ -34,7 +34,15 @@ class CasesByAggressorRelationshipAndAgeAndGender extends BaseGenerator implemen
 
     public function getVerticalSubHeader(): ?array
     {
-        return BeneficiarySegmentationByAge::options();
+        $header = BeneficiarySegmentationByAge::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header['unknown'] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalSubHeaderKey(): ?string

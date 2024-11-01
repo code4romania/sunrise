@@ -6,9 +6,9 @@ namespace App\Concerns\Reports;
 
 use App\Enums\ResidenceEnvironment;
 
-trait HasVerticalHeaderEnvironment
+trait HasHorizontalSubHeaderEnvironment
 {
-    public function getVerticalHeader(): array
+    public function getHorizontalSubHeader(): ?array
     {
         $header = ResidenceEnvironment::options();
 
@@ -21,7 +21,7 @@ trait HasVerticalHeaderEnvironment
         return $header;
     }
 
-    public function getVerticalHeaderKey(): string
+    public function getHorizontalSubHeaderKey(): ?string
     {
         return 'environment';
     }

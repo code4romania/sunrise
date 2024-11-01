@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services\Reports\BeneficiariesReports;
 
+use App\Concerns\Reports\InteractWithViolence;
 use App\Enums\Frequency;
 use App\Interfaces\ReportGenerator;
 
 class CasesByViolenceFrequency extends BaseGenerator implements ReportGenerator
 {
+    use InteractWithViolence;
+
     public function getHorizontalHeader(): array
     {
         return  [
@@ -19,7 +22,15 @@ class CasesByViolenceFrequency extends BaseGenerator implements ReportGenerator
 
     public function getVerticalHeader(): array
     {
-        return Frequency::options();
+        $header = Frequency::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalHeaderKey(): string
@@ -30,10 +41,5 @@ class CasesByViolenceFrequency extends BaseGenerator implements ReportGenerator
     public function getSelectedFields(): array|string
     {
         return 'frequency_violence';
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('violences', 'violences.beneficiary_id', '=', 'beneficiaries.id');
     }
 }

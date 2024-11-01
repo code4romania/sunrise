@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Services\Reports\BeneficiariesReports;
 
+use App\Concerns\Reports\HasHorizontalSubHeaderAgeInterval;
 use App\Concerns\Reports\HasVerticalHeaderGender;
-use App\Enums\AddressType;
-use App\Enums\AgeInterval;
-use App\Enums\ResidenceEnvironment;
+use App\Concerns\Reports\HasVerticalSubHeaderEnvironment;
+use App\Concerns\Reports\InteractWithEffectiveAddress;
 use App\Interfaces\ReportGenerator;
 
 class CasesByAgeGenderAndEffectiveAddress extends BaseGenerator implements ReportGenerator
 {
+    use HasHorizontalSubHeaderAgeInterval;
     use HasVerticalHeaderGender;
+    use HasVerticalSubHeaderEnvironment;
+    use InteractWithEffectiveAddress;
 
     public function getHorizontalHeader(): array
     {
@@ -21,26 +24,6 @@ class CasesByAgeGenderAndEffectiveAddress extends BaseGenerator implements Repor
             __('report.headers.cases_by_age_groups'),
             __('report.headers.total'),
         ];
-    }
-
-    public function getHorizontalSubHeader(): ?array
-    {
-        return AgeInterval::options();
-    }
-
-    public function getHorizontalSubHeaderKey(): ?string
-    {
-        return 'age_group';
-    }
-
-    public function getVerticalSubHeader(): ?array
-    {
-        return ResidenceEnvironment::options();
-    }
-
-    public function getVerticalSubHeaderKey(): ?string
-    {
-        return 'environment';
     }
 
     public function getSelectedFields(): array|string
@@ -64,17 +47,5 @@ class CasesByAgeGenderAndEffectiveAddress extends BaseGenerator implements Repor
                 ELSE 'unknown'
             END as age_group",
         ];
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('addresses', 'addresses.addressable_id', '=', 'beneficiaries.id');
-    }
-
-    public function addConditions(): void
-    {
-        parent::addConditions();
-        $this->query->where('addresses.addressable_type', 'beneficiary')
-            ->where('addresses.address_type', AddressType::EFFECTIVE_RESIDENCE);
     }
 }

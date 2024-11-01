@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Reports\BeneficiariesReports;
 
 use App\Concerns\Reports\HasVerticalHeaderViolence;
+use App\Concerns\Reports\InteractWithViolence;
 use App\Enums\BeneficiarySegmentationByAge;
 use App\Enums\Frequency;
 use App\Interfaces\ReportGenerator;
@@ -12,6 +13,7 @@ use App\Interfaces\ReportGenerator;
 class CasesByPrimaryViolenceFrequencyAndAge extends BaseGenerator implements ReportGenerator
 {
     use HasVerticalHeaderViolence;
+    use InteractWithViolence;
 
     public function getHorizontalHeader(): array
     {
@@ -24,7 +26,15 @@ class CasesByPrimaryViolenceFrequencyAndAge extends BaseGenerator implements Rep
 
     public function getHorizontalSubHeader(): ?array
     {
-        return Frequency::options();
+        $header = Frequency::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getHorizontalSubHeaderKey(): ?string
@@ -32,14 +42,17 @@ class CasesByPrimaryViolenceFrequencyAndAge extends BaseGenerator implements Rep
         return 'frequency_violence';
     }
 
-    public function getVerticalHeaderKey(): string
-    {
-        return 'violence_primary_type';
-    }
-
     public function getVerticalSubHeader(): ?array
     {
-        return BeneficiarySegmentationByAge::options();
+        $header = BeneficiarySegmentationByAge::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header['unknown'] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalSubHeaderKey(): ?string
@@ -58,10 +71,5 @@ class CasesByPrimaryViolenceFrequencyAndAge extends BaseGenerator implements Rep
             'violence_primary_type',
             'frequency_violence',
         ];
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('violences', 'violences.beneficiary_id', '=', 'beneficiaries.id');
     }
 }

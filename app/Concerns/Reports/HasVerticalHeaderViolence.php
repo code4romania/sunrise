@@ -10,11 +10,19 @@ trait HasVerticalHeaderViolence
 {
     public function getVerticalHeader(): array
     {
-        return Violence::options();
+        $header = Violence::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
-//    public function getVerticalHeaderKey(): string
-//    {
-//        return 'relationship';
-//    }
+    public function getVerticalHeaderKey(): string
+    {
+        return 'violence_primary_type';
+    }
 }

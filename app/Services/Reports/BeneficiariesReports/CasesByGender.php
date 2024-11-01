@@ -25,7 +25,7 @@ class CasesByGender extends BaseGenerator implements ReportGenerator
             return $header;
         }
 
-        $header['unknown'] = __('report.headers.missing_values');
+        $header['null'] = __('report.headers.missing_values');
 
         return $header;
     }

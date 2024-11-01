@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Services\Reports\BeneficiariesReports;
 
 use App\Concerns\Reports\HasVerticalHeaderEnvironment;
-use App\Enums\AddressType;
+use App\Concerns\Reports\InteractWithLegalAddress;
 use App\Interfaces\ReportGenerator;
 
 class CasesByLegalAddress extends BaseGenerator implements ReportGenerator
 {
     use HasVerticalHeaderEnvironment;
+    use InteractWithLegalAddress;
 
     public function getHorizontalHeader(): array
     {
@@ -23,17 +24,5 @@ class CasesByLegalAddress extends BaseGenerator implements ReportGenerator
     public function getSelectedFields(): array|string
     {
         return 'environment';
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('addresses', 'addresses.addressable_id', '=', 'beneficiaries.id');
-    }
-
-    public function addConditions(): void
-    {
-        parent::addConditions();
-        $this->query->where('addresses.addressable_type', 'beneficiary')
-            ->where('addresses.address_type', AddressType::LEGAL_RESIDENCE);
     }
 }

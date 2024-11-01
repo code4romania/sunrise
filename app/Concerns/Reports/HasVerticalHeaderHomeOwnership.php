@@ -10,7 +10,15 @@ trait HasVerticalHeaderHomeOwnership
 {
     public function getVerticalHeader(): array
     {
-        return HomeOwnership::options();
+        $header = HomeOwnership::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalHeaderKey(): string

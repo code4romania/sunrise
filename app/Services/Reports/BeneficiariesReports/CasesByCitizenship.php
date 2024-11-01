@@ -19,7 +19,15 @@ class CasesByCitizenship extends BaseGenerator implements ReportGenerator
 
     public function getVerticalHeader(): array
     {
-        return Citizenship::options();
+        $header = Citizenship::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalHeaderKey(): string

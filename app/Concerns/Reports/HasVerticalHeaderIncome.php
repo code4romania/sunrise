@@ -10,7 +10,15 @@ trait HasVerticalHeaderIncome
 {
     public function getVerticalHeader(): array
     {
-        return Income::options();
+        $header = Income::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalHeaderKey(): string

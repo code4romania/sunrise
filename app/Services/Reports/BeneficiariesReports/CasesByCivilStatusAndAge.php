@@ -23,7 +23,15 @@ class CasesByCivilStatusAndAge extends BaseGenerator implements ReportGenerator
 
     public function getHorizontalSubHeader(): ?array
     {
-        return AgeInterval2::options();
+        $header = AgeInterval2::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header['unknown'] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getHorizontalSubHeaderKey(): ?string

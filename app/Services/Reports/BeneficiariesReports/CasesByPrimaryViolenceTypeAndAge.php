@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Services\Reports\BeneficiariesReports;
 
 use App\Concerns\Reports\HasVerticalHeaderViolence;
+use App\Concerns\Reports\InteractWithViolence;
 use App\Enums\BeneficiarySegmentationByAge;
 use App\Interfaces\ReportGenerator;
 
 class CasesByPrimaryViolenceTypeAndAge extends BaseGenerator implements ReportGenerator
 {
     use HasVerticalHeaderViolence;
+    use InteractWithViolence;
 
     public function getHorizontalHeader(): array
     {
@@ -23,17 +25,20 @@ class CasesByPrimaryViolenceTypeAndAge extends BaseGenerator implements ReportGe
 
     public function getHorizontalSubHeader(): ?array
     {
-        return BeneficiarySegmentationByAge::options();
+        $header = BeneficiarySegmentationByAge::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header['unknown'] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getHorizontalSubHeaderKey(): ?string
     {
         return 'age_group';
-    }
-
-    public function getVerticalHeaderKey(): string
-    {
-        return 'violence_primary_type';
     }
 
     public function getSelectedFields(): array|string
@@ -46,10 +51,5 @@ class CasesByPrimaryViolenceTypeAndAge extends BaseGenerator implements ReportGe
             END as age_group",
             'violence_primary_type',
         ];
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('violences', 'violences.beneficiary_id', '=', 'beneficiaries.id');
     }
 }

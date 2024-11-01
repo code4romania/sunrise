@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Services\Reports\BeneficiariesReports;
 
 use App\Concerns\Reports\HasVerticalHeaderViolence;
+use App\Concerns\Reports\InteractWithViolence;
 use App\Interfaces\ReportGenerator;
 use Illuminate\Support\Collection;
 
 class CasesByViolenceTypes extends BaseGenerator implements ReportGenerator
 {
     use HasVerticalHeaderViolence;
+    use InteractWithViolence;
 
     private Collection $reportData;
 
@@ -30,11 +32,6 @@ class CasesByViolenceTypes extends BaseGenerator implements ReportGenerator
     public function getSelectedFields(): array|string
     {
         return 'JSON_UNQUOTE(JSON_EXTRACT(violences.violence_types, "$[*]")) as violence_types';
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('violences', 'violences.beneficiary_id', '=', 'beneficiaries.id');
     }
 
     public function getReportData(): Collection

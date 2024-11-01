@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Concerns\Reports;
 
-use App\Enums\AggressorRelationship;
+use App\Enums\ResidenceEnvironment;
 
-trait HasVerticalHeaderRelationship
+trait HasVerticalSubHeaderEnvironment
 {
-    public function getVerticalHeader(): array
+    public function getVerticalSubHeader(): ?array
     {
-        $header = AggressorRelationship::options();
+        $header = ResidenceEnvironment::options();
 
         if (! $this->showMissingValues) {
             return $header;
@@ -21,8 +21,8 @@ trait HasVerticalHeaderRelationship
         return $header;
     }
 
-    public function getVerticalHeaderKey(): string
+    public function getVerticalSubHeaderKey(): ?string
     {
-        return 'relationship';
+        return 'environment';
     }
 }

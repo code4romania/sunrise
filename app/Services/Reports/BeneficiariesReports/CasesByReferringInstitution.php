@@ -19,7 +19,15 @@ class CasesByReferringInstitution extends BaseGenerator implements ReportGenerat
 
     public function getVerticalHeader(): array
     {
-        return ReferringInstitution::all()->pluck('name', 'id')->toArray();
+        $header = ReferringInstitution::all()->pluck('name', 'id')->toArray();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalHeaderKey(): string

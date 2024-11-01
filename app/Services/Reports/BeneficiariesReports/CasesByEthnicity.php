@@ -19,7 +19,15 @@ class CasesByEthnicity extends BaseGenerator implements ReportGenerator
 
     public function getVerticalHeader(): array
     {
-        return Ethnicity::options();
+        $header = Ethnicity::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getVerticalHeaderKey(): string

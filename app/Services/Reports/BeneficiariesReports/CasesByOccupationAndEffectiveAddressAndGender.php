@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\Services\Reports\BeneficiariesReports;
 
 use App\Concerns\Reports\HasVerticalHeaderOccupation;
-use App\Enums\AddressType;
+use App\Concerns\Reports\HasVerticalSubHeaderEnvironment;
+use App\Concerns\Reports\InteractWithEffectiveAddressAndBeneficiaryDetails;
 use App\Enums\Gender;
-use App\Enums\ResidenceEnvironment;
 use App\Interfaces\ReportGenerator;
 
 class CasesByOccupationAndEffectiveAddressAndGender extends BaseGenerator implements ReportGenerator
 {
     use HasVerticalHeaderOccupation;
+    use HasVerticalSubHeaderEnvironment;
+    use InteractWithEffectiveAddressAndBeneficiaryDetails;
 
     public function getHorizontalHeader(): array
     {
@@ -25,7 +27,15 @@ class CasesByOccupationAndEffectiveAddressAndGender extends BaseGenerator implem
 
     public function getHorizontalSubHeader(): ?array
     {
-        return Gender::options();
+        $header = Gender::options();
+
+        if (! $this->showMissingValues) {
+            return $header;
+        }
+
+        $header[null] = __('report.headers.missing_values');
+
+        return $header;
     }
 
     public function getHorizontalSubHeaderKey(): ?string
@@ -33,31 +43,8 @@ class CasesByOccupationAndEffectiveAddressAndGender extends BaseGenerator implem
         return 'gender';
     }
 
-    public function getVerticalSubHeader(): ?array
-    {
-        return ResidenceEnvironment::options();
-    }
-
-    public function getVerticalSubHeaderKey(): ?string
-    {
-        return 'environment';
-    }
-
     public function getSelectedFields(): array|string
     {
         return ['occupation', 'gender', 'environment'];
-    }
-
-    public function addRelatedTables(): void
-    {
-        $this->query->join('beneficiary_details', 'beneficiaries.id', '=', 'beneficiary_details.beneficiary_id');
-        $this->query->join('addresses', 'addresses.addressable_id', '=', 'beneficiaries.id');
-    }
-
-    public function addConditions(): void
-    {
-        parent::addConditions();
-        $this->query->where('addresses.addressable_type', 'beneficiary')
-            ->where('addresses.address_type', AddressType::EFFECTIVE_RESIDENCE);
     }
 }
