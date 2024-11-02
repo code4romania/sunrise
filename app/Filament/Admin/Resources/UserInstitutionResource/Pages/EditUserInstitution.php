@@ -58,22 +58,26 @@ class EditUserInstitution extends EditRecord
     {
         return [
             TextInput::make('first_name')
-                ->required()
-                ->label(__('institution.labels.first_name')),
+                ->label(__('institution.labels.first_name'))
+                ->maxLength(50)
+                ->required(),
 
             TextInput::make('last_name')
-                ->required()
-                ->label(__('institution.labels.last_name')),
+                ->label(__('institution.labels.last_name'))
+                ->maxLength(50)
+                ->required(),
 
             TextInput::make('email')
-                ->required()
+                ->label(__('institution.labels.email'))
+                ->maxLength(50)
                 ->email()
-                ->label(__('institution.labels.email')),
+                ->required(),
 
             TextInput::make('phone')
-                ->required()
+                ->label(__('institution.labels.phone'))
+                ->maxLength(13)
                 ->tel()
-                ->label(__('institution.labels.phone')),
+                ->required(),
         ];
     }
 }

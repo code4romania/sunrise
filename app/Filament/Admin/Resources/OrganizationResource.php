@@ -75,14 +75,14 @@ class OrganizationResource extends Resource
                                 //     ->required(),
                             ]),
 
-                        Infolists\Components\Section::make(__('organization.section.reprezentative'))
+                        Infolists\Components\Section::make(__('organization.section.representative'))
                             ->columns(2)
                             ->schema([
-                                Infolists\Components\TextEntry::make('reprezentative_name')
-                                    ->label(__('organization.field.reprezentative_name')),
+                                Infolists\Components\TextEntry::make('representative_name')
+                                    ->label(__('organization.field.representative_name')),
 
-                                Infolists\Components\TextEntry::make('reprezentative_email')
-                                    ->label(__('organization.field.reprezentative_email')),
+                                Infolists\Components\TextEntry::make('representative_email')
+                                    ->label(__('organization.field.representative_email')),
                             ]),
 
                         Infolists\Components\Section::make(__('organization.field.logo'))
@@ -149,14 +149,14 @@ class OrganizationResource extends Resource
                                     ->required(),
                             ]),
 
-                        Forms\Components\Section::make(__('organization.section.reprezentative'))
+                        Forms\Components\Section::make(__('organization.section.representative'))
                             ->columns(2)
                             ->schema([
-                                Forms\Components\TextInput::make('reprezentative_name')
-                                    ->label(__('organization.field.reprezentative_name')),
+                                Forms\Components\TextInput::make('representative_name')
+                                    ->label(__('organization.field.representative_name')),
 
-                                Forms\Components\TextInput::make('reprezentative_email')
-                                    ->label(__('organization.field.reprezentative_email')),
+                                Forms\Components\TextInput::make('representative_email')
+                                    ->label(__('organization.field.representative_email')),
                             ]),
 
                         Forms\Components\Section::make(__('organization.field.logo'))

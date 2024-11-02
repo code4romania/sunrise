@@ -13,6 +13,7 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AdminsRelationManager extends RelationManager
@@ -48,6 +49,7 @@ class AdminsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('roles'))
             ->heading(__('institution.headings.admin_users'))
             ->columns([
                 TextColumn::make('first_name')
@@ -56,7 +58,7 @@ class AdminsRelationManager extends RelationManager
                 TextColumn::make('last_name')
                     ->label(__('institution.labels.last_name')),
 
-                TextColumn::make('roles')
+                TextColumn::make('roles.name')
                     ->label(__('institution.labels.roles')),
 
                 TextColumn::make('status')

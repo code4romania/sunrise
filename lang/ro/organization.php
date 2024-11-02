@@ -9,7 +9,7 @@ return [
     'section' => [
         'organization' => 'Organizație',
         'location' => 'Sediu social',
-        'reprezentative' => 'Reprezentant legal',
+        'representative' => 'Reprezentant legal',
     ],
 
     'field' => [
@@ -21,8 +21,8 @@ return [
         'county' => 'Județ sediu social',
         'city' => 'Localitate sediu social',
         'address' => 'Adresă sediu social',
-        'reprezentative_name' => 'Nume reprezentant legal',
-        'reprezentative_email' => 'Email reprezentant legal',
+        'representative_name' => 'Nume reprezentant legal',
+        'representative_email' => 'Email reprezentant legal',
         'phone' => 'Telefon',
         'website' => 'Website',
         'logo' => 'Logo organizație',

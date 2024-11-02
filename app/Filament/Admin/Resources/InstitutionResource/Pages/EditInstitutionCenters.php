@@ -54,14 +54,19 @@ class EditInstitutionCenters extends EditRecord
                 ->addActionLabel(__('institution.actions.add_organization'))
                 ->schema([
                     TextInput::make('name')
-                        ->label(__('institution.labels.center_name')),
+                        ->label(__('institution.labels.center_name'))
+                        ->maxLength(200)
+                        ->required(),
 
                     TextInput::make('short_name')
-                        ->label(__('organization.field.short_name')),
+                        ->label(__('organization.field.short_name'))
+                        ->maxLength(50),
 
                     TextInput::make('main_activity')
                         ->label(__('organization.field.main_activity'))
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->maxLength(200)
+                        ->required(),
 
                     SpatieMediaLibraryFileUpload::make('social_service_licensing_certificate')
                         ->label(__('institution.labels.social_service_licensing_certificate'))

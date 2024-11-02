@@ -85,11 +85,11 @@ class ViewInstitution extends ViewRecord
             TextEntry::make('phone')
                 ->label(__('organization.field.phone')),
 
-            TextEntry::make('reprezentative_name')
-                ->label(__('organization.field.reprezentative_name')),
+            TextEntry::make('representative_name')
+                ->label(__('organization.field.representative_name')),
 
-            TextEntry::make('reprezentative_email')
-                ->label(__('organization.field.reprezentative_email')),
+            TextEntry::make('representative_email')
+                ->label(__('organization.field.representative_email')),
 
             TextEntry::make('website')
                 ->label(__('organization.field.website')),
