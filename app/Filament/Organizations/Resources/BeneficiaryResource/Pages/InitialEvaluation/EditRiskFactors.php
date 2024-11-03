@@ -292,8 +292,8 @@ class EditRiskFactors extends EditRecord
             $fields[] = TextEntry::make('risk_factors.' . $key . '.value')
                 ->label($value)
                 ->formatStateUsing(function ($record, $state) use ($key) {
-                    $result = \is_int($state)
-                        ? Ternary::tryFrom($state)?->label()
+                    $result = $state !== '-'
+                        ? Ternary::tryFrom((int) $state)?->label()
                         : null;
 
                     $result ??= '-';

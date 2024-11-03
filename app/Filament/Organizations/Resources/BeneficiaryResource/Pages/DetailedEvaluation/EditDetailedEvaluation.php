@@ -51,8 +51,8 @@ class EditDetailedEvaluation extends EditRecord
             Section::make()
                 ->maxWidth('3xl')
                 ->schema([
-                    TableRepeater::make('specialists')
-                        ->relationship('specialists')
+                    TableRepeater::make('detailedEvaluationSpecialists')
+                        ->relationship('detailedEvaluationSpecialists')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
                         ->defaultItems(3)
                         ->addActionLabel(__('beneficiary.action.add_row'))
