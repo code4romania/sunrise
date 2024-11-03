@@ -8,11 +8,14 @@ use App\Concerns\HasParentResource;
 use App\Concerns\RedirectToMonitoring;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Forms\Components\Select;
-use App\Models\Beneficiary;
+use App\Forms\Components\TableRepeater;
+use App\Models\Monitoring;
+use App\Models\UserRole;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -74,21 +77,48 @@ class EditDetails extends EditRecord
                     Hidden::make('parent_id')
                         ->formatStateUsing(fn ($record, $state) => $state ?? ($record?->beneficiary_id ?? request('parent'))),
 
-                    //TODO refactoring after roles implementation
-                    // Probably use repeater table to select user and role
-                    Select::make('specialists')
-                        ->label(__('monitoring.labels.team'))
-                        ->placeholder(__('monitoring.placeholders.team'))
+                    TableRepeater::make('specialistsTeam')
+                        ->relationship('specialistsTeam')
+                        ->defaultItems(1)
+                        ->hiddenLabel()
+                        ->hideLabels()
+                        ->emptyLabel()
                         ->columnSpanFull()
-                        ->preload()
-                        ->relationship('specialistsMembers')
-                        ->multiple()
-                        ->options(
-                            fn (Get $get) => Beneficiary::find($get('parent_id'))
-                                ->specialistsMembers
-                                ->pluck('full_name', 'id')
-                        ),
+                        ->addActionLabel(__('monitoring.actions.add_specialist'))
+                        ->schema([
+                            Placeholder::make('id')
+                                ->label(__('nomenclature.labels.nr'))
+                                ->content(function () {
+                                    static $index = 1;
 
+                                    return $index++;
+                                })
+                                ->hiddenLabel(),
+
+                            Select::make('role_id')
+                                ->label(__('monitoring.labels.role'))
+                                ->options(
+                                    UserRole::query()
+                                        ->with('role')
+                                        ->get()
+                                        ->pluck('role.name', 'role.id')
+                                )
+                                ->live(),
+
+                            Select::make('user_id')
+                                ->label(__('monitoring.labels.specialist_name'))
+                                ->options(
+                                    fn (Get $get) => UserRole::query()
+                                        ->where('role_id', $get('role_id'))
+                                        ->with('user')
+                                        ->get()
+                                        ->pluck('user.full_name', 'user.id')
+                                ),
+
+                            Hidden::make('specialistable_type')
+                                ->formatStateUsing(fn ($state) => (new Monitoring())->getMorphClass()),
+
+                        ]),
                 ]),
 
         ];

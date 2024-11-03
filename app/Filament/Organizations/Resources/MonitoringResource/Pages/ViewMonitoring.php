@@ -57,8 +57,7 @@ class ViewMonitoring extends ViewRecord
         $this->getRecord()
             ->load([
                 'specialistsTeam.user',
-                // after design change
-                // 'specialistsTeam.role'
+                'specialistsTeam.role',
             ]);
 
         return $infolist->schema([
@@ -96,7 +95,7 @@ class ViewMonitoring extends ViewRecord
                                         ->listWithLineBreaks()
                                         ->formatStateUsing(
                                             fn ($state) => $state === '-' ? $state : $state->user->getFilamentName() . ' (' .
-                                                $state->roles?->map(fn ($item) => $item->label())->join(', ') . ')'
+                                                $state->role?->name . ')'
                                         ),
                                 ]),
                         ]),
