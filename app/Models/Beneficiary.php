@@ -114,6 +114,18 @@ class Beneficiary extends Model
         });
     }
 
+    public function scopeWhereUserHasAccess(Builder $query): Builder
+    {
+        $user = auth()->user();
+        if ($user->isNgoAdmin() || $user->hasAccessToAllCases()) {
+            return $query;
+        }
+
+        $query->whereHas('specialistsMembers', fn (Builder $query) => $query->where('users.id', $user->id));
+
+        return $query;
+    }
+
     public function getBreadcrumb(): string
     {
         return \sprintf('#%d %s', $this->id, $this->full_name);

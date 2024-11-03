@@ -75,7 +75,8 @@ class BeneficiaryResource extends Resource
             fn (Builder $query) => $query
                 ->leftJoin('monitorings', 'monitorings.beneficiary_id', '=', 'beneficiaries.id')
                 ->select(['beneficiaries.*', 'monitorings.date'])
-                ->with(['managerTeam', 'lastMonitoring'])
+                ->with(['managerTeam', 'lastMonitoring', 'specialistsMembers'])
+                ->whereUserHasAccess()
         )
             ->columns([
                 TextColumn::make('id')
