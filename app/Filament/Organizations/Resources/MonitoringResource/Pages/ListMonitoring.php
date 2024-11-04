@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
-use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -94,9 +93,9 @@ class ListMonitoring extends ListRecords
                 ->sortable()
                 ->listWithLineBreaks()
                 ->formatStateUsing(
-                    fn ($record) => $record->specialists
+                    fn ($record) => $record->specialistsTeam
                         ->map(fn ($specialist) => $specialist->user->getFilamentName() . ' (' .
-                            $specialist->roles?->map(fn ($role) => $role->label())->join(', ') . ')')
+                            $specialist->role?->name . ')')
                         ->join('; ')
                 ),
         ])

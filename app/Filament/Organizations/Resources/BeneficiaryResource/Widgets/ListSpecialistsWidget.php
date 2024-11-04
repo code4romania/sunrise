@@ -9,6 +9,7 @@ use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserRole;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Get;
@@ -102,10 +103,10 @@ class ListSpecialistsWidget extends BaseWidget
             Select::make('role_id')
                 ->label(__('beneficiary.section.specialists.labels.roles'))
                 ->options(
-                    Role::query()
-                        ->active()
+                    UserRole::query()
+                        ->with('role')
                         ->get()
-                        ->pluck('name', 'id')
+                        ->pluck('role.name', 'role.id')
                 )
                 ->afterStateUpdated(fn (Set $set) => $set('user_id', null))
                 ->live()
