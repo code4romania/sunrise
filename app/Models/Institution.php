@@ -96,6 +96,11 @@ class Institution extends Model implements HasMedia
         return $this->city?->name . ' (' . $this->county?->name . ')';
     }
 
+    public function isPending(): bool
+    {
+        return InstitutionStatus::isValue($this->status, InstitutionStatus::PENDING);
+    }
+
     public function inactivate(): void
     {
         $this->update(['status' => InstitutionStatus::INACTIVE->value]);
