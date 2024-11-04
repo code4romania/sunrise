@@ -54,7 +54,7 @@ trait HasPermissions
             return true;
         }
 
-        return $this->permissions->admin_permissions->contains(AdminPermission::CAN_CHANGE_STAFF);
+        return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_STAFF);
     }
 
     public function hasAccessToNomenclature(): bool
@@ -63,7 +63,7 @@ trait HasPermissions
             return true;
         }
 
-        return $this->permissions->admin_permissions->contains(AdminPermission::CAN_CHANGE_NOMENCLATURE);
+        return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_NOMENCLATURE);
     }
 
     public function hasAccessToCommunity()
@@ -76,6 +76,6 @@ trait HasPermissions
             return true;
         }
 
-        return $this->permissions->admin_permissions->contains(AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE);
+        return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE);
     }
 }

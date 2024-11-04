@@ -85,7 +85,7 @@ class ViewUser extends ViewRecord
                             foreach (AdminPermission::cases() as $option) {
                                 $fields[] = TextEntry::make($option->value)
                                     ->label($option->getLabel())
-                                    ->state($record->permissions->admin_permissions->contains($option) ?
+                                    ->state($record->permissions?->admin_permissions->contains($option) ?
                                         Ternary::YES : Ternary::NO);
                             }
 
