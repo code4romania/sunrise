@@ -53,30 +53,37 @@ class EditInstitutionDetails extends EditRecord
                 ->schema([
                     TextInput::make('name')
                         ->label(__('organization.field.name'))
+                        ->placeholder(__('organization.placeholders.name'))
                         ->maxLength(200)
                         ->required(),
 
                     TextInput::make('short_name')
                         ->label(__('organization.field.short_name'))
+                        ->placeholder(__('organization.placeholders.short_name'))
                         ->maxLength(50),
 
                     Select::make('type')
                         ->label(__('organization.field.type'))
+                        ->placeholder(__('organization.placeholders.type'))
                         ->options(OrganizationType::options())
                         ->enum(OrganizationType::class)
                         ->required(),
 
                     TextInput::make('cif')
                         ->label(__('organization.field.cif'))
+                        ->placeholder(__('organization.placeholders.cif'))
                         ->rule(new ValidCIF)
                         ->required(),
 
                     TextInput::make('main_activity')
                         ->label(__('organization.field.main_activity'))
+                        ->placeholder(__('organization.placeholders.main_activity'))
                         ->maxLength(200)
                         ->required(),
+
                     Select::make('area')
                         ->label(__('organization.field.area'))
+                        ->placeholder(__('organization.placeholders.area'))
                         ->options(AreaType::options())
                         ->required(),
 
@@ -86,30 +93,52 @@ class EditInstitutionDetails extends EditRecord
 
                     TextInput::make('address')
                         ->label(__('organization.field.address'))
+                        ->placeholder(__('organization.placeholders.address'))
                         ->columnSpanFull()
                         ->maxLength(200)
                         ->required(),
 
-
                     TextInput::make('representative_name')
                         ->label(__('organization.field.representative_name'))
+                        ->placeholder(__('organization.placeholders.representative_name'))
                         ->maxLength(50)
                         ->required(),
 
                     TextInput::make('representative_email')
                         ->label(__('organization.field.representative_email'))
+                        ->placeholder(__('organization.placeholders.representative_email'))
                         ->maxLength(50)
                         ->email(),
 
                     TextInput::make('phone')
                         ->label(__('organization.field.phone'))
+                        ->placeholder(__('organization.placeholders.phone'))
                         ->maxLength(13)
                         ->tel()
                         ->required(),
 
+                    TextInput::make('contact_person')
+                        ->label(__('organization.field.contact_person'))
+                        ->placeholder(__('organization.placeholders.contact_person'))
+                        ->maxLength(50)
+                        ->required(),
+
+                    TextInput::make('contact_person_email')
+                        ->label(__('organization.field.contact_person_email'))
+                        ->placeholder(__('organization.placeholders.contact_person_email'))
+                        ->maxLength(50)
+                        ->email(),
+
+                    TextInput::make('contact_person_phone')
+                        ->label(__('organization.field.contact_person_phone'))
+                        ->placeholder(__('organization.placeholders.contact_person_phone'))
+                        ->maxLength(13)
+                        ->tel()
+                        ->required(),
 
                     TextInput::make('website')
                         ->label(__('organization.field.website'))
+                        ->placeholder(__('organization.placeholders.website'))
                         ->maxLength(200)
                         ->url(),
 

@@ -27,6 +27,9 @@ return [
         'phone' => 'Telefon',
         'website' => 'Website',
         'logo' => 'Logo organizație',
+        'contact_person' => 'Persoană de contact',
+        'contact_person_email' => 'Email persoană de contact',
+        'contact_person_phone' => 'Număr telefon persoană de contact',
     ],
 
     'filter' => [
@@ -41,5 +44,24 @@ return [
 
     'helper_texts' => [
         'view_tenant_info' => 'Pentru a modifica/ actualiza informațiile din această secțiune, vă rugăm contactați echipa de administrare Sunrise via email la admin@stopviolențeidomestice.ro ',
+    ],
+
+    'placeholders' => [
+        'name' => 'Numele organizației',
+        'short_name' => 'Acronimul organizației',
+        'type' => 'Alege o variantă',
+        'cif' => 'CUI/CIF organizație',
+        'main_activity' => 'Domeniul principal de activitate',
+        'area' => 'Alege o variantă',
+        'address' => 'Adresa completă sediu social',
+        'representative_name' => 'Nume complet reprezentant legal',
+        'representative_email' => 'Emailul reprezentantului legal',
+        'phone' => 'Număr de telefon reprezentant legal',
+        'contact_person' => 'Nume complet persoană de contact',
+        'contact_person_email' => 'Emailul persoanei de contact',
+        'contact_person_phone' => 'Număr de telefon persoană de contact',
+        'website' => 'Link website organizație',
+        'center_name' => 'Numele complet al centrului',
+        'center_short_name' => 'Acronimul centrului',
     ],
 ];

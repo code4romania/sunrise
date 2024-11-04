@@ -59,22 +59,26 @@ class EditUserInstitution extends EditRecord
         return [
             TextInput::make('first_name')
                 ->label(__('institution.labels.first_name'))
+                ->placeholder(__('institution.placeholders.first_name'))
                 ->maxLength(50)
                 ->required(),
 
             TextInput::make('last_name')
                 ->label(__('institution.labels.last_name'))
+                ->placeholder(__('institution.placeholders.last_name'))
                 ->maxLength(50)
                 ->required(),
 
             TextInput::make('email')
                 ->label(__('institution.labels.email'))
+                ->placeholder(__('institution.placeholders.email'))
                 ->maxLength(50)
                 ->email()
                 ->required(),
 
             TextInput::make('phone')
                 ->label(__('institution.labels.phone'))
+                ->placeholder(__('institution.placeholders.phone'))
                 ->maxLength(13)
                 ->tel()
                 ->required(),
