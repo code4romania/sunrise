@@ -26,6 +26,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\HtmlString;
 
 class UserResource extends Resource
 {
@@ -145,7 +146,7 @@ class UserResource extends Resource
                         ->afterStateUpdated(self::setDefaultCaseAndNgoAdminPermissions()),
 
                     Placeholder::make('obs')
-                        ->content(__('user.placeholders.obs'))
+                        ->content(new HtmlString(__('user.placeholders.obs')))
                         ->label('')
                         ->columnSpanFull(),
 

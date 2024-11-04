@@ -37,12 +37,8 @@ class Institution extends Model implements HasMedia
         'county_id',
         'city_id',
         'address',
-        'representative_name',
-        'representative_email',
-        'phone',
+        'representative_person',
         'contact_person',
-        'contact_person_email',
-        'contact_person_phone',
         'website',
         'status',
     ];
@@ -51,6 +47,8 @@ class Institution extends Model implements HasMedia
         'type' => OrganizationType::class,
         'area' => AreaType::class,
         'status' => InstitutionStatus::class,
+        'representative_person' => 'array',
+        'contact_person' => 'array',
     ];
 
     protected function getSlugSource(): string

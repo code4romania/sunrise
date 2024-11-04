@@ -79,17 +79,23 @@ class ViewInstitution extends ViewRecord
             Location::make()
                 ->city(),
 
-            TextEntry::make('address')
-                ->label(__('organization.field.address')),
+//            TextEntry::make('address')
+//                ->label(__('organization.field.address')),
 
-            TextEntry::make('phone')
-                ->label(__('organization.field.phone')),
 
-            TextEntry::make('representative_name')
+            TextEntry::make('representative_person.name')
                 ->label(__('organization.field.representative_name')),
-
-            TextEntry::make('representative_email')
+            TextEntry::make('representative_person.email')
                 ->label(__('organization.field.representative_email')),
+            TextEntry::make('representative_person.phone')
+                ->label(__('organization.field.representative_phone')),
+
+            TextEntry::make('contact_person.name')
+                ->label(__('organization.field.contact_person')),
+            TextEntry::make('contact_person.email')
+                ->label(__('organization.field.contact_person_email')),
+            TextEntry::make('contact_person.phone')
+                ->label(__('organization.field.contact_person_phone')),
 
             TextEntry::make('website')
                 ->label(__('organization.field.website')),

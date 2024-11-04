@@ -31,9 +31,11 @@ class WelcomeNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+            ->greeting(__('email.greeting'))
             ->subject(__('email.organization.welcome.subject'))
             ->line(__('email.organization.welcome.intro_line_1'))
             ->line(__('email.organization.welcome.intro_line_2'))
+            ->salutation(__('email.salutation'))
             ->action(
                 __('email.organization.welcome.accept_invitation'),
                 URL::signedRoute($this->route, ['user' => $notifiable])

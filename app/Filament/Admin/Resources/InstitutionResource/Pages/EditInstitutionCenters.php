@@ -61,12 +61,12 @@ class EditInstitutionCenters extends EditRecord
 
                     TextInput::make('short_name')
                         ->label(__('organization.field.short_name'))
-                        ->placeholder(__('organization.placeholder.center_short_name'))
+                        ->placeholder(__('organization.placeholders.center_short_name'))
                         ->maxLength(50),
 
                     TextInput::make('main_activity')
                         ->label(__('organization.field.main_activity'))
-                        ->placeholder(__('organization.placeholder.main_activity'))
+                        ->placeholder(__('organization.placeholders.main_activity'))
                         ->columnSpanFull()
                         ->maxLength(200)
                         ->required(),

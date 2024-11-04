@@ -27,6 +27,18 @@ class InstitutionFactory extends Factory
         $name = fake()->company();
         $city = City::query()->inRandomOrder()->first();
 
+        $representativePerson = [
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+        ];
+
+        $contactPerson = [
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+        ];
+
         return [
             'name' => $name,
             'short_name' => preg_replace('/\b(\w)|./u', '$1', $name),
@@ -38,14 +50,9 @@ class InstitutionFactory extends Factory
             'city_id' => $city->id,
             'county_id' => $city->county_id,
             'address' => fake()->streetAddress(),
-
-            'representative_name' => fake()->name(),
-            'representative_email' => fake()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
+            'representative_person' => $representativePerson,
+            'contact_person' => $contactPerson,
             'website' => fake()->url(),
-            'contact_person' => fake()->name(),
-            'contact_person_email' => fake()->safeEmail(),
-            'contact_person_phone' => fake()->phoneNumber(),
             'status' => fake()->randomElement(InstitutionStatus::values()),
         ];
     }

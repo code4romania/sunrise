@@ -32,12 +32,8 @@ return new class extends Migration
             $table->foreignIdFor(City::class)->constrained()->cascadeOnDelete();
             $table->string('address');
 
-            $table->string('representative_name');
-            $table->string('representative_email')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('contact_person');
-            $table->string('contact_person_email');
-            $table->string('contact_person_phone');
+            $table->json('representative_person');
+            $table->json('contact_person');
             $table->string('website')->nullable();
 
             $table->string('status')->default(InstitutionStatus::PENDING->value);

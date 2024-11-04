@@ -45,7 +45,7 @@ return [
     ],
 
     'placeholders' => [
-        'obs' => 'Acest tip de utilizator __are acces doar la cazurile din echipa cărora face parte__ și nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
+        'obs' => 'Acest tip de utilizator <span class="italic">are acces doar la cazurile din echipa cărora face parte</span> și nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
     ],
 
     'actions' => [

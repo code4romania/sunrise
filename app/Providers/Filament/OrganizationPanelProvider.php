@@ -145,7 +145,6 @@ class OrganizationPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->tenant(Organization::class, 'slug')
-            ->tenantProfile(Pages\Tenancy\EditOrganizationProfile::class)
             ->tenantRoutePrefix('org')
             ->tenantMiddleware([
                 UpdateDefaultTenant::class,

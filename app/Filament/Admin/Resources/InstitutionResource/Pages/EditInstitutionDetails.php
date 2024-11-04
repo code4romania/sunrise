@@ -10,6 +10,7 @@ use App\Filament\Admin\Resources\InstitutionResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Select;
 use App\Rules\ValidCIF;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -98,43 +99,49 @@ class EditInstitutionDetails extends EditRecord
                         ->maxLength(200)
                         ->required(),
 
-                    TextInput::make('representative_name')
-                        ->label(__('organization.field.representative_name'))
-                        ->placeholder(__('organization.placeholders.representative_name'))
-                        ->maxLength(50)
-                        ->required(),
+                    Grid::make()
+                        ->schema([
+                            TextInput::make('representative_person.name')
+                                ->label(__('organization.field.representative_name'))
+                                ->placeholder(__('organization.placeholders.representative_name'))
+                                ->maxLength(50)
+                                ->required(),
 
-                    TextInput::make('representative_email')
-                        ->label(__('organization.field.representative_email'))
-                        ->placeholder(__('organization.placeholders.representative_email'))
-                        ->maxLength(50)
-                        ->email(),
+                            TextInput::make('representative_person.email')
+                                ->label(__('organization.field.representative_email'))
+                                ->placeholder(__('organization.placeholders.representative_email'))
+                                ->maxLength(50)
+                                ->email(),
 
-                    TextInput::make('phone')
-                        ->label(__('organization.field.phone'))
-                        ->placeholder(__('organization.placeholders.phone'))
-                        ->maxLength(13)
-                        ->tel()
-                        ->required(),
+                            TextInput::make('representative_person.phone')
+                                ->label(__('organization.field.representative_phone'))
+                                ->placeholder(__('organization.placeholders.representative_phone'))
+                                ->maxLength(13)
+                                ->tel(),
+                        ])->columnSpanFull(),
 
-                    TextInput::make('contact_person')
-                        ->label(__('organization.field.contact_person'))
-                        ->placeholder(__('organization.placeholders.contact_person'))
-                        ->maxLength(50)
-                        ->required(),
+                    Grid::make()
+                        ->schema([
+                            TextInput::make('contact_person.name')
+                                ->label(__('organization.field.contact_person'))
+                                ->placeholder(__('organization.placeholders.contact_person'))
+                                ->maxLength(50)
+                                ->required(),
 
-                    TextInput::make('contact_person_email')
-                        ->label(__('organization.field.contact_person_email'))
-                        ->placeholder(__('organization.placeholders.contact_person_email'))
-                        ->maxLength(50)
-                        ->email(),
+                            TextInput::make('contact_person.email')
+                                ->label(__('organization.field.contact_person_email'))
+                                ->placeholder(__('organization.placeholders.contact_person_email'))
+                                ->maxLength(50)
+                                ->required()
+                                ->email(),
 
-                    TextInput::make('contact_person_phone')
-                        ->label(__('organization.field.contact_person_phone'))
-                        ->placeholder(__('organization.placeholders.contact_person_phone'))
-                        ->maxLength(13)
-                        ->tel()
-                        ->required(),
+                            TextInput::make('contact_person.phone')
+                                ->label(__('organization.field.contact_person_phone'))
+                                ->placeholder(__('organization.placeholders.contact_person_phone'))
+                                ->maxLength(13)
+                                ->tel()
+                                ->required(),
+                        ])->columnSpanFull(),
 
                     TextInput::make('website')
                         ->label(__('organization.field.website'))

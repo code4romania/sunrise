@@ -131,6 +131,7 @@ return [
     'first_called_institution' => 'Prima instituție la care a apelat victima',
     'other_called_institutions' => 'Următoarele instituții la care a apelat victima',
     'last_login_at' => 'Ultima accesare',
+    'address' => 'Adresă',
 
     'role' => 'Rol',
     'check' => 'Verifică',

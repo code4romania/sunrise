@@ -54,7 +54,6 @@ class ViewUser extends ViewRecord
                     TextEntry::make('obs')
                         ->default(
                             Str::of(__('user.placeholders.obs'))
-                                ->inlineMarkdown()
                                 ->toHtmlString()
                         )
                         ->hiddenLabel()
