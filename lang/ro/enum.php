@@ -157,7 +157,7 @@ return [
     'organization_type' => [
         'ngo' => 'Organizație non-profit',
         'public' => 'Instituție publică',
-        'private' => 'Entitate privată',
+        'other_type' => 'Alt tip',
     ],
 
     'user_status' => [
@@ -375,5 +375,10 @@ return [
         'active' => 'Activ',
         'inactive' => 'Suspendat',
         'pending' => 'În așteptare',
+    ],
+
+    'area_type' => [
+        'national' => 'Națională',
+        'local' => 'Locală',
     ],
 ];

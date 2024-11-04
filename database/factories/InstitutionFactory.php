@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\AreaType;
 use App\Enums\InstitutionStatus;
 use App\Enums\OrganizationType;
 use App\Models\City;
@@ -30,16 +31,21 @@ class InstitutionFactory extends Factory
             'name' => $name,
             'short_name' => preg_replace('/\b(\w)|./u', '$1', $name),
             'type' => fake()->randomElement(OrganizationType::values()),
-            'phone' => fake()->phoneNumber(),
-            'website' => fake()->url(),
+            'cif' => fake()->numerify(),
+            'main_activity' => fake()->text(),
+            'area' => fake()->randomElement(AreaType::values()),
 
             'city_id' => $city->id,
             'county_id' => $city->county_id,
             'address' => fake()->streetAddress(),
 
-            'reprezentative_name' => fake()->name(),
-            'reprezentative_email' => fake()->safeEmail(),
-
+            'representative_name' => fake()->name(),
+            'representative_email' => fake()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+            'website' => fake()->url(),
+            'contact_person' => fake()->name(),
+            'contact_person_email' => fake()->safeEmail(),
+            'contact_person_phone' => fake()->phoneNumber(),
             'status' => fake()->randomElement(InstitutionStatus::values()),
         ];
     }

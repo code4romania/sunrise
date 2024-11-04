@@ -14,7 +14,7 @@ enum OrganizationType: string
 
     case NGO = 'ngo';
     case PUBLIC = 'public';
-    case PRIVATE = 'private';
+    case OTHER_TYPE = 'other_type';
 
     protected function labelKeyPrefix(): ?string
     {

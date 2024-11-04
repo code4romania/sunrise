@@ -51,22 +51,29 @@ class EditInstitutionDetails extends EditRecord
                 ->columns()
                 ->schema([
                     TextInput::make('name')
-                        ->label(__('organization.field.name')),
+                        ->label(__('organization.field.name'))
+                        ->maxLength(200)
+                        ->required(),
 
                     TextInput::make('short_name')
-                        ->label(__('organization.field.short_name')),
+                        ->label(__('organization.field.short_name'))
+                        ->maxLength(50),
 
                     Select::make('type')
                         ->label(__('organization.field.type'))
                         ->options(OrganizationType::options())
-                        ->enum(OrganizationType::class),
+                        ->enum(OrganizationType::class)
+                        ->required(),
 
                     TextInput::make('cif')
                         ->label(__('organization.field.cif'))
-                        ->rule(new ValidCIF),
+                        ->rule(new ValidCIF)
+                        ->required(),
 
                     TextInput::make('main_activity')
-                        ->label(__('organization.field.main_activity')),
+                        ->label(__('organization.field.main_activity'))
+                        ->maxLength(200)
+                        ->required(),
 
                     Location::make()
                         ->city()
@@ -79,23 +86,31 @@ class EditInstitutionDetails extends EditRecord
 
                     TextInput::make('phone')
                         ->label(__('organization.field.phone'))
-                        ->tel(),
+                        ->maxLength(13)
+                        ->tel()
+                        ->required(),
 
-                    TextInput::make('reprezentative_name')
-                        ->label(__('organization.field.reprezentative_name')),
+                    TextInput::make('representative_name')
+                        ->label(__('organization.field.representative_name'))
+                        ->maxLength(50)
+                        ->required(),
 
-                    TextInput::make('reprezentative_email')
-                        ->label(__('organization.field.reprezentative_email')),
+                    TextInput::make('representative_email')
+                        ->label(__('organization.field.representative_email'))
+                        ->maxLength(50)
+                        ->email(),
 
                     TextInput::make('website')
                         ->label(__('organization.field.website'))
+                        ->maxLength(200)
                         ->url(),
 
                     SpatieMediaLibraryFileUpload::make('organization_status')
                         ->label(__('institution.labels.organization_status'))
                         ->helperText(__('institution.helper_texts.organization_status'))
                         ->collection('organization_status')
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->required(),
 
                     SpatieMediaLibraryFileUpload::make('social_service_provider_certificate')
                         ->label(__('institution.labels.social_service_provider_certificate'))

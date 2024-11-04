@@ -82,6 +82,7 @@ class RoleResource extends Resource
 
                 TextColumn::make('institutions')
                     ->label(__('nomenclature.labels.institutions'))
+                    ->formatStateUsing(fn ($record) => $record->organizations->unique('institution_id')->count())
                     ->default(0),
 
                 TextColumn::make('organizations')

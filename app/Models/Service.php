@@ -8,7 +8,9 @@ use App\Concerns\HasGeneralStatus;
 use App\Enums\CounselingSheet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Service extends Model
@@ -43,5 +45,15 @@ class Service extends Model
     public function organizationServices(): HasMany
     {
         return $this->hasMany(OrganizationService::class);
+    }
+
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class, OrganizationService::class);
+    }
+
+    public function getInstitutionsCountAttribute()
+    {
+        return $this->organizations()->distinct('institution_id')->count('institution_id');
     }
 }

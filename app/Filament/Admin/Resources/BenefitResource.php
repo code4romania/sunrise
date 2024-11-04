@@ -81,7 +81,7 @@ class BenefitResource extends Resource
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.benefit')),
 
-                TextColumn::make('institutions')
+                TextColumn::make('institutions_count')
                     ->label(__('nomenclature.labels.institutions')),
 
                 TextColumn::make('organizations_count')
