@@ -284,7 +284,7 @@ class ViewDetailedEvaluation extends ViewRecord
     public function getDetailedEvaluationSchema(): array
     {
         return [
-            RepeatableEntry::make('specialists')
+            RepeatableEntry::make('detailedEvaluationSpecialists')
                 ->columns(4)
                 ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
                 ->schema([

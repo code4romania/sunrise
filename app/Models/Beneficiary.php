@@ -136,9 +136,9 @@ class Beneficiary extends Model
         );
     }
 
-    public function specialists(): HasMany
+    public function detailedEvaluationSpecialists(): HasMany
     {
-        return $this->hasMany(Specialist::class);
+        return $this->hasMany(DetailedEvaluationSpecialist::class);
     }
 
     public function meetings(): HasMany
