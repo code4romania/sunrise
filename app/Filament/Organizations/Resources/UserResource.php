@@ -138,6 +138,7 @@ class UserResource extends Resource
                     Select::make('role_id')
                         ->label(__('user.labels.select_roles'))
                         ->relationship('rolesInOrganization', 'name')
+                        ->options(Role::active()->pluck('name', 'id'))
                         ->preload()
                         ->multiple()
                         ->live()

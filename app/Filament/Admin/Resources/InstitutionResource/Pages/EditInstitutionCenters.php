@@ -55,7 +55,7 @@ class EditInstitutionCenters extends EditRecord
                 ->schema([
                     TextInput::make('name')
                         ->label(__('institution.labels.center_name'))
-                        ->placeholder(__('organization.placeholder.center_name'))
+                        ->placeholder(__('organization.placeholders.center_name'))
                         ->maxLength(200)
                         ->required(),
 
