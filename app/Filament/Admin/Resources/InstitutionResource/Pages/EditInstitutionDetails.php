@@ -9,7 +9,6 @@ use App\Enums\OrganizationType;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Forms\Components\Location;
 use App\Forms\Components\Select;
-use App\Rules\ValidCIF;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -73,7 +72,6 @@ class EditInstitutionDetails extends EditRecord
                     TextInput::make('cif')
                         ->label(__('organization.field.cif'))
                         ->placeholder(__('organization.placeholders.cif'))
-                        ->rule(new ValidCIF)
                         ->required(),
 
                     TextInput::make('main_activity')
@@ -90,6 +88,9 @@ class EditInstitutionDetails extends EditRecord
 
                     Location::make()
                         ->city()
+                        ->countyLabel(__('organization.field.county'))
+                        ->cityLabel(__('organization.field.city'))
+                        ->addressLabel(__('organization.field.address'))
                         ->required(),
 
                     TextInput::make('address')

@@ -33,14 +33,12 @@ use App\Models\ViolenceHistory;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Columns\Column;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Validation\Rules\Password;
-use Jeffgreco13\FilamentBreezy\BreezyCore;
-use JeffGreco13\FilamentBreezy\FilamentBreezy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -53,6 +51,9 @@ class AppServiceProvider extends ServiceProvider
         $this->registerViteMacros();
 
         $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+        Table::configureUsing(function (Table $table) {
+            return $table->defaultSort('created_at', 'desc');
+        });
 
         Column::macro('shrink', fn () => $this->extraHeaderAttributes(['class' => 'w-1']));
     }
@@ -73,8 +74,6 @@ class AppServiceProvider extends ServiceProvider
             return $entry->default('-');
         });
     }
-
-
 
     protected function enforceMorphMap(): void
     {

@@ -19,7 +19,7 @@ class InstitutionResource extends Resource
 {
     protected static ?string $model = Institution::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function getNavigationSort(): ?int
     {
@@ -57,6 +57,7 @@ class InstitutionResource extends Resource
                     ->withCount(['organizations', 'beneficiaries', 'users'])
                     ->with(['county', 'city'])
             )
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('name')
                     ->label(__('institution.headings.institution_name')),

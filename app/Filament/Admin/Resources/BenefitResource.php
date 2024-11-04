@@ -55,7 +55,7 @@ class BenefitResource extends Resource
                                         $items = $component->getState();
                                         $currentItem = $items[$arguments['item']];
 
-                                        if (! $currentItem['id']) {
+                                        if (!isset($currentItem['id'])) {
                                             return false;
                                         }
 

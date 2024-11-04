@@ -101,7 +101,7 @@ class RoleResource extends Resource
                     ->options(GeneralStatus::options()),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
+                Tables\Actions\EditAction::make()
                     ->label(__('nomenclature.actions.edit')),
             ])
             ->emptyStateHeading(__('nomenclature.labels.empty_state_role_table'))

@@ -327,7 +327,7 @@ return [
 
     'counseling_sheet' => [
         'psychological_assistance' => 'Asistență psihologică',
-        'legal assistance' => 'Asistența juridică',
+        'legal_assistance' => 'Asistența juridică',
     ],
 
     'meeting_status' => [

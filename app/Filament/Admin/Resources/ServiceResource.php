@@ -18,6 +18,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
@@ -73,7 +74,6 @@ class ServiceResource extends Resource
                     ->relationship('serviceInterventions')
                     ->label(__('nomenclature.headings.service_intervention'))
                     ->columnSpanFull()
-                    ->hideLabels()
                     ->addActionLabel(__('nomenclature.actions.add_intervention'))
                     ->schema([
                         Placeholder::make('id')
@@ -85,8 +85,20 @@ class ServiceResource extends Resource
                             })
                             ->hiddenLabel(),
                         TextInput::make('name')
+                            ->columnSpanFull()
+                            ->hiddenLabel()
                             ->label(__('nomenclature.labels.intervention_name')),
-                        Toggle::make('status'),
+
+                        Toggle::make('status')
+                            ->columnSpanFull()
+                            ->live()
+                            ->default(true)
+                            ->afterStateUpdated(function (bool $state) {
+                              if (! $state) {
+                               dd('Modal cu inactivare de hard confirmation');
+                              }
+                            })
+                            ->label(fn (Get $get) => $get('status') ? __('nomenclature.labels.active') : __('nomenclature.labels.inactive')),
                     ])
                     ->deleteAction(
                         fn (Action $action) => $action

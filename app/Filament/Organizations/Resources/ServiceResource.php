@@ -32,7 +32,7 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = OrganizationService::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-view-columns';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 32;
 

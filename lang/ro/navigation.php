@@ -11,7 +11,7 @@ return [
 
     'community' => [
         '_group' => 'Comunitatea Sunrise',
-        'network' => 'Rețea organizații VDP',
+        'network' => 'Rețea organizații VD',
         'profile' => 'Profilul meu în rețea',
     ],
 

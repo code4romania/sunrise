@@ -16,6 +16,6 @@ class ListRoles extends ManageRecords
 
     public function getTitle(): string|Htmlable
     {
-        return __('nomenclature.headings.roles');
+        return __('nomenclature.titles.list');
     }
 }

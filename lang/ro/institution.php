@@ -7,6 +7,7 @@ return [
     'singular' => 'Instituție',
     'plural' => 'instituții',
     'headings' => [
+        'create_title' => 'Adaugă instituție',
         'institution_name' => 'Nume instituție',
         'registered_office' => 'Sediu social',
         'centers' => 'Centre',
