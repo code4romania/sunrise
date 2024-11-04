@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
+use App\Enums\AreaType;
 use App\Enums\OrganizationType;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Forms\Components\Location;
@@ -74,6 +75,10 @@ class EditInstitutionDetails extends EditRecord
                         ->label(__('organization.field.main_activity'))
                         ->maxLength(200)
                         ->required(),
+                    Select::make('area')
+                        ->label(__('organization.field.area'))
+                        ->options(AreaType::options())
+                        ->required(),
 
                     Location::make()
                         ->city()
@@ -81,14 +86,10 @@ class EditInstitutionDetails extends EditRecord
 
                     TextInput::make('address')
                         ->label(__('organization.field.address'))
+                        ->columnSpanFull()
                         ->maxLength(200)
                         ->required(),
 
-                    TextInput::make('phone')
-                        ->label(__('organization.field.phone'))
-                        ->maxLength(13)
-                        ->tel()
-                        ->required(),
 
                     TextInput::make('representative_name')
                         ->label(__('organization.field.representative_name'))
@@ -99,6 +100,13 @@ class EditInstitutionDetails extends EditRecord
                         ->label(__('organization.field.representative_email'))
                         ->maxLength(50)
                         ->email(),
+
+                    TextInput::make('phone')
+                        ->label(__('organization.field.phone'))
+                        ->maxLength(13)
+                        ->tel()
+                        ->required(),
+
 
                     TextInput::make('website')
                         ->label(__('organization.field.website'))

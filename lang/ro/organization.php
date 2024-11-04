@@ -18,6 +18,7 @@ return [
         'type' => 'Tip organizație',
         'cif' => 'CUI/CIF',
         'main_activity' => 'Domeniu principal de activitate',
+        'area' => 'Acoperire',
         'county' => 'Județ sediu social',
         'city' => 'Localitate sediu social',
         'address' => 'Adresă sediu social',
