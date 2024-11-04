@@ -92,6 +92,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationItems([
                 NavigationItem::make(__('nomenclature.titles.list'))
                     ->icon('heroicon-o-document-text')
+                    ->sort(2)
                     ->isActiveWhen(
                         fn () => request()->routeIs('filament.admin.resources.roles.*') ||
                             request()->routeIs('filament.admin.resources.services.*') ||

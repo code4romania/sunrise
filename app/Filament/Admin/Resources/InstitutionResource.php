@@ -21,6 +21,11 @@ class InstitutionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getNavigationSort(): ?int
+    {
+        return 1;
+    }
+
     public static function getModelLabel(): string
     {
         return __('institution.singular');

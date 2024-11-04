@@ -116,10 +116,13 @@ class ServiceResource extends Resource
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.name'))
                     ->searchable(),
-                TextColumn::make('institutions')
+
+                TextColumn::make('institutions_count')
                     ->label(__('nomenclature.labels.institutions')),
+
                 TextColumn::make('organization_services_count')
                     ->label(__('nomenclature.labels.centers')),
+
                 TextColumn::make('status')
                     ->label(__('nomenclature.labels.status'))
                     ->badge(),
