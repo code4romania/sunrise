@@ -99,7 +99,7 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
 
     public function getFilamentName(): string
     {
-        return $this->short_name;
+        return $this->short_name ?: $this->name;
     }
 
     public function getCurrentTenantLabel(): string
