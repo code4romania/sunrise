@@ -30,6 +30,7 @@ use App\Models\Service;
 use App\Models\User;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
+use Filament\Forms\Components\TextInput;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Tables\Columns\Column;
@@ -39,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -56,6 +58,16 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Column::macro('shrink', fn () => $this->extraHeaderAttributes(['class' => 'w-1']));
+
+        Request::macro('isFromLivewire', function () {
+            return $this->headers->has('x-livewire');
+        });
+
+        TextInput::configureUsing(function (TextInput $input) {
+            if ($input->isNumeric()) {
+                $input->minValue(0);
+            }
+        });
     }
 
     /**

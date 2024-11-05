@@ -5,7 +5,7 @@
                 <nav class="fi-tabs flex max-w-full gap-x-1 overflow-x-auto mb-6" aria-label="Tabs">
                     @foreach ($visibleWidgets as $index => $widget)
                         <span wire:click="selectWidget({{ $index }})"
-                              class="fi-tabs-item group flex items-center gap-x-2 rounded-lg px-4 py-2 text-sm font-medium outline-none transition duration-75
+                              class="fi-tabs-item group flex items-center gap-x-2 rounded-lg px-4 py-2 text-sm font-medium outline-none transition duration-75 hover:cursor-default
                               {{
                                 $currentWidget === $index ?
                                     'fi-active fi-tabs-item-active bg-primary-100 dark:bg-primary-800' :

@@ -94,9 +94,9 @@ class ServiceResource extends Resource
                             ->live()
                             ->default(true)
                             ->afterStateUpdated(function (bool $state) {
-                              if (! $state) {
-                               dd('Modal cu inactivare de hard confirmation');
-                              }
+                                if (! $state) {
+                                    dd('Modal cu inactivare de hard confirmation');
+                                }
                             })
                             ->label(fn (Get $get) => $get('status') ? __('nomenclature.labels.active') : __('nomenclature.labels.inactive')),
                     ])

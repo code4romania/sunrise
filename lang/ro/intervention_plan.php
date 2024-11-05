@@ -86,7 +86,7 @@ return [
         'status' => 'Status',
         'date' => 'Data',
         'time' => 'Ora',
-        'duration' => 'Durata',
+        'duration' => 'Durata (min)',
         'observations' => 'Observatii',
         'meet_number' => 'Nr ședință',
         'empty_state_benefit_table' => 'Înregistrează aici toate beneficiile sociale ale beneficiarei.',
@@ -155,6 +155,7 @@ return [
         'delete_benefit' => 'Sterge beneficiu',
         'delete_beneficiary_intervention' => 'Șterge intervenția',
         'view_intervention' => 'Vezi intervenția',
+        'download_meetings' => 'Descarca tabel',
     ],
 
     'placeholders' => [

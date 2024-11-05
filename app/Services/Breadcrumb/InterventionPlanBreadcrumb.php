@@ -48,7 +48,7 @@ class InterventionPlanBreadcrumb
             [self::$resourcePath::getUrl('view_intervention_service', [
                 'parent' => $this->record,
                 'record' => $record,
-            ]) => $record->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name]
+            ]) => $record->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition->name]
         );
     }
 

@@ -41,7 +41,7 @@ class InterventionsWidget extends BaseWidget
                 CreateAction::make()
                     ->label(__('intervention_plan.actions.add_intervention'))
                     ->createAnother(false)
-                    ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name]))
+                    ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition->name]))
                     ->form([
                         Hidden::make('intervention_service_id')
                             ->default($this->record->id),
@@ -51,7 +51,7 @@ class InterventionsWidget extends BaseWidget
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_intervention', [
+                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_meetings', [
                         'parent' => $this->record,
                         'record' => $record,
                     ])),

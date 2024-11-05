@@ -10,12 +10,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class OrganizationServiceIntervention extends Model
 {
     use HasFactory;
     use BelongsToOrganization;
     use HasGeneralStatus;
+    use BelongsToThroughTrait;
 
     protected $fillable = [
         'service_intervention_id',

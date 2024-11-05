@@ -48,6 +48,7 @@ class UnfoldedWidget extends BaseWidget
             ])
             ->headerActions([
                 ExportAction::make()
+                    ->label(__('intervention_plan.actions.download_meetings'))
                     ->exports([
                         ExcelExport::make()
                             ->withColumns([

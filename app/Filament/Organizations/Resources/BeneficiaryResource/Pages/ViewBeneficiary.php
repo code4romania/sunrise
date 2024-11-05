@@ -51,6 +51,13 @@ class ViewBeneficiary extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('view_history')
+                ->label(__('beneficiary.section.history.actions.view'))
+                ->icon('heroicon-o-clock')
+                ->outlined()
+                ->link()
+                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
+
             ActionGroup::make([])
                 ->label(__('beneficiary.action.case_actions'))
                 ->button()
@@ -102,13 +109,6 @@ class ViewBeneficiary extends ViewRecord
                                 ->disabled(),
                         ]),
                 ]),
-
-            Action::make('view_history')
-                ->label(__('beneficiary.section.history.actions.view'))
-                ->icon('heroicon-o-clock')
-                ->outlined()
-                ->link()
-                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
         ];
     }
 

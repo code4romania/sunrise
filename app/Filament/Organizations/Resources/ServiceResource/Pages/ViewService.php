@@ -73,7 +73,8 @@ class ViewService extends ViewRecord
                                     return [];
                                 })
                                 ->disabledForm()
-                                ->link(),
+                                ->link()
+                                ->modalAutofocus(false),
                         ),
                 ]),
         ]);

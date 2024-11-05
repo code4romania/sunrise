@@ -38,4 +38,9 @@ class Specialist extends Model
     {
         return $this->morphTo();
     }
+
+    public function getNameRoleAttribute(): string
+    {
+        return \sprintf('%s (%s)', $this->user->full_name, $this->role->name);
+    }
 }

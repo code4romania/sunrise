@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
+use App\Enums\CounselingSheet;
 use App\Filament\Admin\Resources\ServiceResource;
+use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
+use App\Infolists\Components\Notice;
 use Filament\Actions;
-use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -38,33 +41,68 @@ class ViewService extends ViewRecord
         ];
     }
 
+//    public function infolist(Infolist $infolist): Infolist
+//    {
+//        return $infolist->schema([
+//            Section::make()
+//                ->maxWidth('3xl')
+//                ->schema([
+//                    TextEntry::make('name')
+//                        ->label(__('nomenclature.labels.service_name')),
+//                    TextEntry::make('counseling_sheet')
+//                        ->label(__('nomenclature.labels.counseling_sheet')),
+//                ]),
+//
+//        ]);
+//    }
+
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
             Section::make()
+                ->visible(fn () => $this->getRecord()->counseling_sheet)
                 ->maxWidth('3xl')
                 ->schema([
-                    TextEntry::make('name')
-                        ->label(__('nomenclature.labels.service_name')),
-                    TextEntry::make('counseling_sheet')
-                        ->label(__('nomenclature.labels.counseling_sheet')),
-                    RepeatableEntry::make('serviceInterventions')
-                        ->label(__('nomenclature.headings.service_intervention'))
-                        ->schema([
-                            TextEntry::make('name')
-                                ->label(__('nomenclature.labels.intervention_name')),
+                    Notice::make('counseling_sheet')
+                        ->state(__('service.helper_texts.counseling_sheet'))
+                        ->icon('heroicon-o-document-text')
+                        ->action(
+                            Action::make('view_counseling_sheet')
+                                ->label(__('service.actions.view_counseling_sheet'))
+                                ->modalHeading(
+                                    $this->getRecord()
+                                        ->counseling_sheet
+                                        ?->getLabel()
+                                )
+                                ->form(function () {
+                                    $counselingSheet = $this->getRecord()->counseling_sheet;
 
-                            TextEntry::make('institutions_count')
-                                ->label(__('nomenclature.labels.institutions')),
+                                    if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {
+                                        return EditCounselingSheet::getLegalAssistanceForm();
+                                    }
 
-                            TextEntry::make('centers_count')
-                                ->label(__('nomenclature.labels.institutions')),
+                                    if (CounselingSheet::isValue($counselingSheet, CounselingSheet::PSYCHOLOGICAL_ASSISTANCE)) {
+                                        return EditCounselingSheet::getSchemaForPsychologicalAssistance();
+                                    }
 
-                            TextEntry::make('status')
-                                ->label(__('nomenclature.labels.status')),
-                        ])->columns(4),
+                                    return [];
+                                })
+                                ->disabledForm()
+                                ->link(),
+                        ),
                 ]),
-
         ]);
+    }
+
+    protected function hasInfolist(): bool
+    {
+        return true;
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            ServiceResource\Widgets\InterventionsWidget::class,
+        ];
     }
 }

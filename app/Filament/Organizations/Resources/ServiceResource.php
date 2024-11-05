@@ -123,10 +123,15 @@ class ServiceResource extends Resource
                             ->visible(fn (Forms\Get $get) => $get('service_id'))
                             ->schema(
                                 [
+                                    Placeholder::make('counseling_sheet')
+                                        ->label(__('service.headings.interventions'))
+                                        ->content(__('service.helper_texts.interventions')),
+
+
                                     TableRepeater::make('interventions')
                                         ->hideLabels()
-                                        ->label(__('service.headings.interventions'))
-                                        ->helperText(__('service.helper_texts.interventions'))
+                                        ->hiddenLabel()
+                                        ->helperText(__('service.helper_texts.under_interventions_table'))
                                         ->relationship('interventions')
                                         ->addAction(fn (Action $action) => $action->hidden())
                                         ->deletable(false)
