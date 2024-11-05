@@ -101,7 +101,7 @@ class BeneficiaryResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('managerTeam.user.full_name')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(Role::MANAGER->getLabel())
                     ->toggleable()
                     ->formatStateUsing(
                         fn ($state) => collect(explode(',', $state))
@@ -115,7 +115,8 @@ class BeneficiaryResource extends Resource
                     ->badge(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('general.action.view_details')),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -124,7 +125,7 @@ class BeneficiaryResource extends Resource
                     ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('beneficiaries.status', $state) : $query),
 
                 SelectFilter::make('case_manager')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(Role::MANAGER->getLabel())
                     ->searchable()
                     ->preload()
                     ->relationship('managerTeam.user', 'full_name'),

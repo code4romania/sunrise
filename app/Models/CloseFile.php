@@ -24,7 +24,7 @@ class CloseFile extends Model
         'number',
         'admittance_date',
         'exit_date',
-        'user_id',
+        'specialist_id',
         'admittance_reason',
         'admittance_details',
         'close_method',
@@ -41,6 +41,6 @@ class CloseFile extends Model
 
     public function caseManager(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Specialist::class, 'specialist_id');
     }
 }
