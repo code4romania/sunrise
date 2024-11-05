@@ -13,6 +13,7 @@ return [
         'registered_date' => 'Data înregistrării',
         'reactivated' => 'Reactivare de caz',
         'related_cases' => 'Istoric caz (fișe conectate cazului)',
+        'case_manager' => 'Manager de caz',
     ],
 
     'page' => [

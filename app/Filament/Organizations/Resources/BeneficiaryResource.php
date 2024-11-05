@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
@@ -101,7 +100,7 @@ class BeneficiaryResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('managerTeam.user.full_name')
-                    ->label(Role::MANAGER->getLabel())
+                    ->label(__('beneficiary.labels.case_manager'))
                     ->toggleable()
                     ->formatStateUsing(
                         fn ($state) => collect(explode(',', $state))
@@ -125,7 +124,7 @@ class BeneficiaryResource extends Resource
                     ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('beneficiaries.status', $state) : $query),
 
                 SelectFilter::make('case_manager')
-                    ->label(Role::MANAGER->getLabel())
+                    ->label(__('beneficiary.labels.case_manager'))
                     ->searchable()
                     ->preload()
                     ->relationship('managerTeam.user', 'full_name'),
