@@ -94,7 +94,8 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('general.action.view_details')),
             ])
             ->heading(__('user.heading.table'));
     }

@@ -1,5 +1,5 @@
 <x-filament-panels::page>
-    
+
     <div class="flex flex-col gap-y-6">
         @if ($this->getGroupPages())
         <x-filament::tabs>

@@ -9,6 +9,7 @@ use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditC
 use App\Filament\Organizations\Resources\ServiceResource;
 use App\Infolists\Components\Notice;
 use Filament\Actions\EditAction;
+use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Infolist;
@@ -73,6 +74,7 @@ class ViewService extends ViewRecord
                                     return [];
                                 })
                                 ->disabledForm()
+                                ->modalSubmitAction(fn (StaticAction $action) => $action->hidden())
                                 ->link()
                                 ->modalAutofocus(false),
                         ),

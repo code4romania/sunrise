@@ -168,6 +168,9 @@ return [
             'label' => [
                 'delete_aggressor_description' => 'Acțiunea va șterge din această pagină întreaga secțiune cu informațiile introduse despre acest agresor. Datele șterse nu vor mai putea fi recuperate.',
             ],
+            'placeholders' => [
+                'select_many' => 'Alege toate variantele care se potrivesc',
+            ],
         ],
 
         'initial_evaluation' => [

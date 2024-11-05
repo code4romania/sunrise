@@ -209,7 +209,7 @@ return [
 
     'role' => [
         'coordinator' => 'Coordonator',
-        'manger' => 'Manager de caz',
+        'manager' => 'Manager de caz',
         'chef_manager' => 'Șef manager de caz',
         'chef_service' => 'Șef serviciu',
         'psychological_advice' => 'Consilier Psihologic',

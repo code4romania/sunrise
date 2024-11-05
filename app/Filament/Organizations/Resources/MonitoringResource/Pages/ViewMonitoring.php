@@ -8,6 +8,7 @@ use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Infolists\Components\Actions\Edit;
+use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Infolists\Components\Grid;
@@ -90,13 +91,9 @@ class ViewMonitoring extends ViewRecord
                                     TextEntry::make('end_date')
                                         ->label(__('monitoring.labels.end_date')),
 
-                                    TextEntry::make('specialistsTeam')
+                                    TextEntry::make('specialistsTeam.name_role')
                                         ->label(__('monitoring.labels.team'))
                                         ->listWithLineBreaks()
-                                        ->formatStateUsing(
-                                            fn ($state) => $state === '-' ? $state : $state->user->getFilamentName() . ' (' .
-                                                $state->role?->name . ')'
-                                        ),
                                 ]),
                         ]),
 

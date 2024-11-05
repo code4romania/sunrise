@@ -14,6 +14,7 @@ use App\Models\InterventionService;
 use App\Models\OrganizationService;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
+use Filament\Actions\StaticAction;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
@@ -116,6 +117,8 @@ class ServiceResource extends Resource
                                         return [];
                                     })
                                     ->disabledForm()
+                                    ->modalAutofocus(false)
+                                    ->modalSubmitAction(fn (StaticAction $action) => $action->hidden())
                                     ->link(),
                             ]),
 
@@ -146,7 +149,7 @@ class ServiceResource extends Resource
                                                 ->content(fn ($state) => $state),
                                             Toggle::make('status')
                                                 ->label(__('service.labels.status'))
-                                                ->default(false)
+                                                ->default(true)
                                                 ->disabled(
                                                     function (Toggle $component, $get): bool {
                                                         $index = explode('.', $component->getId());
@@ -229,7 +232,8 @@ class ServiceResource extends Resource
                     ->label(__('service.actions.create')),
             ])
             ->emptyStateIcon('heroicon-o-clipboard-document-check')
-            ->emptyStateHeading(__('service.headings.empty_state_table'));
+            ->emptyStateHeading(__('service.headings.empty_state_table'))
+            ->emptyStateDescription('');
     }
 
     public static function getPages(): array

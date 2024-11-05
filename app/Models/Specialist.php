@@ -22,6 +22,10 @@ class Specialist extends Model
         'specialistable_type',
     ];
 
+    protected $appends = [
+        'name_role'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)

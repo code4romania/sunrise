@@ -88,16 +88,10 @@ class ListMonitoring extends ListRecords
                 ->label(__('monitoring.headings.interval'))
                 ->sortable()
                 ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
-            TextColumn::make('specialistsTeam')
+            TextColumn::make('specialistsTeam.name_role')
                 ->label(__('monitoring.headings.team'))
                 ->sortable()
-                ->listWithLineBreaks()
-                ->formatStateUsing(
-                    fn ($record) => $record->specialistsTeam
-                        ->map(fn ($specialist) => $specialist->user->getFilamentName() . ' (' .
-                            $specialist->role?->name . ')')
-                        ->join('; ')
-                ),
+                ->listWithLineBreaks(),
         ])
             ->actions([
                 ViewAction::make()
@@ -112,7 +106,7 @@ class ListMonitoring extends ListRecords
             ->modifyQueryUsing(
                 fn (Builder $query) => $query->with([
                     'specialistsTeam.user',
-                    // 'specialistsTeam.role',
+                    'specialistsTeam.role',
                 ])
                     ->orderByDesc('id')
             )

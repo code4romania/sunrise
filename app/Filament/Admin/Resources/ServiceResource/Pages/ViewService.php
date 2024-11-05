@@ -9,9 +9,9 @@ use App\Filament\Admin\Resources\ServiceResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Infolists\Components\Notice;
 use Filament\Actions;
+use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -40,21 +40,6 @@ class ViewService extends ViewRecord
                 ->label(__('nomenclature.actions.edit_service')),
         ];
     }
-
-//    public function infolist(Infolist $infolist): Infolist
-//    {
-//        return $infolist->schema([
-//            Section::make()
-//                ->maxWidth('3xl')
-//                ->schema([
-//                    TextEntry::make('name')
-//                        ->label(__('nomenclature.labels.service_name')),
-//                    TextEntry::make('counseling_sheet')
-//                        ->label(__('nomenclature.labels.counseling_sheet')),
-//                ]),
-//
-//        ]);
-//    }
 
     public function infolist(Infolist $infolist): Infolist
     {
@@ -88,6 +73,8 @@ class ViewService extends ViewRecord
                                     return [];
                                 })
                                 ->disabledForm()
+                                ->modalAutofocus(false)
+                                ->modalSubmitAction(fn (StaticAction $action) => $action->hidden())
                                 ->link(),
                         ),
                 ]),

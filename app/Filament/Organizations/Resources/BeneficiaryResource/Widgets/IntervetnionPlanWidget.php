@@ -63,12 +63,33 @@ class IntervetnionPlanWidget extends BaseWidget
                         'record' => $record,
                     ])),
             ])
-            ->emptyStateHeading(__('intervention_plan.headings.empty_state_table'))
-            ->emptyStateDescription(__('intervention_plan.labels.empty_state_table'))
+            ->headerActions([
+                Action::make('view_intervention_plan')
+                    ->label(__('intervention_plan.actions.view_intervention_plan'))
+                    ->visible((bool) $this->record->interventionPlan)
+                    ->link()
+                    ->url(
+                        fn () => BeneficiaryResource::getUrl('view_intervention_plan', [
+                            'parent' => $this->record,
+                            'record' => $this->record->interventionPlan,
+                        ])
+                    ),
+            ])
+            ->emptyStateHeading(
+                $this->record->interventionPlan ?
+                __('intervention_plan.headings.empty_state_table_without_intervetntions') :
+                __('intervention_plan.headings.empty_state_table')
+            )
+            ->emptyStateDescription(
+                $this->record->interventionPlan ?
+                    __('intervention_plan.labels.empty_state_table_without_intervetntions') :
+                    __('intervention_plan.labels.empty_state_table')
+            )
             ->emptyStateIcon('heroicon-o-presentation-chart-bar')
             ->emptyStateActions([
                 Action::make('create_intervention_plan')
                     ->label(__('intervention_plan.actions.create'))
+                    ->hidden((bool) $this->record->interventionPlan)
                     ->outlined()
                     ->action(function () {
                         $this->redirect(
