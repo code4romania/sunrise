@@ -60,8 +60,9 @@ class ViewMeetings extends ViewRecord
                 ->native(false),
             TimePicker::make('time')
                 ->label(__('intervention_plan.labels.time'))
-                ->seconds(false)
-                ->native(false),
+                ->format('H:i')
+                ->displayFormat('H:i')
+                ->seconds(false),
             TextInput::make('duration')
                 ->label(__('intervention_plan.labels.duration'))
                 ->maxLength(3)
