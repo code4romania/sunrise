@@ -22,7 +22,7 @@ trait HasPermissions
 
     public function hasAccessToAllCases(): bool
     {
-        return $this->permissions->case_permissions->contains(CasePermission::HAS_ACCESS_TO_ALL_CASES);
+        return $this->permissions?->case_permissions->contains(CasePermission::HAS_ACCESS_TO_ALL_CASES);
     }
 
     public function hasAccessToBeneficiary(Beneficiary $beneficiary): bool
