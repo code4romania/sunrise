@@ -23,7 +23,7 @@ class Specialist extends Model
     ];
 
     protected $appends = [
-        'name_role'
+        'name_role',
     ];
 
     public function user(): BelongsTo
@@ -45,6 +45,8 @@ class Specialist extends Model
 
     public function getNameRoleAttribute(): string
     {
+        $this->load(['user', 'role']);
+
         return \sprintf('%s (%s)', $this->user->full_name, $this->role->name);
     }
 }
