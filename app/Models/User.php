@@ -248,7 +248,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function canBeCaseManager(): bool
     {
-        return $this->permissions?->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER);
+        return $this->permissions?->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER) ?: false;
     }
 
     public function hasRoleInOrganization(Role | int $role): bool
