@@ -14,7 +14,7 @@
         <h3 class=" text-base font-semibold leading-6 fi-section-header-heading text-gray-950 dark:text-white">
             {{ $getState() }}
         </h3>
-        @if($getBadge)
+        @if($getBadge())
         <x-filament::badge
             :tag="'span'"
             :color="$getBadge()->getColor()"
