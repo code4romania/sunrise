@@ -87,7 +87,8 @@ class ServicesWidget extends BaseWidget
                                         ->get()
                                         ->filter(fn (OrganizationService $item) => $item->service)
                                         ->pluck('service.name', 'id')
-                                ),
+                                )
+                                ->required(),
 
                             TextInput::make('institution')
                                 ->label(__('intervention_plan.labels.responsible_institution'))

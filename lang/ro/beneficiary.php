@@ -21,7 +21,7 @@ return [
             'title' => 'Înregistrează caz nou',
         ],
         'view' => [
-            'title' => '<p class="flex flex-wrap"> #:id :name :badge</p>',
+            'title' => '<p class="flex flex-wrap gap-3"> #:id :name :badge</p>',
         ],
         'identity' => [
             'title' => 'Date identitate',
@@ -236,7 +236,7 @@ return [
                 'institution' => 'Institutia',
                 'relationship' => 'Relatia cu copilul/ familia',
                 'contact_date' => 'Data contactarii',
-                'meetings' => 'Inrevederi (sau convorbiri telefonice) pentru colectarea datelor',
+                'meetings' => 'Intrevederi (sau convorbiri telefonice) pentru colectarea datelor',
                 'specialist' => 'Specialist',
                 'date' => 'Data',
                 'location' => 'Locatia',
