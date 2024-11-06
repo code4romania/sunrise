@@ -174,8 +174,8 @@ class ServiceResource extends Resource
             $interventions->map(function (ServiceIntervention $intervention) {
                 $intervention->service_intervention_id = $intervention->id;
                 $intervention->id = $intervention->organizationIntervention?->id;
-                $intervention->status = $intervention->organizationIntervention?->status ?? true;
-                $intervention->active = isset($intervention->organizationIntervention) ?: true;
+                $intervention->status = $intervention->organizationIntervention?->status ?? false;
+                $intervention->active = isset($intervention->organizationIntervention) ?: false;
             });
 
             $set('interventions', $interventions->toArray());
