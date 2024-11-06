@@ -105,8 +105,9 @@ class ViewMeetings extends ViewRecord
 
                                     return __('intervention_plan.headings.meeting_repeater', [
                                         'number' => $index + 1,
-                                    ]) . ' ' . $record->status?->getLabel();
+                                    ]);
                                 })
+                                ->badge(fn (InterventionMeeting $record) => $record->status)
                                 ->action(Action::make('edit')
                                     ->label(__('general.action.edit'))
                                     ->icon('heroicon-o-pencil')
