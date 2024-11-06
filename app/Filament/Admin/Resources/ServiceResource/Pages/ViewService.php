@@ -6,8 +6,8 @@ namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
 use App\Enums\CounselingSheet;
 use App\Filament\Admin\Resources\ServiceResource;
+use App\Filament\Admin\Resources\ServiceResource\Widgets\InterventionsWidget;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
-use App\Filament\Organizations\Resources\InterventionServiceResource\Widgets\InterventionsWidget;
 use App\Infolists\Components\Notice;
 use Filament\Actions;
 use Filament\Actions\StaticAction;
@@ -90,7 +90,7 @@ class ViewService extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            InterventionsWidget::class,
+            InterventionsWidget::class
         ];
     }
 }
