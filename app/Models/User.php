@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
@@ -47,6 +48,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasUserStatus;
+    use HasPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -85,6 +87,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'ngo_admin' => 'boolean',
         'status' => UserStatus::class,
     ];
 
@@ -183,7 +186,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function canAccessPanel(Panel $panel): bool
     {
         if ($panel->getId() === 'admin') {
-            return $this->is_admin;
+            return $this->isAdmin();
         }
 
         return $this->getTenants($panel)->isNotEmpty();
@@ -258,7 +261,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return false;
     }
 
-    public function activate():void
+    public function activate(): void
     {
         $this->update(['status' => UserStatus::ACTIVE]);
     }

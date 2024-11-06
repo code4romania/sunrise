@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Models\Beneficiary;
+use App\Models\OrganizationService;
 use App\Models\User;
 
-class BeneficiaryPolicy
+class OrganizationServicePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->hasAccessToNomenclature();
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Beneficiary $beneficiary): bool
+    public function view(User $user, OrganizationService $organizationService): bool
     {
-        return $user->hasAccessToBeneficiary($beneficiary);
+        return $user->hasAccessToNomenclature();
     }
 
     /**
@@ -30,29 +30,29 @@ class BeneficiaryPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->hasAccessToNomenclature();
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Beneficiary $beneficiary): bool
+    public function update(User $user, OrganizationService $organizationService): bool
     {
-        return $user->hasAccessToBeneficiary($beneficiary);
+        return $user->hasAccessToNomenclature();
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Beneficiary $beneficiary): bool
+    public function delete(User $user, OrganizationService $organizationService): bool
     {
-        return false;
+        return $user->hasAccessToNomenclature();
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Beneficiary $beneficiary): bool
+    public function restore(User $user, OrganizationService $organizationService): bool
     {
         return false;
     }
@@ -60,7 +60,7 @@ class BeneficiaryPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Beneficiary $beneficiary): bool
+    public function forceDelete(User $user, OrganizationService $organizationService): bool
     {
         return false;
     }
