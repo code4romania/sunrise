@@ -16,7 +16,6 @@ use App\Models\BeneficiaryAntecedents;
 use App\Models\BeneficiaryDetails;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
-use App\Models\CaseTeam;
 use App\Models\Children;
 use App\Models\CloseFile;
 use App\Models\DetailedEvaluationResult;
@@ -28,6 +27,7 @@ use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
+use App\Models\Specialist;
 use App\Models\User;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
@@ -61,7 +61,7 @@ class BeneficiaryFactory extends Factory
             'civil_status' => fake()->randomElement(CivilStatus::values()),
 
             'gender' => $gender,
-            'birthplace' => fake()->sentence(),
+            'birthplace' => fake()->text(50),
             'birthdate' => $birthdate,
 
             'primary_phone' => fake()->phoneNumber(),
@@ -190,16 +190,30 @@ class BeneficiaryFactory extends Factory
                         'organizations',
                         fn (Builder $query) => $query->where('organizations.id', $beneficiary->organization->id)
                     )
+                    ->with('roles')
                     ->inRandomOrder()
                     ->limit($count)
                     ->get()
-                    ->map(fn ($item) => ['user_id' => $item->id])
+                    ->map(function ($item) {
+                        $roles = fake()->randomElements($item->roles, rand(1, \count($item->roles)));
+                        $state = [];
+                        foreach ($roles as $role) {
+                            $state[] = [
+                                'user_id' => $item->id,
+                                'role_id' => $role->id,
+                            ];
+                        }
+
+                        return $state;
+                    })
                     ->toArray();
 
-                CaseTeam::factory()
-                    ->for($beneficiary)
+                $users = array_merge(...$users);
+
+                Specialist::factory()
+                    ->for($beneficiary, 'specialistable')
                     ->state(new Sequence(...$users))
-                    ->count($count)
+                    ->count(\count($users))
                     ->create();
 
                 DetailedEvaluationResult::factory()
@@ -262,7 +276,7 @@ class BeneficiaryFactory extends Factory
                     CloseFile::factory()
                         ->for($beneficiary)
                         ->create([
-                            'case_team_id' => $this->faker->randomElement($beneficiary->team)->id,
+                            'specialist_id' => $this->faker->randomElement($beneficiary->specialistsTeam)->id,
                         ]);
                 }
             });

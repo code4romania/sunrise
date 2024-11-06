@@ -9,7 +9,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\Edit;
 use App\Models\Beneficiary;
-use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\Section;
@@ -84,11 +83,11 @@ class ViewCloseFile extends ViewRecord
                                     TextEntry::make('exit_date')
                                         ->label(__('beneficiary.section.close_file.labels.exit_date')),
 
-                                    TextEntry::make('caseManager.user')
-                                        ->label(__('beneficiary.section.close_file.labels.case_manager'))
-                                        ->formatStateUsing(fn (string | User $state) => $state !== '-' ? $state->getFilamentName() : $state),
+                                    TextEntry::make('caseManager.name_role')
+                                        ->label(__('beneficiary.section.close_file.labels.case_manager')),
 
-                                ]), ]),
+                                ]),
+                        ]),
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
                         ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->getRecord())),

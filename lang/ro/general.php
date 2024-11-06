@@ -13,6 +13,8 @@ return [
         'cancel' => 'Renunță',
         'save' => 'Salvează modificările',
         'delete' => 'Șterge',
+        'view_observations' => 'Vezi observații',
+        'change' => 'Modifică',
     ],
 
     'filters' => [
@@ -24,7 +26,7 @@ return [
 
     'true_answers' => '(:true_answers/:total_answers răspunsuri afirmative)',
 
-    'old' => 'Vechi',
-    'new' => 'Nou',
-    'field' => 'Câmp',
+    'old' => 'Valori inițiale',
+    'new' => 'Valori modificate',
+    'field' => 'Câmp modificat',
 ];

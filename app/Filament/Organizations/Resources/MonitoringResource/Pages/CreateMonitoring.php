@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
+use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Wizard;
@@ -26,6 +27,8 @@ class CreateMonitoring extends CreateRecord
     public ?Monitoring $lastFile;
 
     public array $children = [];
+
+    public array $specialistTeam = [];
 
     public function getBreadcrumbs(): array
     {
@@ -59,24 +62,20 @@ class CreateMonitoring extends CreateRecord
     protected function afterFill(): void
     {
         $copyLastFile = (bool) request('copyLastFile');
-        $this->lastFile = self::getParent()?->monitoring->sortByDesc('id')->first()?->load(['children', 'specialists']);
+        $this->lastFile = self::getParent()
+            ?->monitoring
+            ->sortByDesc('id')
+            ->first()
+            ?->load(['children', 'specialistsTeam']);
         $this->children = $this->getChildren();
+        $this->specialistTeam = $this->getSpecialists();
 
         $data = [
             'date' => now(),
-            'children' => $this->children,
-            'specialists' => [
-                $this->parent
-                    ->team
-                    ->filter(fn ($teamMember) => $teamMember->user_id === auth()->user()->id)
-                    ->first()
-                    ?->id,
-            ],
         ];
 
         if ($copyLastFile && $this->lastFile) {
             $data = array_merge($data, $this->lastFile->toArray());
-            $data['specialists'] = $this->lastFile->specialists->map(fn ($specialist) => $specialist->id);
         }
         $this->form->fill($data);
     }
@@ -86,7 +85,8 @@ class CreateMonitoring extends CreateRecord
         return [
 
             Wizard\Step::make(__('monitoring.headings.details'))
-                ->schema(EditDetails::getSchema()),
+                ->schema(EditDetails::getSchema())
+                ->afterStateHydrated(fn (Set $set) => $set('specialistsTeam', $this->specialistTeam)),
 
             Wizard\Step::make(__('monitoring.headings.child_info'))
                 ->schema(EditChildren::getSchema())
@@ -131,5 +131,19 @@ class CreateMonitoring extends CreateRecord
         }
 
         return $this->parent->children->toArray();
+    }
+
+    private function getSpecialists(): array
+    {
+        if ($this->lastFile && $this->lastFile->specialistsTeam->isNotEmpty()) {
+            return $this->lastFile->specialistsTeam->toArray();
+        }
+
+        return $this->parent
+            ->specialistsTeam
+            ?->each(
+                fn (Specialist $item) => $item->specialistable_type = (new Monitoring())->getMorphClass()
+            )
+            ->toArray();
     }
 }

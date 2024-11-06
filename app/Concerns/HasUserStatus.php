@@ -36,6 +36,12 @@ trait HasUserStatus
 
     public function isInactive(): bool
     {
+        return UserStatus::isValue($this->status, UserStatus::INACTIVE);
+    }
+
+    public function setPendingStatus(): void
+
+    {
         return ! $this->isActive();
     }
 
@@ -52,5 +58,10 @@ trait HasUserStatus
 
             return UserStatus::ACTIVE;
         });
+    }
+
+    public function activate(): void
+    {
+        $this->update(['status' => UserStatus::ACTIVE]);
     }
 }

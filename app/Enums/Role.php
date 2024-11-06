@@ -9,6 +9,7 @@ use App\Concerns\Enums\Comparable;
 use App\Concerns\Enums\HasLabel as HasLabelTrait;
 use Filament\Support\Contracts\HasLabel;
 
+/** @deprecated  use App\Models\Role */
 enum Role: string implements HasLabel
 {
     use Arrayable;
@@ -16,7 +17,7 @@ enum Role: string implements HasLabel
     use HasLabelTrait;
 
     case COORDINATOR = 'coordinator';
-    case MANGER = 'manger';
+    case MANAGER = 'manager';
     case CHEF_MANAGER = 'chef_manager';
     case CHEF_SERVICE = 'chef_service';
     case PSYCHOLOGICAL_ADVICE = 'psychological_advice';

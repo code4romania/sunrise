@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 return [
 
+    'greeting' => 'Salut,',
     'admin' => [
         'welcome' => [
             'intro_line_1' => 'Ești invitat să te alături platformei Sunrise ca administrator.',
@@ -12,6 +13,8 @@ return [
             'accept_invitation' => 'Acceptă invitația',
         ],
     ],
+
+    'salutation' => 'Echipa Sunrise',
 
     'organization' => [
         'welcome' => [

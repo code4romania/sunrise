@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\OrganizationType;
 use App\Models\Beneficiary;
-use App\Models\City;
 use App\Models\CommunityProfile;
 use App\Models\Intervention;
 use App\Models\Organization;
@@ -28,21 +26,10 @@ class OrganizationFactory extends Factory
     public function definition(): array
     {
         $name = fake()->company();
-        $city = City::query()->inRandomOrder()->first();
 
         return [
             'name' => $name,
             'short_name' => preg_replace('/\b(\w)|./u', '$1', $name),
-            'type' => fake()->randomElement(OrganizationType::values()),
-            'phone' => fake()->phoneNumber(),
-            'website' => fake()->url(),
-
-            'city_id' => $city->id,
-            'county_id' => $city->county_id,
-            'address' => fake()->streetAddress(),
-
-            'reprezentative_name' => fake()->name(),
-            'reprezentative_email' => fake()->safeEmail(),
         ];
     }
 
@@ -54,7 +41,10 @@ class OrganizationFactory extends Factory
                     ->count($count)
                     ->sequence(fn (Sequence $sequence) => [
                         'email' => \sprintf('user-%d-%d@example.com', $organization->id, $sequence->index + 1),
+                        'institution_id' => $sequence->index === 0 ? $organization->institution_id : null,
+                        'ngo_admin' => $sequence->index === 0,
                     ])
+                    ->withRolesAndPermissions($organization->id)
                     ->create()
                     ->pluck('id')
                     ->toArray()
@@ -95,7 +85,7 @@ class OrganizationFactory extends Factory
         });
     }
 
-    public function withBeneficiaries(int $count = 50): static
+    public function withBeneficiaries(int $count = 30): static
     {
         return $this->afterCreating(function (Organization $organization) use ($count) {
             Beneficiary::factory()

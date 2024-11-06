@@ -58,12 +58,20 @@ class ViewUser extends ViewRecord
                 ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('status'),
-
-                    TextEntry::make('updated_at'),
+                    
+                    TextEntry::make('last_login_at')
+                        ->label(__('user.labels.last_login_at_date_time')),
                 ]),
-            Section::make()
+            Section::make(__('user.heading.specialist_details'))
                 ->columns()
                 ->maxWidth('3xl')
+                ->headerActions([
+                    Action::make('edit')
+                        ->label(__('general.action.edit'))
+                        ->url(self::$resource::getUrl('edit', ['record' => $this->getRecord()]))
+                        ->link(),
+
+                ])
                 ->schema([
                     SectionHeader::make('user_section')
                         ->state(__('user.heading.specialist_section'))
@@ -86,16 +94,13 @@ class ViewUser extends ViewRecord
                     TextEntry::make('phone_number')
                         ->label(__('user.labels.phone_number')),
 
-                    TextEntry::make('roles')
-                        ->label(__('user.labels.select_roles')),
-
-                    TextEntry::make('can_be_case_manager')
-                        ->label(__('user.labels.can_be_case_manager')),
+                    TextEntry::make('rolesInOrganization.name')
+                        ->label(__('user.labels.select_roles'))
+                        ->columnSpanFull(),
 
                     TextEntry::make('obs')
                         ->default(
                             Str::of(__('user.placeholders.obs'))
-                                ->inlineMarkdown()
                                 ->toHtmlString()
                         )
                         ->hiddenLabel()
@@ -107,11 +112,11 @@ class ViewUser extends ViewRecord
                             $fields = [];
                             $fields[] = SectionHeader::make('case_permissions_group')
                                 ->state(__('user.labels.case_permissions'));
-                            foreach (CasePermission::options() as $key => $option) {
-                                $fields[] = TextEntry::make($key)
-                                    ->label($option)
-                                    ->state($record->case_permissions && \in_array($key, $record->case_permissions) ?
-                                    Ternary::YES : Ternary::NO);
+                            foreach (CasePermission::cases() as $option) {
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->permissions?->case_permissions->contains($option) ?
+                                        Ternary::YES : Ternary::NO);
                             }
 
                             return $fields;
@@ -123,10 +128,10 @@ class ViewUser extends ViewRecord
                             $fields = [];
                             $fields[] = SectionHeader::make('admin_permissions')
                                 ->state(__('user.labels.admin_permissions'));
-                            foreach (AdminPermission::options() as $key => $option) {
-                                $fields[] = TextEntry::make($key)
-                                    ->label($option)
-                                    ->state($record->admin_permissions && \in_array($key, $record->admin_permissions) ?
+                            foreach (AdminPermission::cases() as $option) {
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->permissions?->admin_permissions->contains($option) ?
                                         Ternary::YES : Ternary::NO);
                             }
 
@@ -134,5 +139,12 @@ class ViewUser extends ViewRecord
                         }),
                 ]),
         ]);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            UserResource\Actions\DeactivateUserAction::make(),
+        ];
     }
 }

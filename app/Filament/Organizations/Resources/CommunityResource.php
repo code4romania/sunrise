@@ -30,7 +30,7 @@ class CommunityResource extends Resource
 {
     protected static ?string $model = CommunityProfile::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
+    protected static ?string $navigationIcon = 'heroicon-o-sun';
 
     protected static ?string $recordRouteKeyName = 'slug';
 

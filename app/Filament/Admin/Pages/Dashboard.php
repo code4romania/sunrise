@@ -9,6 +9,11 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class Dashboard extends BaseDashboard
 {
+    public static function getNavigationLabel(): string
+    {
+        return __('dashboard.labels.navigation');
+    }
+
     public function getHeading(): string | Htmlable
     {
         return __('dashboard.welcome', [

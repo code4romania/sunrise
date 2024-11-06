@@ -51,8 +51,8 @@ class EditDetailedEvaluation extends EditRecord
             Section::make()
                 ->maxWidth('3xl')
                 ->schema([
-                    TableRepeater::make('specialists')
-                        ->relationship('specialists')
+                    TableRepeater::make('detailedEvaluationSpecialists')
+                        ->relationship('detailedEvaluationSpecialists')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
                         ->defaultItems(3)
                         ->addActionLabel(__('beneficiary.action.add_row'))
@@ -66,7 +66,7 @@ class EditDetailedEvaluation extends EditRecord
                             TextInput::make('institution')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.institution'))
                                 ->maxLength(50)
-                                ->default(fn () => Filament::getTenant()->name),
+                                ->default(fn () => Filament::getTenant()->institution->name),
 
                             TextInput::make('relationship')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.relationship'))

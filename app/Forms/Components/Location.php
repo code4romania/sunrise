@@ -27,19 +27,19 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     protected string | Closure | null $countyField = null;
 
-    protected string | Closure | null $countyLabel = null;
+    protected string | null $countyLabel = null;
 
     protected bool $hasCity = false;
 
     protected string | Closure | null $cityField = null;
 
-    protected string | Closure | null $cityLabel = null;
+    protected string | null $cityLabel = null;
 
     protected bool $hasAddress = false;
 
     protected string | Closure | null $addressField = null;
 
-    protected string | Closure | null $addressLabel = null;
+    protected string | null $addressLabel = null;
 
     protected bool $hasEnvironment = false;
 
@@ -81,7 +81,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getCountyLabel(): string
     {
-        return  __('field.' . collect([
+        return $this->countyLabel ?? __('field.' . collect([
             $this->getId(),
             'county',
         ])
@@ -113,7 +113,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getCityLabel(): string
     {
-        return  __('field.' . collect([
+        return  $this->cityLabel ?? __('field.' . collect([
             $this->getId(),
             'city',
         ])
@@ -145,7 +145,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getAddressLabel(): string
     {
-        return  __('field.' . collect([
+        return $this->addressLabel ?? __('field.' . collect([
             $this->getId(),
             'address',
         ])
@@ -247,5 +247,26 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             Hidden::make('address_type')
                 ->default($this->getRelationshipName()),
         ];
+    }
+
+    public function countyLabel(string $label): static
+    {
+        $this->countyLabel = $label;
+
+        return $this;
+    }
+
+    public function cityLabel(string $label): static
+    {
+        $this->cityLabel = $label;
+
+        return $this;
+    }
+
+    public function addressLabel(string $label): static
+    {
+        $this->addressLabel = $label;
+
+        return $this;
     }
 }

@@ -27,9 +27,9 @@ return [
         'email' => 'Email',
         'phone_number' => 'Număr telefon',
         'select_roles' => 'Rol specialitate',
-        'can_be_case_manager' => 'Poate lua rol de manager de caz',
-        'case_permissions' => 'Permisiuni suplimentare cazuri',
-        'admin_permissions' => 'Permisiuni suplimentare administrare',
+        'case_permissions' => 'Permisiuni cazuri',
+        'admin_permissions' => 'Permisiuni administrare',
+        'last_login_at_date_time' => 'Data și ora ultimei accesări',
     ],
 
     'stats' => [
@@ -47,11 +47,11 @@ return [
 
     'heading' => [
         'table' => 'Echipa interdisciplinară',
-        'specialist_section' => 'Detalii specialist',
+        'specialist_details' => 'Detalii specialist',
     ],
 
     'placeholders' => [
-        'obs' => 'Acest tip de utilizator __are acces doar la cazurile din echipa cărora face parte__ și nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
+        'obs' => 'Acest tip de utilizator <span class="italic">are acces doar la cazurile din echipa cărora face parte</span> și nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
     ],
 
     'actions' => [
@@ -59,6 +59,7 @@ return [
         'reactivate' => 'Reactivează cont',
         'reset_password' => 'Resetează parola',
         'resend_invitation' => 'Retrimite invitația',
+        'activate' => 'Reactivează cont',
     ],
 
     'action_resend_invitation_confirm' => [

@@ -23,7 +23,7 @@ class CommunityProfileResource extends Resource
 {
     protected static ?string $model = CommunityProfile::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-at-symbol';
+    protected static ?string $navigationIcon = 'heroicon-o-check-badge';
 
     protected static bool $isScopedToTenant = false;
 

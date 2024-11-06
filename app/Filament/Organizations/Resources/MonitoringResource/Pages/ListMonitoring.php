@@ -75,30 +75,25 @@ class ListMonitoring extends ListRecords
 
     public function table(Table $table): Table
     {
-        return $table->columns([
-            TextColumn::make('id')
-                ->label(__('monitoring.headings.id')),
-            TextColumn::make('number')
-                ->label(__('monitoring.headings.file_number'))
-                ->sortable(),
-            TextColumn::make('date')
-                ->label(__('monitoring.headings.date'))
-                ->sortable(),
-            TextColumn::make('start_date')
-                ->label(__('monitoring.headings.interval'))
-                ->sortable()
-                ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
-            TextColumn::make('specialists')
-                ->label(__('monitoring.headings.team'))
-                ->sortable()
-                ->limit(50)
-                ->formatStateUsing(
-                    fn ($record) => $record->specialists
-                        ->map(fn ($specialist) => $specialist->user->getFilamentName() . ' (' .
-                            $specialist->roles?->map(fn ($role) => $role->label())->join(', ') . ')')
-                        ->join('; ')
-                ),
-        ])
+        return $table->modifyQueryUsing(fn (Builder $query) => $query->with('beneficiary'))
+            ->columns([
+                TextColumn::make('id')
+                    ->label(__('monitoring.headings.id')),
+                TextColumn::make('number')
+                    ->label(__('monitoring.headings.file_number'))
+                    ->sortable(),
+                TextColumn::make('date')
+                    ->label(__('monitoring.headings.date'))
+                    ->sortable(),
+                TextColumn::make('start_date')
+                    ->label(__('monitoring.headings.interval'))
+                    ->sortable()
+                    ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
+                TextColumn::make('specialistsTeam.name_role')
+                    ->label(__('monitoring.headings.team'))
+                    ->sortable()
+                    ->listWithLineBreaks(),
+            ])
             ->actions([
                 ViewAction::make()
                     ->label(__('general.action.view_details'))
@@ -109,7 +104,13 @@ class ListMonitoring extends ListRecords
                     ]))),
             ])
             ->actionsColumnLabel(__('monitoring.headings.actions'))
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('specialists')->orderByDesc('id'))
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query->with([
+                    'specialistsTeam.user',
+                    'specialistsTeam.role',
+                ])
+                    ->orderByDesc('id')
+            )
             ->emptyStateHeading(__('monitoring.headings.empty_state_table'))
             ->emptyStateDescription(__('monitoring.labels.empty_state_table'))
             ->emptyStateIcon('heroicon-o-document')

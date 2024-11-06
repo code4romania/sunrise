@@ -22,7 +22,7 @@ class BeneficiaryPolicy
      */
     public function view(User $user, Beneficiary $beneficiary): bool
     {
-        return true;
+        return $user->hasAccessToBeneficiary($beneficiary);
     }
 
     /**
@@ -38,7 +38,7 @@ class BeneficiaryPolicy
      */
     public function update(User $user, Beneficiary $beneficiary): bool
     {
-        return true;
+        return $user->hasAccessToBeneficiary($beneficiary);
     }
 
     /**
@@ -46,7 +46,7 @@ class BeneficiaryPolicy
      */
     public function delete(User $user, Beneficiary $beneficiary): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -54,7 +54,7 @@ class BeneficiaryPolicy
      */
     public function restore(User $user, Beneficiary $beneficiary): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -62,6 +62,6 @@ class BeneficiaryPolicy
      */
     public function forceDelete(User $user, Beneficiary $beneficiary): bool
     {
-        return true;
+        return false;
     }
 }

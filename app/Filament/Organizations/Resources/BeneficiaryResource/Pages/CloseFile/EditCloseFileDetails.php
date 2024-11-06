@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
 use App\Concerns\RedirectToCloseFile;
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
-use App\Models\CaseTeam;
 use App\Models\CloseFile;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
@@ -75,16 +73,16 @@ class EditCloseFileDetails extends EditRecord
                 ->label(__('beneficiary.section.close_file.labels.exit_date'))
                 ->required(),
 
-            Select::make('case_team_id')
+            Select::make('specialist_id')
                 ->label(__('beneficiary.section.close_file.labels.case_manager'))
                 ->columnSpanFull()
                 ->options(
                     function (?CloseFile $record) use ($recordParam) {
-                        $team = $record ? $record->beneficiary->team : $recordParam->team;
+                        $specialists = $record ? $record->beneficiary->specialistsTeam : $recordParam->specialistsTeam;
 
-                        return $team
-                            ->map(fn (CaseTeam $item) => ['id' => $item->id, 'full_name' => $item->user->getFilamentName()])
-                            ->pluck('full_name', 'id');
+                        return $specialists
+                            ->load(['user', 'role'])
+                            ->pluck('name_role', 'id');
                     }
                 )
                 ->required(),

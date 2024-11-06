@@ -71,6 +71,10 @@ class Welcome extends SimplePage
         $this->user->setPassword(
             data_get($this->form->getState(), 'password')
         );
+        $this->user->activate();
+        if ($this->user->institution?->isPending()) {
+            $this->user->institution->activate();
+        }
 
         Filament::auth()->login($this->user);
 
@@ -89,12 +93,20 @@ class Welcome extends SimplePage
                 TextInput::make('password')
                     ->label(__('filament-panels::pages/auth/register.form.password.label'))
                     ->password()
+                    ->rule(
+                        [
+                            'min:8',
+                            'confirmed',
+                        ]
+                    )
+                    ->revealable()
                     ->required()
                     ->confirmed(),
 
                 TextInput::make('password_confirmation')
                     ->label(__('filament-panels::pages/auth/register.form.password_confirmation.label'))
                     ->password()
+                    ->revealable()
                     ->required(),
             ])
             ->statePath('data');

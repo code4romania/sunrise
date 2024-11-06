@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
@@ -15,6 +14,8 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvalua
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
 use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\CreateInterventionPlan;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\ViewInterventionPlan;
 use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
 use App\Filters\DateFilter;
 use App\Models\Beneficiary;
@@ -31,7 +32,7 @@ class BeneficiaryResource extends Resource
 {
     protected static ?string $model = Beneficiary::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-folder';
 
     protected static ?string $slug = 'cases';
 
@@ -73,7 +74,8 @@ class BeneficiaryResource extends Resource
             fn (Builder $query) => $query
                 ->leftJoin('monitorings', 'monitorings.beneficiary_id', '=', 'beneficiaries.id')
                 ->select(['beneficiaries.*', 'monitorings.date'])
-                ->with(['managerTeam', 'lastMonitoring'])
+                ->with(['managerTeam', 'lastMonitoring', 'specialistsMembers'])
+                ->whereUserHasAccess()
         )
             ->columns([
                 TextColumn::make('id')
@@ -99,15 +101,22 @@ class BeneficiaryResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('managerTeam.user.full_name')
-                    ->label(Role::MANGER->getLabel())
-                    ->toggleable(),
+                    ->label(__('beneficiary.labels.case_manager'))
+                    ->toggleable()
+                    ->formatStateUsing(
+                        fn ($state) => collect(explode(',', $state))
+                            ->map(fn ($item) => trim($item))
+                            ->unique()
+                            ->join(', ')
+                    ),
 
                 TextColumn::make('status')
                     ->label(__('field.status'))
                     ->badge(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('general.action.view_details')),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -116,7 +125,7 @@ class BeneficiaryResource extends Resource
                     ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('beneficiaries.status', $state) : $query),
 
                 SelectFilter::make('case_manager')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(__('beneficiary.labels.case_manager'))
                     ->searchable()
                     ->preload()
                     ->relationship('managerTeam.user', 'full_name'),
@@ -203,6 +212,8 @@ class BeneficiaryResource extends Resource
             'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record}/closeFile/editDetails'),
             'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
 
+            'create_intervention_plan' => CreateInterventionPlan::route('/{parent}/createInterventionPlan'),
+            'view_intervention_plan' => ViewInterventionPlan::route('/{parent}/interventionPlan/{record}'),
         ];
     }
 }

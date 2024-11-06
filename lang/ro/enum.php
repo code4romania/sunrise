@@ -157,7 +157,7 @@ return [
     'organization_type' => [
         'ngo' => 'Organizație non-profit',
         'public' => 'Instituție publică',
-        'private' => 'Entitate privată',
+        'other_type' => 'Alt tip',
     ],
 
     'user_status' => [
@@ -167,9 +167,9 @@ return [
     ],
 
     'case_permissions' => [
+        'can_be_case_manager' => 'Poate lua rol de manager de caz',
         'has_access_to_all_cases' => 'Are acces la toate cazurile din Centru',
-        'can_search_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției',
-        'can_copy_cases_in_all_centers' => 'Poate copia date identificare beneficiar dintr-o bază de date în alta  a instituției',
+        'can_search_and_copy_cases_in_all_centers' => 'Poate căuta cazuri (după CNP) în baza de date a tuturor centrelor instituției si poate copia date identificare beneficiar dintr-o bază de date în alta a instituției',
         'has_access_to_statistics' => 'Are acces la rapoarte statistice',
     ],
 
@@ -209,7 +209,7 @@ return [
 
     'role' => [
         'coordinator' => 'Coordonator',
-        'manger' => 'Manager de caz',
+        'manager' => 'Manager de caz',
         'chef_manager' => 'Șef manager de caz',
         'chef_service' => 'Șef serviciu',
         'psychological_advice' => 'Consilier Psihologic',
@@ -293,7 +293,7 @@ return [
     'maintenance_sources' => [
         'relationship_income' => 'Venitul existent în cadrul relației',
         'alimony' => 'Pensie alimentară',
-      ],
+    ],
     'activity_description' => [
         'created' => 'Creat',
         'retrieved' => 'Vizualizat',
@@ -320,10 +320,65 @@ return [
         'other' => 'Altă situație',
     ],
 
+    'general_status' => [
+        0 => 'Inactiv',
+        1 => 'Activ',
+    ],
+
+    'counseling_sheet' => [
+        'psychological_assistance' => 'Asistență psihologică',
+        'legal_assistance' => 'Asistența juridică',
+    ],
+
+    'meeting_status' => [
+        'planed' => 'Planificată',
+        'realized' => 'Realizată',
+    ],
+
+    'patrimony' => [
+        'apartment' => 'Apartament',
+        'house' => 'Casă',
+        'without' => 'Nu deține locuință',
+        'unknown' => 'Nu știe/ nu răspunde',
+    ],
+
+    'possession_mode' => [
+        'exclusive_property' => 'Proprietate exclusivă',
+        'devalmasie' => 'Devălmășie',
+        'co_ownership' => 'Coproprietate',
+        'rental_state_housing' => 'Închiriere locuință de stat',
+        'private_housing_rental' => 'Închiriere locuință privată',
+        'commode' => 'Comodat',
+        'donation' => 'Donație',
+        'usufruct' => 'Uzufruct',
+        'other' => 'Altele',
+    ],
+
+    'file_document_type' => [
+        'marriage_certificate' => 'Certificat căsătorie',
+        'children_birth_certificate' => 'Certificat(e) naștere minor(i)',
+        'land_deed_extract' => 'Extras CF',
+        'rental_agreement' => 'Contract închiriere',
+        'sale_purchase_agreement' => 'Contract vânzare-cumpărare',
+        'iml_certificate' => 'Certificat IML',
+        'other' => 'Altele',
+    ],
+
     'protection_order' => [
         'temporary' => 'Provizoriu',
         'issued_by_court' => 'Emis de instanta',
         'no' => 'Nu',
         'unknown' => 'Nu știe/ Nu răspunde',
+    ],
+
+    'institution_status' => [
+        'active' => 'Activ',
+        'inactive' => 'Suspendat',
+        'pending' => 'În așteptare',
+    ],
+
+    'area_type' => [
+        'national' => 'Națională',
+        'local' => 'Locală',
     ],
 ];
