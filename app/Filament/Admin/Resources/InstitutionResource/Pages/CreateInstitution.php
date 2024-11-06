@@ -7,7 +7,6 @@ namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
 use App\Forms\Components\Repeater;
-use App\Models\Organization;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Wizard\Step;
@@ -69,14 +68,5 @@ class CreateInstitution extends CreateRecord
                         ]),
                 ]),
         ];
-    }
-
-    public function afterCreate()
-    {
-        $record = $this->getRecord();
-        $admins = $record->admins;
-        $organizations = $record->organizations;
-
-        $organizations->each(fn (Organization $organization) => $organization->users()->attach($admins->pluck('id')));
     }
 }

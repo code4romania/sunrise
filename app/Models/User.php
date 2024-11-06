@@ -103,11 +103,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
         static::created(function (User $model) {
             if ($model->institution) {
+                $model->load('organizations');
                 $model->organizations()
-                    ->attach(
+                    ->sync(
                         $model->institution
                             ->organizations
                             ?->pluck('id')
+                            ->diff($model->organizations?->pluck('id'))
                     );
             }
         });
