@@ -13,12 +13,15 @@ class InterventionsWidget extends BaseWidget
 {
     public Service | null $record = null;
 
+    protected int | string | array $columnSpan = 2;
+
     public function table(Table $table): Table
     {
         return $table
             ->query(
                 fn () => $this->record->serviceInterventions()
             )
+            ->heading(null)
             ->columns([
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.intervention_name')),
