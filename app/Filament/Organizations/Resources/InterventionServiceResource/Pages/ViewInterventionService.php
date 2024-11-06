@@ -24,7 +24,7 @@ class ViewInterventionService extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return $this->getRecord()->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name;
+        return $this->getRecord()->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition->name ?: '';
     }
 
     protected function getFooterWidgets(): array

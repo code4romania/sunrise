@@ -21,10 +21,21 @@ class RoleFactory extends Factory
      */
     public function definition(): array
     {
+        $role = fake()->unique()->randomElement(Role::options());
+        $casePermissions = fake()->randomElements(CasePermission::values(), rand(1, 4));
+        $status = fake()->boolean();
+        if ($role === Role::MANAGER->getLabel()) {
+            $casePermissions[] = CasePermission::CAN_BE_CASE_MANAGER->value;
+            $status = true;
+        } else {
+            $casePermissions = array_diff($casePermissions, [CasePermission::CAN_BE_CASE_MANAGER->value]);
+            sort($casePermissions);
+        }
+
         return [
-            'name' => fake()->unique()->randomElement(Role::options()),
-            'status' => fake()->boolean(),
-            'case_permissions' => fake()->randomElements(CasePermission::values(), rand(1, 4)),
+            'name' => $role,
+            'status' => $status,
+            'case_permissions' => $casePermissions,
             'ngo_admin_permissions' => fake()->randomElements(AdminPermission::values(), rand(1, 3)),
         ];
     }

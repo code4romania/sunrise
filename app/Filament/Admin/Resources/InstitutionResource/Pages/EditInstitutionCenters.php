@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Forms\Components\Repeater;
+use App\Models\Organization;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -90,5 +91,24 @@ class EditInstitutionCenters extends EditRecord
                         ->columnSpanFull(),
                 ]),
         ];
+    }
+
+    public function afterSave()
+    {
+        $this->getRecord()
+            ->organizations
+            ?->each(
+                fn (Organization $organization) => $organization->load('admins')
+                    ->admins()
+                    ->attach(
+                        $this->getRecord()
+                            ->admins
+                            ->pluck('id')
+                            ->diff(
+                                $organization->admins
+                                    ->pluck('id')
+                            )
+                    )
+            );
     }
 }

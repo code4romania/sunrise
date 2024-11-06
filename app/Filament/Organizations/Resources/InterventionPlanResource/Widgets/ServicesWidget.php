@@ -7,8 +7,9 @@ namespace App\Filament\Organizations\Resources\InterventionPlanResource\Widgets;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Forms\Components\Select;
 use App\Models\InterventionPlan;
+use App\Models\InterventionService;
 use App\Models\OrganizationService;
-use App\Models\User;
+use App\Models\Specialist;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -31,17 +32,18 @@ class ServicesWidget extends BaseWidget
         return $table
             ->query(
                 fn () => $this->record->services()
-                    ->with('organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition', 'user')
+                    ->with(['organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition', 'specialist.user', 'specialist.role'])
                     ->withCount(['beneficiaryInterventions', 'meetings'])
             )
             ->heading(__('intervention_plan.headings.services'))
             ->columns([
                 TextColumn::make('organization_service_id')
                     ->label(__('intervention_plan.labels.service'))
-                    ->formatStateUsing(fn ($record) => ($record->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name)),
-                TextColumn::make('user_id')
-                    ->label(__('intervention_plan.labels.specialist'))
-                    ->formatStateUsing(fn ($record) => $record->user?->full_name),
+                    ->formatStateUsing(fn (InterventionService $record) => ($record->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name)),
+
+                TextColumn::make('specialist.name_role')
+                    ->label(__('intervention_plan.labels.specialist')),
+
                 TextColumn::make('beneficiary_interventions_count')
                     ->label(__('intervention_plan.labels.interventions_count')),
 
@@ -52,7 +54,7 @@ class ServicesWidget extends BaseWidget
                 CreateAction::make()
                     ->label(__('intervention_plan.actions.add_service'))
                     ->modalHeading(__('intervention_plan.headings.add_service'))
-                    ->form(self::getServiceSchema($this->record->id))
+                    ->form(self::getServiceSchema($this->record))
                     ->createAnother(false),
             ])
             ->actions([
@@ -68,7 +70,7 @@ class ServicesWidget extends BaseWidget
             ->emptyStateIcon('heroicon-o-document');
     }
 
-    public static function getServiceSchema(?int $interventionPlanID = null): array
+    public static function getServiceSchema(?InterventionPlan $interventionPlan = null): array
     {
         return [
             Grid::make()
@@ -85,7 +87,8 @@ class ServicesWidget extends BaseWidget
                                         ->get()
                                         ->filter(fn (OrganizationService $item) => $item->service)
                                         ->pluck('service.name', 'id')
-                                ),
+                                )
+                                ->required(),
 
                             TextInput::make('institution')
                                 ->label(__('intervention_plan.labels.responsible_institution'))
@@ -93,11 +96,24 @@ class ServicesWidget extends BaseWidget
                                 ->default(Filament::getTenant()->name)
                                 ->maxLength(100),
 
-                            Select::make('user_id')
+                            Select::make('specialist_id')
                                 ->label(__('intervention_plan.labels.responsible_specialist'))
                                 ->placeholder(__('intervention_plan.placeholders.specialist'))
-                                ->relationship('user')
-                                ->options(User::all()->pluck('full_name', 'id')),
+                                ->relationship('specialist')
+                                ->options(function (?InterventionService $record) use ($interventionPlan) {
+                                    if (! $interventionPlan) {
+                                        $interventionPlan = $record->interventionPlan;
+                                    }
+
+                                    return $interventionPlan->beneficiary
+                                        ->specialistsTeam
+                                        ->load(['user', 'role'])
+                                        ->map(fn (Specialist $item) => [
+                                            'name' => $item->getNameRoleAttribute(),
+                                            'id' => $item->id,
+                                        ])
+                                        ->pluck('name', 'id');
+                                }),
 
                             DatePicker::make('start_date')
                                 ->label(__('intervention_plan.labels.start_date'))
@@ -123,7 +139,7 @@ class ServicesWidget extends BaseWidget
                 ->maxLength(1000),
 
             Hidden::make('intervention_plan_id')
-                ->default($interventionPlanID),
+                ->default($interventionPlan?->id),
         ];
     }
 

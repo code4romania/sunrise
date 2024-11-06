@@ -86,8 +86,8 @@ return [
         'status' => 'Status',
         'date' => 'Data',
         'time' => 'Ora',
-        'duration' => 'Durata',
-        'observations' => 'Observatii',
+        'duration' => 'Durata (min)',
+        'observations' => 'Observații',
         'meet_number' => 'Nr ședință',
         'empty_state_benefit_table' => 'Înregistrează aici toate beneficiile sociale ale beneficiarei.',
         'benefit_category' => 'Categorie beneficiu social',
@@ -96,6 +96,7 @@ return [
         'interval' => 'Perioada de acordare',
         'benefit_description' => 'Observații beneficii',
         'next_meeting' => 'Următoarea',
+        'empty_state_table_without_intervetntions' => 'Adaugă intervenții în planul beneficiarului, pentru a putea documenta activitățile și ședințele realizate în cadrul serviciilor',
     ],
 
     'headings' => [
@@ -139,6 +140,7 @@ return [
         'benefit_description' => 'Descriere',
         'delete_benefit_modal' => 'Șterge beneficiu social',
         'delete_beneficiary_intervention_modal' => 'Șterge intervenția',
+        'empty_state_table_without_intervetntions' => 'Nici o interventie adăugată în planul de intervenție',
     ],
 
     'actions' => [
@@ -155,6 +157,8 @@ return [
         'delete_benefit' => 'Sterge beneficiu',
         'delete_beneficiary_intervention' => 'Șterge intervenția',
         'view_intervention' => 'Vezi intervenția',
+        'download_meetings' => 'Descarcă tabel',
+        'view_intervention_plan' => 'Vezi detalii plan',
     ],
 
     'placeholders' => [

@@ -41,6 +41,7 @@ class CloseFileWidget extends BaseWidget
             ->emptyStateActions([
                 Tables\Actions\Action::make('create_close_file')
                     ->label(__('beneficiary.section.close_file.actions.create_widget'))
+                    ->outlined()
                     ->disabled(fn () => ! CaseStatus::isValue($this->record->status, CaseStatus::CLOSED))
                     ->url(BeneficiaryResource::getUrl('create_close_file', ['record' => $this->record])),
             ])

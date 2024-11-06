@@ -13,6 +13,7 @@ return [
         'registered_date' => 'Data înregistrării',
         'reactivated' => 'Reactivare de caz',
         'related_cases' => 'Istoric caz (fișe conectate cazului)',
+        'case_manager' => 'Manager de caz',
     ],
 
     'page' => [
@@ -20,7 +21,7 @@ return [
             'title' => 'Înregistrează caz nou',
         ],
         'view' => [
-            'title' => '<p class="flex flex-wrap"> #:id :name :badge</p>',
+            'title' => '<p class="flex flex-wrap gap-3"> #:id :name :badge</p>',
         ],
         'identity' => [
             'title' => 'Date identitate',
@@ -168,6 +169,9 @@ return [
             'label' => [
                 'delete_aggressor_description' => 'Acțiunea va șterge din această pagină întreaga secțiune cu informațiile introduse despre acest agresor. Datele șterse nu vor mai putea fi recuperate.',
             ],
+            'placeholders' => [
+                'select_many' => 'Alege toate variantele care se potrivesc',
+            ],
         ],
 
         'initial_evaluation' => [
@@ -232,7 +236,7 @@ return [
                 'institution' => 'Institutia',
                 'relationship' => 'Relatia cu copilul/ familia',
                 'contact_date' => 'Data contactarii',
-                'meetings' => 'Inrevederi (sau convorbiri telefonice) pentru colectarea datelor',
+                'meetings' => 'Intrevederi (sau convorbiri telefonice) pentru colectarea datelor',
                 'specialist' => 'Specialist',
                 'date' => 'Data',
                 'location' => 'Locatia',

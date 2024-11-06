@@ -51,6 +51,13 @@ class ViewBeneficiary extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('view_history')
+                ->label(__('beneficiary.section.history.actions.view'))
+                ->icon('heroicon-o-clock')
+                ->outlined()
+                ->link()
+                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
+
             ActionGroup::make([])
                 ->label(__('beneficiary.action.case_actions'))
                 ->button()
@@ -102,13 +109,6 @@ class ViewBeneficiary extends ViewRecord
                                 ->disabled(),
                         ]),
                 ]),
-
-            Action::make('view_history')
-                ->label(__('beneficiary.section.history.actions.view'))
-                ->icon('heroicon-o-clock')
-                ->outlined()
-                ->link()
-                ->url(self::getResource()::getUrl('beneficiary-histories.index', ['parent' => $this->getRecord()])),
         ];
     }
 
@@ -308,7 +308,7 @@ class ViewBeneficiary extends ViewRecord
                                 ->color(Color::Gray)
                                 ->size(TextEntrySize::Small),
                             Actions::make([
-                                EditExtraLarge::make('create_initial_evaluation')
+                                Actions\Action::make('create_initial_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
                                     ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
                                     ->outlined(),
@@ -356,7 +356,7 @@ class ViewBeneficiary extends ViewRecord
                                 ->color(Color::Gray)
                                 ->size(TextEntrySize::Small),
                             Actions::make([
-                                EditExtraLarge::make('create_detailed_evaluation')
+                                Actions\Action::make('create_detailed_evaluation')
                                     ->label(__('beneficiary.action.start_evaluation'))
                                     ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
                                     ->outlined(),

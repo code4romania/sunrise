@@ -83,7 +83,7 @@ class ViewCloseFile extends ViewRecord
                                     TextEntry::make('exit_date')
                                         ->label(__('beneficiary.section.close_file.labels.exit_date')),
 
-                                    TextEntry::make('caseManager.full_name')
+                                    TextEntry::make('caseManager.name_role')
                                         ->label(__('beneficiary.section.close_file.labels.case_manager')),
 
                                 ]),

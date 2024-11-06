@@ -13,6 +13,8 @@ class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
+    protected static bool $canCreateAnother = false;
+
     protected function afterSave(): void
     {
         /** @var User $user */

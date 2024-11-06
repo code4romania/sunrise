@@ -14,10 +14,12 @@ use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -55,6 +57,10 @@ class EditChildren extends EditRecord
     public static function getSchema(): array
     {
         return [
+            Placeholder::make('empty_state_children')
+                ->label(__('monitoring.headings.empty_state_children'))
+                ->visible(fn (Get $get) => ! $get('children')),
+
             Repeater::make('children')
                 ->relationship('children')
                 ->hiddenLabel()

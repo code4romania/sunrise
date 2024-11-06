@@ -44,6 +44,7 @@ class MonitoringWidget extends BaseWidget
             ->emptyStateActions([
                 Tables\Actions\Action::make('create_monitoring')
                     ->label(__('monitoring.actions.create_widget'))
+                    ->outlined()
                     ->url(BeneficiaryResource::getUrl('monitorings.create', ['parent' => $this->record])),
             ])
             ->emptyStateIcon('heroicon-o-clipboard-document-check');

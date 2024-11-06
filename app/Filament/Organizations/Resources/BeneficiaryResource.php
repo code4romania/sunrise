@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Enums\CaseStatus;
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
@@ -75,7 +74,8 @@ class BeneficiaryResource extends Resource
             fn (Builder $query) => $query
                 ->leftJoin('monitorings', 'monitorings.beneficiary_id', '=', 'beneficiaries.id')
                 ->select(['beneficiaries.*', 'monitorings.date'])
-                ->with(['managerTeam', 'lastMonitoring'])
+                ->with(['managerTeam', 'lastMonitoring', 'specialistsMembers'])
+                ->whereUserHasAccess()
         )
             ->columns([
                 TextColumn::make('id')
@@ -101,7 +101,7 @@ class BeneficiaryResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('managerTeam.user.full_name')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(__('beneficiary.labels.case_manager'))
                     ->toggleable()
                     ->formatStateUsing(
                         fn ($state) => collect(explode(',', $state))
@@ -115,7 +115,8 @@ class BeneficiaryResource extends Resource
                     ->badge(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('general.action.view_details')),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -124,7 +125,7 @@ class BeneficiaryResource extends Resource
                     ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('beneficiaries.status', $state) : $query),
 
                 SelectFilter::make('case_manager')
-                    ->label(Role::MANGER->getLabel())
+                    ->label(__('beneficiary.labels.case_manager'))
                     ->searchable()
                     ->preload()
                     ->relationship('managerTeam.user', 'full_name'),

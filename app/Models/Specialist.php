@@ -22,6 +22,10 @@ class Specialist extends Model
         'specialistable_type',
     ];
 
+    protected $appends = [
+        'name_role',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)
@@ -37,5 +41,12 @@ class Specialist extends Model
     public function specialistable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function getNameRoleAttribute(): string
+    {
+        $this->load(['user', 'role']);
+
+        return \sprintf('%s (%s)', $this->user->full_name, $this->role->name);
     }
 }

@@ -73,15 +73,16 @@ class EditCloseFileDetails extends EditRecord
                 ->label(__('beneficiary.section.close_file.labels.exit_date'))
                 ->required(),
 
-            Select::make('user_id')
+            Select::make('specialist_id')
                 ->label(__('beneficiary.section.close_file.labels.case_manager'))
                 ->columnSpanFull()
                 ->options(
                     function (?CloseFile $record) use ($recordParam) {
-                        $specialists = $record ? $record->beneficiary->specialistsMembers : $recordParam->specialistsMembers;
+                        $specialists = $record ? $record->beneficiary->specialistsTeam : $recordParam->specialistsTeam;
 
                         return $specialists
-                            ->pluck('full_name', 'id');
+                            ->load(['user', 'role'])
+                            ->pluck('name_role', 'id');
                     }
                 )
                 ->required(),

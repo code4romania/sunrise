@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Models\Beneficiary;
+use App\Models\InterventionService;
 use App\Models\User;
 
-class BeneficiaryPolicy
+class InterventionServicePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -20,9 +20,9 @@ class BeneficiaryPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Beneficiary $beneficiary): bool
+    public function view(User $user, InterventionService $interventionService): bool
     {
-        return $user->hasAccessToBeneficiary($beneficiary);
+        return $user->hasAccessToBeneficiary($interventionService->beneficiary);
     }
 
     /**
@@ -36,32 +36,32 @@ class BeneficiaryPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Beneficiary $beneficiary): bool
+    public function update(User $user, InterventionService $interventionService): bool
     {
-        return $user->hasAccessToBeneficiary($beneficiary);
+        return $user->hasAccessToBeneficiary($interventionService->beneficiary);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Beneficiary $beneficiary): bool
+    public function delete(User $user, InterventionService $interventionService): bool
     {
-        return false;
+        return $user->hasAccessToBeneficiary($interventionService->beneficiary);
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Beneficiary $beneficiary): bool
+    public function restore(User $user, InterventionService $interventionService): bool
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Beneficiary $beneficiary): bool
+    public function forceDelete(User $user, InterventionService $interventionService): bool
     {
-        return false;
+        return true;
     }
 }

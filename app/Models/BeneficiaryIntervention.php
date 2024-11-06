@@ -67,4 +67,9 @@ class BeneficiaryIntervention extends Model
     {
         return $this->belongsToThrough(InterventionPlan::class, InterventionService::class);
     }
+
+    public function beneficiary(): BelongsToThrough
+    {
+        return $this->belongsToThrough(Beneficiary::class, [InterventionPlan::class, InterventionService::class]);
+    }
 }

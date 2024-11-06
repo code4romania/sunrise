@@ -66,7 +66,7 @@ class EditDetailedEvaluation extends EditRecord
                             TextInput::make('institution')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.institution'))
                                 ->maxLength(50)
-                                ->default(fn () => Filament::getTenant()->name),
+                                ->default(fn () => Filament::getTenant()->institution->name),
 
                             TextInput::make('relationship')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.relationship'))

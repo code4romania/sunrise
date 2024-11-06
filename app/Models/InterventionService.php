@@ -23,7 +23,7 @@ class InterventionService extends Model
     protected $fillable = [
         'intervention_plan_id',
         'organization_service_id',
-        'user_id',
+        'specialist_id',
         'institution',
         'start_date',
         'objections',
@@ -45,9 +45,9 @@ class InterventionService extends Model
         return $this->belongsTo(OrganizationService::class, 'organization_service_id');
     }
 
-    public function user(): BelongsTo
+    public function specialist(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Specialist::class);
     }
 
     public function organization(): BelongsToThrough

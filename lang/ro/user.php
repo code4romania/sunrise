@@ -25,6 +25,7 @@ return [
         'select_roles' => 'Rol specialitate',
         'case_permissions' => 'Permisiuni cazuri',
         'admin_permissions' => 'Permisiuni administrare',
+        'last_login_at_date_time' => 'Data și ora ultimei accesări',
     ],
 
     'stats' => [
@@ -43,6 +44,7 @@ return [
     'heading' => [
         'table' => 'Echipa interdisciplinară',
         'active_users' => 'Utilizatori activi',
+        'specialist_details' => 'Detalii specialist',
     ],
 
     'placeholders' => [

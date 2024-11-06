@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Actions;
 
 use App\Enums\CaseStatus;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -54,6 +55,10 @@ class ChangeStatus extends Action
                 ->body(__('beneficiary.notification.change_status.body', [
                     'status' => $status->getLabel(),
                 ]))->send();
+
+            if (CaseStatus::isValue($record->status, CaseStatus::CLOSED)) {
+                $this->redirect(BeneficiaryResource::getUrl('view', ['record' => $record]));
+            }
         });
     }
 }
