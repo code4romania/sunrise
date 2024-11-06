@@ -19,6 +19,7 @@ trait HasUserStatus
     {
         return $this->update([
             'deactivated_at' => null,
+            'status' => UserStatus::ACTIVE,
         ]);
     }
 
@@ -40,28 +41,22 @@ trait HasUserStatus
     }
 
     public function setPendingStatus(): void
-
     {
-        return ! $this->isActive();
+//        return ! $this->isActive();
     }
 
-    public function status(): Attribute
-    {
-        return Attribute::make(function () {
-            if ($this->isInactive()) {
-                return UserStatus::INACTIVE;
-            }
-
-            if (! $this->hasSetPassword()) {
-                return UserStatus::PENDING;
-            }
-
-            return UserStatus::ACTIVE;
-        });
-    }
-
-    public function activate(): void
-    {
-        $this->update(['status' => UserStatus::ACTIVE]);
-    }
+//    public function status(): Attribute
+//    {
+//        return Attribute::make(function () {
+//            if ($this->isInactive()) {
+//                return UserStatus::INACTIVE;
+//            }
+//
+//            if (! $this->hasSetPassword()) {
+//                return UserStatus::PENDING;
+//            }
+//
+//            return UserStatus::ACTIVE;
+//        });
+//    }
 }

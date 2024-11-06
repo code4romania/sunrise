@@ -195,6 +195,9 @@ class BeneficiaryFactory extends Factory
                     ->limit($count)
                     ->get()
                     ->map(function ($item) {
+                        if ($item->roles->isEmpty()) {
+                            return [];
+                        }
                         $roles = fake()->randomElements($item->roles, rand(1, \count($item->roles)));
                         $state = [];
                         foreach ($roles as $role) {
@@ -206,6 +209,7 @@ class BeneficiaryFactory extends Factory
 
                         return $state;
                     })
+                    ->filter()
                     ->toArray();
 
                 $users = array_merge(...$users);
@@ -276,7 +280,7 @@ class BeneficiaryFactory extends Factory
                     CloseFile::factory()
                         ->for($beneficiary)
                         ->create([
-                            'specialist_id' => $this->faker->randomElement($beneficiary->specialistsTeam)->id,
+                            'specialist_id' => $this->faker->randomElement($beneficiary->specialistsTeam)?->id,
                         ]);
                 }
             });

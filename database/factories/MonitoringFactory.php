@@ -82,6 +82,9 @@ class MonitoringFactory extends Factory
                 }
 
                 $specialists = $monitoring->beneficiary->specialistsTeam;
+                if ($specialists->isEmpty()) {
+                    return;
+                }
                 $specialists = collect(fake()->randomElements($specialists, rand(1, $specialists->count())));
                 $specialists = $specialists->map(fn (Specialist $specialist) => ['user_id' => $specialist->user_id, 'role_id' => $specialist->role_id])
                     ->toArray();

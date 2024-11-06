@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('has_access_to_all_cases')->nullable();
             $table->boolean('is_admin')->default(false);
             $table->boolean('ngo_admin')->default(false);
-            $table->timestamp('password_set_at')->nullable();
+            $table->dateTime('password_set_at')->nullable();
             $table->timestamp('deactivated_at')->nullable();
             $table->string('password');
             $table->rememberToken();

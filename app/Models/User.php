@@ -8,8 +8,6 @@ use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
-use App\Enums\Role;
-use App\Enums\Ternary;
 use App\Enums\CasePermission;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;

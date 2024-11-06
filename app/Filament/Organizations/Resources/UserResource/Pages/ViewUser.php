@@ -50,6 +50,13 @@ class ViewUser extends ViewRecord
         ];
     }
 
+//    protected function getHeaderActions(): array
+//    {
+//        return [
+//            UserResource\Actions\DeactivateUserAction::make(),
+//        ];
+//    }
+
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
@@ -58,7 +65,7 @@ class ViewUser extends ViewRecord
                 ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('status'),
-                    
+
                     TextEntry::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time')),
                 ]),
@@ -139,12 +146,5 @@ class ViewUser extends ViewRecord
                         }),
                 ]),
         ]);
-    }
-
-    protected function getHeaderActions(): array
-    {
-        return [
-            UserResource\Actions\DeactivateUserAction::make(),
-        ];
     }
 }

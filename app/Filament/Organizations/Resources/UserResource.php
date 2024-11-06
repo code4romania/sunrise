@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
-use App\Enums\Role;
 use App\Enums\UserStatus;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
@@ -97,7 +96,7 @@ class UserResource extends Resource
                     ->options(UserStatus::options()),
 
                 Tables\Filters\SelectFilter::make('roles')
-                    ->options(Role::options())
+                    ->options(Role::active()->pluck('name', 'id'))
                     ->modifyQueryUsing(
                         fn (Builder $query, $state) => $state['value']
                             ? $query->whereJsonContains('roles', $state['value'])
