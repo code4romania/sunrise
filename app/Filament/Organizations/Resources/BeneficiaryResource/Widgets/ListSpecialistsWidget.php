@@ -80,19 +80,14 @@ class ListSpecialistsWidget extends BaseWidget
                             : $query
                     ),
 
-                SelectFilter::make('roles')
+                SelectFilter::make('role_id')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->options(
                         Role::query()
                             ->active()
                             ->pluck('name', 'id')
                     )
-                    ->searchable()
-                    ->modifyQueryUsing(
-                        fn (Builder $query, $state): Builder => $state['value']
-                            ? $query->whereJsonContains('roles', $state['value'])
-                            : $query
-                    ),
+                    ->searchable(),
             ])
             ->heading(__('beneficiary.section.specialists.title'));
     }
