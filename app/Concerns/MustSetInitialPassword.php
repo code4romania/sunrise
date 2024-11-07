@@ -40,7 +40,7 @@ trait MustSetInitialPassword
     public function sendWelcomeNotification(): void
     {
         $this->notify(
-            $this->is_admin
+            $this->ngo_admin
                 ? new AdminWelcomeNotification
                 : new WelcomeNotification
         );
