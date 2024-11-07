@@ -37,8 +37,8 @@ class WelcomeNotification extends Notification
             ->subject(__('email.organization.welcome.subject'))
             ->line(
                 __('email.organization.welcome.intro_line_1', [
-                    'institution_name' => Filament::getTenant()->institution->name,
-                    'center_name' => Filament::getTenant()->name,
+                    'institution_name' => Filament::getTenant()?->institution->name ?? '',
+                    'center_name' => Filament::getTenant()?->name ?? '',
                 ])
             )
             ->line(__('email.organization.welcome.intro_line_2'))
