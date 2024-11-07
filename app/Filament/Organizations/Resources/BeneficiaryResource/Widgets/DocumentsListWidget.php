@@ -54,6 +54,7 @@ class DocumentsListWidget extends BaseWidget
                     ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                     ->label(__('beneficiary.section.documents.actions.add'))
                     ->outlined()
+                    ->createAnother(false)
                     ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.create'))
                     ->modalCancelActionLabel(__('general.action.cancel'))
                     ->mutateFormDataUsing(function (array $data) {
