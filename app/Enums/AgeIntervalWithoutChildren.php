@@ -7,7 +7,7 @@ namespace App\Enums;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
-enum AgeInterval2: string implements HasLabel
+enum AgeIntervalWithoutChildren: string implements HasLabel
 {
     use Enums\HasLabel;
     use Enums\Arrayable;

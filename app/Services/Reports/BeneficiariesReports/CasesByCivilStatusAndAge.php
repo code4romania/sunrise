@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Reports\BeneficiariesReports;
 
 use App\Concerns\Reports\HasVerticalHeaderCivilStatus;
-use App\Enums\AgeInterval2;
+use App\Enums\AgeIntervalWithoutChildren;
 use App\Interfaces\ReportGenerator;
 
 class CasesByCivilStatusAndAge extends BaseGenerator implements ReportGenerator
@@ -23,7 +23,7 @@ class CasesByCivilStatusAndAge extends BaseGenerator implements ReportGenerator
 
     public function getHorizontalSubHeader(): ?array
     {
-        $header = AgeInterval2::options();
+        $header = AgeIntervalWithoutChildren::options();
 
         if (! $this->showMissingValues) {
             return $header;
