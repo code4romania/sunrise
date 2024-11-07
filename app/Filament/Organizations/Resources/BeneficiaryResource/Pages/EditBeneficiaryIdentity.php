@@ -213,17 +213,22 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->relationship(AddressType::LEGAL_RESIDENCE->value)
                         ->city()
                         ->address()
-                        ->environment(),
+                        ->environment()
+                        ->copyDataInPath(
+                            fn (Get $get) => $get('same_as_legal_residence') ?
+                                AddressType::EFFECTIVE_RESIDENCE->value :
+                                null
+                        ),
 
                     Checkbox::make('same_as_legal_residence')
                         ->label(__('field.same_as_legal_residence'))
                         ->live()
-                        ->afterStateUpdated(function (bool $state, Set $set) {
+                        ->afterStateUpdated(function (bool $state, Set $set, Get $get) {
                             if ($state) {
-                                $set('effective_residence.county_id', null);
-                                $set('effective_residence.city_id', null);
-                                $set('effective_residence.address', null);
-                                $set('effective_residence.environment', null);
+                                $set('effective_residence.county_id', $get('legal_residence.county_id'));
+                                $set('effective_residence.city_id', $get('legal_residence.city_id'));
+                                $set('effective_residence.address', $get('legal_residence.address'));
+                                $set('effective_residence.environment', $get('legal_residence.environment'));
                             }
                         })
                         ->columnSpanFull(),
@@ -235,8 +240,8 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->city()
                         ->address()
                         ->environment()
-                        ->visible(function (Get $get) {
-                            return ! $get('same_as_legal_residence');
+                        ->disabled(function (Get $get) {
+                            return  $get('same_as_legal_residence');
                         }),
 
                     Spacer::make(),
