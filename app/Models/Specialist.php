@@ -47,6 +47,6 @@ class Specialist extends Model
     {
         $this->load(['user', 'role']);
 
-        return \sprintf('%s (%s)', $this->user?->full_name, $this->role?->name);
+        return \sprintf('%s (%s)', $this->user->full_name, $this->role?->name);
     }
 }
