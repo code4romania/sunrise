@@ -6,10 +6,10 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\Initial
 
 use App\Concerns\RedirectToInitialEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -57,7 +57,6 @@ class EditEvaluationDetails extends EditRecord
                 ->schema([
                     DatePicker::make('registered_date')
                         ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
-                        ->native(false)
                         ->required(),
 
                     TextInput::make('file_number')

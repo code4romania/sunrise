@@ -6,9 +6,10 @@ namespace App\Filament\Organizations\Resources\InterventionPlanResource\Pages;
 
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
+use App\Forms\Components\DatePicker;
+use App\Models\Beneficiary;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Actions;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\Section;
@@ -57,20 +58,24 @@ class ViewInterventionPlan extends ViewRecord
                                 ->disabled(),
                             TextInput::make('address')
                                 ->label(__('intervention_plan.labels.address'))
+                                ->formatStateUsing(
+                                    fn (Beneficiary $record) => $record->legal_residence?->address . ', ' .
+                                        $record->legal_residence?->city?->name . ', ' .
+                                        $record->legal_residence?->county?->name
+                                )
                                 ->disabled(),
                         ]),
 
                     Grid::make()
                         ->schema([
                             DatePicker::make('admit_date_in_center')
-                                ->label(__('intervention_plan.labels.admit_date'))
-                                ->native(false),
+                                ->label(__('intervention_plan.labels.admit_date')),
+
                             DatePicker::make('plan_date')
-                                ->label(__('intervention_plan.labels.plan_date'))
-                                ->native(false),
+                                ->label(__('intervention_plan.labels.plan_date')),
+
                             DatePicker::make('last_revise_date')
-                                ->label(__('intervention_plan.labels.last_revise_date'))
-                                ->native(false),
+                                ->label(__('intervention_plan.labels.last_revise_date')),
                         ]),
                 ])
                 ->modalHeading(__('intervention_plan.headings.edit_intervention_plan')),

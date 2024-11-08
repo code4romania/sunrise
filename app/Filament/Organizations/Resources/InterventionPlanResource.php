@@ -8,10 +8,6 @@ use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditC
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditInterventionService;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\ViewInterventionService;
 use App\Models\InterventionPlan;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 
 class InterventionPlanResource extends Resource
@@ -21,29 +17,6 @@ class InterventionPlanResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
 
     public static string $parentResource = BeneficiaryResource::class;
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Grid::make()
-                    ->relationship('beneficiary')
-                    ->schema([
-                        TextInput::make('full_name')
-                            ->disabled(),
-                        TextInput::make('cnp')
-                            ->disabled(),
-                        TextInput::make('address')
-                            ->disabled(),
-                    ]),
-                Grid::make()
-                    ->schema([
-                        DatePicker::make('admit_date'),
-                        DatePicker::make('plan_date'),
-                        DatePicker::make('last_revise_date'),
-                    ]),
-            ]);
-    }
 
     public static function getPages(): array
     {
