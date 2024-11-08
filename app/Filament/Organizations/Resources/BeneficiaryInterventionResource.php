@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
 use App\Models\User;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
@@ -78,17 +78,15 @@ class BeneficiaryInterventionResource extends Resource
             Grid::make()
                 ->schema([
                     DatePicker::make('start_date_interval')
-                        ->label(__('intervention_plan.labels.start_date_interval'))
-                        ->native(false),
+                        ->label(__('intervention_plan.labels.start_date_interval')),
 
                     DatePicker::make('end_date_interval')
-                        ->label(__('intervention_plan.labels.end_date_interval'))
-                        ->native(false),
+                        ->label(__('intervention_plan.labels.end_date_interval')),
                 ]),
 
             Section::make(__('intervention_plan.headings.intervention_indicators'))
-                ->collapsible()
-                ->collapsed()
+                ->collapsible(fn ($operation) => $operation != 'edit')
+                ->collapsed(fn ($operation) => $operation != 'edit')
                 ->schema([
                     Textarea::make('objections')
                         ->label(__('intervention_plan.labels.objections'))
