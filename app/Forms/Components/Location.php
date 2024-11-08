@@ -47,6 +47,8 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     protected string | Closure | null $environmentLabel = null;
 
+    protected Closure|string|null $copyPath = null;
+
     final public function __construct(string | null $id)
     {
         $this->id($id);
@@ -203,8 +205,11 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->live()
                 ->required($this->isRequired())
                 ->disabled($this->isDisabled())
-                ->afterStateUpdated(function (Set $set, Get $get) {
+                ->afterStateUpdated(function (Set $set, $state) {
                     $set($this->getCityField(), null);
+                    if ($this->getCopyPath()) {
+                        $set(\sprintf('../%s.county_id', $this->getCopyPath()), $state);
+                    }
                 })
                 ->when(! $this->hasCity(), fn (Select $component) => $component->columnSpanFull()),
 
@@ -224,7 +229,11 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                         ->pluck('name', 'id');
                 })
                 ->getOptionLabelUsing(fn ($value) => City::find($value)?->name)
-                ->visible(fn () => $this->hasCity()),
+                ->visible(fn () => $this->hasCity())
+                ->afterStateUpdated(
+                    fn (Set $set, $state) => $this->getCopyPath() ?
+                        $set(\sprintf('../%s.city_id', $this->getCopyPath()), $state) : null
+                ),
 
             TextInput::make($this->getAddressField())
                 ->label($this->getAddressLabel())
@@ -232,7 +241,11 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->required($this->isRequired())
                 ->disabled($this->isDisabled())
                 ->visible($this->hasAddress())
-                ->lazy(),
+                ->lazy()
+                ->afterStateUpdated(
+                    fn (Set $set, $state) => $this->getCopyPath() ?
+                        $set(\sprintf('../%s.address', $this->getCopyPath()), $state) : null
+                ),
 
             Select::make($this->getEnvironmentField())
                 ->label($this->getEnvironmentLabel())
@@ -242,7 +255,11 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->required($this->isRequired())
                 ->disabled($this->isDisabled())
                 ->visible($this->hasEnvironment())
-                ->lazy(),
+                ->lazy()
+                ->afterStateUpdated(
+                    fn (Set $set, $state) => $this->getCopyPath() ?
+                        $set(\sprintf('../%s.environment', $this->getCopyPath()), $state) : null
+                ),
 
             Hidden::make('address_type')
                 ->default($this->getRelationshipName()),
@@ -268,5 +285,17 @@ class Location extends Component implements CanEntangleWithSingularRelationships
         $this->addressLabel = $label;
 
         return $this;
+    }
+
+    public function copyDataInPath(Closure | string | null $path = null): static
+    {
+        $this->copyPath = $path;
+
+        return $this;
+    }
+
+    public function getCopyPath()
+    {
+        return $this->evaluate($this->copyPath);
     }
 }
