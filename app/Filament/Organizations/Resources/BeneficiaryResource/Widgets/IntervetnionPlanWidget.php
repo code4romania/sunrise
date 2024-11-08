@@ -30,7 +30,8 @@ class IntervetnionPlanWidget extends BaseWidget
                     ->with([
                         'organizationServiceIntervention.serviceIntervention',
                         'organizationServiceIntervention.organizationService.service',
-                        'user',
+                        'specialist.name',
+                        'specialist.role',
                         'nextMeeting',
                     ])
                     ->withCount('meetings') ?:
@@ -43,7 +44,7 @@ class IntervetnionPlanWidget extends BaseWidget
                 TextColumn::make('organizationServiceIntervention.organizationService.service.name')
                     ->label(__('intervention_plan.labels.service')),
 
-                TextColumn::make('user.full_name')
+                TextColumn::make('specialist.name_role')
                     ->label(__('intervention_plan.labels.specialist')),
 
                 TextColumn::make('meetings_count')

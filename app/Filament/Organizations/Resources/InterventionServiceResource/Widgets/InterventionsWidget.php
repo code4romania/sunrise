@@ -21,14 +21,14 @@ class InterventionsWidget extends BaseWidget
     {
         return $table
             ->query(fn () => $this->record->beneficiaryInterventions()
-                ->with('user')
+                ->with('specialist')
                 ->withCount('meetings'))
             ->heading(__('intervention_plan.headings.interventions'))
             ->columns([
                 Tables\Columns\TextColumn::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
                     ->label(__('intervention_plan.labels.intervention')),
 
-                Tables\Columns\TextColumn::make('user.full_name')
+                Tables\Columns\TextColumn::make('specialist.name_role')
                     ->label(__('intervention_plan.labels.specialist')),
 
                 Tables\Columns\TextColumn::make('interval')
@@ -45,7 +45,7 @@ class InterventionsWidget extends BaseWidget
                     ->form([
                         Hidden::make('intervention_service_id')
                             ->default($this->record->id),
-                        ...BeneficiaryInterventionResource::getSchema($this->record->organization_service_id),
+                        ...BeneficiaryInterventionResource::getSchema($this->record->beneficiary, $this->record->organization_service_id),
                     ]),
             ])
             ->actions([

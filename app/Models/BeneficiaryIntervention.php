@@ -22,7 +22,7 @@ class BeneficiaryIntervention extends Model
     protected $fillable = [
         'organization_service_intervention_id',
         'intervention_service_id',
-        'user_id',
+        'specialist_id',
         'start_date',
         'objections',
         'expected_results',
@@ -41,9 +41,9 @@ class BeneficiaryIntervention extends Model
         return $this->belongsTo(OrganizationServiceIntervention::class);
     }
 
-    public function user(): BelongsTo
+    public function specialist(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Specialist::class);
     }
 
     public function organization(): BelongsToThrough
