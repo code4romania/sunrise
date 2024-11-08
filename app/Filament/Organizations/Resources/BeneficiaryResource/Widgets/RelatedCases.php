@@ -66,6 +66,7 @@ class RelatedCases extends BaseWidget
                     ->color('primary')
                     ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view', ['record' => $record->id])),
             ])
+            ->recordUrl(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view', ['record' => $record->id]))
             ->defaultSort('id', 'desc');
     }
 }

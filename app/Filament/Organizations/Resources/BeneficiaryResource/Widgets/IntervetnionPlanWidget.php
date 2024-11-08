@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionPlan;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ViewAction;
@@ -58,11 +59,15 @@ class IntervetnionPlanWidget extends BaseWidget
             ->actions([
                 ViewAction::make('view_intervention')
                     ->label(__('intervention_plan.actions.view_intervention'))
-                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_intervention', [
+                    ->url(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
                         'parent' => $record->intervention_service_id,
                         'record' => $record,
                     ])),
             ])
+            ->recordUrl(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
+                'parent' => $record->intervention_service_id,
+                'record' => $record,
+            ]))
             ->headerActions([
                 Action::make('view_intervention_plan')
                     ->label(__('intervention_plan.actions.view_intervention_plan'))
