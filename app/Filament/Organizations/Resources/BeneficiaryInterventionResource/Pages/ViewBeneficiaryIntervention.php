@@ -10,7 +10,6 @@ use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -54,21 +53,6 @@ class ViewBeneficiaryIntervention extends ViewRecord
                     ])
                     ->maxWidth('3xl')
                     ->schema([
-                        Grid::make()
-                            ->schema([
-                                TextEntry::make('organizationServiceIntervention.serviceIntervention.name')
-                                    ->label(__('intervention_plan.labels.intervention_type')),
-
-                                TextEntry::make('specialist.name_role')
-                                    ->label(__('intervention_plan.labels.responsible_specialist')),
-
-                                TextEntry::make('start_date')
-                                    ->label(__('intervention_plan.labels.start_date')),
-
-                                TextEntry::make('interval')
-                                    ->label(__('intervention_plan.labels.start_date_interval')),
-                            ]),
-
                         TextEntry::make('objections')
                             ->label(__('intervention_plan.labels.objections')),
                         TextEntry::make('expected_results')
