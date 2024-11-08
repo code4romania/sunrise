@@ -17,6 +17,8 @@ enum CasePermission: string implements HasLabel
     case CAN_SEARCH_AND_COPY_CASES_IN_ALL_CENTERS = 'can_search_and_copy_cases_in_all_centers';
     case HAS_ACCESS_TO_STATISTICS = 'has_access_to_statistics';
 
+    case CAN_BE_CASE_MANAGER = 'can_be_case_manager';
+
     protected function labelKeyPrefix(): ?string
     {
         return 'enum.case_permissions';
