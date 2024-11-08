@@ -60,11 +60,15 @@ class ServicesWidget extends BaseWidget
             ->actions([
                 ViewAction::make()
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => InterventionPlanResource::getUrl('view_intervention_service', [
+                    ->url(fn (InterventionService $record) => InterventionPlanResource::getUrl('view_intervention_service', [
                         'parent' => $this->record,
                         'record' => $record,
                     ])),
             ])
+            ->recordUrl(fn (InterventionService $record) => InterventionPlanResource::getUrl('view_intervention_service', [
+                'parent' => $this->record,
+                'record' => $record,
+            ]))
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_table'))
             ->emptyStateIcon('heroicon-o-document');
