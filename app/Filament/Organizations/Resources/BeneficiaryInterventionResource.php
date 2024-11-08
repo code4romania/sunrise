@@ -7,10 +7,12 @@ namespace App\Filament\Organizations\Resources;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
+use App\Models\Beneficiary;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
 use App\Models\User;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
@@ -39,7 +41,7 @@ class BeneficiaryInterventionResource extends Resource
             ]);
     }
 
-    public static function getSchema(?int $organizationServiceID = null): array
+    public static function getSchema(?Beneficiary $beneficiary = null, ?int $organizationServiceID = null): array
     {
         return [
             Grid::make()
@@ -65,10 +67,13 @@ class BeneficiaryInterventionResource extends Resource
                                 )
                                 ->required(),
 
-                            Select::make('user_id')
+                            Select::make('specialist_id')
                                 ->label(__('intervention_plan.labels.responsible_specialist'))
-                                ->relationship('user', 'full_name')
-                                ->options(User::all()->pluck('full_name', 'id')),
+                                ->options(function (?BeneficiaryIntervention $record) use ($beneficiary) {
+                                    $beneficiary = $beneficiary ?? $record?->beneficiary;
+
+                                    return $beneficiary->specialistsTeam->load(['user', 'role'])->pluck('name_role', 'id');
+                                }),
 
                             DatePicker::make('start_date')
                                 ->label(__('intervention_plan.labels.start_date')),
