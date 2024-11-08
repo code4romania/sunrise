@@ -234,22 +234,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     TextEntry::make('drugs')
                                         ->label(__('field.aggressor_drugs')),
                                 ]),
-
-                            Grid::make()
-                                ->schema([
-                                    TextEntry::make('legal_history')
-                                        ->label(__('field.aggressor_legal_history')),
-                                ]),
-
-                            Grid::make()
-                                ->schema([
-                                    EnumEntry::make('has_protection_order')
-                                        ->label(__('field.has_protection_order'))
-                                        ->placeholder(__('placeholder.select_one')),
-
-                                    TextEntry::make('protection_order_notes')
-                                        ->label(__('field.protection_order_notes')),
-                                ]),
                         ]),
                 ]),
         ];
