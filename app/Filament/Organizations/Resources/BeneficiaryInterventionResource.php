@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
@@ -81,34 +81,36 @@ class BeneficiaryInterventionResource extends Resource
             Grid::make()
                 ->schema([
                     DatePicker::make('start_date_interval')
-                        ->label(__('intervention_plan.labels.start_date_interval'))
-                        ->native(false),
+                        ->label(__('intervention_plan.labels.start_date_interval')),
 
                     DatePicker::make('end_date_interval')
-                        ->label(__('intervention_plan.labels.end_date_interval'))
-                        ->native(false),
+                        ->label(__('intervention_plan.labels.end_date_interval')),
                 ]),
 
             Section::make(__('intervention_plan.headings.intervention_indicators'))
-                ->collapsible()
-                ->collapsed()
+                ->collapsible(fn ($operation) => $operation != 'edit')
+                ->collapsed(fn ($operation) => $operation != 'edit')
                 ->schema([
                     Textarea::make('objections')
                         ->label(__('intervention_plan.labels.objections'))
-                        ->maxLength(1000)
+                        ->maxLength(7000)
                         ->columnSpanFull(),
+
                     Textarea::make('expected_results')
                         ->label(__('intervention_plan.labels.expected_results'))
                         ->maxLength(1000)
                         ->columnSpanFull(),
+
                     Textarea::make('procedure')
                         ->label(__('intervention_plan.labels.procedure'))
                         ->maxLength(1000)
                         ->columnSpanFull(),
+
                     Textarea::make('indicators')
                         ->label(__('intervention_plan.labels.indicators'))
                         ->maxLength(1000)
                         ->columnSpanFull(),
+
                     Textarea::make('achievement_degree')
                         ->label(__('intervention_plan.labels.achievement_degree'))
                         ->maxLength(1000)
