@@ -90,20 +90,24 @@ class BeneficiaryInterventionResource extends Resource
                 ->schema([
                     Textarea::make('objections')
                         ->label(__('intervention_plan.labels.objections'))
-                        ->maxLength(1000)
+                        ->maxLength(7000)
                         ->columnSpanFull(),
+
                     Textarea::make('expected_results')
                         ->label(__('intervention_plan.labels.expected_results'))
                         ->maxLength(1000)
                         ->columnSpanFull(),
+
                     Textarea::make('procedure')
                         ->label(__('intervention_plan.labels.procedure'))
                         ->maxLength(1000)
                         ->columnSpanFull(),
+
                     Textarea::make('indicators')
                         ->label(__('intervention_plan.labels.indicators'))
                         ->maxLength(1000)
                         ->columnSpanFull(),
+
                     Textarea::make('achievement_degree')
                         ->label(__('intervention_plan.labels.achievement_degree'))
                         ->maxLength(1000)
