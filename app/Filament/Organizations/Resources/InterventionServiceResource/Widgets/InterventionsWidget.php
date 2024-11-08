@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widge
 
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
+use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
 use Filament\Forms\Components\Hidden;
 use Filament\Tables;
@@ -51,11 +52,15 @@ class InterventionsWidget extends BaseWidget
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_meetings', [
+                    ->url(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_meetings', [
                         'parent' => $this->record,
                         'record' => $record,
                     ])),
             ])
+            ->recordUrl(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_meetings', [
+                'parent' => $this->record,
+                'record' => $record,
+            ]))
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_intervention_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_intervention_table'))
             ->emptyStateIcon('heroicon-o-document');
