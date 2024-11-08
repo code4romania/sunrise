@@ -105,7 +105,8 @@ class EditViolence extends EditRecord
                     TextEntry::make('description')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                         ->placeholder(__('beneficiary.placeholder.description'))
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->html(),
                 ]),
 
         ];
