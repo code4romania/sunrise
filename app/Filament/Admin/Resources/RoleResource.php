@@ -54,7 +54,7 @@ class RoleResource extends Resource
 
                         CheckboxList::make('case_permissions')
                             ->label(__('nomenclature.labels.case_permissions'))
-                            ->options(CasePermission::options())
+                            ->options(CasePermission::getOptionsWithoutCaseManager())
                             ->columnSpanFull(),
 
                         CheckboxList::make('ngo_admin_permissions')

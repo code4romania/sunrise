@@ -23,4 +23,12 @@ enum CasePermission: string implements HasLabel
     {
         return 'enum.case_permissions';
     }
+
+    public static function getOptionsWithoutCaseManager(): array
+    {
+        $options = self::options();
+        unset($options[self::CAN_BE_CASE_MANAGER->value]);
+
+        return $options;
+    }
 }

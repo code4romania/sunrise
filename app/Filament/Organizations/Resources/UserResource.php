@@ -157,7 +157,7 @@ class UserResource extends Resource
                         ->schema([
                             CheckboxList::make('case_permissions')
                                 ->label(__('user.labels.case_permissions'))
-                                ->options(CasePermission::options())
+                                ->options(CasePermission::getOptionsWithoutCaseManager())
                                 ->disableOptionWhen(function (Get $get, string $value) {
                                     foreach ($get('../role_id') as $roleID) {
                                         $role = self::getRole($roleID);
