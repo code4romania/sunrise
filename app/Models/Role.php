@@ -19,6 +19,7 @@ class Role extends Model
 
     protected $fillable = [
         'name',
+        'case_manager',
         'case_permissions',
         'ngo_admin_permissions',
     ];
@@ -26,6 +27,7 @@ class Role extends Model
     protected $casts = [
         'case_permissions' => AsEnumCollection::class . ':' . CasePermission::class,
         'ngo_admin_permissions' => AsEnumCollection::class . ':' . AdminPermission::class,
+        'case_manager' => 'boolean',
     ];
 
     public function users(): BelongsToMany

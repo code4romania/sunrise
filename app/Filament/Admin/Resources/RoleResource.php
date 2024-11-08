@@ -14,6 +14,7 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -43,6 +44,9 @@ class RoleResource extends Resource
                         TextInput::make('name')
                             ->label(__('nomenclature.labels.role_name'))
                             ->placeholder(__('nomenclature.placeholders.role_name')),
+
+                        Toggle::make('case_manager')
+                            ->label(__('nomenclature.labels.role_case_manager')),
 
                         Spacer::make(),
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
-use App\Enums\CasePermission;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -53,7 +52,7 @@ class CreateCloseFile extends EditRecord
                 ->specialistsTeam
                 ->load('role')
                 ->filter(
-                    fn (Specialist $item) => $item->role->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER)
+                    fn (Specialist $item) => $item->role->case_manager
                 )
                 ->first()
                 ?->id,
