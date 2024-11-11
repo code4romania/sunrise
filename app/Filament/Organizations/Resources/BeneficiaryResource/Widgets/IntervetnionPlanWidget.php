@@ -31,7 +31,7 @@ class IntervetnionPlanWidget extends BaseWidget
                     ->with([
                         'organizationServiceIntervention.serviceIntervention',
                         'organizationServiceIntervention.organizationService.service',
-                        'specialist.name',
+                        'specialist.user',
                         'specialist.role',
                         'nextMeeting',
                     ])
