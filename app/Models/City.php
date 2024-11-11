@@ -29,6 +29,10 @@ class City extends Model
         'parent',
     ];
 
+    protected $appends = [
+        'name_with_uat',
+    ];
+
     protected static function booted(): void
     {
         static::addGlobalScope(new AlphabeticalOrder);
@@ -67,5 +71,10 @@ class City extends Model
         }
 
         return null;
+    }
+
+    public function getNameWithUatAttribute(): ?string
+    {
+        return $this->parent_name ? \sprintf('%s (%s)', $this->name, $this->parent_name) : $this->name;
     }
 }
