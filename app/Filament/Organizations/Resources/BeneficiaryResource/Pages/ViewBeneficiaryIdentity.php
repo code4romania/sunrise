@@ -174,17 +174,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->placeholder(__('placeholder.contact_notes'))
                         ->columnSpanFull(),
 
-                    EnumEntry::make('studies')
-                        ->label(__('field.studies'))
-                        ->placeholder(__('placeholder.contact_notes')),
-
-                    EnumEntry::make('occupation')
-                        ->label(__('field.occupation'))
-                        ->placeholder(__('placeholder.contact_notes')),
-
-                    TextEntry::make('workplace')
-                        ->label(__('field.workplace'))
-                        ->placeholder(__('placeholder.contact_notes')),
                 ]),
         ];
     }
