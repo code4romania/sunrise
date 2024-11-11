@@ -10,5 +10,6 @@ class DatePicker extends \Filament\Forms\Components\DatePicker
     {
         parent::setUp();
         $this->native(false);
+        $this->displayFormat('Y-m-d');
     }
 }
