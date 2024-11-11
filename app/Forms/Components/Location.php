@@ -226,7 +226,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                         ->search($search)
                         ->limit(100)
                         ->get()
-                        ->pluck('name', 'id');
+                        ->pluck('name_with_uat', 'id');
                 })
                 ->getOptionLabelUsing(fn ($value) => City::find($value)?->name)
                 ->visible(fn () => $this->hasCity())
