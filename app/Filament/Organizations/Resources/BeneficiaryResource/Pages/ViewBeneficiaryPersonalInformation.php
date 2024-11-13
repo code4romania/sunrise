@@ -110,17 +110,17 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                             TextEntry::make('observations_chronic_diseases')
                                 ->label(__('beneficiary.section.personal_information.label.observations_chronic_diseases'))
                                 ->columnSpanFull()
-                                ->visible(fn (Beneficiary $record) => $record->details->health_status->contains(Diseases::CHRONIC_DISEASES)),
+                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::CHRONIC_DISEASES)),
 
                             TextEntry::make('observations_degenerative_diseases')
                                 ->label(__('beneficiary.section.personal_information.label.observations_degenerative_diseases'))
                                 ->columnSpanFull()
-                                ->visible(fn (Beneficiary $record) => $record->details->health_status->contains(Diseases::DEGENERATIVE_DISEASES)),
+                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::DEGENERATIVE_DISEASES)),
 
                             TextEntry::make('observations_mental_illness')
                                 ->label(__('beneficiary.section.personal_information.label.observations_mental_illness'))
                                 ->columnSpanFull()
-                                ->visible(fn (Beneficiary $record) => $record->details->health_status->contains(Diseases::MENTAL_ILLNESSES)),
+                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::MENTAL_ILLNESSES)),
                         ]),
 
                     Grid::make()
