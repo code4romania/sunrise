@@ -158,7 +158,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                     'class' => 'h-full',
                 ])
                 ->schema([
-                    RepeatableEntry::make('aggressor')
+                    RepeatableEntry::make('aggressors')
                         ->columns()
                         ->columnSpanFull()
                         ->hiddenLabel()
@@ -234,6 +234,18 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                     TextEntry::make('drugs')
                                         ->label(__('field.aggressor_drugs')),
                                 ]),
+
+                            Grid::make()
+                                ->schema([
+                                    TextEntry::make('has_protection_order')
+                                        ->label(__('field.has_protection_order')),
+
+                                    TextEntry::make('electronically_monitored')
+                                        ->label(__('field.electronically_monitored')),
+
+                                    TextEntry::make('protection_order_notes')
+                                        ->label(__('field.protection_order_notes')),
+                                ]),
                         ]),
                 ]),
         ];
@@ -275,19 +287,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric(),
                         ]),
-
-                    Grid::make()
-                        ->schema([
-                            TextEntry::make('has_protection_order')
-                                ->label(__('field.has_protection_order')),
-
-                            //                            TextEntry::make('electronically_monitored')
-                            //                                ->label(__('field.electronically_monitored')),
-
-                            TextEntry::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes')),
-                        ]),
-
                 ]),
         ];
     }
