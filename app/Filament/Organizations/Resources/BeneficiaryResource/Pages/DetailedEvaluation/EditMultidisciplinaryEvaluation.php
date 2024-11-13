@@ -70,7 +70,7 @@ class EditMultidisciplinaryEvaluation extends EditRecord
                             TextInput::make('reporting_by')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
                                 ->placeholder(__('beneficiary.placeholder.reporting_by'))
-                                ->default(fn (Component $livewire) => $livewire->record->flowPresentation->referringInstitution?->name)
+                                ->default(fn (Component $livewire) => $livewire->record->flowPresentation?->referringInstitution?->name)
                                 ->visible(fn (Get $get) => Applicant::OTHER->is($get('applicant'))),
                         ]),
 

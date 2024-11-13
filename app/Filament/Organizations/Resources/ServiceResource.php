@@ -73,7 +73,8 @@ class ServiceResource extends Resource
                                 )
                             )
                             ->afterStateUpdated(self::populateTable())
-                            ->live(),
+                            ->live()
+                            ->required(),
 
                         Placeholder::make('service')
                             ->label(__('service.labels.name'))
