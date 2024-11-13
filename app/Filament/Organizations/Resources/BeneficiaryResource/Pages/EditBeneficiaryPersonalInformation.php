@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Concerns\RedirectToPersonalInformation;
+use App\Enums\DisabilityDegree;
+use App\Enums\DisabilityType;
+use App\Enums\Diseases;
 use App\Enums\HomeOwnership;
 use App\Enums\Income;
+use App\Enums\IncomeSource;
 use App\Enums\Occupation;
 use App\Enums\Studies;
 use App\Enums\Ternary;
@@ -15,6 +19,7 @@ use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -94,6 +99,38 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                     Grid::make()
                         ->schema([
+                            Select::make('health_insurance')
+                                ->label(__('beneficiary.section.personal_information.label.health_insurance'))
+                                ->options(Ternary::options())
+                                ->enum(Ternary::class),
+
+                            Select::make('health_status')
+                                ->label(__('beneficiary.section.personal_information.label.health_status'))
+                                ->options(Diseases::options())
+                                ->live()
+                                ->multiple(),
+
+                            Textarea::make('observations_chronic_diseases')
+                                ->label(__('beneficiary.section.personal_information.label.observations_chronic_diseases'))
+                                ->columnSpanFull()
+                                ->visible(fn (Get $get) => \in_array(Diseases::CHRONIC_DISEASES->value, $get('health_status')))
+                                ->maxLength(250),
+
+                            Textarea::make('observations_degenerative_diseases')
+                                ->label(__('beneficiary.section.personal_information.label.observations_degenerative_diseases'))
+                                ->columnSpanFull()
+                                ->visible(fn (Get $get) => \in_array(Diseases::DEGENERATIVE_DISEASES->value, $get('health_status')))
+                                ->maxLength(250),
+
+                            Textarea::make('observations_mental_illness')
+                                ->label(__('beneficiary.section.personal_information.label.observations_mental_illness'))
+                                ->columnSpanFull()
+                                ->visible(fn (Get $get) => \in_array(Diseases::MENTAL_ILLNESSES->value, $get('health_status')))
+                                ->maxLength(250),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
                             Select::make('psychiatric_history')
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one'))
@@ -104,6 +141,31 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             TextInput::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_history_notes'))
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
+                            Select::make('disabilities')
+                                ->label(__('beneficiary.section.personal_information.label.disabilities'))
+                                ->options(Ternary::options())
+                                ->enum(Ternary::class)
+                                ->live(),
+
+                            Select::make('type_of_disability')
+                                ->label(__('beneficiary.section.personal_information.label.type_of_disability'))
+                                ->options(DisabilityType::options())
+                                ->multiple()
+                                ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
+
+                            Select::make('degree_of_disability')
+                                ->label(__('beneficiary.section.personal_information.label.degree_of_disability'))
+                                ->options(DisabilityDegree::options())
+                                ->enum(DisabilityDegree::class)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
+
+                            Textarea::make('observations_disability')
+                                ->label(__('beneficiary.section.personal_information.label.observations_disability'))
+                                ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
                         ]),
 
                     Grid::make()
@@ -142,6 +204,11 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->placeholder(__('placeholder.select_one'))
                         ->options(Income::options())
                         ->enum(Income::class),
+
+                    Select::make('income_source')
+                        ->label(__('beneficiary.section.personal_information.label.income_source'))
+                        ->options(IncomeSource::options())
+                        ->multiple(),
 
                     TextInput::make('elder_care_count')
                         ->label(__('field.elder_care_count'))
