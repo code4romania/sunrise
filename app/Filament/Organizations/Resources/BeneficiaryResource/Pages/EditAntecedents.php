@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Concerns\RedirectToPersonalInformation;
-use App\Enums\ProtectionOrder;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
@@ -97,34 +96,6 @@ class EditAntecedents extends EditRecord
                                 ->numeric()
                                 ->minValue(0)
                                 ->maxValue(999),
-                        ]),
-
-                    Grid::make()
-                        ->schema([
-                            Select::make('has_protection_order')
-                                ->label(__('field.has_protection_order'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(ProtectionOrder::options())
-                                ->enum(ProtectionOrder::class)
-                                ->live(),
-
-                            //                            Select::make('electronically_monitored')
-                            //                                ->label(__('field.electronically_monitored'))
-                            //                                ->placeholder(__('placeholder.select_one'))
-                            //                                ->options(Ternary::options())
-                            //                                ->enum(Ternary::class)
-                            //                                ->visible(
-                            //                                    fn (Get $get) => ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::ISSUED_BY_COURT) ||
-                            //                                    ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::TEMPORARY)
-                            //                                ),
-
-                            TextInput::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes'))
-                                ->visible(
-                                    fn (Get $get) => ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::NO) &&
-                                    ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::UNKNOWN)
-                                )
-                                ->maxLength(100),
                         ]),
                 ]),
         ];

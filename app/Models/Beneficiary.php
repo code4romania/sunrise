@@ -135,7 +135,7 @@ class Beneficiary extends Model
         return $this->hasMany(Children::class);
     }
 
-    public function aggressor(): HasMany
+    public function aggressors(): HasMany
     {
         return $this->hasMany(Aggressor::class);
     }

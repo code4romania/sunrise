@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Enums\CaseStatus;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\EditExtraLarge;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
@@ -231,7 +230,7 @@ class ViewBeneficiary extends ViewRecord
                     ->icon('heroicon-o-phone')
                     ->url(fn ($state) => "tel:{$state}"),
 
-                RepeatableEntry::make('aggressor')
+                RepeatableEntry::make('aggressors')
                     ->label(__('beneficiary.section.personal_information.section.aggressor'))
                     ->columns()
                     ->columnSpanFull()

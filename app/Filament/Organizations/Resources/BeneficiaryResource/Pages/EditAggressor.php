@@ -12,6 +12,7 @@ use App\Enums\CivilStatus;
 use App\Enums\Drug;
 use App\Enums\Gender;
 use App\Enums\Occupation;
+use App\Enums\ProtectionOrder;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Enums\Violence;
@@ -69,8 +70,8 @@ class EditAggressor extends EditRecord
     public static function aggressorSection(): array
     {
         return [
-            Repeater::make('aggressor')
-                ->relationship('aggressor')
+            Repeater::make('aggressors')
+                ->relationship('aggressors')
                 ->maxWidth('3xl')
                 ->hiddenLabel()
                 ->columns()
@@ -93,7 +94,7 @@ class EditAggressor extends EditRecord
                         ->modalSubmitActionLabel(__('general.action.delete'))
                 )
                 ->itemLabel(function (Get $get) {
-                    if (\count($get('aggressor')) <= 1) {
+                    if (\count($get('aggressors')) <= 1) {
                         return null;
                     }
 
@@ -209,6 +210,34 @@ class EditAggressor extends EditRecord
                                 ->rule(new MultipleIn(AggressorLegalHistory::values()))
                                 ->multiple()
                                 ->live(),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
+                            Select::make('has_protection_order')
+                                ->label(__('field.has_protection_order'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(ProtectionOrder::options())
+                                ->enum(ProtectionOrder::class)
+                                ->live(),
+
+                            Select::make('electronically_monitored')
+                                ->label(__('field.electronically_monitored'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(Ternary::options())
+                                ->enum(Ternary::class)
+                                ->visible(
+                                    fn (Get $get) => ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::ISSUED_BY_COURT) ||
+                                    ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::TEMPORARY)
+                                ),
+
+                            TextInput::make('protection_order_notes')
+                                ->label(__('field.protection_order_notes'))
+                                ->visible(
+                                    fn (Get $get) => ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::NO) &&
+                                        ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::UNKNOWN)
+                                )
+                                ->maxLength(100),
                         ]),
                 ]),
         ];
