@@ -381,4 +381,41 @@ return [
         'national' => 'Națională',
         'local' => 'Locală',
     ],
+
+    'diseases' => [
+        'denies_diseases' => 'Neagă boli',
+        'chronic_diseases' => 'Boli cronice',
+        'degenerative_diseases' => 'Boli degenerative',
+        'mental_illnesses' => 'Boli psihice',
+    ],
+
+    'disability_type' => [
+        'physical' => 'Fizic',
+        'visual' => 'Vizual',
+        'aural' => 'Auditiv',
+        'deaf' => 'Surdocecitate',
+        'somatic' => 'Somatic',
+        'mental' => 'Mintal',
+        'psychic' => 'Psihic',
+        'hiv_aids' => 'HIV/SIDA',
+        'associate' => 'Asociat',
+        'rare_diseases' => 'Boli rare',
+
+    ],
+
+    'disability_degree' => [
+        'easy' => 'Ușor',
+        'environment' => 'Mediu',
+        'accented' => 'Accentuat',
+        'serious' => 'Grav',
+        'no_classification' => 'Fără încadrare în handicap',
+    ],
+
+    'income_source' => [
+        'salary' => 'Salariu',
+        'pension' => 'Pensie',
+        'child_allowance' => 'Îndemnizație creștere copil',
+        'alimony' => 'Pensie alimentară',
+        'other' => 'Altele',
+    ],
 ];
