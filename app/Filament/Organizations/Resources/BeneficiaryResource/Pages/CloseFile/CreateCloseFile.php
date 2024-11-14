@@ -52,7 +52,7 @@ class CreateCloseFile extends EditRecord
                 ->specialistsTeam
                 ->load('role')
                 ->filter(
-                    fn (Specialist $item) => $item->role->case_manager
+                    fn (Specialist $item) => $item->role?->case_manager
                 )
                 ->first()
                 ?->id,
