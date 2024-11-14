@@ -129,11 +129,14 @@ class UserResource extends Resource
 
                     TextInput::make('email')
                         ->label(__('user.labels.email'))
+                        ->email()
+                        ->unique()
                         ->required(),
 
                     TextInput::make('phone_number')
                         ->label(__('user.labels.phone_number'))
                         ->tel()
+                        ->maxLength(14)
                         ->required(),
 
                     Select::make('role_id')
