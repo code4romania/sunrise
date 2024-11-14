@@ -82,6 +82,7 @@ class EditBeneficiaryPartner extends EditRecord
                         ->relationship(AddressType::LEGAL_RESIDENCE->value)
                         ->city()
                         ->address()
+                        ->addressMaxLength(50)
                         ->copyDataInPath(
                             fn (Get $get) => $get('same_as_legal_residence') ?
                                 AddressType::EFFECTIVE_RESIDENCE->value :
@@ -105,6 +106,7 @@ class EditBeneficiaryPartner extends EditRecord
                         ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                         ->city()
                         ->address()
+                        ->addressMaxLength(50)
                         ->disabled(function (Get $get) {
                             return $get('same_as_legal_residence');
                         }),

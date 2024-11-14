@@ -41,6 +41,8 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     protected string | null $addressLabel = null;
 
+    protected int | null $addressMaxLength = 255;
+
     protected bool $hasEnvironment = false;
 
     protected string | Closure | null $environmentField = null;
@@ -155,6 +157,13 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             ->join('_'));
     }
 
+    public function addressMaxLength(?int $addressMaxLength): self
+    {
+        $this->addressMaxLength = $addressMaxLength;
+
+        return $this;
+    }
+
     public function environment(bool | Closure $condition = true): static
     {
         $this->hasEnvironment = $condition;
@@ -241,6 +250,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->required($this->isRequired())
                 ->disabled($this->isDisabled())
                 ->visible($this->hasAddress())
+                ->maxLength($this->addressMaxLength)
                 ->lazy()
                 ->afterStateUpdated(
                     fn (Set $set, $state) => $this->getCopyPath() ?
