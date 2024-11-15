@@ -18,7 +18,7 @@ class ValidCNP implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! Cnp::validate($value)) {
-            $fail(__('validation.cnp', ['attribute' => $attribute]));
+            $fail(__('validation.cnp', ['attribute' => 'CNP']));
         }
     }
 }
