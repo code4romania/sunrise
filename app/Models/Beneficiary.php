@@ -71,6 +71,8 @@ class Beneficiary extends Model
         'children_accompanying_count',
         'children_notes',
 
+        'notes'
+
     ];
 
     protected $casts = [
