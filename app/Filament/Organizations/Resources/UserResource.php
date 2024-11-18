@@ -130,7 +130,7 @@ class UserResource extends Resource
                     TextInput::make('email')
                         ->label(__('user.labels.email'))
                         ->email()
-                        ->unique()
+                        ->unique(ignoreRecord: true)
                         ->required(),
 
                     TextInput::make('phone_number')
