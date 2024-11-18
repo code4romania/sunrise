@@ -80,6 +80,7 @@ class AppServiceProvider extends ServiceProvider
         tap($this->app->isLocal(), function (bool $shouldBeEnabled) {
             Model::preventLazyLoading($shouldBeEnabled);
             Model::preventAccessingMissingAttributes($shouldBeEnabled);
+            Model::preventSilentlyDiscardingAttributes($shouldBeEnabled);
         });
 
         TextEntry::configureUsing(function (TextEntry $entry) {
