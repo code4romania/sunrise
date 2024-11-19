@@ -17,7 +17,7 @@
 
             @case('pdf')
                 <iframe
-                    src="{{ $getFile()->getFullUrl() }}"
+                    src="{{ $file->getFullUrl() }}"
                     title="{{ $file->name }}"
                     class="w-full h-screen">
                 </iframe>

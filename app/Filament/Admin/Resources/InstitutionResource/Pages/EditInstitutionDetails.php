@@ -152,15 +152,29 @@ class EditInstitutionDetails extends EditRecord
 
                     SpatieMediaLibraryFileUpload::make('organization_status')
                         ->label(__('institution.labels.organization_status'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->helperText(__('institution.helper_texts.organization_status'))
                         ->collection('organization_status')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'application/pdf',
+                            'image/*',
+                        ])
                         ->columnSpanFull()
                         ->required(),
 
                     SpatieMediaLibraryFileUpload::make('social_service_provider_certificate')
                         ->label(__('institution.labels.social_service_provider_certificate'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->helperText(__('institution.helper_texts.social_service_provider_certificate'))
                         ->collection('social_service_provider_certificate')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'application/pdf',
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
                 ]),
         ];

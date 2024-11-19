@@ -7,6 +7,7 @@ namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\ActivateInstitution;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\InactivateInstitution;
+use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\Location;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
@@ -82,34 +83,46 @@ class ViewInstitution extends ViewRecord
                 ->addressLabel(__('organization.field.address'))
                 ->city(),
 
-//            TextEntry::make('address')
-//                ->label(__('organization.field.address')),
-
-
             TextEntry::make('representative_person.name')
                 ->label(__('organization.field.representative_name')),
+
             TextEntry::make('representative_person.email')
                 ->label(__('organization.field.representative_email')),
+
             TextEntry::make('representative_person.phone')
                 ->label(__('organization.field.representative_phone')),
 
             TextEntry::make('contact_person.name')
                 ->label(__('organization.field.contact_person')),
+
             TextEntry::make('contact_person.email')
                 ->label(__('organization.field.contact_person_email')),
+
             TextEntry::make('contact_person.phone')
                 ->label(__('organization.field.contact_person_phone')),
 
             TextEntry::make('website')
                 ->label(__('organization.field.website')),
 
-            TextEntry::make('organization_status')
-                ->label(__('institution.labels.organization_status'))
+            TextEntry::make('organization_status_placeholder')
+                ->hiddenLabel()
+                ->default(__('institution.labels.organization_status'))
+                ->extraAttributes(['class' => 'font-medium'])
                 ->columnSpanFull(),
 
-            TextEntry::make('social_service_provider_certificate')
-                ->label(__('institution.labels.social_service_provider_certificate'))
+            DocumentPreview::make()
+                ->columnSpanFull()
+                ->collection('organization_status'),
+
+            TextEntry::make('social_service_provider_certificate_placeholder')
+                ->hiddenLabel()
+                ->default(__('institution.labels.social_service_provider_certificate'))
+                ->extraAttributes(['class' => 'font-medium'])
                 ->columnSpanFull(),
+
+            DocumentPreview::make()
+                ->columnSpanFull()
+                ->collection('social_service_provider_certificate'),
         ];
     }
 

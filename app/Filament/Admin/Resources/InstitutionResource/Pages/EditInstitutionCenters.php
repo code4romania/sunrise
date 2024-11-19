@@ -75,19 +75,38 @@ class EditInstitutionCenters extends EditRecord
                     SpatieMediaLibraryFileUpload::make('social_service_licensing_certificate')
                         ->label(__('institution.labels.social_service_licensing_certificate'))
                         ->helperText(__('institution.helper_texts.social_service_licensing_certificate'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->collection('social_service_licensing_certificate')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'application/pdf',
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
 
                     SpatieMediaLibraryFileUpload::make('logo')
                         ->label(__('institution.labels.logo_center'))
                         ->helperText(__('institution.helper_texts.logo'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->collection('logo')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
 
                     SpatieMediaLibraryFileUpload::make('organization_header')
                         ->label(__('institution.labels.organization_header'))
                         ->helperText(__('institution.helper_texts.organization_header'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->collection('organization_header')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
                 ]),
         ];
