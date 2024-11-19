@@ -34,6 +34,7 @@ class Aggressor extends Model
         'age',
         'civil_status',
         'drugs',
+        'gender',
         'has_drug_history',
         'has_psychiatric_history',
         'has_violence_history',
