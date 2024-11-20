@@ -93,6 +93,13 @@ class EditBeneficiaryPartner extends EditRecord
                         ->label(__('field.same_as_legal_residence'))
                         ->live()
                         ->afterStateUpdated(function (bool $state, Set $set, Get $get) {
+                            if (! $state) {
+                                $set('effective_residence.county_id', null);
+                                $set('effective_residence.city_id', null);
+                                $set('effective_residence.address', null);
+                                $set('effective_residence.environment', null);
+                            }
+
                             if ($state) {
                                 $set('effective_residence.county_id', $get('legal_residence.county_id'));
                                 $set('effective_residence.city_id', $get('legal_residence.city_id'));
