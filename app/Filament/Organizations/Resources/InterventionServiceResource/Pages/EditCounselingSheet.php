@@ -27,10 +27,16 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EditCounselingSheet extends EditRecord
 {
     protected static string $resource = InterventionServiceResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('intervention_plan.headings.edit_counseling_sheet');
+    }
 
     protected function getRedirectUrl(): ?string
     {

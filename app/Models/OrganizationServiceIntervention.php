@@ -20,8 +20,10 @@ class OrganizationServiceIntervention extends Model
     use BelongsToThroughTrait;
 
     protected $fillable = [
+        'id',
         'service_intervention_id',
         'organization_service_id',
+        'status',
     ];
 
     public function serviceIntervention(): BelongsTo
