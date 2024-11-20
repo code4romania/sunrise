@@ -14,7 +14,6 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
-use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
 use App\Widgets\InfolistWidget;
 use Filament\Infolists\Components\Actions\Action;
@@ -31,10 +30,9 @@ class CounselingSheetWidget extends InfolistWidget
     {
         $previousUrl = url()->previous();
         $parameters = explode('/', $previousUrl);
-        $beneficiaryIntervention = BeneficiaryIntervention::find(end($parameters));
+        $interventionService = InterventionService::find(end($parameters));
 
-        return (bool) $beneficiaryIntervention?->interventionService
-            ->organizationServiceWithoutStatusCondition
+        return (bool) $interventionService?->organizationServiceWithoutStatusCondition
             ->serviceWithoutStatusCondition
             ->counseling_sheet;
     }
