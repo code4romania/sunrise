@@ -170,6 +170,46 @@ class EditAggressor extends EditRecord
 
                     Grid::make()
                         ->schema([
+                            Select::make('legal_history')
+                                ->label(__('field.aggressor_legal_history'))
+                                ->placeholder(__('placeholder.select_many'))
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history')))
+                                ->options(AggressorLegalHistory::options())
+                                ->rule(new MultipleIn(AggressorLegalHistory::values()))
+                                ->multiple()
+                                ->live(),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
+                            Select::make('has_protection_order')
+                                ->label(__('field.has_protection_order'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(ProtectionOrder::options())
+                                ->enum(ProtectionOrder::class)
+                                ->live(),
+
+                            Select::make('electronically_monitored')
+                                ->label(__('field.electronically_monitored'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(Ternary::options())
+                                ->enum(Ternary::class)
+                                ->visible(
+                                    fn (Get $get) => ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::ISSUED_BY_COURT) ||
+                                        ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::TEMPORARY)
+                                ),
+
+                            TextInput::make('protection_order_notes')
+                                ->label(__('field.protection_order_notes'))
+                                ->visible(
+                                    fn (Get $get) => ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::NO) &&
+                                        ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::UNKNOWN)
+                                )
+                                ->maxLength(100),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
                             Select::make('has_psychiatric_history')
                                 ->label(__('field.aggressor_has_psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one'))
@@ -200,45 +240,6 @@ class EditAggressor extends EditRecord
                                 ->multiple(),
                         ]),
 
-                    Grid::make()
-                        ->schema([
-                            Select::make('legal_history')
-                                ->label(__('field.aggressor_legal_history'))
-                                ->placeholder(__('placeholder.select_many'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history')))
-                                ->options(AggressorLegalHistory::options())
-                                ->rule(new MultipleIn(AggressorLegalHistory::values()))
-                                ->multiple()
-                                ->live(),
-                        ]),
-
-                    Grid::make()
-                        ->schema([
-                            Select::make('has_protection_order')
-                                ->label(__('field.has_protection_order'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(ProtectionOrder::options())
-                                ->enum(ProtectionOrder::class)
-                                ->live(),
-
-                            Select::make('electronically_monitored')
-                                ->label(__('field.electronically_monitored'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(Ternary::options())
-                                ->enum(Ternary::class)
-                                ->visible(
-                                    fn (Get $get) => ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::ISSUED_BY_COURT) ||
-                                    ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::TEMPORARY)
-                                ),
-
-                            TextInput::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes'))
-                                ->visible(
-                                    fn (Get $get) => ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::NO) &&
-                                        ! ProtectionOrder::isValue($get('has_protection_order'), ProtectionOrder::UNKNOWN)
-                                )
-                                ->maxLength(100),
-                        ]),
                 ]),
         ];
     }

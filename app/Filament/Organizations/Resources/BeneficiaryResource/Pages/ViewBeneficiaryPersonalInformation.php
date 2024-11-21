@@ -265,6 +265,24 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                             Grid::make()
                                 ->schema([
+                                    TextEntry::make('legal_history')
+                                        ->label(__('field.aggressor_legal_history')),
+                                ]),
+
+                            Grid::make()
+                                ->schema([
+                                    TextEntry::make('has_protection_order')
+                                        ->label(__('field.has_protection_order')),
+
+                                    TextEntry::make('electronically_monitored')
+                                        ->label(__('field.electronically_monitored')),
+
+                                    TextEntry::make('protection_order_notes')
+                                        ->label(__('field.protection_order_notes')),
+                                ]),
+
+                            Grid::make()
+                                ->schema([
                                     EnumEntry::make('has_psychiatric_history')
                                         ->label(__('field.aggressor_has_psychiatric_history'))
                                         ->placeholder(__('placeholder.select_one')),
@@ -283,17 +301,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_drugs')),
                                 ]),
 
-                            Grid::make()
-                                ->schema([
-                                    TextEntry::make('has_protection_order')
-                                        ->label(__('field.has_protection_order')),
-
-                                    TextEntry::make('electronically_monitored')
-                                        ->label(__('field.electronically_monitored')),
-
-                                    TextEntry::make('protection_order_notes')
-                                        ->label(__('field.protection_order_notes')),
-                                ]),
                         ]),
                 ]),
         ];
