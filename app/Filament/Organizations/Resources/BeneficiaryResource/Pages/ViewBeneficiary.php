@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -15,6 +16,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\Intervetnio
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
 use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
+use App\Infolists\Components\Location;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
@@ -173,9 +175,12 @@ class ViewBeneficiary extends ViewRecord
                 TextEntry::make('children_care_count')
                     ->label(__('field.children_care_count')),
 
-                TextEntry::make('legal_residence_address')
+                Location::make(AddressType::LEGAL_RESIDENCE->value)
                     ->label(__('field.legal_residence_address'))
-                    ->icon('heroicon-o-map-pin')
+                    ->relationship(AddressType::LEGAL_RESIDENCE->value)
+                    ->city()
+                    ->address()
+                    ->environment()
                     ->columnSpanFull(),
 
                 TextEntry::make('primary_phone')
@@ -222,10 +227,10 @@ class ViewBeneficiary extends ViewRecord
                             ->label(__('field.referring_institution')),
                     ]),
 
-                TextEntry::make('family_doctor_name')
+                TextEntry::make('details.family_doctor_name')
                     ->label(__('field.family_doctor_name')),
 
-                TextEntry::make('family_doctor_contact')
+                TextEntry::make('details.family_doctor_contact')
                     ->label(__('field.family_doctor_contact'))
                     ->icon('heroicon-o-phone')
                     ->url(fn ($state) => "tel:{$state}"),

@@ -24,6 +24,7 @@ return [
     'residence_environment' => 'Alege mediu de rezidență',
     'phone' => 'Introdu număr telefon',
     'contact_notes' => 'Adaugă interval orar sau orice detalii relevante legate de preferințe în contactare',
+    'notes' => 'Detalii',
     'service_description' => 'Descrie pe scurt serviciul',
     'number' => 'Introdu un număr',
     'other_relevant_details' => 'Adaugă alte detalii relevante',

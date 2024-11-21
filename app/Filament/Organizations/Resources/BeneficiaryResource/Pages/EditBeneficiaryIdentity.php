@@ -278,6 +278,12 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->placeholder(__('placeholder.contact_notes'))
                         ->nullable()
                         ->columnSpanFull(),
+
+                    Textarea::make('notes')
+                        ->label(__('field.notes'))
+                        ->placeholder(__('placeholder.notes'))
+                        ->nullable()
+                        ->columnSpanFull(),
                 ]),
         ];
     }

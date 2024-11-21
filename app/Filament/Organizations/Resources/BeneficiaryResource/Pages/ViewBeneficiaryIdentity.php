@@ -174,6 +174,11 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->placeholder(__('placeholder.contact_notes'))
                         ->columnSpanFull(),
 
+                    TextEntry::make('notes')
+                        ->label(__('field.notes'))
+                        ->placeholder(__('placeholder.notes'))
+                        ->columnSpanFull(),
+
                 ]),
         ];
     }
