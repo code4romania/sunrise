@@ -521,7 +521,7 @@ return [
         'violence_description' => 'A se include și istoricul socio- familial, istoricul agresiunilor, istoricul juridic al solicitantei-ordin de protecție, plângeri penale',
         'initial_evaluation' => 'Identificarea nevoilor inițiale',
         'initial_evaluation_2' => 'Pentru oferirea de servicii imediate',
-        'detailed_evaluation' => 'Evaluarea multidiciplinară',
+        'detailed_evaluation' => 'Evaluarea multidisciplinară',
         'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
         'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls/xlsx, .csv, .png, .tiff, .jpg. Dimensiunea maximă nu poate depăși :size',
         'documents' => 'Niciun document încărcat',
