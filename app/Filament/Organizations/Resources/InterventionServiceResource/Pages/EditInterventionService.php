@@ -52,8 +52,8 @@ class EditInterventionService extends EditRecord
                 ->modalHeading(__('intervention_plan.actions.delete_service'))
                 ->outlined()
                 ->successRedirectUrl(BeneficiaryResource::getUrl('view_intervention_plan', [
-                    'parent' => $this->getRecord()->interventionPlan,
-                    'record' => $this->getRecord(),
+                    'parent' => $this->getRecord()->beneficiary,
+                    'record' => $this->getRecord()->interventionPlan,
                 ])),
         ];
     }
