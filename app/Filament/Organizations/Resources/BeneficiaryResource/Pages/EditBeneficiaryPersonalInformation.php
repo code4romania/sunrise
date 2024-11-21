@@ -90,11 +90,13 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                     TextInput::make('family_doctor_name')
                         ->label(__('field.family_doctor_name'))
                         ->placeholder(__('placeholder.name'))
+                        ->maxLength(80)
                         ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
 
                     TextInput::make('family_doctor_contact')
                         ->label(__('field.family_doctor_contact'))
                         ->placeholder(__('placeholder.phone_or_email'))
+                        ->maxLength(80)
                         ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
 
                     Grid::make()
@@ -140,6 +142,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             TextInput::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_history_notes'))
+                                ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
                         ]),
 
@@ -165,6 +168,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             Textarea::make('observations_disability')
                                 ->label(__('beneficiary.section.personal_information.label.observations_disability'))
+                                ->maxLength(250)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
                         ]),
 
@@ -179,6 +183,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             TextInput::make('criminal_history_notes')
                                 ->label(__('field.criminal_history_notes'))
+                                ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
                         ]),
 
@@ -197,6 +202,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                     TextInput::make('workplace')
                         ->label(__('field.workplace'))
                         ->placeholder(__('placeholder.workplace'))
+                        ->maxLength(100)
                         ->columnSpanFull(),
 
                     Select::make('income')
