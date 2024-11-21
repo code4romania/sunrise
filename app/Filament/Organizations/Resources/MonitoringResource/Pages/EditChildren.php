@@ -75,10 +75,13 @@ class EditChildren extends EditRecord
                     Grid::make()
                         ->schema([
                             TextInput::make('status')
-                                ->label(__('monitoring.labels.status')),
+                                ->label(__('monitoring.labels.status'))
+                                ->maxLength(70),
 
                             TextInput::make('age')
-                                ->label(__('monitoring.labels.age')),
+                                ->label(__('monitoring.labels.age'))
+                                ->maxLength(2)
+                                ->mask('99'),
 
                             DatePicker::make('birthdate')
                                 ->label(__('monitoring.labels.birthdate')),
