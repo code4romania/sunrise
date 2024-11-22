@@ -59,12 +59,14 @@ class DocumentResource extends Resource
                 ->label(__('beneficiary.section.documents.labels.name'))
                 ->placeholder(__('beneficiary.placeholder.file_name'))
                 ->columnSpanFull()
+                ->maxLength(200)
                 ->required(),
 
             Textarea::make('observations')
                 ->placeholder(__('beneficiary.placeholder.observations'))
                 ->label(__('beneficiary.section.documents.labels.observations'))
-                ->columnSpanFull(),
+                ->columnSpanFull()
+                ->maxLength(500),
 
             SpatieMediaLibraryFileUpload::make('document_file')
                 ->label(__('beneficiary.section.documents.labels.document_file'))

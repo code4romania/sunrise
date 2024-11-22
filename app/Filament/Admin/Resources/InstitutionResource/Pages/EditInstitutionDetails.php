@@ -88,16 +88,12 @@ class EditInstitutionDetails extends EditRecord
 
                     Location::make()
                         ->city()
+                        ->address()
                         ->countyLabel(__('organization.field.county'))
                         ->cityLabel(__('organization.field.city'))
                         ->addressLabel(__('organization.field.address'))
-                        ->required(),
-
-                    TextInput::make('address')
-                        ->label(__('organization.field.address'))
-                        ->placeholder(__('organization.placeholders.address'))
-                        ->columnSpanFull()
-                        ->maxLength(200)
+                        ->addressMaxLength(200)
+                        ->addressColumnSpanFull()
                         ->required(),
 
                     Grid::make()
