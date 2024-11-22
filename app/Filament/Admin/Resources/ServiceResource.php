@@ -63,6 +63,7 @@ class ServiceResource extends Resource
                         TextInput::make('name')
                             ->label(__('service.field.name'))
                             ->columnSpanFull()
+                            ->maxLength(200)
                             ->required(),
 
                         Select::make('counseling_sheet')
@@ -87,6 +88,7 @@ class ServiceResource extends Resource
                         TextInput::make('name')
                             ->columnSpanFull()
                             ->hiddenLabel()
+                            ->maxLength(200)
                             ->label(__('nomenclature.labels.intervention_name')),
 
                         Toggle::make('status')
