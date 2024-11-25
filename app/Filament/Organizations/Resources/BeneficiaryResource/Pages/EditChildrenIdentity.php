@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Concerns\RedirectToIdentity;
+use App\Enums\GenderShortValues;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\DatePicker;
+use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
@@ -67,8 +69,7 @@ class EditChildrenIdentity extends EditRecord
                             if ($state) {
                                 $set('children_total_count', null);
                                 $set('children_care_count', null);
-                                $set('children_under_10_care_count', null);
-                                $set('children_10_18_care_count', null);
+                                $set('children_under_18_care_count', null);
                                 $set('children_18_care_count', null);
                                 $set('children_accompanying_count', null);
                                 $set('children', []);
@@ -93,15 +94,8 @@ class EditChildrenIdentity extends EditRecord
                                 ->minValue(0)
                                 ->maxValue(99),
 
-                            TextInput::make('children_under_10_care_count')
-                                ->label(__('field.children_under_10_care_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric()
-                                ->minValue(0)
-                                ->maxValue(99),
-
-                            TextInput::make('children_10_18_care_count')
-                                ->label(__('field.children_10_18_care_count'))
+                            TextInput::make('children_under_18_care_count')
+                                ->label(__('field.children_under_18_care_count'))
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric()
                                 ->minValue(0)
@@ -121,41 +115,50 @@ class EditChildrenIdentity extends EditRecord
                                 ->minValue(0)
                                 ->maxValue(99),
                         ]),
-
-                    TableRepeater::make('children')
-                        ->reorderable(false)
-                        ->relationship('children')
-                        ->columnSpanFull()
-                        ->hiddenLabel()
-                        ->hideLabels()
-                        ->addActionLabel(__('beneficiary.action.add_child'))
-                        ->disabled(fn (Get $get) => $get('doesnt_have_children'))
-                        ->emptyLabel(false)
-                        ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
-                        ->schema([
-                            TextInput::make('name')
-                                ->label(__('field.child_name')),
-
-                            TextInput::make('age')
-                                ->label(__('field.age')),
-
-                            DatePicker::make('birthdate')
-                                ->label(__('field.birthdate')),
-
-                            TextInput::make('current_address')
-                                ->label(__('field.current_address')),
-
-                            TextInput::make('status')
-                                ->label(__('field.child_status')),
-                        ]),
-
-                    Textarea::make('children_notes')
-                        ->label(__('field.children_notes'))
-                        ->placeholder(__('placeholder.other_relevant_details'))
-                        ->disabled(fn (Get $get) => $get('doesnt_have_children'))
-                        ->nullable()
-                        ->columnSpanFull(),
                 ]),
+
+            TableRepeater::make('children')
+                ->reorderable(false)
+                ->relationship('children')
+                ->columnSpanFull()
+                ->hiddenLabel()
+                ->hideLabels()
+                ->addActionLabel(__('beneficiary.action.add_child'))
+                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                ->emptyLabel(false)
+                ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
+                ->schema([
+                    TextInput::make('name')
+                        ->label(__('field.child_name')),
+
+                    TextInput::make('age')
+                        ->label(__('field.age')),
+
+                    Select::make('gender')
+                        ->label(__('field.gender'))
+                        ->options(GenderShortValues::options()),
+
+                    DatePicker::make('birthdate')
+                        ->label(__('field.birthdate')),
+
+                    TextInput::make('current_address')
+                        ->label(__('field.current_address')),
+
+                    TextInput::make('status')
+                        ->label(__('field.child_status')),
+
+                    TextInput::make('workspace')
+                        ->label(__('field.workspace'))
+                        ->maxLength(70),
+                ]),
+
+            Textarea::make('children_notes')
+                ->label(__('field.children_notes'))
+                ->placeholder(__('placeholder.other_relevant_details'))
+                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                ->nullable()
+                ->maxWidth('3xl')
+                ->columnSpanFull(),
         ];
     }
 }

@@ -65,25 +65,23 @@ class Beneficiary extends Model
         'doesnt_have_children',
         'children_total_count',
         'children_care_count',
-        'children_under_10_care_count',
-        'children_10_18_care_count',
+        'children_under_18_care_count',
         'children_18_care_count',
         'children_accompanying_count',
         'children_notes',
 
-        'notes'
+        'notes',
 
     ];
 
     protected $casts = [
         'id_type' => IDType::class,
         'birthdate' => 'date',
-        'children_10_18_care_count' => 'integer',
         'children_18_care_count' => 'integer',
         'children_accompanying_count' => 'integer',
         'children_care_count' => 'integer',
         'children_total_count' => 'integer',
-        'children_under_10_care_count' => 'integer',
+        'children_under_18_care_count' => 'integer',
         'civil_status' => CivilStatus::class,
         'doesnt_have_children' => 'boolean',
         'gender' => Gender::class,
