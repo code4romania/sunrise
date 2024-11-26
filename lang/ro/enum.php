@@ -441,6 +441,21 @@ return [
         'local' => 'Locală',
     ],
 
+    'short_months' => [
+        '1' => 'Ian',
+        '2' => 'Feb',
+        '3' => 'Mar',
+        '4' => 'Apr',
+        '5' => 'Mai',
+        '6' => 'Iun',
+        '7' => 'Iul',
+        '8' => 'Aug',
+        '9' => 'Sep',
+        '10' => 'Oct',
+        '11' => 'Nov',
+        '12' => 'Dec',
+    ],
+    
     'diseases' => [
         'denies_diseases' => 'Neagă boli',
         'chronic_diseases' => 'Boli cronice',
@@ -476,5 +491,11 @@ return [
         'child_allowance' => 'Îndemnizație creștere copil',
         'alimony' => 'Pensie alimentară',
         'other' => 'Altele',
+    ],
+
+    'gender_short_values' => [
+        'f' => 'F',
+        'm' => 'M',
+        'n' => 'N',
     ],
 ];

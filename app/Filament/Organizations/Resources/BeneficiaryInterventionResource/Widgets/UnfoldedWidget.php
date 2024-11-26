@@ -25,7 +25,7 @@ class UnfoldedWidget extends BaseWidget
         return $table
             ->query(
                 fn () => $this->record->meetings()
-                    ->with('user')
+                    ->with(['specialist.user', 'specialist.role'])
             )
             ->heading(__('intervention_plan.headings.unfolded_table'))
             ->columns([
@@ -42,9 +42,8 @@ class UnfoldedWidget extends BaseWidget
                     ->label(__('intervention_plan.labels.time')),
                 TextColumn::make('duration')
                     ->label(__('intervention_plan.labels.duration')),
-                TextColumn::make('user_id')
-                    ->label(__('intervention_plan.labels.specialist'))
-                    ->formatStateUsing(fn ($record) => $record->user?->full_name),
+                TextColumn::make('specialist.name_role')
+                    ->label(__('intervention_plan.labels.specialist')),
             ])
             ->headerActions([
                 ExportAction::make()
@@ -60,7 +59,7 @@ class UnfoldedWidget extends BaseWidget
                                     ->heading(__('intervention_plan.labels.time')),
                                 Column::make('duration')
                                     ->heading(__('intervention_plan.labels.duration')),
-                                Column::make('user.full_name')
+                                Column::make('specialist.name_role')
                                     ->heading(__('intervention_plan.labels.specialist')),
                                 Column::make('observations')
                                     ->heading(__('intervention_plan.labels.observations')),

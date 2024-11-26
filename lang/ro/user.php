@@ -43,11 +43,13 @@ return [
 
     'heading' => [
         'table' => 'Echipa interdisciplinară',
+        'active_users' => 'Utilizatori activi',
         'specialist_details' => 'Detalii specialist',
     ],
 
     'placeholders' => [
         'obs' => 'Acest tip de utilizator <span class="italic">are acces doar la cazurile din echipa cărora face parte</span> și nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
+        'dashboard_cart' => 'Distribuția pe luni a numărului total de utilizatori activi Sunrise. Un utilizator este considerat activ dacă a avut cel puțin o accesare a platformei în luna calendaristică respectivă.',
     ],
 
     'actions' => [

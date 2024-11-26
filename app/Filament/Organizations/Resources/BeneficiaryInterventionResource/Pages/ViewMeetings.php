@@ -8,12 +8,12 @@ use App\Concerns\HasGroupPages;
 use App\Concerns\HasParentResource;
 use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
+use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Infolists\Components\Actions\CreateAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionMeeting;
-use App\Models\User;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
@@ -69,9 +69,15 @@ class ViewMeetings extends ViewRecord
                 ->maxLength(3)
                 ->numeric(),
 
-            Select::make('user_id')
+            Select::make('specialist_id')
                 ->label(__('intervention_plan.labels.responsible_specialist'))
-                ->options(User::getTenantOrganizationUsers()),
+                ->options(
+                    fn () => $this->getRecord()
+                        ->beneficiary
+                        ->specialistsTeam
+                        ->load(['user', 'role'])
+                        ->pluck('name_role', 'id')
+                ),
 
             RichEditor::make('observations')
                 ->label(__('intervention_plan.labels.observations'))
@@ -84,7 +90,7 @@ class ViewMeetings extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
-        $this->getRecord()->load('meetings.user');
+        $this->getRecord()->load(['meetings.specialist.user', 'meetings.specialist.role']);
 
         return $infolist->schema([
             Section::make()
@@ -96,7 +102,11 @@ class ViewMeetings extends ViewRecord
                         ->relationship(fn () => $this->record->meetings())
                         ->modalHeading(__('intervention_plan.actions.add_meeting'))
                         ->form($this->getFormSchema())
-                        ->icon('heroicon-o-plus-circle'),
+                        ->icon('heroicon-o-plus-circle')
+                        ->successRedirectUrl(fn () => InterventionServiceResource::getUrl('view_meetings', [
+                            'parent' => $this->getRecord()->interventionService,
+                            'record' => $this->getRecord(),
+                        ])),
                 ])
                 ->schema([
                     RepeatableEntry::make('meetings')
@@ -112,31 +122,43 @@ class ViewMeetings extends ViewRecord
                                     ]);
                                 })
                                 ->badge(fn (InterventionMeeting $record) => $record->status)
-                                ->action(Action::make('edit')
-                                    ->label(__('general.action.edit'))
-                                    ->icon('heroicon-o-pencil')
-                                    ->link()
-                                    ->modalHeading(__('general.action.edit'))
-                                    ->form($this->getFormSchema())
-                                    ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
-                                    ->extraModalFooterActions(
-                                        fn (InterventionMeeting $record) => [
-                                            Action::make('delete')
-//                                                ->record($record)
-                                                ->label(__('intervention_plan.actions.delete_meeting'))
-                                                ->outlined()
-                                                ->color('danger')
-                                                ->cancelParentActions()
-                                                ->action(fn (InterventionMeeting $record) => $record->delete()),
-                                        ]
-                                    )->action(fn (array $data, InterventionMeeting $record) => $record->update($data))),
+                                ->action(
+                                    Action::make('edit')
+                                        ->label(__('general.action.edit'))
+                                        ->icon('heroicon-o-pencil')
+                                        ->link()
+                                        ->modalHeading(__('general.action.edit'))
+                                        ->form($this->getFormSchema())
+                                        ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
+                                        ->extraModalFooterActions(
+                                            fn () => [
+                                                Action::make('delete')
+                                                    ->label(__('intervention_plan.actions.delete_meeting'))
+                                                    ->outlined()
+                                                    ->color('danger')
+                                                    ->cancelParentActions()
+                                                    ->action(function (InterventionMeeting $record) {
+                                                        $record->delete();
+                                                        $this->redirect(InterventionServiceResource::getUrl('view_meetings', [
+                                                            'parent' => $this->getRecord()->interventionService,
+                                                            'record' => $this->getRecord(),
+                                                        ]));
+                                                    }),
+                                            ]
+                                        )
+                                        ->action(fn (array $data, InterventionMeeting $record) => $record->update($data))
+                                        ->successRedirectUrl(fn () => InterventionServiceResource::getUrl('view_meetings', [
+                                            'parent' => $this->getRecord()->interventionService,
+                                            'record' => $this->getRecord(),
+                                        ]))
+                                ),
 
                             TextEntry::make('date')
                                 ->label(__('intervention_plan.labels.date'))
                                 ->formatStateUsing(fn (InterventionMeeting $record, Carbon | string $state) => (\is_string($state) ? $state : $state->format('Y-m-d')) . ' ' . $record->time?->format('H:i')),
                             TextEntry::make('duration')
                                 ->label(__('intervention_plan.labels.duration')),
-                            TextEntry::make('user.full_name')
+                            TextEntry::make('specialist.name_role')
                                 ->label(__('intervention_plan.labels.responsible_specialist')),
                             TextEntry::make('observations')
                                 ->label(__('intervention_plan.labels.observations'))

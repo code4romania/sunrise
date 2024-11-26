@@ -137,8 +137,7 @@ class BeneficiaryFactory extends Factory
             'doesnt_have_children' => false,
             'children_total_count' => fake()->numberBetween(1, 10),
             'children_care_count' => fake()->numberBetween(1, 10),
-            'children_under_10_care_count' => fake()->numberBetween(1, 10),
-            'children_10_18_care_count' => fake()->numberBetween(1, 10),
+            'children_under_18_care_count' => fake()->numberBetween(1, 10),
             'children_18_care_count' => fake()->numberBetween(1, 10),
             'children_accompanying_count' => fake()->numberBetween(1, 10),
         ]);
