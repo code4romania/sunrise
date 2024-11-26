@@ -35,7 +35,9 @@ class BenefitResource extends Resource
                     ->schema([
                         TextInput::make('name')
                             ->label(__('nomenclature.labels.benefit_name'))
-                            ->maxWidth('3xl'),
+                            ->maxWidth('3xl')
+                            ->maxLength(200),
+
                         TableRepeater::make('benefitTypes')
                             ->relationship('benefitTypes')
                             ->label(__('nomenclature.headings.benefit_types'))
@@ -44,7 +46,9 @@ class BenefitResource extends Resource
                             ->addActionLabel(__('nomenclature.actions.add_benefit_type'))
                             ->schema([
                                 TextInput::make('name')
-                                    ->label(__('nomenclature.labels.benefit_type_name')),
+                                    ->label(__('nomenclature.labels.benefit_type_name'))
+                                    ->maxLength(200),
+
                                 Toggle::make('status')
                                     ->default(true)
                                     ->hiddenLabel(),
@@ -55,7 +59,7 @@ class BenefitResource extends Resource
                                         $items = $component->getState();
                                         $currentItem = $items[$arguments['item']];
 
-                                        if (! $currentItem['id']) {
+                                        if (! isset($currentItem['id'])) {
                                             return false;
                                         }
 
@@ -81,7 +85,7 @@ class BenefitResource extends Resource
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.benefit')),
 
-                TextColumn::make('institutions')
+                TextColumn::make('institutions_count')
                     ->label(__('nomenclature.labels.institutions')),
 
                 TextColumn::make('organizations_count')

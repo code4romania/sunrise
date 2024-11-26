@@ -8,7 +8,9 @@ use App\Enums\UserStatus;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\Role;
+use App\Models\Specialist;
 use App\Models\User;
+use App\Models\UserRole;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Get;
@@ -37,12 +39,12 @@ class ListSpecialistsWidget extends BaseWidget
                     ->with(['user', 'role'])
             )
             ->columns([
-                TextColumn::make('user.full_name')
-                    ->label(__('beneficiary.section.specialists.labels.name')),
-
                 TextColumn::make('role.name')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->color(Color::Gray),
+
+                TextColumn::make('user.full_name')
+                    ->label(__('beneficiary.section.specialists.labels.name')),
 
                 TextColumn::make('user.status')
                     ->label(__('beneficiary.section.specialists.labels.status')),
@@ -79,19 +81,14 @@ class ListSpecialistsWidget extends BaseWidget
                             : $query
                     ),
 
-                SelectFilter::make('roles')
+                SelectFilter::make('role_id')
                     ->label(__('beneficiary.section.specialists.labels.role'))
                     ->options(
                         Role::query()
                             ->active()
                             ->pluck('name', 'id')
                     )
-                    ->searchable()
-                    ->modifyQueryUsing(
-                        fn (Builder $query, $state): Builder => $state['value']
-                            ? $query->whereJsonContains('roles', $state['value'])
-                            : $query
-                    ),
+                    ->searchable(),
             ])
             ->heading(__('beneficiary.section.specialists.title'));
     }
@@ -102,11 +99,13 @@ class ListSpecialistsWidget extends BaseWidget
             Select::make('role_id')
                 ->label(__('beneficiary.section.specialists.labels.roles'))
                 ->options(
-                    Role::query()
-                        ->active()
+                    UserRole::query()
+                        ->with('role')
                         ->get()
-                        ->pluck('name', 'id')
+                        ->pluck('role.name', 'role.id')
                 )
+                ->searchable()
+                ->preload()
                 ->afterStateUpdated(fn (Set $set) => $set('user_id', null))
                 ->live()
                 ->required(),
@@ -130,6 +129,17 @@ class ListSpecialistsWidget extends BaseWidget
                             ->pluck('full_name', 'id');
                     }
                 )
+                ->disableOptionWhen(
+                    fn (Get $get, ?Specialist $record, string $value): bool => $this->record
+                        ->specialistsTeam
+                        ->filter(
+                            fn (Specialist $specialist) => $specialist->role_id === (int) $get('role_id') && $specialist->user_id !== $record?->user_id
+                        )
+                        ->map(fn (Specialist $specialist) => $specialist->user_id)
+                        ->contains($value)
+                )
+                ->searchable()
+                ->preload()
                 ->required(),
 
             Hidden::make('specialistable_id')

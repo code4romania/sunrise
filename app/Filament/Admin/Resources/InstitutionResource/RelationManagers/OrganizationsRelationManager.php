@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
 use App\Filament\Admin\Resources\InstitutionResource;
+use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\SectionHeader;
+use App\Models\Institution;
+use Filament\Facades\Filament;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -44,13 +47,13 @@ class OrganizationsRelationManager extends RelationManager
                     RepeatableEntry::make('organizations')
                         ->hiddenLabel()
                         ->columns()
-                        ->schema($this->getOrganizationInfolistSchema()),
+                        ->schema($this->getOrganizationInfolistSchema($this->getOwnerRecord())),
                 ]),
 
         ])->state(['organizations' => $this->getOwnerRecord()->organizations->toArray()]);
     }
 
-    public static function getOrganizationInfolistSchema(): array
+    public static function getOrganizationInfolistSchema(?Institution $institution = null): array
     {
         return [
             TextEntry::make('name')
@@ -64,16 +67,58 @@ class OrganizationsRelationManager extends RelationManager
                 ->columnSpanFull(),
 
             TextEntry::make('social_service_licensing_certificate')
-                ->label(__('institution.labels.social_service_licensing_certificate'))
+                ->hiddenLabel()
+                ->default(__('institution.labels.social_service_licensing_certificate'))
+                ->extraAttributes(['class' => 'font-medium'])
                 ->columnSpanFull(),
+
+            DocumentPreview::make()
+                ->columnSpanFull()
+                ->record(function () use ($institution) {
+                    if (! $institution) {
+                        return Filament::getTenant();
+                    }
+                    static $organizationIndex = 0;
+
+                    return $institution->organizations->get($organizationIndex++);
+                })
+                ->collection('social_service_licensing_certificate'),
 
             TextEntry::make('logo')
-                ->label(__('institution.labels.logo_center'))
+                ->hiddenLabel()
+                ->default(__('institution.labels.logo_center'))
+                ->extraAttributes(['class' => 'font-medium'])
                 ->columnSpanFull(),
 
+            DocumentPreview::make()
+                ->columnSpanFull()
+                ->record(function () use ($institution) {
+                    if (! $institution) {
+                        return Filament::getTenant();
+                    }
+                    static $organizationIndex = 0;
+
+                    return $institution->organizations->get($organizationIndex++);
+                })
+                ->collection('logo'),
+
             TextEntry::make('organization_header')
-                ->label(__('institution.labels.organization_header'))
+                ->hiddenLabel()
+                ->default(__('institution.labels.organization_header'))
+                ->extraAttributes(['class' => 'font-medium'])
                 ->columnSpanFull(),
+
+            DocumentPreview::make()
+                ->columnSpanFull()
+                ->record(function () use ($institution) {
+                    if (! $institution) {
+                        return Filament::getTenant();
+                    }
+                    static $organizationIndex = 0;
+
+                    return $institution->organizations->get($organizationIndex++);
+                })
+                ->collection('organization_header'),
         ];
     }
 }

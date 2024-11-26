@@ -42,4 +42,9 @@ class Benefit extends Model
     {
         return $this->organizations()->count();
     }
+
+    public function getInstitutionsCountAttribute(): int
+    {
+        return $this->organizations()->distinct('institution_id')->count('institution_id');
+    }
 }

@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionPlan;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ViewAction;
@@ -30,7 +31,8 @@ class IntervetnionPlanWidget extends BaseWidget
                     ->with([
                         'organizationServiceIntervention.serviceIntervention',
                         'organizationServiceIntervention.organizationService.service',
-                        'user',
+                        'specialist.user',
+                        'specialist.role',
                         'nextMeeting',
                     ])
                     ->withCount('meetings') ?:
@@ -43,7 +45,7 @@ class IntervetnionPlanWidget extends BaseWidget
                 TextColumn::make('organizationServiceIntervention.organizationService.service.name')
                     ->label(__('intervention_plan.labels.service')),
 
-                TextColumn::make('user.full_name')
+                TextColumn::make('specialist.name_role')
                     ->label(__('intervention_plan.labels.specialist')),
 
                 TextColumn::make('meetings_count')
@@ -58,17 +60,42 @@ class IntervetnionPlanWidget extends BaseWidget
             ->actions([
                 ViewAction::make('view_intervention')
                     ->label(__('intervention_plan.actions.view_intervention'))
-                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_intervention', [
+                    ->url(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
                         'parent' => $record->intervention_service_id,
                         'record' => $record,
                     ])),
             ])
-            ->emptyStateHeading(__('intervention_plan.headings.empty_state_table'))
-            ->emptyStateDescription(__('intervention_plan.labels.empty_state_table'))
+            ->recordUrl(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
+                'parent' => $record->intervention_service_id,
+                'record' => $record,
+            ]))
+            ->headerActions([
+                Action::make('view_intervention_plan')
+                    ->label(__('intervention_plan.actions.view_intervention_plan'))
+                    ->visible((bool) $this->record->interventionPlan)
+                    ->link()
+                    ->url(
+                        fn () => BeneficiaryResource::getUrl('view_intervention_plan', [
+                            'parent' => $this->record,
+                            'record' => $this->record->interventionPlan,
+                        ])
+                    ),
+            ])
+            ->emptyStateHeading(
+                $this->record->interventionPlan ?
+                __('intervention_plan.headings.empty_state_table_without_intervetntions') :
+                __('intervention_plan.headings.empty_state_table')
+            )
+            ->emptyStateDescription(
+                $this->record->interventionPlan ?
+                    __('intervention_plan.labels.empty_state_table_without_intervetntions') :
+                    __('intervention_plan.labels.empty_state_table')
+            )
             ->emptyStateIcon('heroicon-o-presentation-chart-bar')
             ->emptyStateActions([
                 Action::make('create_intervention_plan')
                     ->label(__('intervention_plan.actions.create'))
+                    ->hidden((bool) $this->record->interventionPlan)
                     ->outlined()
                     ->action(function () {
                         $this->redirect(

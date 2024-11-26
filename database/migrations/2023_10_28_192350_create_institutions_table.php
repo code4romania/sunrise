@@ -23,17 +23,17 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique()->nullable();
             $table->string('short_name')->nullable();
-            $table->string('type')->nullable();
-            $table->string('cif')->nullable();
-            $table->string('main_activity')->nullable();
+            $table->string('type');
+            $table->string('cif');
+            $table->string('main_activity');
+            $table->string('area');
 
-            $table->foreignIdFor(County::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(City::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->string('address')->nullable();
+            $table->foreignIdFor(County::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(City::class)->constrained()->cascadeOnDelete();
+            $table->string('address');
 
-            $table->string('reprezentative_name')->nullable();
-            $table->string('reprezentative_email')->nullable();
-            $table->string('phone')->nullable();
+            $table->json('representative_person');
+            $table->json('contact_person');
             $table->string('website')->nullable();
 
             $table->string('status')->default(InstitutionStatus::PENDING->value);

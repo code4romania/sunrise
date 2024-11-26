@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Forms\Components\Repeater;
+use App\Models\Organization;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -54,33 +55,79 @@ class EditInstitutionCenters extends EditRecord
                 ->addActionLabel(__('institution.actions.add_organization'))
                 ->schema([
                     TextInput::make('name')
-                        ->label(__('institution.labels.center_name')),
+                        ->label(__('institution.labels.center_name'))
+                        ->placeholder(__('organization.placeholders.center_name'))
+                        ->maxLength(200)
+                        ->required(),
 
                     TextInput::make('short_name')
-                        ->label(__('organization.field.short_name')),
+                        ->label(__('organization.field.short_name'))
+                        ->placeholder(__('organization.placeholders.center_short_name'))
+                        ->maxLength(50),
 
                     TextInput::make('main_activity')
                         ->label(__('organization.field.main_activity'))
-                        ->columnSpanFull(),
+                        ->placeholder(__('organization.placeholders.main_activity'))
+                        ->columnSpanFull()
+                        ->maxLength(200)
+                        ->required(),
 
                     SpatieMediaLibraryFileUpload::make('social_service_licensing_certificate')
                         ->label(__('institution.labels.social_service_licensing_certificate'))
                         ->helperText(__('institution.helper_texts.social_service_licensing_certificate'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->collection('social_service_licensing_certificate')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'application/pdf',
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
 
                     SpatieMediaLibraryFileUpload::make('logo')
                         ->label(__('institution.labels.logo_center'))
                         ->helperText(__('institution.helper_texts.logo'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->collection('logo')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
 
                     SpatieMediaLibraryFileUpload::make('organization_header')
                         ->label(__('institution.labels.organization_header'))
                         ->helperText(__('institution.helper_texts.organization_header'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->collection('organization_header')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
                 ]),
         ];
+    }
+
+    public function afterSave()
+    {
+        $this->getRecord()
+            ->organizations
+            ?->each(
+                fn (Organization $organization) => $organization->load('admins')
+                    ->admins()
+                    ->attach(
+                        $this->getRecord()
+                            ->admins
+                            ->pluck('id')
+                            ->diff(
+                                $organization->admins
+                                    ->pluck('id')
+                            )
+                    )
+            );
     }
 }

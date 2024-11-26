@@ -18,6 +18,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
@@ -62,6 +63,7 @@ class ServiceResource extends Resource
                         TextInput::make('name')
                             ->label(__('service.field.name'))
                             ->columnSpanFull()
+                            ->maxLength(200)
                             ->required(),
 
                         Select::make('counseling_sheet')
@@ -73,7 +75,6 @@ class ServiceResource extends Resource
                     ->relationship('serviceInterventions')
                     ->label(__('nomenclature.headings.service_intervention'))
                     ->columnSpanFull()
-                    ->hideLabels()
                     ->addActionLabel(__('nomenclature.actions.add_intervention'))
                     ->schema([
                         Placeholder::make('id')
@@ -85,8 +86,21 @@ class ServiceResource extends Resource
                             })
                             ->hiddenLabel(),
                         TextInput::make('name')
+                            ->columnSpanFull()
+                            ->hiddenLabel()
+                            ->maxLength(200)
                             ->label(__('nomenclature.labels.intervention_name')),
-                        Toggle::make('status'),
+
+                        Toggle::make('status')
+                            ->columnSpanFull()
+                            ->live()
+                            ->default(true)
+                            ->afterStateUpdated(function (bool $state) {
+                                if (! $state) {
+                                    dd('Modal cu inactivare de hard confirmation');
+                                }
+                            })
+                            ->label(fn (Get $get) => $get('status') ? __('nomenclature.labels.active') : __('nomenclature.labels.inactive')),
                     ])
                     ->deleteAction(
                         fn (Action $action) => $action
@@ -116,10 +130,13 @@ class ServiceResource extends Resource
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.name'))
                     ->searchable(),
-                TextColumn::make('institutions')
+
+                TextColumn::make('institutions_count')
                     ->label(__('nomenclature.labels.institutions')),
+
                 TextColumn::make('organization_services_count')
                     ->label(__('nomenclature.labels.centers')),
+
                 TextColumn::make('status')
                     ->label(__('nomenclature.labels.status'))
                     ->badge(),

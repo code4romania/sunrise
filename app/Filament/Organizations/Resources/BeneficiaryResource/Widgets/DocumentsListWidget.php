@@ -9,7 +9,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Models\Beneficiary;
 use App\Models\Document;
-use Filament\Support\Enums\ActionSize;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
@@ -55,7 +54,7 @@ class DocumentsListWidget extends BaseWidget
                     ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                     ->label(__('beneficiary.section.documents.actions.add'))
                     ->outlined()
-                    ->size(ActionSize::ExtraLarge)
+                    ->createAnother(false)
                     ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.create'))
                     ->modalCancelActionLabel(__('general.action.cancel'))
                     ->mutateFormDataUsing(function (array $data) {

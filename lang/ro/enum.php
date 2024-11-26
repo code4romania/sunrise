@@ -157,7 +157,7 @@ return [
     'organization_type' => [
         'ngo' => 'Organizație non-profit',
         'public' => 'Instituție publică',
-        'private' => 'Entitate privată',
+        'other_type' => 'Alt tip',
     ],
 
     'user_status' => [
@@ -209,7 +209,7 @@ return [
 
     'role' => [
         'coordinator' => 'Coordonator',
-        'manger' => 'Manager de caz',
+        'manager' => 'Manager de caz',
         'chef_manager' => 'Șef manager de caz',
         'chef_service' => 'Șef serviciu',
         'psychological_advice' => 'Consilier Psihologic',
@@ -386,7 +386,7 @@ return [
 
     'counseling_sheet' => [
         'psychological_assistance' => 'Asistență psihologică',
-        'legal assistance' => 'Asistența juridică',
+        'legal_assistance' => 'Asistența juridică',
     ],
 
     'meeting_status' => [
@@ -434,5 +434,47 @@ return [
         'active' => 'Activ',
         'inactive' => 'Suspendat',
         'pending' => 'În așteptare',
+    ],
+
+    'area_type' => [
+        'national' => 'Națională',
+        'local' => 'Locală',
+    ],
+
+    'diseases' => [
+        'denies_diseases' => 'Neagă boli',
+        'chronic_diseases' => 'Boli cronice',
+        'degenerative_diseases' => 'Boli degenerative',
+        'mental_illnesses' => 'Boli psihice',
+    ],
+
+    'disability_type' => [
+        'physical' => 'Fizic',
+        'visual' => 'Vizual',
+        'aural' => 'Auditiv',
+        'deaf' => 'Surdocecitate',
+        'somatic' => 'Somatic',
+        'mental' => 'Mintal',
+        'psychic' => 'Psihic',
+        'hiv_aids' => 'HIV/SIDA',
+        'associate' => 'Asociat',
+        'rare_diseases' => 'Boli rare',
+
+    ],
+
+    'disability_degree' => [
+        'easy' => 'Ușor',
+        'environment' => 'Mediu',
+        'accented' => 'Accentuat',
+        'serious' => 'Grav',
+        'no_classification' => 'Fără încadrare în handicap',
+    ],
+
+    'income_source' => [
+        'salary' => 'Salariu',
+        'pension' => 'Pensie',
+        'child_allowance' => 'Îndemnizație creștere copil',
+        'alimony' => 'Pensie alimentară',
+        'other' => 'Altele',
     ],
 ];

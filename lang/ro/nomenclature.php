@@ -16,6 +16,8 @@ return [
         'counseling_sheet' => 'Fișă consiliere serviciu (opțional)',
         'nr' => 'Nr.',
         'intervention_name' => 'Nume intervenție',
+        'active' => 'Activ',
+        'inactive' => 'Inactiv',
         'service_name' => 'Nume serviciu',
         'empty_state_service_table' => 'Niciun serviciu identificat. Adaugă un prim serviciu pentru ca acesta să fie disponibil organizațiilor Sunrise',
         'empty_state_role_table' => 'Niciun rol de specialitate identificat. Adaugă un prim rol pentru ca acesta să fie disponibil organizațiilor Sunrise',
@@ -26,6 +28,7 @@ return [
         'benefit_name' => 'Categorie beneficiu social',
         'benefit_type_name' => 'Nume beneficiu',
         'benefit' => 'Beneficiu',
+        'role_case_manager' => 'Corespondent rolului de manager de caz',
     ],
 
     'headings' => [

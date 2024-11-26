@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
 use App\Filament\Admin\Resources\InstitutionResource;
+use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AdminsRelationManager extends RelationManager
@@ -28,17 +29,7 @@ class AdminsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('first_name')
-                    ->label(__('institution.labels.first_name')),
-
-                TextInput::make('last_name')
-                    ->label(__('institution.labels.last_name')),
-
-                TextInput::make('email')
-                    ->label(__('institution.labels.email')),
-
-                TextInput::make('phone')
-                    ->label(__('institution.labels.phone')),
+                ...EditUserInstitution::getSchema(),
 
                 Hidden::make('ngo_admin')
                     ->default(1),
@@ -48,6 +39,7 @@ class AdminsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('roles'))
             ->heading(__('institution.headings.admin_users'))
             ->columns([
                 TextColumn::make('first_name')
@@ -56,7 +48,7 @@ class AdminsRelationManager extends RelationManager
                 TextColumn::make('last_name')
                     ->label(__('institution.labels.last_name')),
 
-                TextColumn::make('roles')
+                TextColumn::make('roles.name')
                     ->label(__('institution.labels.roles')),
 
                 TextColumn::make('status')

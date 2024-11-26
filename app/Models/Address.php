@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\ResidenceEnvironment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,10 @@ class Address extends Model
         'address_type',
         'addressable_id',
         'addressable_type',
+    ];
+
+    protected $casts = [
+        'environment' => ResidenceEnvironment::class,
     ];
 
     public function county(): BelongsTo

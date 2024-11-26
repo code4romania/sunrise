@@ -25,6 +25,8 @@ class InterventionMeeting extends Model
 
     protected $casts = [
         'status' => MeetingStatus::class,
+        'date' => 'date:Y-m-d',
+        'time' => 'date:H:i',
     ];
 
     public function user(): BelongsTo

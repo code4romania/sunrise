@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\AreaType;
 use App\Enums\InstitutionStatus;
 use App\Enums\OrganizationType;
 use App\Models\City;
@@ -26,20 +27,32 @@ class InstitutionFactory extends Factory
         $name = fake()->company();
         $city = City::query()->inRandomOrder()->first();
 
+        $representativePerson = [
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+        ];
+
+        $contactPerson = [
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail(),
+            'phone' => fake()->phoneNumber(),
+        ];
+
         return [
             'name' => $name,
             'short_name' => preg_replace('/\b(\w)|./u', '$1', $name),
             'type' => fake()->randomElement(OrganizationType::values()),
-            'phone' => fake()->phoneNumber(),
-            'website' => fake()->url(),
+            'cif' => fake()->numerify(),
+            'main_activity' => fake()->text(),
+            'area' => fake()->randomElement(AreaType::values()),
 
             'city_id' => $city->id,
             'county_id' => $city->county_id,
             'address' => fake()->streetAddress(),
-
-            'reprezentative_name' => fake()->name(),
-            'reprezentative_email' => fake()->safeEmail(),
-
+            'representative_person' => $representativePerson,
+            'contact_person' => $contactPerson,
+            'website' => fake()->url(),
             'status' => fake()->randomElement(InstitutionStatus::values()),
         ];
     }

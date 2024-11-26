@@ -31,7 +31,7 @@ class EditInterventionService extends EditRecord
     public function getTitle(): string|Htmlable
     {
         return __('intervention_plan.headings.edit_page', [
-            'service_name' => $this->getRecord()->organizationService->serviceWithoutStatusCondition->name,
+            'service_name' => $this->getRecord()->organizationService?->serviceWithoutStatusCondition->name,
         ]);
     }
 
@@ -52,8 +52,8 @@ class EditInterventionService extends EditRecord
                 ->modalHeading(__('intervention_plan.actions.delete_service'))
                 ->outlined()
                 ->successRedirectUrl(BeneficiaryResource::getUrl('view_intervention_plan', [
-                    'parent' => $this->getRecord()->interventionPlan,
-                    'record' => $this->getRecord(),
+                    'parent' => $this->getRecord()->beneficiary,
+                    'record' => $this->getRecord()->interventionPlan,
                 ])),
         ];
     }

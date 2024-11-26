@@ -64,7 +64,7 @@ class CreateBeneficiary extends CreateRecord
         $parentBeneficiaryID = (int) request('parent');
         if (! $parentBeneficiaryID) {
             $refererUrl = request()->server('HTTP_REFERER');
-            $parentBeneficiaryID = (int) str_replace([self::getResource()::getUrl('create'), '/'], '', $refererUrl);
+            $parentBeneficiaryID = $refererUrl ? (int) str_replace([self::getResource()::getUrl('create'), '/'], '', $refererUrl) : null;
         }
 
         $this->parentBeneficiary = $parentBeneficiaryID ? Beneficiary::find($parentBeneficiaryID) : null;

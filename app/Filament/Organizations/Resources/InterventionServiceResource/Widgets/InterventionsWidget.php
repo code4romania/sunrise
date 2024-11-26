@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widge
 
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
+use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
 use Filament\Forms\Components\Hidden;
 use Filament\Tables;
@@ -21,14 +22,14 @@ class InterventionsWidget extends BaseWidget
     {
         return $table
             ->query(fn () => $this->record->beneficiaryInterventions()
-                ->with('user')
+                ->with('specialist')
                 ->withCount('meetings'))
             ->heading(__('intervention_plan.headings.interventions'))
             ->columns([
                 Tables\Columns\TextColumn::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
                     ->label(__('intervention_plan.labels.intervention')),
 
-                Tables\Columns\TextColumn::make('user.full_name')
+                Tables\Columns\TextColumn::make('specialist.name_role')
                     ->label(__('intervention_plan.labels.specialist')),
 
                 Tables\Columns\TextColumn::make('interval')
@@ -41,21 +42,25 @@ class InterventionsWidget extends BaseWidget
                 CreateAction::make()
                     ->label(__('intervention_plan.actions.add_intervention'))
                     ->createAnother(false)
-                    ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationServiceWithoutStatusCondition->serviceWithoutStatusCondition->name]))
+                    ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition->name]))
                     ->form([
                         Hidden::make('intervention_service_id')
                             ->default($this->record->id),
-                        ...BeneficiaryInterventionResource::getSchema($this->record->organization_service_id),
+                        ...BeneficiaryInterventionResource::getSchema($this->record->beneficiary, $this->record->organization_service_id),
                     ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => InterventionServiceResource::getUrl('view_intervention', [
+                    ->url(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_meetings', [
                         'parent' => $this->record,
                         'record' => $record,
                     ])),
             ])
+            ->recordUrl(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_meetings', [
+                'parent' => $this->record,
+                'record' => $record,
+            ]))
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_intervention_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_intervention_table'))
             ->emptyStateIcon('heroicon-o-document');

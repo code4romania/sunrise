@@ -7,6 +7,7 @@ return [
     'singular' => 'Instituție',
     'plural' => 'instituții',
     'headings' => [
+        'create_title' => 'Adaugă instituție',
         'institution_name' => 'Nume instituție',
         'registered_office' => 'Sediu social',
         'centers' => 'Centre',
@@ -53,6 +54,10 @@ return [
     'placeholders' => [
         'center_details' => 'Dacă instituția are multiple centre acreditate pentru servicii diferite și necesită menținearea unor baze de date diferite de beneficiari, se pot crea tenants (profile) diferite pentru fiecare dintre acestea.',
         'ngo_admins' => 'Adăugați cel puțin un rol de administrator în sistem. Această persoană are drepturi depline asupra întregii aplicații Sunrise pentru toate centrele instituției (ale organizației). Un email de invitație va fi transmis administratorului odată cu finalizarea adăugării instituției.',
+        'first_name' => 'Nume administrator platformă',
+        'last_name' => 'Prenume administrator platformă',
+        'email' => 'Adresă de email administrator platformă',
+        'phone' => 'Număr de telefon administrator platformă',
     ],
 
     'helper_texts' => [

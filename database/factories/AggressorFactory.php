@@ -10,6 +10,7 @@ use App\Enums\CivilStatus;
 use App\Enums\Drug;
 use App\Enums\Gender;
 use App\Enums\Occupation;
+use App\Enums\ProtectionOrder;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Enums\Violence;
@@ -39,6 +40,9 @@ class AggressorFactory extends Factory
             'has_psychiatric_history' => fake()->randomElement(Ternary::values()),
             'has_drug_history' => fake()->randomElement(Ternary::values()),
             'legal_history' => fake()->randomElements(AggressorLegalHistory::values()),
+            'has_protection_order' => fake()->randomElement(ProtectionOrder::values()),
+            'electronically_monitored' => fake()->randomElement(Ternary::values()),
+            'protection_order_notes' => fake()->text(100),
         ];
     }
 

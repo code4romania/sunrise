@@ -8,6 +8,7 @@ use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Infolists\Components\Grid;
@@ -54,13 +55,6 @@ class ViewMonitoring extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
-        $this->getRecord()
-            ->load([
-                'specialistsTeam.user',
-                // after design change
-                // 'specialistsTeam.role'
-            ]);
-
         return $infolist->schema([
             Tabs::make()
                 ->columnSpanFull()
@@ -91,13 +85,9 @@ class ViewMonitoring extends ViewRecord
                                     TextEntry::make('end_date')
                                         ->label(__('monitoring.labels.end_date')),
 
-                                    TextEntry::make('specialistsTeam')
+                                    TextEntry::make('specialistsTeam.name_role')
                                         ->label(__('monitoring.labels.team'))
-                                        ->listWithLineBreaks()
-                                        ->formatStateUsing(
-                                            fn ($state) => $state === '-' ? $state : $state->user->getFilamentName() . ' (' .
-                                                $state->roles?->map(fn ($item) => $item->label())->join(', ') . ')'
-                                        ),
+                                        ->listWithLineBreaks(),
                                 ]),
                         ]),
 
@@ -112,6 +102,7 @@ class ViewMonitoring extends ViewRecord
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('monitoring.headings.child_info'))
+                                ->visible(fn () => $this->getRecord()->children->isNotEmpty())
                                 ->headerActions([
                                     Edit::make('edit_details')
                                         ->url(self::getParentResource()::getUrl('monitoring.edit_children', [
@@ -153,6 +144,13 @@ class ViewMonitoring extends ViewRecord
                                                         ->columnSpanFull(),
                                                 ]),
                                         ]),
+                                ]),
+
+                            Section::make()
+                                ->visible(fn () => $this->getRecord()->children->isEmpty())
+                                ->schema([
+                                    SectionHeader::make('empty_children')
+                                        ->state(__('monitoring.headings.empty_state_children')),
                                 ]),
                         ]),
 

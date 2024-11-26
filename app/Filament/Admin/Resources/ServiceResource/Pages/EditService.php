@@ -39,7 +39,10 @@ class EditService extends EditRecord
                 ->relationship('organizationServices'),
 
             DeleteAction::make()
-                ->disabled(fn () => $this->getRecord()->organizationServices()->count() > 0)
+                ->outlined($this->getRecord()->organizationServices()->count() > 0)
+                ->tooltip(fn () => $this->getRecord()->organizationServices()->count() > 0 ? __('nomenclature.messages.delete_disabled') : '')
+                ->disabled($this->getRecord()->organizationServices()->count() > 0)
+
                 ->successRedirectUrl(self::$resource::getUrl()),
         ];
     }

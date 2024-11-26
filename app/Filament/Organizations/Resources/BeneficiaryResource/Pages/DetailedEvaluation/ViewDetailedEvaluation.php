@@ -149,7 +149,8 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->schema([
                     TextEntry::make('recommendations_for_intervention_plan')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
-                        ->placeholder(__('beneficiary.placeholder.other_services')),
+                        ->placeholder(__('beneficiary.placeholder.other_services'))
+                        ->html(),
                 ]),
         ];
     }
@@ -284,7 +285,7 @@ class ViewDetailedEvaluation extends ViewRecord
     public function getDetailedEvaluationSchema(): array
     {
         return [
-            RepeatableEntry::make('specialists')
+            RepeatableEntry::make('detailedEvaluationSpecialists')
                 ->columns(4)
                 ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
                 ->schema([

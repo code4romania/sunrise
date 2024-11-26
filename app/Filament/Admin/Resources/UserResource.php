@@ -29,6 +29,8 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 31;
 
+    protected static bool $isDiscovered = false;
+
     public static function getModelLabel(): string
     {
         return __('user.label.singular');

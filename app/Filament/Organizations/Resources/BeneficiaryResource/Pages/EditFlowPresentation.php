@@ -114,6 +114,7 @@ class EditFlowPresentation extends EditRecord
 
                             TextInput::make('notifier_other')
                                 ->label(__('field.notifier_other'))
+                                ->maxLength(100)
                                 ->visible(fn (Get $get) => Notifier::isValue(
                                     $get('notifier'),
                                     Notifier::OTHER
@@ -124,7 +125,7 @@ class EditFlowPresentation extends EditRecord
                         ->schema([
                             Select::make('act_location')
                                 ->label(__('field.act_location'))
-                                ->placeholder(__('placeholder.select_many'))
+                                ->placeholder(__('beneficiary.section.personal_information.placeholders.select_many'))
                                 ->options(ActLocation::options())
                                 ->rule(new MultipleIn(ActLocation::values()))
                                 ->multiple()
@@ -132,6 +133,7 @@ class EditFlowPresentation extends EditRecord
 
                             TextInput::make('act_location_other')
                                 ->label(__('field.act_location_other'))
+                                ->maxLength(100)
                                 ->visible(
                                     fn (Get $get) => collect($get('act_location'))
                                         ->filter(fn ($value) => ActLocation::isValue($value, ActLocation::OTHER))
@@ -146,9 +148,10 @@ class EditFlowPresentation extends EditRecord
 
                     Select::make('other_called_institutions')
                         ->label(__('field.other_called_institutions'))
-                        ->placeholder(__('placeholder.select_one'))
+                        ->placeholder(__('beneficiary.section.personal_information.placeholders.select_many'))
                         ->relationship('otherCalledInstitution', 'name')
                         ->multiple()
+                        ->preload()
                         ->nullable(),
                 ]),
         ];

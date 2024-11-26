@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
 use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
-use App\Enums\CasePermission;
 use App\Enums\UserStatus;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
@@ -47,6 +47,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasUserStatus;
+    use HasPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -85,6 +86,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password_set_at' => 'datetime',
         'password' => 'hashed',
         'is_admin' => 'boolean',
+        'ngo_admin' => 'boolean',
         'status' => UserStatus::class,
     ];
 
@@ -100,11 +102,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
         static::created(function (User $model) {
             if ($model->institution) {
+                $model->load('organizations');
                 $model->organizations()
-                    ->attach(
+                    ->sync(
                         $model->institution
                             ->organizations
                             ?->pluck('id')
+                            ->diff($model->organizations?->pluck('id'))
                     );
             }
         });
@@ -183,7 +187,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function canAccessPanel(Panel $panel): bool
     {
         if ($panel->getId() === 'admin') {
-            return $this->is_admin;
+            return $this->isAdmin();
         }
 
         return $this->getTenants($panel)->isNotEmpty();
@@ -243,7 +247,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function canBeCaseManager(): bool
     {
-        return $this->permissions->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER);
+        return (bool) $this->rolesInOrganization
+            ->filter(fn (Role $role) => $role->case_manager)
+            ->count();
     }
 
     public function hasRoleInOrganization(Role | int $role): bool
@@ -258,7 +264,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return false;
     }
 
-    public function activate():void
+    public function activate(): void
     {
         $this->update(['status' => UserStatus::ACTIVE]);
     }

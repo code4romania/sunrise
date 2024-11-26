@@ -28,6 +28,8 @@ class DeactivateUserAction extends Action
 
         $this->modalHeading(__('user.action_deactivate_confirm.title'));
 
+        $this->modalDescription(__('user.action_deactivate_confirm.description'));
+
         $this->modalWidth('md');
 
         $this->action(function (User $record) {

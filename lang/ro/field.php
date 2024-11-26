@@ -37,7 +37,7 @@ return [
     'intervention_name' => 'Nume intervenție',
     'intervention_reason' => 'Motivul intervenției',
     'interventions' => 'Intervenții',
-    'last_evaluated_at' => 'Ultima evaluare',
+    'last_evaluated_at' => 'Ultima monitorizare',
     'last_name' => 'Nume',
     'last_serviced_at' => 'Ultimul serviciu',
     'legal_residence_address' => 'Adresă domiciliu legal',
@@ -131,6 +131,7 @@ return [
     'first_called_institution' => 'Prima instituție la care a apelat victima',
     'other_called_institutions' => 'Următoarele instituții la care a apelat victima',
     'last_login_at' => 'Ultima accesare',
+    'address' => 'Adresă',
 
     'role' => 'Rol',
     'check' => 'Verifică',

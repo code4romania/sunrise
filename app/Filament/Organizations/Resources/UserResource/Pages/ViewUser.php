@@ -10,7 +10,7 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\UserResource;
 use App\Infolists\Components\SectionHeader;
 use App\Models\User;
-use Filament\Actions;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -27,13 +27,23 @@ class ViewUser extends ViewRecord
         return $infolist->schema([
             Section::make()
                 ->columns()
+                ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('status')
                         ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
-                    TextEntry::make('updated_at'),
+                    TextEntry::make('last_login_at')
+                        ->label(__('user.labels.last_login_at_date_time')),
                 ]),
-            Section::make()
+            Section::make(__('user.heading.specialist_details'))
                 ->columns()
+                ->maxWidth('3xl')
+                ->headerActions([
+                    Action::make('edit')
+                        ->label(__('general.action.edit'))
+                        ->url(self::$resource::getUrl('edit', ['record' => $this->getRecord()]))
+                        ->link(),
+
+                ])
                 ->schema([
                     TextEntry::make('first_name')
                         ->label(__('user.labels.first_name')),
@@ -54,7 +64,6 @@ class ViewUser extends ViewRecord
                     TextEntry::make('obs')
                         ->default(
                             Str::of(__('user.placeholders.obs'))
-                                ->inlineMarkdown()
                                 ->toHtmlString()
                         )
                         ->hiddenLabel()
@@ -69,7 +78,7 @@ class ViewUser extends ViewRecord
                             foreach (CasePermission::cases() as $option) {
                                 $fields[] = TextEntry::make($option->value)
                                     ->label($option->getLabel())
-                                    ->state($record->permissions->case_permissions->contains($option) ?
+                                    ->state($record->permissions?->case_permissions->contains($option) ?
                                         Ternary::YES : Ternary::NO);
                             }
 
@@ -85,7 +94,7 @@ class ViewUser extends ViewRecord
                             foreach (AdminPermission::cases() as $option) {
                                 $fields[] = TextEntry::make($option->value)
                                     ->label($option->getLabel())
-                                    ->state($record->permissions->admin_permissions->contains($option) ?
+                                    ->state($record->permissions?->admin_permissions->contains($option) ?
                                         Ternary::YES : Ternary::NO);
                             }
 
@@ -98,8 +107,6 @@ class ViewUser extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make('edit'),
-
             UserResource\Actions\DeactivateUserAction::make(),
 
             //            UserResource\Actions\ResetPassword::make('reset-password'),

@@ -26,12 +26,13 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\HtmlString;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $tenantOwnershipRelationshipName = 'organizations';
 
@@ -93,7 +94,8 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label(__('general.action.view_details')),
             ])
             ->heading(__('user.heading.table'));
     }
@@ -127,16 +129,20 @@ class UserResource extends Resource
 
                     TextInput::make('email')
                         ->label(__('user.labels.email'))
+                        ->email()
+                        ->unique(ignoreRecord: true)
                         ->required(),
 
                     TextInput::make('phone_number')
                         ->label(__('user.labels.phone_number'))
                         ->tel()
+                        ->maxLength(14)
                         ->required(),
 
                     Select::make('role_id')
                         ->label(__('user.labels.select_roles'))
                         ->relationship('rolesInOrganization', 'name')
+                        ->options(Role::active()->pluck('name', 'id'))
                         ->preload()
                         ->multiple()
                         ->live()
@@ -145,7 +151,7 @@ class UserResource extends Resource
                         ->afterStateUpdated(self::setDefaultCaseAndNgoAdminPermissions()),
 
                     Placeholder::make('obs')
-                        ->content(__('user.placeholders.obs'))
+                        ->content(new HtmlString(__('user.placeholders.obs')))
                         ->label('')
                         ->columnSpanFull(),
 
@@ -154,7 +160,7 @@ class UserResource extends Resource
                         ->schema([
                             CheckboxList::make('case_permissions')
                                 ->label(__('user.labels.case_permissions'))
-                                ->options(CasePermission::options())
+                                ->options(CasePermission::getOptionsWithoutCaseManager())
                                 ->disableOptionWhen(function (Get $get, string $value) {
                                     foreach ($get('../role_id') as $roleID) {
                                         $role = self::getRole($roleID);

@@ -6,10 +6,10 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Concerns\RedirectToIdentity;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
@@ -134,19 +134,26 @@ class EditChildrenIdentity extends EditRecord
                         ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
                         ->schema([
                             TextInput::make('name')
-                                ->label(__('field.child_name')),
+                                ->label(__('field.child_name'))
+                                ->maxLength(70),
 
                             TextInput::make('age')
-                                ->label(__('field.age')),
+                                ->label(__('field.age'))
+                                ->mask('99')
+                                ->maxLength(2),
 
                             DatePicker::make('birthdate')
                                 ->label(__('field.birthdate')),
 
                             TextInput::make('current_address')
-                                ->label(__('field.current_address')),
+                                ->label(__('field.current_address'))
+                                ->maxLength(70),
 
                             TextInput::make('status')
-                                ->label(__('field.child_status')),
+                                ->label(__('field.child_status'))
+                                ->maxLength(70),
+
+                            // TODO add workspace / studies
                         ]),
 
                     Textarea::make('children_notes')
@@ -154,6 +161,7 @@ class EditChildrenIdentity extends EditRecord
                         ->placeholder(__('placeholder.other_relevant_details'))
                         ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                         ->nullable()
+                        ->maxLength(500)
                         ->columnSpanFull(),
                 ]),
         ];

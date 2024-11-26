@@ -299,7 +299,7 @@ class BeneficiaryFactory extends Factory
                     CloseFile::factory()
                         ->for($beneficiary)
                         ->create([
-                            'user_id' => $this->faker->randomElement($beneficiary->specialistsMembers)->id,
+                            'specialist_id' => $this->faker->randomElement($beneficiary->specialistsTeam)->id,
                         ]);
                 }
             });

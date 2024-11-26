@@ -14,6 +14,7 @@ use App\Models\InterventionService;
 use App\Models\OrganizationService;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
+use Filament\Actions\StaticAction;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
@@ -22,6 +23,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -32,7 +34,7 @@ class ServiceResource extends Resource
 {
     protected static ?string $model = OrganizationService::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-view-columns';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 32;
 
@@ -71,7 +73,8 @@ class ServiceResource extends Resource
                                 )
                             )
                             ->afterStateUpdated(self::populateTable())
-                            ->live(),
+                            ->live()
+                            ->required(),
 
                         Placeholder::make('service')
                             ->label(__('service.labels.name'))
@@ -116,6 +119,8 @@ class ServiceResource extends Resource
                                         return [];
                                     })
                                     ->disabledForm()
+                                    ->modalAutofocus(false)
+                                    ->modalSubmitAction(fn (StaticAction $action) => $action->hidden())
                                     ->link(),
                             ]),
 
@@ -123,37 +128,40 @@ class ServiceResource extends Resource
                             ->visible(fn (Forms\Get $get) => $get('service_id'))
                             ->schema(
                                 [
+                                    Placeholder::make('counseling_sheet')
+                                        ->label(__('service.headings.interventions'))
+                                        ->content(__('service.helper_texts.interventions')),
+
                                     TableRepeater::make('interventions')
                                         ->hideLabels()
-                                        ->label(__('service.headings.interventions'))
-                                        ->helperText(__('service.helper_texts.interventions'))
+                                        ->hiddenLabel()
+                                        ->helperText(__('service.helper_texts.under_interventions_table'))
                                         ->relationship('interventions')
                                         ->addAction(fn (Action $action) => $action->hidden())
                                         ->deletable(false)
                                         ->reorderable(false)
+                                        ->mutateRelationshipDataBeforeCreateUsing(function (array $data) {
+                                            unset($data['active']);
+
+                                            return $data;
+                                        })
                                         ->schema([
                                             Checkbox::make('active')
                                                 ->label(__('service.labels.select'))
+                                                ->afterStateUpdated(fn (bool $state, Set $set) => $state ? $set('status', true) : $set('status', false))
                                                 ->live(),
+
                                             Placeholder::make('name')
                                                 ->label(__('service.labels.interventions'))
                                                 ->hiddenLabel()
                                                 ->content(fn ($state) => $state),
+
                                             Toggle::make('status')
                                                 ->label(__('service.labels.status'))
-                                                ->default(false)
-                                                ->disabled(
-                                                    function (Toggle $component, $get): bool {
-                                                        $index = explode('.', $component->getId());
-                                                        end($index);
-                                                        $index = prev($index);
-                                                        $state = $component->getParentRepeater()->getState();
-                                                        $state = $state[$index];
+                                                ->disabled(fn (Forms\Get $get) => ! $get('active')),
 
-                                                        return ! $state['active'];
-                                                    }
-                                                ),
                                             Hidden::make('id'),
+
                                             Hidden::make('service_intervention_id'),
                                         ])
                                         ->afterStateHydrated(self::populateTable()),
@@ -165,7 +173,7 @@ class ServiceResource extends Resource
 
     public static function populateTable(): \Closure
     {
-        return function (Forms\Set $set, Forms\Get $get) {
+        return function (Set $set, Forms\Get $get) {
             $serviceID = $get('service_id');
             $interventions = ServiceIntervention::query()
                 ->where('service_id', $serviceID)
@@ -177,7 +185,7 @@ class ServiceResource extends Resource
                 $intervention->service_intervention_id = $intervention->id;
                 $intervention->id = $intervention->organizationIntervention?->id;
                 $intervention->status = $intervention->organizationIntervention?->status ?? false;
-                $intervention->active = isset($intervention->organizationIntervention) ?: null;
+                $intervention->active = isset($intervention->organizationIntervention) ?: false;
             });
 
             $set('interventions', $interventions->toArray());
@@ -224,7 +232,8 @@ class ServiceResource extends Resource
                     ->label(__('service.actions.create')),
             ])
             ->emptyStateIcon('heroicon-o-clipboard-document-check')
-            ->emptyStateHeading(__('service.headings.empty_state_table'));
+            ->emptyStateHeading(__('service.headings.empty_state_table'))
+            ->emptyStateDescription('');
     }
 
     public static function getPages(): array
@@ -237,10 +246,6 @@ class ServiceResource extends Resource
         ];
     }
 
-    protected function mutateFormDataBeforeSave()
-    {
-    }
-
     public static function processInterventionsBeforeSave(?array $interventions): ?array
     {
         foreach ($interventions as $key => &$intervention) {
@@ -249,6 +254,7 @@ class ServiceResource extends Resource
                 continue;
             }
 
+            unset($intervention['active']);
             $intervention['status'] = (bool) $intervention['status'];
         }
 

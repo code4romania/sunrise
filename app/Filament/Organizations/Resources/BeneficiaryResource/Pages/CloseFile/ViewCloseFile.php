@@ -16,7 +16,6 @@ use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Support\Enums\Alignment;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewCloseFile extends ViewRecord
@@ -41,12 +40,13 @@ class ViewCloseFile extends ViewRecord
                 ->label(__('beneficiary.section.close_file.actions.delete'))
                 ->outlined()
                 ->icon('heroicon-o-trash')
+                ->color('danger')
+                ->authorize(static::getResource()::canDelete($this->getRecord()->closeFile))
                 ->modalHeading(__('beneficiary.section.close_file.headings.modal_delete'))
                 ->modalDescription(__('beneficiary.section.close_file.labels.modal_delete_description'))
                 ->modalSubmitActionLabel(__('beneficiary.section.close_file.actions.delete'))
                 ->modalIcon()
-                ->modalAlignment(Alignment::Left)
-                // ->successNotificationTitle(__('beneficiary.section.close_file.notifications.delete_success'))
+                ->successNotificationTitle(__('beneficiary.section.close_file.notifications.delete_success'))
                 ->successRedirectUrl(self::getResource()::getUrl('view', ['record' => $this->getRecord()]))
                 ->using(fn (Beneficiary $record) => $record->closeFile->delete()),
         ];
@@ -83,7 +83,7 @@ class ViewCloseFile extends ViewRecord
                                     TextEntry::make('exit_date')
                                         ->label(__('beneficiary.section.close_file.labels.exit_date')),
 
-                                    TextEntry::make('caseManager.full_name')
+                                    TextEntry::make('caseManager.name_role')
                                         ->label(__('beneficiary.section.close_file.labels.case_manager')),
 
                                 ]),

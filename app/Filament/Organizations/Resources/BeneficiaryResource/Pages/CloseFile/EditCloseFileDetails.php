@@ -6,11 +6,11 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFi
 
 use App\Concerns\RedirectToCloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\CloseFile;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -63,6 +63,7 @@ class EditCloseFileDetails extends EditRecord
 
             TextInput::make('number')
                 ->label(__('beneficiary.section.close_file.labels.number'))
+                ->maxLength(50)
                 ->required(),
 
             DatePicker::make('admittance_date')
@@ -73,15 +74,16 @@ class EditCloseFileDetails extends EditRecord
                 ->label(__('beneficiary.section.close_file.labels.exit_date'))
                 ->required(),
 
-            Select::make('user_id')
+            Select::make('specialist_id')
                 ->label(__('beneficiary.section.close_file.labels.case_manager'))
                 ->columnSpanFull()
                 ->options(
                     function (?CloseFile $record) use ($recordParam) {
-                        $specialists = $record ? $record->beneficiary->specialistsMembers : $recordParam->specialistsMembers;
+                        $specialists = $record ? $record->beneficiary->specialistsTeam : $recordParam->specialistsTeam;
 
                         return $specialists
-                            ->pluck('full_name', 'id');
+                            ->load(['user', 'role'])
+                            ->pluck('name_role', 'id');
                     }
                 )
                 ->required(),

@@ -13,6 +13,7 @@ use App\Enums\CivilStatus;
 use App\Enums\Drug;
 use App\Enums\Gender;
 use App\Enums\Occupation;
+use App\Enums\ProtectionOrder;
 use App\Enums\Studies;
 use App\Enums\Ternary;
 use App\Enums\Violence;
@@ -33,6 +34,7 @@ class Aggressor extends Model
         'age',
         'civil_status',
         'drugs',
+        'gender',
         'has_drug_history',
         'has_psychiatric_history',
         'has_violence_history',
@@ -42,6 +44,9 @@ class Aggressor extends Model
         'relationship',
         'studies',
         'violence_types',
+        'has_protection_order',
+        'electronically_monitored',
+        'protection_order_notes',
     ];
 
     protected $casts = [
@@ -57,5 +62,7 @@ class Aggressor extends Model
         'relationship' => AggressorRelationship::class,
         'studies' => Studies::class,
         'violence_types' => AsEnumCollection::class . ':' . Violence::class,
+        'has_protection_order' => ProtectionOrder::class,
+        'electronically_monitored' => Ternary::class,
     ];
 }

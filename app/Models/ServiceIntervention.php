@@ -8,6 +8,7 @@ use App\Concerns\HasGeneralStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ServiceIntervention extends Model
@@ -27,6 +28,27 @@ class ServiceIntervention extends Model
 
     public function organizationIntervention(): HasOne
     {
-        return $this->hasOne(OrganizationServiceIntervention::class);
+        return $this->hasOne(OrganizationServiceIntervention::class)
+            ->whereHas('organizationService');
+    }
+
+    public function allOrganizationIntervention(): HasMany
+    {
+        return $this->hasMany(OrganizationServiceIntervention::class);
+    }
+
+    public function getOrganizationsCountAttribute(): int
+    {
+        return $this->allOrganizationIntervention()->count();
+    }
+
+    public function getInstitutionsCountAttribute(): int
+    {
+        return $this->allOrganizationIntervention()
+            ->with('organization')
+            ->get()
+            ->map(fn (OrganizationServiceIntervention $item) => $item->organization)
+            ->unique('institution_id')
+            ->count();
     }
 }

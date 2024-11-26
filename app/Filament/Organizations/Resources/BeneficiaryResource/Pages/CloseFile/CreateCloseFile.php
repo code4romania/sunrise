@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
-use App\Enums\Role;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Models\CaseTeam;
+use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Group;
@@ -49,12 +48,11 @@ class CreateCloseFile extends EditRecord
             'date' => now()->format('Y-m-d'),
             'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
             'exit_date' => now()->format('Y-m-d'),
-            'case_team_id' => $this->getRecord()
-                ->team
+            'specialist_id' => $this->getRecord()
+                ->specialistsTeam
+                ->load('role')
                 ->filter(
-                    fn (CaseTeam $item) => $item->roles
-                        ?->filter(fn (Role $role) => Role::isValue($role, Role::MANGER))
-                        ->count()
+                    fn (Specialist $item) => $item->role?->case_manager
                 )
                 ->first()
                 ?->id,

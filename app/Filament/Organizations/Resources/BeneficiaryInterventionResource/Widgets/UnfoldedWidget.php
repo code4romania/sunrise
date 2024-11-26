@@ -48,6 +48,7 @@ class UnfoldedWidget extends BaseWidget
             ])
             ->headerActions([
                 ExportAction::make()
+                    ->label(__('intervention_plan.actions.download_meetings'))
                     ->exports([
                         ExcelExport::make()
                             ->withColumns([
@@ -75,6 +76,10 @@ class UnfoldedWidget extends BaseWidget
                         'record' => $this->record,
                     ])),
             ])
+            ->recordUrl(fn () => InterventionServiceResource::getUrl('view_meetings', [
+                'parent' => $this->record->interventionService,
+                'record' => $this->record,
+            ]))
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_table'))
             ->emptyStateIcon('heroicon-o-document');

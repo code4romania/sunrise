@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\ProtectionOrder;
 use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,9 +24,6 @@ class BeneficiaryAntecedentsFactory extends Factory
             'police_report_count' => fake()->numberBetween(0, 300),
             'has_medical_reports' => fake()->randomElement(Ternary::values()),
             'medical_report_count' => fake()->numberBetween(0, 300),
-            'has_protection_order' => fake()->randomElement(ProtectionOrder::values()),
-            'electronically_monitored' => fake()->randomElement(Ternary::values()),
-            'protection_order_notes' => fake()->text(100),
         ];
     }
 }

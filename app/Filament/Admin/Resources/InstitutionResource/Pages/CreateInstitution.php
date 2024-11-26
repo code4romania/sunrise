@@ -7,18 +7,28 @@ namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
 use App\Forms\Components\Repeater;
-use App\Models\Organization;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\Concerns\HasWizard;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Contracts\Support\Htmlable;
 
 class CreateInstitution extends CreateRecord
 {
     use HasWizard;
 
     protected static string $resource = InstitutionResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('institution.headings.create_title');
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return __('institution.headings.create_title');
+    }
 
     public function getSteps(): array
     {
@@ -58,14 +68,5 @@ class CreateInstitution extends CreateRecord
                         ]),
                 ]),
         ];
-    }
-
-    public function afterCreate()
-    {
-        $record = $this->getRecord();
-        $admins = $record->admins;
-        $organizations = $record->organizations;
-
-        $organizations->each(fn (Organization $organization) => $organization->users()->attach($admins->pluck('id')));
     }
 }

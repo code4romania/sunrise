@@ -14,6 +14,7 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -42,7 +43,11 @@ class RoleResource extends Resource
 
                         TextInput::make('name')
                             ->label(__('nomenclature.labels.role_name'))
-                            ->placeholder(__('nomenclature.placeholders.role_name')),
+                            ->placeholder(__('nomenclature.placeholders.role_name'))
+                            ->maxLength(200),
+
+                        Toggle::make('case_manager')
+                            ->label(__('nomenclature.labels.role_case_manager')),
 
                         Spacer::make(),
 
@@ -50,7 +55,7 @@ class RoleResource extends Resource
 
                         CheckboxList::make('case_permissions')
                             ->label(__('nomenclature.labels.case_permissions'))
-                            ->options(CasePermission::options())
+                            ->options(CasePermission::getOptionsWithoutCaseManager())
                             ->columnSpanFull(),
 
                         CheckboxList::make('ngo_admin_permissions')
@@ -82,6 +87,7 @@ class RoleResource extends Resource
 
                 TextColumn::make('institutions')
                     ->label(__('nomenclature.labels.institutions'))
+                    ->formatStateUsing(fn ($record) => $record->organizations->unique('institution_id')->count())
                     ->default(0),
 
                 TextColumn::make('organizations')
@@ -100,7 +106,7 @@ class RoleResource extends Resource
                     ->options(GeneralStatus::options()),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
+                Tables\Actions\EditAction::make()
                     ->label(__('nomenclature.actions.edit')),
             ])
             ->emptyStateHeading(__('nomenclature.labels.empty_state_role_table'))

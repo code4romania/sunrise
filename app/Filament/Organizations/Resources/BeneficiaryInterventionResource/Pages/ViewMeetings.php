@@ -8,14 +8,13 @@ use App\Concerns\HasGroupPages;
 use App\Concerns\HasParentResource;
 use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Infolists\Components\Actions\CreateAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionMeeting;
 use App\Models\User;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
-use Filament\Actions\DeleteAction;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
@@ -27,6 +26,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Carbon;
 
 class ViewMeetings extends ViewRecord
 {
@@ -54,19 +54,29 @@ class ViewMeetings extends ViewRecord
             Select::make('status')
                 ->label(__('intervention_plan.labels.status'))
                 ->options(MeetingStatus::options()),
+
             DatePicker::make('date')
-                ->label(__('intervention_plan.labels.date')),
+                ->label(__('intervention_plan.labels.date'))
+                ->format('Y-m-d'),
+
             TimePicker::make('time')
-                ->label(__('intervention_plan.labels.time')),
+                ->label(__('intervention_plan.labels.time'))
+                ->format('H:i')
+                ->displayFormat('H:i'),
+
             TextInput::make('duration')
                 ->label(__('intervention_plan.labels.duration'))
+                ->maxLength(3)
                 ->numeric(),
+
             Select::make('user_id')
                 ->label(__('intervention_plan.labels.responsible_specialist'))
                 ->options(User::getTenantOrganizationUsers()),
+
             RichEditor::make('observations')
                 ->label(__('intervention_plan.labels.observations'))
                 ->columnSpanFull(),
+
             Hidden::make('beneficiary_intervention_id')
                 ->default($this->record->id),
         ];
@@ -99,8 +109,9 @@ class ViewMeetings extends ViewRecord
 
                                     return __('intervention_plan.headings.meeting_repeater', [
                                         'number' => $index + 1,
-                                    ]) . ' ' . $record->status?->getLabel();
+                                    ]);
                                 })
+                                ->badge(fn (InterventionMeeting $record) => $record->status)
                                 ->action(Action::make('edit')
                                     ->label(__('general.action.edit'))
                                     ->icon('heroicon-o-pencil')
@@ -109,18 +120,20 @@ class ViewMeetings extends ViewRecord
                                     ->form($this->getFormSchema())
                                     ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
                                     ->extraModalFooterActions(
-                                        fn ($record) => [
-                                            DeleteAction::make()
-                                                ->record($record)
+                                        fn (InterventionMeeting $record) => [
+                                            Action::make('delete')
+//                                                ->record($record)
                                                 ->label(__('intervention_plan.actions.delete_meeting'))
                                                 ->outlined()
-                                                ->cancelParentActions(),
+                                                ->color('danger')
+                                                ->cancelParentActions()
+                                                ->action(fn (InterventionMeeting $record) => $record->delete()),
                                         ]
-                                    )),
+                                    )->action(fn (array $data, InterventionMeeting $record) => $record->update($data))),
 
                             TextEntry::make('date')
                                 ->label(__('intervention_plan.labels.date'))
-                                ->formatStateUsing(fn (InterventionMeeting $record, $state) => $state . ' ' . $record->time),
+                                ->formatStateUsing(fn (InterventionMeeting $record, Carbon | string $state) => (\is_string($state) ? $state : $state->format('Y-m-d')) . ' ' . $record->time?->format('H:i')),
                             TextEntry::make('duration')
                                 ->label(__('intervention_plan.labels.duration')),
                             TextEntry::make('user.full_name')

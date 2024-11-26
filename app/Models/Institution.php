@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\HasSlug;
 use App\Concerns\HasUlid;
+use App\Enums\AreaType;
 use App\Enums\InstitutionStatus;
 use App\Enums\OrganizationType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,19 +33,22 @@ class Institution extends Model implements HasMedia
         'type',
         'cif',
         'main_activity',
+        'area',
         'county_id',
         'city_id',
         'address',
-        'reprezentative_name',
-        'reprezentative_email',
-        'phone',
+        'representative_person',
+        'contact_person',
         'website',
         'status',
     ];
 
     protected $casts = [
         'type' => OrganizationType::class,
+        'area' => AreaType::class,
         'status' => InstitutionStatus::class,
+        'representative_person' => 'array',
+        'contact_person' => 'array',
     ];
 
     protected function getSlugSource(): string
@@ -90,6 +94,11 @@ class Institution extends Model implements HasMedia
     public function getCountyAndCityAttribute(): string
     {
         return $this->city?->name . ' (' . $this->county?->name . ')';
+    }
+
+    public function isPending(): bool
+    {
+        return InstitutionStatus::isValue($this->status, InstitutionStatus::PENDING);
     }
 
     public function inactivate(): void

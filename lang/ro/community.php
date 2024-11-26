@@ -29,4 +29,8 @@ return [
         'logo' => 'Încarcă logo-ul organizației sau o imagine ilustrativă, care să poată fi afișată lângă descrierea organizației.',
     ],
 
+    'headings' => [
+        'empty_state_title' => 'Comunitatea SUNRISE va fi disponibilă în curând',
+    ],
+
 ];

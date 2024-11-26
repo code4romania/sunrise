@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Enums\UserStatus;
 use App\Models\User;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
@@ -73,7 +72,9 @@ class Welcome extends SimplePage
             data_get($this->form->getState(), 'password')
         );
         $this->user->activate();
-        $this->user->institution->activate();
+        if ($this->user->institution?->isPending()) {
+            $this->user->institution->activate();
+        }
 
         Filament::auth()->login($this->user);
 

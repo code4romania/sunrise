@@ -18,6 +18,8 @@ class CaseStatsWidget extends BaseWidget
             Stat::make(
                 __('beneficiary.stats.open'),
                 Beneficiary::query()
+                    ->whereCaseIsActive()
+                    ->whereUserHasAccess()
                     ->count()
             ),
 
@@ -25,6 +27,7 @@ class CaseStatsWidget extends BaseWidget
                 __('beneficiary.stats.monitoring'),
                 Beneficiary::query()
                     ->whereCaseIsMonitored()
+                    ->whereUserHasAccess()
                     ->count()
             ),
 
@@ -32,6 +35,7 @@ class CaseStatsWidget extends BaseWidget
                 __('beneficiary.stats.closed'),
                 Beneficiary::query()
                     ->whereCaseIsClosed()
+                    ->whereUserHasAccess()
                     ->count()
             ),
         ];

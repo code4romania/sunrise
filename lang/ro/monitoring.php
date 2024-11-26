@@ -34,6 +34,7 @@ return [
         'empty_state_table' => 'Nicio fișă de monitorizare încărcat',
         'widget_table' => 'Monitorizare caz',
         'widget_empty_state' => 'Adaugă fișe de monitorizare periodică cazului',
+        'empty_state_children' => 'Persoana nu are copii',
     ],
     'labels' => [
         'date' => 'Data realizării fișei de monitorizare',
@@ -62,6 +63,8 @@ return [
         'empty_state_table' => 'Adauga o fișa de monitorizare',
         'last_monitoring_date' => 'Ultima monitorizare',
         'count' => 'Total monitorizări efectuate',
+        'role' => 'Rol',
+        'specialist_name' => 'Nume specialist',
     ],
     'actions' => [
         'create' => 'Adaugă fișă de monitorizare',
@@ -69,6 +72,7 @@ return [
         'create_simple' => 'Începe cu o fișă necompletată',
         'create_widget' => 'Completează fișa de monitorizare',
         'delete' => 'Șterge fișă',
+        'add_specialist' => 'Adaugă un nou specialist',
     ],
     'placeholders' => [
         'number' => 'Adaugă un număr intern fișă',
