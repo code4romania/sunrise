@@ -18,6 +18,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class BenefitsWidget extends BaseWidget
@@ -87,7 +88,10 @@ class BenefitsWidget extends BaseWidget
 
             CheckboxList::make('benefit_types')
                 ->label(__('intervention_plan.labels.benefit_types'))
-                ->visible(fn (Get $get) => (int) $get('benefit_id') && self::getBenefitTypes((int) $get('benefit_id')))
+                ->visible(
+                    fn (Get $get) => (int) $get('benefit_id') &&
+                        ! self::getBenefitTypes((int) $get('benefit_id'))->isEmpty()
+                )
                 ->options(function (Get $get) {
                     $benefitID = (int) $get('benefit_id');
 
@@ -97,20 +101,25 @@ class BenefitsWidget extends BaseWidget
                         [];
                 }),
 
-            TextInput::make('another_benefit_type')
-                ->label(__('intervention_plan.labels.benefit_type'))
-                ->visible(fn (Get $get) => (int) $get('benefit_id') && ! self::getBenefitTypes((int) $get('benefit_id'))),
+            //            i don't know ...
+            //            TextInput::make('another_benefit_type')
+            //                ->label(__('intervention_plan.labels.benefit_type'))
+            //                ->visible(
+            //                    fn (Get $get) => (int) $get('benefit_id') &&
+            //                        self::getBenefitTypes((int) $get('benefit_id'))->isEmpty()
+            //                ),
 
             RichEditor::make('description')
                 ->label(__('intervention_plan.labels.benefit_description'))
-                ->placeholder(__('intervention_plan.placeholders.benefit_description')),
+                ->placeholder(__('intervention_plan.placeholders.benefit_description'))
+                ->maxLength(1000),
 
             Hidden::make('intervention_plan_id')
                 ->default(fn () => $this->record->id),
         ];
     }
 
-    protected static function getBenefitTypes(int $benefitID)
+    protected static function getBenefitTypes(int $benefitID): Collection
     {
         return Cache::driver('array')
             ->rememberForever(

@@ -60,6 +60,10 @@ class Beneficiary extends Model
         'email',
         'contact_notes',
 
+        'social_media',
+        'contact_person_name',
+        'contact_person_phone',
+
         'status',
 
         'doesnt_have_children',

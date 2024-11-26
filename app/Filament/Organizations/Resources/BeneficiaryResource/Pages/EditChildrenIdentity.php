@@ -129,10 +129,13 @@ class EditChildrenIdentity extends EditRecord
                 ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
                 ->schema([
                     TextInput::make('name')
-                        ->label(__('field.child_name')),
+                        ->label(__('field.child_name'))
+                        ->maxLength(70),
 
                     TextInput::make('age')
-                        ->label(__('field.age')),
+                        ->label(__('field.age'))
+                        ->mask('99')
+                        ->maxLength(2),
 
                     Select::make('gender')
                         ->label(__('field.gender'))
@@ -142,10 +145,12 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.birthdate')),
 
                     TextInput::make('current_address')
-                        ->label(__('field.current_address')),
+                        ->label(__('field.current_address'))
+                        ->maxLength(70),
 
                     TextInput::make('status')
-                        ->label(__('field.child_status')),
+                        ->label(__('field.child_status'))
+                        ->maxLength(70),
 
                     TextInput::make('workspace')
                         ->label(__('field.workspace'))
@@ -157,6 +162,7 @@ class EditChildrenIdentity extends EditRecord
                 ->placeholder(__('placeholder.other_relevant_details'))
                 ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                 ->nullable()
+                ->maxLength(500)
                 ->maxWidth('3xl')
                 ->columnSpanFull(),
         ];

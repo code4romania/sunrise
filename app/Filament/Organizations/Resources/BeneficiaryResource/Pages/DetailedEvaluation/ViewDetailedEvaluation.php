@@ -149,7 +149,8 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->schema([
                     TextEntry::make('recommendations_for_intervention_plan')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
-                        ->placeholder(__('beneficiary.placeholder.other_services')),
+                        ->placeholder(__('beneficiary.placeholder.other_services'))
+                        ->html(),
                 ]),
         ];
     }

@@ -43,7 +43,8 @@ class RoleResource extends Resource
 
                         TextInput::make('name')
                             ->label(__('nomenclature.labels.role_name'))
-                            ->placeholder(__('nomenclature.placeholders.role_name')),
+                            ->placeholder(__('nomenclature.placeholders.role_name'))
+                            ->maxLength(200),
 
                         Toggle::make('case_manager')
                             ->label(__('nomenclature.labels.role_case_manager')),
