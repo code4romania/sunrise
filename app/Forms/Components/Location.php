@@ -43,6 +43,8 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     protected int | null $addressMaxLength = 255;
 
+    protected bool $addressColumnSpanFull = false;
+
     protected bool $hasEnvironment = false;
 
     protected string | Closure | null $environmentField = null;
@@ -164,6 +166,13 @@ class Location extends Component implements CanEntangleWithSingularRelationships
         return $this;
     }
 
+    public function addressColumnSpanFull(bool $columnSpanFull = true): self
+    {
+        $this->addressColumnSpanFull = $columnSpanFull;
+
+        return $this;
+    }
+
     public function environment(bool | Closure $condition = true): static
     {
         $this->hasEnvironment = $condition;
@@ -198,6 +207,23 @@ class Location extends Component implements CanEntangleWithSingularRelationships
 
     public function getChildComponents(): array
     {
+        $addressInput = TextInput::make($this->getAddressField())
+            ->label($this->getAddressLabel())
+            ->placeholder(__('placeholder.address'))
+            ->required($this->isRequired())
+            ->disabled($this->isDisabled())
+            ->visible($this->hasAddress())
+            ->maxLength($this->addressMaxLength)
+            ->lazy()
+            ->afterStateUpdated(
+                fn (Set $set, $state) => $this->getCopyPath() ?
+                    $set(\sprintf('../%s.address', $this->getCopyPath()), $state) : null
+            );
+
+        if ($this->addressColumnSpanFull) {
+            $addressInput->columnSpanFull();
+        }
+
         return [
             Select::make($this->getCountyField())
                 ->label($this->getCountyLabel())
@@ -244,18 +270,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                         $set(\sprintf('../%s.city_id', $this->getCopyPath()), $state) : null
                 ),
 
-            TextInput::make($this->getAddressField())
-                ->label($this->getAddressLabel())
-                ->placeholder(__('placeholder.address'))
-                ->required($this->isRequired())
-                ->disabled($this->isDisabled())
-                ->visible($this->hasAddress())
-                ->maxLength($this->addressMaxLength)
-                ->lazy()
-                ->afterStateUpdated(
-                    fn (Set $set, $state) => $this->getCopyPath() ?
-                        $set(\sprintf('../%s.address', $this->getCopyPath()), $state) : null
-                ),
+            $addressInput,
 
             Select::make($this->getEnvironmentField())
                 ->label($this->getEnvironmentLabel())

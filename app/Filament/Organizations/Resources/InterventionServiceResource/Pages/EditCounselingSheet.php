@@ -80,13 +80,16 @@ class EditCounselingSheet extends EditRecord
                     Select::make('data.patrimony')
                         ->label(__('intervention_plan.labels.patrimony'))
                         ->options(Patrimony::options()),
+
                     Select::make('data.possession_mode')
                         ->label(__('intervention_plan.labels.possession_mode'))
                         ->options(PossessionMode::options())
                         ->live(),
+
                     Textarea::make('data.possession_observation')
                         ->label(__('intervention_plan.labels.possession_observation'))
                         ->visible(fn (Get $get) => PossessionMode::isValue($get('data.possession_mode'), PossessionMode::OTHER))
+                        ->maxLength(100)
                         ->columnSpanFull(),
                 ]),
 
@@ -100,8 +103,10 @@ class EditCounselingSheet extends EditRecord
                                 ->label(__('intervention_plan.labels.original_documents'))
                                 ->options(FileDocumentType::options())
                                 ->live(),
+
                             Textarea::make('data.original_documents_observation')
                                 ->label(__('intervention_plan.labels.original_documents_observation'))
+                                ->maxLength(100)
                                 ->visible(fn (Get $get) => \in_array(FileDocumentType::OTHER->value, $get('data.original_documents'))),
                         ]),
 
@@ -111,8 +116,10 @@ class EditCounselingSheet extends EditRecord
                                 ->label(__('intervention_plan.labels.copy_documents'))
                                 ->options(FileDocumentType::options())
                                 ->live(),
+
                             Textarea::make('data.copy_documents_observation')
                                 ->label(__('intervention_plan.labels.copy_documents_observation'))
+                                ->maxLength(100)
                                 ->visible(fn (Get $get) => \in_array(FileDocumentType::OTHER->value, $get('data.copy_documents'))),
                         ]),
                 ]),
@@ -125,13 +132,20 @@ class EditCounselingSheet extends EditRecord
                         ->addActionLabel(__('intervention_plan.actions.add_institution'))
                         ->schema([
                             TextInput::make('institution')
-                                ->label(__('intervention_plan.labels.responsible_institution')),
+                                ->label(__('intervention_plan.labels.responsible_institution'))
+                                ->maxLength(100),
+
                             DatePicker::make('contact_date')
                                 ->label(__('intervention_plan.labels.contact_date')),
+
                             TextInput::make('phone')
-                                ->label(__('intervention_plan.labels.phone')),
+                                ->label(__('intervention_plan.labels.phone'))
+                                ->tel()
+                                ->maxLength(14),
+
                             TextInput::make('contact_person')
-                                ->label(__('intervention_plan.labels.contact_person')),
+                                ->label(__('intervention_plan.labels.contact_person'))
+                                ->maxLength(100),
                         ]),
 
                 ]),
@@ -141,6 +155,7 @@ class EditCounselingSheet extends EditRecord
                 ->schema([
                     Textarea::make('data.observations')
                         ->label(__('intervention_plan.labels.final_observation'))
+                        ->maxLength(2500)
                         ->columnSpanFull(),
                 ]),
         ];
@@ -176,23 +191,31 @@ class EditCounselingSheet extends EditRecord
                     Select::make('data.current_contraception')
                         ->label(__('intervention_plan.labels.current_contraception'))
                         ->options(Ternary::options()),
+
                     TextInput::make('data.observations_contraception')
-                        ->label(__('intervention_plan.labels.observations_contraception')),
+                        ->label(__('intervention_plan.labels.observations_contraception'))
+                        ->maxLength(100),
+
                     Select::make('data.psychiatric_history')
                         ->label(__('intervention_plan.labels.psychiatric_history'))
                         ->options(Ternary::options()),
+
                     TextInput::make('data.psychiatric_history_observations')
                         ->label(__('intervention_plan.labels.psychiatric_history_observations'))
                         ->maxLength(100),
+
                     Select::make('data.investigations_for_psychiatric_pathology')
                         ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
                         ->options(Ternary::options()),
+
                     TextInput::make('data.investigations_observations')
                         ->label(__('intervention_plan.labels.investigations_observations'))
                         ->maxLength(100),
+
                     Select::make('data.treatment_for_psychiatric_pathology')
                         ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
                         ->options(Ternary::options()),
+
                     TextInput::make('data.treatment_observations')
                         ->label(__('intervention_plan.labels.treatment_observations'))
                         ->maxLength(100),
@@ -204,6 +227,7 @@ class EditCounselingSheet extends EditRecord
                     Textarea::make('data.relationship_history')
                         ->label(__('intervention_plan.labels.relationship_history'))
                         ->maxLength(1500),
+
                     Textarea::make('data.last_incident_description')
                         ->label(__('intervention_plan.labels.last_incident_description'))
                         ->maxLength(1500),
@@ -215,62 +239,78 @@ class EditCounselingSheet extends EditRecord
                         ->label(__('intervention_plan.labels.violence_history_forms'))
                         ->maxLength(1500)
                         ->maxWidth('3xl'),
+
                     Radio::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Radio::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Radio::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Radio::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Radio::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Radio::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Radio::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Radio::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
                         ->inline()
                         ->options(Frequency::options()),
+
                     Group::make()
                         ->maxWidth('3xl')
                         ->schema([
                             Textarea::make('data.physical_violence_description')
                                 ->label(__('intervention_plan.labels.physical_violence_description'))
                                 ->maxLength(1500),
+
                             Textarea::make('data.sexual_violence_description')
                                 ->label(__('intervention_plan.labels.sexual_violence_description'))
                                 ->maxLength(1500),
+
                             Textarea::make('data.psychological_violence_description')
                                 ->label(__('intervention_plan.labels.psychological_violence_description'))
                                 ->maxLength(1500),
+
                             Textarea::make('data.verbal_violence_description')
                                 ->label(__('intervention_plan.labels.verbal_violence_description'))
                                 ->maxLength(1500),
+
                             Textarea::make('data.social_violence_description')
                                 ->label(__('intervention_plan.labels.social_violence_description'))
                                 ->maxLength(1500),
+
                             Textarea::make('data.economic_violence_description')
                                 ->label(__('intervention_plan.labels.economic_violence_description'))
                                 ->maxLength(1500),
+
                             Textarea::make('data.cyber_violence_description')
                                 ->label(__('intervention_plan.labels.cyber_violence_description'))
                                 ->maxLength(1500),
+
                             Textarea::make('data.spiritual_violence_description')
                                 ->label(__('intervention_plan.labels.spiritual_violence_description'))
                                 ->maxLength(1500),
@@ -283,9 +323,11 @@ class EditCounselingSheet extends EditRecord
                     Textarea::make('data.physical_effects')
                         ->label(__('intervention_plan.labels.physical_effects'))
                         ->maxLength(1500),
+
                     Textarea::make('data.psychological_effects')
                         ->label(__('intervention_plan.labels.psychological_effects'))
                         ->maxLength(1500),
+
                     Textarea::make('data.social_effects')
                         ->label(__('intervention_plan.labels.social_effects'))
                         ->maxLength(1500),
@@ -305,6 +347,7 @@ class EditCounselingSheet extends EditRecord
                     Textarea::make('data.internal_resources')
                         ->label(__('intervention_plan.labels.internal_resources'))
                         ->maxLength(1500),
+
                     Textarea::make('data.external_resources')
                         ->label(__('intervention_plan.labels.external_resources'))
                         ->maxLength(1500),

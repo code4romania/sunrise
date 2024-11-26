@@ -117,7 +117,7 @@ class EditAggressor extends EditRecord
                         ->placeholder(__('placeholder.number'))
                         ->numeric()
                         ->minValue(0)
-                        ->maxValue(200),
+                        ->maxValue(99),
 
                     Select::make('gender')
                         ->label(__('field.aggressor_gender'))
@@ -219,6 +219,7 @@ class EditAggressor extends EditRecord
 
                             TextInput::make('psychiatric_history_notes')
                                 ->label(__('field.aggressor_psychiatric_history_notes'))
+                                ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('has_psychiatric_history'))),
                         ]),
 

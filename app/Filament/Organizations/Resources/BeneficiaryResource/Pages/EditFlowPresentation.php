@@ -114,6 +114,7 @@ class EditFlowPresentation extends EditRecord
 
                             TextInput::make('notifier_other')
                                 ->label(__('field.notifier_other'))
+                                ->maxLength(100)
                                 ->visible(fn (Get $get) => Notifier::isValue(
                                     $get('notifier'),
                                     Notifier::OTHER
@@ -132,6 +133,7 @@ class EditFlowPresentation extends EditRecord
 
                             TextInput::make('act_location_other')
                                 ->label(__('field.act_location_other'))
+                                ->maxLength(100)
                                 ->visible(
                                     fn (Get $get) => collect($get('act_location'))
                                         ->filter(fn ($value) => ActLocation::isValue($value, ActLocation::OTHER))

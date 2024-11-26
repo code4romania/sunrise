@@ -75,17 +75,20 @@ class EditCloseFileGeneralDetails extends EditRecord
             TextInput::make('institution_name')
                 ->label(__('beneficiary.section.close_file.labels.institution_name'))
                 ->placeholder(__('beneficiary.section.close_file.placeholders.institution_name'))
-                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::TRANSFER_TO)),
+                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::TRANSFER_TO))
+                ->maxLength(100),
 
             TextInput::make('beneficiary_request')
                 ->label(__('beneficiary.section.close_file.labels.beneficiary_request'))
                 ->placeholder(__('beneficiary.section.close_file.placeholders.add_details'))
-                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::BENEFICIARY_REQUEST)),
+                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::BENEFICIARY_REQUEST))
+                ->maxLength(100),
 
             TextInput::make('other_details')
                 ->label(__('beneficiary.section.close_file.labels.other_details'))
                 ->placeholder(__('beneficiary.section.close_file.placeholders.add_details'))
-                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::OTHER)),
+                ->visible(fn (Get $get) => CloseMethod::isValue($get('close_method'), CloseMethod::OTHER))
+                ->maxLength(100),
 
             RichEditor::make('close_situation')
                 ->label(__('beneficiary.section.close_file.labels.close_situation'))

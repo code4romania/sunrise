@@ -434,6 +434,10 @@ return [
                 'add_details' => 'Adaugă detalii',
                 'close_situation' => 'Descrieți situația cazului la închidere',
             ],
+
+            'notifications' => [
+                'delete_success' => 'Fișa de inchidere a fost ștearsă cu succes.',
+            ],
         ],
 
         'related_cases' => [
