@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widgets;
 
 use App\Enums\CounselingSheet;
-use App\Enums\Drug;
 use App\Enums\FileDocumentType;
 use App\Enums\Frequency;
 use App\Enums\Patrimony;
 use App\Enums\PossessionMode;
-use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
@@ -146,29 +144,6 @@ class CounselingSheetWidget extends InfolistWidget
     private function getSchemaForPsychologicalAssistance(): array
     {
         return [
-            Section::make(__('intervention_plan.headings.medical_details'))
-                ->columns()
-                ->schema([
-                    EnumEntry::make('data.substance_use')
-                        ->label(__('intervention_plan.labels.substance_use'))
-                        ->enumClass(Ternary::class),
-
-                    EnumEntry::make('data.substance_types')
-                        ->label(__('intervention_plan.labels.substance_types'))
-                        ->enumClass(Drug::class),
-
-                    TextEntry::make('data.observations_substances')
-                        ->label(__('intervention_plan.labels.observations_substances'))
-                        ->columnSpanFull(),
-
-                    EnumEntry::make('data.psychiatric_history')
-                        ->label(__('intervention_plan.labels.psychiatric_history'))
-                        ->enumClass(Ternary::class),
-
-                    TextEntry::make('data.psychiatric_history_observations')
-                        ->label(__('intervention_plan.labels.psychiatric_history_observations')),
-                ]),
-
             Section::make(__('intervention_plan.headings.history'))
                 ->schema([
                     TextEntry::make('data.relationship_history')
