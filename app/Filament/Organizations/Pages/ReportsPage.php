@@ -102,11 +102,13 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
         return $infolist->schema([
             Section::make(fn () => $this->report_type ? __('report.table_heading.' . $this->report_type) : null)
                 ->hiddenLabel()
-                ->headerActions([ExportReport::make('export_report')
-                    ->setReportType($this->report_type)
-                    ->setStartDate($this->start_date)
-                    ->setEndDate($this->end_date)
-                    ->setShowMissingValues($this->show_missing_values)])
+                ->headerActions([
+                    ExportReport::make('export_report')
+                        ->setReportType($this->report_type)
+                        ->setStartDate($this->start_date)
+                        ->setEndDate($this->end_date)
+                        ->setShowMissingValues($this->show_missing_values),
+                ])
                 ->schema([
                     $this->reportTable(),
                 ]),

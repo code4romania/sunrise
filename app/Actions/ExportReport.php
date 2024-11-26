@@ -7,8 +7,9 @@ namespace App\Actions;
 use App\Enums\ReportType;
 use App\Exports\Report;
 use App\Services\Reports\BeneficiariesV2;
-use Excel;
 use Filament\Infolists\Components\Actions\Action;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ExportReport extends Action
 {
@@ -57,7 +58,7 @@ class ExportReport extends Action
         return $this;
     }
 
-    public function generateExport(): void
+    public function generateExport(): BinaryFileResponse
     {
         $service = new BeneficiariesV2();
         $service->setReportType($this->reportType)
@@ -66,6 +67,8 @@ class ExportReport extends Action
             ->setShowMissingValue($this->showMissingValues)
             ->composeReport();
 
-        Excel::download(new Report($service), 'test.xlsx');
+        $fileName = \sprintf('%s_%s_%s.xlsx', $this->startDate, $this->endDate, $this->reportType->value);
+
+        return Excel::download(new Report($service), $fileName);
     }
 }
