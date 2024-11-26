@@ -278,8 +278,28 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('email')
                         ->label(__('beneficiary.section.identity.labels.email'))
                         ->placeholder(__('beneficiary.placeholder.email'))
+                        ->maxLength(50)
                         ->email()
                         ->maxLength(50)
+                        ->nullable(),
+
+                    TextInput::make('social_media')
+                        ->label(__('beneficiary.section.identity.labels.social_media'))
+                        ->placeholder(__('beneficiary.placeholder.social_media'))
+                        ->maxLength(300)
+                        ->nullable(),
+
+                    TextInput::make('contact_person_name')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_name'))
+                        ->placeholder(__('beneficiary.placeholder.contact_person_name'))
+                        ->maxLength(50)
+                        ->nullable(),
+
+                    TextInput::make('contact_person_phone')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_phone'))
+                        ->placeholder(__('beneficiary.placeholder.contact_person_phone'))
+                        ->tel()
+                        ->maxLength(14)
                         ->nullable(),
 
                     Textarea::make('contact_notes')
