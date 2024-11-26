@@ -137,6 +137,9 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->label(__('field.ethnicity'))
                         ->placeholder(__('placeholder.ethnicity')),
 
+                    TextEntry::make('id_type')
+                        ->label(__('field.id_type')),
+
                     TextEntry::make('id_serial')
                         ->label(__('field.id_serial'))
                         ->placeholder(__('placeholder.id_serial')),
