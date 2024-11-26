@@ -6,7 +6,9 @@ namespace Database\Factories;
 
 use App\Enums\AddressType;
 use App\Enums\CaseStatus;
+use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
+use App\Enums\Ethnicity;
 use App\Enums\Gender;
 use App\Enums\IDType;
 use App\Models\Address;
@@ -47,11 +49,14 @@ class BeneficiaryFactory extends Factory
      */
     public function definition(): array
     {
-        $birthdate = fake()
-            ->dateTimeBetween('1900-01-01', 'now')
-            ->format('Y-m-d');
+        $birthdate = fake()->boolean(75) ?
+            fake()->dateTimeBetween('1900-01-01', 'now')
+                ->format('Y-m-d') :
+            null;
 
-        $gender = fake()->randomElement(Gender::values());
+        $gender = fake()->boolean(75) ?
+            fake()->randomElement(Gender::values()) :
+            null;
 
         return [
             'first_name' => fake()->firstName(),
@@ -164,6 +169,24 @@ class BeneficiaryFactory extends Factory
                 ->for($beneficiary)
                 ->create();
         });
+    }
+
+    public function withCitizenship(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'citizenship' => fake()->boolean(75) ?
+                fake()->randomElement(Citizenship::values()) :
+                null,
+        ]);
+    }
+
+    public function withEthnicity(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'ethnicity' => fake()->boolean(75) ?
+                fake()->randomElement(Ethnicity::values()) :
+                null,
+        ]);
     }
 
     public function configure(): static

@@ -9,6 +9,11 @@ return [
         'cases' => 'Cazuri',
     ],
 
+    'statistics' => [
+        '_group' => 'Beneficiari',
+        'label' => 'Rapoarte statistice',
+    ],
+
     'community' => [
         '_group' => 'Comunitatea Sunrise',
         'network' => 'Rețea organizații VD',
