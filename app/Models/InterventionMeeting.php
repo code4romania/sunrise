@@ -15,7 +15,7 @@ class InterventionMeeting extends Model
 
     protected $fillable = [
         'beneficiary_intervention_id',
-        'user_id',
+        'specialist_id',
         'status',
         'date',
         'time',
@@ -29,8 +29,8 @@ class InterventionMeeting extends Model
         'time' => 'date:H:i',
     ];
 
-    public function user(): BelongsTo
+    public function specialist(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Specialist::class);
     }
 }
