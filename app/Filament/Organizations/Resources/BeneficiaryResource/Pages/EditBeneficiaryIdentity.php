@@ -225,7 +225,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->label(__('field.same_as_legal_residence'))
                         ->live()
                         ->afterStateUpdated(function (bool $state, Set $set, Get $get) {
-                            if (!$state) {
+                            if (! $state) {
                                 $set('effective_residence.county_id', null);
                                 $set('effective_residence.city_id', null);
                                 $set('effective_residence.address', null);
@@ -270,7 +270,27 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('email')
                         ->label(__('beneficiary.section.identity.labels.email'))
                         ->placeholder(__('beneficiary.placeholder.email'))
+                        ->maxLength(50)
                         ->email()
+                        ->nullable(),
+
+                    TextInput::make('social_media')
+                        ->label(__('beneficiary.section.identity.labels.social_media'))
+                        ->placeholder(__('beneficiary.placeholder.social_media'))
+                        ->maxLength(300)
+                        ->nullable(),
+
+                    TextInput::make('contact_person_name')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_name'))
+                        ->placeholder(__('beneficiary.placeholder.contact_person_name'))
+                        ->maxLength(50)
+                        ->nullable(),
+
+                    TextInput::make('contact_person_phone')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_phone'))
+                        ->placeholder(__('beneficiary.placeholder.contact_person_phone'))
+                        ->tel()
+                        ->maxLength(14)
                         ->nullable(),
 
                     Textarea::make('contact_notes')
