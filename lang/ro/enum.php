@@ -418,4 +418,10 @@ return [
         'alimony' => 'Pensie alimentară',
         'other' => 'Altele',
     ],
+
+    'gender_short_values' => [
+        'f' => 'F',
+        'm' => 'M',
+        'n' => 'N',
+    ],
 ];
