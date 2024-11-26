@@ -74,12 +74,13 @@ class EditUserInstitution extends EditRecord
                 ->placeholder(__('institution.placeholders.email'))
                 ->maxLength(50)
                 ->email()
+                ->unique()
                 ->required(),
 
             TextInput::make('phone')
                 ->label(__('institution.labels.phone'))
                 ->placeholder(__('institution.placeholders.phone'))
-                ->maxLength(13)
+                ->maxLength(14)
                 ->tel()
                 ->required(),
         ];

@@ -80,7 +80,7 @@ class Location extends Component
 
     public function getCountyLabel(): string
     {
-        return $this->countyLabel ??  __('field.' . collect([
+        return $this->countyLabel ?? __('field.' . collect([
             $this->getId(),
             'county',
         ])
@@ -119,7 +119,7 @@ class Location extends Component
 
     public function getCityLabel(): string
     {
-        return $this->cityLabel ??  __('field.' . collect([
+        return $this->cityLabel ?? __('field.' . collect([
             $this->getId(),
             'city',
         ])
@@ -149,16 +149,16 @@ class Location extends Component
             ->join('_');
     }
 
-
     public function addressLabel(string $label): static
     {
         $this->addressLabel = $label;
 
         return $this;
     }
+
     public function getAddressLabel(): string
     {
-        return  $this->addressLabel?? __('field.' . collect([
+        return  $this->addressLabel ?? __('field.' . collect([
             $this->getId(),
             'address',
         ])
@@ -203,22 +203,18 @@ class Location extends Component
         return [
             TextEntry::make($this->getCountyField())
                 ->label($this->getCountyLabel())
-                ->placeholder(__('placeholder.county'))
                 ->formatStateUsing(fn ($state) => County::find($state)?->name ?? '-'),
 
             TextEntry::make($this->getCityField())
                 ->label($this->getCityLabel())
-                ->placeholder(__('placeholder.city'))
                 ->formatStateUsing(fn ($state) => City::find($state)?->name ?? '-'),
 
             TextEntry::make($this->getAddressField())
-                ->label($this->getAddressLabel())
-                ->placeholder(__('placeholder.address')),
+                ->label($this->getAddressLabel()),
 
-            EnumEntry::make($this->getEnvironmentField())
+            TextEntry::make($this->getEnvironmentField())
                 ->label($this->getEnvironmentLabel())
-                ->visible($this->hasEnvironment())
-                ->placeholder(__('placeholder.residence_environment')),
+                ->visible($this->hasEnvironment()),
         ];
     }
 }

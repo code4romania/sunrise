@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Widgets;
 
 use App\Filament\Organizations\Resources\InterventionPlanResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\InterventionPlan;
 use App\Models\InterventionService;
 use App\Models\OrganizationService;
 use App\Models\Specialist;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
@@ -60,11 +60,15 @@ class ServicesWidget extends BaseWidget
             ->actions([
                 ViewAction::make()
                     ->label(__('general.action.view_details'))
-                    ->url(fn ($record) => InterventionPlanResource::getUrl('view_intervention_service', [
+                    ->url(fn (InterventionService $record) => InterventionPlanResource::getUrl('view_intervention_service', [
                         'parent' => $this->record,
                         'record' => $record,
                     ])),
             ])
+            ->recordUrl(fn (InterventionService $record) => InterventionPlanResource::getUrl('view_intervention_service', [
+                'parent' => $this->record,
+                'record' => $record,
+            ]))
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_table'))
             ->emptyStateIcon('heroicon-o-document');
@@ -117,7 +121,6 @@ class ServicesWidget extends BaseWidget
 
                             DatePicker::make('start_date')
                                 ->label(__('intervention_plan.labels.start_date'))
-                                ->native(false),
                         ]),
                 ]),
 
@@ -125,12 +128,10 @@ class ServicesWidget extends BaseWidget
                 ->columnSpanFull()
                 ->schema([
                     DatePicker::make('start_date_interval')
-                        ->label(__('intervention_plan.labels.start_date_interval'))
-                        ->native(false),
+                        ->label(__('intervention_plan.labels.start_date_interval')),
 
                     DatePicker::make('end_date_interval')
-                        ->label(__('intervention_plan.labels.end_date_interval'))
-                        ->native(false),
+                        ->label(__('intervention_plan.labels.end_date_interval')),
                 ]),
 
             RichEditor::make('objections')

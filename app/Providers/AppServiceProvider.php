@@ -80,6 +80,8 @@ class AppServiceProvider extends ServiceProvider
         tap($this->app->isLocal(), function (bool $shouldBeEnabled) {
             Model::preventLazyLoading($shouldBeEnabled);
             Model::preventAccessingMissingAttributes($shouldBeEnabled);
+//            in create beneficiary page we use some inputs that doesn't exist in db
+//            Model::preventSilentlyDiscardingAttributes($shouldBeEnabled);
         });
 
         TextEntry::configureUsing(function (TextEntry $entry) {

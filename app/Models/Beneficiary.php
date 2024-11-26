@@ -12,7 +12,6 @@ use App\Concerns\HasEthnicity;
 use App\Concerns\HasSpecialistsTeam;
 use App\Concerns\HasUlid;
 use App\Concerns\LogsActivityOptions;
-use App\Enums\CasePermission;
 use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
@@ -61,28 +60,32 @@ class Beneficiary extends Model
         'email',
         'contact_notes',
 
+        'social_media',
+        'contact_person_name',
+        'contact_person_phone',
+
         'status',
 
         'doesnt_have_children',
         'children_total_count',
         'children_care_count',
-        'children_under_10_care_count',
-        'children_10_18_care_count',
+        'children_under_18_care_count',
         'children_18_care_count',
         'children_accompanying_count',
         'children_notes',
+
+        'notes',
 
     ];
 
     protected $casts = [
         'id_type' => IDType::class,
         'birthdate' => 'date',
-        'children_10_18_care_count' => 'integer',
         'children_18_care_count' => 'integer',
         'children_accompanying_count' => 'integer',
         'children_care_count' => 'integer',
         'children_total_count' => 'integer',
-        'children_under_10_care_count' => 'integer',
+        'children_under_18_care_count' => 'integer',
         'civil_status' => CivilStatus::class,
         'doesnt_have_children' => 'boolean',
         'gender' => Gender::class,
@@ -103,7 +106,7 @@ class Beneficiary extends Model
                 'user_id' => $user->id,
                 'role_id' => $user->canBeCaseManager()
                     ? $user->rolesInOrganization
-                        ->filter(fn ($role) => $role->case_permissions->contains(CasePermission::CAN_BE_CASE_MANAGER))
+                        ->filter(fn ($role) => $role->case_manager)
                         ->first()
                         ?->id
                     : $user->rolesInOrganization
@@ -136,7 +139,7 @@ class Beneficiary extends Model
         return $this->hasMany(Children::class);
     }
 
-    public function aggressor(): HasMany
+    public function aggressors(): HasMany
     {
         return $this->hasMany(Aggressor::class);
     }
@@ -203,7 +206,7 @@ class Beneficiary extends Model
         return $this->specialistsTeam()
             ->whereHas(
                 'role',
-                fn (Builder $query) => $query->whereJsonContains('case_permissions', CasePermission::CAN_BE_CASE_MANAGER)
+                fn (Builder $query) => $query->where('case_manager', true)
             );
     }
 

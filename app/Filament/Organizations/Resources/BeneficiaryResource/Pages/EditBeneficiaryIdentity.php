@@ -13,6 +13,7 @@ use App\Enums\Ethnicity;
 use App\Enums\Gender;
 use App\Enums\IDType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Location;
 use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
@@ -20,7 +21,6 @@ use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
@@ -109,6 +109,8 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('cnp')
                         ->label(__('field.cnp'))
                         ->placeholder(__('placeholder.cnp'))
+                        ->maxLength(13)
+                        ->mask('9999999999999')
                         ->unique(
                             ignorable: $parentBeneficiary,
                             ignoreRecord: true,
@@ -188,6 +190,7 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('id_serial')
                         ->label(__('field.id_serial'))
                         ->placeholder(__('placeholder.id_serial'))
+                        ->maxLength(2)
                         ->disabled(function (Get $get) {
                             if (! $get('id_type')) {
                                 return true;
@@ -199,6 +202,9 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('id_number')
                         ->label(__('field.id_number'))
                         ->placeholder(__('placeholder.id_number'))
+                        ->maxLength(9)
+                        ->mask('999999999')
+                        ->numeric()
                         ->disabled(function (Get $get) {
                             if (! $get('id_type')) {
                                 return true;
@@ -213,17 +219,30 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->relationship(AddressType::LEGAL_RESIDENCE->value)
                         ->city()
                         ->address()
-                        ->environment(),
+                        ->addressMaxLength(50)
+                        ->environment()
+                        ->copyDataInPath(
+                            fn (Get $get) => $get('same_as_legal_residence') ?
+                                AddressType::EFFECTIVE_RESIDENCE->value :
+                                null
+                        ),
 
                     Checkbox::make('same_as_legal_residence')
                         ->label(__('field.same_as_legal_residence'))
                         ->live()
-                        ->afterStateUpdated(function (bool $state, Set $set) {
-                            if ($state) {
+                        ->afterStateUpdated(function (bool $state, Set $set, Get $get) {
+                            if (! $state) {
                                 $set('effective_residence.county_id', null);
                                 $set('effective_residence.city_id', null);
                                 $set('effective_residence.address', null);
                                 $set('effective_residence.environment', null);
+                            }
+
+                            if ($state) {
+                                $set('effective_residence.county_id', $get('legal_residence.county_id'));
+                                $set('effective_residence.city_id', $get('legal_residence.city_id'));
+                                $set('effective_residence.address', $get('legal_residence.address'));
+                                $set('effective_residence.environment', $get('legal_residence.environment'));
                             }
                         })
                         ->columnSpanFull(),
@@ -234,9 +253,10 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
                         ->city()
                         ->address()
+                        ->addressMaxLength(50)
                         ->environment()
-                        ->visible(function (Get $get) {
-                            return ! $get('same_as_legal_residence');
+                        ->disabled(function (Get $get) {
+                            return  $get('same_as_legal_residence');
                         }),
 
                     Spacer::make(),
@@ -244,25 +264,57 @@ class EditBeneficiaryIdentity extends EditRecord
                     TextInput::make('primary_phone')
                         ->label(__('field.primary_phone'))
                         ->placeholder(__('placeholder.phone'))
+                        ->maxLength(14)
                         ->tel()
                         ->nullable(),
 
                     TextInput::make('backup_phone')
                         ->label(__('field.backup_phone'))
                         ->placeholder(__('placeholder.phone'))
+                        ->maxLength(14)
                         ->tel()
                         ->nullable(),
 
                     TextInput::make('email')
                         ->label(__('beneficiary.section.identity.labels.email'))
                         ->placeholder(__('beneficiary.placeholder.email'))
+                        ->maxLength(50)
                         ->email()
+                        ->maxLength(50)
+                        ->nullable(),
+
+                    TextInput::make('social_media')
+                        ->label(__('beneficiary.section.identity.labels.social_media'))
+                        ->placeholder(__('beneficiary.placeholder.social_media'))
+                        ->maxLength(300)
+                        ->nullable(),
+
+                    TextInput::make('contact_person_name')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_name'))
+                        ->placeholder(__('beneficiary.placeholder.contact_person_name'))
+                        ->maxLength(50)
+                        ->nullable(),
+
+                    TextInput::make('contact_person_phone')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_phone'))
+                        ->placeholder(__('beneficiary.placeholder.contact_person_phone'))
+                        ->tel()
+                        ->maxLength(14)
                         ->nullable(),
 
                     Textarea::make('contact_notes')
                         ->label(__('field.contact_notes'))
                         ->placeholder(__('placeholder.contact_notes'))
                         ->nullable()
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+
+                    // TODO check if is needed
+                    Textarea::make('notes')
+                        ->label(__('field.notes'))
+                        ->placeholder(__('placeholder.notes'))
+                        ->nullable()
+                        ->maxLength(1000)
                         ->columnSpanFull(),
                 ]),
         ];

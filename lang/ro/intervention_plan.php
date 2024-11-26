@@ -141,6 +141,7 @@ return [
         'delete_benefit_modal' => 'Șterge beneficiu social',
         'delete_beneficiary_intervention_modal' => 'Șterge intervenția',
         'empty_state_table_without_intervetntions' => 'Nici o interventie adăugată în planul de intervenție',
+        'edit_counseling_sheet' => 'Editează fișă consiliere',
     ],
 
     'actions' => [

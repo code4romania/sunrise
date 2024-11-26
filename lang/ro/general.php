@@ -29,4 +29,8 @@ return [
     'old' => 'Valori inițiale',
     'new' => 'Valori modificate',
     'field' => 'Câmp modificat',
+
+    'labels' => [
+        'developed_by' => 'o solutie dezvoltată de',
+    ],
 ];

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
 use App\Filament\Admin\Resources\InstitutionResource;
+use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\CreateAction;
@@ -29,17 +29,7 @@ class AdminsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                TextInput::make('first_name')
-                    ->label(__('institution.labels.first_name')),
-
-                TextInput::make('last_name')
-                    ->label(__('institution.labels.last_name')),
-
-                TextInput::make('email')
-                    ->label(__('institution.labels.email')),
-
-                TextInput::make('phone')
-                    ->label(__('institution.labels.phone')),
+                ...EditUserInstitution::getSchema(),
 
                 Hidden::make('ngo_admin')
                     ->default(1),

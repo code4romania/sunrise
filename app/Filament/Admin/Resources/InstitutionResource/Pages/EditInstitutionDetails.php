@@ -88,16 +88,12 @@ class EditInstitutionDetails extends EditRecord
 
                     Location::make()
                         ->city()
+                        ->address()
                         ->countyLabel(__('organization.field.county'))
                         ->cityLabel(__('organization.field.city'))
                         ->addressLabel(__('organization.field.address'))
-                        ->required(),
-
-                    TextInput::make('address')
-                        ->label(__('organization.field.address'))
-                        ->placeholder(__('organization.placeholders.address'))
-                        ->columnSpanFull()
-                        ->maxLength(200)
+                        ->addressMaxLength(200)
+                        ->addressColumnSpanFull()
                         ->required(),
 
                     Grid::make()
@@ -152,15 +148,29 @@ class EditInstitutionDetails extends EditRecord
 
                     SpatieMediaLibraryFileUpload::make('organization_status')
                         ->label(__('institution.labels.organization_status'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->helperText(__('institution.helper_texts.organization_status'))
                         ->collection('organization_status')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'application/pdf',
+                            'image/*',
+                        ])
                         ->columnSpanFull()
                         ->required(),
 
                     SpatieMediaLibraryFileUpload::make('social_service_provider_certificate')
                         ->label(__('institution.labels.social_service_provider_certificate'))
+                        ->maxSize(config('media-library.max_file_size'))
                         ->helperText(__('institution.helper_texts.social_service_provider_certificate'))
                         ->collection('social_service_provider_certificate')
+                        ->openable()
+                        ->downloadable()
+                        ->acceptedFileTypes([
+                            'application/pdf',
+                            'image/*',
+                        ])
                         ->columnSpanFull(),
                 ]),
         ];

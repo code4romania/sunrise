@@ -73,7 +73,8 @@ class ServiceResource extends Resource
                                 )
                             )
                             ->afterStateUpdated(self::populateTable())
-                            ->live(),
+                            ->live()
+                            ->required(),
 
                         Placeholder::make('service')
                             ->label(__('service.labels.name'))
@@ -139,19 +140,28 @@ class ServiceResource extends Resource
                                         ->addAction(fn (Action $action) => $action->hidden())
                                         ->deletable(false)
                                         ->reorderable(false)
+                                        ->mutateRelationshipDataBeforeCreateUsing(function (array $data) {
+                                            unset($data['active']);
+
+                                            return $data;
+                                        })
                                         ->schema([
                                             Checkbox::make('active')
                                                 ->label(__('service.labels.select'))
                                                 ->afterStateUpdated(fn (bool $state, Set $set) => $state ? $set('status', true) : $set('status', false))
                                                 ->live(),
+
                                             Placeholder::make('name')
                                                 ->label(__('service.labels.interventions'))
                                                 ->hiddenLabel()
                                                 ->content(fn ($state) => $state),
+
                                             Toggle::make('status')
                                                 ->label(__('service.labels.status'))
                                                 ->disabled(fn (Forms\Get $get) => ! $get('active')),
+
                                             Hidden::make('id'),
+
                                             Hidden::make('service_intervention_id'),
                                         ])
                                         ->afterStateHydrated(self::populateTable()),
@@ -236,10 +246,6 @@ class ServiceResource extends Resource
         ];
     }
 
-    protected function mutateFormDataBeforeSave()
-    {
-    }
-
     public static function processInterventionsBeforeSave(?array $interventions): ?array
     {
         foreach ($interventions as $key => &$intervention) {
@@ -248,6 +254,7 @@ class ServiceResource extends Resource
                 continue;
             }
 
+            unset($intervention['active']);
             $intervention['status'] = (bool) $intervention['status'];
         }
 

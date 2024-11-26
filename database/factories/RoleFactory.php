@@ -22,14 +22,12 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         $role = fake()->unique()->randomElement(Role::options());
-        $casePermissions = fake()->randomElements(CasePermission::values(), rand(1, 4));
+        $casePermissions = fake()->randomElements(CasePermission::values(), rand(1, 3));
         $status = fake()->boolean();
+        $caseManager = false;
         if ($role === Role::MANAGER->getLabel()) {
-            $casePermissions[] = CasePermission::CAN_BE_CASE_MANAGER->value;
             $status = true;
-        } else {
-            $casePermissions = array_diff($casePermissions, [CasePermission::CAN_BE_CASE_MANAGER->value]);
-            sort($casePermissions);
+            $caseManager = true;
         }
 
         return [
@@ -37,6 +35,7 @@ class RoleFactory extends Factory
             'status' => $status,
             'case_permissions' => $casePermissions,
             'ngo_admin_permissions' => fake()->randomElements(AdminPermission::values(), rand(1, 3)),
+            'case_manager' => $caseManager,
         ];
     }
 }

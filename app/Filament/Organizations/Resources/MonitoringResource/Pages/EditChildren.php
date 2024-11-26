@@ -9,10 +9,10 @@ use App\Concerns\RedirectToMonitoring;
 use App\Enums\ChildAggressorRelationship;
 use App\Enums\MaintenanceSources;
 use App\Filament\Organizations\Resources\MonitoringResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -75,10 +75,13 @@ class EditChildren extends EditRecord
                     Grid::make()
                         ->schema([
                             TextInput::make('status')
-                                ->label(__('monitoring.labels.status')),
+                                ->label(__('monitoring.labels.status'))
+                                ->maxLength(70),
 
                             TextInput::make('age')
-                                ->label(__('monitoring.labels.age')),
+                                ->label(__('monitoring.labels.age'))
+                                ->maxLength(2)
+                                ->mask('99'),
 
                             DatePicker::make('birthdate')
                                 ->label(__('monitoring.labels.birthdate')),

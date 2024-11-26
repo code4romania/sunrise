@@ -7,6 +7,8 @@ namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 use App\Filament\Organizations\Resources\ServiceResource;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\HtmlString;
 
 class ListServices extends ListRecords
 {
@@ -24,6 +26,17 @@ class ListServices extends ListRecords
 
     public function getSubheading(): string|Htmlable|null
     {
-        return __('service.helper_texts.list_page_subheading');
+        // TODO add user manual url after implement
+        return new HtmlString(__('service.helper_texts.list_page_subheading', ['user_manual_url' => '#']));
+    }
+
+    public function getHeader(): ?View
+    {
+        return view('filament.header-with-subheader-full-width', [
+            'heading' => $this->getTitle(),
+            'subheading' => $this->getSubheading(),
+            'actions' => $this->getHeaderActions(),
+            'breadcrumbs' => $this->getBreadcrumbs(),
+        ]);
     }
 }

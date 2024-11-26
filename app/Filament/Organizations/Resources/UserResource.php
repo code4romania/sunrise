@@ -129,11 +129,14 @@ class UserResource extends Resource
 
                     TextInput::make('email')
                         ->label(__('user.labels.email'))
+                        ->email()
+                        ->unique(ignoreRecord: true)
                         ->required(),
 
                     TextInput::make('phone_number')
                         ->label(__('user.labels.phone_number'))
                         ->tel()
+                        ->maxLength(14)
                         ->required(),
 
                     Select::make('role_id')
@@ -157,7 +160,7 @@ class UserResource extends Resource
                         ->schema([
                             CheckboxList::make('case_permissions')
                                 ->label(__('user.labels.case_permissions'))
-                                ->options(CasePermission::options())
+                                ->options(CasePermission::getOptionsWithoutCaseManager())
                                 ->disableOptionWhen(function (Get $get, string $value) {
                                     foreach ($get('../role_id') as $roleID) {
                                         $role = self::getRole($roleID);

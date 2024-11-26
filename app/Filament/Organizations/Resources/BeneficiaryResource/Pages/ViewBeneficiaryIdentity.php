@@ -169,22 +169,25 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->label(__('beneficiary.section.identity.labels.email'))
                         ->icon('heroicon-o-envelope'),
 
+                    TextEntry::make('social_media')
+                        ->label(__('beneficiary.section.identity.labels.social_media')),
+
+                    TextEntry::make('contact_person_name')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_name')),
+
+                    TextEntry::make('contact_person_phone')
+                        ->label(__('beneficiary.section.identity.labels.contact_person_phone')),
+
                     TextEntry::make('contact_notes')
                         ->label(__('field.contact_notes'))
                         ->placeholder(__('placeholder.contact_notes'))
                         ->columnSpanFull(),
 
-                    EnumEntry::make('studies')
-                        ->label(__('field.studies'))
-                        ->placeholder(__('placeholder.contact_notes')),
+                    TextEntry::make('notes')
+                        ->label(__('field.notes'))
+                        ->placeholder(__('placeholder.notes'))
+                        ->columnSpanFull(),
 
-                    EnumEntry::make('occupation')
-                        ->label(__('field.occupation'))
-                        ->placeholder(__('placeholder.contact_notes')),
-
-                    TextEntry::make('workplace')
-                        ->label(__('field.workplace'))
-                        ->placeholder(__('placeholder.contact_notes')),
                 ]),
         ];
     }
@@ -240,13 +243,8 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->placeholder(__('placeholder.number'))
                         ->numeric(),
 
-                    TextEntry::make('children_under_10_care_count')
-                        ->label(__('field.children_under_10_care_count'))
-                        ->placeholder(__('placeholder.number'))
-                        ->numeric(),
-
-                    TextEntry::make('children_10_18_care_count')
-                        ->label(__('field.children_10_18_care_count'))
+                    TextEntry::make('children_under_18_care_count')
+                        ->label(__('field.children_under_18_care_count'))
                         ->placeholder(__('placeholder.number'))
                         ->numeric(),
 
@@ -272,6 +270,9 @@ class ViewBeneficiaryIdentity extends ViewRecord
                     TextEntry::make('age')
                         ->label(__('field.age')),
 
+                    TextEntry::make('gender')
+                        ->label(__('field.gender')),
+
                     TextEntry::make('birthdate')
                         ->label(__('field.birthdate')),
 
@@ -280,6 +281,9 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
                     TextEntry::make('status')
                         ->label(__('field.child_status')),
+
+                    TextEntry::make('workspace')
+                        ->label(__('field.workspace')),
                 ]),
 
             TextEntry::make('children_notes')

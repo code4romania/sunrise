@@ -8,13 +8,13 @@ use App\Concerns\HasGroupPages;
 use App\Concerns\HasParentResource;
 use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Infolists\Components\Actions\CreateAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionMeeting;
 use App\Models\User;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
@@ -54,25 +54,29 @@ class ViewMeetings extends ViewRecord
             Select::make('status')
                 ->label(__('intervention_plan.labels.status'))
                 ->options(MeetingStatus::options()),
+
             DatePicker::make('date')
                 ->label(__('intervention_plan.labels.date'))
-                ->format('Y-m-d')
-                ->native(false),
+                ->format('Y-m-d'),
+
             TimePicker::make('time')
                 ->label(__('intervention_plan.labels.time'))
                 ->format('H:i')
-                ->displayFormat('H:i')
-                ->seconds(false),
+                ->displayFormat('H:i'),
+
             TextInput::make('duration')
                 ->label(__('intervention_plan.labels.duration'))
                 ->maxLength(3)
                 ->numeric(),
+
             Select::make('user_id')
                 ->label(__('intervention_plan.labels.responsible_specialist'))
                 ->options(User::getTenantOrganizationUsers()),
+
             RichEditor::make('observations')
                 ->label(__('intervention_plan.labels.observations'))
                 ->columnSpanFull(),
+
             Hidden::make('beneficiary_intervention_id')
                 ->default($this->record->id),
         ];
@@ -129,7 +133,7 @@ class ViewMeetings extends ViewRecord
 
                             TextEntry::make('date')
                                 ->label(__('intervention_plan.labels.date'))
-                                ->formatStateUsing(fn (InterventionMeeting $record, Carbon $state) => $state->format('Y-m-d') . ' ' . $record->time?->format('H:i')),
+                                ->formatStateUsing(fn (InterventionMeeting $record, Carbon | string $state) => (\is_string($state) ? $state : $state->format('Y-m-d')) . ' ' . $record->time?->format('H:i')),
                             TextEntry::make('duration')
                                 ->label(__('intervention_plan.labels.duration')),
                             TextEntry::make('user.full_name')

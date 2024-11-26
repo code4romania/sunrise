@@ -28,6 +28,7 @@ return [
         'benefit_name' => 'Categorie beneficiu social',
         'benefit_type_name' => 'Nume beneficiu',
         'benefit' => 'Beneficiu',
+        'role_case_manager' => 'Corespondent rolului de manager de caz',
     ],
 
     'headings' => [

@@ -145,6 +145,9 @@ return [
             'labels' => [
                 'email' => 'Email beneficiar',
                 'beneficiary_agreement' => '*Confirm că s-a obținut acordul beneficiarului pentru înregistrarea datelor personale și utilizarea datelor rezultate din evaluare și intervenție în scopul oferirii serviciilor de management de caz.',
+                'social_media' => 'Conturi rețele de socializare',
+                'contact_person_name' => 'Persoană de contact urgență (Nume)',
+                'contact_person_phone' => 'Persoană de contact urgență (Telefon)',
             ],
             'headings' => [
                 'reactivate_modal' => 'Reactivează cazul',
@@ -168,6 +171,16 @@ return [
             ],
             'label' => [
                 'delete_aggressor_description' => 'Acțiunea va șterge din această pagină întreaga secțiune cu informațiile introduse despre acest agresor. Datele șterse nu vor mai putea fi recuperate.',
+                'health_insurance' => 'Asigurare de sănătate',
+                'health_status' => 'Starea de sănătate curentă',
+                'observations_chronic_diseases' => 'Observații boli cronice',
+                'observations_degenerative_diseases' => 'Observații boli degenerative',
+                'observations_mental_illness' => 'Observații boli psihice',
+                'disabilities' => 'Dizabilități/ handicap',
+                'type_of_disability' => 'Tip dizabilitate/ handicap',
+                'degree_of_disability' => 'Încadrare în grad de handicap',
+                'observations_disability' => 'Observații dizabilitate/ handicap',
+                'income_source' => 'Sursa venitului',
             ],
             'placeholders' => [
                 'select_many' => 'Alege toate variantele care se potrivesc',
@@ -424,6 +437,10 @@ return [
                 'add_details' => 'Adaugă detalii',
                 'close_situation' => 'Descrieți situația cazului la închidere',
             ],
+
+            'notifications' => [
+                'delete_success' => 'Fișa de inchidere a fost ștearsă cu succes.',
+            ],
         ],
 
         'related_cases' => [
@@ -500,6 +517,9 @@ return [
         'reactivate_text_1' => 'Prin reactivarea unui caz se va duplica dosarului beneficiarului pentru a putea fi completat cu informații noi, fără a pierde informațiile despre evaluările și managementul de caz anterior.',
         'reactivate_text_2' => 'Toate datele de identitate se vor copia din dosarul curent și pot fi actualizate manual pentru această nouă reactivare. Toate formularele vor fi disponibile pentru a fi completate cu informații noi.',
         'reactivate_text_3' => 'Nicio modificare făcută în dosarul de reactivare nu va afecta informațiile introduse în cazul inițial.',
+        'social_media' => 'Introdu detalii',
+        'contact_person_name' => 'Introdu numele și prenumele',
+        'contact_person_phone' => 'Introdu numărul de telefon',
 
     ],
     'helper_text' => [
@@ -511,7 +531,7 @@ return [
         'violence_description' => 'A se include și istoricul socio- familial, istoricul agresiunilor, istoricul juridic al solicitantei-ordin de protecție, plângeri penale',
         'initial_evaluation' => 'Identificarea nevoilor inițiale',
         'initial_evaluation_2' => 'Pentru oferirea de servicii imediate',
-        'detailed_evaluation' => 'Evaluarea multidiciplinară',
+        'detailed_evaluation' => 'Evaluarea multidisciplinară',
         'detailed_evaluation_2' => 'Pentru informarea planului de intervenție',
         'document_file' => 'Fișierele acceptate sunt de tip .pdf, .doc/docx, .xls/xlsx, .csv, .png, .tiff, .jpg. Dimensiunea maximă nu poate depăși :size',
         'documents' => 'Niciun document încărcat',

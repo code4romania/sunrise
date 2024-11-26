@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\Diseases;
+use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
+use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -98,12 +101,54 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                     Grid::make()
                         ->schema([
+                            TextEntry::make('health_insurance')
+                                ->label(__('beneficiary.section.personal_information.label.health_insurance')),
+
+                            TextEntry::make('health_status')
+                                ->label(__('beneficiary.section.personal_information.label.health_status')),
+
+                            TextEntry::make('observations_chronic_diseases')
+                                ->label(__('beneficiary.section.personal_information.label.observations_chronic_diseases'))
+                                ->columnSpanFull()
+                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::CHRONIC_DISEASES)),
+
+                            TextEntry::make('observations_degenerative_diseases')
+                                ->label(__('beneficiary.section.personal_information.label.observations_degenerative_diseases'))
+                                ->columnSpanFull()
+                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::DEGENERATIVE_DISEASES)),
+
+                            TextEntry::make('observations_mental_illness')
+                                ->label(__('beneficiary.section.personal_information.label.observations_mental_illness'))
+                                ->columnSpanFull()
+                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::MENTAL_ILLNESSES)),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
                             EnumEntry::make('psychiatric_history')
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one')),
 
                             TextEntry::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_history_notes')),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
+                            TextEntry::make('disabilities')
+                                ->label(__('beneficiary.section.personal_information.label.disabilities')),
+
+                            TextEntry::make('type_of_disability')
+                                ->label(__('beneficiary.section.personal_information.label.type_of_disability'))
+                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->disabilities)),
+
+                            TextEntry::make('degree_of_disability')
+                                ->label(__('beneficiary.section.personal_information.label.degree_of_disability'))
+                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->disabilities)),
+
+                            TextEntry::make('observations_disability')
+                                ->label(__('beneficiary.section.personal_information.label.observations_disability'))
+                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->disabilities)),
                         ]),
 
                     Grid::make()
@@ -133,6 +178,9 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->label(__('field.income'))
                         ->placeholder(__('placeholder.select_one')),
 
+                    TextEntry::make('income_source')
+                        ->label(__('beneficiary.section.personal_information.label.income_source')),
+
                     TextEntry::make('elder_care_count')
                         ->label(__('field.elder_care_count'))
                         ->placeholder(__('placeholder.number'))
@@ -158,7 +206,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                     'class' => 'h-full',
                 ])
                 ->schema([
-                    RepeatableEntry::make('aggressor')
+                    RepeatableEntry::make('aggressors')
                         ->columns()
                         ->columnSpanFull()
                         ->hiddenLabel()
@@ -217,6 +265,24 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                             Grid::make()
                                 ->schema([
+                                    TextEntry::make('legal_history')
+                                        ->label(__('field.aggressor_legal_history')),
+                                ]),
+
+                            Grid::make()
+                                ->schema([
+                                    TextEntry::make('has_protection_order')
+                                        ->label(__('field.has_protection_order')),
+
+                                    TextEntry::make('electronically_monitored')
+                                        ->label(__('field.electronically_monitored')),
+
+                                    TextEntry::make('protection_order_notes')
+                                        ->label(__('field.protection_order_notes')),
+                                ]),
+
+                            Grid::make()
+                                ->schema([
                                     EnumEntry::make('has_psychiatric_history')
                                         ->label(__('field.aggressor_has_psychiatric_history'))
                                         ->placeholder(__('placeholder.select_one')),
@@ -235,21 +301,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                         ->label(__('field.aggressor_drugs')),
                                 ]),
 
-                            Grid::make()
-                                ->schema([
-                                    TextEntry::make('legal_history')
-                                        ->label(__('field.aggressor_legal_history')),
-                                ]),
-
-                            Grid::make()
-                                ->schema([
-                                    EnumEntry::make('has_protection_order')
-                                        ->label(__('field.has_protection_order'))
-                                        ->placeholder(__('placeholder.select_one')),
-
-                                    TextEntry::make('protection_order_notes')
-                                        ->label(__('field.protection_order_notes')),
-                                ]),
                         ]),
                 ]),
         ];
@@ -291,19 +342,6 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric(),
                         ]),
-
-                    Grid::make()
-                        ->schema([
-                            TextEntry::make('has_protection_order')
-                                ->label(__('field.has_protection_order')),
-
-                            //                            TextEntry::make('electronically_monitored')
-                            //                                ->label(__('field.electronically_monitored')),
-
-                            TextEntry::make('protection_order_notes')
-                                ->label(__('field.protection_order_notes')),
-                        ]),
-
                 ]),
         ];
     }

@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 return [
 
-    'greeting' => 'Salut,',
+    'greeting' => 'Salut :name,',
     'admin' => [
         'welcome' => [
-            'intro_line_1' => 'Ești invitat să te alături platformei Sunrise ca administrator.',
-            'intro_line_2' => 'Acceptă invitația pentru a-ți putea accesa contul.',
-            'subject' => 'Invitație la platforma Sunrise',
+            'greeting' => 'Salut, :name',
+            'intro_line_1' => ':institution_name te invită ca administrator al centrului :center_name.',
+            'intro_line_2' => 'Pentru a-ți accesa contul de administrator al centrului, te rugăm să urmezi pașii de mai jos:',
+            'intro_line_3' => '1. Acceptă invitați și configurează o parolă pentru contul tău, apasă pe butonul de mai jos.',
+            'intro_line_4' => '2. După ce ai configurat parola, te poți autentifica în platformă folosind adresa ta de email și noua parolă, pe linkul de mai jos',
+            'intro_line_5' => '<a style="text-align: center" href="https://sunrise.stopviolenteidomestice.ro">www.sunrise.stopviolențeidomestice.ro</a>',
+            'subject' => 'Bine ai venit în platforma Sunrise',
             'accept_invitation' => 'Acceptă invitația',
         ],
     ],
@@ -18,9 +22,13 @@ return [
 
     'organization' => [
         'welcome' => [
-            'intro_line_1' => 'Ești invitat să te alături platformei Sunrise.',
-            'intro_line_2' => 'Acceptă invitația pentru a-ți putea accesa contul.',
-            'subject' => 'Invitație la platforma Sunrise',
+            'greeting' => 'Salut, :name',
+            'intro_line_1' => ':institution_name te invită ca specialist al centrului :center_name.',
+            'intro_line_2' => 'Pentru a-ți accesa contul de specialist, te rugăm să urmezi pașii de mai jos:',
+            'intro_line_3' => '1. Acceptă invitați și configurează o parolă pentru contul tău, apasă pe butonul de mai jos.',
+            'intro_line_4' => '2. După ce ai configurat parola, te poți autentifica în platformă folosind adresa ta de email și noua parolă, pe linkul de mai jos',
+            'intro_line_5' => '<a style="text-align: center" href="https://sunrise.stopviolenteidomestice.ro">www.sunrise.stopviolențeidomestice.ro</a>',
+            'subject' => 'Bine ai venit în platforma Sunrise',
             'accept_invitation' => 'Acceptă invitația',
         ],
     ],
