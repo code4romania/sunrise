@@ -34,6 +34,9 @@ return [
     'email' => 'Introdu adresa de email',
     'url' => 'URL',
 
+    'net_income' => 'Alege toate variantele care se potrivesc',
+    'observations' => 'Specificați',
+
     // 'accreditation_number' => 'Introdu seria și numărul',
     // 'activity' => 'Introdu activitatea',
     // 'age' => 'Vârstă',
