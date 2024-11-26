@@ -136,12 +136,16 @@ class CreateMonitoring extends CreateRecord
     private function getSpecialists(): array
     {
         if ($this->lastFile && $this->lastFile->specialistsTeam->isNotEmpty()) {
-            return $this->lastFile->specialistsTeam->toArray();
+            return $this->lastFile
+                ->specialistsTeam
+                ->filter(fn (Specialist $specialist) => $specialist->role_id)
+                ->toArray();
         }
 
         return $this->parent
             ->specialistsTeam
-            ?->each(
+            ?->filter(fn (Specialist $specialist) => $specialist->role_id)
+            ->each(
                 fn (Specialist $item) => $item->specialistable_type = (new Monitoring())->getMorphClass()
             )
             ->toArray();
