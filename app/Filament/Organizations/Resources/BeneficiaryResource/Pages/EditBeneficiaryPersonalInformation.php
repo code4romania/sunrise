@@ -99,6 +99,12 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->maxLength(80)
                         ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
 
+                    TextInput::make('family_doctor_address')
+                        ->label(__('field.family_doctor_address'))
+                        ->placeholder(__('placeholder.address'))
+                        ->maxLength(80)
+                        ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+
                     Grid::make()
                         ->schema([
                             Select::make('health_insurance')
@@ -144,6 +150,26 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->label(__('field.psychiatric_history_notes'))
                                 ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            Select::make('investigations_for_psychiatric_pathology')
+                                ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
+                                ->options(Ternary::options())
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            TextInput::make('investigations_observations')
+                                ->label(__('intervention_plan.labels.investigations_observations'))
+                                ->maxLength(100)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            Select::make('treatment_for_psychiatric_pathology')
+                                ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
+                                ->options(Ternary::options())
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            TextInput::make('treatment_observations')
+                                ->label(__('intervention_plan.labels.treatment_observations'))
+                                ->maxLength(100)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
                         ]),
 
                     Grid::make()
@@ -187,6 +213,17 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
                         ]),
 
+                    Grid::make()
+                        ->schema([
+                            Select::make('current_contraception')
+                                ->label(__('intervention_plan.labels.current_contraception'))
+                                ->options(Ternary::options()),
+
+                            TextInput::make('observations_contraception')
+                                ->label(__('intervention_plan.labels.observations_contraception'))
+                                ->maxLength(100),
+                        ]),
+
                     Select::make('studies')
                         ->label(__('field.studies'))
                         ->placeholder(__('placeholder.studies'))
@@ -204,6 +241,11 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                         ->placeholder(__('placeholder.workplace'))
                         ->maxLength(100)
                         ->columnSpanFull(),
+
+                    TextInput::make('net_income')
+                        ->label(__('field.net_income'))
+                        ->placeholder(__('placeholder.net_income'))
+                        ->mask('9999999999'),
 
                     Select::make('income')
                         ->label(__('field.income'))

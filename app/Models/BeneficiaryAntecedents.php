@@ -19,6 +19,7 @@ class BeneficiaryAntecedents extends Model
         'police_report_count',
         'has_medical_reports',
         'medical_report_count',
+        'observations',
     ];
 
     protected $casts = [

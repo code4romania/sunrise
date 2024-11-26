@@ -188,13 +188,13 @@ class EditCounselingSheet extends EditRecord
                                 ->columnSpanFull(),
                         ]),
 
-                    Select::make('data.current_contraception')
-                        ->label(__('intervention_plan.labels.current_contraception'))
-                        ->options(Ternary::options()),
-
-                    TextInput::make('data.observations_contraception')
-                        ->label(__('intervention_plan.labels.observations_contraception'))
-                        ->maxLength(100),
+                    //                    Select::make('data.current_contraception')
+                    //                        ->label(__('intervention_plan.labels.current_contraception'))
+                    //                        ->options(Ternary::options()),
+                    //
+                    //                    TextInput::make('data.observations_contraception')
+                    //                        ->label(__('intervention_plan.labels.observations_contraception'))
+                    //                        ->maxLength(100),
 
                     Select::make('data.psychiatric_history')
                         ->label(__('intervention_plan.labels.psychiatric_history'))
@@ -204,21 +204,21 @@ class EditCounselingSheet extends EditRecord
                         ->label(__('intervention_plan.labels.psychiatric_history_observations'))
                         ->maxLength(100),
 
-                    Select::make('data.investigations_for_psychiatric_pathology')
-                        ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
-                        ->options(Ternary::options()),
-
-                    TextInput::make('data.investigations_observations')
-                        ->label(__('intervention_plan.labels.investigations_observations'))
-                        ->maxLength(100),
-
-                    Select::make('data.treatment_for_psychiatric_pathology')
-                        ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
-                        ->options(Ternary::options()),
-
-                    TextInput::make('data.treatment_observations')
-                        ->label(__('intervention_plan.labels.treatment_observations'))
-                        ->maxLength(100),
+                    //                    Select::make('data.investigations_for_psychiatric_pathology')
+                    //                        ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
+                    //                        ->options(Ternary::options()),
+                    //
+                    //                    TextInput::make('data.investigations_observations')
+                    //                        ->label(__('intervention_plan.labels.investigations_observations'))
+                    //                        ->maxLength(100),
+                    //
+                    //                    Select::make('data.treatment_for_psychiatric_pathology')
+                    //                        ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
+                    //                        ->options(Ternary::options()),
+                    //
+                    //                    TextInput::make('data.treatment_observations')
+                    //                        ->label(__('intervention_plan.labels.treatment_observations'))
+                    //                        ->maxLength(100),
                 ]),
 
             Section::make(__('intervention_plan.headings.history'))

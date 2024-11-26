@@ -47,6 +47,14 @@ class BeneficiaryDetails extends Model
         'degree_of_disability',
         'observations_disability',
         'income_source',
+        'family_doctor_address',
+        'investigations_for_psychiatric_pathology',
+        'investigations_observations',
+        'treatment_for_psychiatric_pathology',
+        'treatment_observations',
+        'current_contraception',
+        'observations_contraception',
+        'net_income',
     ];
 
     protected $casts = [

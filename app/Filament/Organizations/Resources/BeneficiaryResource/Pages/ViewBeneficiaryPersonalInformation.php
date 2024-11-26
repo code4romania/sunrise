@@ -99,6 +99,9 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->label(__('field.family_doctor_contact'))
                         ->placeholder(__('placeholder.phone_or_email')),
 
+                    TextEntry::make('family_doctor_address')
+                        ->label(__('field.family_doctor_address')),
+
                     Grid::make()
                         ->schema([
                             TextEntry::make('health_insurance')
@@ -131,6 +134,20 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                             TextEntry::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_history_notes')),
+
+                            EnumEntry::make('investigations_for_psychiatric_pathology')
+                                ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
+                                ->enumClass(Ternary::class),
+
+                            TextEntry::make('investigations_observations')
+                                ->label(__('intervention_plan.labels.investigations_observations')),
+
+                            EnumEntry::make('treatment_for_psychiatric_pathology')
+                                ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
+                                ->enumClass(Ternary::class),
+
+                            TextEntry::make('treatment_observations')
+                                ->label(__('intervention_plan.labels.treatment_observations')),
                         ]),
 
                     Grid::make()
@@ -153,6 +170,16 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                     Grid::make()
                         ->schema([
+                            EnumEntry::make('current_contraception')
+                                ->label(__('intervention_plan.labels.current_contraception'))
+                                ->enumClass(Ternary::class),
+
+                            TextEntry::make('observations_contraception')
+                                ->label(__('intervention_plan.labels.observations_contraception')),
+
+                        ]),
+                    Grid::make()
+                        ->schema([
                             EnumEntry::make('criminal_history')
                                 ->label(__('field.criminal_history'))
                                 ->placeholder(__('placeholder.select_one')),
@@ -173,6 +200,9 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                         ->label(__('field.workplace'))
                         ->placeholder(__('placeholder.workplace'))
                         ->columnSpanFull(),
+
+                    TextEntry::make('net_income')
+                        ->label(__('field.net_income')),
 
                     EnumEntry::make('income')
                         ->label(__('field.income'))
@@ -342,6 +372,10 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->placeholder(__('placeholder.number'))
                                 ->numeric(),
                         ]),
+
+                    TextEntry::make('observations')
+                        ->label(__('field.antecedents_observations'))
+                        ->columnSpanFull(),
                 ]),
         ];
     }
