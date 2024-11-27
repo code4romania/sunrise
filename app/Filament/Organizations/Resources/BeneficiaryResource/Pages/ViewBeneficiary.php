@@ -242,8 +242,15 @@ class ViewBeneficiary extends ViewRecord
                     ->schema([
                         EnumEntry::make('relationship')
                             ->label(__('field.aggressor_relationship')),
+
                         EnumEntry::make('has_violence_history')
                             ->label(__('field.aggressor_has_violence_history')),
+
+                        EnumEntry::make('has_protection_order')
+                            ->label(__('field.has_protection_order')),
+
+                        TextEntry::make('protection_order_notes')
+                            ->label(__('field.protection_order_notes')),
                     ]),
 
                 Grid::make()
@@ -258,12 +265,6 @@ class ViewBeneficiary extends ViewRecord
                             ->label(__('field.has_medical_reports'))
                             ->suffix(fn (Beneficiary $record, $state) => Ternary::isYes($state)
                                 ? " ({$record->antecedents->medical_report_count})" : null),
-
-                        EnumEntry::make('has_protection_order')
-                            ->label(__('field.has_protection_order')),
-
-                        TextEntry::make('protection_order_notes')
-                            ->label(__('field.protection_order_notes')),
                     ]),
             ]);
     }
