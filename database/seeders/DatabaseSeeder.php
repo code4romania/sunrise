@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Benefit;
 use App\Models\Country;
 use App\Models\Institution;
+use App\Models\Result;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\User;
@@ -43,6 +44,10 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         Benefit::factory()
+            ->count(20)
+            ->create();
+
+        Result::factory()
             ->count(20)
             ->create();
 

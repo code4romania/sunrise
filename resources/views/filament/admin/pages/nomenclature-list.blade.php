@@ -20,6 +20,14 @@
                 </x-filament::tabs.item>
             </a>
 
+            <a href="{{route('filament.admin.resources.results.index')}}">
+                <x-filament::tabs.item
+                    :active="request()->routeIs('filament.admin.resources.results.index')"
+                >
+                    {{ __('nomenclature.headings.results') }}
+                </x-filament::tabs.item>
+            </a>
+
             <a href="{{route('filament.admin.resources.roles.index')}}">
                 <x-filament::tabs.item
                     :active="request()->routeIs('filament.admin.resources.roles.index')"
