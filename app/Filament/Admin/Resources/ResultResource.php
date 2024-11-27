@@ -52,10 +52,10 @@ class ResultResource extends Resource
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.result_name')),
 
-                TextColumn::make('institution_count')
+                TextColumn::make('institutions_count')
                     ->label(__('nomenclature.labels.institutions')),
 
-                TextColumn::make('center_count')
+                TextColumn::make('organizations_count')
                     ->label(__('nomenclature.labels.centers')),
 
                 TextColumn::make('status')
