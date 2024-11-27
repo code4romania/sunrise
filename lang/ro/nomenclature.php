@@ -29,6 +29,7 @@ return [
         'benefit_type_name' => 'Nume beneficiu',
         'benefit' => 'Beneficiu',
         'role_case_manager' => 'Corespondent rolului de manager de caz',
+        'result_name' => 'Denumire rezultat',
     ],
 
     'headings' => [
@@ -46,6 +47,14 @@ return [
         'benefit_table' => 'Toate beneficiile sociale',
         'benefit_types' => 'Tipuri de beneficiu social',
         'inactivate_benefit_modal' => 'Inactivează beneficiu pentru toate nomenclatoarele',
+        'inactivate_result_modal' => 'Inactivează rezultatul pentru toate nomenclatoarele',
+
+        'add_result' => 'Adaugă rezultat',
+        'results' => 'Rezultate',
+        'empty_state_results_table' => 'Niciun rezultat identificat. Adaugă un prim rezultat pentru ca acesta să fie disponibil organizațiilor Sunrise.',
+        'results_table' => 'Toate rezultatele',
+        'edit_result_title' => 'Modifică rezultatul :name',
+        'delete_result_modal_heading' => 'Șterge rezultatul',
     ],
 
     'helper_texts' => [
@@ -54,7 +63,9 @@ return [
         'role_page_default_permissions' => 'Permisiuni default asociate rolului (nu se pot modifica de către organizație)',
         'inactivate_role_modal' => 'Prin inactivarea rolului, acesta nu va mai fi disponibil pentru fi adăugat în nomenclatoarele de specialiști ale organizațiilor Sunrise. Pentru organizațiile care au folosit deja acest rol, acesta va fi retras din nomenclatoare, fără să se șteargă din istoricul utilizatorilor pentru care a fost folosit. ',
         'inactivate_benefit_modal' => 'Prin inactivarea beneficiului, acesta nu va mai fi disponibil pentru fi adăugat în nomenclatoarele de beneficii ale organizațiilor Sunrise. Pentru organizațiile care au folosit deja acest beneficiu, acesta va fi retras din nomenclatoare, fără să se șteargă din istoricul planului de interventie pentru care a fost folosit.',
+        'inactivate_result_modal' => 'Prin inactivarea rezultatului, acesta nu va mai fi disponibil pentru fi adăugat în nomenclatoarele de rezultate ale organizațiilor Sunrise. Pentru organizațiile care au folosit deja acest rezultat, acesta va fi retras din nomenclatoare, fără să se șteargă din istoricul planului de interventie pentru care a fost folosit.',
         'delete_benefit' => 'Beneficiile sociale utilizate deja în fișe de beneficiar nu mai pot fi șterse. Aveți doar opțiunea de a le deactiva.',
+        'result' => 'Definește un rezultat care va deveni disponibil pentru a fi inclus în nomenclatoarele tuturor organizațiilor Sunrise.',
     ],
 
     'actions' => [
@@ -64,6 +75,7 @@ return [
             'inactivate_service_modal' => 'Inactivează serviciu',
             'inactivate_role_modal' => 'Inactivează rol',
             'inactivate_benefit_modal' => 'Inactivează beneificu',
+            'inactivate_result_modal' => 'Inactivează rezultatul',
         ],
         'add_service' => 'Adaugă serviciu',
         'add_intervention' => 'Adaugă încă o intervenție',
@@ -76,6 +88,8 @@ return [
         'add_benefit_type' => 'Adaugă încă un tip',
         'edit_benefit' => 'Modifică beneficiu',
         'delete_benefit' => 'Șterge beneficiu',
+        'add_result' => 'Adaugă rezultat',
+        'delete_result' => 'Șterge rezultat',
     ],
 
     'placeholders' => [
