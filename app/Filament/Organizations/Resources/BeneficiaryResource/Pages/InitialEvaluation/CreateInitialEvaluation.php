@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
+use App\Concerns\PreventMultipleSubmit;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Wizard\Step;
@@ -14,6 +15,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class CreateInitialEvaluation extends EditRecord
 {
     use HasWizard;
+    use PreventMultipleSubmit;
 
     protected static string $resource = BeneficiaryResource::class;
 
