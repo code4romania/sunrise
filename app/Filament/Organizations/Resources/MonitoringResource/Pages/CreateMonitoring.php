@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
 use App\Concerns\HasParentResource;
+use App\Concerns\PreventMultipleSubmit;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
 use App\Models\Specialist;
@@ -21,6 +22,7 @@ class CreateMonitoring extends CreateRecord
 {
     use HasWizard;
     use HasParentResource;
+    use PreventMultipleSubmit;
 
     protected static string $resource = MonitoringResource::class;
 

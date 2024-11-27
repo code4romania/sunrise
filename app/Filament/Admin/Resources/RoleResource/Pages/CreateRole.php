@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
+use App\Concerns\PreventMultipleSubmit;
 use App\Filament\Admin\Resources\RoleResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
 class CreateRole extends CreateRecord
 {
+    use PreventMultipleSubmit;
+
     protected static string $resource = RoleResource::class;
 
     protected static bool $canCreateAnother = false;
