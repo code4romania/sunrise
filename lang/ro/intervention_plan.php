@@ -97,6 +97,16 @@ return [
         'benefit_description' => 'Observații beneficii',
         'next_meeting' => 'Următoarea',
         'empty_state_table_without_intervetntions' => 'Adaugă intervenții în planul beneficiarului, pentru a putea documenta activitățile și ședințele realizate în cadrul serviciilor',
+        'empty_state_result_table' => 'Poți adăuga rezultate acum sau oricând după crearea planului',
+        'result' => 'Rezultat observat',
+        'started_at' => 'Demers inițiat la',
+        'ended_at' => 'Realizat/ soluționat la',
+        'retried' => 'Demersul a fost retras',
+        'lost_from_monitoring' => 'Demersul a fost pierdut din monitorizare',
+        'result_observations' => 'Observații/ Notițe',
+        'retried_at' => 'Retras la',
+        'retried_date' => 'retras (:date)',
+        'lost_from_monitoring_column' => 'pierdut din monitorizare',
     ],
 
     'headings' => [
@@ -142,6 +152,14 @@ return [
         'delete_beneficiary_intervention_modal' => 'Șterge intervenția',
         'empty_state_table_without_intervetntions' => 'Nici o interventie adăugată în planul de intervenție',
         'edit_counseling_sheet' => 'Editează fișă consiliere',
+        'results_table' => 'Rezultate realizate',
+        'empty_state_result_table' => 'Nici un rezultat adăugat',
+        'result' => 'Rezultat',
+        'specialist' => 'Specialist',
+        'started_at' => 'Inițiat la',
+        'ended_at' => 'Realizat/ soluționat la',
+        'observations' => 'Observatii',
+        'edit_result' => 'Modifică rezultat',
     ],
 
     'actions' => [
@@ -160,6 +178,8 @@ return [
         'view_intervention' => 'Vezi intervenția',
         'download_meetings' => 'Descarcă tabel',
         'view_intervention_plan' => 'Vezi detalii plan',
+        'add_result' => 'Adaugă rezultat',
+        'delete_result' => 'Șterge rezultat',
     ],
 
     'placeholders' => [
@@ -169,5 +189,6 @@ return [
         'specialist' => 'Alege un specialist',
         'objections' => 'Descrieți pe scurt obiectivele acordării serviciului',
         'benefit_category' => 'Alege o categorie',
+        'observations' => 'Notați pe scurt orice observații sau notiție relevante pentru activitate',
     ],
 ];

@@ -11,6 +11,7 @@ class Interventions extends MultiWidget
     public array $widgets = [
         ServicesWidget::class,
         BenefitsWidget::class,
+        ResultsWidget::class,
     ];
 
     public function shouldPersistMultiWidgetTabsInSession(): bool

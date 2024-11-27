@@ -33,6 +33,11 @@ class InterventionPlan extends Model
         return $this->hasMany(BenefitService::class);
     }
 
+    public function results(): HasMany
+    {
+        return $this->hasMany(InterventionPlanResult::class);
+    }
+
     public function beneficiaryInterventions(): HasManyThrough
     {
         return $this->hasManyThrough(BeneficiaryIntervention::class, InterventionService::class);
