@@ -148,6 +148,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             TextInput::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_history_notes'))
+                                ->placeholder(__('placeholder.observations'))
                                 ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
 
@@ -158,6 +159,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             TextInput::make('investigations_observations')
                                 ->label(__('intervention_plan.labels.investigations_observations'))
+                                ->placeholder(__('placeholder.observations'))
                                 ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
 
@@ -168,6 +170,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             TextInput::make('treatment_observations')
                                 ->label(__('intervention_plan.labels.treatment_observations'))
+                                ->placeholder(__('placeholder.observations'))
                                 ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
                         ]),
@@ -194,6 +197,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             Textarea::make('observations_disability')
                                 ->label(__('beneficiary.section.personal_information.label.observations_disability'))
+                                ->placeholder(__('placeholder.observations'))
                                 ->maxLength(250)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
                         ]),
@@ -209,6 +213,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                             TextInput::make('criminal_history_notes')
                                 ->label(__('field.criminal_history_notes'))
+                                ->placeholder(__('placeholder.observations'))
                                 ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
                         ]),
@@ -220,6 +225,7 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->options(Ternary::options()),
 
                             TextInput::make('observations_contraception')
+                                ->placeholder(__('placeholder.observations'))
                                 ->label(__('intervention_plan.labels.observations_contraception'))
                                 ->maxLength(100),
                         ]),
