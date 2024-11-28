@@ -72,9 +72,12 @@ class BeneficiaryResource extends Resource
     {
         return $table->modifyQueryUsing(
             fn (Builder $query) => $query
-                ->leftJoin('monitorings', 'monitorings.beneficiary_id', '=', 'beneficiaries.id')
-                ->select(['beneficiaries.*', 'monitorings.date'])
-                ->with(['managerTeam', 'lastMonitoring', 'specialistsMembers'])
+                ->with([
+                    'managerTeam',
+                    'lastMonitoring',
+                    // used for permissions
+                    'specialistsMembers',
+                ])
                 ->whereUserHasAccess()
         )
             ->columns([
@@ -136,18 +139,15 @@ class BeneficiaryResource extends Resource
 
                 DateFilter::make('monitorings.date')
                     ->label(__('field.last_evaluated_at'))
-                    ->attribute('monitorings.date')
-                    ->query(function (Builder $query, array $state) {
-                        return
-                            $query->join('monitorings', 'beneficiaries.id', '=', 'monitorings.beneficiary_id')
-                                ->when(data_get($state, 'date_from'), function (Builder $query, string $date) {
-                                    $query->whereDate('monitorings.date', '>=', $date);
-                                })
-                                ->when(data_get($state, 'date_until'), function (Builder $query, string $date) {
-                                    $query->whereDate('monitorings.date', '<=', $date);
-                                });
-                    }),
-                //                    ->modifyQueryUsing(fn (Builder $query) => $query->join('monitorings', 'beneficiaries.id', '=', 'monitorings.beneficiary_id')),
+                    ->modifyQueryUsing(
+                        fn (Builder $query, array $state) => $query
+                            ->when(data_get($state, 'date_from'), function (Builder $query, string $date) {
+                                $query->whereHas('lastMonitoring', fn (Builder $query) => $query->whereDate('date', '>=', $date));
+                            })
+                            ->when(data_get($state, 'date_until'), function (Builder $query, string $date) {
+                                $query->whereHas('lastMonitoring', fn (Builder $query) => $query->whereDate('date', '<=', $date));
+                            })
+                    ),
             ])
             ->paginationPageOptions([10, 20, 40, 60, 80, 100])
             ->defaultPaginationPageOption(20)
