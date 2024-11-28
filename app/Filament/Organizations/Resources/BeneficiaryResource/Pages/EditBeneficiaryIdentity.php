@@ -74,73 +74,79 @@ class EditBeneficiaryIdentity extends EditRecord
             ]);
     }
 
-    public static function getBeneficiaryIdentityFormSchema(?Beneficiary $parentBeneficiary = null): array
+    public static function getBeneficiaryIdentityFormSchema(?Beneficiary $parentBeneficiary = null, bool $withCnpField = true): array
     {
+        $firstPartOfSchema = [
+            Hidden::make('initial_id'),
+
+            TextInput::make('last_name')
+                ->label(__('field.last_name'))
+                ->placeholder(__('placeholder.last_name'))
+                ->maxLength(50)
+                ->required(),
+
+            TextInput::make('first_name')
+                ->label(__('field.first_name'))
+                ->placeholder(__('placeholder.first_name'))
+                ->maxLength(50)
+                ->required(),
+
+            TextInput::make('prior_name')
+                ->label(__('field.prior_name'))
+                ->placeholder(__('placeholder.prior_name'))
+                ->maxLength(50)
+                ->nullable(),
+
+            Select::make('civil_status')
+                ->label(__('field.civil_status'))
+                ->placeholder(__('placeholder.civil_status'))
+                ->options(CivilStatus::options())
+                ->enum(CivilStatus::class),
+        ];
+
+        if ($withCnpField) {
+            $firstPartOfSchema[] = TextInput::make('cnp')
+                ->label(__('field.cnp'))
+                ->placeholder(__('placeholder.cnp'))
+                ->maxLength(13)
+                ->mask('9999999999999')
+                ->unique(
+                    ignorable: $parentBeneficiary,
+                    ignoreRecord: true,
+                    modifyRuleUsing: function (Unique $rule, ?Beneficiary $record) use ($parentBeneficiary) {
+                        $initialID = 0;
+                        if ($parentBeneficiary?->id) {
+                            $initialID = $parentBeneficiary->initial_id ?? $parentBeneficiary->id;
+                        }
+                        if (! $initialID && $record) {
+                            $initialID = $record->initial_id ?? $record->id;
+                        }
+
+                        return
+                            $rule->where(fn (Builder $query) => $query->whereNot('id', $initialID)
+                                ->where(fn (Builder $query) => $query->whereNot('initial_id', $initialID)
+                                    ->orWhereNull('initial_id')));
+                    }
+                )
+                ->nullable()
+                ->rule(new ValidCNP)
+                ->lazy()
+                ->afterStateUpdated(function (?string $state, Set $set) {
+                    if ($state === null) {
+                        return;
+                    }
+
+                    if (filled($birthdate = (new Cnp($state))->getBirthDateFromCNP())) {
+                        $set('birthdate', $birthdate);
+                    }
+                });
+        }
+
         return [
             Grid::make()
                 ->maxWidth('3xl')
                 ->schema([
-                    Hidden::make('initial_id'),
-
-                    TextInput::make('last_name')
-                        ->label(__('field.last_name'))
-                        ->placeholder(__('placeholder.last_name'))
-                        ->maxLength(50)
-                        ->required(),
-
-                    TextInput::make('first_name')
-                        ->label(__('field.first_name'))
-                        ->placeholder(__('placeholder.first_name'))
-                        ->maxLength(50)
-                        ->required(),
-
-                    TextInput::make('prior_name')
-                        ->label(__('field.prior_name'))
-                        ->placeholder(__('placeholder.prior_name'))
-                        ->maxLength(50)
-                        ->nullable(),
-
-                    Select::make('civil_status')
-                        ->label(__('field.civil_status'))
-                        ->placeholder(__('placeholder.civil_status'))
-                        ->options(CivilStatus::options())
-                        ->enum(CivilStatus::class),
-
-                    TextInput::make('cnp')
-                        ->label(__('field.cnp'))
-                        ->placeholder(__('placeholder.cnp'))
-                        ->maxLength(13)
-                        ->mask('9999999999999')
-                        ->unique(
-                            ignorable: $parentBeneficiary,
-                            ignoreRecord: true,
-                            modifyRuleUsing: function (Unique $rule, ?Beneficiary $record) use ($parentBeneficiary) {
-                                $initialID = 0;
-                                if ($parentBeneficiary?->id) {
-                                    $initialID = $parentBeneficiary->initial_id ?? $parentBeneficiary->id;
-                                }
-                                if (! $initialID && $record) {
-                                    $initialID = $record->initial_id ?? $record->id;
-                                }
-
-                                return
-                                    $rule->where(fn (Builder $query) => $query->whereNot('id', $initialID)
-                                        ->where(fn (Builder $query) => $query->whereNot('initial_id', $initialID)
-                                            ->orWhereNull('initial_id')));
-                            }
-                        )
-                        ->nullable()
-                        ->rule(new ValidCNP)
-                        ->lazy()
-                        ->afterStateUpdated(function (?string $state, Set $set) {
-                            if ($state === null) {
-                                return;
-                            }
-
-                            if (filled($birthdate = (new Cnp($state))->getBirthDateFromCNP())) {
-                                $set('birthdate', $birthdate);
-                            }
-                        }),
+                    ...$firstPartOfSchema,
 
                     Select::make('gender')
                         ->label(__('field.gender'))
