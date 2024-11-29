@@ -21,6 +21,7 @@ use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\HtmlString;
 
 class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
 {
@@ -101,8 +102,15 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
                         ->live(),
 
                     Checkbox::make('add_cases_in_monitoring')
-                        ->label(__('report.labels.add_cases_in_monitoring'))
-                        ->helperText(__('report.helpers.add_cases_in_monitoring'))
+                        ->label(
+                            new HtmlString(
+                                \sprintf(
+                                    '<span class="heroicon heroicon-o-information-circle" title="%s">%s</span>',
+                                    __('report.helpers.add_cases_in_monitoring'),
+                                    __('report.labels.add_cases_in_monitoring'),
+                                )
+                            )
+                        )
                         ->columnSpan(2),
 
                     Checkbox::make('show_missing_values')
