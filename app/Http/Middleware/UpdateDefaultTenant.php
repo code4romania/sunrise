@@ -27,6 +27,11 @@ class UpdateDefaultTenant
                 'latest_organization_id' => $tenant->id,
             ]);
 
+            if (! $user->userStatus) {
+                $user->initializeStatus();
+                $user->load('userStatus');
+            }
+
             if ($user->userStatus->status === UserStatus::PENDING) {
                 $user->userStatus->activate();
             }

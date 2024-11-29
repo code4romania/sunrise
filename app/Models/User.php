@@ -273,6 +273,9 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function initializeStatus(): void
     {
+        if (! Filament::getTenant()?->id) {
+            return;
+        }
         $this->userStatus()->create([
             'user_id' => $this->id,
             'organization_id' => Filament::getTenant()->id,

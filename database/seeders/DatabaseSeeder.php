@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory(['email' => 'admin@example.com'])
             ->admin()
+            ->withUserStatus()
             ->create();
 
         Country::factory()
