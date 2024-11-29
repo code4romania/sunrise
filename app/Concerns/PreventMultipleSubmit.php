@@ -11,7 +11,8 @@ trait PreventMultipleSubmit
 {
     public function beforeCreate(): void
     {
-        $className = str(self::$resource::getTitleCaseModelLabel())->replace(' ', '_')->lower();
+        $className = \Str::replace(' ', '_', self::$resource::getTitleCaseModelLabel());
+        $className = \Str::lower($className);
         $cacheKey = \sprintf('create_%s_%d', $className, auth()->id());
         $lock = Cache::lock($cacheKey, 5);
 
