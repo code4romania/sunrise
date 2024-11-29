@@ -136,4 +136,8 @@ return [
     'role' => 'Rol',
     'check' => 'Verifică',
     'user' => 'Utilizator',
+
+    'family_doctor_address' => 'Adresă medic de familie',
+    'net_income' => 'Venit lunar net (din toate sursele)',
+    'antecedents_observations' => 'Observații antecedente caz',
 ];

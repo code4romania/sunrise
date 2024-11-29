@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
 use App\Enums\CounselingSheet;
-use App\Enums\Drug;
 use App\Enums\FileDocumentType;
 use App\Enums\Frequency;
 use App\Enums\Patrimony;
 use App\Enums\PossessionMode;
-use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
@@ -18,7 +16,6 @@ use App\Forms\Components\Select;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
@@ -164,63 +161,6 @@ class EditCounselingSheet extends EditRecord
     public static function getSchemaForPsychologicalAssistance(): array
     {
         return [
-            Section::make(__('intervention_plan.headings.medical_details'))
-                ->columns()
-                ->maxWidth('3xl')
-                ->schema([
-                    Grid::make()
-                        ->columnSpanFull()
-                        ->schema([
-                            Select::make('data.substance_use')
-                                ->label(__('intervention_plan.labels.substance_use'))
-                                ->options(Ternary::options())
-                                ->live(),
-                            Select::make('data.substance_types')
-                                ->label(__('intervention_plan.labels.substance_types'))
-                                ->options(Drug::options())
-                                ->visible(fn (Get $get) => Ternary::isYes($get('data.substance_use')))
-                                ->live(),
-
-                            TextInput::make('data.observations_substances')
-                                ->label(__('intervention_plan.labels.observations_substances'))
-                                ->maxLength(100)
-                                ->visible(fn (Get $get) => Drug::isValue($get('data.substance_types'), Drug::OTHER))
-                                ->columnSpanFull(),
-                        ]),
-
-                    Select::make('data.current_contraception')
-                        ->label(__('intervention_plan.labels.current_contraception'))
-                        ->options(Ternary::options()),
-
-                    TextInput::make('data.observations_contraception')
-                        ->label(__('intervention_plan.labels.observations_contraception'))
-                        ->maxLength(100),
-
-                    Select::make('data.psychiatric_history')
-                        ->label(__('intervention_plan.labels.psychiatric_history'))
-                        ->options(Ternary::options()),
-
-                    TextInput::make('data.psychiatric_history_observations')
-                        ->label(__('intervention_plan.labels.psychiatric_history_observations'))
-                        ->maxLength(100),
-
-                    Select::make('data.investigations_for_psychiatric_pathology')
-                        ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
-                        ->options(Ternary::options()),
-
-                    TextInput::make('data.investigations_observations')
-                        ->label(__('intervention_plan.labels.investigations_observations'))
-                        ->maxLength(100),
-
-                    Select::make('data.treatment_for_psychiatric_pathology')
-                        ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
-                        ->options(Ternary::options()),
-
-                    TextInput::make('data.treatment_observations')
-                        ->label(__('intervention_plan.labels.treatment_observations'))
-                        ->maxLength(100),
-                ]),
-
             Section::make(__('intervention_plan.headings.history'))
                 ->maxWidth('3xl')
                 ->schema([

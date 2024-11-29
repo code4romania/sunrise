@@ -97,6 +97,11 @@ class EditAntecedents extends EditRecord
                                 ->minValue(0)
                                 ->maxValue(999),
                         ]),
+
+                    TextInput::make('observations')
+                        ->label(__('field.antecedents_observations'))
+                        ->placeholder(__('placeholder.observations'))
+                        ->maxLength(1000),
                 ]),
         ];
     }

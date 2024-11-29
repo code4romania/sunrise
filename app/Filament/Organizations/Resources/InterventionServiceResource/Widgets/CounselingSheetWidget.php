@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widgets;
 
 use App\Enums\CounselingSheet;
-use App\Enums\Drug;
 use App\Enums\FileDocumentType;
 use App\Enums\Frequency;
 use App\Enums\Patrimony;
 use App\Enums\PossessionMode;
-use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
@@ -146,44 +144,11 @@ class CounselingSheetWidget extends InfolistWidget
     private function getSchemaForPsychologicalAssistance(): array
     {
         return [
-            Section::make(__('intervention_plan.headings.medical_details'))
-                ->columns()
-                ->schema([
-                    EnumEntry::make('data.substance_use')
-                        ->label(__('intervention_plan.labels.substance_use'))
-                        ->enumClass(Ternary::class),
-                    EnumEntry::make('data.substance_types')
-                        ->label(__('intervention_plan.labels.substance_types'))
-                        ->enumClass(Drug::class),
-                    TextEntry::make('data.observations_substances')
-                        ->label(__('intervention_plan.labels.observations_substances'))
-                        ->columnSpanFull(),
-                    EnumEntry::make('data.current_contraception')
-                        ->label(__('intervention_plan.labels.current_contraception'))
-                        ->enumClass(Ternary::class),
-                    TextEntry::make('data.observations_contraception')
-                        ->label(__('intervention_plan.labels.observations_contraception')),
-                    EnumEntry::make('data.psychiatric_history')
-                        ->label(__('intervention_plan.labels.psychiatric_history'))
-                        ->enumClass(Ternary::class),
-                    TextEntry::make('data.psychiatric_history_observations')
-                        ->label(__('intervention_plan.labels.psychiatric_history_observations')),
-                    EnumEntry::make('data.investigations_for_psychiatric_pathology')
-                        ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
-                        ->enumClass(Ternary::class),
-                    TextEntry::make('data.investigations_observations')
-                        ->label(__('intervention_plan.labels.investigations_observations')),
-                    EnumEntry::make('data.treatment_for_psychiatric_pathology')
-                        ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
-                        ->enumClass(Ternary::class),
-                    TextEntry::make('data.treatment_observations')
-                        ->label(__('intervention_plan.labels.treatment_observations')),
-                ]),
-
             Section::make(__('intervention_plan.headings.history'))
                 ->schema([
                     TextEntry::make('data.relationship_history')
                         ->label(__('intervention_plan.labels.relationship_history')),
+
                     TextEntry::make('data.last_incident_description')
                         ->label(__('intervention_plan.labels.last_incident_description')),
                 ]),
@@ -192,44 +157,60 @@ class CounselingSheetWidget extends InfolistWidget
                 ->schema([
                     TextEntry::make('data.violence_history_forms')
                         ->label(__('intervention_plan.labels.violence_history_forms')),
+
                     EnumEntry::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
                         ->enumClass(Frequency::class),
+
                     EnumEntry::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
                         ->enumClass(Frequency::class),
+
                     EnumEntry::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
                         ->enumClass(Frequency::class),
+
                     EnumEntry::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
                         ->enumClass(Frequency::class),
+
                     EnumEntry::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
                         ->enumClass(Frequency::class),
+
                     EnumEntry::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
                         ->enumClass(Frequency::class),
+
                     EnumEntry::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
                         ->enumClass(Frequency::class),
+
                     EnumEntry::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
                         ->enumClass(Frequency::class),
+
                     TextEntry::make('data.physical_violence_description')
                         ->label(__('intervention_plan.labels.physical_violence_description')),
+
                     TextEntry::make('data.sexual_violence_description')
                         ->label(__('intervention_plan.labels.sexual_violence_description')),
+
                     TextEntry::make('data.psychological_violence_description')
                         ->label(__('intervention_plan.labels.psychological_violence_description')),
+
                     TextEntry::make('data.verbal_violence_description')
                         ->label(__('intervention_plan.labels.verbal_violence_description')),
+
                     TextEntry::make('data.social_violence_description')
                         ->label(__('intervention_plan.labels.social_violence_description')),
+
                     TextEntry::make('data.economic_violence_description')
                         ->label(__('intervention_plan.labels.economic_violence_description')),
+
                     TextEntry::make('data.cyber_violence_description')
                         ->label(__('intervention_plan.labels.cyber_violence_description')),
+
                     TextEntry::make('data.spiritual_violence_description')
                         ->label(__('intervention_plan.labels.spiritual_violence_description')),
                 ]),
@@ -238,8 +219,10 @@ class CounselingSheetWidget extends InfolistWidget
                 ->schema([
                     TextEntry::make('data.physical_effects')
                         ->label(__('intervention_plan.labels.physical_effects')),
+
                     TextEntry::make('data.psychological_effects')
                         ->label(__('intervention_plan.labels.psychological_effects')),
+
                     TextEntry::make('data.social_effects')
                         ->label(__('intervention_plan.labels.social_effects')),
                 ]),
@@ -254,6 +237,7 @@ class CounselingSheetWidget extends InfolistWidget
                 ->schema([
                     TextEntry::make('data.internal_resources')
                         ->label(__('intervention_plan.labels.internal_resources')),
+
                     TextEntry::make('data.external_resources')
                         ->label(__('intervention_plan.labels.external_resources')),
                 ]),
