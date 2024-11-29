@@ -8,6 +8,7 @@ use App\Filament\Organizations\Resources\UserResource;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class CreateUser extends CreateRecord
 {
@@ -27,5 +28,17 @@ class CreateUser extends CreateRecord
         }
 
         $user->rolesInOrganization()->sync($pivotData);
+    }
+
+    protected function handleRecordCreation(array $data): Model
+    {
+        if ($user = User::query()->where('email', $data['email'])->first()) {
+            $this->associateRecordWithTenant($user, Filament::getTenant());
+            $user->sendWelcomeNotification();
+
+            return $user;
+        }
+
+        return parent::handleRecordCreation($data);
     }
 }

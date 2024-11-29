@@ -29,7 +29,7 @@ class ViewUser extends ViewRecord
                 ->columns()
                 ->maxWidth('3xl')
                 ->schema([
-                    TextEntry::make('status')
+                    TextEntry::make('userStatus.status')
                         ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
                     TextEntry::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time')),

@@ -18,7 +18,7 @@ class DeactivateUserAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isActive());
+        $this->visible(fn (User $record) => $record->userStatus->isActive());
 
         $this->label(__('user.actions.deactivate'));
 
