@@ -32,11 +32,15 @@ class EditResult extends EditRecord
         return [
             ChangeNomenclatureStatusAction::make(),
 
-            // TODO: disable button if is used by ngo
             Actions\DeleteAction::make()
                 ->label(__('nomenclature.actions.delete_result'))
                 ->modalHeading(__('nomenclature.headings.delete_result_modal_heading'))
                 ->outlined()
+                ->disabled(
+                    fn () => $this->record
+                        ->loadCount('interventionPlanResults')
+                        ->intervention_plan_results_count
+                )
                 ->modalSubmitActionLabel(__('nomenclature.actions.delete_result')),
         ];
     }
