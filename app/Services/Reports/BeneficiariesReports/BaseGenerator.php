@@ -4,38 +4,45 @@ declare(strict_types=1);
 
 namespace App\Services\Reports\BeneficiariesReports;
 
+use App\Enums\ActivityDescription;
+use App\Enums\CaseStatus;
 use App\Models\Beneficiary;
+use Carbon\Carbon;
+use DB;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
 
 abstract class BaseGenerator
 {
-    protected string | null $startDate;
+    protected string | null $startDate = null;
 
     protected string | null $endDate = null;
 
     protected bool | null $showMissingValues = false;
+
+    protected bool | null $addCasesInMonitoring = false;
 
     protected $query;
 
     public function __construct()
     {
         $this->query = Beneficiary::query()
-            ->leftJoin('close_files', 'beneficiaries.id', '=', 'close_files.beneficiary_id')
-            ->toBase()
             ->selectRaw('COUNT(*) as total_cases');
     }
 
     public function setStartDate(?string $startDate): self
     {
-        $this->startDate = $startDate;
+        $this->startDate = $startDate ? Carbon::parse($startDate)->startOfDay()->format('Y-m-d H:i:s') : null;
 
         return $this;
     }
 
     public function setEndDate(?string $endDate): self
     {
-        $this->endDate = $endDate;
+        $this->endDate = $endDate ?
+            Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s') :
+            Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
 
         return $this;
     }
@@ -43,6 +50,13 @@ abstract class BaseGenerator
     public function setShowMissingValues(?bool $showMissingValues): self
     {
         $this->showMissingValues = $showMissingValues;
+
+        return $this;
+    }
+
+    public function setAddCasesInMonitoring(?bool $addCasesInMonitoring): self
+    {
+        $this->addCasesInMonitoring = $addCasesInMonitoring;
 
         return $this;
     }
@@ -56,6 +70,7 @@ abstract class BaseGenerator
             ->groupBy($this->getGroupBy());
 
         return $this->query
+            ->toBase()
             ->get();
     }
 
@@ -89,16 +104,70 @@ abstract class BaseGenerator
             }
         }
 
-        if ($this->endDate) {
-            $this->query->where('beneficiaries.created_at', '<=', $this->endDate . ' 23:59:59');
-        }
+        $this->addDateConditions();
+    }
 
-        if ($this->startDate) {
-            $this->query->where(
-                fn (Builder $query) => $query->where('close_files.date', '>=', $this->startDate)
-                    ->orWhereNull('close_files.date')
+    public function addDateConditions(): void
+    {
+        $this->query
+            ->when(
+                $this->startDate,
+                fn (EloquentBuilder $query) => $query
+                    ->whereHas(
+                        'activity',
+                        fn (EloquentBuilder $query) => $query
+                            ->where(
+                                fn (EloquentBuilder $query) => $query->whereJsonContains('properties->attributes->status', CaseStatus::ACTIVE->value)
+                                    ->when(
+                                        $this->addCasesInMonitoring,
+                                        fn (EloquentBuilder $query) => $query->orWhereJsonContains('properties->attributes->status', CaseStatus::MONITORED->value)
+                                    )
+                            )
+                            ->where('created_at', '<=', $this->endDate)
+                            ->whereIn('activity_log.description', [ActivityDescription::CREATED->value, ActivityDescription::UPDATED->value])
+                            ->whereNotExists(
+                                fn (Builder $subQuery) => $subQuery->select(DB::raw(1))
+                                    ->from('activity_log as sublog')
+                                    ->whereColumn('sublog.subject_id', 'activity_log.subject_id')
+                                    ->whereIn('sublog.description', [
+                                        ActivityDescription::CREATED->value,
+                                        ActivityDescription::UPDATED->value,
+                                    ])
+                                    ->where('sublog.subject_type', 'beneficiary')
+                                    ->whereColumn('sublog.created_at', '>', 'activity_log.created_at')
+                                    ->whereJsonContainsKey('properties->attributes->status')
+                                    ->where('sublog.created_at', '<=', $this->endDate)
+                            )
+                    )
+                    ->orWhereHas(
+                        'activity',
+                        fn (EloquentBuilder $query) => $query->whereJsonContains('properties->old->status', CaseStatus::ACTIVE->value)
+                            ->when(
+                                $this->addCasesInMonitoring,
+                                fn (EloquentBuilder $query) => $query->orWhereJsonContains('properties->old->status', CaseStatus::MONITORED->value)
+                            )
+                            ->whereBetween('created_at', [$this->startDate, $this->endDate])
+                    )
+            )
+            ->when(
+                ! $this->startDate,
+                fn (EloquentBuilder $query) => $query
+                    ->whereHas(
+                        'activity',
+                        fn (EloquentBuilder $query) => $query
+                            ->where(
+                                fn (EloquentBuilder $query) => $query
+                                    ->whereJsonContains('properties->attributes->status', CaseStatus::ACTIVE->value)
+                                    ->when(
+                                        $this->addCasesInMonitoring,
+                                        fn (EloquentBuilder $query) => $query->orWhereJsonContains('properties->attributes->status', CaseStatus::MONITORED->value)
+                                    )
+                            )
+                            ->whereIn('description', [ActivityDescription::CREATED->value, ActivityDescription::UPDATED->value])
+                            ->where('created_at', '<=', $this->endDate)
+                            ->where('subject_type', 'beneficiary')
+                    )
             );
-        }
     }
 
     public function addRelatedTables(): void

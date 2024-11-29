@@ -8,8 +8,12 @@ use App\Actions\ExportReport;
 use App\Enums\ReportType;
 use App\Forms\Components\ReportTable;
 use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
@@ -36,6 +40,13 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
     public $end_date;
 
     public $show_missing_values;
+
+    public $add_cases_in_monitoring;
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()->hasAccessToReports();
+    }
 
     public static function getNavigationGroup(): ?string
     {
@@ -69,22 +80,32 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
             Forms\Components\Section::make()
                 ->columns(4)
                 ->schema([
-                    Forms\Components\Select::make('report_type')
+                    Select::make('report_type')
                         ->key('report_type')
                         ->label(__('report.labels.report_type'))
                         ->columnSpan(2)
                         ->options(ReportType::options())
                         ->searchable(),
 
-                    Forms\Components\DatePicker::make('start_date')
+                    DatePicker::make('start_date')
                         ->label(__('report.labels.start_date'))
-                        ->default(now()->startOfMonth()),
+                        ->default(now()->startOfMonth())
+                        ->maxDate(fn (Get $get) => $get('end_date') ? debug($get('end_date')) : now())
+                        ->live(),
 
-                    Forms\Components\DatePicker::make('end_date')
+                    DatePicker::make('end_date')
                         ->label(__('report.labels.end_date'))
-                        ->default(now()),
+                        ->default(now())
+                        ->minDate(fn (Get $get) => $get('start_date') ?? null)
+                        ->maxDate(now())
+                        ->live(),
 
-                    Forms\Components\Checkbox::make('show_missing_values')
+                    Checkbox::make('add_cases_in_monitoring')
+                        ->label(__('report.labels.add_cases_in_monitoring'))
+                        ->helperText(__('report.helpers.add_cases_in_monitoring'))
+                        ->columnSpan(2),
+
+                    Checkbox::make('show_missing_values')
                         ->label(__('report.labels.show_missing_values'))
                         ->default(true)
                         ->columnSpan(2),
@@ -107,7 +128,8 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
                         ->setReportType($this->report_type)
                         ->setStartDate($this->start_date)
                         ->setEndDate($this->end_date)
-                        ->setShowMissingValues($this->show_missing_values),
+                        ->setShowMissingValues($this->show_missing_values)
+                        ->setAddCasesInMonitoring($this->add_cases_in_monitoring),
                 ])
                 ->schema([
                     $this->reportTable(),
@@ -121,7 +143,8 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
             ->setReportType($this->report_type ? ReportType::tryFrom($this->report_type) : null)
             ->setStartDate($this->start_date)
             ->setEndDate($this->end_date)
-            ->setShowMissingValue($this->show_missing_values);
+            ->setShowMissingValue($this->show_missing_values)
+            ->setAddCasesInMonitoring($this->add_cases_in_monitoring);
     }
 
     public function render(): View

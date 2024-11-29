@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Forms\Components;
 
 use App\Enums\ReportType;
-use App\Services\Reports\Beneficiaries;
 use App\Services\Reports\BeneficiariesV2;
 use Filament\Infolists\Components\Component;
 use Illuminate\Support\Collection;
@@ -14,7 +13,7 @@ class ReportTable extends Component
 {
     protected string $view = 'forms.components.report-table';
 
-    protected Beneficiaries | BeneficiariesV2 $reportService;
+    protected BeneficiariesV2 $reportService;
 
     protected ReportType | null $reportType = null;
 
@@ -23,6 +22,8 @@ class ReportTable extends Component
     protected string | null $endDate = null;
 
     protected bool | null $showMissingValues = false;
+
+    protected bool | null $addCasesInMonitoring = false;
 
     public static function make(string | null $id = null): static
     {
@@ -36,7 +37,6 @@ class ReportTable extends Component
     {
         parent::setUp();
         $this->reportService = new BeneficiariesV2();
-//        $this->reportService = new Beneficiaries();
     }
 
     public function setReportType(ReportType | string | null $reportType): self
@@ -71,14 +71,17 @@ class ReportTable extends Component
         return $this;
     }
 
+    public function setAddCasesInMonitoring(?bool $addCasesInMonitoring): self
+    {
+        $this->addCasesInMonitoring = $addCasesInMonitoring;
+        $this->reportService->setAddCasesInMonitoring($addCasesInMonitoring);
+
+        return $this;
+    }
+
     public function composeReport(): void
     {
         $this->reportService->composeReport();
-    }
-
-    public function getReportType(): ?ReportType
-    {
-        return $this->reportService->getReportType();
     }
 
     public function getReportData(): Collection
