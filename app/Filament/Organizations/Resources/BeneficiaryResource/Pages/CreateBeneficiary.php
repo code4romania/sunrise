@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\PreventMultipleSubmit;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
@@ -26,6 +27,7 @@ use Illuminate\Support\HtmlString;
 class CreateBeneficiary extends CreateRecord
 {
     use HasWizard;
+    use PreventMultipleSubmit;
 
     protected static string $resource = BeneficiaryResource::class;
 
