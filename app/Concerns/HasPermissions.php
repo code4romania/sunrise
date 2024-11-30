@@ -66,7 +66,7 @@ trait HasPermissions
         return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_NOMENCLATURE);
     }
 
-    public function hasAccessToCommunity()
+    public function hasAccessToCommunity(): bool
     {
         if ($this->isAdmin()) {
             return true;
@@ -77,5 +77,14 @@ trait HasPermissions
         }
 
         return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE);
+    }
+
+    public function canSearchBeneficiary(): bool
+    {
+        if ($this->isNgoAdmin()) {
+            return true;
+        }
+
+        return $this->permissions?->case_permissions->contains(CasePermission::CAN_SEARCH_AND_COPY_CASES_IN_ALL_CENTERS);
     }
 }
