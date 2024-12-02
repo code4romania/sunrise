@@ -26,6 +26,8 @@ class ResendInvitationAction extends Action
 
         $this->icon('heroicon-o-envelope-open');
 
+        $this->outlined();
+
         $this->action(function (User $record) {
             $key = $this->getRateLimiterKey($record);
             $maxAttempts = 1;

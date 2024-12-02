@@ -35,6 +35,10 @@ class UpdateDefaultTenant
             if ($user->userStatus->status === UserStatus::PENDING) {
                 $user->userStatus->activate();
             }
+
+            if ($tenant->institution->isPending()) {
+                $tenant->institution->activate();
+            }
         }
 
         return $next($request);

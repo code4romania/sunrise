@@ -51,7 +51,7 @@ class AdminsRelationManager extends RelationManager
                 TextColumn::make('roles.name')
                     ->label(__('institution.labels.roles')),
 
-                TextColumn::make('status')
+                TextColumn::make('userStatus.status')
                     ->label(__('institution.labels.account_status')),
 
                 TextColumn::make('last_login_at')

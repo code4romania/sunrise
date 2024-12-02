@@ -69,7 +69,12 @@ return [
     'action_deactivate_confirm' => [
         'title' => 'Deactivează cont',
         'success' => 'Cont dezactivat cu succes',
-        'description' => 'Odată dezactivat contul, utilizatorul nu va mai avea acces în platformă. Toate datele asociate contului vor rămâne în baza de date. Pentru a oferi din nou acces utilizatorului, va trebui să reactivați contul din profilul acestuia.'
+        'description' => 'Odată dezactivat contul, utilizatorul nu va mai avea acces în platformă. Toate datele asociate contului vor rămâne în baza de date. Pentru a oferi din nou acces utilizatorului, va trebui să reactivați contul din profilul acestuia.',
+    ],
+
+    'action_reactivate_confirm' => [
+        'title' => 'Deactivează cont',
+        'success' => 'Cont reactivat cu succes',
     ],
 
     'status' => [

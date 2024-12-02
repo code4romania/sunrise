@@ -8,6 +8,9 @@ use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\UserResource;
+use App\Filament\Organizations\Resources\UserResource\Actions\DeactivateUserAction;
+use App\Filament\Organizations\Resources\UserResource\Actions\ReactivateUserAction;
+use App\Filament\Organizations\Resources\UserResource\Actions\ResendInvitationAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\User;
 use Filament\Infolists\Components\Actions\Action;
@@ -107,11 +110,13 @@ class ViewUser extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            UserResource\Actions\DeactivateUserAction::make(),
+            DeactivateUserAction::make(),
 
             //            UserResource\Actions\ResetPassword::make('reset-password'),
 
-            UserResource\Actions\ResendInvitationAction::make(),
+            ResendInvitationAction::make(),
+
+            ReactivateUserAction::make(),
         ];
     }
 

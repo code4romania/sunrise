@@ -26,6 +26,8 @@ class DeactivateUserAction extends Action
 
         $this->icon('heroicon-o-user-minus');
 
+        $this->outlined();
+
         $this->modalHeading(__('user.action_deactivate_confirm.title'));
 
         $this->modalDescription(__('user.action_deactivate_confirm.description'));

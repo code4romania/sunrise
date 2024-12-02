@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\UserInstitutionResource\Actions;
 
+use App\Models\Organization;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -20,11 +21,21 @@ class ResendInvitationAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isPending());
+        $this->visible(
+            fn (User $record) => $record->institution
+                ->organizations
+                ->filter(
+                    fn (Organization $organization) => $record->getStatusInOrganization($organization->id)
+                        ->isPending()
+                )
+                ->count()
+        );
 
         $this->label(__('user.actions.resend_invitation'));
 
         $this->icon('heroicon-o-envelope-open');
+
+        $this->outlined();
 
         $this->action(function (User $record) {
             $key = $this->getRateLimiterKey($record);

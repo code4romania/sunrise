@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
 use App\Concerns\MustSetInitialPassword;
+use App\Models\Scopes\BelongsToCurrentTenant;
 use App\Notifications\Organizations\WelcomeNotificationInAnotherTenant;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
@@ -102,6 +103,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
                             ->organizations
                             ?->pluck('id')
                             ->diff($model->organizations?->pluck('id'))
+                    );
+
+                $model->load('organizations')
+                    ->organizations->each(
+                        fn (Organization $organization) => $model->initializeStatus($organization->id)
                     );
             }
         });
@@ -272,15 +278,31 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         return $this->hasOne(UserStatus::class);
     }
 
-    public function initializeStatus(): void
+    public function initializeStatus(?int $organizationID = null): void
     {
-        if (! Filament::getTenant()?->id) {
+        $organizationID = Filament::getTenant()?->id ?? $organizationID;
+
+        if (! $organizationID) {
             return;
         }
+
+        if ($this->getStatusInOrganization($organizationID)) {
+            return;
+        }
+
         $this->userStatus()->create([
             'user_id' => $this->id,
-            'organization_id' => Filament::getTenant()->id,
+            'organization_id' => $organizationID,
         ]);
+    }
+
+    public function getStatusInOrganization(int $organizationID): ?UserStatus
+    {
+        return UserStatus::query()
+            ->withoutGlobalScopes([BelongsToCurrentTenant::class])
+            ->where('user_id', $this->id)
+            ->where('organization_id', $organizationID)
+            ->first();
     }
 
     public function sendWelcomeNotificationInAnotherTenant(): void

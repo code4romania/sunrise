@@ -162,7 +162,7 @@ return [
 
     'user_status' => [
         'active' => 'Activ',
-        'inactive' => 'Dezactivat',
+        'inactive' => 'Suspendat',
         'pending' => 'În așteptare',
     ],
 
@@ -350,8 +350,8 @@ return [
 
     'beneficiary_segmentation_by_age' => [
         'minor' => '0-17 ani (minor)',
-        'major' => '18 ani + (major)'
-      ],
+        'major' => '18 ani + (major)',
+    ],
 
     'activity_description' => [
         'created' => 'Creat',
@@ -455,7 +455,7 @@ return [
         '11' => 'Nov',
         '12' => 'Dec',
     ],
-    
+
     'diseases' => [
         'denies_diseases' => 'Neagă boli',
         'chronic_diseases' => 'Boli cronice',
