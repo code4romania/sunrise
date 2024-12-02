@@ -35,23 +35,23 @@ class WelcomeNotificationInAnotherTenant extends Notification
     {
         // TODO: change line msg
         return (new MailMessage)
-            ->subject(__('email.organization.welcome.subject'))
-            ->line('![Logo](' . Vite::asset('resources/svg/logo.svg') . ')')
-            ->greeting(__('email.organization.welcome.greeting', ['name' => $notifiable->first_name]))
+            ->subject(__('email.organization.welcome_in_anther_tenant.subject'))
+//            ->line('![Logo](' . Vite::asset('resources/svg/logo.svg') . ')')
+            ->greeting(__('email.organization.welcome_in_anther_tenant.greeting', ['name' => $notifiable->first_name]))
             ->line(
-                __('email.organization.welcome.intro_line_1', [
+                __('email.organization.welcome_in_anther_tenant.intro_line_1', [
                     'institution_name' => Filament::getTenant()?->institution->name ?? '',
                     'center_name' => Filament::getTenant()?->name ?? '',
                 ])
             )
-            ->line(__('email.organization.welcome.intro_line_2'))
-            ->line(__('email.organization.welcome.intro_line_3'))
+            ->line(__('email.organization.welcome_in_anther_tenant.intro_line_2'))
+            ->line(__('email.organization.welcome_in_anther_tenant.intro_line_3'))
             ->action(
-                __('email.organization.welcome.accept_invitation'),
+                __('email.organization.welcome_in_anther_tenant.accept_invitation'),
                 URL::signedRoute($this->route, ['tenant' => Filament::getTenant()])
             )
-            ->line(__('email.organization.welcome.intro_line_4'))
-            ->line(new HtmlString(__('email.organization.welcome.intro_line_5')))
+            ->line(__('email.organization.welcome_in_anther_tenant.intro_line_4'))
+            ->line(new HtmlString(__('email.organization.welcome_in_anther_tenant.intro_line_5')))
             ->salutation(__('email.salutation'));
     }
 }
