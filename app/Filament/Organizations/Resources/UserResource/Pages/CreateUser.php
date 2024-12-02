@@ -34,7 +34,8 @@ class CreateUser extends CreateRecord
     {
         if ($user = User::query()->where('email', $data['email'])->first()) {
             $this->associateRecordWithTenant($user, Filament::getTenant());
-            $user->sendWelcomeNotification();
+            $user->initializeStatus();
+            $user->sendWelcomeNotificationInAnotherTenant();
 
             return $user;
         }

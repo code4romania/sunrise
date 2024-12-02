@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
 use App\Concerns\MustSetInitialPassword;
+use App\Notifications\Organizations\WelcomeNotificationInAnotherTenant;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -280,5 +281,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             'user_id' => $this->id,
             'organization_id' => Filament::getTenant()->id,
         ]);
+    }
+
+    public function sendWelcomeNotificationInAnotherTenant(): void
+    {
+        $this->notify(new WelcomeNotificationInAnotherTenant);
     }
 }
