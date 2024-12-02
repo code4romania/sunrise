@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
+use App\Concerns\PreventMultipleSubmit;
 use App\Filament\Organizations\Resources\ServiceResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
 class CreateService extends CreateRecord
 {
+    use PreventMultipleSubmit;
+
     protected static string $resource = ServiceResource::class;
 
     protected static bool $canCreateAnother = false;

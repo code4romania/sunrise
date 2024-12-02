@@ -21,6 +21,8 @@ class ExportReport extends Action
 
     protected bool | null $showMissingValues = false;
 
+    protected bool | null $addCasesInMonitoring = false;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -58,6 +60,13 @@ class ExportReport extends Action
         return $this;
     }
 
+    public function setAddCasesInMonitoring(?bool $addCasesInMonitoring): self
+    {
+        $this->addCasesInMonitoring = $addCasesInMonitoring;
+
+        return $this;
+    }
+
     public function generateExport(): BinaryFileResponse
     {
         $service = new BeneficiariesV2();
@@ -65,6 +74,7 @@ class ExportReport extends Action
             ->setStartDate($this->startDate)
             ->setEndDate($this->endDate)
             ->setShowMissingValue($this->showMissingValues)
+            ->setAddCasesInMonitoring($this->addCasesInMonitoring)
             ->composeReport();
 
         $fileName = \sprintf('%s_%s_%s.xlsx', $this->startDate, $this->endDate, $this->reportType->value);

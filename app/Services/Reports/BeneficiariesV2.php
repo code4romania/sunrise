@@ -20,6 +20,8 @@ class BeneficiariesV2
 
     protected bool | null $showMissingValue = false;
 
+    protected bool | null $addCasesInMonitoring = false;
+
     public function setReportType(ReportType | string | null $reportType): self
     {
         $this->reportType = $reportType;
@@ -48,6 +50,13 @@ class BeneficiariesV2
         return $this;
     }
 
+    public function setAddCasesInMonitoring(?bool $addCasesInMonitoring): self
+    {
+        $this->addCasesInMonitoring = $addCasesInMonitoring;
+
+        return $this;
+    }
+
     public function composeReport(): void
     {
         $generatorClass = str_replace(' ', '', ucwords(str_replace('_', ' ', $this->reportType->value)));
@@ -61,7 +70,8 @@ class BeneficiariesV2
         $this->generator
             ->setStartDate($this->startDate)
             ->setEndDate($this->endDate)
-            ->setShowMissingValues($this->showMissingValue);
+            ->setShowMissingValues($this->showMissingValue)
+            ->setAddCasesInMonitoring($this->addCasesInMonitoring);
     }
 
     public function getReportData(): Collection

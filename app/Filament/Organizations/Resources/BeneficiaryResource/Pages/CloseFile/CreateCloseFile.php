@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use App\Concerns\PreventMultipleSubmit;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -18,6 +19,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class CreateCloseFile extends EditRecord
 {
     use HasWizard;
+    use PreventMultipleSubmit;
 
     protected static string $resource = BeneficiaryResource::class;
 

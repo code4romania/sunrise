@@ -78,4 +78,22 @@ trait HasPermissions
 
         return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE);
     }
+
+    public function canSearchBeneficiary(): bool
+    {
+        if ($this->isNgoAdmin()) {
+            return true;
+        }
+
+        return $this->permissions?->case_permissions->contains(CasePermission::CAN_SEARCH_AND_COPY_CASES_IN_ALL_CENTERS);
+    }
+
+    public function hasAccessToReports(): bool
+    {
+        if ($this->isNgoAdmin()) {
+            return true;
+        }
+
+        return (bool) $this->permissions?->case_permissions->contains(CasePermission::HAS_ACCESS_TO_STATISTICS);
+    }
 }
