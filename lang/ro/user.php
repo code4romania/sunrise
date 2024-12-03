@@ -14,6 +14,10 @@ return [
         'plural' => 'Specialiști',
     ],
 
+    'titles' => [
+        'create_specialist' => 'Adaugă specialist',
+    ],
+
     'labels' => [
         'first_name' => 'Nume',
         'last_name' => 'Prenume',
@@ -69,7 +73,17 @@ return [
     'action_deactivate_confirm' => [
         'title' => 'Deactivează cont',
         'success' => 'Cont dezactivat cu succes',
-        'description' => 'Odată dezactivat contul, utilizatorul nu va mai avea acces în platformă. Toate datele asociate contului vor rămâne în baza de date. Pentru a oferi din nou acces utilizatorului, va trebui să reactivați contul din profilul acestuia.'
+        'description' => 'Odată dezactivat contul, utilizatorul nu va mai avea acces în platformă. Toate datele asociate contului vor rămâne în baza de date. Pentru a oferi din nou acces utilizatorului, va trebui să reactivați contul din profilul acestuia.',
+    ],
+
+    'action_reactivate_confirm' => [
+        'title' => 'Deactivează cont',
+        'success' => 'Cont reactivat cu succes',
+    ],
+
+    'action_reset_password_confirm' => [
+        'title' => 'Resetează parola',
+        'success' => 'Email-ul a fost trimis cu succes',
     ],
 
     'status' => [

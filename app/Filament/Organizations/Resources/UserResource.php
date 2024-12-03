@@ -27,6 +27,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
+use Illuminate\Validation\Rules\Unique;
 
 class UserResource extends Resource
 {
@@ -67,7 +68,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('rolesInOrganization'))
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['rolesInOrganization', 'userStatus']))
             ->columns([
                 TextColumn::make('first_name')
                     ->sortable()
@@ -82,7 +83,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->label(__('user.labels.roles')),
 
-                TextColumn::make('status')
+                TextColumn::make('userStatus.status')
                     ->sortable()
                     ->label(__('user.labels.account_status')),
 
@@ -130,7 +131,10 @@ class UserResource extends Resource
                     TextInput::make('email')
                         ->label(__('user.labels.email'))
                         ->email()
-                        ->unique(ignoreRecord: true)
+                        ->unique(
+                            ignoreRecord: true,
+                            modifyRuleUsing: fn (Unique $rule) => $rule->whereIn('id', User::getTenantOrganizationUsers()->keys())
+                        )
                         ->required(),
 
                     TextInput::make('phone_number')

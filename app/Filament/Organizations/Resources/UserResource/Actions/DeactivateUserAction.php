@@ -18,13 +18,15 @@ class DeactivateUserAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isActive());
+        $this->visible(fn (User $record) => $record->userStatus->isActive());
 
         $this->label(__('user.actions.deactivate'));
 
         $this->color('danger');
 
         $this->icon('heroicon-o-user-minus');
+
+        $this->outlined();
 
         $this->modalHeading(__('user.action_deactivate_confirm.title'));
 

@@ -67,7 +67,7 @@ class ViewUserInstitution extends ViewRecord
                 ->maxWidth('3xl')
                 ->columns()
                 ->schema([
-                    TextEntry::make('status')
+                    TextEntry::make('userStatus.status')
                         ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
                     TextEntry::make('updated_at'),
                 ]),

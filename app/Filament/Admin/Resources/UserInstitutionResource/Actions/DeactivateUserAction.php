@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\UserInstitutionResource\Actions;
 
+use App\Models\Organization;
 use App\Models\User;
 use Filament\Actions\Action;
 
@@ -18,7 +19,15 @@ class DeactivateUserAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isActive());
+        $this->visible(
+            fn (User $record) => $record->institution
+                ->organizations
+                ->filter(
+                    fn (Organization $organization) => $record->getStatusInOrganization($organization->id)
+                        ->isActive()
+                )
+                ->count()
+        );
 
         $this->label(__('user.actions.deactivate'));
 
@@ -33,7 +42,12 @@ class DeactivateUserAction extends Action
         $this->modalWidth('md');
 
         $this->action(function (User $record) {
-            $record->deactivate();
+            $record->institution
+                ->organizations
+                ->each(
+                    fn (Organization $organization) => $record->getStatusInOrganization($organization->id)
+                        ->deactivate()
+                );
             $this->success();
         });
 

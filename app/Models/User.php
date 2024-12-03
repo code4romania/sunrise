@@ -6,9 +6,9 @@ namespace App\Models;
 
 use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
-use App\Concerns\HasUserStatus;
 use App\Concerns\MustSetInitialPassword;
-use App\Enums\UserStatus;
+use App\Models\Scopes\BelongsToCurrentTenant;
+use App\Notifications\Organizations\WelcomeNotificationInAnotherTenant;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -46,7 +46,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use MustSetInitialPassword;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use HasUserStatus;
     use HasPermissions;
 
     /**
@@ -59,7 +58,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'last_name',
         'email',
         'phone_number',
-        'status',
         'password',
         'password_set_at',
         'latest_organization_id',
@@ -87,7 +85,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password' => 'hashed',
         'is_admin' => 'boolean',
         'ngo_admin' => 'boolean',
-        'status' => UserStatus::class,
     ];
 
     protected static function booted()
@@ -96,11 +93,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             return $query->withLastLoginAt();
         });
 
-        static::creating(function (User $model) {
-            $model->setPendingStatus();
-        });
-
         static::created(function (User $model) {
+            $model->initializeStatus();
             if ($model->institution) {
                 $model->load('organizations');
                 $model->organizations()
@@ -109,6 +103,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
                             ->organizations
                             ?->pluck('id')
                             ->diff($model->organizations?->pluck('id'))
+                    );
+
+                $model->load('organizations')
+                    ->organizations->each(
+                        fn (Organization $organization) => $model->initializeStatus($organization->id)
                     );
             }
         });
@@ -228,11 +227,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             ->withCasts(['last_login_at' => 'datetime']);
     }
 
-    // TODO create notifications
-    public function resetPassword(): void
-    {
-    }
-
     public function getFullNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
@@ -266,6 +260,48 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function activate(): void
     {
-        $this->update(['status' => UserStatus::ACTIVE]);
+        $this->userStatus->activate();
+    }
+
+    public function deactivate()
+    {
+        $this->userStatus->deactivate();
+    }
+
+    public function userStatus(): HasOne
+    {
+        return $this->hasOne(UserStatus::class);
+    }
+
+    public function initializeStatus(?int $organizationID = null): void
+    {
+        $organizationID = Filament::getTenant()?->id ?? $organizationID;
+
+        if (! $organizationID) {
+            return;
+        }
+
+        if ($this->getStatusInOrganization($organizationID)) {
+            return;
+        }
+
+        $this->userStatus()->create([
+            'user_id' => $this->id,
+            'organization_id' => $organizationID,
+        ]);
+    }
+
+    public function getStatusInOrganization(int $organizationID): ?UserStatus
+    {
+        return UserStatus::query()
+            ->withoutGlobalScopes([BelongsToCurrentTenant::class])
+            ->where('user_id', $this->id)
+            ->where('organization_id', $organizationID)
+            ->first();
+    }
+
+    public function sendWelcomeNotificationInAnotherTenant(): void
+    {
+        $this->notify(new WelcomeNotificationInAnotherTenant);
     }
 }

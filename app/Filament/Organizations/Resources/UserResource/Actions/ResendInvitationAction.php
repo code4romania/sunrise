@@ -20,11 +20,13 @@ class ResendInvitationAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isPending());
+        $this->visible(fn (User $record) => $record->userStatus->isPending());
 
         $this->label(__('user.actions.resend_invitation'));
 
         $this->icon('heroicon-o-envelope-open');
+
+        $this->outlined();
 
         $this->action(function (User $record) {
             $key = $this->getRateLimiterKey($record);

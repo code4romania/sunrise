@@ -32,7 +32,6 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'status' => fake()->randomElement(UserStatus::values()),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
@@ -106,6 +105,16 @@ class UserFactory extends Factory
                     'case_permissions' => $casePermissions,
                     'admin_permissions' => $adminPermissions,
                 ]);
+        });
+    }
+
+    public function withUserStatus(?int $organizationID = null): static
+    {
+        return $this->afterCreating(function (User $user) use ($organizationID) {
+            $user->userStatus()->create([
+                'status' => $user->institution_id || $user->isAdmin() ? UserStatus::ACTIVE : fake()->randomElement(UserStatus::values()),
+                'organization_id' => $organizationID,
+            ]);
         });
     }
 }

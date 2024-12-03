@@ -8,6 +8,10 @@ use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\UserResource;
+use App\Filament\Organizations\Resources\UserResource\Actions\DeactivateUserAction;
+use App\Filament\Organizations\Resources\UserResource\Actions\ReactivateUserAction;
+use App\Filament\Organizations\Resources\UserResource\Actions\ResendInvitationAction;
+use App\Filament\Organizations\Resources\UserResource\Actions\ResetPasswordAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\User;
 use Filament\Infolists\Components\Actions\Action;
@@ -29,7 +33,7 @@ class ViewUser extends ViewRecord
                 ->columns()
                 ->maxWidth('3xl')
                 ->schema([
-                    TextEntry::make('status')
+                    TextEntry::make('userStatus.status')
                         ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
                     TextEntry::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time')),
@@ -107,11 +111,13 @@ class ViewUser extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            UserResource\Actions\DeactivateUserAction::make(),
+            DeactivateUserAction::make(),
 
-            //            UserResource\Actions\ResetPassword::make('reset-password'),
+            ResetPasswordAction::make(),
 
-            UserResource\Actions\ResendInvitationAction::make(),
+            ResendInvitationAction::make(),
+
+            ReactivateUserAction::make(),
         ];
     }
 

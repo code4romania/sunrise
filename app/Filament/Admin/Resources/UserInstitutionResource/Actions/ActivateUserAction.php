@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\UserInstitutionResource\Actions;
 
+use App\Models\Organization;
 use App\Models\User;
 use Filament\Actions\Action;
 
@@ -18,7 +19,15 @@ class ActivateUserAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->isInactive());
+        $this->visible(
+            fn (User $record) => $record->institution
+                ->organizations
+                ->filter(
+                    fn (Organization $organization) => $record->getStatusInOrganization($organization->id)
+                        ->isInactive()
+                )
+                ->count()
+        );
 
         $this->label(__('user.actions.activate'));
 
@@ -31,9 +40,13 @@ class ActivateUserAction extends Action
         $this->modalWidth('md');
 
         $this->action(function (User $record) {
-            $record->activate();
+            $record->institution
+                ->organizations
+                ->each(
+                    fn (Organization $organization) => $record->getStatusInOrganization($organization->id)
+                        ->activate()
+                );
             $this->success();
         });
-
     }
 }
