@@ -34,8 +34,6 @@ class EnumEntry extends TextEntry
                 $reflectionClass = new \ReflectionEnum($this->enumClass);
                 $returnType = $reflectionClass->getBackingtype();
 
-                debug($returnType->getName(), $this->enumClass);
-
                 return $state->map(
                     function ($item) use ($returnType) {
                         $item = match ($returnType->getName()) {
@@ -46,10 +44,6 @@ class EnumEntry extends TextEntry
                         return $this->enumClass::tryFrom($item)?->getLabel();
                     }
                 )->join(', ');
-
-                debug($state);
-
-                return $state;
             }
 
             return $state;

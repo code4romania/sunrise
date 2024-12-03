@@ -91,7 +91,7 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
                     DatePicker::make('start_date')
                         ->label(__('report.labels.start_date'))
                         ->default(now()->startOfMonth())
-                        ->maxDate(fn (Get $get) => $get('end_date') ? debug($get('end_date')) : now())
+                        ->maxDate(fn (Get $get) => $get('end_date') ? $get('end_date') : now())
                         ->live(),
 
                     DatePicker::make('end_date')
