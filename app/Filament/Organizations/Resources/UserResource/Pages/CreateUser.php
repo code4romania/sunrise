@@ -9,6 +9,7 @@ use App\Filament\Organizations\Resources\UserResource;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
 class CreateUser extends CreateRecord
@@ -18,6 +19,11 @@ class CreateUser extends CreateRecord
     protected static string $resource = UserResource::class;
 
     protected static bool $canCreateAnother = false;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('user.titles.create_specialist');
+    }
 
     protected function afterSave(): void
     {

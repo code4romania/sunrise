@@ -227,11 +227,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             ->withCasts(['last_login_at' => 'datetime']);
     }
 
-    // TODO create notifications
-    public function resetPassword(): void
-    {
-    }
-
     public function getFullNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;

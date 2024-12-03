@@ -14,6 +14,10 @@ return [
         'plural' => 'Specialiști',
     ],
 
+    'titles' => [
+        'create_specialist' => 'Adaugă specialist',
+    ],
+
     'labels' => [
         'first_name' => 'Nume',
         'last_name' => 'Prenume',
@@ -75,6 +79,11 @@ return [
     'action_reactivate_confirm' => [
         'title' => 'Deactivează cont',
         'success' => 'Cont reactivat cu succes',
+    ],
+
+    'action_reset_password_confirm' => [
+        'title' => 'Resetează parola',
+        'success' => 'Email-ul a fost trimis cu succes',
     ],
 
     'status' => [

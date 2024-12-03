@@ -11,6 +11,7 @@ use App\Filament\Organizations\Resources\UserResource;
 use App\Filament\Organizations\Resources\UserResource\Actions\DeactivateUserAction;
 use App\Filament\Organizations\Resources\UserResource\Actions\ReactivateUserAction;
 use App\Filament\Organizations\Resources\UserResource\Actions\ResendInvitationAction;
+use App\Filament\Organizations\Resources\UserResource\Actions\ResetPasswordAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\User;
 use Filament\Infolists\Components\Actions\Action;
@@ -112,7 +113,7 @@ class ViewUser extends ViewRecord
         return [
             DeactivateUserAction::make(),
 
-            //            UserResource\Actions\ResetPassword::make('reset-password'),
+            ResetPasswordAction::make(),
 
             ResendInvitationAction::make(),
 
