@@ -133,7 +133,8 @@ class UserResource extends Resource
                         ->email()
                         ->unique(
                             ignoreRecord: true,
-                            modifyRuleUsing: fn (Unique $rule) => $rule->whereIn('id', User::getTenantOrganizationUsers()->keys())
+                            modifyRuleUsing: fn (Unique $rule, string $operation) => $operation === 'edit' ? $rule :
+                                $rule->whereIn('id', User::getTenantOrganizationUsers()->keys())
                         )
                         ->required(),
 
