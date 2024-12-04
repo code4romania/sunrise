@@ -66,7 +66,7 @@ class CounselingSheetWidget extends InfolistWidget
         return [
             Section::make()
                 ->relationship('counselingSheet')
-                ->maxWidth('3xl')
+                ->maxWidth(! CounselingSheet::isValue($counselingSheet, CounselingSheet::SOCIAL_ASSISTANCE) ? '3xl' : null)
                 ->schema([
                     SectionHeader::make('counseling_sheet')
                         ->state(__('intervention_plan.headings.counseling_sheet'))
@@ -272,18 +272,18 @@ class CounselingSheetWidget extends InfolistWidget
     {
         return [
             Section::make(__('intervention_plan.headings.family_relationship'))
+                ->maxWidth('3xl')
                 ->schema([
                     RepeatableEntry::make('data.family')
                         ->hiddenLabel()
-//                        TODO add item label
-//                        ->itemLabel(function () {
-//                            static $index = 1;
-//
-//                            return __('intervention_plan.labels.family', ['number' => $index++]);
-//                        })
                         ->columns()
-                        ->maxWidth('3xl')
                         ->schema([
+                            SectionHeader::make('header')
+                                ->state(function (SectionHeader $component) {
+                                    $index = (int) explode('.', $component->getStatePath())[1];
+
+                                    return __('intervention_plan.labels.family', ['number' => ++$index]);
+                                }),
 
                             EnumEntry::make('relationship')
                                 ->label(__('intervention_plan.labels.relationship'))
@@ -315,18 +315,19 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.support_group'))
+                ->maxWidth('3xl')
                 ->schema([
                     RepeatableEntry::make('data.support_group')
                         ->hiddenLabel()
-                        // TODO add item label
-//                        ->itemLabel(function () {
-//                            static $index = 1;
-//
-//                            return __('intervention_plan.labels.social_relationship', ['number' => $index++]);
-//                        })
                         ->columns()
-                        ->maxWidth('3xl')
                         ->schema([
+                            SectionHeader::make('header')
+                                ->state(function (SectionHeader $component) {
+                                    $index = (int) explode('.', $component->getStatePath())[1];
+
+                                    return __('intervention_plan.labels.social_relationship', ['number' => ++$index]);
+                                }),
+
                             EnumEntry::make('relationship')
                                 ->label(__('intervention_plan.labels.relationship'))
                                 ->enumClass(SocialRelationship::class),
@@ -344,9 +345,9 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.living_conditions'))
+                ->maxWidth('3xl')
                 ->schema([
                     Grid::make()
-                        ->maxWidth('3xl')
                         ->schema([
                             EnumEntry::make('data.home_type')
                                 ->label(__('intervention_plan.labels.home_type'))
@@ -369,15 +370,14 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.professional_experience'))
+                ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('data.professional_experience')
-                        ->label(__('intervention_plan.labels.professional_experience'))
-                        ->maxWidth('3xl'),
+                        ->label(__('intervention_plan.labels.professional_experience')),
                 ]),
 
             Section::make(__('intervention_plan.headings.children_details'))
                 ->schema([
-                    // TODO add child info from beneficiary children
                     RepeatableEntry::make('data.children')
                         ->hiddenLabel()
                         ->schema([
@@ -393,23 +393,53 @@ class CounselingSheetWidget extends InfolistWidget
                                         }),
 
                                     TextEntry::make('name')
-                                        ->label(__('intervention_plan.labels.children_name')),
+                                        ->label(__('intervention_plan.labels.children_name'))
+                                        ->state(function (TextEntry $component, $record) {
+                                            $index = (int) explode('.', $component->getStatePath())[3];
+
+                                            return $record->beneficiary->children->get($index)->name;
+                                        }),
 
                                     TextEntry::make('age')
-                                        ->label(__('intervention_plan.labels.children_age')),
+                                        ->label(__('intervention_plan.labels.children_age'))
+                                        ->state(function (TextEntry $component, $record) {
+                                            $index = (int) explode('.', $component->getStatePath())[3];
+
+                                            return $record->beneficiary->children->get($index)->age;
+                                        }),
 
                                     EnumEntry::make('gender')
                                         ->label(__('intervention_plan.labels.children_gender'))
-                                        ->enumClass(Gender::class),
+                                        ->enumClass(Gender::class)
+                                        ->state(function (TextEntry $component, $record) {
+                                            $index = (int) explode('.', $component->getStatePath())[3];
+
+                                            return $record->beneficiary->children->get($index)->gender;
+                                        }),
 
                                     TextEntry::make('current_address')
-                                        ->label(__('field.current_address')),
+                                        ->label(__('field.current_address'))
+                                        ->state(function (TextEntry $component, $record) {
+                                            $index = (int) explode('.', $component->getStatePath())[3];
+
+                                            return $record->beneficiary->children->get($index)->current_address;
+                                        }),
 
                                     TextEntry::make('status')
-                                        ->label(__('field.child_status')),
+                                        ->label(__('field.child_status'))
+                                        ->state(function (TextEntry $component, $record) {
+                                            $index = (int) explode('.', $component->getStatePath())[3];
+
+                                            return $record->beneficiary->children->get($index)->status;
+                                        }),
 
                                     TextEntry::make('workspace')
-                                        ->label(__('field.workspace')),
+                                        ->label(__('field.workspace'))
+                                        ->state(function (TextEntry $component, $record) {
+                                            $index = (int) explode('.', $component->getStatePath())[3];
+
+                                            return $record->beneficiary->children->get($index)->workspace;
+                                        }),
                                 ]),
 
                             Grid::make()
@@ -475,6 +505,7 @@ class CounselingSheetWidget extends InfolistWidget
 
             Section::make(__('intervention_plan.headings.integration_and_participation_in_social_service'))
                 ->columns()
+                ->maxWidth('3xl')
                 ->schema([
                     EnumEntry::make('data.communication')
                         ->label(__('intervention_plan.labels.communication'))
