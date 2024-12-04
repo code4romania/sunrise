@@ -71,6 +71,10 @@ class ViewService extends ViewRecord
                                         return EditCounselingSheet::getSchemaForPsychologicalAssistance();
                                     }
 
+                                    if (CounselingSheet::isValue($counselingSheet, CounselingSheet::SOCIAL_ASSISTANCE)) {
+                                        return EditCounselingSheet::getSchemaForSocialAssistance();
+                                    }
+
                                     return [];
                                 })
                                 ->disabledForm()
@@ -90,7 +94,7 @@ class ViewService extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            InterventionsWidget::class
+            InterventionsWidget::class,
         ];
     }
 }

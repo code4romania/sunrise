@@ -71,6 +71,10 @@ class ViewService extends ViewRecord
                                         return EditCounselingSheet::getSchemaForPsychologicalAssistance();
                                     }
 
+                                    if (CounselingSheet::isValue($counselingSheet, CounselingSheet::SOCIAL_ASSISTANCE)) {
+                                        return EditCounselingSheet::getSchemaForSocialAssistance();
+                                    }
+
                                     return [];
                                 })
                                 ->disabledForm()

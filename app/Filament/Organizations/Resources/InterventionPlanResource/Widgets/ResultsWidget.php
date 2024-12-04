@@ -132,7 +132,7 @@ class ResultsWidget extends BaseWidget
 
             RichEditor::make('observations')
                 ->label(__('intervention_plan.labels.result_observations'))
-                ->placeholder(__('intervention_plan.placeholders.observations')),
+                ->placeholder(__('intervention_plan.placeholders.result_observations')),
         ];
     }
 
