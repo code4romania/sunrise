@@ -16,6 +16,7 @@ use App\Enums\PossessionMode;
 use App\Enums\ProtectionMeasuringType;
 use App\Enums\SocialRelationship;
 use App\Enums\Ternary;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
@@ -39,6 +40,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Str;
 
 class EditCounselingSheet extends EditRecord
 {
@@ -477,6 +479,16 @@ class EditCounselingSheet extends EditRecord
                 ]),
 
             Section::make(__('intervention_plan.headings.children_details'))
+                ->headerActions([
+                    Action::make('view_children_identity')
+                        ->label(__('intervention_plan.actions.view_children_identity'))
+                        ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
+                            'record' => $interventionService->beneficiary,
+                            'tab' => \sprintf('-%s-tab', Str::slug(__('beneficiary.section.identity.tab.children'))),
+                        ]))
+                        ->visible(fn () => $interventionService)
+                        ->link(),
+                ])
                 ->afterStateHydrated(function (Set $set, array $state) use ($interventionService) {
                     if (! $interventionService) {
                         return;
@@ -645,6 +657,7 @@ class EditCounselingSheet extends EditRecord
 
             Section::make(__('intervention_plan.headings.integration_and_participation_in_social_service'))
                 ->columns()
+                ->maxWidth('3xl')
                 ->schema([
                     Select::make('data.communication')
                         ->label(__('intervention_plan.labels.communication'))

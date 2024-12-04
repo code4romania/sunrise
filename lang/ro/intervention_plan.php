@@ -238,6 +238,7 @@ return [
         'add_result' => 'Adaugă rezultat',
         'delete_result' => 'Șterge rezultat',
         'add_social_relationship' => 'Adaugă încă o relație socială',
+        'view_children_identity' => 'Vezi detalii identitate copii',
     ],
 
     'placeholders' => [
