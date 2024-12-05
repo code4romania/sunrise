@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Enums\UserStatus;
+use App\Filament\Organizations\Pages\Dashboard;
 use Closure;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
@@ -26,6 +27,10 @@ class UpdateDefaultTenant
             $user->update([
                 'latest_organization_id' => $tenant->id,
             ]);
+
+            if ($tenant->institution->isInactivated()) {
+                return redirect()->to(Dashboard::getUrl());
+            }
 
             if (! $user->userStatus) {
                 $user->initializeStatus();
