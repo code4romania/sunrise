@@ -7,6 +7,7 @@ namespace App\Concerns;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Models\Beneficiary;
+use Filament\Facades\Filament;
 
 trait HasPermissions
 {
@@ -17,7 +18,7 @@ trait HasPermissions
 
     public function isNgoAdmin(): bool
     {
-        return $this->ngo_admin;
+        return $this->ngo_admin && $this->institution_id === Filament::getTenant()->institution_id;
     }
 
     public function hasAccessToAllCases(): bool
