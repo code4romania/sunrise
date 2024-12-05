@@ -386,7 +386,8 @@ return [
 
     'counseling_sheet' => [
         'psychological_assistance' => 'Asistență psihologică',
-        'legal_assistance' => 'Asistența juridică',
+        'legal_assistance' => 'Asistență juridică',
+        'social_assistance' => 'Asistență socială',
     ],
 
     'meeting_status' => [
@@ -497,5 +498,48 @@ return [
         'f' => 'F',
         'm' => 'M',
         'n' => 'N',
+    ],
+
+    'family_relationship' => [
+        'partner' => 'Partener',
+        'mother' => 'Mamă',
+        'father' => 'Tatăl',
+        'sister' => 'Soră',
+        'brother' => 'Frate',
+        'other' => 'Alt membru al familiei',
+    ],
+
+    'social_relationship' => [
+        'friend' => 'Prieten(ă)',
+        'coworker' => 'Coleg(ă)',
+        'support_group' => 'Grup sprijin',
+        'other' => 'Altă relație',
+    ],
+
+    'home_type' => [
+        'individual_house' => 'Casă individuală',
+        'building_with_multiple_houses' => 'Casă cu două sau mai multe locuințe (cuplate, înșiruite, etc)',
+        'apartment' => 'Apartament în bloc de locuințe',
+        'studio' => 'Garsonieră în loc de locuințe',
+        'room' => 'Cameră în unitate de locuit în comun (cămin, internat)',
+        'space_in_building_with_non_residential_destination' => 'Spațiu în clădire cu altă destinație decât locuire',
+        'other' => 'Alt tip de proprietate',
+    ],
+
+    'protection_measuring_type' => [
+        'emergency_placement' => 'Plasament în regim de urgență',
+        'placement_in_family' => 'Plasament la o persoană sau familie',
+        'placement_at_foster_care' => 'Plasament la un asistent maternal',
+        'placement_in_residential_care_service' => 'Plasament la un serviciu de tip rezidențial',
+        'specialized_supervision' => 'Supraveghere specializată',
+        'other' => 'Altă măsură de protecție',
+    ],
+
+    'payment_method' => [
+        'representative' => 'Reprezentant',
+        'postal_office' => 'Oficiu poștal',
+        'bank_account' => 'Card bancar',
+        'other' => 'Altă modalitate de plată',
+
     ],
 ];

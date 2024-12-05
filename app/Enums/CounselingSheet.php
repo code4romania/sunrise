@@ -15,6 +15,7 @@ enum CounselingSheet: string implements HasLabel
 
     case PSYCHOLOGICAL_ASSISTANCE = 'psychological_assistance';
     case LEGAL_ASSISTANCE = 'legal_assistance';
+    case SOCIAL_ASSISTANCE = 'social_assistance';
 
     protected function labelKeyPrefix(): ?string
     {
