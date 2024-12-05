@@ -13,7 +13,12 @@ trait LogsActivityOptions
 {
     use LogsActivity;
 
-    protected static $recordEvents = ['created', 'updated', 'deleted', 'retrieved'];
+    protected static $recordEvents = [
+        'created',
+        'updated',
+        'deleted',
+        //        'retrieved'
+    ];
 
     public function getActivitylogOptions(): LogOptions
     {

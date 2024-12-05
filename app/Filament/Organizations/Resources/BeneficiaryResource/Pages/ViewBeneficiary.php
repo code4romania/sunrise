@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Enums\ActivityDescription;
 use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Enums\Ternary;
@@ -17,6 +18,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCase
 use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
+use App\Models\Activity;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
@@ -42,6 +44,22 @@ use Illuminate\Support\HtmlString;
 class ViewBeneficiary extends ViewRecord
 {
     protected static string $resource = BeneficiaryResource::class;
+
+    public function mount(int|string $record): void
+    {
+        parent::mount($record);
+
+        Activity::create([
+            'log_name' => 'default',
+            'description' => ActivityDescription::RETRIEVED,
+            'subject_type' => $this->getRecord()->getMorphClass(),
+            'subject_id' => $this->getRecord()->id,
+            'event' => ActivityDescription::RETRIEVED->value,
+            'causer_type' => auth()->user()->getMorphClass(),
+            'causer_id' => auth()->id(),
+            'properties' => ['old' => $this->getRecord()->toArray()],
+        ]);
+    }
 
     public function getBreadcrumbs(): array
     {
