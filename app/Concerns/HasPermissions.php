@@ -18,7 +18,15 @@ trait HasPermissions
 
     public function isNgoAdmin(): bool
     {
-        return $this->ngo_admin && $this->institution_id === Filament::getTenant()->institution_id;
+        if (! $this->ngo_admin) {
+            return false;
+        }
+
+        if (! Filament::getTenant()) {
+            return true;
+        }
+
+        return $this->institution_id === Filament::getTenant()->institution_id;
     }
 
     public function hasAccessToAllCases(): bool
