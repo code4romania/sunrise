@@ -124,7 +124,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
                     TextEntry::make('birthdate')
                         ->label(__('field.birthdate'))
-                        ->date('Y-m-d'),
+                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('Y-m-d') : $state),
 
                     TextEntry::make('birthplace')
                         ->label(__('field.birthplace'))
