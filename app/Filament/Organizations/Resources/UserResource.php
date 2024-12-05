@@ -8,6 +8,7 @@ use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
+use App\Models\OrganizationUserPermissions;
 use App\Models\Role;
 use App\Models\User;
 use Filament\Facades\Filament;
@@ -119,6 +120,19 @@ class UserResource extends Resource
         return [
             Section::make()
                 ->columns()
+                ->maxWidth('3xl')
+                ->visible(fn (string $operation) => $operation === 'edit')
+                ->schema([
+                    Placeholder::make('userStatus.status')
+                        ->content(fn (User $record, $state) => $record->userStatus->status->getLabel()),
+
+                    Placeholder::make('last_login_at')
+                        ->label(__('user.labels.last_login_at_date_time'))
+                        ->content(fn (User $record) => $record->last_login_at ?? '-'),
+                ]),
+            Section::make()
+                ->columns()
+                ->maxWidth('3xl')
                 ->schema([
                     TextInput::make('first_name')
                         ->label(__('user.labels.first_name'))
@@ -166,7 +180,11 @@ class UserResource extends Resource
                             CheckboxList::make('case_permissions')
                                 ->label(__('user.labels.case_permissions'))
                                 ->options(CasePermission::getOptionsWithoutCaseManager())
-                                ->disableOptionWhen(function (Get $get, string $value) {
+                                ->disableOptionWhen(function (Get $get, string $value, OrganizationUserPermissions $record) {
+                                    if ($record->user->isNgoAdmin()) {
+                                        return true;
+                                    }
+
                                     foreach ($get('../role_id') as $roleID) {
                                         $role = self::getRole($roleID);
 
@@ -184,7 +202,11 @@ class UserResource extends Resource
                             CheckboxList::make('admin_permissions')
                                 ->label(__('user.labels.admin_permissions'))
                                 ->options(AdminPermission::options())
-                                ->disableOptionWhen(function (Get $get, string $value) {
+                                ->disableOptionWhen(function (Get $get, string $value, OrganizationUserPermissions $record) {
+                                    if ($record->user->isNgoAdmin()) {
+                                        return true;
+                                    }
+
                                     foreach ($get('../role_id') as $roleID) {
                                         $role = self::getRole($roleID);
 
@@ -208,9 +230,20 @@ class UserResource extends Resource
 
     public static function setDefaultCaseAndNgoAdminPermissions(): \Closure
     {
-        return function (Set $set, Get $get, $state) {
+        return function (Set $set, Get $get, $state, User $record) {
             $casePermissions = $get('permissions.case_permissions') ?: [];
             $adminPermissions = $get('permissions.admin_permissions') ?: [];
+
+            if ($record->isNgoAdmin()) {
+                $casePermissions = CasePermission::values();
+                $adminPermissions = AdminPermission::values();
+
+                $set('permissions.case_permissions', $casePermissions);
+                $set('permissions.admin_permissions', $adminPermissions);
+
+                return;
+            }
+
             foreach ($state as $roleID) {
                 $role = self::getRole($roleID);
                 $defaultCasePermissions = $role->case_permissions?->map(fn ($item) => $item->value)->toArray();

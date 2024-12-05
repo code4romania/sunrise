@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
 use App\Concerns\MustSetInitialPassword;
+use App\Enums\AdminPermission;
+use App\Enums\CasePermission;
 use App\Models\Scopes\BelongsToCurrentTenant;
 use App\Notifications\Organizations\WelcomeNotificationInAnotherTenant;
 use Filament\Facades\Filament;
@@ -106,8 +108,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
                     );
 
                 $model->load('organizations')
-                    ->organizations->each(
-                        fn (Organization $organization) => $model->initializeStatus($organization->id)
+                    ->organizations
+                    ->each(
+                        function (Organization $organization) use ($model) {
+                            $model->initializeStatus($organization->id);
+                            $model->setFullPermission($organization->id);
+                        }
                     );
             }
         });
@@ -298,6 +304,20 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             ->where('user_id', $this->id)
             ->where('organization_id', $organizationID)
             ->first();
+    }
+
+    public function setFullPermission(int $organizationID): void
+    {
+        if (! $this->isNgoAdmin()) {
+            return;
+        }
+
+        $this->permissions()->create([
+            'user_id' => $this->id,
+            'organization_id' => $organizationID,
+            'case_permissions' => CasePermission::values(),
+            'admin_permissions' => AdminPermission::values(),
+        ]);
     }
 
     public function sendWelcomeNotificationInAnotherTenant(): void
