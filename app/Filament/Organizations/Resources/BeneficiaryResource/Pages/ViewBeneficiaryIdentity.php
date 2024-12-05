@@ -123,7 +123,8 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->placeholder(__('placeholder.select_one')),
 
                     TextEntry::make('birthdate')
-                        ->label(__('field.birthdate')),
+                        ->label(__('field.birthdate'))
+                        ->date('Y-m-d'),
 
                     TextEntry::make('birthplace')
                         ->label(__('field.birthplace'))
