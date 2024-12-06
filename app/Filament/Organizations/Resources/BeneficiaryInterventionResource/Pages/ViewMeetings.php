@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Infolists\Components\Actions\CreateAction;
+use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionMeeting;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
@@ -25,6 +26,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\Alignment;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Carbon;
 
@@ -123,10 +125,8 @@ class ViewMeetings extends ViewRecord
                                 })
                                 ->badge(fn (InterventionMeeting $record) => $record->status)
                                 ->action(
-                                    Action::make('edit')
-                                        ->label(__('general.action.edit'))
+                                    Edit::make('edit')
                                         ->icon('heroicon-o-pencil')
-                                        ->link()
                                         ->modalHeading(__('general.action.edit'))
                                         ->form($this->getFormSchema())
                                         ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
@@ -134,7 +134,7 @@ class ViewMeetings extends ViewRecord
                                             fn () => [
                                                 Action::make('delete')
                                                     ->label(__('intervention_plan.actions.delete_meeting'))
-                                                    ->outlined()
+                                                    ->link()
                                                     ->color('danger')
                                                     ->cancelParentActions()
                                                     ->action(function (InterventionMeeting $record) {
@@ -146,6 +146,7 @@ class ViewMeetings extends ViewRecord
                                                     }),
                                             ]
                                         )
+                                        ->modalExtraFooterActionsAlignment(Alignment::Left)
                                         ->action(fn (array $data, InterventionMeeting $record) => $record->update($data))
                                         ->successRedirectUrl(fn () => InterventionServiceResource::getUrl('view_meetings', [
                                             'parent' => $this->getRecord()->interventionService,

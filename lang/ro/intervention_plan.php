@@ -230,7 +230,7 @@ return [
         'delete_meeting' => 'Șterge ședința',
         'add_institution' => 'Adaugă încă o instituție',
         'add_benefit' => 'Adaugă beneficiu',
-        'delete_benefit' => 'Sterge beneficiu',
+        'delete_benefit' => 'Șterge beneficiu',
         'delete_beneficiary_intervention' => 'Șterge intervenția',
         'view_intervention' => 'Vezi intervenția',
         'download_meetings' => 'Descarcă tabel',

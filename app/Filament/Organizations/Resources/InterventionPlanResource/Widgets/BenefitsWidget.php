@@ -7,14 +7,15 @@ namespace App\Filament\Organizations\Resources\InterventionPlanResource\Widgets;
 use App\Forms\Components\Select;
 use App\Models\BenefitType;
 use App\Models\InterventionPlan;
+use App\Tables\Actions\EditAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -63,12 +64,14 @@ class BenefitsWidget extends BaseWidget
                     ->extraModalFooterActions([
                         DeleteAction::make()
                             ->label(__('intervention_plan.actions.delete_benefit'))
-                            ->outlined()
+                            ->link()
+                            ->icon(null)
                             ->cancelParentActions()
                             ->modalHeading(__('intervention_plan.headings.delete_benefit_modal'))
                             ->modalDescription(fn ($record) => $record->benefit->name)
                             ->modalSubmitActionLabel(__('intervention_plan.actions.delete_benefit')),
-                    ]),
+                    ])
+                    ->modalExtraFooterActionsAlignment(Alignment::Left),
             ])
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_benefit_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_benefit_table'))
