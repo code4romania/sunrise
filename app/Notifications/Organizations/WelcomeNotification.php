@@ -33,8 +33,8 @@ class WelcomeNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->greeting(__('email.organization.welcome.greeting', ['name' => $notifiable->first_name]))
             ->subject(__('email.organization.welcome.subject'))
+            ->greeting(__('email.organization.welcome.greeting', ['name' => $notifiable->first_name]))
             ->line(
                 __('email.organization.welcome.intro_line_1', [
                     'institution_name' => Filament::getTenant()?->institution->name ?? '',
