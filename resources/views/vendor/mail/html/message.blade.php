@@ -2,7 +2,7 @@
 {{-- Header --}}
 <x-slot:header>
 <x-mail::header :url="config('app.url')">
-    <img src="{{ Vite::asset('resources/svg/logo_purple.svg') }}" class="logo"  style="width: 40%" alt="{{ config('app.name') }}">
+    <img src="{{ Vite::image('logo.png') }}" class="logo"  style="width: 225px" alt="{{ config('app.name') }}">
 </x-mail::header>
 </x-slot:header>
 
