@@ -64,6 +64,11 @@
     <form wire:submit.prevent="callMountedTableAction">
         @php
             $action = $this->getMountedTableAction();
+
+            $modalExtraFooterActionsAlignment = null;
+            if ($action && method_exists($action, 'getModalExtraFooterActionsAlignment')) {
+                $modalExtraFooterActionsAlignment = $action->getModalExtraFooterActionsAlignment();
+            }
         @endphp
 
         <x-filament::modal
@@ -77,6 +82,8 @@
             :extra-modal-window-attribute-bag="$action?->getExtraModalWindowAttributeBag()"
             :footer-actions="$action?->getVisibleModalFooterActions()"
             :footer-actions-alignment="$action?->getModalFooterActionsAlignment()"
+            :extra-footer-actions="$action?->getExtraModalFooterActions()"
+            :extra-footer-actions-alignment="$modalExtraFooterActionsAlignment"
             :heading="$action?->getModalHeading()"
             :icon="$action?->getModalIcon()"
             :icon-color="$action?->getModalIconColor()"

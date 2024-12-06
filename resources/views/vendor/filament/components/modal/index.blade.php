@@ -17,7 +17,9 @@
     'extraModalWindowAttributeBag' => null,
     'footer' => null,
     'footerActions' => [],
+    'extraFooterActions' => [],
     'footerActionsAlignment' => Alignment::Start,
+    'extraFooterActionsAlignment' => null,
     'header' => null,
     'heading' => null,
     'icon' => null,
@@ -46,6 +48,18 @@
 
     if (! $footerActionsAlignment instanceof Alignment) {
         $footerActionsAlignment = filled($footerActionsAlignment) ? (Alignment::tryFrom($footerActionsAlignment) ?? $footerActionsAlignment) : null;
+    }
+
+    if ($extraFooterActions &&
+            $extraFooterActionsAlignment &&
+            $footerActions &&
+            $extraFooterActionsAlignment !== $footerActionsAlignment
+        ) {
+        foreach ($footerActions as $key => $action) {
+            if (in_array($action, $extraFooterActions)) {
+                unset($footerActions[$key]);
+            }
+        }
     }
 
     if (! $width instanceof MaxWidth) {
@@ -342,25 +356,75 @@
                             @if (! \Filament\Support\is_slot_empty($footer))
                                 {{ $footer }}
                             @else
-                                <div
-                                    @class([
-                                        'fi-modal-footer-actions gap-3',
-                                        match ($footerActionsAlignment) {
-                                            Alignment::Start, Alignment::Left => 'flex flex-wrap items-center',
-                                            Alignment::Center => 'flex flex-col-reverse sm:grid sm:grid-cols-[repeat(auto-fit,minmax(0,1fr))]',
-                                            Alignment::End, Alignment::Right => 'flex flex-row-reverse flex-wrap items-center',
-                                            default => null,
-                                        },
-                                    ])
-                                >
-                                    @if (is_array($footerActions))
-                                        @foreach ($footerActions as $action)
-                                            {{ $action }}
-                                        @endforeach
+                                    @if ($extraFooterActions &&
+                                            $extraFooterActionsAlignment &&
+                                            $extraFooterActionsAlignment != $footerActionsAlignment
+                                        )
+                                        <div class="fi-modal-footer-actions flex justify-between">
+                                            <div
+                                                @class([
+                                                    'fi-modal-footer-actions gap-3',
+                                                    'flex flex-wrap items-center',
+                                                    match ($extraFooterActionsAlignment) {
+                                                        Alignment::Start, Alignment::Left => 'flex flex-wrap items-center',
+                                                        Alignment::Center => 'flex flex-col-reverse sm:grid sm:grid-cols-[repeat(auto-fit,minmax(0,1fr))]',
+                                                        Alignment::End, Alignment::Right => 'flex flex-row-reverse flex-wrap items-center',
+                                                        default => null,
+                                                    },
+                                                ])
+                                            >
+                                                @if (is_array($extraFooterActions))
+                                                    @foreach ($extraFooterActions as $action)
+                                                        {{ $action }}
+                                                    @endforeach
+                                                @else
+                                                    {{ $extraFooterActions }}
+                                                @endif
+                                            </div>
+
+                                            <div
+                                                @class([
+                                                    'fi-modal-footer-actions gap-3',
+                                                    match ($footerActionsAlignment) {
+                                                        Alignment::Start, Alignment::Left => 'flex flex-wrap items-center',
+                                                        Alignment::Center => 'flex flex-col-reverse sm:grid sm:grid-cols-[repeat(auto-fit,minmax(0,1fr))]',
+                                                        Alignment::End, Alignment::Right => 'flex flex-row-reverse flex-wrap items-center',
+                                                        default => null,
+                                                    },
+                                                ])
+                                            >
+                                                @if (is_array($footerActions))
+                                                    @foreach ($footerActions as $action)
+                                                        {{ $action }}
+                                                    @endforeach
+                                                @else
+                                                    {{ $footerActions }}
+                                                @endif
+                                            </div>
+                                        </div>
+
                                     @else
-                                        {{ $footerActions }}
+                                        <div
+                                            @class([
+                                                'fi-modal-footer-actions gap-3',
+                                                match ($footerActionsAlignment) {
+                                                    Alignment::Start, Alignment::Left => 'flex flex-wrap items-center',
+                                                    Alignment::Center => 'flex flex-col-reverse sm:grid sm:grid-cols-[repeat(auto-fit,minmax(0,1fr))]',
+                                                    Alignment::End, Alignment::Right => 'flex flex-row-reverse flex-wrap items-center',
+                                                    default => null,
+                                                },
+                                            ])
+                                        >
+                                            @if (is_array($footerActions))
+                                                @foreach ($footerActions as $action)
+                                                    {{ $action }}
+                                                @endforeach
+                                            @else
+                                                {{ $footerActions }}
+                                            @endif
+                                        </div>
                                     @endif
-                                </div>
+
                             @endif
                         </div>
                     @endif
