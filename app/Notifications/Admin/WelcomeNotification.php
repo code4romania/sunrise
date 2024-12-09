@@ -14,7 +14,7 @@ class WelcomeNotification extends Notification
 {
     use Queueable;
 
-    public string $route = 'filament.admin.auth.welcome';
+    public string $organizationRoute = 'filament.organization.auth.welcome';
 
     /**
      * Get the notification's delivery channels.
@@ -46,7 +46,10 @@ class WelcomeNotification extends Notification
             ->line(__('email.admin.welcome.intro_line_3'))
             ->action(
                 __('email.admin.welcome.accept_invitation'),
-                URL::signedRoute($this->route, ['user' => $notifiable])
+                URL::signedRoute($this->organizationRoute, [
+                    'tenant' => $institution->organizations->first(),
+                    'user' => $notifiable,
+                ])
             )
             ->line(__('email.admin.welcome.intro_line_4'))
             ->line(new HtmlString(__('email.organization.welcome.intro_line_5')))
