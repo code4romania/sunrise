@@ -8,11 +8,13 @@ use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\InterventionPlan;
 use App\Models\User;
+use App\Tables\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Get;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
@@ -72,7 +74,7 @@ class ResultsWidget extends BaseWidget
                     ->html(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
+                EditAction::make()
                     ->label(__('general.action.change'))
                     ->form($this->getFormSchema())
                     ->modalHeading(__('intervention_plan.headings.edit_result'))
@@ -80,10 +82,12 @@ class ResultsWidget extends BaseWidget
                         DeleteAction::make()
                             ->cancelParentActions()
                             ->label(__('intervention_plan.actions.delete_result'))
+                            ->link()
                             ->modalHeading(__('intervention_plan.actions.delete_result'))
                             ->modalSubmitActionLabel(__('intervention_plan.actions.delete_result'))
                             ->icon(null),
-                    ]),
+                    ])
+                    ->modalExtraFooterActionsAlignment(Alignment::Left),
             ])
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_result_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_result_table'))

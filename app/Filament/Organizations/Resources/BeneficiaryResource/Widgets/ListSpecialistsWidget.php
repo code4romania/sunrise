@@ -11,14 +11,15 @@ use App\Models\Role;
 use App\Models\Specialist;
 use App\Models\User;
 use App\Models\UserRole;
+use App\Tables\Actions\EditAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -67,8 +68,10 @@ class ListSpecialistsWidget extends BaseWidget
                             ->cancelParentActions()
                             ->label(__('beneficiary.section.specialists.action.delete'))
                             ->modalHeading(__('beneficiary.section.specialists.heading.delete_modal'))
+                            ->link()
                             ->icon(null),
-                    ]),
+                    ])
+                    ->modalExtraFooterActionsAlignment(Alignment::Left),
             ])
             ->filters([
                 SelectFilter::make('status')
