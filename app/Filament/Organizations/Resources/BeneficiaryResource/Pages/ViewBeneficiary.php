@@ -306,7 +306,7 @@ class ViewBeneficiary extends ViewRecord
                         ->schema([
                             TextEntry::make('evaluateDetails.registered_date')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
-                                ->date(),
+                                ->date('Y-m-d'),
                             TextEntry::make('violence.violence_types')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
                                 ->color(Color::Gray),

@@ -61,6 +61,7 @@ class ViewMeetings extends ViewRecord
 
             TimePicker::make('time')
                 ->label(__('intervention_plan.labels.time'))
+                ->seconds(false)
                 ->format('H:i')
                 ->displayFormat('H:i'),
 
