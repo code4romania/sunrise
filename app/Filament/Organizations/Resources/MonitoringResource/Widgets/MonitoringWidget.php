@@ -38,7 +38,7 @@ class MonitoringWidget extends BaseWidget
                     ->label(__('monitoring.labels.last_monitoring_date')),
                 Tables\Columns\TextColumn::make('count')
                     ->label(__('monitoring.labels.count'))
-                    ->default(fn () => $this->record->monitoring()->count()),
+                    ->default(fn () => $this->record->monitoring->count()),
             ])
             ->emptyStateHeading(__('monitoring.headings.widget_empty_state'))
             ->emptyStateActions([
