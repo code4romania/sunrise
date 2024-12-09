@@ -16,6 +16,7 @@ use App\Rules\ValidCNP;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
@@ -324,15 +325,50 @@ class CreateBeneficiary extends CreateRecord
                         ->columns()
                         ->schema(EditFlowPresentation::flowSection()),
                 ]),
+            Step::make('specialist')
+                ->label(__('beneficiary.wizard.specialist.label'))
+                ->schema([
+                    Section::make()
+                        ->label(__('beneficiary.wizard.specialist.label'))
+                        ->maxWidth('3xl')
+                        ->schema([
+                            CheckboxList::make('roles')
+                                ->label(__('beneficiary.section.specialists.labels.select_roles', ['user_name' => auth()->user()->full_name]))
+                                ->options(function () {
+                                    $roles = auth()->user()->rolesInOrganization->pluck('name', 'id');
+                                    $roles[-1] = __('beneficiary.section.specialists.labels.without_role');
+
+                                    return $roles;
+                                }),
+                        ]),
+                ]),
         ];
     }
 
     public function afterCreate(): void
     {
+        /** @var Beneficiary $record */
         $record = $this->getRecord();
         if ($record->same_as_legal_residence) {
             $record->load(['legal_residence', 'effective_residence']);
             Beneficiary::copyLegalResidenceToEffectiveResidence($record);
+        }
+
+        $roles = $this->data['roles'] ?? [];
+
+        if (! $roles) {
+            return;
+        }
+
+        foreach ($roles as $role) {
+            if (! $role) {
+                continue;
+            }
+            $record->specialistsTeam()->create([
+                'role_id' => $role !== '-1' ? $role : null,
+                'user_id' => auth()->id(),
+                'specialistable_type' => 'beneficiary',
+            ]);
         }
     }
 }

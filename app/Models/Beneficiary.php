@@ -93,30 +93,6 @@ class Beneficiary extends Model
         'status' => CaseStatus::class,
     ];
 
-    protected static function booted()
-    {
-        static::created(function (Beneficiary $beneficiary) {
-            if (auth()->guest()) {
-                return;
-            }
-
-            /** @var User $user */
-            $user = auth()->user();
-            $beneficiary->specialistsTeam()->create([
-                'user_id' => $user->id,
-                'role_id' => $user->canBeCaseManager()
-                    ? $user->rolesInOrganization
-                        ->filter(fn ($role) => $role->case_manager)
-                        ->first()
-                        ?->id
-                    : $user->rolesInOrganization
-                        ->first()
-                        ?->id,
-                'specialistable_type' => $beneficiary->getMorphClass(),
-            ]);
-        });
-    }
-
     public function scopeWhereUserHasAccess(Builder $query): Builder
     {
         $user = auth()->user();
