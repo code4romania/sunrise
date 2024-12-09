@@ -42,6 +42,7 @@ class ListSpecialistsWidget extends BaseWidget
             ->columns([
                 TextColumn::make('role.name')
                     ->label(__('beneficiary.section.specialists.labels.role'))
+                    ->default(__('beneficiary.section.specialists.labels.empty_state_role'))
                     ->color(Color::Gray),
 
                 TextColumn::make('user.full_name')
@@ -110,14 +111,19 @@ class ListSpecialistsWidget extends BaseWidget
                 ->searchable()
                 ->preload()
                 ->afterStateUpdated(fn (Set $set) => $set('user_id', null))
+                ->disabled(fn (string $operation) => $operation === 'edit')
                 ->live()
                 ->required(),
 
             Select::make('user_id')
                 ->label(__('beneficiary.section.specialists.labels.name'))
                 ->options(
-                    function (Get $get) {
+                    function (Get $get, $state) {
                         if (! $roleID = (int) $get('role_id')) {
+                            if ($state) {
+                                return [$state => User::find($state)->full_name];
+                            }
+
                             return [];
                         }
                         $users = Cache::driver('array')

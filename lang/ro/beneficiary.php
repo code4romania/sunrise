@@ -309,11 +309,11 @@ return [
 
         'specialists' => [
             'title' => 'Echipa de caz',
-            'add_action' => 'Adaugă specialist',
+            'add_action' => 'Adaugă membru echipă',
             'change_action' => 'Modifică',
             'heading' => [
-                'add_modal' => 'Adaugă specialist în echipă',
-                'edit_modal' => 'Modifică  specialist în echipă',
+                'add_modal' => 'Adaugă membru în echipă',
+                'edit_modal' => 'Modifică membru în echipă',
                 'delete_modal' => 'Elimină membrul din echipa de caz',
             ],
             'labels' => [
@@ -322,6 +322,7 @@ return [
                 'status' => 'Status',
                 'roles' => 'Rol în echipa de caz',
                 'summarize' => '{1} +:count alt specialist|[2,19] +:count alți specialiști|[20,*] +:count de alți specialiști',
+                'empty_state_role' => 'Luare în evidență caz',
             ],
             'action' => [
                 'delete' => 'Elimină din echipa de caz',
