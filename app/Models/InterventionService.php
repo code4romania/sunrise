@@ -25,7 +25,6 @@ class InterventionService extends Model
         'organization_service_id',
         'specialist_id',
         'institution',
-        'start_date',
         'objections',
     ];
 
