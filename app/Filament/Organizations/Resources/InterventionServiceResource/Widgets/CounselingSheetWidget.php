@@ -16,6 +16,7 @@ use App\Enums\PossessionMode;
 use App\Enums\ProtectionMeasuringType;
 use App\Enums\SocialRelationship;
 use App\Enums\Ternary;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
@@ -27,6 +28,7 @@ use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
+use Str;
 
 class CounselingSheetWidget extends InfolistWidget
 {
@@ -268,7 +270,7 @@ class CounselingSheetWidget extends InfolistWidget
         ];
     }
 
-    public static function getSchemaForSocialAssistance(): array
+    public function getSchemaForSocialAssistance(): array
     {
         return [
             Section::make(__('intervention_plan.headings.family_relationship'))
@@ -377,6 +379,18 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.children_details'))
+                ->visible(fn () => $this->record->beneficiary->children->count())
+                ->headerActions([
+                    Action::make('view_children_identity')
+                        ->label(__('intervention_plan.actions.view_children_identity'))
+                        ->icon('heroicon-o-arrow-top-right-on-square')
+                        ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
+                            'record' => $this->record->beneficiary,
+                            'tab' => \sprintf('-%s-tab', Str::slug(__('beneficiary.section.identity.tab.children'))),
+                        ]))
+                        ->openUrlInNewTab()
+                        ->link(),
+                ])
                 ->schema([
                     RepeatableEntry::make('data.children')
                         ->hiddenLabel()
