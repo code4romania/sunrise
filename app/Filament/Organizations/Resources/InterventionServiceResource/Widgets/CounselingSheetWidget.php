@@ -396,7 +396,7 @@ class CounselingSheetWidget extends InfolistWidget
                         ->hiddenLabel()
                         ->schema([
                             Grid::make()
-                                ->columns(7)
+                                ->columns(15)
                                 ->schema([
                                     TextEntry::make('count')
                                         ->label(__('intervention_plan.labels.count'))
@@ -412,7 +412,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->name;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
 
                                     TextEntry::make('age')
                                         ->label(__('intervention_plan.labels.children_age'))
@@ -437,7 +438,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->current_address;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
 
                                     TextEntry::make('status')
                                         ->label(__('field.child_status'))
@@ -445,7 +447,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->status;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
 
                                     TextEntry::make('workspace')
                                         ->label(__('field.workspace'))
@@ -453,7 +456,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->workspace;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
                                 ]),
 
                             Grid::make()

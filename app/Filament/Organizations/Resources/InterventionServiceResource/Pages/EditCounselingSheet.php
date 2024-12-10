@@ -517,7 +517,7 @@ class EditCounselingSheet extends EditRecord
                         ->addAction(fn (Action $action) => $action->hidden())
                         ->schema([
                             Grid::make()
-                                ->columns(7)
+                                ->columns(15)
                                 ->schema([
                                     Placeholder::make('count')
                                         ->label(__('intervention_plan.labels.count'))
@@ -529,6 +529,7 @@ class EditCounselingSheet extends EditRecord
 
                                     TextInput::make('name')
                                         ->label(__('intervention_plan.labels.children_name'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('age')
@@ -542,14 +543,17 @@ class EditCounselingSheet extends EditRecord
 
                                     TextInput::make('current_address')
                                         ->label(__('field.current_address'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('status')
                                         ->label(__('field.child_status'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('workspace')
                                         ->label(__('field.workspace'))
+                                        ->columnSpan(3)
                                         ->disabled(),
                                 ]),
 
