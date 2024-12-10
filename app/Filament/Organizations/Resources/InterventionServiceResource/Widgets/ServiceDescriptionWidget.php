@@ -40,12 +40,13 @@ class ServiceDescriptionWidget extends InfolistWidget
                 ->schema([
                     TextEntry::make('institution')
                         ->label(__('intervention_plan.labels.responsible_institution')),
+
                     TextEntry::make('specialist.name_role')
                         ->label(__('intervention_plan.labels.responsible_specialist')),
-                    TextEntry::make('start_date')
-                        ->label(__('intervention_plan.labels.start_date')),
+
                     TextEntry::make('interval')
                         ->label(__('intervention_plan.labels.interval')),
+
                     TextEntry::make('objections')
                         ->label(__('intervention_plan.labels.objections'))
                         ->columnSpanFull()

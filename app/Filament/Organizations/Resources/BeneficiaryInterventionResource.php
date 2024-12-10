@@ -72,9 +72,6 @@ class BeneficiaryInterventionResource extends Resource
 
                                     return $beneficiary->specialistsTeam->load(['user', 'role'])->pluck('name_role', 'id');
                                 }),
-
-                            DatePicker::make('start_date')
-                                ->label(__('intervention_plan.labels.start_date')),
                         ]),
                 ]),
 
