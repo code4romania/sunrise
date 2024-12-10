@@ -22,7 +22,6 @@ use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
-use App\Models\Children;
 use App\Models\InterventionService;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
@@ -479,44 +478,36 @@ class EditCounselingSheet extends EditRecord
                 ]),
 
             Section::make(__('intervention_plan.headings.children_details'))
+                ->visible(fn () => ! $interventionService || $interventionService?->beneficiary->children->count())
                 ->headerActions([
                     Action::make('view_children_identity')
                         ->label(__('intervention_plan.actions.view_children_identity'))
+                        ->icon('heroicon-o-arrow-top-right-on-square')
                         ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
                             'record' => $interventionService->beneficiary,
                             'tab' => \sprintf('-%s-tab', Str::slug(__('beneficiary.section.identity.tab.children'))),
                         ]))
                         ->visible(fn () => $interventionService)
+                        ->openUrlInNewTab()
                         ->link(),
                 ])
                 ->afterStateHydrated(function (Set $set, array $state) use ($interventionService) {
                     if (! $interventionService) {
                         return;
                     }
-                    $childrenState = $state['data']['children'];
+
+                    $childrenState = $state['data']['children'] ?? [];
+                    $childrenState = collect($childrenState);
                     $beneficiaryChildren = $interventionService->beneficiary->children;
 
-                    $emptyState = true;
-                    foreach ($childrenState as &$childState) {
-                        $childState = array_filter($childState);
-                        if (\count($childState) > 1) {
-                            $emptyState = false;
-                            $beneficiaryChild = $beneficiaryChildren->filter(fn (Children $child) => $child->id === $childState['id'])
-                                ->first()
-                                ?->toArray() ??
-                                [];
-
-                            $childState = array_merge($childState, $beneficiaryChild);
-                        }
+                    $children = [];
+                    foreach ($beneficiaryChildren as $child) {
+                        $childState = $childrenState->filter(fn (array $childState) => isset($childState['id']) && $childState['id'] === $child->id)
+                            ->first() ?? [];
+                        $children[] = array_merge($child->toArray(), $childState);
                     }
 
-                    if ($emptyState) {
-                        $set('data.children', $beneficiaryChildren->toArray());
-
-                        return;
-                    }
-
-                    $set('data.children', $childrenState);
+                    $set('data.children', $children);
                 })
                 ->schema([
                     Repeater::make('data.children')
@@ -526,7 +517,7 @@ class EditCounselingSheet extends EditRecord
                         ->addAction(fn (Action $action) => $action->hidden())
                         ->schema([
                             Grid::make()
-                                ->columns(7)
+                                ->columns(15)
                                 ->schema([
                                     Placeholder::make('count')
                                         ->label(__('intervention_plan.labels.count'))
@@ -538,6 +529,7 @@ class EditCounselingSheet extends EditRecord
 
                                     TextInput::make('name')
                                         ->label(__('intervention_plan.labels.children_name'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('age')
@@ -551,14 +543,17 @@ class EditCounselingSheet extends EditRecord
 
                                     TextInput::make('current_address')
                                         ->label(__('field.current_address'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('status')
                                         ->label(__('field.child_status'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('workspace')
                                         ->label(__('field.workspace'))
+                                        ->columnSpan(3)
                                         ->disabled(),
                                 ]),
 
