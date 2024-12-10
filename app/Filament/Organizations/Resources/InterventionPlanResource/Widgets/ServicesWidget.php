@@ -118,9 +118,6 @@ class ServicesWidget extends BaseWidget
                                         ])
                                         ->pluck('name', 'id');
                                 }),
-
-                            DatePicker::make('start_date')
-                                ->label(__('intervention_plan.labels.start_date'))
                         ]),
                 ]),
 

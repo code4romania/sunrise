@@ -23,7 +23,6 @@ class BeneficiaryIntervention extends Model
         'organization_service_intervention_id',
         'intervention_service_id',
         'specialist_id',
-        'start_date',
         'objections',
         'expected_results',
         'procedure',
