@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources;
 use App\Enums\ActivityDescription;
 use App\Models\Activity;
 use App\Models\Beneficiary;
-use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,19 +32,23 @@ class BeneficiaryHistoryResource extends Resource
     {
         return app(static::getModel())
             ->resolveRouteBindingQuery(static::getEloquentQuery(), $key, static::getRecordRouteKeyName())
+            ->when(
+                ! auth()->user()->hasAccessToAllCases() && ! auth()->user()->isNgoAdmin(),
+                fn (Builder $query) => $query->whereHasMorph(
+                    'subject',
+                    Beneficiary::class,
+                    fn (Builder $query) => $query->whereHas(
+                        'specialistsTeam',
+                        fn (Builder $query) => $query->where('user_id', auth()->id())
+                    )
+                )
+            )
             ->first();
     }
 
     public static function getEloquentQuery(): Builder
     {
         $query = static::getModel()::query();
-
-//        if (
-//            static::isScopedToTenant() &&
-//            ($tenant = Filament::getTenant())
-//        ) {
-//            static::scopeEloquentQueryToTenant($query, $tenant);
-//        }
 
         return $query;
     }

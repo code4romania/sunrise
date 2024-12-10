@@ -136,6 +136,9 @@ return [
         'beneficiary_situation' => [
             'label' => 'Situația beneficiarului',
         ],
+        'specialist' => [
+            'label' => 'Definește rol în echipa cazului ',
+        ],
     ],
 
     'section' => [
@@ -323,6 +326,8 @@ return [
                 'roles' => 'Rol în echipa de caz',
                 'summarize' => '{1} +:count alt specialist|[2,19] +:count alți specialiști|[20,*] +:count de alți specialiști',
                 'empty_state_role' => 'Luare în evidență caz',
+                'select_roles' => 'Selectează rolul (sau rolurile) specialistului :user_name în echipa cazului',
+                'without_role' => 'Specialistul  înregistrează cazul, dar nu are alt rol în echipa de caz',
             ],
             'action' => [
                 'delete' => 'Elimină din echipa de caz',
