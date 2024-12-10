@@ -8,6 +8,7 @@ use App\Concerns\HasParentResource;
 use App\Enums\ActivityDescription;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource;
 use App\Models\Activity;
+use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\ViewAction;
@@ -49,7 +50,20 @@ class ListBeneficiaryHistories extends ListRecords
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn () => Activity::whereMorphedTo('subject', $this->parent))
+            ->query(
+                fn () => Activity::whereMorphedTo('subject', $this->parent)
+                    ->when(
+                        ! auth()->user()->hasAccessToAllCases() && ! auth()->user()->isNgoAdmin(),
+                        fn (Builder $query) => $query->whereHasMorph(
+                            'subject',
+                            Beneficiary::class,
+                            fn (Builder $query) => $query->whereHas(
+                                'specialistsTeam',
+                                fn (Builder $query) => $query->where('user_id', auth()->id())
+                            )
+                        )
+                    )
+            )
             ->heading(__('beneficiary.section.history.headings.table'))
             ->columns([
                 TextColumn::make('created_at')
