@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
 use App\Enums\CounselingSheet;
+use App\Enums\ExtendedFrequency;
 use App\Enums\FamilyRelationship;
 use App\Enums\FileDocumentType;
-use App\Enums\Frequency;
 use App\Enums\Gender;
 use App\Enums\HomeType;
 use App\Enums\Patrimony;
@@ -202,42 +202,42 @@ class EditCounselingSheet extends EditRecord
                     Radio::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Radio::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Radio::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Radio::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Radio::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Radio::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Radio::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Radio::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options()),
 
                     Group::make()
                         ->maxWidth('3xl')

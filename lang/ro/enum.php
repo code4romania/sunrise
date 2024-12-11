@@ -184,6 +184,8 @@ return [
         'weekly' => 'Săptămânală',
         'monthly' => 'Lunară',
         'lass_than_monthly' => 'Mai rar decât lunară',
+        'none' => 'Deloc',
+        'no_answer' => 'NS/NR',
     ],
 
     'helps' => [
