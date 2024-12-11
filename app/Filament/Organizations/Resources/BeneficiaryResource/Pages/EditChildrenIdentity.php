@@ -11,6 +11,7 @@ use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -132,17 +133,30 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.child_name'))
                         ->maxLength(70),
 
+                    DatePicker::make('birthdate')
+                        ->label(__('field.birthdate'))
+                        ->maxDate(now())
+                        ->afterStateUpdated(function (Set $set, $state) {
+                            if (! $state) {
+                                return;
+                            }
+
+                            $age = Carbon::parse($state)->diffInYears(now());
+
+                            if ($age === 0) {
+                                $age = '<1';
+                            }
+                            $set('age', $age);
+                        })
+                        ->live(),
+
                     TextInput::make('age')
                         ->label(__('field.age'))
-                        ->mask('99')
-                        ->maxLength(2),
+                        ->disabled(),
 
                     Select::make('gender')
                         ->label(__('field.gender'))
                         ->options(GenderShortValues::options()),
-
-                    DatePicker::make('birthdate')
-                        ->label(__('field.birthdate')),
 
                     TextInput::make('current_address')
                         ->label(__('field.current_address'))
