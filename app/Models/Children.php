@@ -34,4 +34,10 @@ class Children extends Model
 
         return $age === 0 ? '<1' : $age;
     }
+
+    public function setBirthdateAttribute(?string $value = null): void
+    {
+        $date = Carbon::createFromFormat('d-m-Y', $value);
+        $this->attributes['birthdate'] = $date->format('Y-m-d');
+    }
 }
