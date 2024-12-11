@@ -39,7 +39,8 @@ class CaseTeamListWidget extends BaseWidget
             ])
             ->columns([
                 TextColumn::make('role.name')
-                    ->label(__('beneficiary.section.specialists.labels.role')),
+                    ->label(__('beneficiary.section.specialists.labels.role'))
+                    ->default(__('beneficiary.section.specialists.labels.empty_state_role')),
 
                 TextColumn::make('user.full_name')
                     ->label(__('beneficiary.section.specialists.labels.name')),
