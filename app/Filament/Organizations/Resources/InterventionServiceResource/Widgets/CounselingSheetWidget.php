@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widgets;
 
 use App\Enums\CounselingSheet;
+use App\Enums\ExtendedFrequency;
 use App\Enums\FamilyRelationship;
 use App\Enums\FileDocumentType;
-use App\Enums\Frequency;
 use App\Enums\Gender;
 use App\Enums\HomeType;
 use App\Enums\Patrimony;
@@ -16,6 +16,7 @@ use App\Enums\PossessionMode;
 use App\Enums\ProtectionMeasuringType;
 use App\Enums\SocialRelationship;
 use App\Enums\Ternary;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
@@ -27,6 +28,7 @@ use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
+use Str;
 
 class CounselingSheetWidget extends InfolistWidget
 {
@@ -172,35 +174,35 @@ class CounselingSheetWidget extends InfolistWidget
 
                     EnumEntry::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     TextEntry::make('data.physical_violence_description')
                         ->label(__('intervention_plan.labels.physical_violence_description')),
@@ -268,7 +270,7 @@ class CounselingSheetWidget extends InfolistWidget
         ];
     }
 
-    public static function getSchemaForSocialAssistance(): array
+    public function getSchemaForSocialAssistance(): array
     {
         return [
             Section::make(__('intervention_plan.headings.family_relationship'))
@@ -377,12 +379,24 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.children_details'))
+                ->visible(fn () => $this->record->beneficiary->children->count())
+                ->headerActions([
+                    Action::make('view_children_identity')
+                        ->label(__('intervention_plan.actions.view_children_identity'))
+                        ->icon('heroicon-o-arrow-top-right-on-square')
+                        ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
+                            'record' => $this->record->beneficiary,
+                            'tab' => \sprintf('-%s-tab', Str::slug(__('beneficiary.section.identity.tab.children'))),
+                        ]))
+                        ->openUrlInNewTab()
+                        ->link(),
+                ])
                 ->schema([
                     RepeatableEntry::make('data.children')
                         ->hiddenLabel()
                         ->schema([
                             Grid::make()
-                                ->columns(7)
+                                ->columns(15)
                                 ->schema([
                                     TextEntry::make('count')
                                         ->label(__('intervention_plan.labels.count'))
@@ -398,7 +412,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->name;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
 
                                     TextEntry::make('age')
                                         ->label(__('intervention_plan.labels.children_age'))
@@ -423,7 +438,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->current_address;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
 
                                     TextEntry::make('status')
                                         ->label(__('field.child_status'))
@@ -431,7 +447,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->status;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
 
                                     TextEntry::make('workspace')
                                         ->label(__('field.workspace'))
@@ -439,7 +456,8 @@ class CounselingSheetWidget extends InfolistWidget
                                             $index = (int) explode('.', $component->getStatePath())[3];
 
                                             return $record->beneficiary->children->get($index)->workspace;
-                                        }),
+                                        })
+                                        ->columnSpan(3),
                                 ]),
 
                             Grid::make()

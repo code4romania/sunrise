@@ -15,9 +15,7 @@ return [
         'related_cases' => 'Istoric caz (fișe conectate cazului)',
         'case_manager' => 'Manager de caz',
         'beneficiary_exist' => 'Beneficiarul cu CNP-ul introdus există în baza de date.',
-        'copy_data_from_another_tenant' => 'Copiază datele de identificare în noul dosar de management de caz',
-        'continue_register_without_copy' => 'Continuă cu adăugarea beneficiarului, fără copierea datelor de identificare în noul dosar de management de caz',
-
+        'modal_create_beneficiary_from_anther_tenant' => 'Beneficiarul cu CNP :cnp există în baza de date :center. Continuă cu adăugarea beneficiarului cu copierea datelor de identificare în noul dosar de management de caz. Acestea vor putea fi modificate sau actualizate în pasul următor',
     ],
 
     'page' => [
@@ -483,6 +481,9 @@ return [
         'reactivate' => 'Reactivează caz (dosar nou)',
         'reactivate_modal' => 'Reactivează',
         'delete' => 'Șterge dosar caz',
+        'continue_copy_beneficiary_data' => 'Continuă cu copiere',
+        'copy_beneficiary_data' => 'Copiază date identitate',
+        'view_case_details' => 'Vezi detalii caz',
     ],
 
     'breadcrumb' => [
@@ -492,7 +493,7 @@ return [
     ],
 
     'headings' => [
-        'modal_create_beneficiary_from_anther_tenant' => 'Beneficiar identificat în baza de date',
+        'modal_create_beneficiary_from_anther_tenant' => 'Beneficiar identificat în baza de date a instituției',
     ],
 
     'placeholder' => [
@@ -526,6 +527,7 @@ return [
         'email' => 'Introdu un email',
         'consent' => 'Odată înregistrat cazul în sistem, aceste formulare de obținere a consimțământului vor putea fi încarcate în sistem, în secțiunea Documente Beneficiar.',
         'beneficiary_exists' => 'CNP-ul a fost identificat în această bază de date.',
+        'beneficiary_exists_in_another_tenant' => 'CNP-ul a fost identificat în baza de date :center. Cu permisiunea beneficiarei poți copia datele de identificare ale persoanei în această bază de date. ',
         'file_name' => 'Nume document',
         'reactivate_text_1' => 'Prin reactivarea unui caz se va duplica dosarului beneficiarului pentru a putea fi completat cu informații noi, fără a pierde informațiile despre evaluările și managementul de caz anterior.',
         'reactivate_text_2' => 'Toate datele de identitate se vor copia din dosarul curent și pot fi actualizate manual pentru această nouă reactivare. Toate formularele vor fi disponibile pentru a fi completate cu informații noi.',

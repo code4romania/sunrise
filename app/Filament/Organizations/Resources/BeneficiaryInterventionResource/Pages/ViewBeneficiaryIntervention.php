@@ -62,9 +62,6 @@ class ViewBeneficiaryIntervention extends ViewRecord
                                 TextEntry::make('specialist.name_role')
                                     ->label(__('intervention_plan.labels.responsible_specialist')),
 
-                                TextEntry::make('start_date')
-                                    ->label(__('intervention_plan.labels.start_date')),
-
                                 TextEntry::make('interval')
                                     ->label(__('intervention_plan.labels.start_date_interval')),
                             ]),

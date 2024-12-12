@@ -180,8 +180,8 @@ class UserResource extends Resource
                             CheckboxList::make('case_permissions')
                                 ->label(__('user.labels.case_permissions'))
                                 ->options(CasePermission::getOptionsWithoutCaseManager())
-                                ->disableOptionWhen(function (Get $get, string $value, OrganizationUserPermissions $record) {
-                                    if ($record->user->isNgoAdmin()) {
+                                ->disableOptionWhen(function (Get $get, string $value, ?OrganizationUserPermissions $record) {
+                                    if ($record?->user->isNgoAdmin()) {
                                         return true;
                                     }
 
@@ -202,8 +202,8 @@ class UserResource extends Resource
                             CheckboxList::make('admin_permissions')
                                 ->label(__('user.labels.admin_permissions'))
                                 ->options(AdminPermission::options())
-                                ->disableOptionWhen(function (Get $get, string $value, OrganizationUserPermissions $record) {
-                                    if ($record->user->isNgoAdmin()) {
+                                ->disableOptionWhen(function (Get $get, string $value, ?OrganizationUserPermissions $record) {
+                                    if ($record?->user->isNgoAdmin()) {
                                         return true;
                                     }
 
@@ -230,11 +230,11 @@ class UserResource extends Resource
 
     public static function setDefaultCaseAndNgoAdminPermissions(): \Closure
     {
-        return function (Set $set, Get $get, $state, User $record) {
+        return function (Set $set, Get $get, $state, ?User $record) {
             $casePermissions = $get('permissions.case_permissions') ?: [];
             $adminPermissions = $get('permissions.admin_permissions') ?: [];
 
-            if ($record->isNgoAdmin()) {
+            if ($record?->isNgoAdmin()) {
                 $casePermissions = CasePermission::values();
                 $adminPermissions = AdminPermission::values();
 

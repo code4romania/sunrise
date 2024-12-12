@@ -322,6 +322,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function sendWelcomeNotificationInAnotherTenant(): void
     {
-        $this->notify(new WelcomeNotificationInAnotherTenant);
+        if ($this->password_set_at) {
+            $this->notify(new WelcomeNotificationInAnotherTenant);
+
+            return;
+        }
+
+        $this->sendWelcomeNotification();
     }
 }

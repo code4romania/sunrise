@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
 use App\Enums\CounselingSheet;
+use App\Enums\ExtendedFrequency;
 use App\Enums\FamilyRelationship;
 use App\Enums\FileDocumentType;
-use App\Enums\Frequency;
 use App\Enums\Gender;
 use App\Enums\HomeType;
 use App\Enums\Patrimony;
@@ -22,7 +22,6 @@ use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
-use App\Models\Children;
 use App\Models\InterventionService;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
@@ -203,76 +202,124 @@ class EditCounselingSheet extends EditRecord
                     Radio::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Group::make()
                         ->maxWidth('3xl')
                         ->schema([
                             Textarea::make('data.physical_violence_description')
                                 ->label(__('intervention_plan.labels.physical_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.physics') ||
+                                    ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NONE) ||
+                                ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.sexual_violence_description')
                                 ->label(__('intervention_plan.labels.sexual_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.sexed') ||
+                                    ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NONE) ||
+                                ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.psychological_violence_description')
                                 ->label(__('intervention_plan.labels.psychological_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.psychological') ||
+                                    ExtendedFrequency::isValue($get('data.psychological'), ExtendedFrequency::NONE) ||
+                                ExtendedFrequency::isValue($get('data.psychological'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.verbal_violence_description')
                                 ->label(__('intervention_plan.labels.verbal_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.verbal') ||
+                                        ExtendedFrequency::isValue($get('data.verbal'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.verbal'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.social_violence_description')
                                 ->label(__('intervention_plan.labels.social_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.sociable') ||
+                                        ExtendedFrequency::isValue($get('data.sociable'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.sociable'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.economic_violence_description')
                                 ->label(__('intervention_plan.labels.economic_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.economic') ||
+                                        ExtendedFrequency::isValue($get('data.economic'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.economic'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.cyber_violence_description')
                                 ->label(__('intervention_plan.labels.cyber_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.cybernetics') ||
+                                        ExtendedFrequency::isValue($get('data.cybernetics'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.cybernetics'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.spiritual_violence_description')
                                 ->label(__('intervention_plan.labels.spiritual_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.spiritual') ||
+                                        ExtendedFrequency::isValue($get('data.spiritual'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.spiritual'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
                         ]),
                 ]),
@@ -479,44 +526,36 @@ class EditCounselingSheet extends EditRecord
                 ]),
 
             Section::make(__('intervention_plan.headings.children_details'))
+                ->visible(fn () => ! $interventionService || $interventionService?->beneficiary->children->count())
                 ->headerActions([
                     Action::make('view_children_identity')
                         ->label(__('intervention_plan.actions.view_children_identity'))
+                        ->icon('heroicon-o-arrow-top-right-on-square')
                         ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
                             'record' => $interventionService->beneficiary,
                             'tab' => \sprintf('-%s-tab', Str::slug(__('beneficiary.section.identity.tab.children'))),
                         ]))
                         ->visible(fn () => $interventionService)
+                        ->openUrlInNewTab()
                         ->link(),
                 ])
                 ->afterStateHydrated(function (Set $set, array $state) use ($interventionService) {
                     if (! $interventionService) {
                         return;
                     }
-                    $childrenState = $state['data']['children'];
+
+                    $childrenState = $state['data']['children'] ?? [];
+                    $childrenState = collect($childrenState);
                     $beneficiaryChildren = $interventionService->beneficiary->children;
 
-                    $emptyState = true;
-                    foreach ($childrenState as &$childState) {
-                        $childState = array_filter($childState);
-                        if (\count($childState) > 1) {
-                            $emptyState = false;
-                            $beneficiaryChild = $beneficiaryChildren->filter(fn (Children $child) => $child->id === $childState['id'])
-                                ->first()
-                                ?->toArray() ??
-                                [];
-
-                            $childState = array_merge($childState, $beneficiaryChild);
-                        }
+                    $children = [];
+                    foreach ($beneficiaryChildren as $child) {
+                        $childState = $childrenState->filter(fn (array $childState) => isset($childState['id']) && $childState['id'] === $child->id)
+                            ->first() ?? [];
+                        $children[] = array_merge($child->toArray(), $childState);
                     }
 
-                    if ($emptyState) {
-                        $set('data.children', $beneficiaryChildren->toArray());
-
-                        return;
-                    }
-
-                    $set('data.children', $childrenState);
+                    $set('data.children', $children);
                 })
                 ->schema([
                     Repeater::make('data.children')
@@ -526,7 +565,7 @@ class EditCounselingSheet extends EditRecord
                         ->addAction(fn (Action $action) => $action->hidden())
                         ->schema([
                             Grid::make()
-                                ->columns(7)
+                                ->columns(15)
                                 ->schema([
                                     Placeholder::make('count')
                                         ->label(__('intervention_plan.labels.count'))
@@ -538,6 +577,7 @@ class EditCounselingSheet extends EditRecord
 
                                     TextInput::make('name')
                                         ->label(__('intervention_plan.labels.children_name'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('age')
@@ -551,14 +591,17 @@ class EditCounselingSheet extends EditRecord
 
                                     TextInput::make('current_address')
                                         ->label(__('field.current_address'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('status')
                                         ->label(__('field.child_status'))
+                                        ->columnSpan(3)
                                         ->disabled(),
 
                                     TextInput::make('workspace')
                                         ->label(__('field.workspace'))
+                                        ->columnSpan(3)
                                         ->disabled(),
                                 ]),
 
