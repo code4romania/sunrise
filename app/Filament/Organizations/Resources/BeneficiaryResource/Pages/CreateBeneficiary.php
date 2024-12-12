@@ -8,7 +8,6 @@ use App\Concerns\PreventMultipleSubmit;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Notice;
-use App\Forms\Components\Radio;
 use App\Models\Beneficiary;
 use App\Models\Organization;
 use App\Models\Scopes\BelongsToCurrentTenant;
@@ -22,7 +21,9 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
@@ -78,6 +79,22 @@ class CreateBeneficiary extends CreateRecord
         }
 
         $this->parentBeneficiary = $parentBeneficiaryID ? Beneficiary::find($parentBeneficiaryID) : null;
+    }
+
+    public function form(Form $form): Form
+    {
+        return parent::form($form)
+            ->schema([
+                Wizard::make($this->getSteps())
+                    ->extraAlpineAttributes([
+                        '@copy_beneficiary_data.window' => "step='beneficiary'",
+                    ])
+                    ->startOnStep($this->getStartStep())
+                    ->cancelAction($this->getCancelFormAction())
+                    ->submitAction($this->getSubmitFormAction())
+                    ->skippable($this->hasSkippableSteps()),
+            ])
+            ->columns(null);
     }
 
     public function getStartStep(): int
@@ -165,37 +182,34 @@ class CreateBeneficiary extends CreateRecord
                                             ->first()
                                 )
                                 ->content(function (Get $get) {
-                                    return new HtmlString(__('beneficiary.placeholder.beneficiary_exists'));
                                     $beneficiary = Beneficiary::query()
                                         ->where('cnp', $get('cnp'))
                                         ->first();
 
-                                    if (! $beneficiary) {
-                                        $organizations = auth()->user()->organizations
-                                            ->filter(fn (Organization $organization) => $organization->institution_id == Filament::getTenant()->institution_id);
-                                        $beneficiary = Beneficiary::query()
-                                            ->where('cnp', $get('cnp'))
-                                            ->whereIn('organization_id', $organizations->pluck('id')->toArray())
-                                            ->withoutGlobalScopes([BelongsToCurrentTenant::class])
-                                            ->with('organization')
-                                            ->first();
-
-                                        if (! $beneficiary) {
-                                            return '';
-                                        }
-
-                                        return new HtmlString(__('beneficiary.placeholder.beneficiary_exists', [
-                                            'url' => BeneficiaryResource::getUrl('view', ['record' => $beneficiary, 'tenant' => $beneficiary->organization]),
-                                        ]));
+                                    if ($beneficiary) {
+                                        return new HtmlString(__('beneficiary.placeholder.beneficiary_exists'));
                                     }
 
-                                    return new HtmlString(__('beneficiary.placeholder.beneficiary_exists', [
-                                        'url' => BeneficiaryResource::getUrl('view', ['record' => $beneficiary]),
+                                    $organizations = auth()->user()->organizations
+                                        ->filter(fn (Organization $organization) => $organization->institution_id == Filament::getTenant()->institution_id);
+                                    $beneficiary = Beneficiary::query()
+                                        ->where('cnp', $get('cnp'))
+                                        ->whereIn('organization_id', $organizations->pluck('id')->toArray())
+                                        ->withoutGlobalScopes([BelongsToCurrentTenant::class])
+                                        ->with('organization')
+                                        ->first();
+
+                                    if (! $beneficiary) {
+                                        return '';
+                                    }
+
+                                    return new HtmlString(__('beneficiary.placeholder.beneficiary_exists_in_another_tenant', [
+                                        'center' => $beneficiary->organization->name,
                                     ]));
                                 })
                                 ->registerActions([
                                     Action::make('view_beneficiary')
-                                        ->label(__('general.action.view_details'))
+                                        ->label(__('beneficiary.action.view_case_details'))
                                         ->link()
                                         ->url(
                                             fn (Get $get) => BeneficiaryResource::getUrl('view', [
@@ -211,23 +225,35 @@ class CreateBeneficiary extends CreateRecord
                                         ),
 
                                     Action::make('view_beneficiary_from_another_tenant')
-                                        ->label(__('general.action.view_details'))
+                                        ->label(__('beneficiary.action.copy_beneficiary_data'))
                                         ->link()
                                         ->modalHeading(__('beneficiary.headings.modal_create_beneficiary_from_anther_tenant'))
-                                        ->form([
-                                            Radio::make('copy_beneficiary')
-                                                ->label(__('beneficiary.labels.beneficiary_exist'))
-                                                ->options([
-                                                    'yes' => __('beneficiary.labels.copy_data_from_another_tenant'),
-                                                    'no' => __('beneficiary.labels.continue_register_without_copy'),
-                                                ]),
-                                        ])
-                                        ->modalSubmitActionLabel(__('beneficiary.action.register'))
-                                        ->action(function (array $data, Get $get, Set $set): void {
-                                            if ($data['copy_beneficiary'] !== 'yes') {
-                                                return;
-                                            }
-
+                                        ->modalDescription(
+                                            fn (Get $get) => __('beneficiary.labels.modal_create_beneficiary_from_anther_tenant', [
+                                                'cnp' => $get('cnp'),
+                                                'center' => Beneficiary::query()
+                                                    ->where('cnp', $get('cnp'))
+                                                    ->whereIn(
+                                                        'organization_id',
+                                                        auth()->user()
+                                                            ->organizations
+                                                            ->filter(
+                                                                fn (Organization $organization) => $organization->institution_id == Filament::getTenant()->institution_id
+                                                                    && $organization !== Filament::getTenant()
+                                                            )
+                                                            ->pluck('id')
+                                                            ->toArray()
+                                                    )
+                                                    ->withoutGlobalScopes([BelongsToCurrentTenant::class])
+                                                    ->with(['organization'])
+                                                    ->first()
+                                                    ->organization
+                                                    ->name,
+                                            ])
+                                        )
+                                        ->modalSubmitActionLabel(__('beneficiary.action.continue_copy_beneficiary_data'))
+                                        ->modalWidth('md')
+                                        ->action(function (Get $get, Set $set): void {
                                             $beneficiary = Beneficiary::query()
                                                 ->where('cnp', $get('cnp'))
                                                 ->whereIn(
@@ -261,6 +287,8 @@ class CreateBeneficiary extends CreateRecord
                                                 }
                                                 $set($beneficiaryKey, $beneficiaryValue);
                                             }
+
+                                            $this->dispatch('copy_beneficiary_data');
                                         })
                                         ->visible(
                                             fn (Get $get) => ! Beneficiary::query()
