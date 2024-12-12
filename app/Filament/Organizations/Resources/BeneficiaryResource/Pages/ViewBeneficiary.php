@@ -179,7 +179,7 @@ class ViewBeneficiary extends ViewRecord
 
                 TextEntry::make('birthdate')
                     ->label(__('field.birthdate'))
-                    ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->toDateString()),
+                    ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('m-d-Y') : $state),
 
                 EnumEntry::make('gender')
                     ->label(__('field.gender')),

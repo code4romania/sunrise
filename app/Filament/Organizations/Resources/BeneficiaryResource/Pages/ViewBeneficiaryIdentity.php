@@ -124,7 +124,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
 
                     TextEntry::make('birthdate')
                         ->label(__('field.birthdate'))
-                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('Y-m-d') : $state),
+                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('d-m-Y') : $state),
 
                     TextEntry::make('birthplace')
                         ->label(__('field.birthplace'))
@@ -278,7 +278,8 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->label(__('field.gender')),
 
                     TextEntry::make('birthdate')
-                        ->label(__('field.birthdate')),
+                        ->label(__('field.birthdate'))
+                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('d-m-Y') : $state),
 
                     TextEntry::make('current_address')
                         ->label(__('field.current_address')),

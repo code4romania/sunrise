@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\HasBirthdate;
 use App\Enums\ChildAggressorRelationship;
 use App\Enums\MaintenanceSources;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,13 +14,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MonitoringChild extends Model
 {
     use HasFactory;
+    use HasBirthdate;
 
     protected $fillable = [
         'monitoring_id',
         'name',
         'status',
         'age',
-        'birthdate',
         'aggressor_relationship',
         'maintenance_sources',
         'location',
