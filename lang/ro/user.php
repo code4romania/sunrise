@@ -30,6 +30,7 @@ return [
         'case_permissions' => 'Permisiuni cazuri',
         'admin_permissions' => 'Permisiuni administrare',
         'last_login_at_date_time' => 'Data și ora ultimei accesări',
+        'can_be_case_manager' => 'Poate lua rol de manager de caz',
     ],
 
     'stats' => [
@@ -52,7 +53,8 @@ return [
     ],
 
     'placeholders' => [
-        'obs' => 'Acest tip de utilizator <span class="italic">are acces doar la cazurile din echipa cărora face parte</span> și nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
+        'user_role_without_permissions_for_all_cases' => 'Acest tip de utilizator <span class="italic">are acces doar la cazurile din echipa cărora face parte</span> și nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
+        'user_role_with_permissions_for_all_cases' => 'Acest tip de rol are acces <span class="italic">la toate cazurile din cadrul Centrului</span>, însă nu deține drepturi de administrare ale sistemului. Puteți oferi permisiuni suplimentare din lista de mai jos.',
         'dashboard_cart' => 'Distribuția pe luni a numărului total de utilizatori activi Sunrise. Un utilizator este considerat activ dacă a avut cel puțin o accesare a platformei în luna calendaristică respectivă.',
     ],
 
