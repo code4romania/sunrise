@@ -7,10 +7,11 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Concerns\RedirectToIdentity;
 use App\Enums\GenderShortValues;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Forms\Components\DatePicker;
+use App\Forms\Components\DateInput;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -132,17 +133,37 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.child_name'))
                         ->maxLength(70),
 
+                    DateInput::make('birthdate')
+                        ->label(__('field.birthdate'))
+                        ->afterStateUpdated(function (Set $set, $state) {
+                            if (! $state) {
+                                return;
+                            }
+
+                            try {
+                                $age = Carbon::createFromFormat('d-m-Y', $state)->diffInYears(now());
+                            } catch (\Exception $e) {
+                                return;
+                            }
+
+                            if ($age > 1000) {
+                                return;
+                            }
+
+                            if ($age === 0) {
+                                $age = '<1';
+                            }
+                            $set('age', $age);
+                        })
+                        ->live(),
+
                     TextInput::make('age')
                         ->label(__('field.age'))
-                        ->mask('99')
-                        ->maxLength(2),
+                        ->disabled(),
 
                     Select::make('gender')
                         ->label(__('field.gender'))
                         ->options(GenderShortValues::options()),
-
-                    DatePicker::make('birthdate')
-                        ->label(__('field.birthdate')),
 
                     TextInput::make('current_address')
                         ->label(__('field.current_address'))
