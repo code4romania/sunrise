@@ -19,7 +19,13 @@ class BeneficiaryInterventionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'objections' => fake()->text(),
+            'expected_results' => fake()->text(),
+            'procedure' => fake()->text(),
+            'indicators' => fake()->text(),
+            'achievement_degree' => fake()->text(),
+            'start_date_interval' => fake()->date(),
+            'end_date_interval' => fake()->date(),
         ];
     }
 }

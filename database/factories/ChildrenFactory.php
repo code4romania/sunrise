@@ -20,8 +20,7 @@ class ChildrenFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'age' => fake()->boolean() ? fake()->numberBetween(0, 20) : null,
-            'birthdate' => fake()->date(),
+            'birthdate' => fake()->date('d-m-Y'),
             'current_address' => fake()->boolean() ? fake()->address() : null,
             'status' => fake()->boolean() ? fake()->words(asText: true) : null,
         ];
