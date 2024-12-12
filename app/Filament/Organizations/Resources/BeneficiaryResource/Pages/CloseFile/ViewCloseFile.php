@@ -33,9 +33,48 @@ class ViewCloseFile extends ViewRecord
             ->getBreadcrumbs('view_close_file');
     }
 
+    /**
+     * @return array
+     */
+    public function getFileDetailsSchema(): array
+    {
+        return [
+            TextEntry::make('date')
+                ->label(__('beneficiary.section.close_file.labels.date')),
+
+            TextEntry::make('number')
+                ->label(__('beneficiary.section.close_file.labels.number')),
+
+            TextEntry::make('admittance_date')
+                ->label(__('beneficiary.section.close_file.labels.admittance_date')),
+
+            TextEntry::make('exit_date')
+                ->label(__('beneficiary.section.close_file.labels.exit_date')),
+
+            TextEntry::make('caseManager.name_role')
+                ->label(__('beneficiary.section.close_file.labels.case_manager')),
+
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
+            BeneficiaryResource\Actions\ExportPdf::make()
+                ->schema([
+                    TextEntry::make('status')
+                        ->badge(),
+
+                    Section::make('asdasdasd')
+                        ->columns()
+                        ->relationship('closeFile')
+                        ->schema($this->getFileDetailsSchema()),
+                ]),
+
+            BeneficiaryResource\Actions\ExportPdf2::make()
+                ->exporter(\App\Exports\Pdf::class)
+                ->schema($this->getFileDetailsSchema()),
+
             DeleteAction::make()
                 ->label(__('beneficiary.section.close_file.actions.delete'))
                 ->outlined()
@@ -70,23 +109,7 @@ class ViewCloseFile extends ViewRecord
                                     Edit::make('edit_details')
                                         ->url(self::getResource()::getUrl('edit_close_file_details', ['record' => $this->getRecord()])),
                                 ])
-                                ->schema([
-                                    TextEntry::make('date')
-                                        ->label(__('beneficiary.section.close_file.labels.date')),
-
-                                    TextEntry::make('number')
-                                        ->label(__('beneficiary.section.close_file.labels.number')),
-
-                                    TextEntry::make('admittance_date')
-                                        ->label(__('beneficiary.section.close_file.labels.admittance_date')),
-
-                                    TextEntry::make('exit_date')
-                                        ->label(__('beneficiary.section.close_file.labels.exit_date')),
-
-                                    TextEntry::make('caseManager.name_role')
-                                        ->label(__('beneficiary.section.close_file.labels.case_manager')),
-
-                                ]),
+                                ->schema($this->getFileDetailsSchema()),
                         ]),
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
