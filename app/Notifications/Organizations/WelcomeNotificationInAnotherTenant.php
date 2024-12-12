@@ -10,7 +10,6 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
-use Vite;
 
 class WelcomeNotificationInAnotherTenant extends Notification
 {
@@ -33,10 +32,8 @@ class WelcomeNotificationInAnotherTenant extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        // TODO: change line msg
         return (new MailMessage)
             ->subject(__('email.organization.welcome_in_anther_tenant.subject'))
-//            ->line('![Logo](' . Vite::asset('resources/svg/logo.svg') . ')')
             ->greeting(__('email.organization.welcome_in_anther_tenant.greeting', ['name' => $notifiable->first_name]))
             ->line(
                 __('email.organization.welcome_in_anther_tenant.intro_line_1', [
