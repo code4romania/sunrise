@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
 use App\Enums\CounselingSheet;
+use App\Enums\ExtendedFrequency;
 use App\Enums\FamilyRelationship;
 use App\Enums\FileDocumentType;
-use App\Enums\Frequency;
 use App\Enums\Gender;
 use App\Enums\HomeType;
 use App\Enums\Patrimony;
@@ -202,76 +202,124 @@ class EditCounselingSheet extends EditRecord
                     Radio::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Radio::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
                         ->inline()
-                        ->options(Frequency::options()),
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
 
                     Group::make()
                         ->maxWidth('3xl')
                         ->schema([
                             Textarea::make('data.physical_violence_description')
                                 ->label(__('intervention_plan.labels.physical_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.physics') ||
+                                    ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NONE) ||
+                                ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.sexual_violence_description')
                                 ->label(__('intervention_plan.labels.sexual_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.sexed') ||
+                                    ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NONE) ||
+                                ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.psychological_violence_description')
                                 ->label(__('intervention_plan.labels.psychological_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.psychological') ||
+                                    ExtendedFrequency::isValue($get('data.psychological'), ExtendedFrequency::NONE) ||
+                                ExtendedFrequency::isValue($get('data.psychological'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.verbal_violence_description')
                                 ->label(__('intervention_plan.labels.verbal_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.verbal') ||
+                                        ExtendedFrequency::isValue($get('data.verbal'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.verbal'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.social_violence_description')
                                 ->label(__('intervention_plan.labels.social_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.sociable') ||
+                                        ExtendedFrequency::isValue($get('data.sociable'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.sociable'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.economic_violence_description')
                                 ->label(__('intervention_plan.labels.economic_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.economic') ||
+                                        ExtendedFrequency::isValue($get('data.economic'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.economic'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.cyber_violence_description')
                                 ->label(__('intervention_plan.labels.cyber_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.cybernetics') ||
+                                        ExtendedFrequency::isValue($get('data.cybernetics'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.cybernetics'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
 
                             Textarea::make('data.spiritual_violence_description')
                                 ->label(__('intervention_plan.labels.spiritual_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.spiritual') ||
+                                        ExtendedFrequency::isValue($get('data.spiritual'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.spiritual'), ExtendedFrequency::NO_ANSWER)
+                                )
                                 ->maxLength(1500),
                         ]),
                 ]),

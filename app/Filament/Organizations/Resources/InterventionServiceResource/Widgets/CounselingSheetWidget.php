@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widgets;
 
 use App\Enums\CounselingSheet;
+use App\Enums\ExtendedFrequency;
 use App\Enums\FamilyRelationship;
 use App\Enums\FileDocumentType;
-use App\Enums\Frequency;
 use App\Enums\Gender;
 use App\Enums\HomeType;
 use App\Enums\Patrimony;
@@ -174,35 +174,35 @@ class CounselingSheetWidget extends InfolistWidget
 
                     EnumEntry::make('data.physics')
                         ->label(__('intervention_plan.labels.physics'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.sexed')
                         ->label(__('intervention_plan.labels.sexed'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.psychological')
                         ->label(__('intervention_plan.labels.psychological'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.verbal')
                         ->label(__('intervention_plan.labels.verbal'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.sociable')
                         ->label(__('intervention_plan.labels.sociable'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.economic')
                         ->label(__('intervention_plan.labels.economic'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.cybernetics')
                         ->label(__('intervention_plan.labels.cybernetics'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     EnumEntry::make('data.spiritual')
                         ->label(__('intervention_plan.labels.spiritual'))
-                        ->enumClass(Frequency::class),
+                        ->enumClass(ExtendedFrequency::class),
 
                     TextEntry::make('data.physical_violence_description')
                         ->label(__('intervention_plan.labels.physical_violence_description')),
