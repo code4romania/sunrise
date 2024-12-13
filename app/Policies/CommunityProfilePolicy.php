@@ -14,7 +14,7 @@ class CommunityProfilePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAccessToCommunity();
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class CommunityProfilePolicy
      */
     public function view(User $user, CommunityProfile $communityProfile): bool
     {
-        return $user->hasAccessToCommunity();
+        return true;
     }
 
     /**
@@ -30,7 +30,7 @@ class CommunityProfilePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasAccessToCommunity();
+        return true;
     }
 
     /**
@@ -38,7 +38,7 @@ class CommunityProfilePolicy
      */
     public function update(User $user, CommunityProfile $communityProfile): bool
     {
-        return $user->hasAccessToCommunity();
+        return true;
     }
 
     /**
@@ -46,7 +46,7 @@ class CommunityProfilePolicy
      */
     public function delete(User $user, CommunityProfile $communityProfile): bool
     {
-        return $user->hasAccessToCommunity();
+        return true;
     }
 
     /**
