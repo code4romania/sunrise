@@ -29,15 +29,15 @@ class InterventionServiceFactory extends Factory
     public function withBeneficiaryIntervention(): self
     {
         return $this->afterCreating(function (InterventionService $interventionService) {
-//            dd($interventionService->organizationService->interventions);
-//            $interventionService->load('organizationService', 'beneficiary');
             BeneficiaryIntervention::factory()
                 ->for($interventionService)
                 ->state(
                     fn () => [
                         'organization_service_intervention_id' => $interventionService->organizationServiceWithoutStatusCondition
-                            ->interventions
-                            ->random()
+                            ->interventions()
+                            ->where('organization_id', $interventionService->organizationServiceWithoutStatusCondition->organization_id)
+                            ->inRandomOrder()
+                            ->first()
                             ->id,
                         'specialist_id' => $interventionService->beneficiary
                             ->specialistsTeam

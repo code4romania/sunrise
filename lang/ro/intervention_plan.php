@@ -158,6 +158,9 @@ return [
         'integration_and_participation_in_social_service_observations' => 'Alte observații legate de integrare și participare în serviciul social',
         'count' => 'Nr',
         'social_relationship' => 'Relația socială #:number',
+        'beneficiary' => 'Beneficiar',
+        'actions' => 'Acțiuni',
+        'selected_interval' => 'Interval selectat',
     ],
 
     'headings' => [
@@ -217,6 +220,8 @@ return [
         'professional_experience' => 'Experiența profesională',
         'children_details' => 'Date adiționale despre copii',
         'integration_and_participation_in_social_service' => 'Integrare și participare în serviciul social',
+        'dashboard_intervention_table' => 'Sumar intervenții',
+        'dashboard_intervention_table_empty_state' => 'Odată deschis primul caz și creat primul plan de intervenție pentru acesta, o listă a intervențiilor va fi afișată în acest tabel.',
     ],
 
     'actions' => [
@@ -262,5 +267,6 @@ return [
         'peoples' => 'Introdu un număr',
         'add_details' => 'Adaugă detalii',
         'select_age' => 'Alege un an',
+        'search_by_beneficiary_or_specialist' => 'Caută caz sau specialist',
     ],
 ];

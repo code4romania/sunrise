@@ -544,4 +544,10 @@ return [
         'other' => 'Altă modalitate de plată',
 
     ],
+
+    'dashboard_interval_filter' => [
+        'today' => 'Astăzi',
+        'tomorrow' => 'Mâine',
+        'one_week' => '7 zile',
+    ],
 ];
