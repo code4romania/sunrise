@@ -9,7 +9,7 @@ trait RedirectToIdentity
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('view_identity', [
-            'record' => $this->record->id,
+            'record' => $this->record,
             'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
     }

@@ -81,7 +81,7 @@ class BeneficiaryResource extends Resource
                 ->whereUserHasAccess()
         )
             ->columns([
-                TextColumn::make('id')
+                TextColumn::make('organization_beneficiary_id')
                     ->label(__('field.case_id'))
                     ->sortable()
                     ->searchable(true, fn (Builder $query, $search) => $query->where('beneficiaries.id', 'LIKE', '%' . $search . '%')),
@@ -161,59 +161,64 @@ class BeneficiaryResource extends Resource
         ];
     }
 
+    public static function getRecordRouteKeyName(): ?string
+    {
+        return 'ulid';
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListBeneficiaries::route('/'),
             'create' => Pages\CreateBeneficiary::route('/create/{parent?}'),
-            'view' => Pages\ViewBeneficiary::route('/{record}'),
+            'view' => Pages\ViewBeneficiary::route('/{record:ulid}'),
 
-            'view_identity' => Pages\ViewBeneficiaryIdentity::route('/{record}/identity'),
-            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity/edit'),
-            'edit_children' => Pages\EditChildrenIdentity::route('{record}/children/edit'),
-            'view_personal_information' => Pages\ViewBeneficiaryPersonalInformation::route('/{record}/personal'),
-            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal/edit'),
-            'edit_aggressor' => Pages\EditAggressor::route('/{record}/aggressor/edit'),
-            'edit_antecedents' => Pages\EditAntecedents::route('{record}/antecedents/edit'),
-            'edit_flow_presentation' => Pages\EditFlowPresentation::route('{record}/flowPresentation/edit'),
+            'view_identity' => Pages\ViewBeneficiaryIdentity::route('/{record:ulid}/identity'),
+            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record:ulid}/identity/edit'),
+            'edit_children' => Pages\EditChildrenIdentity::route('{record:ulid}/children/edit'),
+            'view_personal_information' => Pages\ViewBeneficiaryPersonalInformation::route('/{record:ulid}/personal'),
+            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record:ulid}/personal/edit'),
+            'edit_aggressor' => Pages\EditAggressor::route('/{record:ulid}/aggressor/edit'),
+            'edit_antecedents' => Pages\EditAntecedents::route('{record:ulid}/antecedents/edit'),
+            'edit_flow_presentation' => Pages\EditFlowPresentation::route('{record:ulid}/flowPresentation/edit'),
 
-            'view_initial_evaluation' => InitialEvaluation\ViewInitialEvaluation::route('/{record}/initialEvaluation'),
-            'create_initial_evaluation' => InitialEvaluation\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
-            'edit_initial_evaluation_details' => InitialEvaluation\EditEvaluationDetails::route('/{record}/initialEvaluation/details/edit'),
-            'edit_initial_evaluation_violence' => InitialEvaluation\EditViolence::route('/{record}/initialEvaluation/violence/edit'),
-            'edit_initial_evaluation_risk_factors' => InitialEvaluation\EditRiskFactors::route('/{record}/initialEvaluation/riskFactors/edit'),
-            'edit_initial_evaluation_requested_services' => InitialEvaluation\EditRequestedServices::route('/{record}/initialEvaluation/requestedServices/edit'),
-            'edit_initial_evaluation_beneficiary_situation' => InitialEvaluation\EditBeneficiarySituation::route('/{record}/initialEvaluation/beneficiarySituation/edit'),
+            'view_initial_evaluation' => InitialEvaluation\ViewInitialEvaluation::route('/{record:ulid}/initialEvaluation'),
+            'create_initial_evaluation' => InitialEvaluation\CreateInitialEvaluation::route('/{record:ulid}/initialEvaluation/create'),
+            'edit_initial_evaluation_details' => InitialEvaluation\EditEvaluationDetails::route('/{record:ulid}/initialEvaluation/details/edit'),
+            'edit_initial_evaluation_violence' => InitialEvaluation\EditViolence::route('/{record:ulid}/initialEvaluation/violence/edit'),
+            'edit_initial_evaluation_risk_factors' => InitialEvaluation\EditRiskFactors::route('/{record:ulid}/initialEvaluation/riskFactors/edit'),
+            'edit_initial_evaluation_requested_services' => InitialEvaluation\EditRequestedServices::route('/{record:ulid}/initialEvaluation/requestedServices/edit'),
+            'edit_initial_evaluation_beneficiary_situation' => InitialEvaluation\EditBeneficiarySituation::route('/{record:ulid}/initialEvaluation/beneficiarySituation/edit'),
 
-            'view_detailed_evaluation' => DetailedEvaluation\ViewDetailedEvaluation::route('/{record}/detailedEvaluation'),
-            'create_detailed_evaluation' => DetailedEvaluation\CreateDetailedEvaluation::route('/{record}/detailedEvaluation/create'),
-            'edit_detailed_evaluation' => DetailedEvaluation\EditDetailedEvaluation::route('/{record}/detailedEvaluation/edit'),
-            'edit_beneficiary_partner' => DetailedEvaluation\EditBeneficiaryPartner::route('/{record}/beneficiaryPartner/edit'),
-            'edit_multidisciplinary_evaluation' => DetailedEvaluation\EditMultidisciplinaryEvaluation::route('/{record}/multidisciplinaryEvaluation/edit'),
-            'edit_detailed_evaluation_result' => DetailedEvaluation\EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
+            'view_detailed_evaluation' => DetailedEvaluation\ViewDetailedEvaluation::route('/{record:ulid}/detailedEvaluation'),
+            'create_detailed_evaluation' => DetailedEvaluation\CreateDetailedEvaluation::route('/{record:ulid}/detailedEvaluation/create'),
+            'edit_detailed_evaluation' => DetailedEvaluation\EditDetailedEvaluation::route('/{record:ulid}/detailedEvaluation/edit'),
+            'edit_beneficiary_partner' => DetailedEvaluation\EditBeneficiaryPartner::route('/{record:ulid}/beneficiaryPartner/edit'),
+            'edit_multidisciplinary_evaluation' => DetailedEvaluation\EditMultidisciplinaryEvaluation::route('/{record:ulid}/multidisciplinaryEvaluation/edit'),
+            'edit_detailed_evaluation_result' => DetailedEvaluation\EditDetailedEvaluationResult::route('/{record:ulid}/detailedEvaluationResult/edit'),
 
-            'view_specialists' => ListSpecialists::route('/{record}/specialists'),
+            'view_specialists' => ListSpecialists::route('/{record:ulid}/specialists'),
 
-            'documents.index' => ListDocuments::route('/{parent}/documents'),
-            'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
+            'documents.index' => ListDocuments::route('/{parent:ulid}/documents'),
+            'documents.view' => ViewDocument::route('/{parent:ulid}/documents/{record}'),
 
-            'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create/{copyLastFile?}'),
-            'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
-            'monitorings.view' => MonitoringResourcePages\ViewMonitoring::route('/{parent}/monitoring/{record}'),
-            'monitoring.edit_details' => MonitoringResourcePages\EditDetails::route('/{parent}/monitoring/{record}/editDetails'),
-            'monitoring.edit_children' => MonitoringResourcePages\EditChildren::route('/{parent}/monitoring/{record}/editChildren'),
-            'monitoring.edit_general' => MonitoringResourcePages\EditGeneral::route('/{parent}/monitoring/{record}/editGeneral'),
+            'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent:ulid}/monitoring/create/{copyLastFile?}'),
+            'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent:ulid}/monitoring'),
+            'monitorings.view' => MonitoringResourcePages\ViewMonitoring::route('/{parent:ulid}/monitoring/{record}'),
+            'monitoring.edit_details' => MonitoringResourcePages\EditDetails::route('/{parent:ulid}/monitoring/{record}/editDetails'),
+            'monitoring.edit_children' => MonitoringResourcePages\EditChildren::route('/{parent:ulid}/monitoring/{record}/editChildren'),
+            'monitoring.edit_general' => MonitoringResourcePages\EditGeneral::route('/{parent:ulid}/monitoring/{record}/editGeneral'),
 
-            'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
-            'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),
+            'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent:ulid}/history'),
+            'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent:ulid}/history/{record}'),
 
-            'create_close_file' => CloseFile\CreateCloseFile::route('/{record}/createCloseFile'),
-            'view_close_file' => CloseFile\ViewCloseFile::route('/{record}/closeFile'),
-            'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record}/closeFile/editDetails'),
-            'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
+            'create_close_file' => CloseFile\CreateCloseFile::route('/{record:ulid}/createCloseFile'),
+            'view_close_file' => CloseFile\ViewCloseFile::route('/{record:ulid}/closeFile'),
+            'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record:ulid}/closeFile/editDetails'),
+            'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record:ulid}/closeFile/editGeneralDetails'),
 
-            'create_intervention_plan' => CreateInterventionPlan::route('/{parent}/createInterventionPlan'),
-            'view_intervention_plan' => ViewInterventionPlan::route('/{parent}/interventionPlan/{record}'),
+            'create_intervention_plan' => CreateInterventionPlan::route('/{parent:ulid}/createInterventionPlan'),
+            'view_intervention_plan' => ViewInterventionPlan::route('/{parent:ulid}/interventionPlan/{record}'),
         ];
     }
 }

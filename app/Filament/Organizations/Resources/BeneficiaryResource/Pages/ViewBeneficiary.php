@@ -143,7 +143,7 @@ class ViewBeneficiary extends ViewRecord
 
         return new HtmlString(__('beneficiary.page.view.title', [
             'name' => $this->record->full_name,
-            'id' => $this->record->id,
+            'id' => $this->record->organization_beneficiary_id,
             'badge' => $statusBadge,
         ]));
     }
