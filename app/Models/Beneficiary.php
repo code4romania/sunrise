@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToOrganization;
+use App\Concerns\HasBirthdate;
 use App\Concerns\HasCaseStatus;
 use App\Concerns\HasCitizenship;
 use App\Concerns\HasEffectiveAddress;
@@ -36,6 +37,7 @@ class Beneficiary extends Model
     use LogsActivity;
     use LogsActivityOptions;
     use HasSpecialistsTeam;
+    use HasBirthdate;
 
     protected $fillable = [
         'initial_id',
@@ -47,7 +49,6 @@ class Beneficiary extends Model
         'cnp',
         'gender',
 
-        'birthdate',
         'birthplace',
         'ethnicity',
 
@@ -80,7 +81,6 @@ class Beneficiary extends Model
 
     protected $casts = [
         'id_type' => IDType::class,
-        'birthdate' => 'date',
         'children_18_care_count' => 'integer',
         'children_accompanying_count' => 'integer',
         'children_care_count' => 'integer',

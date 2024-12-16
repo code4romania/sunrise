@@ -128,7 +128,8 @@ class ViewMonitoring extends ViewRecord
                                                         ->label(__('monitoring.labels.age')),
 
                                                     TextEntry::make('birthdate')
-                                                        ->label(__('monitoring.labels.birthdate')),
+                                                        ->label(__('monitoring.labels.birthdate'))
+                                                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('d-m-Y') : $state),
 
                                                     TextEntry::make('aggressor_relationship')
                                                         ->label(__('monitoring.labels.aggressor_relationship')),
