@@ -14,6 +14,11 @@ class ListCommunityProfiles extends ListRecords
 
     protected static string $view = 'filament.organizations.pages.empty-page';
 
+    public function getBreadcrumbs(): array
+    {
+        return [];
+    }
+
     public function getTitle(): string|Htmlable
     {
         return __('community.headings.empty_state_title');
