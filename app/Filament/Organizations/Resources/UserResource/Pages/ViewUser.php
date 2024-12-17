@@ -62,16 +62,13 @@ class ViewUser extends ViewRecord
                         ->label(__('user.labels.phone_number')),
 
                     TextEntry::make('rolesInOrganization.name')
-                        ->label(__('user.labels.select_roles'))
-                        ->columnSpanFull(),
+                        ->label(__('user.labels.select_roles')),
 
-                    TextEntry::make('obs')
-                        ->default(
-                            Str::of(__('user.placeholders.obs'))
-                                ->toHtmlString()
-                        )
-                        ->hiddenLabel()
-                        ->columnSpanFull(),
+                    TextEntry::make('can_be_case_manager')
+                        ->label(__('user.labels.can_be_case_manager'))
+                        ->state(fn (User $record) => Ternary::tryFrom((int)$record->canBeCaseManager())),
+
+
 
                     Group::make()
                         ->columnSpanFull()

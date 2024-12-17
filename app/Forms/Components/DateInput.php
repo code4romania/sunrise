@@ -16,7 +16,7 @@ class DateInput extends TextInput
 
         $this->placeholder('dd-mm-yyyy');
         $this->mask('99-99-9999');
-        $this->formatStateUsing(fn (string $state) => $state ? Carbon::parse($state)->format('d-m-Y') : null);
+        $this->formatStateUsing(fn (?string $state) => $state ? Carbon::parse($state)->format('d-m-Y') : null);
         $this->rules([
             'date_format:d-m-Y',
             fn (): Closure => function (string $attribute, $value, Closure $fail) {
