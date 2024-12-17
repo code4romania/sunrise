@@ -31,6 +31,11 @@ class CommunityProfileResource extends Resource
 
     protected static ?int $navigationSort = 21;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->canChangeOrganizationProfile();
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('navigation.community._group');

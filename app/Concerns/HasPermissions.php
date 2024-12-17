@@ -75,7 +75,7 @@ trait HasPermissions
         return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_NOMENCLATURE);
     }
 
-    public function hasAccessToCommunity(): bool
+    public function canChangeOrganizationProfile(): bool
     {
         if ($this->isAdmin()) {
             return true;
