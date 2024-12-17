@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditInterventionService;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\ViewInterventionService;
+use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\CreateMonthlyPlan;
 use App\Models\InterventionPlan;
 use Filament\Resources\Resource;
 
@@ -24,6 +25,8 @@ class InterventionPlanResource extends Resource
             'view_intervention_service' => ViewInterventionService::route('{parent}/service/{record}'),
             'edit_intervention_service' => EditInterventionService::route('{parent}/service/{record}/edit'),
             'edit_counseling_sheet' => EditCounselingSheet::route('{parent}/service/{record}/editCounselingSheet'),
+
+            'create_monthly_plan' => CreateMonthlyPlan::route('{parent}/createMonthlyPlan'),
         ];
     }
 }

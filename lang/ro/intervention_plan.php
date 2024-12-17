@@ -158,6 +158,10 @@ return [
         'integration_and_participation_in_social_service_observations' => 'Alte observații legate de integrare și participare în serviciul social',
         'count' => 'Nr',
         'social_relationship' => 'Relația socială #:number',
+        'monthly_plan_start_date' => 'Început perioadă de referință',
+        'monthly_plan_end_date' => 'Final perioadă de referință',
+        'case_manager' => 'Manager caz',
+        'specialists' => 'Echipă caz',
     ],
 
     'headings' => [
@@ -217,6 +221,10 @@ return [
         'professional_experience' => 'Experiența profesională',
         'children_details' => 'Date adiționale despre copii',
         'integration_and_participation_in_social_service' => 'Integrare și participare în serviciul social',
+        'monthly_plans' => 'Planuri lunare',
+        'monthly_plan_details' => 'Detalii plan',
+        'services_and_interventions' => 'Servicii și intervenții',
+        'create_monthly_plan' => 'Creează plan lunar',
     ],
 
     'actions' => [
@@ -246,6 +254,7 @@ return [
         'organization_service' => 'Alege un serviciu',
         'institution' => 'Introdu numele organizației',
         'specialist' => 'Alege un specialist',
+        'specialists' => 'Alege specialiști',
         'objections' => 'Descrieți pe scurt obiectivele acordării serviciului',
         'benefit_category' => 'Alege o categorie',
         'result_observations' => 'Notați pe scurt orice observații sau notiție relevante pentru activitate',
