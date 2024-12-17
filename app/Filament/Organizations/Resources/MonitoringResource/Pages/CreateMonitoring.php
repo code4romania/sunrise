@@ -10,6 +10,7 @@ use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
 use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Set;
@@ -70,6 +71,10 @@ class CreateMonitoring extends CreateRecord
             ->first()
             ?->load(['children', 'specialistsTeam']);
         $this->children = $this->getChildren();
+        foreach ($this->children as &$child) {
+            $child['birthdate'] = $child['birthdate'] ? Carbon::parse($child['birthdate'])->format('d-m-Y') : null;
+        }
+
         $this->specialistTeam = $this->getSpecialists();
 
         $data = [

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\HasBirthdate;
 use App\Enums\GenderShortValues;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,10 +15,10 @@ class Children extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use HasBirthdate;
 
     protected $fillable = [
         'name',
-        'birthdate',
         'current_address',
         'status',
         'gender',
@@ -33,11 +34,5 @@ class Children extends Model
         $age = $this->birthdate ? Carbon::parse($this->birthdate)->diffInYears(now()) : null;
 
         return $age === 0 ? '<1' : $age;
-    }
-
-    public function setBirthdateAttribute(?string $value = null): void
-    {
-        $date = Carbon::createFromFormat('d-m-Y', $value);
-        $this->attributes['birthdate'] = $date->format('Y-m-d');
     }
 }
