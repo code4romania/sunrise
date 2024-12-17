@@ -18,8 +18,17 @@ class BeneficiaryInterventionFactory extends Factory
      */
     public function definition(): array
     {
+        $startDate = fake()->dateTimeBetween('-2 weeks', '2 weeks');
+        $endDate = fake()->dateTimeBetween($startDate, '+3 weeks');
+
         return [
-            //
+            'objections' => fake()->text(),
+            'expected_results' => fake()->text(),
+            'procedure' => fake()->text(),
+            'indicators' => fake()->text(),
+            'achievement_degree' => fake()->text(),
+            'start_date_interval' => $startDate->format('Y-m-d'),
+            'end_date_interval' => $endDate->format('Y-m-d'),
         ];
     }
 }

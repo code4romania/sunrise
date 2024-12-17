@@ -6,9 +6,11 @@ namespace Database\Factories;
 
 use App\Models\Beneficiary;
 use App\Models\CommunityProfile;
-use App\Models\Intervention;
 use App\Models\Organization;
+use App\Models\OrganizationService;
+use App\Models\OrganizationServiceIntervention;
 use App\Models\Service;
+use App\Models\ServiceIntervention;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -78,24 +80,37 @@ class OrganizationFactory extends Factory
                 ->withBeneficiaryDetails()
                 ->withCitizenship()
                 ->withEthnicity()
+                ->withInterventionPlan($organization)
                 ->for($organization)
                 ->create();
         });
     }
 
-    public function withInterventions(int $count = 5): static
+    public function withServices(int $count = 5): static
     {
         return $this->afterCreating(function (Organization $organization) use ($count) {
             Service::query()
                 ->inRandomOrder()
                 ->limit($count)
+                ->with('serviceInterventions')
                 ->get()
                 ->each(
-                    fn (Service $service) => Intervention::factory()
-                        ->count($count)
-                        ->for($organization)
-                        ->for($service)
-                        ->create()
+                    function (Service $service) use ($organization) {
+                        $organizationService = OrganizationService::factory()
+                            ->for($organization)
+                            ->for($service)
+                            ->create();
+
+                        $service->serviceInterventions
+                            ->filter(fn (ServiceIntervention $serviceIntervention) => $serviceIntervention->status)
+                            ->each(
+                                fn (ServiceIntervention $serviceIntervention) => OrganizationServiceIntervention::factory()
+                                    ->for($organizationService)
+                                    ->for($serviceIntervention)
+                                    ->for($organization)
+                                    ->create()
+                            );
+                    }
                 );
         });
     }

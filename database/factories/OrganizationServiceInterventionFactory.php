@@ -19,7 +19,7 @@ class OrganizationServiceInterventionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'status' => fake()->boolean(),
         ];
     }
 }
