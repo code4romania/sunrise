@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
 use App\Concerns\PreventMultipleSubmit;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\UserResource;
 use App\Models\User;
 use Filament\Facades\Filament;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 class CreateUser extends CreateRecord
 {
     use PreventMultipleSubmit;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = UserResource::class;
 

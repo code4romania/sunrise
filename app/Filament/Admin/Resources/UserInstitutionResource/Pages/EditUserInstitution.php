@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\UserInstitutionResource\Pages;
 
 use App\Concerns\HasParentResource;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource;
 use Filament\Forms\Components\Section;
@@ -16,6 +17,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class EditUserInstitution extends EditRecord
 {
     use HasParentResource;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = UserInstitutionResource::class;
 

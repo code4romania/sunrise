@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Concerns\PreventMultipleSubmit;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Notice;
@@ -37,6 +38,7 @@ class CreateBeneficiary extends CreateRecord
 {
     use HasWizard;
     use PreventMultipleSubmit;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 
