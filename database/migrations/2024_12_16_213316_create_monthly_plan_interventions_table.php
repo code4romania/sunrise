@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Models\MonthlyPlan;
 use App\Models\MonthlyPlanService;
 use App\Models\ServiceIntervention;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +17,6 @@ return new class extends Migration
     {
         Schema::create('monthly_plan_interventions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(MonthlyPlan::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(MonthlyPlanService::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(ServiceIntervention::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('objections')->nullable();
