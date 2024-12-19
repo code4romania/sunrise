@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Image\Enums\Fit;
@@ -81,9 +82,14 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
             });
     }
 
-    public function monitorings()
+    public function monitorings(): HasManyThrough
     {
         return $this->hasManyThrough(Monitoring::class, Beneficiary::class);
+    }
+
+    public function monthlyPlans(): HasManyThrough
+    {
+        return $this->hasManyThrough(MonthlyPlan::class, InterventionPlan::class);
     }
 
     public function registerMediaCollections(): void
