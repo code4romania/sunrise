@@ -10,6 +10,7 @@ use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionPlan;
 use App\Models\InterventionService;
+use App\Models\MonthlyPlan;
 
 class InterventionPlanBreadcrumb
 {
@@ -60,6 +61,27 @@ class InterventionPlanBreadcrumb
                 'parent' => $record->interventionService,
                 'record' => $record,
             ]) => $record->organizationServiceIntervention->serviceInterventionWithoutStatusCondition->name]
+        );
+    }
+
+    public function getViewMonthlyPlan(MonthlyPlan $record): array
+    {
+        return array_merge(
+            $this->getInterventionPlanBreadcrumb(),
+            [self::$resourcePath::getUrl('view_monthly_plan', [
+                'parent' => $this->record,
+                'record' => $record,
+            ]) => __('intervention_plan.headings.monthly_plan')]
+        );
+    }
+
+    public function getCreateMonthlyPlan(): array
+    {
+        return array_merge(
+            $this->getInterventionPlanBreadcrumb(),
+            [self::$resourcePath::getUrl('create_monthly_plan', [
+                'parent' => $this->record,
+            ]) => __('intervention_plan.headings.create_monthly_plan')]
         );
     }
 }

@@ -12,6 +12,7 @@ class Interventions extends MultiWidget
         ServicesWidget::class,
         BenefitsWidget::class,
         ResultsWidget::class,
+        MonthlyPlanWidget::class,
     ];
 
     public function shouldPersistMultiWidgetTabsInSession(): bool
