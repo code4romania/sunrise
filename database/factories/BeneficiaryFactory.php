@@ -24,9 +24,11 @@ use App\Models\DetailedEvaluationResult;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\FlowPresentation;
+use App\Models\InterventionPlan;
 use App\Models\Meeting;
 use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
+use App\Models\Organization;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
 use App\Models\Specialist;
@@ -187,6 +189,17 @@ class BeneficiaryFactory extends Factory
                 fake()->randomElement(Ethnicity::values()) :
                 null,
         ]);
+    }
+
+    public function withInterventionPlan(Organization $organization): static
+    {
+        return $this->afterCreating(function (Beneficiary $beneficiary) use ($organization) {
+            InterventionPlan::factory()
+                ->for($beneficiary)
+                ->for($organization)
+                ->withService($organization)
+                ->create();
+        });
     }
 
     public function configure(): static

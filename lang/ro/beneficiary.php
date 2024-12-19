@@ -217,7 +217,7 @@ return [
                 'protection_order_in_past' => '4. În trecut a existat emis un ordin de protecție provizoriu/ordin de protecție?',
                 'abuser_violated_protection_order' => '5. Agresorul a încălcat, în trecut, un ordin de protecție provizoriu/ ordin de protecție?',
 
-                'frequency_of_violence_acts' => '6. Care este frecvența actelelor de violență domestică?',
+                'frequency_of_violence_acts' => '6. Acte de violență domestică/ incidente semnificative care au loc cu frecvență?',
                 'use_weapons_in_act_of_violence' => '7.  În manifestarea actelor de violență domestică agresorul a folosit arme/ amenințarea cu arme?',
                 'controlling_and_isolating' => '8. Agresorul a manifestat comportament de control și de izolare a victimei?',
                 'stalked_or_harassed' => '9. Victima a fost urmărită/hărțuită?',

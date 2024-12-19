@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\BeneficiaryIntervention;
+use App\Models\InterventionService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +21,32 @@ class InterventionServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'institution' => $this->faker->company(),
+            'objections' => $this->faker->text(),
         ];
+    }
+
+    public function withBeneficiaryIntervention(): self
+    {
+        return $this->afterCreating(function (InterventionService $interventionService) {
+            BeneficiaryIntervention::factory()
+                ->for($interventionService)
+                ->state(
+                    fn () => [
+                        'organization_service_intervention_id' => $interventionService->organizationServiceWithoutStatusCondition
+                            ->interventions()
+                            ->where('organization_id', $interventionService->organizationServiceWithoutStatusCondition->organization_id)
+                            ->inRandomOrder()
+                            ->first()
+                            ->id,
+                        'specialist_id' => $interventionService->beneficiary
+                            ->specialistsTeam
+                            ->random()
+                            ->id,
+                    ]
+                )
+                ->count(rand(1, 5))
+                ->create();
+        });
     }
 }

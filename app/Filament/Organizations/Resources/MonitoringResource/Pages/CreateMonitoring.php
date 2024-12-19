@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventMultipleSubmit;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
 use App\Models\Specialist;
@@ -24,6 +25,7 @@ class CreateMonitoring extends CreateRecord
     use HasWizard;
     use HasParentResource;
     use PreventMultipleSubmit;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = MonitoringResource::class;
 

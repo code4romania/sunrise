@@ -64,9 +64,9 @@ class InstitutionFactory extends Factory
                 ->for($institution)
                 ->count(2)
                 ->withUsers()
+                ->withServices()
                 ->withBeneficiaries()
                 ->withCommunityProfile()
-                ->withInterventions()
                 ->create();
         });
     }

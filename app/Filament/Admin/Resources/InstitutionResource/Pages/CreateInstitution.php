@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
 use App\Concerns\PreventMultipleSubmit;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
 use App\Forms\Components\Repeater;
@@ -19,6 +20,7 @@ class CreateInstitution extends CreateRecord
 {
     use HasWizard;
     use PreventMultipleSubmit;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = InstitutionResource::class;
 

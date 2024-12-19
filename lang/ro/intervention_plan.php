@@ -169,6 +169,9 @@ return [
         'monthly_plan_service_interval_end' => 'Final perioadă de acordare',
         'organization_beneficiary_id' => 'Nr Caz',
         'create_monthly_plan_modal' => 'Poți alege să începi cu plan lunar necompletată sau cu un duplicat al ultimului plan lunar realizat pe acest caz. Dacă vei porni de la un duplicat, va trebui să modifici informațiile care s-au schimbat de la o lună la alta.',
+        'beneficiary' => 'Beneficiar',
+        'actions' => 'Acțiuni',
+        'selected_interval' => 'Interval selectat',
     ],
 
     'headings' => [
@@ -240,6 +243,8 @@ return [
         'interventions_count' => 'Nr intervenții',
         'monthly_plan' => 'Plan de intervenție lunar',
         'create_monthly_plan_modal' => 'Crează un plan lunar de intervenție nou',
+        'dashboard_intervention_table' => 'Sumar intervenții',
+        'dashboard_intervention_table_empty_state' => 'Odată deschis primul caz și creat primul plan de intervenție pentru acesta, o listă a intervențiilor va fi afișată în acest tabel.',
     ],
 
     'actions' => [
@@ -298,5 +303,6 @@ return [
         'select_intervention' => 'Alege o intervenție',
         'monthly_plan_objective' => 'Specifică obiective',
         'monthly_plan_observations' => 'Specifică observații',
+        'search_by_beneficiary_or_specialist' => 'Caută caz sau specialist',
     ],
 ];
