@@ -23,7 +23,7 @@ class MonthlyPlanWidget extends BaseWidget
         return $table
             ->query(
                 fn () => $this->record->monthlyPlans()
-                    ->with('caseManager')
+                    ->with(['caseManager', 'beneficiary'])
                     ->withCount(['monthlyPlanServices', 'monthlyPlanInterventions'])
             )
             ->heading(__('intervention_plan.headings.monthly_plans'))

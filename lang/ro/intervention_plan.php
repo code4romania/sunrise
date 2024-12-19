@@ -248,6 +248,7 @@ return [
         'dashboard_intervention_table_empty_state' => 'Odată deschis primul caz și creat primul plan de intervenție pentru acesta, o listă a intervențiilor va fi afișată în acest tabel.',
         'edit_monthly_plan_title' => 'Editează plan lunar',
         'edit_monthly_plan_services_and_interventions_title' => 'Editează servicii si intervenții',
+        'delete_monthly_plan_modal' => 'Șterge plan lunar',
     ],
 
     'actions' => [
@@ -275,6 +276,7 @@ return [
         'create_monthly_plan' => 'Crează un plan',
         'create_monthly_plan_from_last' => 'Pornește de la un duplicat',
         'create_monthly_plan_simple' => 'Începe cu un plan necompletată',
+        'delete_monthly_plan' => 'Șterge planul lunar',
     ],
 
     'placeholders' => [

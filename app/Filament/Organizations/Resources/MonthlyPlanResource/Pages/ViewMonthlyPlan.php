@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
 use App\Concerns\HasParentResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\MonthlyPlanResource;
 use App\Infolists\Components\SectionHeader;
@@ -12,6 +13,7 @@ use App\Infolists\Components\TableEntry;
 use App\Models\Specialist;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Carbon\Carbon;
+use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
@@ -37,6 +39,24 @@ class ViewMonthlyPlan extends ViewRecord
     public function getTitle(): string|Htmlable
     {
         return __('intervention_plan.headings.monthly_plan');
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            DeleteAction::make()
+                ->label(__('intervention_plan.actions.delete_monthly_plan'))
+                ->icon('heroicon-o-trash')
+                ->modalHeading(__('intervention_plan.headings.delete_monthly_plan_modal'))
+                ->modalSubmitActionLabel(__('intervention_plan.actions.delete_monthly_plan'))
+                ->successRedirectUrl(
+                    BeneficiaryResource::getUrl('view_intervention_plan', [
+                        'parent' => $this->parent->beneficiary,
+                        'record' => $this->parent,
+                    ])
+                )
+                ->outlined(),
+        ];
     }
 
     public function infolist(Infolist $infolist): Infolist
