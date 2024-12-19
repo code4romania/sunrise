@@ -9,6 +9,7 @@ use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ChangeStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
@@ -86,10 +87,11 @@ class ViewBeneficiary extends ViewRecord
                     ActionGroup::make([])
                         ->dropdown(false)
                         ->actions([
-                            BeneficiaryResource\Actions\ChangeStatus::make('active'),
-                            BeneficiaryResource\Actions\ChangeStatus::make('monitored'),
-                            BeneficiaryResource\Actions\ChangeStatus::make('closed'),
-                            BeneficiaryResource\Actions\ChangeStatus::make('archived'),
+                            ChangeStatus::make('active'),
+                            ChangeStatus::make('monitored'),
+                            ChangeStatus::make('inactive'),
+                            ChangeStatus::make('closed'),
+                            ChangeStatus::make('archived'),
                         ]),
 
                     ActionGroup::make([])
