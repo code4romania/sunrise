@@ -172,6 +172,7 @@ return [
         'beneficiary' => 'Beneficiar',
         'actions' => 'Acțiuni',
         'selected_interval' => 'Interval selectat',
+        'service_details' => 'Detalii acordare serviciu',
     ],
 
     'headings' => [
@@ -245,6 +246,8 @@ return [
         'create_monthly_plan_modal' => 'Crează un plan lunar de intervenție nou',
         'dashboard_intervention_table' => 'Sumar intervenții',
         'dashboard_intervention_table_empty_state' => 'Odată deschis primul caz și creat primul plan de intervenție pentru acesta, o listă a intervențiilor va fi afișată în acest tabel.',
+        'edit_monthly_plan_title' => 'Editează plan lunar',
+        'edit_monthly_plan_services_and_interventions_title' => 'Editează servicii si intervenții',
     ],
 
     'actions' => [
@@ -304,5 +307,6 @@ return [
         'monthly_plan_objective' => 'Specifică obiective',
         'monthly_plan_observations' => 'Specifică observații',
         'search_by_beneficiary_or_specialist' => 'Caută caz sau specialist',
+        'service_details' => 'Adaugă orice detalii relevante acordării intervenției sau intervențiilor',
     ],
 ];

@@ -23,7 +23,7 @@ class MonthlyPlanWidget extends BaseWidget
         return $table
             ->query(
                 fn () => $this->record->monthlyPlans()
-                    ->with('caseManager.user')
+                    ->with('caseManager')
                     ->withCount(['monthlyPlanServices', 'monthlyPlanInterventions'])
             )
             ->heading(__('intervention_plan.headings.monthly_plans'))
@@ -57,7 +57,7 @@ class MonthlyPlanWidget extends BaseWidget
                 TextColumn::make('interval')
                     ->label(__('intervention_plan.headings.interval')),
 
-                TextColumn::make('caseManager.user.full_name')
+                TextColumn::make('caseManager.full_name')
                     ->label(__('intervention_plan.headings.case_manager')),
 
                 TextColumn::make('monthly_plan_services_count')

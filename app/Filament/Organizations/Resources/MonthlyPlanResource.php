@@ -58,7 +58,7 @@ class MonthlyPlanResource extends Resource
         return [
             'index' => Pages\ListMonthlyPlans::route('/'),
             'create' => Pages\CreateMonthlyPlan::route('/create'),
-            'edit' => Pages\EditMonthlyPlan::route('/{record}/edit'),
+            'edit' => Pages\EditMonthlyPlanDetails::route('/{record}/edit'),
         ];
     }
 }

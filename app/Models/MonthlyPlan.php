@@ -58,7 +58,7 @@ class MonthlyPlan extends Model
 
     public function caseManager(): BelongsTo
     {
-        return $this->belongsTo(Specialist::class, 'case_manager_user_id');
+        return $this->belongsTo(User::class, 'case_manager_user_id');
     }
 
     public function getIntervalAttribute(): string
