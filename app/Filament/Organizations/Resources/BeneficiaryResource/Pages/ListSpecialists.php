@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Resources\Pages\ViewRecord;
@@ -19,6 +20,14 @@ class ListSpecialists extends ViewRecord
             ->getBreadcrumbs('view_specialists');
     }
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->getRecord()])),
+        ];
+    }
+
     protected function getHeaderWidgets(): array
     {
         return [
@@ -31,7 +40,7 @@ class ListSpecialists extends ViewRecord
         return 1;
     }
 
-    public function getHeading(): string|Htmlable
+    public function getTitle(): string|Htmlable
     {
         return __('beneficiary.section.specialists.title');
     }

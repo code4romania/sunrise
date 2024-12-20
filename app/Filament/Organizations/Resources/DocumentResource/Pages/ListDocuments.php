@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\DocumentResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Enums\DocumentType;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Models\Document;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -45,6 +47,9 @@ class ListDocuments extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->parent])),
+
             Actions\CreateAction::make()
                 ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                 ->label(__('beneficiary.section.documents.actions.add'))

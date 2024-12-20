@@ -41,13 +41,6 @@ class EditBeneficiaryIdentity extends EditRecord
 
     protected static string $resource = BeneficiaryResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public function getTitle(): string|Htmlable
     {
         return  __('beneficiary.page.edit_identity.title');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
@@ -46,6 +47,9 @@ class EditInterventionService extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+
             Actions\DeleteAction::make()
                 ->label(__('intervention_plan.actions.delete_service'))
                 ->icon('heroicon-o-trash')

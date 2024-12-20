@@ -6,6 +6,8 @@ namespace App\Concerns;
 
 trait RedirectToCloseFile
 {
+    use HasBackAction;
+
     protected function getRedirectUrl(): string
     {
         return self::$resource::getUrl('view_close_file', [

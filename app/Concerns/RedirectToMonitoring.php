@@ -6,6 +6,8 @@ namespace App\Concerns;
 
 trait RedirectToMonitoring
 {
+    use HasBackAction;
+
     protected function getRedirectUrl(): ?string
     {
         return self::getParentResource()::getUrl('monitorings.view', [

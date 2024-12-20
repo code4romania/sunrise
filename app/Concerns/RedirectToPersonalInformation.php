@@ -6,6 +6,8 @@ namespace App\Concerns;
 
 trait RedirectToPersonalInformation
 {
+    use HasBackAction;
+
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('view_personal_information', [

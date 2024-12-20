@@ -33,13 +33,6 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
     protected static string $resource = BeneficiaryResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public function getTitle(): string|Htmlable
     {
         return  __('beneficiary.page.edit_personal_information.title', [

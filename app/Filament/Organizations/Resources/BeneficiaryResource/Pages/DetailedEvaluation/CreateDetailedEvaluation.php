@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -38,12 +39,17 @@ class CreateDetailedEvaluation extends EditRecord
             ->getBreadcrumbs('create_detailed_evaluation');
     }
 
-    /**
-     * @return string|Htmlable
-     */
     public function getTitle(): string|Htmlable
     {
         return __('beneficiary.page.create_detailed_evaluation.title');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->getRecord()])),
+        ];
     }
 
     public function getSteps(): array

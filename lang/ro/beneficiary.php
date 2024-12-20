@@ -23,7 +23,7 @@ return [
             'title' => 'Înregistrează caz nou',
         ],
         'view' => [
-            'title' => '<p class="flex flex-wrap gap-3"> #:id :name :badge</p>',
+            'title' => '<p class="flex flex-wrap gap-3">:action #:id :name :badge</p>',
         ],
         'identity' => [
             'title' => 'Date identitate',

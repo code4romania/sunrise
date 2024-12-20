@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Enums\RecommendationService;
 use App\Enums\Ternary;
@@ -34,6 +35,14 @@ class ViewDetailedEvaluation extends ViewRecord
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbs('view_detailed_evaluation');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->getRecord()])),
+        ];
     }
 
     public function infolist(Infolist $infolist): Infolist

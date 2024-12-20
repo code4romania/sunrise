@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -37,6 +39,9 @@ class ListMonitoring extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->parent])),
+
             Actions\Action::make('open_modal')
                 ->label(__('monitoring.actions.create'))
                 ->visible(fn () => $this->parent->monitoring->count())

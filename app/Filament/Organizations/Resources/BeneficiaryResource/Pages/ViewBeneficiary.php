@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\ActivityDescription;
 use App\Enums\AddressType;
 use App\Enums\CaseStatus;
@@ -131,9 +132,6 @@ class ViewBeneficiary extends ViewRecord
         ];
     }
 
-    /**
-     * @return string|Htmlable
-     */
     public function getTitle(): string|Htmlable
     {
         $statusBadge = Blade::render('<x-filament::badge :color="$color">{{$name}}</x-filament::badge>', [
@@ -142,6 +140,8 @@ class ViewBeneficiary extends ViewRecord
         ]);
 
         return new HtmlString(__('beneficiary.page.view.title', [
+            'action' => BackAction::make()
+                ->url(BeneficiaryResource::getUrl())->toHtml(),
             'name' => $this->record->full_name,
             'id' => $this->record->id,
             'badge' => $statusBadge,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Enums\ExtendedFrequency;
 use App\Enums\FamilyRelationship;
@@ -62,9 +63,20 @@ class EditCounselingSheet extends EditRecord
             ->getServiceBreadcrumb($this->getRecord());
     }
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+        ];
+    }
+
     public function form(Form $form): Form
     {
-        $counselingSheet = $this->record->organizationService->serviceWithoutStatusCondition->counseling_sheet;
+        $counselingSheet = $this->record
+            ->organizationServiceWithoutStatusCondition
+            ->serviceWithoutStatusCondition
+            ->counseling_sheet;
         $schema = [];
 
         if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {

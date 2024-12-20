@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
@@ -41,6 +43,9 @@ class ViewInterventionPlan extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->parent])),
+
             Actions\EditAction::make()
                 ->label(__('intervention_plan.actions.edit_intervention_plan'))
                 ->icon('heroicon-o-pencil')

@@ -6,6 +6,8 @@ namespace App\Concerns;
 
 trait RedirectToInitialEvaluation
 {
+    use HasBackAction;
+
     protected function getRedirectUrl(): string
     {
         return self::$resource::getUrl('view_initial_evaluation', [

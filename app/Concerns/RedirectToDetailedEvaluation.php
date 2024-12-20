@@ -6,6 +6,8 @@ namespace App\Concerns;
 
 trait RedirectToDetailedEvaluation
 {
+    use HasBackAction;
+
     protected function getRedirectUrl(): string
     {
         return self::$resource::getUrl('view_detailed_evaluation', [
