@@ -9,7 +9,7 @@ trait RedirectToPersonalInformation
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('view_personal_information', [
-            'record' => $this->record->id,
+            'record' => $this->record,
             'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
     }

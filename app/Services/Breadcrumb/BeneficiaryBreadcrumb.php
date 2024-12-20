@@ -28,7 +28,7 @@ class BeneficiaryBreadcrumb
     {
         return array_merge(
             [self::$resourcePath::getUrl() => self::$resourcePath::getBreadcrumb()],
-            [self::$resourcePath::getUrl('view', ['record' => $this->record->id]) => $this->record->getBreadcrumb()],
+            [self::$resourcePath::getUrl('view', ['record' => $this->record]) => $this->record->getBreadcrumb()],
         );
     }
 
@@ -48,9 +48,9 @@ class BeneficiaryBreadcrumb
         };
 
         $params = match ($page) {
-            'documents.index', 'monitorings.index', 'beneficiary-histories.index' => ['parent' => $this->record->id],
+            'documents.index', 'monitorings.index', 'beneficiary-histories.index' => ['parent' => $this->record],
 
-            default => ['record' => $this->record->id],
+            default => ['record' => $this->record],
         };
 
         return array_merge(
