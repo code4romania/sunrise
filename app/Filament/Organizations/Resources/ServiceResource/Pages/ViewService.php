@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Filament\Organizations\Resources\ServiceResource;
@@ -36,6 +37,9 @@ class ViewService extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(ServiceResource::getUrl()),
+
             EditAction::make()
                 ->label(__('service.actions.change_service')),
         ];

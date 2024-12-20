@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\UserResource;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -28,5 +29,13 @@ class EditUser extends EditRecord
     protected function getRedirectUrl(): string
     {
         return self::$resource::getUrl('view', ['record' => $this->record->id]);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+        ];
     }
 }

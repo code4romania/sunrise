@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Enums\Ternary;
@@ -20,7 +21,6 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
-use Illuminate\Support\Str;
 
 class ViewUser extends ViewRecord
 {
@@ -66,9 +66,7 @@ class ViewUser extends ViewRecord
 
                     TextEntry::make('can_be_case_manager')
                         ->label(__('user.labels.can_be_case_manager'))
-                        ->state(fn (User $record) => Ternary::tryFrom((int)$record->canBeCaseManager())),
-
-
+                        ->state(fn (User $record) => Ternary::tryFrom((int) $record->canBeCaseManager())),
 
                     Group::make()
                         ->columnSpanFull()
@@ -108,6 +106,9 @@ class ViewUser extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(UserResource::getUrl()),
+
             DeactivateUserAction::make(),
 
             ResetPasswordAction::make(),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\UserResource;
@@ -25,6 +26,14 @@ class CreateUser extends CreateRecord
     public function getTitle(): string|Htmlable
     {
         return __('user.titles.create_specialist');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(UserResource::getUrl()),
+        ];
     }
 
     protected function afterSave(): void
