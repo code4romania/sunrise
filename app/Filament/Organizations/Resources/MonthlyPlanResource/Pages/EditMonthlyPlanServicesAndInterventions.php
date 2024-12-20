@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\MonthlyPlanResource;
@@ -56,6 +57,14 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
     protected function getTabSlug(): string
     {
         return Str::slug(__('intervention_plan.headings.services_and_interventions'));
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+        ];
     }
 
     public function form(Form $form): Form
