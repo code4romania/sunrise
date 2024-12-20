@@ -12,6 +12,7 @@ use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Models\Service;
+use App\Models\ServiceIntervention;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
@@ -92,7 +93,18 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                             Select::make('service_id')
                                 ->label(__('intervention_plan.labels.service_type'))
                                 ->placeholder(__('intervention_plan.placeholders.select_service'))
-                                ->relationship('service', 'name')
+                                ->options(function (?int $state) {
+                                    $services = Service::query()
+                                        ->active()
+                                        ->get()
+                                        ->pluck('name', 'id');
+
+                                    if ($state && ! isset($services[$state])) {
+                                        $services[$state] = Service::find($state)->name;
+                                    }
+
+                                    return $services;
+                                })
                                 ->required()
                                 ->live(),
 
@@ -142,12 +154,22 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                                 ->label(__('intervention_plan.headings.interventions'))
                                 ->placeholder(__('intervention_plan.placeholders.select_intervention'))
                                 ->options(
-                                    fn (Get $get) => $get('../../service_id') ?
-                                        Service::find((int) $get('../../service_id'))
-                                            ->load('serviceInterventions')
-                                            ->serviceInterventions
-                                            ->pluck('name', 'id') :
-                                        []
+                                    function (Get $get, ?int $state) {
+                                        if (! $get('../../service_id')) {
+                                            return [];
+                                        }
+
+                                        $interventions = Service::find((int) $get('../../service_id'))
+                                            ->load('activeServiceInterventions')
+                                            ->activeServiceInterventions
+                                            ->pluck('name', 'id');
+
+                                        if ($state && ! isset($interventions[$state])) {
+                                            $interventions[$state] = ServiceIntervention::find($state)->name;
+                                        }
+
+                                        return $interventions;
+                                    }
                                 ),
 
                             TextInput::make('objections')
