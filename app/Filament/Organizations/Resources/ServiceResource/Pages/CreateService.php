@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\ServiceResource;
@@ -29,6 +30,14 @@ class CreateService extends CreateRecord
         return [
             self::getResource()::getUrl() => __('service.headings.navigation'),
             self::getResource()::getUrl('create') => $this->getTitle(),
+        ];
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(ServiceResource::getUrl()),
         ];
     }
 

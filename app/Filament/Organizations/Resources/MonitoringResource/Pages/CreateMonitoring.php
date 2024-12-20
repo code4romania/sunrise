@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
 use App\Models\Specialist;
@@ -59,9 +61,12 @@ class CreateMonitoring extends CreateRecord
         ]);
     }
 
-    protected function configureAction(Action $action): void
+    protected function getHeaderActions(): array
     {
-        $action->hidden();
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('monitorings.index', ['parent' => $this->parent])),
+        ];
     }
 
     protected function afterFill(): void

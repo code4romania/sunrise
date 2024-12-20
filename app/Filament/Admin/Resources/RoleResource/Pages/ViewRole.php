@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Resources\RoleResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Section;
@@ -29,9 +30,12 @@ class ViewRole extends ViewRecord
         ];
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(RoleResource::getUrl()),
+
             Actions\EditAction::make()
                 ->label(__('nomenclature.actions.edit_role')),
         ];

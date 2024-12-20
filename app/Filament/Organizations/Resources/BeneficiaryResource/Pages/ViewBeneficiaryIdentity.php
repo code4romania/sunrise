@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\Actions\Edit;
@@ -36,6 +37,14 @@ class ViewBeneficiaryIdentity extends ViewRecord
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbs('view_identity');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->getRecord()])),
+        ];
     }
 
     public function infolist(Infolist $infolist): Infolist

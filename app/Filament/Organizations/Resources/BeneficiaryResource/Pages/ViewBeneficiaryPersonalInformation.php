@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\Diseases;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -35,6 +36,14 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbs('view_personal_information');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->getRecord()])),
+        ];
     }
 
     public function infolist(Infolist $infolist): Infolist

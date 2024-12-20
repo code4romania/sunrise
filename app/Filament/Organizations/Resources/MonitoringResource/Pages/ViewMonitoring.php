@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Infolists\Components\Actions\Edit;
@@ -41,6 +43,9 @@ class ViewMonitoring extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('monitorings.index', ['parent' => $this->parent])),
+
             Actions\DeleteAction::make()
                 ->label(__('monitoring.actions.delete'))
                 ->outlined()

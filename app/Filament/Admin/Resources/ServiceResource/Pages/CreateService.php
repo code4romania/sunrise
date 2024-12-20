@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\ServiceResource;
@@ -29,6 +30,14 @@ class CreateService extends CreateRecord
         return [
             self::$resource::getUrl() => __('nomenclature.titles.list'),
             self::$resource::getUrl('create') => __('nomenclature.actions.add_service'),
+        ];
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(ServiceResource::getUrl()),
         ];
     }
 }

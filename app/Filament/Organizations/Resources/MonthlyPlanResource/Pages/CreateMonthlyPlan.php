@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\MonthlyPlanResource;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
@@ -32,7 +34,7 @@ class CreateMonthlyPlan extends CreateRecord
     public function getBreadcrumbs(): array
     {
         return InterventionPlanBreadcrumb::make($this->parent)
-            ->getCreateMonthlyPlan($this->getRecord());
+            ->getCreateMonthlyPlan();
     }
 
     public function getTitle(): string|Htmlable
@@ -46,6 +48,17 @@ class CreateMonthlyPlan extends CreateRecord
             'parent' => $this->parent,
             'record' => $this->getRecord(),
         ]);
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view_intervention_plan', [
+                    'parent' => $this->parent->beneficiary,
+                    'record' => $this->parent,
+                ])),
+        ];
     }
 
     protected function afterFill(): void

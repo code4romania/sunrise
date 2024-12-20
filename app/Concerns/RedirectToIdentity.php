@@ -6,6 +6,8 @@ namespace App\Concerns;
 
 trait RedirectToIdentity
 {
+    use HasBackAction;
+
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('view_identity', [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\BenefitResource;
@@ -35,5 +36,13 @@ class CreateBenefit extends CreateRecord
     protected function getRedirectUrl(): string
     {
         return self::$resource::getUrl('view', ['record' => $this->getRecord()]);
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BenefitResource::getUrl()),
+        ];
     }
 }

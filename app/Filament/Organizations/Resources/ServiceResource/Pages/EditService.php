@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\ServiceResource;
 use App\Filament\Organizations\Resources\ServiceResource\Actions\ChangeStatusAction;
 use Filament\Actions;
@@ -35,6 +36,9 @@ class EditService extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+
             ChangeStatusAction::make()
                 ->disabled(fn () => ! $this->getRecord()->service),
 

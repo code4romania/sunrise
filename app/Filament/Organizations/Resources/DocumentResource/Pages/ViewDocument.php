@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\DocumentResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\EnumEntry;
@@ -39,6 +41,9 @@ class ViewDocument extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('documents.index', ['parent' => $this->parent])),
+
             DeleteAction::make()
                 ->label(__('beneficiary.section.documents.actions.delete'))
                 ->outlined()

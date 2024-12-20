@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasGroupPages;
 use App\Concerns\HasParentResource;
 use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
+use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
@@ -48,6 +50,19 @@ class ViewMeetings extends ViewRecord
     public function getTitle(): string|Htmlable
     {
         return $this->getRecord()->organizationServiceIntervention->serviceInterventionWithoutStatusCondition->name;
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(
+                    InterventionPlanResource::getUrl('view_intervention_service', [
+                        'parent' => $this->parent->interventionPlan,
+                        'record' => $this->parent,
+                    ])
+                ),
+        ];
     }
 
     protected function getFormSchema(): array

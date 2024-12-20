@@ -47,7 +47,11 @@ class CounselingSheetWidget extends InfolistWidget
 
     protected function getInfoListSchema(): array
     {
-        $counselingSheet = $this->record->organizationService->serviceWithoutStatusCondition->counseling_sheet;
+        $counselingSheet = $this->record
+            ->organizationServiceWithoutStatusCondition
+            ->serviceWithoutStatusCondition
+            ->counseling_sheet;
+
         if (blank($counselingSheet)) {
             return [];
         }

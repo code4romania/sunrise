@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Resources\ServiceResource;
 use Filament\Actions\DeleteAction;
@@ -35,6 +36,9 @@ class EditService extends EditRecord
     protected function getActions(): array
     {
         return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+
             ChangeNomenclatureStatusAction::make()
                 ->relationship('organizationServices'),
 

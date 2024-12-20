@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
@@ -44,6 +45,12 @@ class ViewMonthlyPlan extends ViewRecord
     public function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view_intervention_plan', [
+                    'parent' => $this->parent->beneficiary,
+                    'record' => $this->parent,
+                ])),
+
             DeleteAction::make()
                 ->label(__('intervention_plan.actions.delete_monthly_plan'))
                 ->icon('heroicon-o-trash')

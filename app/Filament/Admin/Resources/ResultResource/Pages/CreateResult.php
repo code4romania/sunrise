@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ResultResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\ResultResource;
@@ -35,5 +36,13 @@ class CreateResult extends CreateRecord
     protected function getRedirectUrl(): string
     {
         return self::$resource::getUrl();
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(ResultResource::getUrl()),
+        ];
     }
 }

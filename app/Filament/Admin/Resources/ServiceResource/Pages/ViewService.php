@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Filament\Admin\Resources\ServiceResource;
 use App\Filament\Admin\Resources\ServiceResource\Widgets\InterventionsWidget;
@@ -37,6 +38,9 @@ class ViewService extends ViewRecord
     protected function getActions(): array
     {
         return [
+            BackAction::make()
+                ->url(ServiceResource::getUrl()),
+
             Actions\EditAction::make()
                 ->label(__('nomenclature.actions.edit_service')),
         ];

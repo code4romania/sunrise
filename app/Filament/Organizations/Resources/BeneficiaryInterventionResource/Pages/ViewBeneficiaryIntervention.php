@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasGroupPages;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
+use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
@@ -35,6 +37,19 @@ class ViewBeneficiaryIntervention extends ViewRecord
     public function getTitle(): string|Htmlable
     {
         return $this->getRecord()->organizationServiceIntervention->serviceInterventionWithoutStatusCondition->name;
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(
+                    InterventionPlanResource::getUrl('view_intervention_service', [
+                        'parent' => $this->parent->interventionPlan,
+                        'record' => $this->parent,
+                    ])
+                ),
+        ];
     }
 
     public function infolist(Infolist $infolist): Infolist

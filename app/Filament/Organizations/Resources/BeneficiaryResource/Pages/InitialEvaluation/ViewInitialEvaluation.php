@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
+use App\Actions\BackAction;
 use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -33,6 +34,14 @@ class ViewInitialEvaluation extends ViewRecord
     {
         return BeneficiaryBreadcrumb::make($this->getRecord())
             ->getBreadcrumbs('view_initial_evaluation');
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->getRecord()])),
+        ];
     }
 
     public function infolist(Infolist $infolist): Infolist
