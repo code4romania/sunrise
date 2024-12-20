@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ResultResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Resources\ResultResource;
 use Filament\Actions;
@@ -30,6 +31,9 @@ class EditResult extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(ResultResource::getUrl()),
+
             ChangeNomenclatureStatusAction::make(),
 
             Actions\DeleteAction::make()

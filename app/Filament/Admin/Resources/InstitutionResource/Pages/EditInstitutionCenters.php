@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Forms\Components\Repeater;
 use App\Models\Organization;
@@ -36,6 +37,14 @@ class EditInstitutionCenters extends EditRecord
     public function getTitle(): string|Htmlable
     {
         return $this->getRecord()->name;
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+        ];
     }
 
     public function form(Form $form): Form

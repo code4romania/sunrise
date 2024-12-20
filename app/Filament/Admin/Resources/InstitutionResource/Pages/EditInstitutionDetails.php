@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
+use App\Actions\BackAction;
 use App\Enums\AreaType;
 use App\Enums\OrganizationType;
 use App\Filament\Admin\Resources\InstitutionResource;
@@ -42,6 +43,14 @@ class EditInstitutionDetails extends EditRecord
     public function form(Form $form): Form
     {
         return $form->schema(self::getSchema());
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+        ];
     }
 
     public static function getSchema(): array

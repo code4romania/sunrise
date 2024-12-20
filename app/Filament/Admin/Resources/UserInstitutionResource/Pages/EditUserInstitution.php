@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\UserInstitutionResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
@@ -44,6 +45,14 @@ class EditUserInstitution extends EditRecord
     public function getTitle(): string|Htmlable
     {
         return $this->getRecord()->full_name;
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+        ];
     }
 
     public function form(Form $form): Form

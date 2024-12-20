@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\UserInstitutionResource\Pages;
 
+use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource;
@@ -52,6 +53,9 @@ class ViewUserInstitution extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+
             ActivateUserAction::make(),
 
             DeactivateUserAction::make(),

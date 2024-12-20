@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Resources\BenefitResource;
 use Filament\Actions;
@@ -35,6 +36,9 @@ class EditBenefit extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+
             ChangeNomenclatureStatusAction::make(),
 
             Actions\DeleteAction::make()

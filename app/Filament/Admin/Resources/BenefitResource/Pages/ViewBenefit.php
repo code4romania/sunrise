@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Resources\BenefitResource;
 use App\Filament\Admin\Resources\BenefitResource\Widgets\BenefitTypesWidget;
 use Filament\Actions\EditAction;
@@ -20,9 +21,12 @@ class ViewBenefit extends ViewRecord
         return 1;
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url(BenefitResource::getUrl()),
+
             EditAction::make()
                 ->label(__('nomenclature.actions.edit_benefit')),
         ];

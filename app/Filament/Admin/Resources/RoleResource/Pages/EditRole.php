@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Resources\RoleResource;
 use Filament\Actions\DeleteAction;
@@ -35,6 +36,9 @@ class EditRole extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            BackAction::make()
+                ->url($this->getRedirectUrl()),
+
             ChangeNomenclatureStatusAction::make(),
 
             DeleteAction::make()

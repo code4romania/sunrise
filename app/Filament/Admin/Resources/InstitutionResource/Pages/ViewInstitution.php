@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
+use App\Actions\BackAction;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\ActivateInstitution;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\InactivateInstitution;
@@ -36,6 +37,9 @@ class ViewInstitution extends ViewRecord
     protected function getActions(): array
     {
         return [
+            BackAction::make()
+                ->url(InstitutionResource::getUrl()),
+
             ActivateInstitution::make(),
 
             InactivateInstitution::make(),
