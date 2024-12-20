@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Service extends Model
 {
@@ -27,14 +25,14 @@ class Service extends Model
         'counseling_sheet' => CounselingSheet::class,
     ];
 
-//    public function counselingSheet(): HasOne
-//    {
-//
-//    }
-
     public function serviceInterventions(): HasMany
     {
         return $this->hasMany(ServiceIntervention::class);
+    }
+
+    public function activeServiceInterventions(): HasMany
+    {
+        return $this->serviceInterventions()->active();
     }
 
     public function interventions(): HasMany
