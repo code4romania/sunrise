@@ -461,6 +461,7 @@ return [
     'status' => [
         'active' => 'Deschis',
         'monitored' => 'Monitorizare',
+        'inactive' => 'Inactiv',
         'closed' => 'Închis',
         'archived' => 'Arhivat',
     ],
@@ -476,6 +477,7 @@ return [
         'case_actions' => 'Acțiuni caz',
         'active' => 'Redeschide caz (dosar curent)',
         'monitored' => 'Mută în monitorizare ',
+        'inactive' => 'Inactivează caz',
         'closed' => 'Închide caz',
         'archived' => 'Arhivează caz',
         'reactivate' => 'Reactivează caz (dosar nou)',

@@ -17,6 +17,7 @@ enum CaseStatus: string implements HasLabel, HasColor
 
     case ACTIVE = 'active';
     case MONITORED = 'monitored';
+    case INACTIVE = 'inactive';
     case CLOSED = 'closed';
     case ARCHIVED = 'archived';
 
@@ -30,7 +31,7 @@ enum CaseStatus: string implements HasLabel, HasColor
         return match ($this) {
             self::ACTIVE => Color::Green,
             self::MONITORED => Color::Yellow,
-            self::CLOSED => Color::Gray,
+            self::CLOSED, self::INACTIVE => Color::Gray,
             self::ARCHIVED => Color::Purple,
             default => Color::Red,
         };
