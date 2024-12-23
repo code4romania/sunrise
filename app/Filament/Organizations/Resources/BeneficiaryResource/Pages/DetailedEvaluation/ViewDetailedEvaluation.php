@@ -11,6 +11,7 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Group;
@@ -307,10 +308,10 @@ class ViewDetailedEvaluation extends ViewRecord
                     TextEntry::make('relationship')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.relationship')),
 
-                    TextEntry::make('date')
+                    DateEntry::make('date')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date')),
                 ]),
-            //
+
             RepeatableEntry::make('meetings')
                 ->columns()
                 ->label(__('beneficiary.section.detailed_evaluation.labels.meetings'))
@@ -318,12 +319,14 @@ class ViewDetailedEvaluation extends ViewRecord
                     TextEntry::make('specialist')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.specialist'))
                         ->placeholder(__('beneficiary.placeholder.full_name')),
-                    TextEntry::make('date')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.date'))
-                        ->placeholder(__('beneficiary.placeholder.date')),
+
+                    DateEntry::make('date')
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.date')),
+
                     TextEntry::make('location')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.location'))
                         ->placeholder(__('beneficiary.placeholder.meet_location')),
+
                     TextEntry::make('observations')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
                         ->placeholder(__('beneficiary.placeholder.relevant_details')),

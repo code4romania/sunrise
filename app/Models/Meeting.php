@@ -23,4 +23,8 @@ class Meeting extends Model
         'location',
         'observations',
     ];
+
+    protected $casts = [
+        'date' => 'date',
+    ];
 }

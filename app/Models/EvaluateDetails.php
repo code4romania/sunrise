@@ -25,6 +25,10 @@ class EvaluateDetails extends Model
         'method_of_identifying_the_service',
     ];
 
+    protected $casts = [
+        'registered_date' => 'date',
+    ];
+
     public function specialist(): BelongsTo
     {
         return $this->belongsTo(User::class, 'specialist_id');

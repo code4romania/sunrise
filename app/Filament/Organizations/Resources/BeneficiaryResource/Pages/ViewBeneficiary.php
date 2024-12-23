@@ -18,6 +18,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsLi
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\IntervetnionPlanWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
 use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
+use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Models\Activity;
@@ -179,9 +180,8 @@ class ViewBeneficiary extends ViewRecord
                     ->label(__('field.age'))
                     ->formatStateUsing(fn ($state) => $state === '-' ? $state : trans_choice('general.age', $state)),
 
-                TextEntry::make('birthdate')
-                    ->label(__('field.birthdate'))
-                    ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('m-d-Y') : $state),
+                DateEntry::make('birthdate')
+                    ->label(__('field.birthdate')),
 
                 EnumEntry::make('gender')
                     ->label(__('field.gender')),
@@ -306,12 +306,13 @@ class ViewBeneficiary extends ViewRecord
                         ->columns()
                         ->visible(fn (Beneficiary $record) => $record->violence?->violence_types)
                         ->schema([
-                            TextEntry::make('evaluateDetails.registered_date')
-                                ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
-                                ->date('Y-m-d'),
+                            DateEntry::make('evaluateDetails.registered_date')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.registered_date')),
+
                             TextEntry::make('violence.violence_types')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
                                 ->color(Color::Gray),
+
                             TextEntry::make('riskFactors.risk_level')
                                 ->hiddenLabel()
                                 ->badge()

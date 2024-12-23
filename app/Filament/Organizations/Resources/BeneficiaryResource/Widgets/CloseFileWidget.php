@@ -7,7 +7,9 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
+use App\Tables\Columns\DateColumn;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
@@ -32,9 +34,10 @@ class CloseFileWidget extends BaseWidget
                     ->url(BeneficiaryResource::getUrl('view_close_file', ['record' => $this->record])),
             ])
             ->columns([
-                Tables\Columns\TextColumn::make('date')
+                DateColumn::make('date')
                     ->label(__('beneficiary.section.close_file.labels.close_date')),
-                Tables\Columns\TextColumn::make('close_method')
+
+                TextColumn::make('close_method')
                     ->label(__('beneficiary.section.close_file.labels.close_method')),
             ])
             ->emptyStateHeading(__('beneficiary.section.close_file.headings.widget_empty_state'))

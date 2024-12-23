@@ -8,6 +8,7 @@ use App\Concerns\RedirectToInitialEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
+use App\Infolists\Components\DateEntry;
 use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Section;
@@ -88,7 +89,7 @@ class EditEvaluationDetails extends EditRecord
                 ->columns()
                 ->relationship('evaluateDetails')
                 ->schema([
-                    TextEntry::make('registered_date')
+                    DateEntry::make('registered_date')
                         ->label(__('beneficiary.section.initial_evaluation.labels.registered_date')),
 
                     TextEntry::make('file_number')

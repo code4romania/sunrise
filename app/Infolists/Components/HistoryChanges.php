@@ -8,6 +8,7 @@ use App\Enums\Ternary;
 use App\Models\City;
 use App\Models\County;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Infolists\Components\Entry;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Support\Collection;
@@ -61,6 +62,10 @@ class HistoryChanges extends Entry
 
     public function getFieldValue(string $field, mixed $value): mixed
     {
+        if ($field === 'created_at' || $field === 'updated_at') {
+            return Carbon::parse($value)->format('d.m.Y H:i:s');
+        }
+
         $castType = $this->getCastType($field);
 
         if ($castType) {
@@ -76,6 +81,10 @@ class HistoryChanges extends Entry
                 }
 
                 return $value;
+            }
+
+            if ($castType === 'date' && $value) {
+                return Carbon::parse($value)->format('d.m.Y');
             }
 
             $value = $this->convertToEnum($castType, $value);

@@ -19,4 +19,8 @@ class DetailedEvaluationSpecialist extends Model
         'relationship',
         'date',
     ];
+
+    protected $casts = [
+        'date' => 'date',
+    ];
 }

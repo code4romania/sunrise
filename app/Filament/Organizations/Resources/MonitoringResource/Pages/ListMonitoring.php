@@ -10,6 +10,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Models\Monitoring;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use App\Tables\Columns\DateColumn;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\CreateAction;
@@ -84,16 +85,19 @@ class ListMonitoring extends ListRecords
             ->columns([
                 TextColumn::make('id')
                     ->label(__('monitoring.headings.id')),
+
                 TextColumn::make('number')
                     ->label(__('monitoring.headings.file_number'))
                     ->sortable(),
-                TextColumn::make('date')
+
+                DateColumn::make('date')
                     ->label(__('monitoring.headings.date'))
                     ->sortable(),
-                TextColumn::make('start_date')
+
+                TextColumn::make('interval')
                     ->label(__('monitoring.headings.interval'))
-                    ->sortable()
-                    ->formatStateUsing(fn ($record) => $record->start_date . ' - ' . $record->end_date),
+                    ->sortable(),
+
                 TextColumn::make('specialistsTeam.name_role')
                     ->label(__('monitoring.headings.team'))
                     ->sortable()

@@ -8,9 +8,12 @@ use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
+use App\Infolists\Components\DateTimeEntry;
 use App\Models\OrganizationUserPermissions;
 use App\Models\Role;
 use App\Models\User;
+use App\Tables\Columns\DateTimeColumn;
+use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Group;
@@ -88,7 +91,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->label(__('user.labels.account_status')),
 
-                TextColumn::make('last_login_at')
+                DateTimeColumn::make('last_login_at')
                     ->sortable()
                     ->label(__('user.labels.last_login_at')),
             ])
@@ -128,7 +131,7 @@ class UserResource extends Resource
 
                     Placeholder::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time'))
-                        ->content(fn (User $record) => $record->last_login_at ?? '-'),
+                        ->content(fn (User $record) => $record->last_login_at !== '-' ? $record->last_login_at->format('d.m.Y H:i:s') : $record->last_login_at),
                 ]),
             Section::make()
                 ->columns()
@@ -172,14 +175,13 @@ class UserResource extends Resource
                     Placeholder::make('obs')
                         ->hiddenLabel()
                         ->content(function (Get $get) {
-
                             foreach ($get('role_id') as $roleID) {
                                 $role = self::getRole($roleID);
-                                if ($role->case_permissions->contains(CasePermission::HAS_ACCESS_TO_ALL_CASES))
-                                {
+                                if ($role->case_permissions->contains(CasePermission::HAS_ACCESS_TO_ALL_CASES)) {
                                     return new HtmlString(__('user.placeholders.user_role_with_permissions_for_all_cases'));
                                 }
                             }
+
                             return new HtmlString(__('user.placeholders.user_role_without_permissions_for_all_cases'));
                         })
                         ->columnSpanFull(),
