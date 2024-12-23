@@ -72,6 +72,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Purple,
             ])
+            ->font('DM Sans')
             ->maxContentWidth('full')
             ->viteTheme('resources/css/filament/common/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
