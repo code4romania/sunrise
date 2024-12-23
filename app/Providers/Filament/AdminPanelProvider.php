@@ -60,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->font('DM Sans')
             ->maxContentWidth('full')
             ->viteTheme('resources/css/filament/common/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
