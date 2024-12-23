@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
+use App\Tables\Columns\DateTimeColumn;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -54,7 +55,7 @@ class AdminsRelationManager extends RelationManager
                 TextColumn::make('userStatus.status')
                     ->label(__('institution.labels.account_status')),
 
-                TextColumn::make('last_login_at')
+                DateTimeColumn::make('last_login_at')
                     ->label(__('institution.labels.last_login_at')),
             ])
             ->headerActions([

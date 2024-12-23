@@ -35,7 +35,7 @@ class ViewUser extends ViewRecord
                 ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('userStatus.status')
-                        ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
+                        ->label(__('user.labels.status')),
 
                     DateTimeEntry::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time')),
