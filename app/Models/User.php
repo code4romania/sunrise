@@ -268,7 +268,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     {
         if ($this->isNgoAdmin()) {
             $this->organizations
-                ->filter(fn (Organization $organization) => $organization->id !== Filament::getTenant()?->id)
+                ->filter(
+                    fn (Organization $organization) => $organization->id !== Filament::getTenant()?->id &&
+                        $organization->institution_id === $this->institution_id
+                )
                 ->each(
                     fn (Organization $organization) => UserStatus::query()
                         ->withoutGlobalScopes([BelongsToCurrentTenant::class])
