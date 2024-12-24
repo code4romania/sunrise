@@ -266,6 +266,18 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function activate(): void
     {
+        if ($this->isNgoAdmin()) {
+            $this->organizations
+                ->filter(fn (Organization $organization) => $organization->id !== Filament::getTenant()?->id)
+                ->each(
+                    fn (Organization $organization) => UserStatus::query()
+                        ->withoutGlobalScopes([BelongsToCurrentTenant::class])
+                        ->where('organization_id', $organization->id)
+                        ->where('user_id', $this->id)
+                        ->first()
+                        ?->activate()
+                );
+        }
         $this->userStatus->activate();
     }
 
