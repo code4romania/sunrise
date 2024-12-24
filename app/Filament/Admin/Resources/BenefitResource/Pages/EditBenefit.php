@@ -51,4 +51,13 @@ class EditBenefit extends EditRecord
                 ->tooltip(fn (Actions\DeleteAction $action) => $action->isDisabled() ? __('nomenclature.helper_texts.delete_benefit') : ''),
         ];
     }
+
+    public function beforeSave(): void
+    {
+        foreach ($this->data['benefitTypes'] as $key => $value) {
+            if (! $value['name']) {
+                unset($this->data['benefitTypes'][$key]);
+            }
+        }
+    }
 }
