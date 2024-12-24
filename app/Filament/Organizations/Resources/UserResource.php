@@ -171,21 +171,22 @@ class UserResource extends Resource
 
                     Placeholder::make('obs')
                         ->hiddenLabel()
+                        ->visible(fn (Get $get) => $get('role_id'))
                         ->content(function (Get $get) {
-
                             foreach ($get('role_id') as $roleID) {
                                 $role = self::getRole($roleID);
-                                if ($role->case_permissions->contains(CasePermission::HAS_ACCESS_TO_ALL_CASES))
-                                {
+                                if ($role->case_permissions->contains(CasePermission::HAS_ACCESS_TO_ALL_CASES)) {
                                     return new HtmlString(__('user.placeholders.user_role_with_permissions_for_all_cases'));
                                 }
                             }
+
                             return new HtmlString(__('user.placeholders.user_role_without_permissions_for_all_cases'));
                         })
                         ->columnSpanFull(),
 
                     Group::make()
                         ->relationship('permissions')
+                        ->columnSpanFull()
                         ->schema([
                             CheckboxList::make('case_permissions')
                                 ->label(__('user.labels.case_permissions'))
