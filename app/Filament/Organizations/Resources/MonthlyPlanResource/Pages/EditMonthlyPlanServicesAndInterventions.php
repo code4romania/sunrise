@@ -130,11 +130,9 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                                 ->maxLength(200),
 
                             DatePicker::make('start_date')
-                                ->displayFormat('d-m-Y')
                                 ->label(__('intervention_plan.labels.monthly_plan_service_interval_start')),
 
                             DatePicker::make('end_date')
-                                ->displayFormat('d-m-Y')
                                 ->label(__('intervention_plan.labels.monthly_plan_service_interval_end')),
 
                             Textarea::make('objective')

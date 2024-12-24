@@ -71,12 +71,10 @@ class EditMonthlyPlanDetails extends EditRecord
                 ->schema([
                     DatePicker::make('start_date')
                         ->label(__('intervention_plan.labels.monthly_plan_start_date'))
-                        ->displayFormat('d-m-Y')
                         ->required(),
 
                     DatePicker::make('end_date')
                         ->label(__('intervention_plan.labels.monthly_plan_end_date'))
-                        ->displayFormat('d-m-Y')
                         ->required(),
 
                     Select::make('case_manager_user_id')

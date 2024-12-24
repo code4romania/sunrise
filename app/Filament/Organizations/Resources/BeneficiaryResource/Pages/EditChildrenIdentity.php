@@ -141,7 +141,7 @@ class EditChildrenIdentity extends EditRecord
                             }
 
                             try {
-                                $age = Carbon::createFromFormat('d-m-Y', $state)->diffInYears(now());
+                                $age = Carbon::createFromFormat('d.m.Y', $state)->diffInYears(now());
                             } catch (\Exception $e) {
                                 return;
                             }

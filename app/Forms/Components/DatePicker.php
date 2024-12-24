@@ -14,5 +14,6 @@ class DatePicker extends BaseDatePicker
         $this->native(false);
         $this->displayFormat('d.m.Y');
         $this->closeOnDateSelection();
+        $this->placeholder(__('general.placeholders.date'));
     }
 }

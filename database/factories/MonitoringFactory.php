@@ -7,6 +7,7 @@ namespace Database\Factories;
 use App\Models\Monitoring;
 use App\Models\MonitoringChild;
 use App\Models\Specialist;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 
@@ -77,7 +78,8 @@ class MonitoringFactory extends Factory
                         ->create(['name' => $child['name'] ?? null,
                             'status' => $child['status'] ?? null,
                             'age' => $child['age'] ?? null,
-                            'birthdate' => $child['birthdate'] ?? null,
+                            'birthdate' => $child['birthdate'] ? Carbon::parse($child['birthdate'])
+                                ->format('d.m.Y') : null,
                         ]);
                 }
 

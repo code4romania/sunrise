@@ -73,8 +73,7 @@ class ViewMeetings extends ViewRecord
                 ->options(MeetingStatus::options()),
 
             DatePicker::make('date')
-                ->label(__('intervention_plan.labels.date'))
-                ->format('Y-m-d'),
+                ->label(__('intervention_plan.labels.date')),
 
             TimePicker::make('time')
                 ->label(__('intervention_plan.labels.time'))
@@ -172,7 +171,7 @@ class ViewMeetings extends ViewRecord
 
                             TextEntry::make('date')
                                 ->label(__('intervention_plan.labels.date'))
-                                ->formatStateUsing(fn (InterventionMeeting $record, Carbon | string $state) => (\is_string($state) ? $state : $state->format('Y-m-d')) . ' ' . $record->time?->format('H:i')),
+                                ->formatStateUsing(fn (InterventionMeeting $record, Carbon | string $state) => (\is_string($state) ? $state : $state->format('d.m.Y')) . ' ' . $record->time?->format('H:i')),
                             TextEntry::make('duration')
                                 ->label(__('intervention_plan.labels.duration')),
                             TextEntry::make('specialist.name_role')

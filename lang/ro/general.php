@@ -33,4 +33,8 @@ return [
     'labels' => [
         'developed_by' => 'o solutie dezvoltată de',
     ],
+
+    'placeholders' => [
+        'date' => 'zz-ll-aaaa'
+    ]
 ];

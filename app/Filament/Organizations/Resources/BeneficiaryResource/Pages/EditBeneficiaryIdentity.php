@@ -129,7 +129,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         return;
                     }
 
-                    if (filled($birthdate = (new Cnp($state))->getBirthDateFromCNP('d-m-Y'))) {
+                    if (filled($birthdate = (new Cnp($state))->getBirthDateFromCNP('d.m.Y'))) {
                         $set('birthdate', $birthdate);
                     }
                 });

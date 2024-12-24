@@ -17,7 +17,7 @@ trait HasBirthdate
 
     public function setBirthdateAttribute(?string $value = null): void
     {
-        $date = $value ? Carbon::createFromFormat('d-m-Y', $value) : null;
+        $date = $value ? Carbon::createFromFormat('d.m.Y', $value) : null;
 
         $this->attributes['birthdate'] = $date?->format('Y-m-d');
     }
