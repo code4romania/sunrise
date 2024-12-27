@@ -174,6 +174,7 @@ class UserResource extends Resource
 
                     Placeholder::make('obs')
                         ->hiddenLabel()
+                        ->visible(fn (Get $get) => $get('role_id'))
                         ->content(function (Get $get) {
                             foreach ($get('role_id') as $roleID) {
                                 $role = self::getRole($roleID);
@@ -188,6 +189,7 @@ class UserResource extends Resource
 
                     Group::make()
                         ->relationship('permissions')
+                        ->columnSpanFull()
                         ->schema([
                             CheckboxList::make('case_permissions')
                                 ->label(__('user.labels.case_permissions'))
