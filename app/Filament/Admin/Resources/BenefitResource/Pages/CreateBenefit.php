@@ -45,4 +45,15 @@ class CreateBenefit extends CreateRecord
                 ->url(BenefitResource::getUrl()),
         ];
     }
+
+    public function mutateFormDataBeforeCreate(array $data): array
+    {
+        foreach ($this->data['benefitTypes'] as $key => $value) {
+            if (! $value['name']) {
+                unset($this->data['benefitTypes'][$key]);
+            }
+        }
+
+        return $data;
+    }
 }
