@@ -21,7 +21,10 @@ use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
+use function Filament\Support\get_color_css_variables;
 
 class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
 {
@@ -102,15 +105,41 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
                         ->live(),
 
                     Checkbox::make('add_cases_in_monitoring')
-                        ->label(
-                            new HtmlString(
-                                \sprintf(
-                                    '<span class="heroicon heroicon-o-information-circle" title="%s">%s</span>',
-                                    __('report.helpers.add_cases_in_monitoring'),
-                                    __('report.labels.add_cases_in_monitoring'),
-                                )
-                            )
-                        )
+                        ->label(function () {
+                            $icon = 'heroicon-o-information-circle';
+
+                            $iconClasses = Arr::toCssClasses([
+                                'fi-in-text-item-icon h-5 w-5 shrink-0',
+                                'text-custom-500',
+                            ]);
+
+                            $iconColor = 'grey';
+                            $iconStyles = Arr::toCssStyles([
+                                get_color_css_variables($iconColor, shades: [500]) => $iconColor !== 'gray',
+                            ]);
+
+                            $label = Blade::render('
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 text-sm">
+                                        <span title="{{ $helper }}">{{ $label }}</span>
+                                    </div>
+                                    <span title="{{ $helper }}">
+                                        <x-filament::icon
+                                            :icon="$icon"
+                                            :class="$iconClasses"
+                                            :style="$iconStyles"
+                                            />
+                                    </span>
+                                </div>', [
+                                    'helper' => __('report.helpers.add_cases_in_monitoring'),
+                                    'label' => __('report.labels.add_cases_in_monitoring'),
+                                    'icon' => $icon,
+                                    'iconClasses' => $iconClasses,
+                                    'iconStyles' => $iconStyles,
+                            ]);
+
+                            return new HtmlString($label);
+                        })
                         ->columnSpan(2),
 
                     Checkbox::make('show_missing_values')
