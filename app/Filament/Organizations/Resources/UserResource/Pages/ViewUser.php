@@ -77,6 +77,9 @@ class ViewUser extends ViewRecord
                             $fields[] = SectionHeader::make('case_permissions_group')
                                 ->state(__('user.labels.case_permissions'));
                             foreach (CasePermission::cases() as $option) {
+                                if ($option === CasePermission::CAN_BE_CASE_MANAGER) {
+                                    continue;
+                                }
                                 $fields[] = TextEntry::make($option->value)
                                     ->label($option->getLabel())
                                     ->state($record->permissions?->case_permissions->contains($option) ?
