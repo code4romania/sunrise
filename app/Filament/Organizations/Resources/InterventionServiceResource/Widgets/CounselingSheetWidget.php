@@ -153,7 +153,8 @@ class CounselingSheetWidget extends InfolistWidget
                 ->schema([
                     TextEntry::make('data.observations')
                         ->label(__('intervention_plan.labels.final_observation'))
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->html(),
                 ]),
 
         ];
@@ -269,7 +270,8 @@ class CounselingSheetWidget extends InfolistWidget
             Section::make(__('intervention_plan.headings.psychological_evaluation'))
                 ->schema([
                     TextEntry::make('data.first_meeting_psychological_evaluation')
-                        ->label(__('intervention_plan.labels.first_meeting_psychological_evaluation')),
+                        ->label(__('intervention_plan.labels.first_meeting_psychological_evaluation'))
+                        ->html(),
                 ]),
         ];
     }
