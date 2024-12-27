@@ -39,6 +39,10 @@ class Monitoring extends Model
     ];
 
     protected $casts = [
+        'date' => 'date',
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'admittance_date' => 'date',
         'protection_measures' => 'json',
         'health_measures' => 'json',
         'legal_measures' => 'json',
@@ -60,5 +64,10 @@ class Monitoring extends Model
     public function children(): HasMany
     {
         return $this->hasMany(MonitoringChild::class);
+    }
+
+    public function getIntervalAttribute(): string
+    {
+        return $this->start_date?->format('d.m.Y') . ' - ' . $this->end_date?->format('d.m.Y');
     }
 }

@@ -35,6 +35,7 @@ use App\Models\Specialist;
 use App\Models\User;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -53,7 +54,7 @@ class BeneficiaryFactory extends Factory
     {
         $birthdate = fake()->boolean(75) ?
             fake()->dateTimeBetween('1900-01-01', 'now')
-                ->format('Y-m-d') :
+                ->format('d.m.Y') :
             null;
 
         $gender = fake()->boolean(75) ?
@@ -82,13 +83,21 @@ class BeneficiaryFactory extends Factory
 
     public function withCNP(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'cnp' => rescue(
-                fn () => fake()->cnp(gender: $attributes['gender'], dateOfBirth: $attributes['birthdate']),
-                fn () => fake()->cnp(dateOfBirth: $attributes['birthdate']),
-                false
-            ),
-        ]);
+        return $this->state(function (array $attributes) {
+            if (! $attributes['birthdate']) {
+                return [];
+            }
+            $birthdate = Carbon::createFromFormat('d.m.Y', $attributes['birthdate'])
+                ->format('Y-m-d');
+
+            return [
+                'cnp' => rescue(
+                    fn () => fake()->cnp(gender: $attributes['gender'], dateOfBirth: $birthdate),
+                    fn () => fake()->cnp(dateOfBirth: $birthdate),
+                    false
+                ),
+            ];
+        });
     }
 
     public function withID(): static

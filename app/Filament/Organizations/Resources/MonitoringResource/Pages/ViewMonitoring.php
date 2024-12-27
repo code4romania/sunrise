@@ -10,6 +10,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Filament\Organizations\Resources\MonitoringResource;
 use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
@@ -78,16 +79,16 @@ class ViewMonitoring extends ViewRecord
                                 ])
                                 ->columns()
                                 ->schema([
-                                    TextEntry::make('date')
+                                    DateEntry::make('date')
                                         ->label(__('monitoring.labels.date')),
 
                                     TextEntry::make('number')
                                         ->label(__('monitoring.labels.number')),
 
-                                    TextEntry::make('start_date')
+                                    DateEntry::make('start_date')
                                         ->label(__('monitoring.labels.start_date')),
 
-                                    TextEntry::make('end_date')
+                                    DateEntry::make('end_date')
                                         ->label(__('monitoring.labels.end_date')),
 
                                     TextEntry::make('specialistsTeam.name_role')
@@ -132,9 +133,8 @@ class ViewMonitoring extends ViewRecord
                                                     TextEntry::make('age')
                                                         ->label(__('monitoring.labels.age')),
 
-                                                    TextEntry::make('birthdate')
-                                                        ->label(__('monitoring.labels.birthdate'))
-                                                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('d-m-Y') : $state),
+                                                    DateEntry::make('birthdate')
+                                                        ->label(__('monitoring.labels.birthdate')),
 
                                                     TextEntry::make('aggressor_relationship')
                                                         ->label(__('monitoring.labels.aggressor_relationship')),
@@ -174,7 +174,7 @@ class ViewMonitoring extends ViewRecord
                                 ->schema([
                                     Grid::make()
                                         ->schema([
-                                            TextEntry::make('admittance_date')
+                                            DateEntry::make('admittance_date')
                                                 ->label(__('monitoring.labels.admittance_date')),
 
                                             TextEntry::make('admittance_disposition')

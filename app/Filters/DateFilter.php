@@ -37,11 +37,11 @@ class DateFilter extends BaseFilter
                 ->schema([
                     DatePicker::make('date_from')
                         ->label(__('general.filters.logged_from'))
-                        ->placeholder(today()->subYear()->format('Y-m-d')),
+                        ->placeholder(today()->subYear()->format('d.m.Y')),
 
                     DatePicker::make('date_until')
                         ->label(__('general.filters.logged_until'))
-                        ->placeholder(today()->format('Y-m-d')),
+                        ->placeholder(today()->format('d.m.Y')),
                 ]),
         ]);
 

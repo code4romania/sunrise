@@ -35,6 +35,8 @@ trait LogsActivityOptions
         }
 
         $activity->event = $activity->subject_type;
+
+        $this->loadMissing('beneficiary');
         $activity->subject()->associate($this->beneficiary);
     }
 

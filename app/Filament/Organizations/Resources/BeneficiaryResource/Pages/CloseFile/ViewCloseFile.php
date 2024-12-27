@@ -9,6 +9,7 @@ use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\DateEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\DeleteAction;
@@ -75,16 +76,16 @@ class ViewCloseFile extends ViewRecord
                                         ->url(self::getResource()::getUrl('edit_close_file_details', ['record' => $this->getRecord()])),
                                 ])
                                 ->schema([
-                                    TextEntry::make('date')
+                                    DateEntry::make('date')
                                         ->label(__('beneficiary.section.close_file.labels.date')),
 
                                     TextEntry::make('number')
                                         ->label(__('beneficiary.section.close_file.labels.number')),
 
-                                    TextEntry::make('admittance_date')
+                                    DateEntry::make('admittance_date')
                                         ->label(__('beneficiary.section.close_file.labels.admittance_date')),
 
-                                    TextEntry::make('exit_date')
+                                    DateEntry::make('exit_date')
                                         ->label(__('beneficiary.section.close_file.labels.exit_date')),
 
                                     TextEntry::make('caseManager.name_role')

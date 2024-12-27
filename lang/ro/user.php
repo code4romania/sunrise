@@ -31,6 +31,7 @@ return [
         'admin_permissions' => 'Permisiuni administrare',
         'last_login_at_date_time' => 'Data și ora ultimei accesări',
         'can_be_case_manager' => 'Poate lua rol de manager de caz',
+        'status' => 'Status cont',
     ],
 
     'stats' => [

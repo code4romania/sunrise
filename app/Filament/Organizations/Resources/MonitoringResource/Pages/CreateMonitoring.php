@@ -79,7 +79,7 @@ class CreateMonitoring extends CreateRecord
             ?->load(['children', 'specialistsTeam']);
         $this->children = $this->getChildren();
         foreach ($this->children as &$child) {
-            $child['birthdate'] = $child['birthdate'] ? Carbon::parse($child['birthdate'])->format('d-m-Y') : null;
+            $child['birthdate'] = $child['birthdate'] ? Carbon::parse($child['birthdate'])->format('d.m.Y') : null;
         }
 
         $this->specialistTeam = $this->getSpecialists();

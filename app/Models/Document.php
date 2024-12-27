@@ -32,6 +32,7 @@ class Document extends Model implements HasMedia
     ];
 
     protected $casts = [
+        'date' => 'date',
         'type' => DocumentType::class,
     ];
 

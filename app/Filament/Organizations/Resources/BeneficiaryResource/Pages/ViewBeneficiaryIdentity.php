@@ -8,6 +8,7 @@ use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Infolists\Components\Notice;
@@ -131,9 +132,8 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->label(__('field.gender'))
                         ->placeholder(__('placeholder.select_one')),
 
-                    TextEntry::make('birthdate')
-                        ->label(__('field.birthdate'))
-                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('d-m-Y') : $state),
+                    DateEntry::make('birthdate')
+                        ->label(__('field.birthdate')),
 
                     TextEntry::make('birthplace')
                         ->label(__('field.birthplace'))
@@ -286,9 +286,8 @@ class ViewBeneficiaryIdentity extends ViewRecord
                     TextEntry::make('gender')
                         ->label(__('field.gender')),
 
-                    TextEntry::make('birthdate')
-                        ->label(__('field.birthdate'))
-                        ->formatStateUsing(fn ($state) => $state !== '-' ? $state->format('d-m-Y') : $state),
+                    DateEntry::make('birthdate')
+                        ->label(__('field.birthdate')),
 
                     TextEntry::make('current_address')
                         ->label(__('field.current_address')),

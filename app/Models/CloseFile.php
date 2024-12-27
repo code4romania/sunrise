@@ -35,6 +35,9 @@ class CloseFile extends Model
     ];
 
     protected $casts = [
+        'date' => 'date',
+        'admittance_date' => 'date',
+        'exit_date' => 'date',
         'admittance_reason' => AsEnumCollection::class . ':' . AdmittanceReason::class,
         'close_method' => CloseMethod::class,
     ];

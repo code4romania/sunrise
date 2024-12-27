@@ -8,6 +8,7 @@ use App\Filament\Admin\Pages;
 use App\Filament\Admin\Resources\ServiceResource;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
+use Filament\Actions\MountableAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -18,6 +19,7 @@ use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Table;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -90,6 +92,9 @@ class AdminPanelProvider extends PanelProvider
             ->bootUsing(function () {
                 Page::stickyFormActions();
                 Page::alignFormActionsEnd();
+                MountableAction::configureUsing(function (MountableAction $action) {
+                    $action->modalFooterActionsAlignment(Alignment::Right);
+                });
             })
             ->navigationItems([
                 NavigationItem::make(__('nomenclature.titles.list'))

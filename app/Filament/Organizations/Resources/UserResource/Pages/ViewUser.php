@@ -13,6 +13,7 @@ use App\Filament\Organizations\Resources\UserResource\Actions\DeactivateUserActi
 use App\Filament\Organizations\Resources\UserResource\Actions\ReactivateUserAction;
 use App\Filament\Organizations\Resources\UserResource\Actions\ResendInvitationAction;
 use App\Filament\Organizations\Resources\UserResource\Actions\ResetPasswordAction;
+use App\Infolists\Components\DateTimeEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Models\User;
 use Filament\Infolists\Components\Actions\Action;
@@ -34,8 +35,9 @@ class ViewUser extends ViewRecord
                 ->maxWidth('3xl')
                 ->schema([
                     TextEntry::make('userStatus.status')
-                        ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
-                    TextEntry::make('last_login_at')
+                        ->label(__('user.labels.status')),
+
+                    DateTimeEntry::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time')),
                 ]),
             Section::make(__('user.heading.specialist_details'))

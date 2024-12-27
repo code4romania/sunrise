@@ -20,7 +20,7 @@ class ChildrenFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'birthdate' => fake()->date('d-m-Y'),
+            'birthdate' => fake()->date('d.m.Y'),
             'current_address' => fake()->boolean() ? fake()->address() : null,
             'status' => fake()->boolean() ? fake()->words(asText: true) : null,
         ];

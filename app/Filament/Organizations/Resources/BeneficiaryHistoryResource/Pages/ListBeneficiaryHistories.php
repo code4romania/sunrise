@@ -10,6 +10,7 @@ use App\Filament\Organizations\Resources\BeneficiaryHistoryResource;
 use App\Models\Activity;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use App\Tables\Columns\DateColumn;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -66,9 +67,8 @@ class ListBeneficiaryHistories extends ListRecords
             )
             ->heading(__('beneficiary.section.history.headings.table'))
             ->columns([
-                TextColumn::make('created_at')
-                    ->label(__('beneficiary.section.history.labels.date'))
-                    ->date(),
+                DateColumn::make('created_at')
+                    ->label(__('beneficiary.section.history.labels.date')),
 
                 TextColumn::make('time')
                     ->label(__('beneficiary.section.history.labels.time'))

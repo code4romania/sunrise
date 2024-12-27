@@ -14,18 +14,18 @@ class DateInput extends TextInput
     {
         parent::setUp();
 
-        $this->placeholder('dd-mm-yyyy');
-        $this->mask('99-99-9999');
-        $this->formatStateUsing(fn (?string $state) => $state ? Carbon::parse($state)->format('d-m-Y') : null);
+        $this->mask('99.99.9999');
+        $this->formatStateUsing(fn (?string $state) => $state ? Carbon::parse($state)->format('d.m.Y') : null);
         $this->rules([
-            'date_format:d-m-Y',
+            'date_format:d.m.Y',
             fn (): Closure => function (string $attribute, $value, Closure $fail) {
-                if (Carbon::createFromFormat('d-m-Y', $value)->greaterThan(now())) {
+                if (Carbon::createFromFormat('d.m.Y', $value)->greaterThan(now())) {
                     $fail(__('validation.before_or_equal', [
-                        'date' => now()->format('d-m-Y'),
+                        'date' => now()->format('d.m.Y'),
                     ]));
                 }
             },
         ]);
+        $this->placeholder(__('general.placeholders.date'));
     }
 }

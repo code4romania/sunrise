@@ -11,6 +11,7 @@ use App\Filament\Admin\Resources\UserInstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\ActivateUserAction;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\DeactivateUserAction;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\ResendInvitationAction;
+use App\Infolists\Components\DateTimeEntry;
 use App\Infolists\Components\SectionHeader;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
@@ -72,14 +73,17 @@ class ViewUserInstitution extends ViewRecord
                 ->columns()
                 ->schema([
                     TextEntry::make('userStatus.status')
-                        ->formatStateUsing(fn ($state) => $state === '-' ? $state : $state->label()),
-                    TextEntry::make('updated_at'),
+                        ->label(__('user.labels.status')),
+
+                    DateTimeEntry::make('last_login_at')
+                        ->label(__('user.labels.last_login_at_date_time')),
                 ]),
             Section::make()
                 ->maxWidth('3xl')
                 ->columns()
                 ->schema([
                     SectionHeader::make('edit_user')
+                        ->state(__('user.heading.specialist_details'))
                         ->action(
                             Action::make('edit')
                                 ->label(__('general.action.edit'))

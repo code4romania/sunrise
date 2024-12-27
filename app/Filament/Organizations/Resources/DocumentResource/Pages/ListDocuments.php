@@ -11,6 +11,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\DocumentResource;
 use App\Models\Document;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use App\Tables\Columns\DateColumn;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Support\Enums\ActionSize;
@@ -76,7 +77,7 @@ class ListDocuments extends ListRecords
             ->heading(__('beneficiary.section.documents.title.table'))
             ->actionsColumnLabel(__('general.action.actions'))
             ->columns([
-                TextColumn::make('date')
+                DateColumn::make('date')
                     ->label(__('beneficiary.section.documents.labels.date'))
                     ->sortable(),
 

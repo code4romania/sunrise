@@ -58,9 +58,9 @@ class CreateCloseFile extends EditRecord
     public function beforeFill(): void
     {
         $this->prefillFormData = [
-            'date' => now()->format('Y-m-d'),
-            'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
-            'exit_date' => now()->format('Y-m-d'),
+            'date' => now()->format('d.m.Y'),
+            'admittance_date' => $this->getRecord()->created_at->format('d.m.Y'),
+            'exit_date' => now()->format('d.m.Y'),
             'specialist_id' => $this->getRecord()
                 ->specialistsTeam
                 ->load('role')
@@ -105,18 +105,5 @@ class CreateCloseFile extends EditRecord
             ->label(__('filament-panels::resources/pages/create-record.form.actions.create.label'))
             ->submit('create')
             ->keyBindings(['mod+s']);
-    }
-
-    public function getCloseFilePreFillData(): array
-    {
-        return [
-            'date' => now()->format('Y-m-d'),
-            'admittance_date' => $this->getRecord()->created_at->format('Y-m-d'),
-            'exit_date' => now()->format('Y-m-d'),
-            'user_id' => $this->getRecord()
-                ->managerTeam
-                ->first()
-                ?->user_id,
-        ];
     }
 }
