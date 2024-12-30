@@ -18,6 +18,7 @@ use App\Enums\SocialRelationship;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionService;
@@ -77,17 +78,14 @@ class CounselingSheetWidget extends InfolistWidget
                     SectionHeader::make('counseling_sheet')
                         ->state(__('intervention_plan.headings.counseling_sheet'))
                         ->action(
-                            Action::make('view')
-                                ->label(__('general.action.edit'))
-                                ->icon('heroicon-o-pencil')
+                            EditAction::make('view')
                                 ->url(InterventionPlanResource::getUrl(
                                     'edit_counseling_sheet',
                                     [
                                         'parent' => $this->record->interventionPlan,
                                         'record' => $this->record,
                                     ]
-                                ))
-                                ->link(),
+                                )),
                         ),
                     ...$schema]),
         ];

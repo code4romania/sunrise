@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
 use App\Filament\Admin\Resources\InstitutionResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Institution;
 use Filament\Facades\Filament;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -37,10 +37,7 @@ class OrganizationsRelationManager extends RelationManager
                     SectionHeader::make('center_details')
                         ->state(__('institution.headings.center_details'))
                         ->action(
-                            Action::make('edit_centers')
-                                ->label(__('general.action.edit'))
-                                ->icon('heroicon-o-pencil')
-                                ->link()
+                            EditAction::make('edit_centers')
                                 ->url(InstitutionResource::getUrl('edit_institution_centers', ['record' => $this->getOwnerRecord()]))
                         ),
 

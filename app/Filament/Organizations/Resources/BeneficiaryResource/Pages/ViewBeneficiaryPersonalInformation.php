@@ -9,7 +9,7 @@ use App\Enums\AggressorRelationship;
 use App\Enums\Diseases;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Aggressor;
@@ -91,7 +91,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->columns()
                 ->relationship('details')
                 ->headerActions([
-                    Edit::make('edit')
+                    EditAction::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -240,7 +240,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns()
                 ->headerActions([
-                    Edit::make('edit')
+                    EditAction::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_aggressor', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -360,7 +360,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->columns()
                 ->relationship('antecedents')
                 ->headerActions([
-                    Edit::make('edit')
+                    EditAction::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -404,7 +404,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->columns()
                 ->relationship('flowPresentation')
                 ->headerActions([
-                    Edit::make('edit')
+                    EditAction::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
                 ])
                 ->extraAttributes([

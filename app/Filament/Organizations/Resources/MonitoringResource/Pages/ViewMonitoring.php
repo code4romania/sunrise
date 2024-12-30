@@ -9,7 +9,7 @@ use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Filament\Organizations\Resources\MonitoringResource;
-use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -71,7 +71,7 @@ class ViewMonitoring extends ViewRecord
                         ->schema([
                             Section::make(__('monitoring.headings.details'))
                                 ->headerActions([
-                                    Edit::make('edit_details')
+                                    EditAction::make()
                                         ->url(self::getParentResource()::getUrl('monitoring.edit_details', [
                                             'parent' => $this->parent,
                                             'record' => $this->getRecord(),
@@ -110,7 +110,7 @@ class ViewMonitoring extends ViewRecord
                             Section::make(__('monitoring.headings.child_info'))
                                 ->visible(fn () => $this->getRecord()->children->isNotEmpty())
                                 ->headerActions([
-                                    Edit::make('edit_details')
+                                    EditAction::make()
                                         ->url(self::getParentResource()::getUrl('monitoring.edit_children', [
                                             'parent' => $this->parent,
                                             'record' => $this->getRecord(),
@@ -165,7 +165,7 @@ class ViewMonitoring extends ViewRecord
                         ->schema([
                             Section::make(__('monitoring.headings.general'))
                                 ->headerActions([
-                                    Edit::make('edit_details')
+                                    EditAction::make()
                                         ->url(self::getParentResource()::getUrl('monitoring.edit_general', [
                                             'parent' => $this->parent,
                                             'record' => $this->getRecord(),
