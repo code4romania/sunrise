@@ -476,7 +476,7 @@ return [
         'deaf' => 'Surdocecitate',
         'somatic' => 'Somatic',
         'mental' => 'Mintal',
-       'neuropsychic' => 'Neuropsihic',
+        'neuropsychic' => 'Neuropsihic',
         'hiv_aids' => 'HIV/SIDA',
         'associate' => 'Asociat',
         'rare_diseases' => 'Boli rare',
@@ -553,5 +553,13 @@ return [
         'today' => 'Astăzi',
         'tomorrow' => 'Mâine',
         'one_week' => '7 zile',
+    ],
+
+    'award_method' => [
+        'postal_money_order_at_home' => 'Mandat poștal la domiciliu',
+        'bank_account' => 'Cont bancar',
+        'payroll' => 'Stat de plată',
+        'other' => 'Altă modalitate de acordare',
+
     ],
 ];

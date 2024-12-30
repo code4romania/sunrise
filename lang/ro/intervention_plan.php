@@ -173,6 +173,7 @@ return [
         'actions' => 'Acțiuni',
         'selected_interval' => 'Interval selectat',
         'service_details' => 'Detalii acordare serviciu',
+        'award_methods' => 'Modalitatea de acordare',
     ],
 
     'headings' => [
@@ -249,6 +250,7 @@ return [
         'edit_monthly_plan_title' => 'Editează plan lunar',
         'edit_monthly_plan_services_and_interventions_title' => 'Editează servicii si intervenții',
         'delete_monthly_plan_modal' => 'Șterge plan lunar',
+        'award_methods' => 'Modalitatea de acordare',
     ],
 
     'actions' => [
