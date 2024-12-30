@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\SectionHeader;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrganizationsRelationManager extends RelationManager
 {
+    use PreventSubmitFormOnEnter;
+
     protected static string $relationship = 'organizations';
 
     protected static string $view = 'infolists.infolist-relation-manager';

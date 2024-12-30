@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\P
 
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
@@ -17,6 +18,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class EditBeneficiaryIntervention extends EditRecord
 {
     use HasParentResource;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryInterventionResource::class;
 
