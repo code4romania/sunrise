@@ -8,12 +8,10 @@ use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Filament\Organizations\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
-use App\Infolists\Components\DateTimeEntry;
 use App\Models\OrganizationUserPermissions;
 use App\Models\Role;
 use App\Models\User;
 use App\Tables\Columns\DateTimeColumn;
-use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Group;
@@ -73,6 +71,7 @@ class UserResource extends Resource
     {
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['rolesInOrganization', 'userStatus']))
+            ->heading(__('user.heading.table'))
             ->columns([
                 TextColumn::make('first_name')
                     ->sortable()
@@ -89,7 +88,8 @@ class UserResource extends Resource
 
                 TextColumn::make('userStatus.status')
                     ->sortable()
-                    ->label(__('user.labels.account_status')),
+                    ->label(__('user.labels.account_status'))
+                    ->suffix(fn (User $record) => $record->isNgoAdmin() ? '**' : ''),
 
                 DateTimeColumn::make('last_login_at')
                     ->sortable()
@@ -101,8 +101,7 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->label(__('general.action.view_details')),
-            ])
-            ->heading(__('user.heading.table'));
+            ]);
     }
 
     public static function getPages(): array

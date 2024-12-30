@@ -7,6 +7,7 @@ namespace App\Concerns;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Models\Beneficiary;
+use App\Models\User;
 use Filament\Facades\Filament;
 
 trait HasPermissions
@@ -53,7 +54,7 @@ trait HasPermissions
         return false;
     }
 
-    public function hasAccessToStaff(): bool
+    public function hasAccessToStaff(?User $model = null): bool
     {
         if ($this->isAdmin()) {
             return true;
@@ -61,6 +62,10 @@ trait HasPermissions
 
         if ($this->isNgoAdmin()) {
             return true;
+        }
+
+        if ($model && $model->isNgoAdmin()) {
+            return false;
         }
 
         return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_STAFF);
