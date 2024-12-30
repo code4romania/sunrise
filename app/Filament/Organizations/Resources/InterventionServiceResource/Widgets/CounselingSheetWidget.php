@@ -78,7 +78,7 @@ class CounselingSheetWidget extends InfolistWidget
                     SectionHeader::make('counseling_sheet')
                         ->state(__('intervention_plan.headings.counseling_sheet'))
                         ->action(
-                            EditAction::make('view')
+                            EditAction::make()
                                 ->url(InterventionPlanResource::getUrl(
                                     'edit_counseling_sheet',
                                     [

@@ -27,7 +27,7 @@ class ServiceDescriptionWidget extends InfolistWidget
                 ->maxWidth('3xl')
                 ->columns()
                 ->headerActions([
-                    EditAction::make('edit')
+                    EditAction::make()
                         ->url(InterventionPlanResource::getUrl('edit_intervention_service', [
                             'parent' => $this->record->interventionPlan,
                             'record' => $this->record,

@@ -91,7 +91,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->columns()
                 ->relationship('details')
                 ->headerActions([
-                    EditAction::make('edit')
+                    EditAction::make()
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_personal_information', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -240,7 +240,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
             Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns()
                 ->headerActions([
-                    EditAction::make('edit')
+                    EditAction::make()
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_aggressor', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -360,7 +360,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->columns()
                 ->relationship('antecedents')
                 ->headerActions([
-                    EditAction::make('edit')
+                    EditAction::make()
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_antecedents', ['record' => $record])),
                 ])
                 ->extraAttributes([
@@ -404,7 +404,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                 ->columns()
                 ->relationship('flowPresentation')
                 ->headerActions([
-                    EditAction::make('edit')
+                    EditAction::make()
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_flow_presentation', ['record' => $record])),
                 ])
                 ->extraAttributes([

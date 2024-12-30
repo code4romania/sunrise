@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources;
 
 use App\Models\Monitoring;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,5 +21,4 @@ class MonitoringResource extends Resource
     {
         return $record->number;
     }
-
 }
