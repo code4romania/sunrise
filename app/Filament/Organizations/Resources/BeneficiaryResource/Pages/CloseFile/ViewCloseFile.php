@@ -7,12 +7,13 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFi
 use App\Actions\BackAction;
 use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\DateEntry;
+use App\Infolists\Components\Notice;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\DeleteAction;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
@@ -95,7 +96,33 @@ class ViewCloseFile extends ViewRecord
                         ]),
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
-                        ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->getRecord())),
+                        ->schema([
+                            Section::make()
+                                ->maxWidth('3xl')
+                                ->columns()
+                                ->schema([
+                                    Notice::make('identity')
+                                        ->icon('heroicon-s-information-circle')
+                                        ->state(__('beneficiary.section.identity.heading_description'))
+                                        ->color('primary')
+                                        ->action(
+                                            Action::make('view')
+                                                ->label(__('beneficiary.section.identity.title'))
+                                                ->url(self::$resource::getUrl('view_identity', ['record' => $this->getRecord()]))
+                                                ->link(),
+                                        ),
+
+                                    TextEntry::make('last_name')
+                                        ->label(__('field.last_name')),
+
+                                    TextEntry::make('first_name')
+                                        ->label(__('field.first_name')),
+
+                                    TextEntry::make('cnp')
+                                        ->label(__('field.cnp')),
+                                ]),
+
+                        ]),
                     Tabs\Tab::make(__('beneficiary.section.close_file.headings.general_details'))
                         ->maxWidth('3xl')
                         ->schema([
