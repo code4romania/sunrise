@@ -334,7 +334,10 @@ class CreateBeneficiary extends CreateRecord
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
                 ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema())
-                ->afterStateHydrated(fn (Set $set) => $set('children', $this->parentBeneficiary?->children->toArray())),
+                ->afterStateHydrated(
+                    fn (Set $set) => $this->parentBeneficiary?->children->count() ?
+                        $set('children', $this->parentBeneficiary?->children->toArray()) : null
+                ),
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
@@ -371,8 +374,8 @@ class CreateBeneficiary extends CreateRecord
                                     return $roles;
                                 })
                                 ->disableOptionWhen(fn (Get $get, string $value) => $value === '-1' ?
-                                    array_diff($get('roles'), ['-1']):
-                                    in_array('-1', $get('roles')))
+                                    array_diff($get('roles'), ['-1']) :
+                                    \in_array('-1', $get('roles')))
                                 ->live(),
                         ]),
                 ]),
