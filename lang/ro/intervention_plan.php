@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'labels' => [
-        'empty_state_table' => 'Crează chiar acum un plan și adaugă serviciile de care ar trebui să beneficieze',
+        'empty_state_table' => 'Creează chiar acum un plan și adaugă serviciile de care ar trebui să beneficieze',
         'full_name' => 'Beneficiar',
         'cnp' => 'CNP',
         'address' => 'Domiciliu',
@@ -243,7 +243,7 @@ return [
         'services_count' => 'Nr servicii',
         'interventions_count' => 'Nr intervenții',
         'monthly_plan' => 'Plan de intervenție lunar',
-        'create_monthly_plan_modal' => 'Crează un plan lunar de intervenție nou',
+        'create_monthly_plan_modal' => 'Creează un plan lunar de intervenție nou',
         'dashboard_intervention_table' => 'Sumar intervenții',
         'dashboard_intervention_table_empty_state' => 'Odată deschis primul caz și creat primul plan de intervenție pentru acesta, o listă a intervențiilor va fi afișată în acest tabel.',
         'edit_monthly_plan_title' => 'Editează plan lunar',
@@ -252,7 +252,7 @@ return [
     ],
 
     'actions' => [
-        'create' => 'Crează plan',
+        'create' => 'Creează plan',
         'edit' => 'Editează',
         'edit_intervention_plan' => 'Actualizează detalii',
         'add_service' => 'Adaugă serviciu',
@@ -273,7 +273,7 @@ return [
         'delete_result' => 'Șterge rezultat',
         'add_social_relationship' => 'Adaugă încă o relație socială',
         'view_children_identity' => 'Vezi detalii identitate copii',
-        'create_monthly_plan' => 'Crează un plan',
+        'create_monthly_plan' => 'Creează un plan',
         'create_monthly_plan_from_last' => 'Pornește de la un duplicat',
         'create_monthly_plan_simple' => 'Începe cu un plan necompletată',
         'delete_monthly_plan' => 'Șterge planul lunar',

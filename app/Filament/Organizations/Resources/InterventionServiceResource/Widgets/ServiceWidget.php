@@ -9,8 +9,8 @@ use Kenepa\MultiWidget\MultiWidget;
 class ServiceWidget extends MultiWidget
 {
     public array $widgets = [
-        InterventionsWidget::class,
         CounselingSheetWidget::class,
+        InterventionsWidget::class,
         ServiceDescriptionWidget::class,
     ];
 
