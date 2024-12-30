@@ -369,7 +369,11 @@ class CreateBeneficiary extends CreateRecord
                                     $roles[-1] = __('beneficiary.section.specialists.labels.without_role');
 
                                     return $roles;
-                                }),
+                                })
+                                ->disableOptionWhen(fn (Get $get, string $value) => $value === '-1' ?
+                                    array_diff($get('roles'), ['-1']):
+                                    in_array('-1', $get('roles')))
+                                ->live(),
                         ]),
                 ]),
         ];
