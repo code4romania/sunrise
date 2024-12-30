@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('citizenship')->nullable();
 
             $table->string('relationship')->nullable();
+            $table->string('relationship_other')->nullable();
             $table->tinyInteger('age')->unsigned()->nullable();
             $table->string('gender')->nullable();
             $table->string('civil_status')->nullable();
@@ -42,6 +43,7 @@ return new class extends Migration
             $table->json('drugs')->nullable();
 
             $table->json('legal_history')->nullable();
+            $table->text('legal_history_notes')->nullable();
         });
     }
 };

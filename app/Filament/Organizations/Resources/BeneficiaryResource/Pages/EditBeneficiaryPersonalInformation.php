@@ -243,18 +243,19 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                     TextInput::make('net_income')
                         ->label(__('field.net_income'))
-                        ->placeholder(__('placeholder.net_income'))
+                        ->placeholder(__('placeholder.input_sum'))
                         ->mask('9999999999'),
 
                     Select::make('income')
                         ->label(__('field.income'))
-                        ->placeholder(__('placeholder.select_one'))
+                        ->placeholder(__('placeholder.choose_situation'))
                         ->options(Income::options())
                         ->enum(Income::class),
 
                     Select::make('income_source')
                         ->label(__('beneficiary.section.personal_information.label.income_source'))
                         ->options(IncomeSource::options())
+                        ->placeholder(__('placeholder.choose_one_or_more'))
                         ->multiple(),
 
                     TextInput::make('elder_care_count')

@@ -35,7 +35,7 @@ class FlowPresentation extends Model
 
     protected $casts = [
         'presentation_mode' => PresentationMode::class,
-        'referral_mode' => ReferralMode::class,
+        'referral_mode' => AsEnumCollection::class . ':' . ReferralMode::class,
         'notification_mode' => NotificationMode::class,
         'notifier' => Notifier::class,
         'act_location' => AsEnumCollection::class . ':' . ActLocation::class,

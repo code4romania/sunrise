@@ -19,10 +19,12 @@ enum DisabilityType: string implements HasLabel
     case DEAF = 'deaf';
     case SOMATIC = 'somatic';
     case MENTAL = 'mental';
-    case PSYCHIC = 'psychic';
+    case NEUROPSYCHIC = 'neuropsychic';
     case HIV_AIDS = 'hiv_aids';
     case ASSOCIATE = 'associate';
     case RARE_DISEASES = 'rare_diseases';
+
+    case UNKNOWN = 'unknown';
 
     protected function labelKeyPrefix(): ?string
     {

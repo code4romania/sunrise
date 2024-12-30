@@ -99,6 +99,7 @@ return [
     'workspace' => 'Unitate învățământ/ Loc  muncă',
 
     'aggressor_relationship' => 'Relația victimei cu agresorul',
+    'aggressor_relationship_other' => 'Defineşte altǎ situație',
     'aggressor_age' => 'Vârsta agresorului (ani)',
     'aggressor_gender' => 'Genul agresorului',
     'aggressor_citizenship' => 'Cetățenia agresorului',
@@ -112,6 +113,8 @@ return [
     'aggressor_has_drug_history' => 'Consum de substanțe agresor',
     'aggressor_drugs' => 'Tip de substanțe consumate',
     'aggressor_legal_history' => 'Aspecte legale agresor',
+    'aggressor_legal_history_notes' => 'Observații aspecte legale',
+
     'has_protection_order' => 'Ordin de protecție',
     'electronically_monitored' => 'Monitorizat electronic',
     'protection_order_notes' => 'Observații ordin de protecție',

@@ -23,7 +23,9 @@ use App\Rules\MultipleIn;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -112,6 +114,15 @@ class EditAggressor extends EditRecord
                         ->enum(AggressorRelationship::class)
                         ->live(),
 
+                    Textarea::make('relationship_other')
+                        ->label(__('field.aggressor_relationship_other'))
+                        ->placeholder(__('placeholder.input_text'))
+                        ->extraAttributes([
+                            'class' => 'h-full',
+                        ])
+                        ->visible(fn (Get $get) => AggressorRelationship::isValue($get('relationship'), AggressorRelationship::OTHER))
+                        ->maxLength(100),
+
                     TextInput::make('age')
                         ->label(__('field.aggressor_age'))
                         ->placeholder(__('placeholder.number'))
@@ -158,13 +169,17 @@ class EditAggressor extends EditRecord
                                 ->enum(Ternary::class)
                                 ->live(),
 
-                            Select::make('violence_types')
-                                ->label(__('field.aggressor_violence_types'))
-                                ->placeholder(__('placeholder.select_many'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history')))
-                                ->options(Violence::options())
-                                ->rule(new MultipleIn(Violence::values()))
-                                ->multiple(),
+                            Group::make([
+                                Select::make('violence_types')
+                                    ->label(__('field.aggressor_violence_types'))
+                                    ->placeholder(__('placeholder.select_many'))
+                                    ->options(Violence::options())
+                                    ->rule(new MultipleIn(Violence::values()))
+                                    ->multiple(),
+
+                            ])->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history')))
+                                ->columns(2)
+                                ->columnSpanFull(),
 
                         ]),
 
@@ -173,12 +188,18 @@ class EditAggressor extends EditRecord
                             Select::make('legal_history')
                                 ->label(__('field.aggressor_legal_history'))
                                 ->placeholder(__('placeholder.select_many'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history')))
                                 ->options(AggressorLegalHistory::options())
                                 ->rule(new MultipleIn(AggressorLegalHistory::values()))
                                 ->multiple()
                                 ->live(),
-                        ]),
+                            Textarea::make('legal_history_notes')
+                                ->label(__('field.aggressor_legal_history_notes'))
+                                ->placeholder(__('placeholder.input_text'))
+                                ->extraAttributes([
+                                    'class' => 'h-full',
+                                ])
+                                ->maxLength(100),
+                        ])->visible(fn (Get $get) => Ternary::isYes($get('has_violence_history'))),
 
                     Grid::make()
                         ->schema([

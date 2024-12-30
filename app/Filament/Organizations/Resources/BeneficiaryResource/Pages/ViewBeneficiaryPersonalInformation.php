@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use App\Actions\BackAction;
+use App\Enums\AggressorRelationship;
 use App\Enums\Diseases;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\Actions\Edit;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
+use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Grid;
@@ -266,6 +268,10 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->label(__('field.aggressor_relationship'))
                                 ->placeholder(__('placeholder.select_one')),
 
+                            TextEntry::make('relationship_other')
+                                ->label(__('field.aggressor_relationship_other'))
+                                ->visible(fn (Aggressor $record) => $record->relationship === AggressorRelationship::OTHER),
+
                             TextEntry::make('age')
                                 ->label(__('field.aggressor_age'))
                                 ->placeholder(__('placeholder.number'))
@@ -306,6 +312,8 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                                 ->schema([
                                     TextEntry::make('legal_history')
                                         ->label(__('field.aggressor_legal_history')),
+                                    TextEntry::make('legal_history_notes')
+                                        ->label(__('field.aggressor_legal_history_notes')),
                                 ]),
 
                             Grid::make()

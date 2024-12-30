@@ -25,7 +25,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('referral_mode')->nullable();
+            $table->json('referral_mode')->nullable();
             $table->string('notifier')->nullable();
             $table->string('notification_mode')->nullable();
             $table->string('notifier_other')->nullable();

@@ -11,6 +11,7 @@ return [
     'civil_status' => 'Alege starea civilă',
     'cnp' => 'Cod Numeric Personal',
     'select_many' => 'Alege răspunsurile care se aplică',
+    'input_text' => 'Specificați',
     'select_one' => 'Alege un răspuns',
     'birthplace' => 'Localitatea în care s-a născut',
     'id_number' => 'Introdu număr act',
@@ -34,8 +35,11 @@ return [
     'email' => 'Introdu adresa de email',
     'url' => 'URL',
 
-    'net_income' => 'Alege toate variantele care se potrivesc',
+    'input_sum' => 'Introdu o sumă',
     'observations' => 'Specificați',
+    'choose_situation' => 'Alege o situație',
+
+    'choose_one_or_more' => 'Alege toate variantele care se potrivesc',
 
     // 'accreditation_number' => 'Introdu seria și numărul',
     // 'activity' => 'Introdu activitatea',

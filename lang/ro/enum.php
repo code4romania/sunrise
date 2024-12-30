@@ -476,10 +476,11 @@ return [
         'deaf' => 'Surdocecitate',
         'somatic' => 'Somatic',
         'mental' => 'Mintal',
-        'psychic' => 'Psihic',
+       'neuropsychic' => 'Neuropsihic',
         'hiv_aids' => 'HIV/SIDA',
         'associate' => 'Asociat',
         'rare_diseases' => 'Boli rare',
+        'unknown' => 'Nu știe/Nu răspunde',
 
     ],
 
