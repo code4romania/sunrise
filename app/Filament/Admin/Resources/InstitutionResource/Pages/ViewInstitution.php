@@ -81,6 +81,10 @@ class ViewInstitution extends ViewRecord
             TextEntry::make('main_activity')
                 ->label(__('organization.field.main_activity')),
 
+            TextEntry::make('area')
+                ->label(__('organization.field.area'))
+                ->placeholder(__('organization.placeholders.area')),
+
             Location::make()
                 ->cityLabel(__('organization.field.city'))
                 ->countyLabel(__('organization.field.county'))

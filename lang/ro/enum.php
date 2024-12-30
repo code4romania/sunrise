@@ -440,7 +440,10 @@ return [
     ],
 
     'area_type' => [
+        'international' => 'Internațională',
         'national' => 'Națională',
+        'regional' => 'Regională',
+        'county' => 'Județeană',
         'local' => 'Locală',
     ],
 

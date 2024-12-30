@@ -13,7 +13,12 @@ enum AreaType: string implements HasLabel
     use Enums\Arrayable;
     use Enums\Comparable;
 
+    case INTERNATIONAL = 'international';
     case NATIONAL = 'national';
+
+    case REGIONAL = 'regional';
+
+    case COUNTY = 'county';
     case LOCAL = 'local';
 
     protected function labelKeyPrefix(): ?string
