@@ -32,6 +32,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -181,7 +182,7 @@ class EditCounselingSheet extends EditRecord
             Section::make(__('intervention_plan.headings.final_observations'))
                 ->maxWidth('3xl')
                 ->schema([
-                    Textarea::make('data.observations')
+                    RichEditor::make('data.observations')
                         ->label(__('intervention_plan.labels.final_observation'))
                         ->maxLength(2500)
                         ->columnSpanFull(),
@@ -383,7 +384,7 @@ class EditCounselingSheet extends EditRecord
             Section::make(__('intervention_plan.headings.psychological_evaluation'))
                 ->maxWidth('3xl')
                 ->schema([
-                    Textarea::make('data.first_meeting_psychological_evaluation')
+                    RichEditor::make('data.first_meeting_psychological_evaluation')
                         ->label(__('intervention_plan.labels.first_meeting_psychological_evaluation'))
                         ->maxLength(5000),
                 ]),
