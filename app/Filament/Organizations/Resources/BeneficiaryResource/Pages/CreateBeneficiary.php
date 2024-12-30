@@ -93,7 +93,10 @@ class CreateBeneficiary extends CreateRecord
                     ])
                     ->startOnStep($this->getStartStep())
                     ->cancelAction($this->getCancelFormAction())
-                    ->submitAction($this->getSubmitFormAction())
+                    ->submitAction(
+                        $this->getSubmitFormAction()
+                            ->label(__('general.action.finish'))
+                    )
                     ->skippable($this->hasSkippableSteps()),
             ])
             ->columns(null);
@@ -371,8 +374,8 @@ class CreateBeneficiary extends CreateRecord
                                     return $roles;
                                 })
                                 ->disableOptionWhen(fn (Get $get, string $value) => $value === '-1' ?
-                                    array_diff($get('roles'), ['-1']):
-                                    in_array('-1', $get('roles')))
+                                    array_diff($get('roles'), ['-1']) :
+                                    \in_array('-1', $get('roles')))
                                 ->live(),
                         ]),
                 ]),

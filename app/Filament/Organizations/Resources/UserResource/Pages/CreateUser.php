@@ -9,6 +9,7 @@ use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\UserResource;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -34,6 +35,12 @@ class CreateUser extends CreateRecord
             BackAction::make()
                 ->url(UserResource::getUrl()),
         ];
+    }
+
+    protected function getCreateFormAction(): Action
+    {
+        return parent::getCreateFormAction()
+            ->label(__('user.actions.add_specialist'));
     }
 
     protected function afterSave(): void
