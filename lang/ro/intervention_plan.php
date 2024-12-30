@@ -253,7 +253,6 @@ return [
 
     'actions' => [
         'create' => 'Creează plan',
-        'edit' => 'Editează',
         'edit_intervention_plan' => 'Actualizează detalii',
         'add_service' => 'Adaugă serviciu',
         'add_service_repeater' => 'Adaugă încă un serviciu',

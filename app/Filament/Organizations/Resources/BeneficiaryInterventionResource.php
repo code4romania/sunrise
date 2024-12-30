@@ -11,6 +11,7 @@ use App\Models\Beneficiary;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
+use App\Tables\Actions\EditAction;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
@@ -127,7 +128,7 @@ class BeneficiaryInterventionResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
