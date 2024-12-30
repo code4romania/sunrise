@@ -244,6 +244,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                     $set($this->getCityField(), null);
                     if ($this->getCopyPath()) {
                         $set(\sprintf('../%s.county_id', $this->getCopyPath()), $state);
+                        $set(\sprintf('../%s.city_id', $this->getCopyPath()), null);
                     }
                 })
                 ->when(! $this->hasCity(), fn (Select $component) => $component->columnSpanFull()),
