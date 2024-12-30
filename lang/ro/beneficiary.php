@@ -240,7 +240,9 @@ return [
                 'domestic_violence_during_pregnancy' => '23. Au existat acte de violență domestică în timpul sarcinii?',
 
                 'extended_family_can_provide' => '24. Familia extinsă poate oferi',
+                'extended_family_can_not_provide' => 'Familia extinsă nu poate oferi suport social',
                 'friends_can_provide' => '25. Vecinii/ prietenii pot oferi',
+                'friends_can_not_provide' => 'Vecinii/ prietenii nu pot oferi suport social',
 
                 'moment_of_evaluation' => 'Momentul evaluării situației',
                 'description_of_situation' => 'A se include și situația juridică - acțiuni în instanță, situația socio-familială, situația medicală actuală):',

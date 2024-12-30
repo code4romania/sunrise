@@ -17,11 +17,13 @@ use App\Forms\Components\Select;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
@@ -117,14 +119,32 @@ class EditRiskFactors extends EditRecord
     public static function getSocialSupportSchema(): array
     {
         return [
-            Select::make('extended_family_can_provide')
-                ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
-                ->multiple()
-                ->options(Helps::options()),
-            Select::make('friends_can_provide')
-                ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
-                ->multiple()
-                ->options(Helps::options()),
+            Group::make()
+                ->schema([
+                    Select::make('extended_family_can_provide')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
+                        ->multiple()
+                        ->options(Helps::options())
+                        ->disabled(fn (Get $get) => $get('extended_family_can_not_provide')),
+
+                    Checkbox::make('extended_family_can_not_provide')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_not_provide'))
+                        ->live(),
+                ]),
+
+            Group::make()
+                ->schema([
+                    Select::make('friends_can_provide')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
+                        ->multiple()
+                        ->options(Helps::options())
+                        ->disabled(fn (Get $get) => $get('friends_can_not_provide')),
+
+                    Checkbox::make('friends_can_not_provide')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_not_provide'))
+                        ->live(),
+                ]),
+
         ];
     }
 
@@ -197,10 +217,22 @@ class EditRiskFactors extends EditRecord
         return [
             EnumEntry::make('extended_family_can_provide')
                 ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
+                ->formatStateUsing(
+                    fn (Beneficiary $record, $state) => $record->riskFactors->extended_family_can_not_provide ?
+                        __('beneficiary.section.initial_evaluation.labels.extended_family_can_not_provide') :
+                        $state
+                )
                 ->badge(),
+
             EnumEntry::make('friends_can_provide')
                 ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
+                ->formatStateUsing(
+                    fn (Beneficiary $record, $state) => $record->riskFactors->friends_can_not_provide ?
+                        __('beneficiary.section.initial_evaluation.labels.friends_can_not_provide') :
+                        $state
+                )
                 ->badge(),
+
         ];
     }
 
