@@ -62,6 +62,13 @@ class ListSpecialistsWidget extends BaseWidget
             ->actions([
                 EditAction::make()
                     ->form($this->getFormSchema())
+                    ->fillForm(function (Specialist $record) {
+                        if (!$record->role_id) {
+                            $record->role_id = -1;
+                        }
+
+                        return $record->toArray();
+                    })
                     ->label(__('beneficiary.section.specialists.change_action'))
                     ->modalHeading(__('beneficiary.section.specialists.heading.edit_modal'))
                     ->extraModalFooterActions([
@@ -103,10 +110,12 @@ class ListSpecialistsWidget extends BaseWidget
             Select::make('role_id')
                 ->label(__('beneficiary.section.specialists.labels.roles'))
                 ->options(
-                    UserRole::query()
-                        ->with('role')
-                        ->get()
-                        ->pluck('role.name', 'role.id')
+                    fn (string $operation, ?string $state) => $operation === 'edit' && $state === '-1' ?
+                        [-1 => __('beneficiary.section.specialists.labels.empty_state_role')] :
+                        UserRole::query()
+                            ->with('role')
+                            ->get()
+                            ->pluck('role.name', 'role.id')
                 )
                 ->searchable()
                 ->preload()
@@ -119,7 +128,8 @@ class ListSpecialistsWidget extends BaseWidget
                 ->label(__('beneficiary.section.specialists.labels.name'))
                 ->options(
                     function (Get $get, $state) {
-                        if (! $roleID = (int) $get('role_id')) {
+                        $roleID = (int)$get('role_id');
+                        if ($roleID === -1) {
                             if ($state) {
                                 return [$state => User::find($state)->full_name];
                             }
