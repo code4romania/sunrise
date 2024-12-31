@@ -21,7 +21,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return $user->hasAccessToStaff();
+        return $user->hasAccessToStaff($model);
     }
 
     /**
@@ -37,7 +37,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->hasAccessToStaff();
+        return $user->hasAccessToStaff($model);
     }
 
     /**
