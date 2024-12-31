@@ -71,11 +71,11 @@ class EditBeneficiarySituation extends EditRecord
                 ->relationship('beneficiarySituation')
                 ->schema([
                     TextEntry::make('moment_of_evaluation')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.moment_of_evaluation'))
-                        ->placeholder(__('beneficiary.placeholder.moment_of_evaluation')),
+                        ->label(__('beneficiary.section.initial_evaluation.labels.moment_of_evaluation')),
+
                     TextEntry::make('description_of_situation')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description_of_situation'))
-                        ->placeholder(__('beneficiary.placeholder.description_of_situation')),
+                        ->html(),
                 ]),
         ];
     }
