@@ -24,7 +24,6 @@ class CloseFileFactory extends Factory
 
         return [
             'date' => $this->faker->date(),
-            'number' => $this->faker->randomNumber(),
             'admittance_date' => $this->faker->date(),
             'exit_date' => $this->faker->date(),
             'admittance_reason' => $this->faker->randomElements(AdmittanceReason::values(), rand(0, 5)),

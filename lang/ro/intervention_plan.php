@@ -174,6 +174,7 @@ return [
         'actions' => 'Acțiuni',
         'selected_interval' => 'Interval selectat',
         'service_details' => 'Detalii acordare serviciu',
+        'intervention_details' => 'Detalii acordare intervenții',
     ],
 
     'headings' => [
@@ -333,8 +334,6 @@ return [
             'observations' => 'Specificați',
             'add_details' => 'Adaugă detalii',
             'select_age' => 'Alege un an',
-
-
 
         ],
 

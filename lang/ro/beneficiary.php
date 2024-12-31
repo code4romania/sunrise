@@ -423,9 +423,9 @@ return [
                 'admittance_reason' => 'Motivul admiterii în Centru',
                 'admittance_details' => 'Detalii motiv admitere',
                 'close_method' => 'Modalitatea de închidere a cazului',
-                'institution_name' => 'Numele instituției',
-                'beneficiary_request' => 'Descrie motivul beneficiarei',
-                'other_details' => 'Descrie altă situație',
+                'institution_name' => 'Specificǎ instituția/serviciul unde s-a realizat transferul',
+                'beneficiary_request' => 'Specificǎ motivul beneficiarei',
+                'other_details' => 'Specificǎ altă situație',
                 'close_situation' => 'Situația cazului la închidere',
                 'close_date' => 'Închis la data',
                 'close_method_widget' => 'Modalitatea de închidere',
@@ -440,9 +440,10 @@ return [
             ],
             'placeholders' => [
                 'admittance_details' => 'Adaugă detalii referitoare la motivul admiterii',
-                'institution_name' => 'Adaugă numele instituției la care s-a transferat beneficiara',
+                'institution_name' => 'Introdu instituția/serviciului',
                 'add_details' => 'Adaugă detalii',
                 'close_situation' => 'Descrieți situația cazului la închidere',
+                '',
             ],
 
             'notifications' => [

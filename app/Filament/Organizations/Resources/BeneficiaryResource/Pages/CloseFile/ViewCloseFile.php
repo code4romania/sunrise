@@ -79,10 +79,6 @@ class ViewCloseFile extends ViewRecord
                                 ->schema([
                                     DateEntry::make('date')
                                         ->label(__('beneficiary.section.close_file.labels.date')),
-
-                                    TextEntry::make('number')
-                                        ->label(__('beneficiary.section.close_file.labels.number')),
-
                                     DateEntry::make('admittance_date')
                                         ->label(__('beneficiary.section.close_file.labels.admittance_date')),
 

@@ -190,7 +190,7 @@ class ViewMonthlyPlan extends ViewRecord
                                                 ]),
 
                                             TextEntry::make('service_details')
-                                                ->label(__('intervention_plan.labels.service_details'))
+                                                ->label(__('intervention_plan.labels.intervention_details'))
                                                 ->columnSpanFull(),
                                         ]),
                                 ]),

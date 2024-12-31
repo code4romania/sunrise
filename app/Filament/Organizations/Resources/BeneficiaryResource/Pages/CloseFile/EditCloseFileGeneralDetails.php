@@ -92,7 +92,7 @@ class EditCloseFileGeneralDetails extends EditRecord
 
             RichEditor::make('close_situation')
                 ->label(__('beneficiary.section.close_file.labels.close_situation'))
-                ->placeholder(__('beneficiary.section.close_file.placeholder.close_situation'))->columnSpanFull()
+                ->placeholder(__('beneficiary.section.close_file.placeholders.close_situation'))->columnSpanFull()
                 ->maxLength(2500),
 
         ];

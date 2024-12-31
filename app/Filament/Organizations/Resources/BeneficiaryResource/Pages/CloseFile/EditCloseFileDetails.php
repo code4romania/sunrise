@@ -61,11 +61,6 @@ class EditCloseFileDetails extends EditRecord
                 ->label(__('beneficiary.section.close_file.labels.date'))
                 ->required(),
 
-            TextInput::make('number')
-                ->label(__('beneficiary.section.close_file.labels.number'))
-                ->maxLength(50)
-                ->required(),
-
             DatePicker::make('admittance_date')
                 ->label(__('beneficiary.section.close_file.labels.admittance_date'))
                 ->required(),
