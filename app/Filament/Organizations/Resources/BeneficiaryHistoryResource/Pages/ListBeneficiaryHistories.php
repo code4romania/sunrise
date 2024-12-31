@@ -7,14 +7,16 @@ namespace App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages;
 use App\Concerns\HasParentResource;
 use App\Enums\ActivityDescription;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource;
+use App\Filters\DateFilter;
 use App\Models\Activity;
 use App\Models\Beneficiary;
+use App\Models\User;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use App\Tables\Columns\DateColumn;
+use App\Tables\Filters\SelectFilter;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,8 +53,8 @@ class ListBeneficiaryHistories extends ListRecords
     public function table(Table $table): Table
     {
         return $table
-            ->query(
-                fn () => Activity::whereMorphedTo('subject', $this->parent)
+            ->modifyQueryUsing(
+                fn (Builder $query) => $query->whereMorphedTo('subject', $this->parent)
                     ->when(
                         ! auth()->user()->hasAccessToAllCases() && ! auth()->user()->isNgoAdmin(),
                         fn (Builder $query) => $query->whereHasMorph(
@@ -108,11 +110,14 @@ class ListBeneficiaryHistories extends ListRecords
                         ? $query->where('description', $state['value'])
                         : $query
                     ),
-            ]);
-    }
 
-    protected function applyFiltersToTableQuery(Builder $query): Builder
-    {
-        return $query;
+                SelectFilter::make('causer_id')
+                    ->label(__('beneficiary.section.history.labels.user'))
+                    ->options(User::getTenantOrganizationUsers()),
+
+                DateFilter::make('created_at')
+                    ->label(__('beneficiary.section.history.labels.date')),
+
+            ]);
     }
 }
