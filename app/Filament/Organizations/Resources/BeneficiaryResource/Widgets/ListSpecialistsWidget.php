@@ -63,7 +63,7 @@ class ListSpecialistsWidget extends BaseWidget
                 EditAction::make()
                     ->form($this->getFormSchema())
                     ->fillForm(function (Specialist $record) {
-                        if (!$record->role_id) {
+                        if (! $record->role_id) {
                             $record->role_id = -1;
                         }
 
@@ -128,7 +128,7 @@ class ListSpecialistsWidget extends BaseWidget
                 ->label(__('beneficiary.section.specialists.labels.name'))
                 ->options(
                     function (Get $get, $state) {
-                        $roleID = (int)$get('role_id');
+                        $roleID = (int) $get('role_id');
                         if ($roleID === -1) {
                             if ($state) {
                                 return [$state => User::find($state)->full_name];
@@ -155,7 +155,11 @@ class ListSpecialistsWidget extends BaseWidget
                             fn (Specialist $specialist) => $specialist->role_id === (int) $get('role_id') && $specialist->user_id !== $record?->user_id
                         )
                         ->map(fn (Specialist $specialist) => $specialist->user_id)
-                        ->contains($value)
+                        ->contains($value) ||
+                        ! User::query()
+                            ->find($value)
+                            ->userStatus
+                            ->isActive()
                 )
                 ->searchable()
                 ->preload()
