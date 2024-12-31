@@ -17,7 +17,7 @@ class EditUser extends EditRecord
     {
         return [
             self::$resource::getUrl() => self::$resource::getBreadcrumb(),
-            self::$resource::getUrl('view', ['record' => $this->record->id]) => $this->record->getFilamentName(),
+            self::$resource::getUrl('view', ['record' => $this->record]) => $this->record->getFilamentName(),
         ];
     }
 
@@ -28,7 +28,7 @@ class EditUser extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return self::$resource::getUrl('view', ['record' => $this->record->id]);
+        return self::$resource::getUrl('view', ['record' => $this->record]);
     }
 
     protected function getHeaderActions(): array
