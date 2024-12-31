@@ -10,8 +10,8 @@ use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -58,10 +58,7 @@ class ViewBeneficiaryIntervention extends ViewRecord
             ->schema([
                 Section::make(__('intervention_plan.headings.intervention_indicators'))
                     ->headerActions([
-                        Action::make('edit_intervention')
-                            ->label(__('general.action.edit'))
-                            ->icon('heroicon-o-pencil')
-                            ->link()
+                        EditAction::make('edit_intervention')
                             ->url(fn () => InterventionServiceResource::getUrl('edit_intervention', [
                                 'parent' => $this->record->interventionService,
                                 'record' => $this->record,

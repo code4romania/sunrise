@@ -311,7 +311,6 @@ return [
         'specialists' => [
             'title' => 'Echipa de caz',
             'add_action' => 'Adaugă membru echipă',
-            'change_action' => 'Modifică',
             'heading' => [
                 'add_modal' => 'Adaugă membru în echipă',
                 'edit_modal' => 'Modifică membru în echipă',

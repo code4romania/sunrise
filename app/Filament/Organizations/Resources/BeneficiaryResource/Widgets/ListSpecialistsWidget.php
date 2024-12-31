@@ -69,7 +69,6 @@ class ListSpecialistsWidget extends BaseWidget
 
                         return $record->toArray();
                     })
-                    ->label(__('beneficiary.section.specialists.change_action'))
                     ->modalHeading(__('beneficiary.section.specialists.heading.edit_modal'))
                     ->extraModalFooterActions([
                         DeleteAction::make()

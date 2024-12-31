@@ -7,6 +7,7 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\UserResource\Pages;
 use App\Forms\Components\Select;
 use App\Models\User;
+use App\Tables\Actions\EditAction;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -126,7 +127,7 @@ class UserResource extends Resource
                     ->multiple(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

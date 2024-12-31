@@ -9,11 +9,10 @@ use App\Enums\RecommendationService;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
-use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\Notice;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
@@ -56,7 +55,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.details.label'))
                                 ->headerActions([
-                                    Edit::make('edit')
+                                    EditAction::make()
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_details',
                                             ['record' => $record]
@@ -77,7 +76,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.violence.label'))
                                 ->headerActions([
-                                    Edit::make('edit')
+                                    EditAction::make()
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_violence',
                                             ['record' => $record]
@@ -94,13 +93,11 @@ class ViewInitialEvaluation extends ViewRecord
                                     SectionHeader::make('riskFactors')
                                         ->state(__('beneficiary.wizard.risk_factors.label'))
                                         ->action(
-                                            Action::make('view')
-                                                ->label(__('general.action.edit'))
+                                            EditAction::make()
                                                 ->url(BeneficiaryResource::getUrl(
                                                     'edit_initial_evaluation_risk_factors',
                                                     ['record' => $this->getRecord()]
-                                                ))
-                                                ->link(),
+                                                )),
                                         ),
 
                                     ...EditRiskFactors::getInfoListSchema(),
@@ -111,7 +108,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.requested_services.label'))
                                 ->headerActions([
-                                    Edit::make('edit')
+                                    EditAction::make()
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_requested_services',
                                             ['record' => $record]
@@ -123,7 +120,7 @@ class ViewInitialEvaluation extends ViewRecord
                         ->schema([
                             Section::make(__('beneficiary.wizard.beneficiary_situation.label'))
                                 ->headerActions([
-                                    Edit::make('edit')
+                                    EditAction::make()
                                         ->url(fn ($record) => BeneficiaryResource::getUrl(
                                             'edit_initial_evaluation_beneficiary_situation',
                                             ['record' => $record]
