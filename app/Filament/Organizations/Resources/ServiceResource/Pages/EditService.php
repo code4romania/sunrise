@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
 use App\Actions\BackAction;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\ServiceResource;
 use App\Filament\Organizations\Resources\ServiceResource\Actions\ChangeStatusAction;
 use Filament\Actions;
@@ -13,6 +14,8 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditService extends EditRecord
 {
+    use PreventSubmitFormOnEnter;
+
     protected static string $resource = ServiceResource::class;
 
     protected function getRedirectUrl(): ?string

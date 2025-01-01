@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
 use App\Actions\BackAction;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
 use App\Filament\Admin\Resources\ServiceResource;
 use Filament\Actions\DeleteAction;
@@ -13,6 +14,8 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditService extends EditRecord
 {
+    use PreventSubmitFormOnEnter;
+
     protected static string $resource = ServiceResource::class;
 
     public function getBreadcrumbs(): array

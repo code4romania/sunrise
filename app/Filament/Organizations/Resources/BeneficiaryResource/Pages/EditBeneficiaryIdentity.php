@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
 use alcea\cnp\Cnp;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToIdentity;
 use App\Enums\AddressType;
 use App\Enums\Citizenship;
@@ -38,6 +39,7 @@ use Illuminate\Validation\Rules\Unique;
 class EditBeneficiaryIdentity extends EditRecord
 {
     use RedirectToIdentity;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 

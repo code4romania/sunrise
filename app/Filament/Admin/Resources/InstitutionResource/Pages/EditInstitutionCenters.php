@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
 use App\Actions\BackAction;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Forms\Components\Repeater;
 use App\Models\Organization;
@@ -16,6 +17,8 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditInstitutionCenters extends EditRecord
 {
+    use PreventSubmitFormOnEnter;
+
     protected static string $resource = InstitutionResource::class;
 
     protected function getRedirectUrl(): ?string

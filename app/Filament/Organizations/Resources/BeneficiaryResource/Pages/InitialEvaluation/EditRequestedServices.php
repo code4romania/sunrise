@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -20,6 +21,7 @@ use Illuminate\Support\Str;
 class EditRequestedServices extends EditRecord
 {
     use RedirectToInitialEvaluation;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 

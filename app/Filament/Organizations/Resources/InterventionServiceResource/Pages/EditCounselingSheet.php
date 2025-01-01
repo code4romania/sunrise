@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
 use App\Actions\BackAction;
+
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\AllowancePerson;
 use App\Enums\CounselingSheet;
 use App\Enums\ExtendedFrequency;
@@ -46,6 +48,8 @@ use Illuminate\Support\Str;
 
 class EditCounselingSheet extends EditRecord
 {
+    use PreventSubmitFormOnEnter;
+
     protected static string $resource = InterventionServiceResource::class;
 
     public function getTitle(): string|Htmlable

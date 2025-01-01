@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
 use App\Actions\BackAction;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\UserResource;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
 class EditUser extends EditRecord
 {
+    use PreventSubmitFormOnEnter;
+
     protected static string $resource = UserResource::class;
 
     public function getBreadcrumbs(): array

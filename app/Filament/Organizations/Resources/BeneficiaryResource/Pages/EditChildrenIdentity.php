@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToIdentity;
 use App\Enums\GenderShortValues;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -27,6 +28,7 @@ use Illuminate\Support\Str;
 class EditChildrenIdentity extends EditRecord
 {
     use RedirectToIdentity;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\Frequency;
 use App\Enums\Violence;
@@ -23,6 +24,7 @@ use Illuminate\Support\Str;
 class EditViolence extends EditRecord
 {
     use RedirectToInitialEvaluation;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 

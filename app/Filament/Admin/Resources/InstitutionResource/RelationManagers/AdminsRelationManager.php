@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
 use App\Tables\Columns\DateTimeColumn;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class AdminsRelationManager extends RelationManager
 {
+    use PreventSubmitFormOnEnter;
+
     protected static string $relationship = 'admins';
 
     public function isReadOnly(): bool

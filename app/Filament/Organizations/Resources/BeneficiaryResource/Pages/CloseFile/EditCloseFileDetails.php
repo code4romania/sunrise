@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToCloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\DatePicker;
@@ -21,6 +22,7 @@ use Illuminate\Support\Str;
 class EditCloseFileDetails extends EditRecord
 {
     use RedirectToCloseFile;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 
