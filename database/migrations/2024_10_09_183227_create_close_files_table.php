@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreignIdFor(Beneficiary::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Specialist::class)->nullable()->constrained()->cascadeOnDelete();
             $table->date('date')->nullable();
-            $table->string('number')->nullable();
             $table->date('admittance_date')->nullable();
             $table->date('exit_date')->nullable();
             $table->string('admittance_reason')->nullable();

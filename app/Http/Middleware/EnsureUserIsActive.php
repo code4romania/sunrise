@@ -39,6 +39,7 @@ class EnsureUserIsActive
                 )
                 ->first();
 
+//            dd($activeOrganization);
             if ($activeOrganization) {
                 auth()->user()->update(['latest_organization_id' => $activeOrganization->organization_id]);
 

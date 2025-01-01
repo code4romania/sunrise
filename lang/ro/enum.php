@@ -423,7 +423,14 @@ return [
         'rental_agreement' => 'Contract închiriere',
         'sale_purchase_agreement' => 'Contract vânzare-cumpărare',
         'iml_certificate' => 'Certificat IML',
+        'court_sentences' => 'Sentințe judecătorești',
         'other' => 'Altele',
+    ],
+    'allowance_person' => [
+
+        'beneficiary' => 'Beneficiara',
+        'other' => 'Altǎ persoanǎ',
+        'unknown' => 'Nu știe/ Nu răspunde',
     ],
 
     'protection_order' => [
@@ -476,7 +483,7 @@ return [
         'deaf' => 'Surdocecitate',
         'somatic' => 'Somatic',
         'mental' => 'Mintal',
-       'neuropsychic' => 'Neuropsihic',
+        'neuropsychic' => 'Neuropsihic',
         'hiv_aids' => 'HIV/SIDA',
         'associate' => 'Asociat',
         'rare_diseases' => 'Boli rare',

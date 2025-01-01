@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
 use App\Actions\BackAction;
+
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Enums\AllowancePerson;
 use App\Enums\CounselingSheet;
 use App\Enums\ExtendedFrequency;
 use App\Enums\FamilyRelationship;
@@ -111,11 +113,13 @@ class EditCounselingSheet extends EditRecord
                 ->schema([
                     Select::make('data.patrimony')
                         ->label(__('intervention_plan.labels.patrimony'))
+                        ->placeholder(__('intervention_plan.placeholders.juridic_file.chose_option'))
                         ->options(Patrimony::options()),
 
                     Select::make('data.possession_mode')
                         ->label(__('intervention_plan.labels.possession_mode'))
                         ->options(PossessionMode::options())
+                        ->placeholder(__('intervention_plan.placeholders.juridic_file.chose_option'))
                         ->live(),
 
                     Textarea::make('data.possession_observation')
@@ -131,6 +135,18 @@ class EditCounselingSheet extends EditRecord
                 ->schema([
                     Group::make()
                         ->schema([
+                            CheckboxList::make('data.copy_documents')
+                                ->label(__('intervention_plan.labels.copy_documents'))
+                                ->options(FileDocumentType::options())
+                                ->live(),
+
+                            Textarea::make('data.copy_documents_observation')
+                                ->label(__('intervention_plan.labels.copy_documents_observation'))
+                                ->maxLength(100)
+                                ->visible(fn (Get $get) => \in_array(FileDocumentType::OTHER->value, $get('data.copy_documents'))),
+                        ]),
+                    Group::make()
+                        ->schema([
                             CheckboxList::make('data.original_documents')
                                 ->label(__('intervention_plan.labels.original_documents'))
                                 ->options(FileDocumentType::options())
@@ -142,18 +158,6 @@ class EditCounselingSheet extends EditRecord
                                 ->visible(fn (Get $get) => \in_array(FileDocumentType::OTHER->value, $get('data.original_documents'))),
                         ]),
 
-                    Group::make()
-                        ->schema([
-                            CheckboxList::make('data.copy_documents')
-                                ->label(__('intervention_plan.labels.copy_documents'))
-                                ->options(FileDocumentType::options())
-                                ->live(),
-
-                            Textarea::make('data.copy_documents_observation')
-                                ->label(__('intervention_plan.labels.copy_documents_observation'))
-                                ->maxLength(100)
-                                ->visible(fn (Get $get) => \in_array(FileDocumentType::OTHER->value, $get('data.copy_documents'))),
-                        ]),
                 ]),
 
             Section::make(__('intervention_plan.headings.institution_contacted'))
@@ -165,6 +169,7 @@ class EditCounselingSheet extends EditRecord
                         ->schema([
                             TextInput::make('institution')
                                 ->label(__('intervention_plan.labels.responsible_institution'))
+                                ->placeholder(__('intervention_plan.placeholders.juridic_file.responsible_institution'))
                                 ->maxLength(100),
 
                             DatePicker::make('contact_date')
@@ -172,11 +177,12 @@ class EditCounselingSheet extends EditRecord
 
                             TextInput::make('phone')
                                 ->label(__('intervention_plan.labels.phone'))
-                                ->tel()
-                                ->maxLength(14),
+                                ->placeholder(__('intervention_plan.placeholders.juridic_file.phone'))
+                                ->maxLength(50),
 
                             TextInput::make('contact_person')
                                 ->label(__('intervention_plan.labels.contact_person'))
+                                ->placeholder(__('intervention_plan.placeholders.juridic_file.contact_person'))
                                 ->maxLength(100),
                         ]),
 
@@ -187,6 +193,7 @@ class EditCounselingSheet extends EditRecord
                 ->schema([
                     RichEditor::make('data.observations')
                         ->label(__('intervention_plan.labels.final_observation'))
+                        ->placeholder(__('intervention_plan.placeholders.juridic_file.final_observation'))
                         ->maxLength(2500)
                         ->columnSpanFull(),
                 ]),
@@ -418,42 +425,42 @@ class EditCounselingSheet extends EditRecord
 
                             Select::make('relationship')
                                 ->label(__('intervention_plan.labels.relationship'))
-                                ->placeholder(__('intervention_plan.placeholders.select'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                 ->options(FamilyRelationship::options()),
 
                             TextInput::make('first_and_last_name')
                                 ->label(__('intervention_plan.labels.first_and_last_name'))
-                                ->placeholder(__('intervention_plan.placeholders.first_and_last_name'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.first_and_last_name'))
                                 ->maxLength(100),
 
                             TextInput::make('age')
                                 ->label(__('intervention_plan.labels.age'))
-                                ->placeholder(__('intervention_plan.placeholders.age'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.age'))
                                 ->mask('999'),
 
                             TextInput::make('locality')
                                 ->label(__('intervention_plan.labels.locality'))
-                                ->placeholder(__('intervention_plan.placeholders.locality'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.locality'))
                                 ->maxLength(100),
 
                             TextInput::make('occupation')
                                 ->label(__('intervention_plan.labels.occupation'))
-                                ->placeholder(__('intervention_plan.placeholders.occupation'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.occupation'))
                                 ->maxLength(100),
 
                             TextInput::make('relationship_observation')
                                 ->label(__('intervention_plan.labels.relationship_observation'))
-                                ->placeholder(__('intervention_plan.placeholders.relationship_observation'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.relationship_observation'))
                                 ->maxLength(250),
 
                             Select::make('support')
                                 ->label(__('intervention_plan.labels.support'))
-                                ->placeholder(__('intervention_plan.placeholders.support'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                 ->options(Ternary::options()),
 
                             TextInput::make('support_observations')
                                 ->label(__('intervention_plan.labels.support_observations'))
-                                ->placeholder(__('intervention_plan.placeholders.observations'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.support_observations'))
                                 ->maxLength(250),
 
                         ]),
@@ -478,22 +485,22 @@ class EditCounselingSheet extends EditRecord
                         ->schema([
                             Select::make('relationship')
                                 ->label(__('intervention_plan.labels.relationship'))
-                                ->placeholder(__('intervention_plan.placeholders.select'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                 ->options(SocialRelationship::options()),
 
                             TextInput::make('full_name')
                                 ->label(__('intervention_plan.labels.person_or_group_name'))
-                                ->placeholder(__('intervention_plan.placeholders.person_or_group_name'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.person_or_group_name'))
                                 ->maxLength(200),
 
                             Select::make('support')
                                 ->label(__('intervention_plan.labels.support'))
-                                ->placeholder(__('intervention_plan.placeholders.select'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                 ->options(Ternary::options()),
 
                             TextInput::make('support_observations')
                                 ->label(__('intervention_plan.labels.support_observations'))
-                                ->placeholder(__('intervention_plan.placeholders.support_observations'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.support_observations'))
                                 ->maxLength(250),
                         ]),
                 ]),
@@ -505,27 +512,27 @@ class EditCounselingSheet extends EditRecord
                         ->schema([
                             Select::make('data.home_type')
                                 ->label(__('intervention_plan.labels.home_type'))
-                                ->placeholder(__('intervention_plan.placeholders.select'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                 ->options(HomeType::options()),
 
                             TextInput::make('data.rooms')
                                 ->label(__('intervention_plan.labels.rooms'))
-                                ->placeholder(__('intervention_plan.placeholders.rooms'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.rooms'))
                                 ->mask('999'),
 
                             TextInput::make('data.peoples')
                                 ->label(__('intervention_plan.labels.peoples'))
-                                ->placeholder(__('intervention_plan.placeholders.peoples'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.peoples'))
                                 ->mask('999'),
 
                             TextInput::make('data.utilities')
                                 ->label(__('intervention_plan.labels.utilities'))
-                                ->placeholder(__('intervention_plan.placeholders.observations'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                                 ->maxLength(250),
 
                             Textarea::make('data.living_observations')
                                 ->label(__('intervention_plan.labels.living_observations'))
-                                ->placeholder(__('intervention_plan.placeholders.add_details'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.add_details'))
                                 ->columnSpanFull()
                                 ->maxLength(1000),
                         ]),
@@ -536,7 +543,7 @@ class EditCounselingSheet extends EditRecord
                 ->schema([
                     Textarea::make('data.professional_experience')
                         ->label(__('intervention_plan.labels.professional_experience'))
-                        ->placeholder(__('intervention_plan.placeholders.add_details'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.add_details'))
                         ->maxWidth('3xl')
                         ->maxLength(1000),
                 ]),
@@ -626,34 +633,34 @@ class EditCounselingSheet extends EditRecord
                                 ->schema([
                                     Select::make('paternity_recognized')
                                         ->label(__('intervention_plan.labels.paternity_recognized'))
-                                        ->placeholder(__('intervention_plan.placeholders.select'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                         ->options(Ternary::options()),
 
                                     Select::make('another_person_care')
                                         ->label(__('intervention_plan.labels.another_person_care'))
-                                        ->placeholder(__('intervention_plan.placeholders.select'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                         ->options(Ternary::options()),
 
                                     TextInput::make('quality_person')
                                         ->label(__('intervention_plan.labels.quality_person'))
-                                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                                         ->maxLength(100),
 
                                     Select::make('protection_measuring')
                                         ->label(__('intervention_plan.labels.protection_measuring'))
-                                        ->placeholder(__('intervention_plan.placeholders.select'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                         ->options(Ternary::options())
                                         ->live(),
 
                                     Select::make('protection_measuring_type')
                                         ->label(__('intervention_plan.labels.protection_measuring_type'))
-                                        ->placeholder(__('intervention_plan.placeholders.select'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                         ->options(ProtectionMeasuringType::options())
                                         ->visible(fn (Get $get) => Ternary::isYes($get('protection_measuring'))),
 
                                     Select::make('establishment_year')
                                         ->label(__('intervention_plan.labels.establishment_year'))
-                                        ->placeholder(__('intervention_plan.placeholders.select_age'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select_age'))
                                         ->options(function () {
                                             $options = [];
                                             for ($year = date('Y'); $year >= 1900; $year--) {
@@ -671,13 +678,19 @@ class EditCounselingSheet extends EditRecord
                                 ->schema([
                                     Select::make('allowance')
                                         ->label(__('intervention_plan.labels.allowance'))
-                                        ->placeholder(__('intervention_plan.placeholders.select'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                         ->options(Ternary::options())
                                         ->live(),
 
+                                    Select::make('allowance_person')
+                                        ->label(__('intervention_plan.labels.allowance_person'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                                        ->options(AllowancePerson::options())
+                                        ->visible(fn (Get $get) => Ternary::isYes($get('allowance'))),
+
                                     Select::make('payment_method')
                                         ->label(__('intervention_plan.labels.payment_method'))
-                                        ->placeholder(__('intervention_plan.placeholders.select'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                         ->options(PaymentMethod::options())
                                         ->visible(fn (Get $get) => Ternary::isYes($get('allowance'))),
                                 ]),
@@ -687,28 +700,28 @@ class EditCounselingSheet extends EditRecord
                                 ->schema([
                                     Select::make('family_medic')
                                         ->label(__('intervention_plan.labels.family_medic'))
-                                        ->placeholder(__('intervention_plan.placeholders.select'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                                         ->options(Ternary::options()),
 
                                     TextInput::make('family_doctor_contact')
                                         ->label(__('intervention_plan.labels.family_doctor_contact'))
-                                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                                         ->maxLength(100),
 
                                     TextInput::make('health_status')
                                         ->label(__('intervention_plan.labels.health_status'))
-                                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                                         ->maxLength(250),
                                 ]),
 
                             TextInput::make('school_coordinator')
                                 ->label(__('intervention_plan.labels.school_coordinator'))
-                                ->placeholder(__('intervention_plan.placeholders.observations'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                                 ->maxLength(500),
 
                             Textarea::make('relationship_details')
                                 ->label(__('intervention_plan.labels.relationship_details'))
-                                ->placeholder(__('intervention_plan.placeholders.add_details'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.add_details'))
                                 ->maxWidth('3xl')
                                 ->maxLength(1000),
                         ]),
@@ -720,87 +733,87 @@ class EditCounselingSheet extends EditRecord
                 ->schema([
                     Select::make('data.communication')
                         ->label(__('intervention_plan.labels.communication'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.communication_observations')
                         ->label(__('intervention_plan.labels.communication_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Select::make('data.socialization')
                         ->label(__('intervention_plan.labels.socialization'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.socialization_observations')
                         ->label(__('intervention_plan.labels.socialization_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Select::make('data.rules_compliance')
                         ->label(__('intervention_plan.labels.rules_compliance'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.rules_compliance_observations')
                         ->label(__('intervention_plan.labels.rules_compliance_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Select::make('data.participation_in_individual_counseling')
                         ->label(__('intervention_plan.labels.participation_in_individual_counseling'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.participation_in_individual_counseling_observations')
                         ->label(__('intervention_plan.labels.participation_in_individual_counseling_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Select::make('data.participation_in_joint_activities')
                         ->label(__('intervention_plan.labels.participation_in_joint_activities'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.participation_in_joint_activities_observations')
                         ->label(__('intervention_plan.labels.participation_in_joint_activities_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Select::make('data.self_management')
                         ->label(__('intervention_plan.labels.self_management'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.self_management_observations')
                         ->label(__('intervention_plan.labels.self_management_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Select::make('data.addictive_behavior')
                         ->label(__('intervention_plan.labels.addictive_behavior'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.addictive_behavior_observations')
                         ->label(__('intervention_plan.labels.addictive_behavior_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Select::make('data.financial_education')
                         ->label(__('intervention_plan.labels.financial_education'))
-                        ->placeholder(__('intervention_plan.placeholders.select'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
                         ->options(Ternary::options()),
 
                     TextInput::make('data.financial_education_observations')
                         ->label(__('intervention_plan.labels.financial_education_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->maxLength(100),
 
                     Textarea::make('data.integration_and_participation_in_social_service_observations')
                         ->label(__('intervention_plan.labels.integration_and_participation_in_social_service_observations'))
-                        ->placeholder(__('intervention_plan.placeholders.observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
                         ->columnSpanFull()
                         ->maxLength(1000),
                 ]),

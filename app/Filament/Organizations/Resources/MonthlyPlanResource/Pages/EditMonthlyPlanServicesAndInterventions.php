@@ -20,6 +20,7 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -192,8 +193,8 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                                 ->maxLength(200),
                         ]),
 
-                    Textarea::make('service_details')
-                        ->label(__('intervention_plan.labels.service_details'))
+                    RichEditor::make('service_details')
+                        ->label(__('intervention_plan.labels.intervention_details'))
                         ->placeholder(__('intervention_plan.placeholders.service_details')),
                 ]),
         ];

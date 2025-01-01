@@ -21,7 +21,6 @@ class CloseFile extends Model
 
     protected $fillable = [
         'date',
-        'number',
         'admittance_date',
         'exit_date',
         'specialist_id',

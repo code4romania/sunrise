@@ -10,6 +10,7 @@ use App\Enums\GeneralStatus;
 use App\Filament\Admin\Resources\RoleResource\Pages;
 use App\Forms\Components\Spacer;
 use App\Models\Role;
+use App\Tables\Actions\EditAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -17,7 +18,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -106,8 +106,7 @@ class RoleResource extends Resource
                     ->options(GeneralStatus::options()),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(__('nomenclature.actions.edit')),
+                EditAction::make(),
             ])
             ->emptyStateHeading(__('nomenclature.labels.empty_state_role_table'))
             ->emptyStateDescription(null)

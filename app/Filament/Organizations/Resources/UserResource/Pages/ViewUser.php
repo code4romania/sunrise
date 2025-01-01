@@ -13,10 +13,10 @@ use App\Filament\Organizations\Resources\UserResource\Actions\DeactivateUserActi
 use App\Filament\Organizations\Resources\UserResource\Actions\ReactivateUserAction;
 use App\Filament\Organizations\Resources\UserResource\Actions\ResendInvitationAction;
 use App\Filament\Organizations\Resources\UserResource\Actions\ResetPasswordAction;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateTimeEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Models\User;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -44,10 +44,8 @@ class ViewUser extends ViewRecord
                 ->columns()
                 ->maxWidth('3xl')
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(self::$resource::getUrl('edit', ['record' => $this->getRecord()]))
-                        ->link(),
+                    EditAction::make()
+                        ->url(self::$resource::getUrl('edit', ['record' => $this->getRecord()])),
 
                 ])
                 ->schema([

@@ -7,7 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
@@ -72,7 +72,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
         return [
             Section::make(__('beneficiary.section.identity.tab.beneficiary'))
                 ->headerActions([
-                    Edit::make('edit')
+                    EditAction::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_identity', ['record' => $record])),
                 ])
                 ->schema(self::identitySchema()),
@@ -210,7 +210,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
         return [
             Section::make(__('beneficiary.section.identity.tab.children'))
                 ->headerActions([
-                    Edit::make('edit')
+                    EditAction::make('edit')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('edit_children', ['record' => $record])),
                 ])
                 ->schema(self::childrenSchema()),

@@ -14,7 +14,7 @@ use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Infolists\Components\Actions\CreateAction;
-use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionMeeting;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
@@ -140,8 +140,7 @@ class ViewMeetings extends ViewRecord
                                 })
                                 ->badge(fn (InterventionMeeting $record) => $record->status)
                                 ->action(
-                                    Edit::make('edit')
-                                        ->icon('heroicon-o-pencil')
+                                    EditAction::make()
                                         ->modalHeading(__('general.action.edit'))
                                         ->form($this->getFormSchema())
                                         ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
