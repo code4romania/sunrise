@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToCloseFile;
 use App\Enums\AdmittanceReason;
 use App\Enums\CloseMethod;
@@ -23,6 +24,7 @@ use Illuminate\Support\Str;
 class EditCloseFileGeneralDetails extends EditRecord
 {
     use RedirectToCloseFile;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 

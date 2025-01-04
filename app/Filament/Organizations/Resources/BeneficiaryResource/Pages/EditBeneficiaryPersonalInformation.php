@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
 use App\Enums\DisabilityDegree;
 use App\Enums\DisabilityType;
@@ -30,6 +31,7 @@ use Illuminate\Support\Str;
 class EditBeneficiaryPersonalInformation extends EditRecord
 {
     use RedirectToPersonalInformation;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 

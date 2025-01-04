@@ -11,6 +11,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateInterventionPlan extends CreateRecord
 {
     use PreventSubmitFormOnEnter;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = InterventionPlanResource::class;
 }

@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages
 
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\ServicesWidget;
@@ -20,6 +21,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class EditInterventionService extends EditRecord
 {
     use HasParentResource;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = InterventionServiceResource::class;
 

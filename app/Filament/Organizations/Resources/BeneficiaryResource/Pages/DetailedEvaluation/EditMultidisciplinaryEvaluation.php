@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\Applicant;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -25,6 +26,7 @@ use Livewire\Component;
 class EditMultidisciplinaryEvaluation extends EditRecord
 {
     use RedirectToDetailedEvaluation;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 
