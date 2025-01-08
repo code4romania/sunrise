@@ -6,9 +6,11 @@ namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\BenefitResource;
-use App\Filament\Admin\Resources\BenefitResource\Widgets\BenefitTypesWidget;
+use App\Infolists\Components\TableEntry;
 use Filament\Actions\EditAction;
-use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -45,15 +47,24 @@ class ViewBenefit extends ViewRecord
         return $this->record->name;
     }
 
-    public function form(Form $form): Form
+    public function infolist(Infolist $infolist): Infolist
     {
-        return $form->schema([]);
-    }
+        return $infolist->schema([
+            Section::make()
+                ->maxWidth('3xl')
+                ->schema([
+                    TableEntry::make('benefitTypes')
+                        ->hiddenLabel()
+                        ->schema([
+                            TextEntry::make('name')
+                                ->label(__('nomenclature.labels.benefit_type_name'))
+                                ->hiddenLabel(),
 
-    protected function getFooterWidgets(): array
-    {
-        return [
-            BenefitTypesWidget::class,
-        ];
+                            TextEntry::make('status')
+                                ->label(__('nomenclature.labels.status'))
+                                ->hiddenLabel(),
+                        ]),
+                ]),
+        ]);
     }
 }
