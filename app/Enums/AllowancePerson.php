@@ -7,17 +7,18 @@ namespace App\Enums;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
-enum PaymentMethod: string implements HasLabel
+enum AllowancePerson: string implements HasLabel
 {
     use Enums\HasLabel;
     use Enums\Arrayable;
     use Enums\Comparable;
-    case POSTAL_OFFICE = 'postal_office';
-    case BANK_ACCOUNT = 'bank_account';
+
+    case BENEFICIARY = 'beneficiary';
     case OTHER = 'other';
+    case UNKNOWN = 'unknown';
 
     public function labelKeyPrefix(): ?string
     {
-        return 'enum.payment_method';
+        return 'enum.allowance_person';
     }
 }

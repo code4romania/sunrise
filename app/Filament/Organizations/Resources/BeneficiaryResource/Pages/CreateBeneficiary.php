@@ -13,6 +13,7 @@ use App\Models\Beneficiary;
 use App\Models\Organization;
 use App\Models\Scopes\BelongsToCurrentTenant;
 use App\Rules\ValidCNP;
+use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
@@ -93,7 +94,10 @@ class CreateBeneficiary extends CreateRecord
                     ])
                     ->startOnStep($this->getStartStep())
                     ->cancelAction($this->getCancelFormAction())
-                    ->submitAction($this->getSubmitFormAction())
+                    ->submitAction(
+                        $this->getSubmitFormAction()
+                            ->label(__('general.action.finish'))
+                    )
                     ->skippable($this->hasSkippableSteps()),
             ])
             ->columns(null);
@@ -270,23 +274,35 @@ class CreateBeneficiary extends CreateRecord
                                                         ->toArray()
                                                 )
                                                 ->withoutGlobalScopes([BelongsToCurrentTenant::class])
-                                                ->with(['effective_residence', 'legal_residence'])
+                                                ->with([
+                                                    'effective_residence',
+                                                    'legal_residence',
+                                                    'children',
+                                                    'aggressors',
+                                                    'details',
+                                                ])
                                                 ->first();
 
                                             $ignoredFields = [
                                                 'id',
                                                 'initial_id',
-                                                'doesnt_have_children',
-                                                'children_total_count',
-                                                'children_care_count',
-                                                'children_under_18_care_count',
-                                                'children_18_care_count',
-                                                'children_accompanying_count',
                                             ];
-                                            foreach ($beneficiary->toArray() as $beneficiaryKey => $beneficiaryValue) {
+
+                                            $beneficiaryArray = $beneficiary->toArray();
+                                            foreach ($beneficiaryArray['children'] as &$child) {
+                                                $child['birthdate'] = $child['birthdate'] ? Carbon::parse($child['birthdate'])->format('d.m.Y') : null;
+                                                $child['age'] = $child['birthdate'] ? Carbon::createFromFormat('d.m.Y', $child['birthdate'])->diffInYears(now()) : null;
+                                            }
+
+                                            foreach ($beneficiaryArray as $beneficiaryKey => $beneficiaryValue) {
                                                 if (\in_array($beneficiaryKey, $ignoredFields)) {
                                                     continue;
                                                 }
+
+                                                if ($beneficiaryKey === 'birthdate' && $beneficiaryValue) {
+                                                    $beneficiaryValue = Carbon::parse($beneficiaryValue)->format('d.m.Y');
+                                                }
+
                                                 $set($beneficiaryKey, $beneficiaryValue);
                                             }
 
@@ -334,7 +350,16 @@ class CreateBeneficiary extends CreateRecord
             Step::make('children')
                 ->label(__('beneficiary.wizard.children.label'))
                 ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema())
-                ->afterStateHydrated(fn (Set $set) => $set('children', $this->parentBeneficiary?->children->toArray())),
+                ->afterStateHydrated(
+                    function (Set $set) {
+                        $children = $this->parentBeneficiary?->children->toArray() ?? [];
+                        foreach ($children as &$child) {
+                            $child['birthdate'] = $child['birthdate'] ? Carbon::parse($child['birthdate'])->format('d.m.Y') : null;
+                            $child['age'] = $child['birthdate'] ? Carbon::createFromFormat('d.m.Y', $child['birthdate'])->diffInYears(now()) : null;
+                        }
+                        $set('children', $children);
+                    }
+                ),
 
             Step::make('personal_information')
                 ->label(__('beneficiary.wizard.personal_information.label'))
@@ -371,8 +396,8 @@ class CreateBeneficiary extends CreateRecord
                                     return $roles;
                                 })
                                 ->disableOptionWhen(fn (Get $get, string $value) => $value === '-1' ?
-                                    array_diff($get('roles'), ['-1']):
-                                    in_array('-1', $get('roles')))
+                                    array_diff($get('roles'), ['-1']) :
+                                    \in_array('-1', $get('roles')))
                                 ->live(),
                         ]),
                 ]),

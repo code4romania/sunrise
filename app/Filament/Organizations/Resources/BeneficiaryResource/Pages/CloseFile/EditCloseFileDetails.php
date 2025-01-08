@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToCloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\DatePicker;
@@ -21,6 +22,7 @@ use Illuminate\Support\Str;
 class EditCloseFileDetails extends EditRecord
 {
     use RedirectToCloseFile;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 
@@ -59,11 +61,6 @@ class EditCloseFileDetails extends EditRecord
         return [
             DatePicker::make('date')
                 ->label(__('beneficiary.section.close_file.labels.date'))
-                ->required(),
-
-            TextInput::make('number')
-                ->label(__('beneficiary.section.close_file.labels.number'))
-                ->maxLength(50)
                 ->required(),
 
             DatePicker::make('admittance_date')

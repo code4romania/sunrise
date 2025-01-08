@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
 use App\Concerns\HasParentResource;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToMonitoring;
 use App\Enums\ChildAggressorRelationship;
 use App\Enums\MaintenanceSources;
@@ -28,6 +29,7 @@ class EditChildren extends EditRecord
 {
     use HasParentResource;
     use RedirectToMonitoring;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = MonitoringResource::class;
 

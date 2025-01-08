@@ -64,6 +64,7 @@ return [
         'reset_password' => 'Resetează parola',
         'resend_invitation' => 'Retrimite invitația',
         'activate' => 'Reactivează cont',
+        'add_specialist' => 'Adaugă specialist',
     ],
 
     'action_resend_invitation_confirm' => [

@@ -12,7 +12,7 @@ class Dashboard extends BaseDashboard
     public function getHeading(): string | Htmlable
     {
         return __('dashboard.welcome', [
-            'name' => auth()->user()->first_name,
+            'name' => auth()->user()->last_name,
         ]);
     }
 

@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\MonthlyPlanResource;
 use App\Forms\Components\DatePicker;
@@ -21,6 +22,7 @@ use Illuminate\Support\Str;
 class EditMonthlyPlanDetails extends EditRecord
 {
     use HasParentResource;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = MonthlyPlanResource::class;
 

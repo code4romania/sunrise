@@ -9,13 +9,13 @@ use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\MonthlyPlanResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
 use App\Infolists\Components\TableEntry;
 use App\Models\Specialist;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Carbon\Carbon;
 use Filament\Actions\DeleteAction;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
@@ -87,9 +87,7 @@ class ViewMonthlyPlan extends ViewRecord
                                     SectionHeader::make('monthly_plan_details')
                                         ->state(__('intervention_plan.headings.monthly_plan_details'))
                                         ->action(
-                                            Action::make('edit_details')
-                                                ->label(__('general.action.edit'))
-                                                ->link()
+                                            EditAction::make()
                                                 ->url(
                                                     InterventionPlanResource::getUrl('edit_monthly_plan_details', [
                                                         'parent' => $this->parent,
@@ -137,9 +135,7 @@ class ViewMonthlyPlan extends ViewRecord
                                     SectionHeader::make('monthly_plan_details')
                                         ->state(__('intervention_plan.headings.services_and_interventions'))
                                         ->action(
-                                            Action::make('edit_details')
-                                                ->label(__('general.action.edit'))
-                                                ->link()
+                                            EditAction::make()
                                                 ->url(
                                                     InterventionPlanResource::getUrl('edit_monthly_plan_services_and_interventions', [
                                                         'parent' => $this->parent,
@@ -194,7 +190,7 @@ class ViewMonthlyPlan extends ViewRecord
                                                 ]),
 
                                             TextEntry::make('service_details')
-                                                ->label(__('intervention_plan.labels.service_details'))
+                                                ->label(__('intervention_plan.labels.intervention_details'))
                                                 ->columnSpanFull(),
                                         ]),
                                 ]),

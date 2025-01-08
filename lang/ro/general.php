@@ -15,6 +15,7 @@ return [
         'delete' => 'Șterge',
         'view_observations' => 'Vezi observații',
         'change' => 'Modifică',
+        'finish' => 'Finalizează',
     ],
 
     'filters' => [
@@ -35,6 +36,6 @@ return [
     ],
 
     'placeholders' => [
-        'date' => 'zz-ll-aaaa'
-    ]
+        'date' => 'zz-ll-aaaa',
+    ],
 ];

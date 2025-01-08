@@ -83,7 +83,6 @@ return [
         'add_role' => 'Adaugă rol specialist',
         'edit_role' => 'Modifică rol specialist',
         'delete_role' => 'Șterge rol',
-        'edit' => 'Modifică',
         'add_benefit' => 'Adaugă beneficiu social',
         'add_benefit_type' => 'Adaugă încă un tip',
         'edit_benefit' => 'Modifică beneficiu',

@@ -37,7 +37,7 @@ return [
         'copy_documents_observation' => 'Observații acte în copie depuse la dosar (altele)',
         'institution' => 'Instituția',
         'contact_date' => 'Data contactării',
-        'phone' => 'Telefon',
+        'phone' => 'Contact(telefon/email)',
         'contact_person' => 'Persoana de contact',
         'final_observation' => 'Observații finale evaluare',
 
@@ -134,10 +134,11 @@ return [
         'protection_measuring_type' => 'Tip măsură de protecție',
         'establishment_year' => 'Anul instituirii',
         'allowance' => 'Alocație de stat',
+        'allowance_person' => 'Reprezentant alocație',
         'payment_method' => 'Modalitate de plată',
         'family_medic' => 'Medic de familie',
         'family_doctor_contact' => 'Date de contact medic de familie',
-        'health_status' => 'Stare de sănătate',
+        'health_status' => 'Probleme de sănătate',
         'school_coordinator' => 'Dacă este școlarizat, detalii învățător/diriginte',
         'relationship_details' => 'Caracterizarea relației',
         'communication' => 'Comunicare',
@@ -174,6 +175,7 @@ return [
         'selected_interval' => 'Interval selectat',
         'service_details' => 'Detalii acordare serviciu',
         'award_methods' => 'Modalitatea de acordare',
+        'intervention_details' => 'Detalii acordare intervenții',
     ],
 
     'headings' => [
@@ -191,7 +193,7 @@ return [
         'patrimony_data' => 'Date patrimoniu',
         'file_documents' => 'Acte depuse la dosar',
         'final_observations' => 'Observații finale',
-        'institution_contacted' => 'Instituții contactate',
+        'institution_contacted' => 'Instituții contactate în baza planului de intervenție',
         'medical_details' => 'Date medicale',
         'history' => 'Istoric ',
         'violence_forms' => 'Forme de violență',
@@ -255,7 +257,6 @@ return [
 
     'actions' => [
         'create' => 'Creează plan',
-        'edit' => 'Editează',
         'edit_intervention_plan' => 'Actualizează detalii',
         'add_service' => 'Adaugă serviciu',
         'add_service_repeater' => 'Adaugă încă un serviciu',
@@ -312,5 +313,31 @@ return [
         'monthly_plan_observations' => 'Specifică observații',
         'search_by_beneficiary_or_specialist' => 'Caută caz sau specialist',
         'service_details' => 'Adaugă orice detalii relevante acordării intervenției sau intervențiilor',
+        'juridic_file' => [
+            'chose_option' => 'Alege un rǎspuns',
+            'responsible_institution' => 'Introdu o instituție',
+            'contact_date' => 'Alege o dată',
+            'phone' => 'Intordu date de contact ',
+            'contact_person' => 'Introdu nume persoanǎ',
+            'final_observation' => 'Adaugǎ detalii',
+
+        ],
+        'social_file' => [
+            'select' => 'Alege un răspuns',
+            'first_and_last_name' => 'Introdu numele persoanei',
+            'age' => 'Introdu vârsta',
+            'locality' => 'Introdu localitatea',
+            'occupation' => 'Introdu ocupația',
+            'relationship_observation' => 'Specificați relația',
+            'support_observations' => 'Specificați',
+            'person_or_group_name' => 'Introdu numele sau denumirea',
+            'rooms' => 'Total încăperi de locuit',
+            'peoples' => 'Introdu un număr',
+            'observations' => 'Specificați',
+            'add_details' => 'Adaugă detalii',
+            'select_age' => 'Alege un an',
+
+        ],
+
     ],
 ];

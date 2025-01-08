@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
 use App\Enums\AggressorLegalHistory;
 use App\Enums\AggressorRelationship;
@@ -36,6 +37,7 @@ use Illuminate\Support\Str;
 class EditAggressor extends EditRecord
 {
     use RedirectToPersonalInformation;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 

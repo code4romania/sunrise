@@ -18,6 +18,7 @@ use App\Enums\SocialRelationship;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionService;
@@ -77,17 +78,14 @@ class CounselingSheetWidget extends InfolistWidget
                     SectionHeader::make('counseling_sheet')
                         ->state(__('intervention_plan.headings.counseling_sheet'))
                         ->action(
-                            Action::make('view')
-                                ->label(__('general.action.edit'))
-                                ->icon('heroicon-o-pencil')
+                            EditAction::make()
                                 ->url(InterventionPlanResource::getUrl(
                                     'edit_counseling_sheet',
                                     [
                                         'parent' => $this->record->interventionPlan,
                                         'record' => $this->record,
                                     ]
-                                ))
-                                ->link(),
+                                )),
                         ),
                     ...$schema]),
         ];
@@ -114,6 +112,14 @@ class CounselingSheetWidget extends InfolistWidget
                 ->schema([
                     Group::make()
                         ->schema([
+                            EnumEntry::make('data.copy_documents')
+                                ->label(__('intervention_plan.labels.copy_documents'))
+                                ->enumClass(FileDocumentType::class),
+                            TextEntry::make('data.copy_documents_observation')
+                                ->label(__('intervention_plan.labels.copy_documents_observation')),
+                        ]),
+                    Group::make()
+                        ->schema([
                             EnumEntry::make('data.original_documents')
                                 ->label(__('intervention_plan.labels.original_documents'))
                                 ->enumClass(FileDocumentType::class),
@@ -121,14 +127,6 @@ class CounselingSheetWidget extends InfolistWidget
                                 ->label(__('intervention_plan.labels.original_documents_observation')),
                         ]),
 
-                    Group::make()
-                        ->schema([
-                            EnumEntry::make('data.copy_documents')
-                                ->label(__('intervention_plan.labels.copy_documents'))
-                                ->enumClass(FileDocumentType::class),
-                            TextEntry::make('data.copy_documents_observation')
-                                ->label(__('intervention_plan.labels.copy_documents_observation')),
-                        ]),
                 ]),
 
             Section::make(__('intervention_plan.headings.institution_contacted'))

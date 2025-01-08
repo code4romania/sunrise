@@ -19,6 +19,8 @@ enum FileDocumentType: string implements HasLabel
     case RENTAL_AGREEMENT = 'rental_agreement';
     case SALE_PURCHASE_AGREEMENT = 'sale_purchase_agreement';
     case IML_CERTIFICATE = 'iml_certificate';
+
+    case COURT_SENTENCES = 'court_sentences';
     case OTHER = 'other';
 
     protected function labelKeyPrefix(): ?string

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
 use App\Enums\DisabilityDegree;
 use App\Enums\DisabilityType;
@@ -30,6 +31,7 @@ use Illuminate\Support\Str;
 class EditBeneficiaryPersonalInformation extends EditRecord
 {
     use RedirectToPersonalInformation;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = BeneficiaryResource::class;
 
@@ -114,19 +116,19 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                             Textarea::make('observations_chronic_diseases')
                                 ->label(__('beneficiary.section.personal_information.label.observations_chronic_diseases'))
                                 ->columnSpanFull()
-                                ->visible(fn (Get $get) => \in_array(Diseases::CHRONIC_DISEASES->value, $get('health_status')))
+                                ->visible(fn (Get $get) => $get('health_status') && \in_array(Diseases::CHRONIC_DISEASES->value, $get('health_status')))
                                 ->maxLength(250),
 
                             Textarea::make('observations_degenerative_diseases')
                                 ->label(__('beneficiary.section.personal_information.label.observations_degenerative_diseases'))
                                 ->columnSpanFull()
-                                ->visible(fn (Get $get) => \in_array(Diseases::DEGENERATIVE_DISEASES->value, $get('health_status')))
+                                ->visible(fn (Get $get) => $get('health_status') && \in_array(Diseases::DEGENERATIVE_DISEASES->value, $get('health_status')))
                                 ->maxLength(250),
 
                             Textarea::make('observations_mental_illness')
                                 ->label(__('beneficiary.section.personal_information.label.observations_mental_illness'))
                                 ->columnSpanFull()
-                                ->visible(fn (Get $get) => \in_array(Diseases::MENTAL_ILLNESSES->value, $get('health_status')))
+                                ->visible(fn (Get $get) => $get('health_status') && \in_array(Diseases::MENTAL_ILLNESSES->value, $get('health_status')))
                                 ->maxLength(250),
                         ]),
 
