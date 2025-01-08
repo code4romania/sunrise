@@ -8,9 +8,9 @@ use App\Actions\BackAction;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\ActivateInstitution;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\InactivateInstitution;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\Location;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -51,10 +51,7 @@ class ViewInstitution extends ViewRecord
         return $infolist->schema([
             Section::make(__('institution.headings.institution_details'))
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->icon('heroicon-o-pencil')
-                        ->link()
+                    EditAction::make()
                         ->url(self::$resource::getUrl('edit_institution_details', ['record' => $this->getRecord()])),
                 ])
                 ->maxWidth('3xl')

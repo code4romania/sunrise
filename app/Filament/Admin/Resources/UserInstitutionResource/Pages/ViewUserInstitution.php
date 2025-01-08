@@ -11,9 +11,9 @@ use App\Filament\Admin\Resources\UserInstitutionResource;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\ActivateUserAction;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\DeactivateUserAction;
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\ResendInvitationAction;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateTimeEntry;
 use App\Infolists\Components\SectionHeader;
-use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -85,9 +85,7 @@ class ViewUserInstitution extends ViewRecord
                     SectionHeader::make('edit_user')
                         ->state(__('user.heading.specialist_details'))
                         ->action(
-                            Action::make('edit')
-                                ->label(__('general.action.edit'))
-                                ->link()
+                            EditAction::make()
                                 ->url(self::getParentResource()::getUrl('user.edit', [
                                     'parent' => $this->parent,
                                     'record' => $this->getRecord(),

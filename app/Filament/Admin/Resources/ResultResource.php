@@ -7,12 +7,12 @@ namespace App\Filament\Admin\Resources;
 use App\Enums\GeneralStatus;
 use App\Filament\Admin\Resources\ResultResource\Pages;
 use App\Models\Result;
+use App\Tables\Actions\EditAction;
 use App\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -66,8 +66,7 @@ class ResultResource extends Resource
                     ->options(GeneralStatus::options()),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(__('general.action.change')),
+                EditAction::make(),
             ])
             ->emptyStateHeading(__('nomenclature.headings.empty_state_results_table'))
             ->emptyStateDescription(null)

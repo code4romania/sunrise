@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
+use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\MonthlyPlanResource;
 use App\Forms\Components\DatePicker;
@@ -19,6 +20,7 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -31,6 +33,7 @@ use Illuminate\Support\Str;
 class EditMonthlyPlanServicesAndInterventions extends EditRecord
 {
     use HasParentResource;
+    use PreventSubmitFormOnEnter;
 
     protected static string $resource = MonthlyPlanResource::class;
 
@@ -190,8 +193,8 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                                 ->maxLength(200),
                         ]),
 
-                    Textarea::make('service_details')
-                        ->label(__('intervention_plan.labels.service_details'))
+                    RichEditor::make('service_details')
+                        ->label(__('intervention_plan.labels.intervention_details'))
                         ->placeholder(__('intervention_plan.placeholders.service_details')),
                 ]),
         ];

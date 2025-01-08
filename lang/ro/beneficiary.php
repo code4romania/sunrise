@@ -240,7 +240,9 @@ return [
                 'domestic_violence_during_pregnancy' => '23. Au existat acte de violență domestică în timpul sarcinii?',
 
                 'extended_family_can_provide' => '24. Familia extinsă poate oferi',
+                'extended_family_can_not_provide' => 'Familia extinsă nu poate oferi suport social',
                 'friends_can_provide' => '25. Vecinii/ prietenii pot oferi',
+                'friends_can_not_provide' => 'Vecinii/ prietenii nu pot oferi suport social',
 
                 'moment_of_evaluation' => 'Momentul evaluării situației',
                 'description_of_situation' => 'A se include și situația juridică - acțiuni în instanță, situația socio-familială, situația medicală actuală):',
@@ -311,7 +313,6 @@ return [
         'specialists' => [
             'title' => 'Echipa de caz',
             'add_action' => 'Adaugă membru echipă',
-            'change_action' => 'Modifică',
             'heading' => [
                 'add_modal' => 'Adaugă membru în echipă',
                 'edit_modal' => 'Modifică membru în echipă',
@@ -424,9 +425,9 @@ return [
                 'admittance_reason' => 'Motivul admiterii în Centru',
                 'admittance_details' => 'Detalii motiv admitere',
                 'close_method' => 'Modalitatea de închidere a cazului',
-                'institution_name' => 'Numele instituției',
-                'beneficiary_request' => 'Descrie motivul beneficiarei',
-                'other_details' => 'Descrie altă situație',
+                'institution_name' => 'Specificǎ instituția/serviciul unde s-a realizat transferul',
+                'beneficiary_request' => 'Specificǎ motivul beneficiarei',
+                'other_details' => 'Specificǎ altă situație',
                 'close_situation' => 'Situația cazului la închidere',
                 'close_date' => 'Închis la data',
                 'close_method_widget' => 'Modalitatea de închidere',
@@ -441,9 +442,10 @@ return [
             ],
             'placeholders' => [
                 'admittance_details' => 'Adaugă detalii referitoare la motivul admiterii',
-                'institution_name' => 'Adaugă numele instituției la care s-a transferat beneficiara',
+                'institution_name' => 'Introdu instituția/serviciului',
                 'add_details' => 'Adaugă detalii',
                 'close_situation' => 'Descrieți situația cazului la închidere',
+                '',
             ],
 
             'notifications' => [

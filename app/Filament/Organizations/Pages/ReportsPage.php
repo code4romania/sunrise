@@ -21,10 +21,6 @@ use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\HtmlString;
-use function Filament\Support\get_color_css_variables;
 
 class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
 {
@@ -82,70 +78,47 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
     {
         return [
             Forms\Components\Section::make()
-                ->columns(4)
+                ->columns(12)
                 ->schema([
                     Select::make('report_type')
                         ->key('report_type')
                         ->label(__('report.labels.report_type'))
-                        ->columnSpan(2)
+                        ->columnSpan(6)
                         ->options(ReportType::options())
                         ->searchable(),
 
                     DatePicker::make('start_date')
                         ->label(__('report.labels.start_date'))
                         ->default(now()->startOfMonth())
+                        ->columnSpan(3)
                         ->maxDate(fn (Get $get) => $get('end_date') ? $get('end_date') : now())
                         ->live(),
 
                     DatePicker::make('end_date')
                         ->label(__('report.labels.end_date'))
                         ->default(now())
+                        ->columnSpan(3)
                         ->minDate(fn (Get $get) => $get('start_date') ?? null)
                         ->maxDate(now())
                         ->live(),
 
                     Checkbox::make('add_cases_in_monitoring')
-                        ->label(function () {
-                            $icon = 'heroicon-o-information-circle';
-
-                            $iconClasses = Arr::toCssClasses([
-                                'fi-in-text-item-icon h-5 w-5 shrink-0',
-                                'text-custom-500',
-                            ]);
-
-                            $iconColor = 'grey';
-                            $iconStyles = Arr::toCssStyles([
-                                get_color_css_variables($iconColor, shades: [500]) => $iconColor !== 'gray',
-                            ]);
-
-                            $label = Blade::render('
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 text-sm">
-                                        <span title="{{ $helper }}">{{ $label }}</span>
-                                    </div>
-                                    <span title="{{ $helper }}">
-                                        <x-filament::icon
-                                            :icon="$icon"
-                                            :class="$iconClasses"
-                                            :style="$iconStyles"
-                                            />
-                                    </span>
-                                </div>', [
-                                    'helper' => __('report.helpers.add_cases_in_monitoring'),
-                                    'label' => __('report.labels.add_cases_in_monitoring'),
-                                    'icon' => $icon,
-                                    'iconClasses' => $iconClasses,
-                                    'iconStyles' => $iconStyles,
-                            ]);
-
-                            return new HtmlString($label);
-                        })
-                        ->columnSpan(2),
+                        ->hintIcon('heroicon-o-information-circle', __('report.helpers.add_cases_in_monitoring'))
+                        ->hintColor('black')
+                        ->columnSpan(2)
+                        ->extraAttributes([
+                            'class' => 'justify-start',
+                        ])
+                        ->label(__('report.labels.add_cases_in_monitoring'))
+                        ->default(true),
 
                     Checkbox::make('show_missing_values')
                         ->label(__('report.labels.show_missing_values'))
                         ->default(true)
-                        ->columnSpan(2),
+                        ->extraAttributes([
+                            'class' => 'ml-16'
+                        ])
+                        ->columnSpan(4),
                 ]),
         ];
     }

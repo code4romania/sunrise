@@ -10,4 +10,12 @@ use Filament\Tables\Actions\EditAction as BaseEditAction;
 class EditAction extends BaseEditAction
 {
     use HasModalExtraFooterActionsAlignment;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->label(__('general.action.change'));
+        $this->icon(null);
+    }
 }

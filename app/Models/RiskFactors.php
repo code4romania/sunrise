@@ -24,7 +24,9 @@ class RiskFactors extends Model
     protected $fillable = [
         'risk_factors',
         'extended_family_can_provide',
+        'extended_family_can_not_provide',
         'friends_can_provide',
+        'friends_can_not_provide',
         'risk_level',
     ];
 
@@ -38,9 +40,26 @@ class RiskFactors extends Model
     protected static function boot()
     {
         parent::boot();
-        self::creating(fn (RiskFactors $model) => self::calculateRiskLevel($model));
+        self::creating(function (RiskFactors $model) {
+            self::formatSocialSupport($model);
+            self::calculateRiskLevel($model);
+        });
 
-        self::updating(fn (RiskFactors $model) => self::calculateRiskLevel($model));
+        self::updating(function (RiskFactors $model) {
+            self::formatSocialSupport($model);
+            self::calculateRiskLevel($model);
+        });
+    }
+
+    public static function formatSocialSupport(self $model): void
+    {
+        if ($model->extended_family_can_not_provide) {
+            $model->extended_family_can_provide = [];
+        }
+
+        if ($model->friends_can_not_provide) {
+            $model->friends_can_provide = [];
+        }
     }
 
     public static function calculateRiskLevel(self $model): void

@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widgets;
 
 use App\Filament\Organizations\Resources\InterventionPlanResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Models\InterventionService;
 use App\Widgets\InfolistWidget;
-use Filament\Infolists\Components\Actions\Action;
-//use Filament\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 
@@ -28,10 +27,7 @@ class ServiceDescriptionWidget extends InfolistWidget
                 ->maxWidth('3xl')
                 ->columns()
                 ->headerActions([
-                    Action::make('edit')
-                        ->label(__('intervention_plan.actions.edit'))
-                        ->icon('heroicon-o-pencil')
-                        ->link()
+                    EditAction::make()
                         ->url(InterventionPlanResource::getUrl('edit_intervention_service', [
                             'parent' => $this->record->interventionPlan,
                             'record' => $this->record,

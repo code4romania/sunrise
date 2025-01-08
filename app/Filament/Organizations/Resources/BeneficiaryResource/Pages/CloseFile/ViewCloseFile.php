@@ -7,7 +7,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFi
 use App\Actions\BackAction;
 use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Infolists\Components\Actions\Edit;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\Notice;
 use App\Models\Beneficiary;
@@ -73,16 +73,12 @@ class ViewCloseFile extends ViewRecord
                                 ->columns()
                                 ->relationship('closeFile')
                                 ->headerActions([
-                                    Edit::make('edit_details')
+                                    EditAction::make('edit_details')
                                         ->url(self::getResource()::getUrl('edit_close_file_details', ['record' => $this->getRecord()])),
                                 ])
                                 ->schema([
                                     DateEntry::make('date')
                                         ->label(__('beneficiary.section.close_file.labels.date')),
-
-                                    TextEntry::make('number')
-                                        ->label(__('beneficiary.section.close_file.labels.number')),
-
                                     DateEntry::make('admittance_date')
                                         ->label(__('beneficiary.section.close_file.labels.admittance_date')),
 
@@ -131,7 +127,7 @@ class ViewCloseFile extends ViewRecord
                                 ->columns()
                                 ->relationship('closeFile')
                                 ->headerActions([
-                                    Edit::make('edit_details')
+                                    EditAction::make('edit_details')
                                         ->url(self::getResource()::getUrl('edit_close_file_general_details', ['record' => $this->getRecord()])),
                                 ])
                                 ->schema([

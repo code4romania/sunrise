@@ -7,7 +7,7 @@ namespace App\Infolists\Components\Actions;
 use App\Concerns\HasModalExtraFooterActionsAlignment;
 use Filament\Infolists\Components\Actions\Action;
 
-class Edit extends Action
+class EditAction extends Action
 {
     use HasModalExtraFooterActionsAlignment;
 
@@ -21,6 +21,7 @@ class Edit extends Action
         parent::setUp();
 
         $this->label(__('general.action.edit'));
+        $this->icon('heroicon-o-pencil-square');
 
         $this->link();
     }

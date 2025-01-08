@@ -75,7 +75,6 @@ class ResultsWidget extends BaseWidget
             ])
             ->actions([
                 EditAction::make()
-                    ->label(__('general.action.change'))
                     ->form($this->getFormSchema())
                     ->modalHeading(__('intervention_plan.headings.edit_result'))
                     ->extraModalFooterActions([
