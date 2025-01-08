@@ -186,9 +186,14 @@ return [
                 'degree_of_disability' => 'Încadrare în grad de handicap',
                 'observations_disability' => 'Observații dizabilitate/ handicap',
                 'income_source' => 'Sursa venitului',
+                'drug_consumption' => 'Consum de substanțe beneficiar',
+                'drug_types' => 'Tip de substanțe consumate',
+                'other_current_medication' => 'Altă medicație curentă',
+                'medication_observations' => 'Observații medicație',
             ],
             'placeholders' => [
                 'select_many' => 'Alege toate variantele care se potrivesc',
+                'select_drugs' => 'Alege substanțele',
             ],
         ],
 

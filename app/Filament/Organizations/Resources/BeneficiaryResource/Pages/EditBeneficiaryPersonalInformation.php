@@ -9,6 +9,7 @@ use App\Concerns\RedirectToPersonalInformation;
 use App\Enums\DisabilityDegree;
 use App\Enums\DisabilityType;
 use App\Enums\Diseases;
+use App\Enums\Drug;
 use App\Enums\HomeOwnership;
 use App\Enums\Income;
 use App\Enums\IncomeSource;
@@ -134,6 +135,22 @@ class EditBeneficiaryPersonalInformation extends EditRecord
 
                     Grid::make()
                         ->schema([
+                            Select::make('drug_consumption')
+                                ->label(__('beneficiary.section.personal_information.label.drug_consumption'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(Ternary::options())
+                                ->live(),
+
+                            Select::make('drug_types')
+                                ->label(__('beneficiary.section.personal_information.label.drug_types'))
+                                ->placeholder(__('beneficiary.section.personal_information.placeholders.select_drugs'))
+                                ->options(Drug::options())
+                                ->multiple()
+                                ->visible(fn (Get $get) => Ternary::isYes($get('drug_consumption'))),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
                             Select::make('psychiatric_history')
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one'))
@@ -195,6 +212,21 @@ class EditBeneficiaryPersonalInformation extends EditRecord
                                 ->placeholder(__('placeholder.observations'))
                                 ->maxLength(250)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
+                            Select::make('other_current_medication')
+                                ->label(__('beneficiary.section.personal_information.label.other_current_medication'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(Ternary::options())
+                                ->live(),
+
+                            TextInput::make('medication_observations')
+                                ->label(__('beneficiary.section.personal_information.label.medication_observations'))
+                                ->placeholder(__('placeholder.input_text'))
+                                ->maxLength(100)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('other_current_medication'))),
                         ]),
 
                     Grid::make()

@@ -8,6 +8,7 @@ use App\Concerns\BelongsToBeneficiary;
 use App\Enums\DisabilityDegree;
 use App\Enums\DisabilityType;
 use App\Enums\Diseases;
+use App\Enums\Drug;
 use App\Enums\HomeOwnership;
 use App\Enums\Income;
 use App\Enums\IncomeSource;
@@ -55,6 +56,10 @@ class BeneficiaryDetails extends Model
         'current_contraception',
         'observations_contraception',
         'net_income',
+        'drug_consumption',
+        'drug_types',
+        'other_current_medication',
+        'medication_observations',
     ];
 
     protected $casts = [
@@ -72,5 +77,8 @@ class BeneficiaryDetails extends Model
         'type_of_disability' => AsEnumCollection::class . ':' . DisabilityType::class,
         'degree_of_disability' => DisabilityDegree::class,
         'income_source' => AsEnumCollection::class . ':' . IncomeSource::class,
+        'drug_consumption' => Ternary::class,
+        'drug_types' => AsEnumCollection::class . ':' . Drug::class,
+        'other_current_medication' => Ternary::class,
     ];
 }

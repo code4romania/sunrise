@@ -139,6 +139,16 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                     Grid::make()
                         ->schema([
+                            TextEntry::make('drug_consumption')
+                                ->label(__('beneficiary.section.personal_information.label.drug_consumption')),
+
+                            TextEntry::make('drug_types')
+                                ->label(__('beneficiary.section.personal_information.label.drug_types'))
+                                ->visible(fn (Beneficiary $record) => Ternary::isYes($record->details->drug_consumption)),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
                             EnumEntry::make('psychiatric_history')
                                 ->label(__('field.psychiatric_history'))
                                 ->placeholder(__('placeholder.select_one')),
@@ -177,6 +187,16 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                             TextEntry::make('observations_disability')
                                 ->label(__('beneficiary.section.personal_information.label.observations_disability'))
                                 ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->disabilities)),
+                        ]),
+
+                    Grid::make()
+                        ->schema([
+                            TextEntry::make('other_current_medication')
+                                ->label(__('beneficiary.section.personal_information.label.other_current_medication')),
+
+                            TextEntry::make('medication_observations')
+                                ->label(__('beneficiary.section.personal_information.label.medication_observations'))
+                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->other_current_medication)),
                         ]),
 
                     Grid::make()
