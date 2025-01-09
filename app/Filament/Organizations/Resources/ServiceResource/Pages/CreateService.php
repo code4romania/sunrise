@@ -8,7 +8,9 @@ use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\ServiceResource;
+use App\Models\OrganizationService;
 use Filament\Resources\Pages\CreateRecord;
+use Filament\Support\Exceptions\Halt;
 use Illuminate\Contracts\Support\Htmlable;
 
 class CreateService extends CreateRecord
@@ -46,5 +48,19 @@ class CreateService extends CreateRecord
         $this->data['interventions'] = self::$resource::processInterventionsBeforeSave($this->data['interventions']);
 
         return parent::mutateFormDataBeforeCreate($data);
+    }
+
+    public function beforeCreate(): void
+    {
+        $serviceID = $this->data['service_id'];
+
+        $organizationService = OrganizationService::query()
+            ->where('service_id', $serviceID)
+            ->first();
+
+        if ($organizationService) {
+            $this->redirect(ServiceResource::getUrl('view', ['record' => $organizationService]));
+            throw new Halt();
+        }
     }
 }
