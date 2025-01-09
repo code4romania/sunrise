@@ -71,54 +71,58 @@ class ServiceResource extends Resource
                             ->options(CounselingSheet::options()),
 
                     ]),
-                TableRepeater::make('serviceInterventions')
-                    ->relationship('serviceInterventions')
-                    ->label(__('nomenclature.headings.service_intervention'))
-                    ->columnSpanFull()
-                    ->addActionLabel(__('nomenclature.actions.add_intervention'))
+
+                Section::make()
                     ->schema([
-                        Placeholder::make('id')
-                            ->label(__('nomenclature.labels.nr'))
-                            ->content(function () {
-                                static $index = 1;
-
-                                return $index++;
-                            })
-                            ->hiddenLabel(),
-                        TextInput::make('name')
+                        TableRepeater::make('serviceInterventions')
+                            ->relationship('serviceInterventions')
+                            ->label(__('nomenclature.headings.service_intervention'))
                             ->columnSpanFull()
-                            ->hiddenLabel()
-                            ->maxLength(200)
-                            ->label(__('nomenclature.labels.intervention_name')),
+                            ->addActionLabel(__('nomenclature.actions.add_intervention'))
+                            ->schema([
+                                Placeholder::make('id')
+                                    ->label(__('nomenclature.labels.nr'))
+                                    ->content(function () {
+                                        static $index = 1;
 
-                        Toggle::make('status')
-                            ->columnSpanFull()
-                            ->live()
-                            ->default(true)
-                            ->afterStateUpdated(function (bool $state) {
-                                if (! $state) {
-                                    dd('Modal cu inactivare de hard confirmation');
-                                }
-                            })
-                            ->label(fn (Get $get) => $get('status') ? __('nomenclature.labels.active') : __('nomenclature.labels.inactive')),
-                    ])
-                    ->deleteAction(
-                        fn (Action $action) => $action
-                            ->disabled(function (array $arguments, TableRepeater $component): bool {
-                                $items = $component->getState();
-                                $currentItem = $items[$arguments['item']];
+                                        return $index++;
+                                    })
+                                    ->hiddenLabel(),
+                                TextInput::make('name')
+                                    ->columnSpanFull()
+                                    ->hiddenLabel()
+                                    ->maxLength(200)
+                                    ->label(__('nomenclature.labels.intervention_name')),
 
-                                $serviceIntervention = ServiceIntervention::where('id', $currentItem['id'])
-                                    ->withCount('organizationIntervention')
-                                    ->first();
+                                Toggle::make('status')
+                                    ->columnSpanFull()
+                                    ->live()
+                                    ->default(true)
+                                    ->afterStateUpdated(function (bool $state) {
+                                        if (! $state) {
+                                            dd('Modal cu inactivare de hard confirmation');
+                                        }
+                                    })
+                                    ->label(fn (Get $get) => $get('status') ? __('nomenclature.labels.active') : __('nomenclature.labels.inactive')),
+                            ])
+                            ->deleteAction(
+                                fn (Action $action) => $action
+                                    ->disabled(function (array $arguments, TableRepeater $component): bool {
+                                        $items = $component->getState();
+                                        $currentItem = $items[$arguments['item']];
 
-                                if (! $serviceIntervention) {
-                                    return false;
-                                }
+                                        $serviceIntervention = ServiceIntervention::where('id', $currentItem['id'])
+                                            ->withCount('organizationIntervention')
+                                            ->first();
 
-                                return  $serviceIntervention->organization_intervention_count > 0;
-                            })
-                    ),
+                                        if (! $serviceIntervention) {
+                                            return false;
+                                        }
+
+                                        return  $serviceIntervention->organization_intervention_count > 0;
+                                    })
+                            ),
+                    ]),
             ]);
     }
 

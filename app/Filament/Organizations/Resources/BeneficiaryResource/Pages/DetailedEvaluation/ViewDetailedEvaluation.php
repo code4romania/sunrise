@@ -13,6 +13,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficia
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\Location;
+use App\Infolists\Components\TableEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -295,21 +296,25 @@ class ViewDetailedEvaluation extends ViewRecord
     public function getDetailedEvaluationSchema(): array
     {
         return [
-            RepeatableEntry::make('detailedEvaluationSpecialists')
+            TableEntry::make('detailedEvaluationSpecialists')
                 ->columns(4)
                 ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
                 ->schema([
                     TextEntry::make('full_name')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.full_name')),
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))
+                        ->hiddenLabel(),
 
                     TextEntry::make('institution')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.institution')),
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.institution'))
+                        ->hiddenLabel(),
 
                     TextEntry::make('relationship')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.relationship')),
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.relationship'))
+                        ->hiddenLabel(),
 
                     DateEntry::make('date')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date')),
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date'))
+                        ->hiddenLabel(),
                 ]),
 
             RepeatableEntry::make('meetings')
