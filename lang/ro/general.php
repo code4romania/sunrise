@@ -33,6 +33,8 @@ return [
 
     'labels' => [
         'developed_by' => 'o solutie dezvoltată de',
+        'village' => 'sat',
+        'commune' => 'Comuna',
     ],
 
     'placeholders' => [
