@@ -176,6 +176,7 @@ return [
         'service_details' => 'Detalii acordare serviciu',
         'award_methods' => 'Modalitatea de acordare',
         'intervention_details' => 'Detalii acordare intervenții',
+        'violence_frequency' => 'Frecvența formelor de violență'
     ],
 
     'headings' => [

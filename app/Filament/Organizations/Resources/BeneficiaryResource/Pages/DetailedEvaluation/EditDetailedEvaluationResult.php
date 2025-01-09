@@ -55,6 +55,7 @@ class EditDetailedEvaluationResult extends EditRecord
                 ->schema([
                     Section::make(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
                         ->schema(self::getRecommendationServicesSchema()),
+
                     self::getInterventionPlanSchema(),
 
                 ]),
