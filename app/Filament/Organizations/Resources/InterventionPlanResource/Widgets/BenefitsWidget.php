@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Widgets;
 
+use App\Enums\AwardMethod;
 use App\Forms\Components\Select;
 use App\Models\BenefitType;
 use App\Models\InterventionPlan;
@@ -52,6 +53,9 @@ class BenefitsWidget extends BaseWidget
                             ->map(fn ($item) => BenefitType::find((int) trim($item))->name)
                             ->join(', ')
                     ),
+
+                TextColumn::make('award_methods')
+                    ->label(__('intervention_plan.headings.award_methods')),
 
                 TextColumn::make('description')
                     ->label(__('intervention_plan.headings.benefit_description'))
@@ -110,6 +114,10 @@ class BenefitsWidget extends BaseWidget
             //                    fn (Get $get) => (int) $get('benefit_id') &&
             //                        self::getBenefitTypes((int) $get('benefit_id'))->isEmpty()
             //                ),
+
+            CheckboxList::make('award_methods')
+                ->label(__('intervention_plan.labels.award_methods'))
+                ->options(AwardMethod::options()),
 
             RichEditor::make('description')
                 ->label(__('intervention_plan.labels.benefit_description'))
