@@ -25,7 +25,7 @@ class EditService extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('service.headings.edit_page', ['name' => $this->getRecord()->serviceWithoutStatusCondition?->name]);
+        return __('service.headings.edit_page', ['name' => strtolower($this->getRecord()->serviceWithoutStatusCondition->name)]);
     }
 
     public function getBreadcrumbs(): array

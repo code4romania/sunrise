@@ -43,6 +43,7 @@ return [
         'edit_page' => 'Modifică serviciu :name',
         'interventions' => 'Intervenții asociate serviciului',
         'inactivate_modal' => 'Inactivează serviciul în nomenclator',
+        'view_service_page' => 'Serviciu :service_name',
     ],
 
     'helper_texts' => [

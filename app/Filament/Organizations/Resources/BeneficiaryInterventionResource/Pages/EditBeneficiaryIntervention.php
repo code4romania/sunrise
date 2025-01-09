@@ -38,7 +38,9 @@ class EditBeneficiaryIntervention extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return $this->getRecord()->organizationServiceIntervention->serviceInterventionWithoutStatusCondition->name;
+        return __('intervention_plan.headings.edit_page', [
+            'service_name' => strtolower($this->getRecord()->organizationServiceIntervention->serviceInterventionWithoutStatusCondition->name),
+        ]);
     }
 
     protected function getHeaderActions(): array

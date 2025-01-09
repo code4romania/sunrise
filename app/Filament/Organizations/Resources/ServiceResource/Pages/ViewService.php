@@ -23,7 +23,7 @@ class ViewService extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return $this->getRecord()->serviceWithoutStatusCondition->name;
+        return __('service.headings.view_service_page', ['service_name' => strtolower($this->getRecord()->serviceWithoutStatusCondition->name)]);
     }
 
     public function getBreadcrumbs(): array

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
 use App\Actions\BackAction;
-
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\AllowancePerson;
 use App\Enums\CounselingSheet;
@@ -54,7 +53,13 @@ class EditCounselingSheet extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
-        return __('intervention_plan.headings.edit_counseling_sheet');
+        return __('intervention_plan.headings.edit_counseling_sheet', [
+            'counseling_sheet_name' => strtolower($this->getRecord()
+                ->organizationServiceWithoutStatusCondition
+                ->serviceWithoutStatusCondition
+                ->counseling_sheet
+                ->getLabel()),
+        ]);
     }
 
     protected function getRedirectUrl(): ?string
