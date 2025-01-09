@@ -20,11 +20,13 @@ use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Infolists\Components\Group as InfolistGroup;
 use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
@@ -131,7 +133,21 @@ class EditRiskFactors extends EditRecord
 
                     Checkbox::make('extended_family_can_not_provide')
                         ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_not_provide'))
+                        ->afterStateUpdated(
+                            function ($state, Get $get, Set $set) {
+                                if ($state) {
+                                    $set('extended_family_can_provide_old_values', $get('extended_family_can_provide'));
+                                    $set('extended_family_can_provide', null);
+
+                                    return;
+                                }
+
+                                $set('extended_family_can_provide', $get('extended_family_can_provide_old_values'));
+                            }
+                        )
                         ->live(),
+
+                    Hidden::make('extended_family_can_provide_old_values'),
                 ]),
 
             Group::make()
@@ -144,7 +160,22 @@ class EditRiskFactors extends EditRecord
 
                     Checkbox::make('friends_can_not_provide')
                         ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_not_provide'))
+                        ->afterStateUpdated(
+                            function ($state, Get $get, Set $set) {
+                                if ($state) {
+                                    $set('friends_can_provide_old_values', $get('friends_can_provide'));
+                                    $set('friends_can_provide', null);
+
+                                    return;
+                                }
+
+                                $set('friends_can_provide', $get('friends_can_provide_old_values'));
+                            }
+                        )
                         ->live(),
+
+                    Hidden::make('friends_can_provide_old_values'),
+
                 ]),
 
         ];

@@ -37,7 +37,7 @@ class RiskFactorsFactory extends Factory
         foreach (fake()->randomElements($riskFactors, rand(1, \count($riskFactors))) as $riskFactor) {
             $selectedRiskFactors[$riskFactor] = [
                 'value' => fake()->randomElement(Ternary::values()),
-                'description' => fake()->text(),
+                'description' => fake()->text(100),
             ];
         }
 
