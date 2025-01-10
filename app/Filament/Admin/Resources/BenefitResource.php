@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -87,6 +88,15 @@ class BenefitResource extends Resource
                     ->url(self::getUrl('create')),
             ])
             ->heading(__('nomenclature.headings.benefit_table'))
+            ->reorderable('sort')
+            ->defaultSort('sort')
+            ->reorderRecordsTriggerAction(
+                fn (TableAction $action) => $action
+                    ->icon(null)
+                    ->button()
+                    ->outlined()
+                    ->color('primary')
+            )
             ->columns([
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.benefit')),

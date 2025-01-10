@@ -13,6 +13,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -48,6 +49,15 @@ class ResultResource extends Resource
                 CreateAction::make()
                     ->label(__('nomenclature.actions.add_result')),
             ])
+            ->reorderable('sort')
+            ->defaultSort('sort')
+            ->reorderRecordsTriggerAction(
+                fn (TableAction $action) => $action
+                    ->icon(null)
+                    ->button()
+                    ->outlined()
+                    ->color('primary')
+            )
             ->columns([
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.result_name')),

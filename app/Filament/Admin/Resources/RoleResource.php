@@ -18,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -81,6 +82,15 @@ class RoleResource extends Resource
                     ->label(__('nomenclature.actions.add_role')),
 
             ])
+            ->reorderable('sort')
+            ->defaultSort('sort')
+            ->reorderRecordsTriggerAction(
+                fn (TableAction $action) => $action
+                    ->icon(null)
+                    ->button()
+                    ->outlined()
+                    ->color('primary')
+            )
             ->columns([
                 TextColumn::make('name')
                     ->label(__('nomenclature.labels.role_name')),

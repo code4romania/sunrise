@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\HasGeneralStatus;
+use App\Concerns\HasSortOrder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class Benefit extends Model
 {
     use HasFactory;
     use HasGeneralStatus;
+    use HasSortOrder;
 
     protected $fillable = [
         'name',
