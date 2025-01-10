@@ -15,6 +15,7 @@ use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -68,20 +69,43 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.doesnt_have_children'))
                         ->live()
                         ->columnSpanFull()
-                        ->afterStateUpdated(function (bool $state, Set $set) {
+                        ->afterStateUpdated(function (bool $state, Set $set, Get $get) {
+                            $fields = [
+                                'children_total_count',
+                                'children_care_count',
+                                'children_under_18_care_count',
+                                'children_18_care_count',
+                                'children_accompanying_count',
+                                'children',
+                                'children_notes',
+                            ];
                             if ($state) {
-                                $set('children_total_count', null);
-                                $set('children_care_count', null);
-                                $set('children_under_18_care_count', null);
-                                $set('children_18_care_count', null);
-                                $set('children_accompanying_count', null);
-                                $set('children', []);
-                                $set('children_notes', null);
+                                $oldFields = [];
+                                foreach ($fields as $field) {
+                                    $oldFields[$field] = $get($field);
+                                    $set($field, null);
+                                }
+
+                                $set('old_children_fields', $oldFields);
+
+                                return;
+                            }
+
+                            $oldFields = $get('old_children_fields');
+                            if (! $oldFields) {
+                                return;
+                            }
+
+                            foreach ($oldFields as $field => $value) {
+                                $set($field, $value);
                             }
                         }),
 
+                    Hidden::make('old_children_fields'),
+
                     Grid::make()
                         ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                        ->hidden(fn (Get $get) => $get('doesnt_have_children'))
                         ->schema([
                             TextInput::make('children_total_count')
                                 ->label(__('field.children_total_count'))
@@ -128,6 +152,7 @@ class EditChildrenIdentity extends EditRecord
                 ->hideLabels()
                 ->addActionLabel(__('beneficiary.action.add_child'))
                 ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                ->hidden(fn (Get $get) => $get('doesnt_have_children'))
                 ->emptyLabel(false)
                 ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
                 ->schema([
@@ -184,7 +209,7 @@ class EditChildrenIdentity extends EditRecord
                 ->label(__('field.children_notes'))
                 ->placeholder(__('placeholder.other_relevant_details'))
                 ->disabled(fn (Get $get) => $get('doesnt_have_children'))
-                ->nullable()
+                ->hidden(fn (Get $get) => $get('doesnt_have_children'))
                 ->maxLength(500)
                 ->maxWidth('3xl')
                 ->columnSpanFull(),
