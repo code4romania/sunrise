@@ -22,7 +22,7 @@ return [
         'first_name' => 'Nume',
         'last_name' => 'Prenume',
         'roles' => 'Roluri',
-        'account_status' => 'Cont',
+        'account_status' => 'Status cont',
         'last_login_at' => 'Ultima accesare',
         'email' => 'Email',
         'phone_number' => 'Număr telefon',
