@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserStatus;
 use Closure;
 use Filament\Facades\Filament;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,7 +40,6 @@ class EnsureUserIsActive
                 )
                 ->first();
 
-//            dd($activeOrganization);
             if ($activeOrganization) {
                 auth()->user()->update(['latest_organization_id' => $activeOrganization->organization_id]);
 
@@ -52,8 +52,16 @@ class EnsureUserIsActive
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->to(Filament::getCurrentPanel()->getLoginUrl())
-            ->with('error', __('user.inactive_error'));
+        Notification::make()
+            ->title(__('user.inactive_error.title', [
+                'seconds' => 10,
+            ]))
+            ->body(\array_key_exists('body', __('user.inactive_error') ?: []) ? __('user.inactive_error.body', [
+                'seconds' => 10,
+            ]) : null)
+            ->danger()->send();
+
+        return redirect()->to(Filament::getCurrentPanel()->getLoginUrl());
     }
 
     public function userAndInstitutionIsActive(): bool|RedirectResponse
