@@ -13,6 +13,7 @@ use App\Forms\Components\TableRepeater;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -77,10 +78,15 @@ class ServiceResource extends Resource
                         TableRepeater::make('serviceInterventions')
                             ->relationship('serviceInterventions')
                             ->label(__('nomenclature.headings.service_intervention'))
+                            ->helperText(__('nomenclature.helper_texts.service_interventions'))
+                            ->reorderable()
+                            ->orderColumn()
                             ->columnSpanFull()
                             ->addActionLabel(__('nomenclature.actions.add_intervention'))
                             ->schema([
-                                Placeholder::make('id')
+                                Hidden::make('sort'),
+
+                                Placeholder::make('index')
                                     ->label(__('nomenclature.labels.nr'))
                                     ->content(function () {
                                         static $index = 1;
@@ -88,6 +94,7 @@ class ServiceResource extends Resource
                                         return $index++;
                                     })
                                     ->hiddenLabel(),
+
                                 TextInput::make('name')
                                     ->columnSpanFull()
                                     ->hiddenLabel()
@@ -107,7 +114,11 @@ class ServiceResource extends Resource
                             ])
                             ->deleteAction(
                                 fn (Action $action) => $action
-                                    ->disabled(function (array $arguments, TableRepeater $component): bool {
+                                    ->disabled(function (array $arguments, TableRepeater $component, string $operation): bool {
+                                        if ($operation === 'create') {
+                                            return false;
+                                        }
+
                                         $items = $component->getState();
                                         $currentItem = $items[$arguments['item']];
 

@@ -66,6 +66,8 @@ return [
         'inactivate_result_modal' => 'Prin inactivarea rezultatului, acesta nu va mai fi disponibil pentru fi adăugat în nomenclatoarele de rezultate ale organizațiilor Sunrise. Pentru organizațiile care au folosit deja acest rezultat, acesta va fi retras din nomenclatoare, fără să se șteargă din istoricul planului de interventie pentru care a fost folosit.',
         'delete_benefit' => 'Beneficiile sociale utilizate deja în fișe de beneficiar nu mai pot fi șterse. Aveți doar opțiunea de a le deactiva.',
         'result' => 'Definește un rezultat care va deveni disponibil pentru a fi inclus în nomenclatoarele tuturor organizațiilor Sunrise.',
+        'service_interventions' => 'Ordinea intervențiilor din această listă va fi păstrată în platforma Sunrise pentru afișarea opțiunilor în selectorul de intervenții',
+        'benefit_types' => 'Ordinea beneficiilor din această listă va fi păstrată în platforma Sunrise pentru afișarea opțiunilor în selectorul de beneficii sociale.',
     ],
 
     'actions' => [

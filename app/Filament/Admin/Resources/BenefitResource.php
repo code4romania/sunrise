@@ -10,6 +10,7 @@ use App\Forms\Components\TableRepeater;
 use App\Models\Benefit;
 use App\Models\BenefitService;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -41,10 +42,15 @@ class BenefitResource extends Resource
                         TableRepeater::make('benefitTypes')
                             ->relationship('benefitTypes')
                             ->label(__('nomenclature.headings.benefit_types'))
+                            ->helperText(__('nomenclature.helper_texts.benefit_types'))
+                            ->reorderable()
+                            ->orderColumn()
                             ->columnSpanFull()
                             ->hideLabels()
                             ->addActionLabel(__('nomenclature.actions.add_benefit_type'))
                             ->schema([
+                                Hidden::make('sort'),
+
                                 TextInput::make('name')
                                     ->label(__('nomenclature.labels.benefit_type_name'))
                                     ->maxLength(200),
