@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\SimplePage;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
@@ -53,6 +54,11 @@ class Welcome extends SimplePage
         $this->form->fill([
             'email' => $this->user->email,
         ]);
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('auth.set_password');
     }
 
     public function handle(): ?LoginResponse
