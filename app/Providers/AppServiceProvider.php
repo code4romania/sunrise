@@ -18,7 +18,6 @@ use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\FlowPresentation;
 use App\Models\Institution;
-use App\Models\Intervention;
 use App\Models\Meeting;
 use App\Models\Monitoring;
 use App\Models\MultidisciplinaryEvaluation;
@@ -97,7 +96,6 @@ class AppServiceProvider extends ServiceProvider
             'city' => City::class,
             'community_profile' => CommunityProfile::class,
             'county' => County::class,
-            'intervention' => Intervention::class,
             'organization' => Organization::class,
             'referring_institution' => ReferringInstitution::class,
             'service' => Service::class,
