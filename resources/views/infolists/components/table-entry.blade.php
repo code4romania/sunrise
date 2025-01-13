@@ -14,7 +14,7 @@
 
 @endphp
 
-<x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry">
+<x-dynamic-component :component="$getEntryWrapperView()" :entry="$entry" xmlns:x-filament="http://www.w3.org/1999/html">
     <div
         x-data="{}"
         {{ $attributes->merge($getExtraAttributes())->class([
@@ -37,14 +37,14 @@
                 'xl:ring-gray-950/5 dark:xl:ring-white/20' => ! $hasContainers && $breakPoint === 'xl',
                 '2xl:ring-gray-950/5 dark:2xl:ring-white/20' => ! $hasContainers && $breakPoint === '2xl',
             ])>
-                <table class="w-full">
-                    <thead @class([
+                <x-filament-tables::table class="w-full">
+                    <x-slot:header @class([
                         'filament-table-repeater-header-hidden sr-only' => $hasHiddenHeader,
                         'filament-table-repeater-header rounded-t-xl overflow-hidden border-b border-gray-950/5 dark:border-white/20' => ! $hasHiddenHeader,
                     ])>
-                        <tr class="text-xs md:divide-x md:divide-gray-950/5 dark:md:divide-white/20">
+                        <x-filament-tables::row class="text-xs md:divide-x md:divide-gray-950/5 dark:md:divide-white/20">
                             @foreach ($headers as $key => $header)
-                                <th
+                                <x-filament-tables::header-cell
                                     @class([
                                         'filament-table-repeater-header-column px-3 py-2 font-medium  bg-gray-100 dark:text-gray-300 dark:bg-gray-900/60',
                                         'ltr:rounded-tl-xl rtl:rounded-tr-xl' => $loop->first,
@@ -55,20 +55,15 @@
                                           default => 'text-left rtl:text-right'
                                         }
                                     ])
-                                    @if ($header['width'])
-                                        style="width: {{ $header['width'] }}"
-                                    @endif
+                                    @style([
+                                        'width: ' . $header['width'] => $header['width'],
+                                    ])
                                 >
                                     {{ $header['label'] }}
-                                    @if ($header['required'])
-                                        <span class="whitespace-nowrap">
-                                            <sup class="font-medium text-danger-700 dark:text-danger-400">*</sup>
-                                        </span>
-                                    @endif
-                                </th>
+                                </x-filament-tables::header-cell>
                             @endforeach
-                        </tr>
-                    </thead>
+                        </x-filament-tables::row>
+                    </x-slot:header>
                     <tbody
                         x-sortable
                         wire:end.stop="{{ 'mountFormComponentAction(\'' . $statePath . '\', \'reorder\', { items: $event.target.sortable.toArray() })' }}"
@@ -76,22 +71,18 @@
                     >
                         @if (count($containers))
                             @foreach ($containers as $uuid => $row)
-                                <tr class="filament-table-repeater-row md:divide-x md:divide-gray-950/5 dark:md:divide-white/20">
+                                <x-filament-tables::row class="filament-table-repeater-row md:divide-x md:divide-gray-950/5 dark:md:divide-white/20">
                                     @foreach($row->getComponents() as $cell)
                                         @if(! $cell instanceof \Filament\Forms\Components\Hidden && ! $cell->isHidden())
+                                            @php
+                                                $cellKey = method_exists($cell, 'getName') ? $cell->getName() : $cell->getId();
+//                                                if (!$cell->getState())
+//                                                debug($cell->getState(), $cell->getStatePath());
+                                            @endphp
                                             <td
-                                                @class([
-                                                    'filament-table-repeater-column p-2',
-                                                    'has-hidden-label' => $cell->isLabelHidden(),
-                                                ])
-                                                @php
-                                                    $cellKey = method_exists($cell, 'getName') ? $cell->getName() : $cell->getId();
-                                                @endphp
-                                                @if (
-                                                    $columnWidths &&
-                                                    isset($columnWidths[$cellKey])
-                                                )
-                                                    style="width: {{ $columnWidths[$cellKey] }}"
+                                                class="filament-table-repeater-column p-2"
+                                                @if ($columnWidths && isset($columnWidths[$cellKey]))
+                                                    style="width: {{$columnWidths[$cellKey]}}"
                                                 @endif
                                             >
                                                 {{ $cell }}
@@ -101,17 +92,17 @@
                                         @endif
                                     @endforeach
 
-                                </tr>
+                                </x-filament-tables::row>
                             @endforeach
                         @else
-                            <tr class="filament-table-repeater-row filament-table-repeater-empty-row md:divide-x md:divide-gray-950/5 dark:md:divide-divide-white/20">
-                                <td colspan="{{ count($headers) }}" class="filament-table-repeater-column filament-table-repeater-empty-column p-4 w-px text-center italic">
+                            <x-filament-tables::row class="filament-table-repeater-row filament-table-repeater-empty-row md:divide-x md:divide-gray-950/5 dark:md:divide-divide-white/20">
+                                <x-filament-tables::cell colspan="{{ count($headers) }}" class="filament-table-repeater-column filament-table-repeater-empty-column p-4 w-px text-center italic">
                                     {{ $emptyLabel ?: __('filament-table-repeater::components.repeater.empty.label') }}
-                                </td>
-                            </tr>
+                                </x-filament-tables::cell>
+                            </x-filament-tables::row>
                         @endif
                     </tbody>
-                </table>
+                </x-filament-tables::table>
             </div>
         @endif
     </div>

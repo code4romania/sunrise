@@ -9,10 +9,13 @@ use App\Enums\CounselingSheet;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Filament\Organizations\Resources\ServiceResource;
 use App\Infolists\Components\Notice;
+use App\Infolists\Components\TableEntry;
+use App\Models\BeneficiaryIntervention;
 use Filament\Actions\EditAction;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -47,6 +50,12 @@ class ViewService extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
+        $this->getRecord()
+            ->load([
+                'interventions.serviceInterventionWithoutStatusCondition',
+                'interventions.beneficiaryInterventions.interventionPlan',
+            ]);
+
         return $infolist->schema([
             Section::make()
                 ->visible(fn () => $this->getRecord()->serviceWithoutStatusCondition->counseling_sheet)
@@ -87,18 +96,30 @@ class ViewService extends ViewRecord
                                 ->modalAutofocus(false),
                         ),
                 ]),
+
+            TableEntry::make('interventions')
+                ->columnSpanFull()
+                ->hiddenLabel()
+                ->schema([
+                    TextEntry::make('serviceInterventionWithoutStatusCondition.name')
+                        ->hiddenLabel()
+                        ->label(__('service.labels.interventions')),
+
+                    TextEntry::make('cases')
+                        ->hiddenLabel()
+                        ->label(__('service.labels.cases'))
+                        ->default(
+                            fn ($record) => $record->beneficiaryInterventions
+                                ?->map(fn (BeneficiaryIntervention $beneficiaryIntervention) => $beneficiaryIntervention->interventionPlan->beneficiary_id)
+                                ->unique()
+                                ->count()
+                        ),
+
+                    TextEntry::make('status')
+                        ->hiddenLabel()
+                        ->label(__('service.labels.status')),
+                ]),
+
         ]);
-    }
-
-    protected function hasInfolist(): bool
-    {
-        return true;
-    }
-
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            ServiceResource\Widgets\ListServiceInterventions::class,
-        ];
     }
 }

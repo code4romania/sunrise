@@ -561,4 +561,12 @@ return [
         'tomorrow' => 'Mâine',
         'one_week' => '7 zile',
     ],
+
+    'award_method' => [
+        'postal_money_order_at_home' => 'Mandat poștal la domiciliu',
+        'bank_account' => 'Cont bancar',
+        'payroll' => 'Stat de plată',
+        'other' => 'Altă modalitate de acordare',
+
+    ],
 ];
