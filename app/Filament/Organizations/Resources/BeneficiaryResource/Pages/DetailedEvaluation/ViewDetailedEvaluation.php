@@ -6,8 +6,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\Detaile
 
 use App\Actions\BackAction;
 use App\Enums\AddressType;
-use App\Enums\RecommendationService;
-use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\EditAction;
@@ -134,28 +132,15 @@ class ViewDetailedEvaluation extends ViewRecord
 
     private function getResultSchema(): array
     {
-        $fields = [];
-        $record = $this->getRecord();
-        foreach (RecommendationService::options() as $key => $value) {
-            $fields[] = TextEntry::make($key)
-                ->label($value)
-                ->state(
-                    $record->detailedEvaluationResult
-                        ->recommendation_services
-                        ->contains(RecommendationService::tryFrom($key)) ?
-                        Ternary::YES->getLabel() :
-                    Ternary::NO->getLabel()
-                );
-        }
-
         return [
-            ...$fields,
-            TextEntry::make('recommendation_services.other_services')
-                ->formatStateUsing(fn ($state) => $record ? __('enum.ternary.1') : __('enum.ternary.0'))
-                ->label(__('beneficiary.section.detailed_evaluation.labels.other_services')),
+            TextEntry::make('recommendation_services')
+                ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
+                ->listWithLineBreaks(),
+
             TextEntry::make('other_services_description')
                 ->label(__('beneficiary.section.detailed_evaluation.labels.other_services'))
                 ->placeholder(__('beneficiary.placeholder.other_services')),
+
             Section::make(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
                 ->schema([
                     TextEntry::make('recommendations_for_intervention_plan')

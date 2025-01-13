@@ -175,37 +175,38 @@ class CounselingSheetWidget extends InfolistWidget
                     TextEntry::make('data.violence_history_forms')
                         ->label(__('intervention_plan.labels.violence_history_forms')),
 
-                    EnumEntry::make('data.physics')
-                        ->label(__('intervention_plan.labels.physics'))
-                        ->enumClass(ExtendedFrequency::class),
+                    TextEntry::make('violence_frequency')
+                        ->label(__('intervention_plan.labels.violence_frequency'))
+                        ->state(function ($record) {
+                            $fields = [
+                                'physics',
+                                'sexed',
+                                'psychological',
+                                'verbal',
+                                'sociable',
+                                'economic',
+                                'cybernetics',
+                                'spiritual',
+                            ];
 
-                    EnumEntry::make('data.sexed')
-                        ->label(__('intervention_plan.labels.sexed'))
-                        ->enumClass(ExtendedFrequency::class),
+                            $result = [];
+                            foreach ($fields as $field) {
+                                $data = $record->counselingSheet->data;
+                                if ($data[$field] &&
+                                    ! ExtendedFrequency::isValue($data[$field], ExtendedFrequency::NO_ANSWER) &&
+                                    ! ExtendedFrequency::isValue($data[$field], ExtendedFrequency::NONE)
+                                ) {
+                                    $result[] = \sprintf(
+                                        '%s - %s',
+                                        __('intervention_plan.labels.' . $field),
+                                        ExtendedFrequency::tryFrom($data[$field])->getLabel()
+                                    );
+                                }
+                            }
 
-                    EnumEntry::make('data.psychological')
-                        ->label(__('intervention_plan.labels.psychological'))
-                        ->enumClass(ExtendedFrequency::class),
-
-                    EnumEntry::make('data.verbal')
-                        ->label(__('intervention_plan.labels.verbal'))
-                        ->enumClass(ExtendedFrequency::class),
-
-                    EnumEntry::make('data.sociable')
-                        ->label(__('intervention_plan.labels.sociable'))
-                        ->enumClass(ExtendedFrequency::class),
-
-                    EnumEntry::make('data.economic')
-                        ->label(__('intervention_plan.labels.economic'))
-                        ->enumClass(ExtendedFrequency::class),
-
-                    EnumEntry::make('data.cybernetics')
-                        ->label(__('intervention_plan.labels.cybernetics'))
-                        ->enumClass(ExtendedFrequency::class),
-
-                    EnumEntry::make('data.spiritual')
-                        ->label(__('intervention_plan.labels.spiritual'))
-                        ->enumClass(ExtendedFrequency::class),
+                            return $result;
+                        })
+                        ->listWithLineBreaks(),
 
                     TextEntry::make('data.physical_violence_description')
                         ->label(__('intervention_plan.labels.physical_violence_description')),
