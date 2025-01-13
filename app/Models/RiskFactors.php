@@ -41,25 +41,12 @@ class RiskFactors extends Model
     {
         parent::boot();
         self::creating(function (RiskFactors $model) {
-            self::formatSocialSupport($model);
             self::calculateRiskLevel($model);
         });
 
         self::updating(function (RiskFactors $model) {
-            self::formatSocialSupport($model);
             self::calculateRiskLevel($model);
         });
-    }
-
-    public static function formatSocialSupport(self $model): void
-    {
-        if ($model->extended_family_can_not_provide) {
-            $model->extended_family_can_provide = [];
-        }
-
-        if ($model->friends_can_not_provide) {
-            $model->friends_can_provide = [];
-        }
     }
 
     public static function calculateRiskLevel(self $model): void
