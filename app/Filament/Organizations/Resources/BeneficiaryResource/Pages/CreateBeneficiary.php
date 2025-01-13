@@ -352,6 +352,10 @@ class CreateBeneficiary extends CreateRecord
                 ->schema(EditChildrenIdentity::getChildrenIdentityFormSchema())
                 ->afterStateHydrated(
                     function (Set $set) {
+                        if (! $this->parentBeneficiary?->children->count()) {
+                            return;
+                        }
+
                         $children = $this->parentBeneficiary?->children->toArray() ?? [];
                         foreach ($children as &$child) {
                             $child['birthdate'] = $child['birthdate'] ? Carbon::parse($child['birthdate'])->format('d.m.Y') : null;
