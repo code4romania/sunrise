@@ -25,7 +25,7 @@
 
 
 
-@if (count($actions))
+    @if (count($actions))
         <div
             class="flex items-center gap-3 shrink-0">
 
