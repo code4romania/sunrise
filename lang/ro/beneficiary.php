@@ -57,7 +57,7 @@ return [
             'title' => 'Evaluare inițială',
         ],
         'edit_evaluation_details' => [
-            'title' => 'Editează detaliile evaluării',
+            'title' => 'Editează detalii evaluare',
         ],
         'edit_violence' => [
             'title' => 'Editează violența',

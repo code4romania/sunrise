@@ -64,6 +64,7 @@ class BenefitsWidget extends BaseWidget
             ->actions([
                 EditAction::make()
                     ->form($this->getBenefitSchema())
+                    ->modalHeading(__('intervention_plan.headings.edit_benefit'))
                     ->extraModalFooterActions([
                         DeleteAction::make()
                             ->label(__('intervention_plan.actions.delete_benefit'))

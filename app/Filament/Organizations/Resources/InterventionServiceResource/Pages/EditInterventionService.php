@@ -34,7 +34,7 @@ class EditInterventionService extends EditRecord
     public function getTitle(): string|Htmlable
     {
         return __('intervention_plan.headings.edit_page', [
-            'service_name' => $this->getRecord()->organizationService?->serviceWithoutStatusCondition->name,
+            'service_name' => strtolower($this->getRecord()->organizationService->serviceWithoutStatusCondition->name),
         ]);
     }
 

@@ -130,8 +130,13 @@ class UserResource extends Resource
 
                     Placeholder::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time'))
-                        ->content(fn (User $record) => $record->last_login_at !== '-' ? $record->last_login_at->format('d.m.Y H:i:s') : $record->last_login_at),
+                        ->content(
+                            fn (User $record) => $record->last_login_at && $record->last_login_at !== '-' ?
+                                $record->last_login_at->format('d.m.Y H:i:s') :
+                                '-'
+                        ),
                 ]),
+
             Section::make()
                 ->columns()
                 ->maxWidth('3xl')

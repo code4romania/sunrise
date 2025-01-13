@@ -220,7 +220,7 @@ return [
         'delete_benefit_modal' => 'Șterge beneficiu social',
         'delete_beneficiary_intervention_modal' => 'Șterge intervenția',
         'empty_state_table_without_intervetntions' => 'Nici o interventie adăugată în planul de intervenție',
-        'edit_counseling_sheet' => 'Editează fișă consiliere',
+        'edit_counseling_sheet' => 'Editează fișă consiliere :counseling_sheet_name',
         'results_table' => 'Rezultate realizate',
         'empty_state_result_table' => 'Nici un rezultat adăugat',
         'empty_state_monthly_plan_table' => 'Nici un plan lunar adăugat',
@@ -252,6 +252,7 @@ return [
         'edit_monthly_plan_title' => 'Editează plan lunar',
         'edit_monthly_plan_services_and_interventions_title' => 'Editează servicii si intervenții',
         'delete_monthly_plan_modal' => 'Șterge plan lunar',
+        'edit_benefit' => 'Modifică beneficiu social',
         'award_methods' => 'Modalitatea de acordare',
     ],
 
