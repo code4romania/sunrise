@@ -58,16 +58,18 @@ class City extends Model
                     ->orWhereHas('parent', function (Builder $query) use ($search) {
                         $query->where('name', 'like', "%{$search}%");
                     });
-            });
+            })
+            ->whereNot('level', 2);
     }
 
     public function getParentNameAttribute(): ?string
     {
         if (
-            \in_array($this->type, [11, 19, 22, 23]) &&
             $this->parent_id !== null
         ) {
-            return $this->parent->name;
+            $parentName = $this->parent->name;
+
+            return $this->parent->type === 3 ? \sprintf('%s %s', __('general.labels.commune'), $parentName) : $parentName;
         }
 
         return null;
@@ -75,6 +77,8 @@ class City extends Model
 
     public function getNameWithUatAttribute(): ?string
     {
-        return $this->parent_name ? \sprintf('%s (%s)', $this->name, $this->parent_name) : $this->name;
+        $name = $this->type == 22 ? \sprintf('%s - %s', $this->name, __('general.labels.village')) : $this->name;
+
+        return $this->parent_name ? \sprintf('%s (%s)', $name, $this->parent_name) : $name;
     }
 }
