@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\HasGeneralStatus;
+use App\Concerns\HasSortOrder;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
@@ -16,6 +17,7 @@ class Role extends Model
 {
     use HasFactory;
     use HasGeneralStatus;
+    use HasSortOrder;
 
     protected $fillable = [
         'name',
