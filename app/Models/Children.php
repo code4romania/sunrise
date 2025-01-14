@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
 use App\Concerns\HasBirthdate;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\GenderShortValues;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,7 @@ class Children extends Model
     use HasFactory;
     use BelongsToBeneficiary;
     use HasBirthdate;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'name',

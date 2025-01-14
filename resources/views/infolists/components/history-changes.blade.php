@@ -29,6 +29,27 @@
                     continue;
                 }
 
+                $excludedFields = [
+                    'specialistable_id',
+                    'specialistable_type',
+                    'addressable_id',
+                    'addressable_type',
+                    'monitoring_id',
+                    'intervention_plan_id',
+                    'organization_service_id',
+                    'intervention_service_id',
+                    'organization_service_intervention_id',
+                    'monthly_plan_id',
+                    'monthly_plan_service_id',
+                    'service_intervention_id'
+                ];
+
+                if (in_array($field, $excludedFields))
+                {
+
+                    continue;
+                }
+
                 $lineData = $getLineData($field, $oldValue, $newValue);
 
                 $oldValue = $lineData->get('old');

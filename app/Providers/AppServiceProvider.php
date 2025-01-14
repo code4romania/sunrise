@@ -5,28 +5,44 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Http\Responses\LoginResponse;
+use App\Models\Address;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryAntecedents;
+use App\Models\BeneficiaryDetails;
+use App\Models\BeneficiaryIntervention;
 use App\Models\BeneficiaryPartner;
 use App\Models\BeneficiarySituation;
+use App\Models\BenefitService;
+use App\Models\Children;
 use App\Models\City;
 use App\Models\CloseFile;
 use App\Models\CommunityProfile;
 use App\Models\County;
 use App\Models\DetailedEvaluationResult;
+use App\Models\DetailedEvaluationSpecialist;
 use App\Models\Document;
 use App\Models\EvaluateDetails;
 use App\Models\FlowPresentation;
 use App\Models\Institution;
 use App\Models\Intervention;
+use App\Models\InterventionMeeting;
+use App\Models\InterventionPlan;
+use App\Models\InterventionPlanResult;
+use App\Models\InterventionService;
 use App\Models\Meeting;
 use App\Models\Monitoring;
+use App\Models\MonitoringChild;
+use App\Models\MonthlyPlan;
+use App\Models\MonthlyPlanInterventions;
+use App\Models\MonthlyPlanService;
 use App\Models\MultidisciplinaryEvaluation;
 use App\Models\Organization;
 use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
 use App\Models\Service;
+use App\Models\Specialist;
 use App\Models\User;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
@@ -117,6 +133,22 @@ class AppServiceProvider extends ServiceProvider
             'closeFile' => CloseFile::class,
             'monitoring' => Monitoring::class,
             'flowPresentation' => FlowPresentation::class,
+            'children' => Children::class,
+            'address' => Address::class,
+            'specialist' => Specialist::class,
+            'monitoringChild' => MonitoringChild::class,
+            'beneficiaryAntecedents' => BeneficiaryAntecedents::class,
+            'beneficiaryDetails' => BeneficiaryDetails::class,
+            'interventionPlan' => InterventionPlan::class,
+            'interventionService' => InterventionService::class,
+            'beneficiaryIntervention' => BeneficiaryIntervention::class,
+            'detailedEvaluationSpecialist' => DetailedEvaluationSpecialist::class,
+            'interventionMeeting' => InterventionMeeting::class,
+            'benefitService' => BenefitService::class,
+            'interventionPlanResult' => InterventionPlanResult::class,
+            'monthlyPlan' => MonthlyPlan::class,
+            'monthlyPlanService' => MonthlyPlanService::class,
+            'monthlyPlanInterventions' => MonthlyPlanInterventions::class,
         ]);
     }
 

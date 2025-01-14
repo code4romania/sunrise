@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class BeneficiaryAntecedents extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'has_police_reports',

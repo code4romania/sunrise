@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\BelongsToInterventionPlan;
 use App\Concerns\HasIntervalAttribute;
+use App\Concerns\LogsActivityOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Znck\Eloquent\Relations\BelongsToThrough;
-use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class InterventionService extends Model
 {
     use HasFactory;
-    use BelongsToThroughTrait;
     use HasIntervalAttribute;
+    use LogsActivityOptions;
+    use BelongsToInterventionPlan;
 
     protected $fillable = [
         'intervention_plan_id',
@@ -27,11 +28,6 @@ class InterventionService extends Model
         'institution',
         'objections',
     ];
-
-    public function interventionPlan(): BelongsTo
-    {
-        return $this->belongsTo(InterventionPlan::class);
-    }
 
     public function organizationService(): BelongsTo
     {
@@ -49,11 +45,6 @@ class InterventionService extends Model
         return $this->belongsTo(Specialist::class);
     }
 
-    public function organization(): BelongsToThrough
-    {
-        return $this->belongsToThrough(Organization::class, InterventionPlan::class);
-    }
-
     public function beneficiaryInterventions(): HasMany
     {
         return $this->hasMany(BeneficiaryIntervention::class);
@@ -67,10 +58,5 @@ class InterventionService extends Model
     public function meetings(): HasManyThrough
     {
         return $this->hasManyThrough(InterventionMeeting::class, BeneficiaryIntervention::class);
-    }
-
-    public function beneficiary(): BelongsToThrough
-    {
-        return $this->belongsToThrough(Beneficiary::class, InterventionPlan::class);
     }
 }

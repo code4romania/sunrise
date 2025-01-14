@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\BelongsToInterventionPlan;
+use App\Concerns\LogsActivityOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,9 +13,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class InterventionPlanResult extends Model
 {
     use HasFactory;
+    use LogsActivityOptions;
+    use BelongsToInterventionPlan;
 
     protected $fillable = [
-        'intervention_plan_id',
         'result_id',
         'user_id',
         'started_at',
@@ -23,11 +26,6 @@ class InterventionPlanResult extends Model
         'lost_from_monitoring',
         'observations',
     ];
-
-    public function interventionPlan(): BelongsTo
-    {
-        return $this->belongsTo(InterventionPlan::class);
-    }
 
     public function user(): BelongsTo
     {
