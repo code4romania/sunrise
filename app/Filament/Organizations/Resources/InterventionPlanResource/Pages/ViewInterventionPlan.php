@@ -74,7 +74,7 @@ class ViewInterventionPlan extends ViewRecord
                     Grid::make()
                         ->schema([
                             DatePicker::make('admit_date_in_center')
-                                ->label(__('intervention_plan.labels.admit_date')),
+                                ->label(__('intervention_plan.labels.admit_date_in_center')),
 
                             DatePicker::make('plan_date')
                                 ->label(__('intervention_plan.labels.plan_date')),
@@ -105,7 +105,7 @@ class ViewInterventionPlan extends ViewRecord
                                 $record->beneficiary->legal_residence?->county?->name
                         ),
                     TextEntry::make('admit_date_in_center')
-                        ->label(__('intervention_plan.labels.admit_date')),
+                        ->label(__('intervention_plan.labels.admit_date_in_center')),
                     TextEntry::make('plan_date')
                         ->label(__('intervention_plan.labels.plan_date')),
                     TextEntry::make('last_revise_date')

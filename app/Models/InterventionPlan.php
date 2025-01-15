@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
 use App\Concerns\BelongsToOrganization;
+use App\Concerns\LogsActivityOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +17,7 @@ class InterventionPlan extends Model
     use HasFactory;
     use BelongsToBeneficiary;
     use BelongsToOrganization;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'admit_date_in_center',

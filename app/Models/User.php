@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\HasPermissions;
 use App\Concerns\HasUlid;
+use App\Concerns\LogsActivityOptions;
 use App\Concerns\MustSetInitialPassword;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
@@ -32,7 +33,6 @@ use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -44,7 +44,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use HasFactory;
     use HasUlid;
     use InteractsWithMedia;
-    use LogsActivity;
+    use LogsActivityOptions;
     use MustSetInitialPassword;
     use Notifiable;
     use TwoFactorAuthenticatable;

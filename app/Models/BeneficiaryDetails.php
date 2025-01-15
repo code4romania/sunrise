@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\DisabilityDegree;
 use App\Enums\DisabilityType;
 use App\Enums\Diseases;
@@ -23,6 +24,7 @@ class BeneficiaryDetails extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'has_family_doctor',
@@ -80,5 +82,8 @@ class BeneficiaryDetails extends Model
         'drug_consumption' => Ternary::class,
         'drug_types' => AsEnumCollection::class . ':' . Drug::class,
         'other_current_medication' => Ternary::class,
+        'current_contraception' => Ternary::class,
+        'treatment_for_psychiatric_pathology' => Ternary::class,
+        'investigations_for_psychiatric_pathology' => Ternary::class,
     ];
 }

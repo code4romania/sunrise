@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
 use App\Concerns\HasSpecialistsTeam;
+use App\Concerns\LogsActivityOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +20,7 @@ class Monitoring extends Model
     use HasSpecialistsTeam;
     use BelongsToBeneficiary;
     use BelongsToThroughTrait;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'date',

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Filament\Infolists\Components\Entry;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Support\Collection;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 class HistoryChanges extends Entry
@@ -54,8 +55,8 @@ class HistoryChanges extends Entry
 
         return collect([
             'label' => $fieldLabel,
-            'old' => $oldValue,
-            'new' => $newValue,
+            'old' => \is_string($oldValue) ? new HtmlString($oldValue) : $oldValue,
+            'new' => \is_string($newValue) ? new HtmlString($newValue) : $newValue,
             'subFields' => $subFields,
         ]);
     }
@@ -75,7 +76,7 @@ class HistoryChanges extends Entry
                 }
             }
 
-            if ($castType === 'collection' && $value) {
+            if (($castType === 'collection' || $castType === 'json') && $value) {
                 if (\is_array($value)) {
                     $value = collect($value)->map(fn ($item) => \is_array($item) ? collect($item) : $item);
                 }
@@ -123,6 +124,9 @@ class HistoryChanges extends Entry
             }
         }
 
+        if ($record->event === 'monitoring_specialist') {
+            $record->event = 'specialist';
+        }
         $modelName = \sprintf('\App\Models\%s', ucfirst($record->event));
         $modelClass = new $modelName();
 
@@ -137,6 +141,9 @@ class HistoryChanges extends Entry
         }
 
         if (enum_exists($castType)) {
+            if ($castType === Ternary::class && ! blank($fieldValue)) {
+                $fieldValue = (int) $fieldValue;
+            }
             $fieldValue = ! blank($fieldValue) ? $castType::tryFrom($fieldValue)?->getLabel() : '-';
         }
 
@@ -160,7 +167,7 @@ class HistoryChanges extends Entry
     private function getRiskFactorsFields(Collection $values): Collection
     {
         return $values->map(function ($item) {
-            $value = $item['value'] ? Ternary::tryFrom($item['value'])->getLabel() : '-';
+            $value = $item['value'] ? Ternary::tryFrom((int) $item['value'])->getLabel() : '-';
 
             if ($item['description']) {
                 return $value . ' (' . $item['description'] . ')';
@@ -190,6 +197,9 @@ class HistoryChanges extends Entry
             'beneficiary.section.detailed_evaluation.labels',
             'beneficiary.section.specialists.labels',
             'beneficiary.section.documents.labels',
+            'beneficiary.section.close_file.labels',
+            'intervention_plan.labels',
+            'monitoring.labels',
         ];
 
         if ($field === 'name' &&

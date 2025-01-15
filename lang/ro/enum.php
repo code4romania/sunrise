@@ -569,4 +569,9 @@ return [
         'other' => 'Altă modalitate de acordare',
 
     ],
+
+    'address_type' => [
+        'legal_residence' => 'Domiciliul legal',
+        'effective_residence' => 'Domiciliul efectiv',
+    ],
 ];

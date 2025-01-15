@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\LogsActivityOptions;
+use App\Enums\AddressType;
 use App\Enums\ResidenceEnvironment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Address extends Model
 {
     use HasFactory;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'country_id',
@@ -27,6 +30,7 @@ class Address extends Model
 
     protected $casts = [
         'environment' => ResidenceEnvironment::class,
+        'address_type' => AddressType::class,
     ];
 
     public function county(): BelongsTo

@@ -9,7 +9,6 @@ use App\Concerns\LogsActivityOptions;
 use App\Enums\DocumentType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
@@ -21,7 +20,6 @@ class Document extends Model implements HasMedia
     use InteractsWithMedia;
     use BelongsToBeneficiary;
     use BelongsToThroughTrait;
-    use LogsActivity;
     use LogsActivityOptions;
 
     protected $fillable = [
