@@ -42,6 +42,7 @@ use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
 use App\Models\Service;
+use App\Models\Specialist;
 use App\Models\User;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
