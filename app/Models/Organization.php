@@ -69,11 +69,6 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
         return $this->hasMany(Service::class);
     }
 
-    public function interventions(): HasMany
-    {
-        return $this->hasMany(Intervention::class);
-    }
-
     public function communityProfile(): HasOne
     {
         return $this->hasOne(CommunityProfile::class)

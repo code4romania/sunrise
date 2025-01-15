@@ -42,7 +42,6 @@ use App\Models\ReferringInstitution;
 use App\Models\RequestedServices;
 use App\Models\RiskFactors;
 use App\Models\Service;
-use App\Models\Specialist;
 use App\Models\User;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
@@ -113,7 +112,6 @@ class AppServiceProvider extends ServiceProvider
             'city' => City::class,
             'community_profile' => CommunityProfile::class,
             'county' => County::class,
-            'intervention' => Intervention::class,
             'organization' => Organization::class,
             'referring_institution' => ReferringInstitution::class,
             'service' => Service::class,

@@ -35,11 +35,6 @@ class Service extends Model
         return $this->serviceInterventions()->active();
     }
 
-    public function interventions(): HasMany
-    {
-        return $this->hasMany(Intervention::class);
-    }
-
     public function organizationServices(): HasMany
     {
         return $this->hasMany(OrganizationService::class);

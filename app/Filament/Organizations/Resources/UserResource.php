@@ -95,9 +95,6 @@ class UserResource extends Resource
                     ->sortable()
                     ->label(__('user.labels.last_login_at')),
             ])
-            ->filters([
-                //
-            ])
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->label(__('general.action.view_details')),
