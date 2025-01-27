@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Concerns\BelongsToBeneficiary;
+use App\Concerns\LogsActivityOptions;
 use App\Enums\ActLocation;
 use App\Enums\NotificationMode;
 use App\Enums\Notifier;
@@ -20,6 +21,7 @@ class FlowPresentation extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'presentation_mode',

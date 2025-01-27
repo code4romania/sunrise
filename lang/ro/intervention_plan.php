@@ -8,7 +8,7 @@ return [
         'full_name' => 'Beneficiar',
         'cnp' => 'CNP',
         'address' => 'Domiciliu',
-        'admit_date' => 'Data admiterii în centru',
+        'admit_date_in_center' => 'Data admiterii în centru',
         'plan_date' => 'Data realizării planului',
         'last_revise_date' => 'Data ultimei revizuiri',
         'service' => 'Serviciu',
@@ -176,7 +176,7 @@ return [
         'service_details' => 'Detalii acordare serviciu',
         'award_methods' => 'Modalitatea de acordare',
         'intervention_details' => 'Detalii acordare intervenții',
-        'violence_frequency' => 'Frecvența formelor de violență'
+        'violence_frequency' => 'Frecvența formelor de violență',
     ],
 
     'headings' => [

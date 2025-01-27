@@ -10,14 +10,12 @@ use App\Concerns\LogsActivityOptions;
 use App\Enums\Occupation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class BeneficiaryPartner extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
     use HasEffectiveAddress;
-    use LogsActivity;
     use LogsActivityOptions;
 
     protected $fillable = [

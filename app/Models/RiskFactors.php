@@ -12,13 +12,11 @@ use App\Enums\Ternary;
 use Illuminate\Database\Eloquent\Casts\AsEnumCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class RiskFactors extends Model
 {
     use HasFactory;
     use BelongsToBeneficiary;
-    use LogsActivity;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -35,6 +33,8 @@ class RiskFactors extends Model
         'extended_family_can_provide' => AsEnumCollection::class . ':' . Helps::class,
         'friends_can_provide' => AsEnumCollection::class . ':' . Helps::class,
         'risk_level' => Level::class,
+        'extended_family_can_not_provide' => Ternary::class,
+        'friends_can_not_provide' => Ternary::class,
     ];
 
     protected static function boot()

@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\LogsActivityOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Znck\Eloquent\Relations\BelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class MonthlyPlanService extends Model
 {
     use HasFactory;
+    use LogsActivityOptions;
+    use BelongsToThroughTrait;
 
     protected $fillable = [
         'monthly_plan_id',
@@ -37,5 +42,13 @@ class MonthlyPlanService extends Model
     public function monthlyPlanInterventions(): HasMany
     {
         return $this->hasMany(MonthlyPlanInterventions::class);
+    }
+
+    public function beneficiary(): BelongsToThrough
+    {
+        return $this->belongsToThrough(Beneficiary::class, [
+            InterventionPlan::class,
+            MonthlyPlan::class,
+        ]);
     }
 }

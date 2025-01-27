@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Concerns\LogsActivityOptions;
 use App\Enums\MeetingStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class InterventionMeeting extends Model
 {
     use HasFactory;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'beneficiary_intervention_id',

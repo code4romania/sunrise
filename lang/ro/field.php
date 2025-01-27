@@ -46,6 +46,8 @@ return [
     'legal_residence_city' => 'Oraș/UAT domiciliu legal',
     'legal_residence_county' => 'Județ domiciliu legal',
     'legal_residence_environment' => 'Mediu rezidență domiciliu legal',
+    'environment' => 'Mediu rezidență',
+    'address_type' => 'Tipul adresei',
     'location' => 'Locație',
     'notes' => 'Descriere / Observații',
     'nurse' => 'Asistent Medical Comunitar',

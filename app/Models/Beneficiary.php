@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Beneficiary extends Model
 {
@@ -34,7 +33,6 @@ class Beneficiary extends Model
     use HasFactory;
     use HasUlid;
     use HasEffectiveAddress;
-    use LogsActivity;
     use LogsActivityOptions;
     use HasSpecialistsTeam;
     use HasBirthdate;
