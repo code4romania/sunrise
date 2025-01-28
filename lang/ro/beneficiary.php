@@ -10,7 +10,7 @@ return [
     ],
 
     'labels' => [
-        'registered_date' => 'Data înregistrării',
+        'registered_date' => 'Data înregistrării (zi-lună-an)',
         'reactivated' => 'Reactivare de caz',
         'related_cases' => 'Istoric caz (fișe conectate cazului)',
         'case_manager' => 'Manager de caz',
@@ -208,7 +208,7 @@ return [
                 'types_of_requested_services' => 'Tipuri de servicii solicitate',
             ],
             'labels' => [
-                'registered_date' => 'Data înregistrării',
+                'registered_date' => 'Data înregistrării (zi-lună-an)',
                 'file_number' => 'Număr fișă',
                 'specialist' => 'Specialist',
                 'method_of_identifying_the_service' => 'Modalitatea de identificare a serviciului de către solicitant',
@@ -262,10 +262,10 @@ return [
                 'full_name' => 'Nume si prenume',
                 'institution' => 'Institutia',
                 'relationship' => 'Relatia cu copilul/ familia',
-                'contact_date' => 'Data contactarii',
+                'contact_date' => 'Data contactarii (zi-lună-an)',
                 'meetings' => 'Intrevederi (sau convorbiri telefonice) pentru colectarea datelor',
                 'specialist' => 'Specialist',
-                'date' => 'Data',
+                'date' => 'Data (zi-lună-an)',
                 'location' => 'Locatia',
                 'observations' => 'Observații',
                 'applicant' => 'Solicitant',
@@ -358,7 +358,7 @@ return [
                 'type' => 'Tip document',
                 'name' => 'Denumire document',
                 'observations' => 'Observații',
-                'date' => 'Data',
+                'date' => 'Data (zi-lună-an)',
                 'document_file' => 'Încarcă document',
                 'summarize' => '{1} +:count alt document|[2,19] +:count alte documente|[20,*] +:count de alte documente',
                 'delete_description' => 'Odată șters un document, acesta nu mai poate fi recuperat. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
@@ -377,7 +377,7 @@ return [
             ],
 
             'labels' => [
-                'date' => 'Data',
+                'date' => 'Data (zi-lună-an)',
                 'time' => 'Ora',
                 'user' => 'Utilizator',
                 'description' => 'Acțiune',
@@ -444,10 +444,10 @@ return [
                 'modal_delete' => 'Șterge fișă de închidere a cazului',
             ],
             'labels' => [
-                'date' => 'Data realizării fișei de închidere',
+                'date' => 'Data realizării fișei de închidere (zi-lună-an)',
                 'number' => 'Număr fișă',
-                'admittance_date' => 'Data admiterii în centru',
-                'exit_date' => 'Data ieșirii din centru',
+                'admittance_date' => 'Data admiterii în centru (zi-lună-an)',
+                'exit_date' => 'Data ieșirii din centru (zi-lună-an)',
                 'case_manager' => 'Manager de caz',
                 'admittance_reason' => 'Motivul admiterii în Centru',
                 'admittance_details' => 'Detalii motiv admitere',
@@ -456,7 +456,7 @@ return [
                 'beneficiary_request' => 'Specificǎ motivul beneficiarei',
                 'other_details' => 'Specificǎ altă situație',
                 'close_situation' => 'Situația cazului la închidere',
-                'close_date' => 'Închis la data',
+                'close_date' => 'Închis la data (zi-lună-an)',
                 'close_method_widget' => 'Modalitatea de închidere',
                 'modal_delete_description' => 'Odată ștearsă o fișă, acesta nu mai poate fi recuperată. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
             ],
@@ -472,7 +472,6 @@ return [
                 'institution_name' => 'Introdu instituția/serviciului',
                 'add_details' => 'Adaugă detalii',
                 'close_situation' => 'Descrieți situația cazului la închidere',
-                '',
             ],
 
             'notifications' => [
@@ -532,7 +531,7 @@ return [
         'first_name' => 'Nume de familie',
         'last_name' => 'Numele mic',
         'age' => 'Varsta in ani impliniti',
-        'date' => 'ZZ/LL/AN',
+        'date' => 'zi-lună-an',
         'meet_location' => 'Locatia intrevederii',
         'relevant_details' => 'Detalii relevante pe scurt',
         'partner_relevant_observations' => 'Adaugă orice observație relevantă despre partener',
