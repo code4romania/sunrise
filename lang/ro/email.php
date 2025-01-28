@@ -43,4 +43,15 @@ return [
             'accept_invitation' => 'Acceptă invitația',
         ],
     ],
+    'reset_password' => [
+        'intro_line_1' => 'Am primit o cerere de resetare a parolei tale în platforma Sunrise.',
+        'intro_line_2' => 'Pentru a configura o parolă nouă te rugăm să apeși butonul de mai jos și să urmezi instrucțiunile.',
+        'intro_line_3' => 'Opțiunea de a reseta parola va expira după 60 de minute.',
+        'intro_line_4' => 'Dacă nu ai solicitat resetarea parolei, te rugăm să ignori acest mail.',
+        'intro_line_5' => 'Poți accesa platforma Sunrise la link-ul de mai jos:',
+        'intro_line_6' => '<a style="text-align: center" href="https://sunrise.stopviolenteidomestice.ro">www.sunrise.stopviolențeidomestice.ro</a>',
+        'subject' => 'Cerere de resetare a parolei pentru contul tău din platforma Sunrise',
+        'action' => 'Resetează parola',
+        'reset_password' => 'Resetează parola',
+    ],
 ];

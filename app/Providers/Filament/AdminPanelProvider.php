@@ -6,6 +6,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages;
 use App\Filament\Admin\Resources\ServiceResource;
+use App\Filament\Pages\Auth\RequestPasswordReset;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
 use Filament\Actions\MountableAction;
@@ -59,6 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups(false)
             ->login(Pages\Auth\Login::class)
+            ->passwordReset(RequestPasswordReset::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

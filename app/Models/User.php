@@ -12,6 +12,7 @@ use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
 use App\Models\Scopes\BelongsToCurrentTenant;
 use App\Notifications\Organizations\WelcomeNotificationInAnotherTenant;
+use App\Notifications\PasswordReset;
 use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -346,5 +347,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         }
 
         $this->sendWelcomeNotification();
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new PasswordReset($token));
     }
 }

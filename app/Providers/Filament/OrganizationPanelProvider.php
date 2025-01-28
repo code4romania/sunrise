@@ -6,6 +6,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Organizations\Pages;
 use App\Filament\Organizations\Pages\Profile\UserPersonalInfo;
+use App\Filament\Pages\Auth\RequestPasswordReset;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\UpdateDefaultTenant;
 use App\Livewire\Welcome;
@@ -24,7 +25,6 @@ use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Table;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -68,7 +68,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups(false)
             ->login(Pages\Auth\Login::class)
-            ->passwordReset()
+            ->passwordReset(RequestPasswordReset::class)
             ->colors([
                 'primary' => Color::Purple,
             ])
