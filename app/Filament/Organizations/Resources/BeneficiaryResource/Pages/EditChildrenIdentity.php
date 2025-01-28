@@ -148,8 +148,12 @@ class EditChildrenIdentity extends EditRecord
                 ->reorderable(false)
                 ->relationship('children')
                 ->columnSpanFull()
+                ->extraAttributes(['class' => 'm'])
                 ->hiddenLabel()
                 ->hideLabels()
+                ->columnWidths([
+                    'gender' => '120px',
+                ])
                 ->addActionLabel(__('beneficiary.action.add_child'))
                 ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                 ->hidden(fn (Get $get) => $get('doesnt_have_children'))
@@ -190,6 +194,8 @@ class EditChildrenIdentity extends EditRecord
 
                     Select::make('gender')
                         ->label(__('field.gender'))
+//                        ->native(true)
+                            ->placeholder(__('placeholder.select_gender'))
                         ->options(GenderShortValues::options()),
 
                     TextInput::make('current_address')

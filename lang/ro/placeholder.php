@@ -11,6 +11,7 @@ return [
     'civil_status' => 'Alege starea civilă',
     'cnp' => 'Cod Numeric Personal',
     'select_many' => 'Alege răspunsurile care se aplică',
+    'select_gender' => 'Gen ',
     'input_text' => 'Specificați',
     'select_one' => 'Alege un răspuns',
     'birthplace' => 'Localitatea în care s-a născut',
