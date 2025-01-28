@@ -248,7 +248,7 @@ return [
         'interventions_count' => 'Nr intervenții',
         'monthly_plan' => 'Plan de intervenție lunar',
         'create_monthly_plan_modal' => 'Creează un plan lunar de intervenție nou',
-        'dashboard_intervention_table' => 'Sumar intervenții',
+        'dashboard_intervention_table' => 'Sumar intervenții pentru ziua de astăzi',
         'dashboard_intervention_table_empty_state' => 'Odată deschis primul caz și creat primul plan de intervenție pentru acesta, o listă a intervențiilor va fi afișată în acest tabel.',
         'edit_monthly_plan_title' => 'Editează plan lunar',
         'edit_monthly_plan_services_and_interventions_title' => 'Editează servicii si intervenții',
