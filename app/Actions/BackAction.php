@@ -15,6 +15,9 @@ class BackAction extends Action
         $this->icon('heroicon-o-chevron-left');
         $this->hiddenLabel();
         $this->link();
+        $this->extraAttributes([
+            'class' => 'p-4'
+        ]);
     }
 
     public function getName(): ?string

@@ -26,13 +26,15 @@
                 class="mb-2 hidden sm:block"
             />
         @endif
-
+        <div class="flex  gap-3 justify-items-center items-center">
+            {{ $backAction }}
         <h1
             class="fi-header-heading text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl"
         >
-            {{ $backAction }}
+
             {{ $heading }}
         </h1>
+        </div>
 
         @if ($subheading)
             <p
