@@ -16,7 +16,7 @@ class BackAction extends Action
         $this->hiddenLabel();
         $this->link();
         $this->extraAttributes([
-            'class' => 'p-4'
+            'class' => 'p-4',
         ]);
     }
 

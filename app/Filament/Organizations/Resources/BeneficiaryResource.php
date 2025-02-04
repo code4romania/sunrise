@@ -70,16 +70,17 @@ class BeneficiaryResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table->modifyQueryUsing(
-            fn (Builder $query) => $query
-                ->with([
-                    'managerTeam',
-                    'lastMonitoring',
-                    // used for permissions
-                    'specialistsMembers',
-                ])
-                ->whereUserHasAccess()
-        )
+        return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                return $query
+                    ->with([
+                        'managerTeam',
+                        'lastMonitoring',
+                        // used for permissions
+                        'specialistsMembers',
+                    ])
+                    ->whereUserHasAccess();
+            })
             ->columns([
                 TextColumn::make('id')
                     ->label(__('field.case_id'))

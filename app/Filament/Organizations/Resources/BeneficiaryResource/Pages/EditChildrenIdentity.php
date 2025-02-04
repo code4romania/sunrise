@@ -195,7 +195,7 @@ class EditChildrenIdentity extends EditRecord
                     Select::make('gender')
                         ->label(__('field.gender'))
 //                        ->native(true)
-                            ->placeholder(__('placeholder.select_gender'))
+                        ->placeholder(__('placeholder.select_gender'))
                         ->options(GenderShortValues::options()),
 
                     TextInput::make('current_address')

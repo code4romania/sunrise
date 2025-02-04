@@ -89,7 +89,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
         'password' => 'hashed',
         'is_admin' => 'boolean',
         'ngo_admin' => 'boolean',
-        'config_process' => 'boolean'
+        'config_process' => 'boolean',
     ];
 
     protected static function booted()

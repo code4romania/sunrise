@@ -46,6 +46,4 @@ class OrganizationService extends Model
     {
         return $this->hasMany(InterventionService::class);
     }
-
-
 }
