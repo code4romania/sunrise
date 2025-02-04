@@ -27,7 +27,7 @@ use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Models\InterventionService;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
-use Awcodes\FilamentTableRepeater\Components\TableRepeater;
+use Awcodes\TableRepeater\Components\TableRepeater;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;

@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.2",
         "alcea/cnp": "^3.0",
-        "awcodes/filament-table-repeater": "^2.0",
+        "awcodes/filament-table-repeater": "^3.1",
         "blade-ui-kit/blade-icons": "^1.6",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
