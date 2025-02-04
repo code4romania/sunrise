@@ -35,6 +35,6 @@ class Children extends Model
     {
         $age = $this->birthdate ? Carbon::parse($this->birthdate)->diffInYears(now()) : null;
 
-        return $age === 0 ? '<1' : $age;
+        return $age === 0 ? '<1' : \intval($age);
     }
 }
