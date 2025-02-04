@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Pages\Auth;
 
 use App\Notifications\PasswordReset;
@@ -23,7 +25,7 @@ class RequestPasswordReset extends BaseRequestPasswordReset
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]))
-                ->body(array_key_exists('body', __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled') ?: []) ? __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled.body', [
+                ->body(\array_key_exists('body', __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled') ?: []) ? __('filament-panels::pages/auth/password-reset/request-password-reset.notifications.throttled.body', [
                     'seconds' => $exception->secondsUntilAvailable,
                     'minutes' => ceil($exception->secondsUntilAvailable / 60),
                 ]) : null)

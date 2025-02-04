@@ -5,47 +5,6 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Http\Responses\LoginResponse;
-use App\Models\Address;
-use App\Models\Aggressor;
-use App\Models\Beneficiary;
-use App\Models\BeneficiaryAntecedents;
-use App\Models\BeneficiaryDetails;
-use App\Models\BeneficiaryIntervention;
-use App\Models\BeneficiaryPartner;
-use App\Models\BeneficiarySituation;
-use App\Models\BenefitService;
-use App\Models\Children;
-use App\Models\City;
-use App\Models\CloseFile;
-use App\Models\CommunityProfile;
-use App\Models\County;
-use App\Models\DetailedEvaluationResult;
-use App\Models\DetailedEvaluationSpecialist;
-use App\Models\Document;
-use App\Models\EvaluateDetails;
-use App\Models\FlowPresentation;
-use App\Models\Institution;
-use App\Models\Intervention;
-use App\Models\InterventionMeeting;
-use App\Models\InterventionPlan;
-use App\Models\InterventionPlanResult;
-use App\Models\InterventionService;
-use App\Models\Meeting;
-use App\Models\Monitoring;
-use App\Models\MonitoringChild;
-use App\Models\MonthlyPlan;
-use App\Models\MonthlyPlanInterventions;
-use App\Models\MonthlyPlanService;
-use App\Models\MultidisciplinaryEvaluation;
-use App\Models\Organization;
-use App\Models\ReferringInstitution;
-use App\Models\RequestedServices;
-use App\Models\RiskFactors;
-use App\Models\Service;
-use App\Models\Specialist;
-use App\Models\User;
-use App\Models\Violence;
-use App\Models\ViolenceHistory;
 use Filament\Forms\Components\TextInput;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Filament\Infolists\Components\TextEntry;
@@ -69,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerViteMacros();
 
         $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+
         Table::configureUsing(function (Table $table) {
             return $table->defaultSort('created_at', 'desc');
         });
@@ -95,9 +55,9 @@ class AppServiceProvider extends ServiceProvider
 
         tap($this->app->isLocal(), function (bool $shouldBeEnabled) {
             Model::preventLazyLoading($shouldBeEnabled);
-            Model::preventAccessingMissingAttributes($shouldBeEnabled);
-//            in create beneficiary page we use some inputs that doesn't exist in db
-//            Model::preventSilentlyDiscardingAttributes($shouldBeEnabled);
+            // Model::preventAccessingMissingAttributes($shouldBeEnabled);
+            // in create beneficiary page we use some inputs that doesn't exist in db
+            // Model::preventSilentlyDiscardingAttributes($shouldBeEnabled);
         });
 
         TextEntry::configureUsing(function (TextEntry $entry) {
@@ -108,46 +68,46 @@ class AppServiceProvider extends ServiceProvider
     protected function enforceMorphMap(): void
     {
         Relation::enforceMorphMap([
-            'institution' => Institution::class,
-            'beneficiary' => Beneficiary::class,
-            'city' => City::class,
-            'community_profile' => CommunityProfile::class,
-            'county' => County::class,
-            'organization' => Organization::class,
-            'referring_institution' => ReferringInstitution::class,
-            'service' => Service::class,
-            'user' => User::class,
-            'document' => Document::class,
-            'aggressor' => Aggressor::class,
-            'beneficiaryPartner' => BeneficiaryPartner::class,
-            'meeting' => Meeting::class,
-            'multidisciplinaryEvaluation' => MultidisciplinaryEvaluation::class,
-            'detailedEvaluationResult' => DetailedEvaluationResult::class,
-            'evaluateDetails' => EvaluateDetails::class,
-            'violence' => Violence::class,
-            'riskFactors' => RiskFactors::class,
-            'requestedServices' => RequestedServices::class,
-            'beneficiarySituation' => BeneficiarySituation::class,
-            'violenceHistory' => ViolenceHistory::class,
-            'closeFile' => CloseFile::class,
-            'monitoring' => Monitoring::class,
-            'flowPresentation' => FlowPresentation::class,
-            'children' => Children::class,
-            'address' => Address::class,
-            'specialist' => Specialist::class,
-            'monitoringChild' => MonitoringChild::class,
-            'beneficiaryAntecedents' => BeneficiaryAntecedents::class,
-            'beneficiaryDetails' => BeneficiaryDetails::class,
-            'interventionPlan' => InterventionPlan::class,
-            'interventionService' => InterventionService::class,
-            'beneficiaryIntervention' => BeneficiaryIntervention::class,
-            'detailedEvaluationSpecialist' => DetailedEvaluationSpecialist::class,
-            'interventionMeeting' => InterventionMeeting::class,
-            'benefitService' => BenefitService::class,
-            'interventionPlanResult' => InterventionPlanResult::class,
-            'monthlyPlan' => MonthlyPlan::class,
-            'monthlyPlanService' => MonthlyPlanService::class,
-            'monthlyPlanInterventions' => MonthlyPlanInterventions::class,
+            'address' => \App\Models\Address::class,
+            'aggressor' => \App\Models\Aggressor::class,
+            'beneficiary' => \App\Models\Beneficiary::class,
+            'beneficiaryAntecedents' => \App\Models\BeneficiaryAntecedents::class,
+            'beneficiaryDetails' => \App\Models\BeneficiaryDetails::class,
+            'beneficiaryIntervention' => \App\Models\BeneficiaryIntervention::class,
+            'beneficiaryPartner' => \App\Models\BeneficiaryPartner::class,
+            'beneficiarySituation' => \App\Models\BeneficiarySituation::class,
+            'benefitService' => \App\Models\BenefitService::class,
+            'children' => \App\Models\Children::class,
+            'city' => \App\Models\City::class,
+            'closeFile' => \App\Models\CloseFile::class,
+            'community_profile' => \App\Models\CommunityProfile::class,
+            'county' => \App\Models\County::class,
+            'detailedEvaluationResult' => \App\Models\DetailedEvaluationResult::class,
+            'detailedEvaluationSpecialist' => \App\Models\DetailedEvaluationSpecialist::class,
+            'document' => \App\Models\Document::class,
+            'evaluateDetails' => \App\Models\EvaluateDetails::class,
+            'flowPresentation' => \App\Models\FlowPresentation::class,
+            'institution' => \App\Models\Institution::class,
+            'interventionMeeting' => \App\Models\InterventionMeeting::class,
+            'interventionPlan' => \App\Models\InterventionPlan::class,
+            'interventionPlanResult' => \App\Models\InterventionPlanResult::class,
+            'interventionService' => \App\Models\InterventionService::class,
+            'meeting' => \App\Models\Meeting::class,
+            'monitoring' => \App\Models\Monitoring::class,
+            'monitoringChild' => \App\Models\MonitoringChild::class,
+            'monthlyPlan' => \App\Models\MonthlyPlan::class,
+            'monthlyPlanInterventions' => \App\Models\MonthlyPlanInterventions::class,
+            'monthlyPlanService' => \App\Models\MonthlyPlanService::class,
+            'multidisciplinaryEvaluation' => \App\Models\MultidisciplinaryEvaluation::class,
+            'organization' => \App\Models\Organization::class,
+            'referring_institution' => \App\Models\ReferringInstitution::class,
+            'requestedServices' => \App\Models\RequestedServices::class,
+            'riskFactors' => \App\Models\RiskFactors::class,
+            'service' => \App\Models\Service::class,
+            'specialist' => \App\Models\Specialist::class,
+            'user' => \App\Models\User::class,
+            'violence' => \App\Models\Violence::class,
+            'violenceHistory' => \App\Models\ViolenceHistory::class,
         ]);
     }
 
@@ -158,7 +118,7 @@ class AppServiceProvider extends ServiceProvider
                 ->filter()
                 ->join('_');
 
-            return $this->foreignIdFor(County::class, $column)
+            return $this->foreignIdFor(\App\Models\County::class, $column)
                 ->nullable()
                 ->constrained('countries')
                 ->cascadeOnDelete();
@@ -169,7 +129,7 @@ class AppServiceProvider extends ServiceProvider
                 ->filter()
                 ->join('_');
 
-            return $this->foreignIdFor(City::class, $column)
+            return $this->foreignIdFor(\App\Models\City::class, $column)
                 ->nullable()
                 ->constrained('cities')
                 ->cascadeOnDelete();

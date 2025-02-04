@@ -94,6 +94,7 @@ class Beneficiary extends Model
     public function scopeWhereUserHasAccess(Builder $query): Builder
     {
         $user = auth()->user();
+
         if ($user->isNgoAdmin() || $user->hasAccessToAllCases()) {
             return $query;
         }

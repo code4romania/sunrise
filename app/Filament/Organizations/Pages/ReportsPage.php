@@ -116,7 +116,7 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
                         ->label(__('report.labels.show_missing_values'))
                         ->default(true)
                         ->extraAttributes([
-                            'class' => 'ml-16'
+                            'class' => 'ml-16',
                         ])
                         ->columnSpan(4),
                 ]),
