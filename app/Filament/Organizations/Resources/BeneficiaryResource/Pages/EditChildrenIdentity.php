@@ -12,6 +12,7 @@ use App\Forms\Components\DateInput;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Awcodes\TableRepeater\Header;
 use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
@@ -150,15 +151,35 @@ class EditChildrenIdentity extends EditRecord
                 ->columnSpanFull()
                 ->extraAttributes(['class' => 'm'])
                 ->hiddenLabel()
-                ->hideLabels()
-                ->columnWidths([
-                    'gender' => '120px',
-                ])
                 ->addActionLabel(__('beneficiary.action.add_child'))
                 ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                 ->hidden(fn (Get $get) => $get('doesnt_have_children'))
                 ->emptyLabel(false)
                 ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
+                ->headers([
+                    Header::make('name')
+                        ->label(__('field.child_name')),
+
+                    Header::make('birthdate')
+                        ->label(__('field.birthdate')),
+
+                    Header::make('age')
+                        ->label(__('field.age'))
+                        ->width('60px'),
+
+                    Header::make('gender')
+                        ->label(__('field.gender'))
+                        ->width('120px'),
+
+                    Header::make('current_address')
+                        ->label(__('field.current_address')),
+
+                    Header::make('status')
+                        ->label(__('field.status')),
+
+                    Header::make('workspace')
+                        ->label(__('field.child_status')),
+                ])
                 ->schema([
                     TextInput::make('name')
                         ->label(__('field.child_name'))
@@ -167,24 +188,15 @@ class EditChildrenIdentity extends EditRecord
                     DateInput::make('birthdate')
                         ->label(__('field.birthdate'))
                         ->afterStateUpdated(function (Set $set, $state) {
-                            if (! $state) {
-                                return;
-                            }
+                            $set('age', rescue(
+                                function () use ($state) {
+                                    $age = (int) Carbon::createFromFormat('d.m.Y', $state)->diffInYears(today());
 
-                            try {
-                                $age = Carbon::createFromFormat('d.m.Y', $state)->diffInYears(now());
-                            } catch (\Exception $e) {
-                                return;
-                            }
-
-                            if ($age > 1000) {
-                                return;
-                            }
-
-                            if ($age === 0) {
-                                $age = '<1';
-                            }
-                            $set('age', $age);
+                                    return $age < 1 ? '<1' : $age;
+                                },
+                                rescue: '–',
+                                report: false
+                            ));
                         })
                         ->live(),
 
@@ -194,7 +206,6 @@ class EditChildrenIdentity extends EditRecord
 
                     Select::make('gender')
                         ->label(__('field.gender'))
-//                        ->native(true)
                         ->placeholder(__('placeholder.select_gender'))
                         ->options(GenderShortValues::options()),
 

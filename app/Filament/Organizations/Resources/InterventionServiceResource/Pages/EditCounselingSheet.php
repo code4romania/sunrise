@@ -28,6 +28,7 @@ use App\Forms\Components\Select;
 use App\Models\InterventionService;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\TableRepeater\Components\TableRepeater;
+use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
@@ -53,6 +54,7 @@ class EditCounselingSheet extends EditRecord
 
     public function getTitle(): string|Htmlable
     {
+        // TODO: look into this
         return __('intervention_plan.headings.edit_counseling_sheet', [
             'counseling_sheet_name' => strtolower($this->getRecord()
                 ->organizationServiceWithoutStatusCondition
@@ -169,8 +171,20 @@ class EditCounselingSheet extends EditRecord
                 ->schema([
                     TableRepeater::make('data.institutions')
                         ->hiddenLabel()
-                        ->hideLabels()
                         ->addActionLabel(__('intervention_plan.actions.add_institution'))
+                        ->headers([
+                            Header::make('institution')
+                                ->label(__('intervention_plan.labels.responsible_institution')),
+
+                            Header::make('contact_date')
+                                ->label(__('intervention_plan.labels.contact_date')),
+
+                            Header::make('phone')
+                                ->label(__('intervention_plan.labels.phone')),
+
+                            Header::make('contact_person')
+                                ->label(__('intervention_plan.labels.contact_person')),
+                        ])
                         ->schema([
                             TextInput::make('institution')
                                 ->label(__('intervention_plan.labels.responsible_institution'))

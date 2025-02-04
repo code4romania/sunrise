@@ -12,15 +12,15 @@ use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
+use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -83,9 +83,22 @@ class ServiceResource extends Resource
                             ->orderColumn()
                             ->columnSpanFull()
                             ->addActionLabel(__('nomenclature.actions.add_intervention'))
-                            ->schema([
-                                Hidden::make('sort'),
+                            ->minItems(1)
+                            ->showLabels()
+                            ->headers([
+                                Header::make('index')
+                                    ->label(__('nomenclature.labels.nr'))
+                                    ->width('2em')
+                                    ->align(Alignment::Right),
 
+                                Header::make('name')
+                                    ->label(__('nomenclature.labels.intervention_name'))
+                                    ->markAsRequired(),
+
+                                Header::make('status')
+                                    ->label(__('nomenclature.labels.status')),
+                            ])
+                            ->schema([
                                 Placeholder::make('index')
                                     ->label(__('nomenclature.labels.nr'))
                                     ->content(function () {
@@ -96,21 +109,25 @@ class ServiceResource extends Resource
                                     ->hiddenLabel(),
 
                                 TextInput::make('name')
-                                    ->columnSpanFull()
+                                    ->label(__('nomenclature.labels.intervention_name'))
                                     ->hiddenLabel()
                                     ->maxLength(200)
-                                    ->label(__('nomenclature.labels.intervention_name')),
+                                    ->required(),
 
                                 Toggle::make('status')
-                                    ->columnSpanFull()
                                     ->live()
                                     ->default(true)
                                     ->afterStateUpdated(function (bool $state) {
                                         if (! $state) {
+                                            // TODO: fix this
                                             dd('Modal cu inactivare de hard confirmation');
                                         }
                                     })
-                                    ->label(fn (Get $get) => $get('status') ? __('nomenclature.labels.active') : __('nomenclature.labels.inactive')),
+                                    ->label(
+                                        fn (bool $state) => $state
+                                            ? __('nomenclature.labels.active')
+                                            : __('nomenclature.labels.inactive')
+                                    ),
                             ])
                             ->deleteAction(
                                 fn (Action $action) => $action

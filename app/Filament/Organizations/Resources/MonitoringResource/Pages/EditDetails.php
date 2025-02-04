@@ -14,6 +14,7 @@ use App\Forms\Components\TableRepeater;
 use App\Models\Monitoring;
 use App\Models\UserRole;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
@@ -83,10 +84,19 @@ class EditDetails extends EditRecord
                         ->relationship('specialistsTeam')
                         ->defaultItems(1)
                         ->hiddenLabel()
-                        ->hideLabels()
                         ->emptyLabel()
                         ->columnSpanFull()
                         ->addActionLabel(__('monitoring.actions.add_specialist'))
+                        ->headers([
+                            Header::make('id')
+                                ->label(__('nomenclature.labels.nr')),
+
+                            Header::make('role_id')
+                                ->label(__('monitoring.labels.role')),
+
+                            Header::make('user_id')
+                                ->label(__('monitoring.labels.specialist_name')),
+                        ])
                         ->schema([
                             Placeholder::make('id')
                                 ->label(__('nomenclature.labels.nr'))

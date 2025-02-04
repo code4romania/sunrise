@@ -16,6 +16,7 @@ use App\Forms\Components\TableRepeater;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
+use Awcodes\TableRepeater\Header;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Grid;
@@ -148,8 +149,20 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                     TableRepeater::make('monthlyPlanInterventions')
                         ->relationship('monthlyPlanInterventions')
                         ->hiddenLabel()
-                        ->hideLabels()
                         ->addActionLabel(__('intervention_plan.actions.add_intervention_repeater'))
+                        ->headers([
+                            Header::make('number')
+                                ->label(__('intervention_plan.labels.count')),
+
+                            Header::make('service_intervention_id')
+                                ->label(__('intervention_plan.headings.interventions')),
+
+                            Header::make('objections')
+                                ->label(__('intervention_plan.labels.objections')),
+
+                            Header::make('observations')
+                                ->label(__('intervention_plan.labels.observations')),
+                        ])
                         ->schema([
                             Placeholder::make('number')
                                 ->label(__('intervention_plan.labels.count'))

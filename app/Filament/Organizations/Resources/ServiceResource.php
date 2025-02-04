@@ -14,6 +14,7 @@ use App\Models\InterventionService;
 use App\Models\OrganizationService;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
+use Awcodes\TableRepeater\Header;
 use Filament\Actions\StaticAction;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
@@ -126,47 +127,54 @@ class ServiceResource extends Resource
 
                         Group::make()
                             ->visible(fn (Forms\Get $get) => $get('service_id'))
-                            ->schema(
-                                [
-                                    Placeholder::make('counseling_sheet')
-                                        ->label(__('service.headings.interventions'))
-                                        ->content(__('service.helper_texts.interventions')),
+                            ->schema([
+                                Placeholder::make('counseling_sheet')
+                                    ->label(__('service.headings.interventions'))
+                                    ->content(__('service.helper_texts.interventions')),
 
-                                    TableRepeater::make('interventions')
-                                        ->hideLabels()
-                                        ->hiddenLabel()
-                                        ->helperText(__('service.helper_texts.under_interventions_table'))
-                                        ->relationship('interventions')
-                                        ->addAction(fn (Action $action) => $action->hidden())
-                                        ->deletable(false)
-                                        ->reorderable(false)
-                                        ->mutateRelationshipDataBeforeCreateUsing(function (array $data) {
-                                            unset($data['active']);
+                                TableRepeater::make('interventions')
+                                    ->helperText(__('service.helper_texts.under_interventions_table'))
+                                    ->relationship('interventions')
+                                    ->addAction(fn (Action $action) => $action->hidden())
+                                    ->deletable(false)
+                                    ->reorderable(false)
+                                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data) {
+                                        unset($data['active']);
 
-                                            return $data;
-                                        })
-                                        ->schema([
-                                            Checkbox::make('active')
-                                                ->label(__('service.labels.select'))
-                                                ->afterStateUpdated(fn (bool $state, Set $set) => $state ? $set('status', true) : $set('status', false))
-                                                ->live(),
+                                        return $data;
+                                    })
+                                    ->headers([
+                                        Header::make('active')
+                                            ->label(__('service.labels.select')),
 
-                                            Placeholder::make('name')
-                                                ->label(__('service.labels.interventions'))
-                                                ->hiddenLabel()
-                                                ->content(fn ($state) => $state),
+                                        Header::make('name')
+                                            ->label(__('service.labels.interventions')),
 
-                                            Toggle::make('status')
-                                                ->label(__('service.labels.status'))
-                                                ->disabled(fn (Forms\Get $get) => ! $get('active')),
+                                        Header::make('status')
+                                            ->label(__('service.labels.status')),
 
-                                            Hidden::make('id'),
+                                    ])
+                                    ->schema([
+                                        Checkbox::make('active')
+                                            ->label(__('service.labels.select'))
+                                            ->afterStateUpdated(fn (bool $state, Set $set) => $state ? $set('status', true) : $set('status', false))
+                                            ->live(),
 
-                                            Hidden::make('service_intervention_id'),
-                                        ])
-                                        ->afterStateHydrated(self::populateTable()),
-                                ]
-                            ),
+                                        Placeholder::make('name')
+                                            ->label(__('service.labels.interventions'))
+                                            ->hiddenLabel()
+                                            ->content(fn ($state) => $state),
+
+                                        Toggle::make('status')
+                                            ->label(__('service.labels.status'))
+                                            ->disabled(fn (Forms\Get $get) => ! $get('active')),
+
+                                        Hidden::make('id'),
+
+                                        Hidden::make('service_intervention_id'),
+                                    ])
+                                    ->afterStateHydrated(self::populateTable()),
+                            ]),
                     ]),
             ]);
     }
