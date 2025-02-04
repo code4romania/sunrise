@@ -9,8 +9,8 @@ use App\Filament\Admin\Resources\BenefitResource\Pages;
 use App\Forms\Components\TableRepeater;
 use App\Models\Benefit;
 use App\Models\BenefitService;
+use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -37,7 +37,8 @@ class BenefitResource extends Resource
                         TextInput::make('name')
                             ->label(__('nomenclature.labels.benefit_name'))
                             ->maxWidth('3xl')
-                            ->maxLength(200),
+                            ->maxLength(200)
+                            ->required(),
 
                         TableRepeater::make('benefitTypes')
                             ->relationship('benefitTypes')
@@ -46,18 +47,32 @@ class BenefitResource extends Resource
                             ->reorderable()
                             ->orderColumn()
                             ->columnSpanFull()
-                            ->hideLabels()
+                            ->minItems(1)
+                            ->showLabels()
                             ->addActionLabel(__('nomenclature.actions.add_benefit_type'))
-                            ->schema([
-                                Hidden::make('sort'),
+                            ->headers([
+                                Header::make('name')
+                                    ->label(__('nomenclature.labels.benefit_type_name'))
+                                    ->markAsRequired(),
 
+                                Header::make('status')
+                                    ->label(__('nomenclature.labels.status')),
+                            ])
+                            ->schema([
                                 TextInput::make('name')
                                     ->label(__('nomenclature.labels.benefit_type_name'))
-                                    ->maxLength(200),
+                                    ->hiddenLabel()
+                                    ->maxLength(200)
+                                    ->required(),
 
                                 Toggle::make('status')
+                                    ->live()
                                     ->default(true)
-                                    ->hiddenLabel(),
+                                    ->label(
+                                        fn (bool $state) => $state
+                                            ? __('nomenclature.labels.active')
+                                            : __('nomenclature.labels.inactive')
+                                    ),
                             ])
                             ->deleteAction(
                                 fn (Action $action) => $action
