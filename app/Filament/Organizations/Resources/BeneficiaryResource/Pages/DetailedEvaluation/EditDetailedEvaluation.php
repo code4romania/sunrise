@@ -11,6 +11,7 @@ use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Awcodes\TableRepeater\Header;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -60,6 +61,19 @@ class EditDetailedEvaluation extends EditRecord
                         ->addActionLabel(__('beneficiary.action.add_row'))
                         ->showLabels(false)
                         ->deletable()
+                        ->headers([
+                            Header::make('full_name')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.full_name')),
+
+                            Header::make('institution')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.institution')),
+
+                            Header::make('relationship')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.relationship')),
+
+                            Header::make('date')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date')),
+                        ])
                         ->schema([
                             TextInput::make('full_name')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))
