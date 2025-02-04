@@ -9,6 +9,7 @@ use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Models\CommunityProfile;
 use App\Models\Service;
+use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
@@ -74,9 +75,19 @@ class CommunityProfileResource extends Resource
                                 TableRepeater::make('services')
                                     ->relationship()
                                     ->reorderable(false)
-                                    ->hideLabels()
                                     ->addActionLabel(__('service.action.create'))
                                     ->minItems(1)
+                                    ->headers([
+                                        Header::make('service_id')
+                                            ->label(__('community.field.service'))
+                                            ->markAsRequired(),
+
+                                        Header::make('is_visible')
+                                            ->label(__('community.field.service_visible')),
+
+                                        Header::make('is_available')
+                                            ->label(__('community.field.service_available')),
+                                    ])
                                     ->schema([
                                         Hidden::make('model_type')
                                             ->default(app(CommunityProfile::class)->getMorphClass()),
