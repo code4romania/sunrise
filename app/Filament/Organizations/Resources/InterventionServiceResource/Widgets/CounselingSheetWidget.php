@@ -189,22 +189,27 @@ class CounselingSheetWidget extends InfolistWidget
                                 'spiritual',
                             ];
 
-                            $result = [];
-                            foreach ($fields as $field) {
-                                $data = $record->counselingSheet->data;
-                                if ($data[$field] &&
-                                    ! ExtendedFrequency::isValue($data[$field], ExtendedFrequency::NO_ANSWER) &&
-                                    ! ExtendedFrequency::isValue($data[$field], ExtendedFrequency::NONE)
-                                ) {
-                                    $result[] = \sprintf(
+                            return collect($fields)
+                                ->map(function (string $field) use ($record) {
+                                    $frequency = ExtendedFrequency::tryFrom(
+                                        (string) data_get($record->counselingSheet, "data.$field")
+                                    );
+
+                                    if (
+                                        blank($frequency) ||
+                                        $frequency->is(ExtendedFrequency::NO_ANSWER) ||
+                                        $frequency->is(ExtendedFrequency::NONE)
+                                    ) {
+                                        return null;
+                                    }
+
+                                    return \sprintf(
                                         '%s - %s',
                                         __('intervention_plan.labels.' . $field),
-                                        ExtendedFrequency::tryFrom($data[$field])->getLabel()
+                                        $frequency->getLabel()
                                     );
-                                }
-                            }
-
-                            return $result;
+                                })
+                                ->filter();
                         })
                         ->listWithLineBreaks(),
 
