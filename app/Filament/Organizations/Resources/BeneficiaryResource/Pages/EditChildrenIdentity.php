@@ -8,7 +8,7 @@ use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToIdentity;
 use App\Enums\GenderShortValues;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Forms\Components\DateInput;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -185,7 +185,7 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.child_name'))
                         ->maxLength(70),
 
-                    DateInput::make('birthdate')
+                    DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
                         ->afterStateUpdated(function (Set $set, $state) {
                             $set('age', rescue(
