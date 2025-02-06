@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
 use App\Actions\BackAction;
-use App\Enums\RecommendationService;
-use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\Notice;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
@@ -133,25 +132,13 @@ class ViewInitialEvaluation extends ViewRecord
 
     public function getRequestedServicesInfoListSchema(): array
     {
-        $fields = [];
-        $record = $this->getRecord();
-        foreach (RecommendationService::options() as $key => $value) {
-            $fields[] = TextEntry::make($key)
-                ->label($value)
-                ->state(
-                    $record->requestedServices
-                        ->requested_services
-                        ->contains(RecommendationService::tryFrom($key)) ?
-                        Ternary::YES->getLabel() :
-                        Ternary::NO->getLabel()
-                );
-        }
-
         return [
-            Section::make(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
+            Group::make()
                 ->relationship('requestedServices')
                 ->schema([
-                    ...$fields,
+                    TextEntry::make('requested_services')
+                        ->label(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
+                        ->listWithLineBreaks(),
                     TextEntry::make('other_services_description')
                         ->hiddenLabel()
                         ->placeholder(__('beneficiary.placeholder.other_services')),
