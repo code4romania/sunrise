@@ -14,7 +14,7 @@ use App\Enums\Ethnicity;
 use App\Enums\Gender;
 use App\Enums\IDType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Forms\Components\DateInput;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Location;
 use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
@@ -149,7 +149,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->options(Gender::options())
                         ->enum(Gender::class),
 
-                    DateInput::make('birthdate')
+                    DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
                         ->live(),
 

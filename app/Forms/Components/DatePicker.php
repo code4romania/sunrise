@@ -11,9 +11,11 @@ class DatePicker extends BaseDatePicker
     protected function setUp(): void
     {
         parent::setUp();
-        $this->native(false);
+
         $this->displayFormat('d-m-Y');
+
         $this->closeOnDateSelection();
+
         $this->placeholder(__('general.placeholders.date'));
     }
 }

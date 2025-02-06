@@ -10,7 +10,7 @@ use App\Concerns\RedirectToMonitoring;
 use App\Enums\ChildAggressorRelationship;
 use App\Enums\MaintenanceSources;
 use App\Filament\Organizations\Resources\MonitoringResource;
-use App\Forms\Components\DateInput;
+use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -85,7 +85,7 @@ class EditChildren extends EditRecord
                                 ->maxLength(2)
                                 ->mask('99'),
 
-                            DateInput::make('birthdate')
+                            DatePicker::make('birthdate')
                                 ->label(__('monitoring.labels.birthdate')),
 
                             Select::make('aggressor_relationship')
