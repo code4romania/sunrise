@@ -8,14 +8,16 @@ use App\Http\Responses\LoginResponse;
 use Filament\Forms\Components\TextInput;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Facades\FilamentView;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Table;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
-use Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,6 +46,11 @@ class AppServiceProvider extends ServiceProvider
                 $input->minValue(0);
             }
         });
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::SIDEBAR_NAV_END,
+            fn () => view('filament.sidebar-footer')
+        );
     }
 
     /**
