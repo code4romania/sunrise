@@ -180,10 +180,10 @@ return [
     ],
 
     'frequency' => [
-        'daily' => 'Zilnică',
-        'weekly' => 'Săptămânală',
-        'monthly' => 'Lunară',
-        'lass_than_monthly' => 'Mai rar decât lunară',
+        'daily' => 'Zilnic',
+        'weekly' => 'Săptămânal',
+        'monthly' => 'Lunar',
+        'lass_than_monthly' => 'Mai rar decât lunar',
         'none' => 'Deloc',
         'no_answer' => 'NS/NR',
     ],
