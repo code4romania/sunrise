@@ -7,3 +7,11 @@
 .fi-sidebar-group-label {
     @apply uppercase !text-xs tracking-wide;
 }
+
+.fi-in-entry-wrp > .gap-y-2 {
+    row-gap: 0;
+}
+
+.fi-in-entry-wrp-label > span {
+    @apply text-xs text-gray-700;
+}
