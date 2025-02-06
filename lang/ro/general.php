@@ -32,7 +32,6 @@ return [
     'field' => 'Câmp modificat',
 
     'labels' => [
-        'developed_by' => 'o solutie dezvoltată de',
         'village' => 'sat',
         'commune' => 'Comuna',
     ],

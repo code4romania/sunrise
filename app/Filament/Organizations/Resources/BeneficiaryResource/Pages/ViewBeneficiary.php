@@ -363,8 +363,7 @@ class ViewBeneficiary extends ViewRecord
                         ->schema([
                             TextEntry::make('recommendation_services')
                                 ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
-                                ->color(Color::Gray)
-                                ->badge(),
+                                ->listWithLineBreaks(),
                         ]),
                     Group::make()
                         ->visible(fn (Beneficiary $record) => ! $record->detailedEvaluationResult)
