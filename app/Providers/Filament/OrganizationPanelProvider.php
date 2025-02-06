@@ -70,7 +70,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->login(Pages\Auth\Login::class)
             ->passwordReset(RequestPasswordReset::class)
             ->colors([
-                'primary' => Color::Purple,
+                'primary' => Color::Violet,
             ])
             ->font('DM Sans')
             ->maxContentWidth('full')
