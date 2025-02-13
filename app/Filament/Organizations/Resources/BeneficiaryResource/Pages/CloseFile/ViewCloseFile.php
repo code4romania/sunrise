@@ -69,7 +69,6 @@ class ViewCloseFile extends ViewRecord
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.section.close_file.headings.file_details_simple'))
-                                ->maxWidth('3xl')
                                 ->columns()
                                 ->relationship('closeFile')
                                 ->headerActions([
@@ -87,14 +86,13 @@ class ViewCloseFile extends ViewRecord
 
                                     TextEntry::make('caseManager.name_role')
                                         ->label(__('beneficiary.section.close_file.labels.case_manager')),
-
                                 ]),
                         ]),
+
                     Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make()
-                                ->maxWidth('3xl')
                                 ->columns()
                                 ->schema([
                                     Notice::make('identity')
@@ -117,13 +115,12 @@ class ViewCloseFile extends ViewRecord
                                     TextEntry::make('cnp')
                                         ->label(__('field.cnp')),
                                 ]),
-
                         ]),
+
                     Tabs\Tab::make(__('beneficiary.section.close_file.headings.general_details'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.section.close_file.headings.general_details'))
-                                ->maxWidth('3xl')
                                 ->columns()
                                 ->relationship('closeFile')
                                 ->headerActions([
@@ -160,7 +157,6 @@ class ViewCloseFile extends ViewRecord
                                         ->label(__('beneficiary.section.close_file.labels.close_situation'))
                                         ->html()
                                         ->columnSpanFull(),
-
                                 ]),
                         ]),
                 ]),

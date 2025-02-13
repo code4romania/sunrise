@@ -40,6 +40,7 @@ class ViewUser extends ViewRecord
                     DateTimeEntry::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time')),
                 ]),
+
             Section::make(__('user.heading.specialist_details'))
                 ->columns()
                 ->maxWidth('3xl')

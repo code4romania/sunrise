@@ -294,13 +294,11 @@ class ViewBeneficiary extends ViewRecord
         return
             Section::make(__('beneficiary.page.create_initial_evaluation.title'))
                 ->columnSpan(1)
-                ->headerActions(
-                    [
-                        ViewDetailsAction::make('view')
-                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
-                            ->visible(fn (Beneficiary $record) => $record->violence?->violence_types),
-                    ]
-                )
+                ->headerActions([
+                    ViewDetailsAction::make('view')
+                        ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
+                        ->visible(fn (Beneficiary $record) => $record->violence?->violence_types),
+                ])
                 ->schema([
                     Group::make()
                         ->columns()

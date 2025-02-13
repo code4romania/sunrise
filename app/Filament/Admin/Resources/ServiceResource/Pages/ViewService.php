@@ -10,6 +10,7 @@ use App\Filament\Admin\Resources\ServiceResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Infolists\Components\Notice;
 use App\Infolists\Components\TableEntry;
+use App\Models\Service;
 use Filament\Actions;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\Actions\Action;
@@ -51,7 +52,7 @@ class ViewService extends ViewRecord
     {
         return $infolist->schema([
             Section::make()
-                ->visible(fn () => $this->getRecord()->counseling_sheet)
+                ->visible(fn (Service $record) => $record->counseling_sheet)
                 ->maxWidth('3xl')
                 ->schema([
                     Notice::make('counseling_sheet')
@@ -60,27 +61,12 @@ class ViewService extends ViewRecord
                         ->action(
                             Action::make('view_counseling_sheet')
                                 ->label(__('service.actions.view_counseling_sheet'))
-                                ->modalHeading(
-                                    $this->getRecord()
-                                        ->counseling_sheet
-                                        ?->getLabel()
-                                )
-                                ->form(function () {
-                                    $counselingSheet = $this->getRecord()->counseling_sheet;
-
-                                    if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {
-                                        return EditCounselingSheet::getLegalAssistanceForm();
-                                    }
-
-                                    if (CounselingSheet::isValue($counselingSheet, CounselingSheet::PSYCHOLOGICAL_ASSISTANCE)) {
-                                        return EditCounselingSheet::getSchemaForPsychologicalAssistance();
-                                    }
-
-                                    if (CounselingSheet::isValue($counselingSheet, CounselingSheet::SOCIAL_ASSISTANCE)) {
-                                        return EditCounselingSheet::getSchemaForSocialAssistance();
-                                    }
-
-                                    return [];
+                                ->modalHeading(fn (Service $record) => $record->counseling_sheet?->getLabel())
+                                ->form(fn (Service $record) => match ($record->counseling_sheet) {
+                                    CounselingSheet::LEGAL_ASSISTANCE => EditCounselingSheet::getLegalAssistanceForm(),
+                                    CounselingSheet::PSYCHOLOGICAL_ASSISTANCE => EditCounselingSheet::getSchemaForPsychologicalAssistance(),
+                                    CounselingSheet::SOCIAL_ASSISTANCE => EditCounselingSheet::getSchemaForSocialAssistance(),
+                                    default => [],
                                 })
                                 ->disabledForm()
                                 ->modalAutofocus(false)
@@ -109,7 +95,6 @@ class ViewService extends ViewRecord
                             TextEntry::make('status')
                                 ->label(__('nomenclature.labels.status'))
                                 ->hiddenLabel(),
-
                         ]),
                 ]),
         ]);

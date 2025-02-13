@@ -13,7 +13,6 @@ use App\Filament\Admin\Resources\UserInstitutionResource\Actions\DeactivateUserA
 use App\Filament\Admin\Resources\UserInstitutionResource\Actions\ResendInvitationAction;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateTimeEntry;
-use App\Infolists\Components\SectionHeader;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -78,26 +77,28 @@ class ViewUserInstitution extends ViewRecord
                     DateTimeEntry::make('last_login_at')
                         ->label(__('user.labels.last_login_at_date_time')),
                 ]),
+
             Section::make()
+                ->heading(__('user.heading.specialist_details'))
+                ->headerActions([
+                    EditAction::make()
+                        ->url(self::getParentResource()::getUrl('user.edit', [
+                            'parent' => $this->parent,
+                            'record' => $this->getRecord(),
+                        ])),
+                ])
                 ->maxWidth('3xl')
                 ->columns()
                 ->schema([
-                    SectionHeader::make('edit_user')
-                        ->state(__('user.heading.specialist_details'))
-                        ->action(
-                            EditAction::make()
-                                ->url(self::getParentResource()::getUrl('user.edit', [
-                                    'parent' => $this->parent,
-                                    'record' => $this->getRecord(),
-                                ]))
-                        ),
-
                     TextEntry::make('first_name')
                         ->label(__('user.labels.first_name')),
+
                     TextEntry::make('last_name')
                         ->label(__('user.labels.last_name')),
+
                     TextEntry::make('email')
                         ->label(__('user.labels.email')),
+
                     TextEntry::make('phone_number')
                         ->label(__('user.labels.phone_number')),
                 ]),

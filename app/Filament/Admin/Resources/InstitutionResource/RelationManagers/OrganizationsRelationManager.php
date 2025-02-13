@@ -8,7 +8,6 @@ use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DocumentPreview;
-use App\Infolists\Components\SectionHeader;
 use App\Models\Institution;
 use Filament\Facades\Filament;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -35,15 +34,13 @@ class OrganizationsRelationManager extends RelationManager
     {
         return $infolist->schema([
             Section::make()
+                ->heading(__('institution.headings.center_details'))
+                ->headerActions([
+                    EditAction::make('edit_centers')
+                        ->url(InstitutionResource::getUrl('edit_institution_centers', ['record' => $this->getOwnerRecord()])),
+                ])
                 ->maxWidth('3xl')
                 ->schema([
-                    SectionHeader::make('center_details')
-                        ->state(__('institution.headings.center_details'))
-                        ->action(
-                            EditAction::make('edit_centers')
-                                ->url(InstitutionResource::getUrl('edit_institution_centers', ['record' => $this->getOwnerRecord()]))
-                        ),
-
                     RepeatableEntry::make('organizations')
                         ->hiddenLabel()
                         ->columns()
