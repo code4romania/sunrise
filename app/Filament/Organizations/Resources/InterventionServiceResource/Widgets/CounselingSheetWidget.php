@@ -57,37 +57,32 @@ class CounselingSheetWidget extends InfolistWidget
             return [];
         }
 
-        $schema = [];
-        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {
-            $schema = $this->getSchemaForLegalAssistance();
-        }
+        $schema = match ($counselingSheet) {
+            CounselingSheet::LEGAL_ASSISTANCE => $this->getSchemaForLegalAssistance(),
+            CounselingSheet::PSYCHOLOGICAL_ASSISTANCE => $this->getSchemaForPsychologicalAssistance(),
+            CounselingSheet::SOCIAL_ASSISTANCE => $this->getSchemaForSocialAssistance(),
+            default => [],
+        };
 
-        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::PSYCHOLOGICAL_ASSISTANCE)) {
-            $schema = $this->getSchemaForPsychologicalAssistance();
-        }
-
-        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::SOCIAL_ASSISTANCE)) {
-            $schema = $this->getSchemaForSocialAssistance();
-        }
+        $schema = $this->getSchemaForSocialAssistance();
 
         return [
             Section::make()
                 ->relationship('counselingSheet')
                 ->maxWidth(! CounselingSheet::isValue($counselingSheet, CounselingSheet::SOCIAL_ASSISTANCE) ? '3xl' : null)
-                ->schema([
-                    SectionHeader::make('counseling_sheet')
-                        ->state(__('intervention_plan.headings.counseling_sheet'))
-                        ->action(
-                            EditAction::make()
-                                ->url(InterventionPlanResource::getUrl(
-                                    'edit_counseling_sheet',
-                                    [
-                                        'parent' => $this->record->interventionPlan,
-                                        'record' => $this->record,
-                                    ]
-                                )),
-                        ),
-                    ...$schema]),
+                ->heading(__('intervention_plan.headings.counseling_sheet'))
+                ->headerActions([
+                    EditAction::make()
+                        ->url(InterventionPlanResource::getUrl(
+                            'edit_counseling_sheet',
+                            [
+                                'parent' => $this->record->interventionPlan,
+                                'record' => $this->record,
+                            ]
+                        )),
+                ])
+                ->compact()
+                ->schema($schema),
         ];
     }
 
@@ -95,6 +90,7 @@ class CounselingSheetWidget extends InfolistWidget
     {
         return [
             Section::make(__('intervention_plan.headings.patrimony_data'))
+                ->compact()
                 ->columns()
                 ->schema([
                     EnumEntry::make('data.patrimony')
@@ -108,6 +104,7 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.file_documents'))
+                ->compact()
                 ->columns()
                 ->schema([
                     Group::make()
@@ -130,6 +127,7 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.institution_contacted'))
+                ->compact()
                 ->schema([
                     RepeatableEntry::make('data.institutions')
                         ->hiddenLabel()
@@ -148,6 +146,7 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.final_observations'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.observations')
                         ->label(__('intervention_plan.labels.final_observation'))
@@ -162,6 +161,7 @@ class CounselingSheetWidget extends InfolistWidget
     {
         return [
             Section::make(__('intervention_plan.headings.history'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.relationship_history')
                         ->label(__('intervention_plan.labels.relationship_history')),
@@ -171,6 +171,7 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.violence_forms'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.violence_history_forms')
                         ->label(__('intervention_plan.labels.violence_history_forms')),
@@ -239,6 +240,7 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.violence_effects'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.physical_effects')
                         ->label(__('intervention_plan.labels.physical_effects')),
@@ -251,12 +253,14 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.risk_factors'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.risk_factors_description')
                         ->label(__('intervention_plan.labels.risk_factors_description')),
                 ]),
 
             Section::make(__('intervention_plan.headings.protection_factors'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.internal_resources')
                         ->label(__('intervention_plan.labels.internal_resources')),
@@ -266,12 +270,14 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.request'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.requests_description')
                         ->label(__('intervention_plan.labels.requests_description')),
                 ]),
 
             Section::make(__('intervention_plan.headings.psychological_evaluation'))
+                ->compact()
                 ->schema([
                     TextEntry::make('data.first_meeting_psychological_evaluation')
                         ->label(__('intervention_plan.labels.first_meeting_psychological_evaluation'))
@@ -285,6 +291,7 @@ class CounselingSheetWidget extends InfolistWidget
         return [
             Section::make(__('intervention_plan.headings.family_relationship'))
                 ->maxWidth('3xl')
+                ->compact()
                 ->schema([
                     RepeatableEntry::make('data.family')
                         ->hiddenLabel()
@@ -328,6 +335,7 @@ class CounselingSheetWidget extends InfolistWidget
 
             Section::make(__('intervention_plan.headings.support_group'))
                 ->maxWidth('3xl')
+                ->compact()
                 ->schema([
                     RepeatableEntry::make('data.support_group')
                         ->hiddenLabel()
@@ -358,6 +366,7 @@ class CounselingSheetWidget extends InfolistWidget
 
             Section::make(__('intervention_plan.headings.living_conditions'))
                 ->maxWidth('3xl')
+                ->compact()
                 ->schema([
                     Grid::make()
                         ->schema([
@@ -378,11 +387,11 @@ class CounselingSheetWidget extends InfolistWidget
                                 ->label(__('intervention_plan.labels.living_observations'))
                                 ->columnSpanFull(),
                         ]),
-
                 ]),
 
             Section::make(__('intervention_plan.headings.professional_experience'))
                 ->maxWidth('3xl')
+                ->compact()
                 ->schema([
                     TextEntry::make('data.professional_experience')
                         ->label(__('intervention_plan.labels.professional_experience')),
@@ -390,6 +399,7 @@ class CounselingSheetWidget extends InfolistWidget
 
             Section::make(__('intervention_plan.headings.children_details'))
                 ->visible(fn () => $this->record->beneficiary->children->count())
+                ->compact()
                 ->headerActions([
                     Action::make('view_children_identity')
                         ->label(__('intervention_plan.actions.view_children_identity'))
@@ -534,6 +544,7 @@ class CounselingSheetWidget extends InfolistWidget
             Section::make(__('intervention_plan.headings.integration_and_participation_in_social_service'))
                 ->columns()
                 ->maxWidth('3xl')
+                ->compact()
                 ->schema([
                     EnumEntry::make('data.communication')
                         ->label(__('intervention_plan.labels.communication'))

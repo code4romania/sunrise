@@ -89,6 +89,7 @@ class ViewDocument extends ViewRecord
                     TextEntry::make('observations')
                         ->label(__('beneficiary.section.documents.labels.observations')),
                 ]),
+
             DocumentPreview::make()
                 ->columnSpanFull(),
         ]);

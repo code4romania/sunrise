@@ -272,31 +272,35 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->numeric(),
                 ]),
 
-            RepeatableEntry::make('children')
-                ->label(__('enum.notifier.child'))
-                ->columnSpanFull()
-                ->columns()
+            Section::make(__('enum.notifier.child'))
+                ->compact()
                 ->schema([
-                    TextEntry::make('name')
-                        ->label(__('field.child_name')),
+                    RepeatableEntry::make('children')
+                        ->hiddenLabel()
+                        ->columnSpanFull()
+                        ->columns()
+                        ->schema([
+                            TextEntry::make('name')
+                                ->label(__('field.child_name')),
 
-                    TextEntry::make('age')
-                        ->label(__('field.age')),
+                            TextEntry::make('age')
+                                ->label(__('field.age')),
 
-                    TextEntry::make('gender')
-                        ->label(__('field.gender')),
+                            TextEntry::make('gender')
+                                ->label(__('field.gender')),
 
-                    DateEntry::make('birthdate')
-                        ->label(__('field.birthdate')),
+                            DateEntry::make('birthdate')
+                                ->label(__('field.birthdate')),
 
-                    TextEntry::make('current_address')
-                        ->label(__('field.current_address')),
+                            TextEntry::make('current_address')
+                                ->label(__('field.current_address')),
 
-                    TextEntry::make('status')
-                        ->label(__('field.child_status')),
+                            TextEntry::make('status')
+                                ->label(__('field.child_status')),
 
-                    TextEntry::make('workspace')
-                        ->label(__('field.workspace')),
+                            TextEntry::make('workspace')
+                                ->label(__('field.workspace')),
+                        ]),
                 ]),
 
             TextEntry::make('children_notes')

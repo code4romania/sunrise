@@ -129,6 +129,7 @@ class CreateBeneficiary extends CreateRecord
                                 ->content(__('beneficiary.placeholder.consent')),
                         ]),
                 ]),
+
             Step::make(__('field.cnp'))
                 ->schema([
                     Group::make()
@@ -370,26 +371,32 @@ class CreateBeneficiary extends CreateRecord
                 ->schema([
                     Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
                         ->columns()
+                        ->compact()
                         ->schema(EditBeneficiaryPersonalInformation::beneficiarySection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.aggressor'))
                         ->columns()
+                        ->compact()
                         ->schema(EditAggressor::aggressorSection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.antecedents'))
                         ->columns()
+                        ->compact()
                         ->schema(EditAntecedents::antecedentsSection()),
 
                     Section::make(__('beneficiary.section.personal_information.section.flow'))
                         ->columns()
+                        ->compact()
                         ->schema(EditFlowPresentation::flowSection()),
                 ]),
+
             Step::make('specialist')
                 ->label(__('beneficiary.wizard.specialist.label'))
                 ->schema([
                     Section::make()
                         ->label(__('beneficiary.wizard.specialist.label'))
                         ->maxWidth('3xl')
+                        ->compact()
                         ->schema([
                             CheckboxList::make('roles')
                                 ->label(__('beneficiary.section.specialists.labels.select_roles', ['user_name' => auth()->user()->full_name]))

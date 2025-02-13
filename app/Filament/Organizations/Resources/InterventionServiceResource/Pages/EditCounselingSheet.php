@@ -86,23 +86,17 @@ class EditCounselingSheet extends EditRecord
 
     public function form(Form $form): Form
     {
-        $counselingSheet = $this->record
+        $counselingSheet = $this->getRecord()
             ->organizationServiceWithoutStatusCondition
             ->serviceWithoutStatusCondition
             ->counseling_sheet;
-        $schema = [];
 
-        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {
-            $schema = self::getLegalAssistanceForm();
-        }
-
-        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::PSYCHOLOGICAL_ASSISTANCE)) {
-            $schema = self::getSchemaForPsychologicalAssistance();
-        }
-
-        if (CounselingSheet::isValue($counselingSheet, CounselingSheet::SOCIAL_ASSISTANCE)) {
-            $schema = self::getSchemaForSocialAssistance($this->getRecord());
-        }
+        $schema = match ($counselingSheet) {
+            CounselingSheet::LEGAL_ASSISTANCE => self::getLegalAssistanceForm(),
+            CounselingSheet::PSYCHOLOGICAL_ASSISTANCE => self::getSchemaForPsychologicalAssistance(),
+            CounselingSheet::SOCIAL_ASSISTANCE => self::getSchemaForSocialAssistance($this->getRecord()),
+            default => [],
+        };
 
         return $form->schema([
             Section::make()

@@ -43,37 +43,32 @@ class BeneficiaryInterventionResource extends Resource
     public static function getSchema(?Beneficiary $beneficiary = null, ?int $organizationServiceID = null): array
     {
         return [
-            Grid::make()
+            Group::make()
                 ->schema([
-                    Group::make()
-                        ->schema([
-                            Select::make('organization_service_intervention_id')
-                                ->label(__('intervention_plan.labels.intervention_type'))
-                                ->relationship('organizationServiceIntervention', 'name')
-                                ->options(
-                                    function (?BeneficiaryIntervention $record) use ($organizationServiceID) {
-                                        $organizationServiceID = $record?->interventionService->organization_service_id ?? $organizationServiceID;
+                    Select::make('organization_service_intervention_id')
+                        ->label(__('intervention_plan.labels.intervention_type'))
+                        ->relationship('organizationServiceIntervention', 'name')
+                        ->options(function (?BeneficiaryIntervention $record) use ($organizationServiceID) {
+                            $organizationServiceID = $record?->interventionService->organization_service_id ?? $organizationServiceID;
 
-                                        return OrganizationServiceIntervention::with('serviceIntervention')
-                                            ->where('organization_service_id', $organizationServiceID)
-                                            ->active()
-                                            ->get()
-                                            ->filter(
-                                                fn (OrganizationServiceIntervention $organizationServiceIntervention) => $organizationServiceIntervention->serviceIntervention
-                                            )
-                                            ->pluck('serviceIntervention.name', 'id');
-                                    }
+                            return OrganizationServiceIntervention::with('serviceIntervention')
+                                ->where('organization_service_id', $organizationServiceID)
+                                ->active()
+                                ->get()
+                                ->filter(
+                                    fn (OrganizationServiceIntervention $organizationServiceIntervention) => $organizationServiceIntervention->serviceIntervention
                                 )
-                                ->required(),
+                                ->pluck('serviceIntervention.name', 'id');
+                        })
+                        ->required(),
 
-                            Select::make('specialist_id')
-                                ->label(__('intervention_plan.labels.responsible_specialist'))
-                                ->options(function (?BeneficiaryIntervention $record) use ($beneficiary) {
-                                    $beneficiary = $beneficiary ?? $record?->beneficiary;
+                    Select::make('specialist_id')
+                        ->label(__('intervention_plan.labels.responsible_specialist'))
+                        ->options(function (?BeneficiaryIntervention $record) use ($beneficiary) {
+                            $beneficiary = $beneficiary ?? $record?->beneficiary;
 
-                                    return $beneficiary->specialistsTeam->load(['user', 'role'])->pluck('name_role', 'id');
-                                }),
-                        ]),
+                            return $beneficiary->specialistsTeam->load(['user', 'role'])->pluck('name_role', 'id');
+                        }),
                 ]),
 
             Grid::make()
@@ -88,6 +83,7 @@ class BeneficiaryInterventionResource extends Resource
             Section::make(__('intervention_plan.headings.intervention_indicators'))
                 ->collapsible(fn ($operation) => $operation != 'edit')
                 ->collapsed(fn ($operation) => $operation != 'edit')
+                ->compact()
                 ->schema([
                     Textarea::make('objections')
                         ->label(__('intervention_plan.labels.objections'))
@@ -114,7 +110,6 @@ class BeneficiaryInterventionResource extends Resource
                         ->maxLength(1000)
                         ->columnSpanFull(),
                 ]),
-
         ];
     }
 

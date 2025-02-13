@@ -26,6 +26,7 @@ class ServiceDescriptionWidget extends InfolistWidget
             Section::make(__('intervention_plan.headings.service_description'))
                 ->maxWidth('3xl')
                 ->columns()
+                ->compact()
                 ->headerActions([
                     EditAction::make()
                         ->url(InterventionPlanResource::getUrl('edit_intervention_service', [

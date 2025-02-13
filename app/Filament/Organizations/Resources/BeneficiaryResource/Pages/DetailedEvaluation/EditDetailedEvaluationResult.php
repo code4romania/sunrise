@@ -81,6 +81,7 @@ class EditDetailedEvaluationResult extends EditRecord
         return Section::make(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
             ->schema([
                 RichEditor::make('recommendations_for_intervention_plan')
+                    ->hiddenLabel()
                     ->helperText(__('beneficiary.helper_text.recommendations_for_intervention_plan'))
                     ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
                     ->placeholder(__('beneficiary.placeholder.recommendations_for_intervention_plan'))

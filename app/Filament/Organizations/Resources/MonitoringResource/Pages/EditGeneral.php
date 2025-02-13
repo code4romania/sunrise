@@ -49,7 +49,8 @@ class EditGeneral extends EditRecord
         return $form->schema([
             Section::make()
                 ->maxWidth('3xl')
-                ->schema(self::getSchema())]);
+                ->schema(self::getSchema()),
+        ]);
     }
 
     public static function getSchema(): array
