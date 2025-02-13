@@ -16,7 +16,6 @@ use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
@@ -273,11 +272,11 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->numeric(),
                 ]),
 
-            Group::make()
-                ->label(__('enum.notifier.child'))
+            Section::make(__('enum.notifier.child'))
+                ->compact()
                 ->schema([
-
                     RepeatableEntry::make('children')
+                        ->hiddenLabel()
                         ->columnSpanFull()
                         ->columns()
                         ->schema([
@@ -302,7 +301,6 @@ class ViewBeneficiaryIdentity extends ViewRecord
                             TextEntry::make('workspace')
                                 ->label(__('field.workspace')),
                         ]),
-
                 ]),
 
             TextEntry::make('children_notes')

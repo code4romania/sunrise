@@ -142,9 +142,11 @@ class ViewDetailedEvaluation extends ViewRecord
                 ->placeholder(__('beneficiary.placeholder.other_services')),
 
             Section::make(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
+                ->compact()
                 ->schema([
                     TextEntry::make('recommendations_for_intervention_plan')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.recommendations_for_intervention_plan'))
+                        ->hiddenLabel()
                         ->placeholder(__('beneficiary.placeholder.other_services'))
                         ->html(),
                 ]),
@@ -294,46 +296,53 @@ class ViewDetailedEvaluation extends ViewRecord
     public function getDetailedEvaluationSchema(): array
     {
         return [
-            TableEntry::make('detailedEvaluationSpecialists')
-                ->columns(4)
-                ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
+            Section::make(__('beneficiary.section.detailed_evaluation.labels.specialists'))
+                ->compact()
                 ->schema([
-                    TextEntry::make('full_name')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))
-                        ->hiddenLabel(),
+                    TableEntry::make('detailedEvaluationSpecialists')
+                        ->hiddenLabel()
+                        ->schema([
+                            TextEntry::make('full_name')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))
+                                ->hiddenLabel(),
 
-                    TextEntry::make('institution')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.institution'))
-                        ->hiddenLabel(),
+                            TextEntry::make('institution')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.institution'))
+                                ->hiddenLabel(),
 
-                    TextEntry::make('relationship')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.relationship'))
-                        ->hiddenLabel(),
+                            TextEntry::make('relationship')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.relationship'))
+                                ->hiddenLabel(),
 
-                    DateEntry::make('date')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date'))
-                        ->hiddenLabel(),
+                            DateEntry::make('date')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date'))
+                                ->hiddenLabel(),
+                        ]),
                 ]),
 
-            RepeatableEntry::make('meetings')
-                ->columns()
-                ->label(__('beneficiary.section.detailed_evaluation.labels.meetings'))
+            Section::make(__('beneficiary.section.detailed_evaluation.labels.meetings'))
+                ->compact()
                 ->schema([
-                    TextEntry::make('specialist')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.specialist'))
-                        ->placeholder(__('beneficiary.placeholder.full_name')),
+                    RepeatableEntry::make('meetings')
+                        ->columns()
+                        ->hiddenLabel()
+                        ->schema([
+                            TextEntry::make('specialist')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.specialist'))
+                                ->placeholder(__('beneficiary.placeholder.full_name')),
 
-                    DateEntry::make('date')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.date')),
+                            DateEntry::make('date')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.date')),
 
-                    TextEntry::make('location')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.location'))
-                        ->placeholder(__('beneficiary.placeholder.meet_location')),
+                            TextEntry::make('location')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.location'))
+                                ->placeholder(__('beneficiary.placeholder.meet_location')),
 
-                    TextEntry::make('observations')
-                        ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
-                        ->placeholder(__('beneficiary.placeholder.relevant_details')),
+                            TextEntry::make('observations')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
+                                ->placeholder(__('beneficiary.placeholder.relevant_details')),
 
+                        ]),
                 ]),
         ];
     }
