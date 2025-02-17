@@ -140,7 +140,7 @@ class ListSpecialistsWidget extends BaseWidget
                                 'tenant_users',
                                 fn () => Filament::getTenant()
                                     ->users
-                                    ->load('rolesInOrganization')
+                                    ->loadMissing('rolesInOrganization')
                             );
 
                         return $users->filter(fn (User $user) => $user->hasRoleInOrganization($roleID))

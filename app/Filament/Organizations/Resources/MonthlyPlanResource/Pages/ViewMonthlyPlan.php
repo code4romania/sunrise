@@ -69,7 +69,7 @@ class ViewMonthlyPlan extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
         $this->getRecord()
-            ->load([
+            ->loadMissing([
                 'monthlyPlanServices.service',
                 'monthlyPlanServices.monthlyPlanInterventions.serviceIntervention',
             ]);

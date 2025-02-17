@@ -183,7 +183,7 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                                         }
 
                                         $interventions = Service::find((int) $get('../../service_id'))
-                                            ->load('activeServiceInterventions')
+                                            ->loadMissing('activeServiceInterventions')
                                             ->activeServiceInterventions
                                             ->pluck('name', 'id');
 

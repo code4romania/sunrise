@@ -67,7 +67,13 @@ class BeneficiaryInterventionResource extends Resource
                         ->options(function (?BeneficiaryIntervention $record) use ($beneficiary) {
                             $beneficiary = $beneficiary ?? $record?->beneficiary;
 
-                            return $beneficiary->specialistsTeam->load(['user', 'role'])->pluck('name_role', 'id');
+                            return $beneficiary
+                                ->specialistsTeam
+                                ->loadMissing([
+                                    'user:id,first_name,last_name',
+                                    'role:id,name',
+                                ])
+                                ->pluck('name_role', 'id');
                         }),
                 ]),
 

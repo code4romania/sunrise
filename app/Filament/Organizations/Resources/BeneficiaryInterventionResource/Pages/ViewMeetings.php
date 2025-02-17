@@ -92,7 +92,10 @@ class ViewMeetings extends ViewRecord
                     fn () => $this->getRecord()
                         ->beneficiary
                         ->specialistsTeam
-                        ->load(['user', 'role'])
+                        ->loadMissing([
+                            'user:id,first_name,last_name',
+                            'role:id,name',
+                        ])
                         ->pluck('name_role', 'id')
                 ),
 
@@ -107,7 +110,10 @@ class ViewMeetings extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
-        $this->getRecord()->load(['meetings.specialist.user', 'meetings.specialist.role']);
+        $this->getRecord()->loadMissing([
+            'meetings.specialist.user:id,first_name,last_name',
+            'meetings.specialist.role:id,name',
+        ]);
 
         return $infolist->schema([
             Section::make()

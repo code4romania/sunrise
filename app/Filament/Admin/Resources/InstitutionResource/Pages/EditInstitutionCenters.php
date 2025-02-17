@@ -129,7 +129,7 @@ class EditInstitutionCenters extends EditRecord
         $this->getRecord()
             ->organizations
             ?->each(
-                fn (Organization $organization) => $organization->load('admins')
+                fn (Organization $organization) => $organization
                     ->admins()
                     ->attach(
                         $this->getRecord()

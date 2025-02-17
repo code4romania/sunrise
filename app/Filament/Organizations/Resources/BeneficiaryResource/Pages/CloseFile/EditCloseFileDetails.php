@@ -16,6 +16,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class EditCloseFileDetails extends EditRecord
@@ -74,13 +75,19 @@ class EditCloseFileDetails extends EditRecord
                 ->label(__('beneficiary.section.close_file.labels.case_manager'))
                 ->columnSpanFull()
                 ->options(
-                    function (?CloseFile $record) use ($recordParam) {
-                        $specialists = $record ? $record->beneficiary->specialistsTeam : $recordParam->specialistsTeam;
+                    fn (?CloseFile $record) => Cache::driver('array')
+                        ->rememberForever('close-file-specialists', function () use ($record, $recordParam) {
+                            $specialists = $record
+                                ? $record->beneficiary->specialistsTeam
+                                : $recordParam->specialistsTeam;
 
-                        return $specialists
-                            ->load(['user', 'role'])
-                            ->pluck('name_role', 'id');
-                    }
+                            return $specialists
+                                ->loadMissing([
+                                    'user:id,first_name,last_name',
+                                    'role:id,name',
+                                ])
+                                ->pluck('name_role', 'id');
+                        })
                 )
                 ->required(),
 

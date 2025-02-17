@@ -63,10 +63,8 @@ class CreateCloseFile extends EditRecord
             'exit_date' => now()->format('d.m.Y'),
             'specialist_id' => $this->getRecord()
                 ->specialistsTeam
-                ->load('role')
-                ->filter(
-                    fn (Specialist $item) => $item->role?->case_manager
-                )
+                ->loadMissing('role:id,case_manager')
+                ->filter(fn (Specialist $item) => $item->role?->case_manager)
                 ->first()
                 ?->id,
         ];

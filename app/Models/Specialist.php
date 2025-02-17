@@ -47,7 +47,10 @@ class Specialist extends Model
 
     public function getNameRoleAttribute(): string
     {
-        $this->load(['user', 'role']);
+        $this->loadMissing([
+            'user:id,first_name,last_name',
+            'role:id,name',
+        ]);
 
         return \sprintf('%s (%s)', $this->user->full_name, $this->role?->name);
     }

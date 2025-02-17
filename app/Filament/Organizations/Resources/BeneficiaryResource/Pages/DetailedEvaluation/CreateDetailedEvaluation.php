@@ -73,7 +73,7 @@ class CreateDetailedEvaluation extends EditRecord
     {
         $partnerRecord = $this->getRecord()->partner;
         if ($partnerRecord->same_as_legal_residence) {
-            $partnerRecord->load(['legal_residence', 'effective_residence']);
+            $partnerRecord->loadMissing(['legal_residence', 'effective_residence']);
             BeneficiaryPartner::copyLegalResidenceToEffectiveResidence($partnerRecord);
         }
     }

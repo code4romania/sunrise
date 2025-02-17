@@ -51,7 +51,7 @@ class ViewService extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
         $this->getRecord()
-            ->load([
+            ->loadMissing([
                 'interventions.serviceInterventionWithoutStatusCondition',
                 'interventions.beneficiaryInterventions.interventionPlan',
             ]);

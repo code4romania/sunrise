@@ -62,6 +62,6 @@ class ViewOrganizationTenant extends Page implements HasInfolists
                     ]),
 
             ])
-            ->record(Filament::getTenant()->load('institution'));
+            ->record(Filament::getTenant());
     }
 }
