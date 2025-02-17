@@ -175,10 +175,10 @@ class EditChildrenIdentity extends EditRecord
                         ->label(__('field.current_address')),
 
                     Header::make('status')
-                        ->label(__('field.status')),
+                        ->label(__('field.child_status')),
 
                     Header::make('workspace')
-                        ->label(__('field.child_status')),
+                        ->label(__('field.workspace')),
                 ])
                 ->schema([
                     TextInput::make('name')

@@ -12,11 +12,11 @@ use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Infolists\Components\Notice;
+use App\Infolists\Components\TableEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
@@ -275,31 +275,38 @@ class ViewBeneficiaryIdentity extends ViewRecord
             Section::make(__('enum.notifier.child'))
                 ->compact()
                 ->schema([
-                    RepeatableEntry::make('children')
+                    TableEntry::make('children')
                         ->hiddenLabel()
                         ->columnSpanFull()
                         ->columns()
                         ->schema([
                             TextEntry::make('name')
-                                ->label(__('field.child_name')),
-
-                            TextEntry::make('age')
-                                ->label(__('field.age')),
-
-                            TextEntry::make('gender')
-                                ->label(__('field.gender')),
+                                ->label(__('field.child_name'))
+                                ->hiddenLabel(),
 
                             DateEntry::make('birthdate')
-                                ->label(__('field.birthdate')),
+                                ->label(__('field.birthdate'))
+                                ->hiddenLabel(),
+
+                            TextEntry::make('age')
+                                ->label(__('field.age'))
+                                ->hiddenLabel(),
+
+                            TextEntry::make('gender')
+                                ->label(__('field.gender'))
+                                ->hiddenLabel(),
 
                             TextEntry::make('current_address')
-                                ->label(__('field.current_address')),
+                                ->label(__('field.current_address'))
+                                ->hiddenLabel(),
 
                             TextEntry::make('status')
-                                ->label(__('field.child_status')),
+                                ->label(__('field.child_status'))
+                                ->hiddenLabel(),
 
                             TextEntry::make('workspace')
-                                ->label(__('field.workspace')),
+                                ->label(__('field.workspace'))
+                                ->hiddenLabel(),
                         ]),
                 ]),
 

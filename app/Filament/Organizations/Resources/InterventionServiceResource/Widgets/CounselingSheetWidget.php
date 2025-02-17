@@ -29,7 +29,7 @@ use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
-use Str;
+use Illuminate\Support\Str;
 
 class CounselingSheetWidget extends InfolistWidget
 {
@@ -398,14 +398,14 @@ class CounselingSheetWidget extends InfolistWidget
                 ]),
 
             Section::make(__('intervention_plan.headings.children_details'))
-                ->visible(fn () => $this->record->beneficiary->children->count())
+                ->visible(fn ($record) => $record->beneficiary->children->count())
                 ->compact()
                 ->headerActions([
                     Action::make('view_children_identity')
                         ->label(__('intervention_plan.actions.view_children_identity'))
                         ->icon('heroicon-o-arrow-top-right-on-square')
-                        ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
-                            'record' => $this->record->beneficiary,
+                        ->url(fn ($record) => BeneficiaryResource::getUrl('view_identity', [
+                            'record' => $record->beneficiary,
                             'tab' => \sprintf('-%s-tab', Str::slug(__('beneficiary.section.identity.tab.children'))),
                         ]))
                         ->openUrlInNewTab()
