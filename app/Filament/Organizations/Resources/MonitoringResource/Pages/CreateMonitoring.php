@@ -76,7 +76,8 @@ class CreateMonitoring extends CreateRecord
             ?->monitoring
             ->sortByDesc('id')
             ->first()
-            ?->load(['children', 'specialistsTeam']);
+            ?->loadMissing(['children', 'specialistsTeam']);
+
         $this->children = $this->getChildren();
         foreach ($this->children as &$child) {
             $child['birthdate'] = $child['birthdate'] ? Carbon::parse($child['birthdate'])->format('d.m.Y') : null;

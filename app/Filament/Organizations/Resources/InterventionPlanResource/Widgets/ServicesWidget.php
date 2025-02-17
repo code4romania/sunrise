@@ -111,12 +111,13 @@ class ServicesWidget extends BaseWidget
 
                                     return $interventionPlan->beneficiary
                                         ->specialistsTeam
-                                        ->load(['user', 'role'])
-                                        ->map(fn (Specialist $item) => [
-                                            'name' => $item->getNameRoleAttribute(),
-                                            'id' => $item->id,
+                                        ->loadMissing([
+                                            'user:id,first_name,last_name',
+                                            'role:id,name',
                                         ])
-                                        ->pluck('name', 'id');
+                                        ->mapWithKeys(fn (Specialist $specialist) => [
+                                            $specialist->id => $specialist->name_role,
+                                        ]);
                                 }),
                         ]),
                 ]),

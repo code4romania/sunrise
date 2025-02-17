@@ -34,7 +34,7 @@ class UpdateDefaultTenant
 
             if (! $user->userStatus) {
                 $user->initializeStatus();
-                $user->load('userStatus');
+                $user->loadMissing('userStatus');
             }
 
             if ($user->userStatus->status === UserStatus::PENDING) {

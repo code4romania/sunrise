@@ -14,7 +14,6 @@ class TenantPathGenerator extends DefaultPathGenerator
     {
         $ulid = filament()->getTenant()?->ulid;
 
-        $media->load('model');
         if (! $ulid && $media->model instanceof Organization) {
             $ulid = $media->model->ulid;
         }
