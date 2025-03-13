@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         Institution::factory()
-            ->count(2)
+            ->count(1)
             ->withOrganization()
             ->create();
     }
