@@ -1,15 +1,15 @@
 <?php
 return [
-    'confirmation' => '',
+    'confirmation' => '¿Está seguro de que desea realizar la operación?',
     'actions' => [
         'cancel' => [
-            'label' => '',
+            'label' => 'dejar',
         ],
         'confirm' => [
-            'label' => '',
+            'label' => 'Confirmación',
         ],
         'submit' => [
-            'label' => '',
+            'label' => 'Ahorra',
         ],
     ],
 ];
