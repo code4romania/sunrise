@@ -19,7 +19,7 @@ return [
         'representative_name' => '',
         'representative_email' => '',
         'representative_phone' => '',
-        'website' => '',
+        'website' => 'sitio web',
         'logo' => '',
         'contact_person' => '',
         'contact_person_email' => '',
