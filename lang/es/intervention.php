@@ -1,15 +1,15 @@
 <?php
 return [
     'label' => [
-        'singular' => '',
-        'plural' => '',
+        'singular' => 'intervención',
+        'plural' => 'Intervenciones',
     ],
     'field' => [
-        'name' => '',
-        'description' => '',
-        'use_count' => '',
+        'name' => 'Nombre de la intervención',
+        'description' => 'Descripción de la intervención',
+        'use_count' => 'Número de usos',
     ],
     'action' => [
-        'create' => '',
+        'create' => 'Agregar intervención',
     ],
 ];
