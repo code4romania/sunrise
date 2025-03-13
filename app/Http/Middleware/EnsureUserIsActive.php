@@ -22,7 +22,10 @@ class EnsureUserIsActive
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if ($this->userAndInstitutionIsActive()) {
+        if (Filament::getCurrentPanel()->getId()=== 'admin' && auth()->user()->isAdmin()) {
+            return $next($request);
+        }
+        if ($this->userAndInstitutionIsActive() ) {
             return $next($request);
         }
 
