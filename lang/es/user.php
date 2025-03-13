@@ -5,4 +5,7 @@ return [
         'closed' => 'Casos cerrados',
         'open' => 'Casos abiertos',
     ],
+    'status' => [
+        'inactive' => 'Inactivo',
+    ],
 ];
