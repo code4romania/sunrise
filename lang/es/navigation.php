@@ -1,23 +1,23 @@
 <?php
 return [
     'beneficiaries' => [
-        '_group' => '',
-        'cases' => '',
+        '_group' => 'Beneficiarios',
+        'cases' => 'Casos',
     ],
     'statistics' => [
-        '_group' => '',
-        'label' => '',
+        '_group' => 'Beneficiarios',
+        'label' => 'Informes estadísticos',
     ],
     'community' => [
-        '_group' => '',
-        'network' => '',
-        'profile' => '',
+        '_group' => 'Comunidad Sunrise',
+        'network' => 'Red de organizaciones de VD',
+        'profile' => 'Mi perfil de red',
     ],
     'configurations' => [
-        '_group' => '',
-        'organization' => '',
-        'services' => '',
-        'staff' => '',
+        '_group' => 'Configuraciones',
+        'organization' => 'Información de la organización',
+        'services' => 'Nomenclatura de servicios',
+        'staff' => 'Empleados',
     ],
-    'developed_by' => '',
+    'developed_by' => 'Una solución desarrollada por',
 ];
