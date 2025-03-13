@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -10,6 +11,6 @@ return [
     | you want to customize your views to better match your application.
     |
     */
-    'previous' => '',
-    'next' => '',
+    'previous' => 'Anterior',
+    'next' => 'Siguiente',
 ];

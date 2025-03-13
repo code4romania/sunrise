@@ -1,23 +1,24 @@
 <?php
+
 return [
     'beneficiaries' => [
-        '_group' => '',
-        'cases' => '',
+        '_group' => 'Beneficiarios',
+        'cases' => 'Casos',
     ],
     'statistics' => [
-        '_group' => '',
-        'label' => '',
+        '_group' => 'Estadísticas',
+        'label' => 'Estadísticas',
     ],
     'community' => [
-        '_group' => '',
-        'network' => '',
-        'profile' => '',
+        '_group' => 'Comunidad',
+        'network' => 'Red',
+        'profile' => 'Perfil',
     ],
     'configurations' => [
-        '_group' => '',
-        'organization' => '',
-        'services' => '',
-        'staff' => '',
+        '_group' => 'Configuraciones',
+        'organization' => 'Organización',
+        'services' => 'Servicios',
+        'staff' => 'Personal',
     ],
-    'developed_by' => '',
+    'developed_by' => 'Desarrollado por',
 ];

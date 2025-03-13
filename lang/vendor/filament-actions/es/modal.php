@@ -1,15 +1,16 @@
 <?php
+
 return [
-    'confirmation' => '',
+    'confirmation' => 'Confirmación',
     'actions' => [
         'cancel' => [
-            'label' => '',
+            'label' => 'Cancelar',
         ],
         'confirm' => [
-            'label' => '',
+            'label' => 'Confirmar',
         ],
         'submit' => [
-            'label' => '',
+            'label' => 'Enviar',
         ],
     ],
 ];

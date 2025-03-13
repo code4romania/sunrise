@@ -1,15 +1,16 @@
 <?php
+
 return [
     'label' => [
-        'singular' => '',
-        'plural' => '',
+        'singular' => 'Intervención',
+        'plural' => 'Intervenciones',
     ],
     'field' => [
-        'name' => '',
-        'description' => '',
-        'use_count' => '',
+        'name' => 'Nombre',
+        'description' => 'Descripción',
+        'use_count' => 'Número de usos',
     ],
     'action' => [
-        'create' => '',
+        'create' => 'Crear',
     ],
 ];
