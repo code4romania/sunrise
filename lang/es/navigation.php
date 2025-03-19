@@ -1,5 +1,4 @@
 <?php
-
 return [
     'beneficiaries' => [
         '_group' => 'Beneficiarios',

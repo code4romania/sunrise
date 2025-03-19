@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 return [
     'age' => 'Edad',
     'backup_phone' => 'Teléfono secundario',
