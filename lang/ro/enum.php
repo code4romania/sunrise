@@ -77,9 +77,9 @@ return [
     ],
 
     'ternary' => [
-        1 => 'Da',
-        0 => 'Nu',
-        -1 => 'Nu știe/ Nu răspunde',
+        '1' => 'Da',
+        '0' => 'Nu',
+        '-1' => 'Nu știe/ Nu răspunde',
     ],
 
     'aggressor_relationship' => [

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
     'civil_status' => [
         'single' => 'Soltero/a',
@@ -65,9 +68,9 @@ return [
         'other' => 'Otro',
     ],
     'ternary' => [
-        1 => 'Sí',
-        0 => 'No',
-        'UnaryOp(\'-\', 1)' => 'No sabe/ No contesta',
+        '1' => 'Sí',
+        '0' => 'No',
+        '-1' => 'No sabe/ No contesta',
     ],
     'aggressor_relationship' => [
         'marital' => 'Matrimonial',
