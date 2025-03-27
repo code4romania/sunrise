@@ -1,5 +1,4 @@
 <?php
-
 return [
     'civil_status' => [
         'single' => 'Soltero/a',
@@ -68,6 +67,7 @@ return [
     'ternary' => [
         1 => 'Sí',
         0 => 'No',
+        'UnaryOp(\'-\', 1)' => 'No sabe/ No contesta',
     ],
     'aggressor_relationship' => [
         'marital' => 'Matrimonial',
