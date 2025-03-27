@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 return [
     'civil_status' => [
         'single' => 'Soltero/a',
