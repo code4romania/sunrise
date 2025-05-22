@@ -31,9 +31,8 @@ use Filament\Forms\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\HtmlString;
-use Illuminate\Validation\Rules\Unique;
 
 class CreateBeneficiary extends CreateRecord
 {
@@ -139,56 +138,50 @@ class CreateBeneficiary extends CreateRecord
                                 ->label(__('field.beneficiary_cnp'))
                                 ->placeholder(__('placeholder.cnp'))
                                 ->maxLength(13)
+                                ->required(fn (Get $get) => ! $get('without_cnp'))
                                 ->mask('9999999999999')
                                 ->rule(new ValidCNP)
-                                ->unique(
-                                    ignorable: $this->parentBeneficiary,
-                                    ignoreRecord: true,
-                                    modifyRuleUsing: function (Unique $rule, ?Beneficiary $record) {
-                                        $initialID = 0;
-                                        if ($this->parentBeneficiary?->id) {
-                                            $initialID = $parentBeneficiary->initial_id ?? $this->parentBeneficiary->id;
-                                        }
-                                        if (! $initialID && $record) {
-                                            $initialID = $record->initial_id ?? $record->id;
-                                        }
-
-                                        return
-                                            $rule->where(fn (Builder $query) => $query->whereNot('id', $initialID)
-                                                ->where(fn (Builder $query) => $query->whereNot('initial_id', $initialID)
-                                                    ->orWhereNull('initial_id')))
-                                                ->where('organization_id', Filament::getTenant()->id);
-                                    }
-                                )
-                                ->live()
+                                ->lazy()
                                 ->disabled(fn (Get $get) => $get('without_cnp')),
 
                             Checkbox::make('without_cnp')
                                 ->label(__('field.without_cnp'))
+                                ->afterStateUpdated(fn (bool $state, Set $set) => $set('cnp', null))
                                 ->live(),
 
                             Notice::make('beneficiary_exist')
                                 ->key('beneficiary_exist')
                                 ->color('primary')
                                 ->visible(
-                                    fn (Get $get) => auth()->user()->canSearchBeneficiary() ?
-                                        Beneficiary::query()
+                                    function (Get $get, Set $set) {
+                                        $cnp = $get('cnp');
+                                        if (empty($cnp) || $cnp < 10) {
+                                            return false;
+                                        }
+                                        $existenBeneficary = Beneficiary::query()
                                             ->where('cnp', $get('cnp'))
-                                            ->whereIn(
-                                                'organization_id',
-                                                auth()->user()
-                                                    ->organizations
-                                                    ->filter(fn (Organization $organization) => $organization->institution_id == Filament::getTenant()->institution_id)
-                                                    ->pluck('id')
+                                            ->when(
+                                                auth()->user()->canSearchBeneficiary(),
+                                                fn (EloquentBuilder $query) => $query->whereIn(
+                                                    'organization_id',
+                                                    auth()->user()
+                                                        ->whereHas(
+                                                            'organizations',
+                                                            fn (EloquentBuilder $query) => $query
+                                                                ->where('institution_id', Filament::getTenant()->institution_id)
+                                                        )
+                                                )->pluck('id')
                                                     ->toArray()
                                             )
-                                            ->withoutGlobalScopes([BelongsToCurrentTenant::class])
-                                            ->first() :
-                                        Beneficiary::query()
-                                            ->where('cnp', $get('cnp'))
-                                            ->first()
+                                            ->withoutGlobalScope(BelongsToCurrentTenant::class)
+                                            ->first();
+                                        $set('organization_where_beneficiary_exist', $existenBeneficary->organization ?? null);
+                                    }
                                 )
                                 ->content(function (Get $get) {
+                                    $organization = $get('organization_where_beneficiary_exist');
+                                    debug($organization);
+
                                     $beneficiary = Beneficiary::query()
                                         ->where('cnp', $get('cnp'))
                                         ->first();

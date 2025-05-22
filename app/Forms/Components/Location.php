@@ -237,6 +237,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 })
                 ->searchable()
                 ->preload()
+//                ->getSearchResultsUsing(fn (string $search): array => County::search($search)->get()->pluck('name', 'id')->toArray())
                 ->live()
                 ->required($this->isRequired())
                 ->disabled($this->isDisabled())
@@ -257,10 +258,9 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->required($this->isRequired())
                 ->disabled(fn (Get $get) => $this->isDisabled() || ! $get($this->getCountyField()))
                 ->getSearchResultsUsing(function (string $search, Get $get) {
-                    return City::query()
+
+                    return City::search($search)
                         ->where('county_id', (int) $get($this->getCountyField()))
-                        ->search($search)
-                        ->limit(100)
                         ->get()
                         ->pluck('name_with_uat', 'id');
                 })
