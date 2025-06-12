@@ -198,6 +198,9 @@ class EditChildrenIdentity extends EditRecord
                                 report: false
                             ));
                         })
+                        ->dehydrateStateUsing(
+                            fn (string $state) => Carbon::parse($state)->format('d.m.Y')
+                        )
                         ->live(),
 
                     TextInput::make('age')

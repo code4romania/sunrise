@@ -14,11 +14,12 @@ use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Carbon\Carbon;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Pages\EditRecord;
@@ -86,7 +87,11 @@ class EditChildren extends EditRecord
                                 ->mask('99'),
 
                             DatePicker::make('birthdate')
-                                ->label(__('monitoring.labels.birthdate')),
+                                ->label(__('monitoring.labels.birthdate'))
+                                ->dehydrateStateUsing(
+                                    fn (string $state) => Carbon::parse($state)->format('d.m.Y')
+                                )
+                                ,
 
                             Select::make('aggressor_relationship')
                                 ->label(__('monitoring.labels.aggressor_relationship'))
