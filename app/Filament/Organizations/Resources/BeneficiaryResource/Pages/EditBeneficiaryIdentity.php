@@ -152,9 +152,6 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
-                        ->dehydrateStateUsing(function ($state) {
-                            return Carbon::createFromFormat('Y-m-d', $state)->format('d.m.Y');
-                        })
                         ->live(),
 
                     TextInput::make('birthplace')
