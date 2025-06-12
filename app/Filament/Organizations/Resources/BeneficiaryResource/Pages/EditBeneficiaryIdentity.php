@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use alcea\cnp\Cnp;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToIdentity;
 use App\Enums\AddressType;
@@ -21,12 +20,13 @@ use App\Forms\Components\Spacer;
 use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -35,6 +35,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use alcea\cnp\Cnp;
 
 class EditBeneficiaryIdentity extends EditRecord
 {
@@ -151,6 +152,9 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
+                        ->dehydrateStateUsing(function ($state) {
+                            return Carbon::createFromFormat('Y-m-d', $state)->format('d.m.Y');
+                        })
                         ->live(),
 
                     TextInput::make('birthplace')
