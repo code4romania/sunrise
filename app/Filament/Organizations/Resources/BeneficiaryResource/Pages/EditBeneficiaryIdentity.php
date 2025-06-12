@@ -20,6 +20,7 @@ use App\Forms\Components\Spacer;
 use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
@@ -151,7 +152,11 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
-                        ->live(),
+                        ->live()
+                        ->dehydrateStateUsing(
+                            fn (string $state) => Carbon::parse($state)->format('d.m.Y')
+                        )
+                    ,
 
                     TextInput::make('birthplace')
                         ->label(__('field.birthplace'))
