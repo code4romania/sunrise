@@ -9,11 +9,7 @@
         @lang('navigation.developed_by')
     </h2>
 
-    <a href="https://www.eeirh.org" target="_blank" rel="noopener noreferrer" tabindex="-1">
-        <img src="{{ Vite::image('eeirh.png') }}" class="h-10" alt="">
-    </a>
+    <img src="{{ Vite::image('eeirh.png') }}" class="h-10" alt="">
 
-    <a href="https://www.code4.ro" target="_blank" rel="noopener noreferrer" tabindex="-1">
-        <img src="{{ Vite::image('code4romania.png') }}" class="h-8" alt="">
-    </a>
+    <img src="{{ Vite::image('code4romania.png') }}" class="h-8" alt="">
 </aside>
