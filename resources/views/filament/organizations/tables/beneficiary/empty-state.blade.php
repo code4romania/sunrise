@@ -1,4 +1,4 @@
-<div class="text-center">
+<div class="flex flex-col items-center bg-gray-100 m-4 py-32">
     <svg width="123" height="121" viewBox="0 0 123 121" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_11072_42142)">
             <path d="M78.0861 27.4876H44.943C44.1877 27.4885 43.4636 27.7888 42.9296 28.3226C42.3955 28.8564 42.0951 29.5801 42.0942 30.3349V103.957L41.7143 104.073L33.5838 106.561C33.1984 106.679 32.7822 106.639 32.4265 106.45C32.0708 106.261 31.8047 105.938 31.6865 105.553L7.50184 26.5973C7.38415 26.2122 7.42426 25.7961 7.61337 25.4406C7.80248 25.085 8.1251 24.819 8.51034 24.701L21.0395 20.8666L57.362 9.75451L69.891 5.92012C70.0817 5.86147 70.2821 5.84097 70.4807 5.85981C70.6793 5.87864 70.8722 5.93644 71.0485 6.02988C71.2247 6.12333 71.3808 6.25059 71.5077 6.40439C71.6347 6.55818 71.7301 6.73549 71.7884 6.92617L77.9703 27.108L78.0861 27.4876Z" fill="#F2F2F2"/>
@@ -19,20 +19,17 @@
         </defs>
     </svg>
 
-    <h3 class="mt-2 text-sm font-semibold text-gray-900">
+    <h3 class="mt-2 text-base font-semibold text-gray-900">
         {{ __('beneficiary.page.empty_state.title') }}
     </h3>
-    <p class="mt-1 text-sm text-gray-500">
-        {{ __('beneficiary.page.empty_state.description') }}<
+
+    <p class="mt-1 text-base text-gray-500 text-center max-w-sm">
+        {{ __('beneficiary.page.empty_state.description') }}
     </p>
-    <div class="mt-6">
-        <button type="button" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-            <svg class="-ml-0.5 mr-1.5 size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-            </svg>
-            <span>
-                {{ __('beneficiary.page.create.title') }}
-            </span>
+
+    <div class="mt-4">
+        <button type="button" class="inline-flex items-center rounded-xl bg-white px-5 py-2.5 border border-primary-500 text-sm font-semibold text-primary-700 font-bold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+            {{ __('beneficiary.page.create.title') }}
         </button>
     </div>
 </div>
