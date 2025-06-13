@@ -19,8 +19,12 @@
         </defs>
     </svg>
 
-    <h3 class="mt-2 text-sm font-semibold text-gray-900">Niciun caz identificat</h3>
-    <p class="mt-1 text-sm text-gray-500">Adaugă chiar acum un caz nou, pentru a iniția managementul de caz al unui beneficiar.</p>
+    <h3 class="mt-2 text-sm font-semibold text-gray-900">
+        {{ __('beneficiary.page.empty_state.title') }}
+    </h3>
+    <p class="mt-1 text-sm text-gray-500">
+        {{ __('beneficiary.page.empty_state.description') }}<
+    </p>
     <div class="mt-6">
         <button type="button" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
             <svg class="-ml-0.5 mr-1.5 size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">

@@ -25,13 +25,16 @@ return [
         'view' => [
             'title' => '<div class="flex flex-wrap justify-items-center items-center gap-3">:action #:id :name :badge</div>',
         ],
+        'empty_state' => [
+            'title' => 'Niciun caz identificat',
+            'description' => 'Adaugă chiar acum un caz nou, pentru a iniția managementul de caz al unui beneficiar.',
+        ],
         'identity' => [
             'title' => 'Date identitate',
         ],
         'edit_identity' => [
             'title' => 'Editează identitate beneficiar',
         ],
-
         'edit_children' => [
             'title' => 'Editează identitate copii',
         ],
