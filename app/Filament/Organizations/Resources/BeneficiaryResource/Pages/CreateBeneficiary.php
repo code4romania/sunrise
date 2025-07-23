@@ -158,7 +158,7 @@ class CreateBeneficiary extends CreateRecord
                                         if (empty($cnp) || $cnp < 10) {
                                             return false;
                                         }
-                                        $existenBeneficary = Beneficiary::query()
+                                        $existedBeneficiary = Beneficiary::query()
                                             ->where('cnp', $get('cnp'))
                                             ->when(
                                                 auth()->user()->canSearchBeneficiary(),
@@ -175,7 +175,7 @@ class CreateBeneficiary extends CreateRecord
                                             )
                                             ->withoutGlobalScope(BelongsToCurrentTenant::class)
                                             ->first();
-                                        $set('organization_where_beneficiary_exist', $existenBeneficary->organization ?? null);
+                                        $set('organization_where_beneficiary_exist', $existedBeneficiary->organization ?? null);
                                     }
                                 )
                                 ->content(function (Get $get) {
