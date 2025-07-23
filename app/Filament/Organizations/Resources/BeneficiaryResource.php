@@ -152,7 +152,8 @@ class BeneficiaryResource extends Resource
             ])
             ->paginationPageOptions([10, 20, 40, 60, 80, 100])
             ->defaultPaginationPageOption(20)
-            ->defaultSort('id', 'desc');
+            ->defaultSort('id', 'desc')
+            ->emptyState(view('filament.organizations.tables.beneficiary.empty-state'));
     }
 
     public static function getRelations(): array
