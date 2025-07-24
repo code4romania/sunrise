@@ -151,6 +151,7 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
+                        ->format('d.m.Y')
                         ->live(),
 
                     TextInput::make('birthplace')
