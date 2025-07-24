@@ -148,17 +148,26 @@ class ListSpecialistsWidget extends BaseWidget
                     }
                 )
                 ->disableOptionWhen(
-                    fn (Get $get, ?Specialist $record, string $value): bool => $this->record
-                        ->specialistsTeam
-                        ->filter(
-                            fn (Specialist $specialist) => $specialist->role_id === (int) $get('role_id') && $specialist->user_id !== $record?->user_id
-                        )
-                        ->map(fn (Specialist $specialist) => $specialist->user_id)
-                        ->contains($value) ||
-                        ! User::query()
+                    function (Get $get, ?Specialist $record, string $value): bool {
+                        $contains = $this->record
+                            ->specialistsTeam
+                            ->filter(
+                                fn (Specialist $specialist) => $specialist->role_id === (int) $get('role_id') && $specialist->user_id !== $record?->user_id
+                            )
+                            ->map(fn (Specialist $specialist) => $specialist->user_id)
+                            ->contains($value);
+                        if ($contains) {
+                            return true;
+                        }
+                        $userStatus = User::query()
                             ->find($value)
-                            ->userStatus
-                            ->isActive()
+                            ->userStatus;
+                        if ($userStatus->isActive() || $userStatus->isPending()) {
+                            return false;
+                        }
+
+                        return true;
+                    }
                 )
                 ->searchable()
                 ->preload()
