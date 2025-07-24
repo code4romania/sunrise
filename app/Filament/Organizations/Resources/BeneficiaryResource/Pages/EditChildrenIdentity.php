@@ -187,6 +187,7 @@ class EditChildrenIdentity extends EditRecord
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
+                        ->format('d.m.Y')
                         ->afterStateUpdated(function (Set $set, $state) {
                             $set('age', rescue(
                                 function () use ($state) {
