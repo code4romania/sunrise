@@ -100,7 +100,7 @@ class CreateCloseFile extends EditRecord
     protected function getSubmitFormAction(): Action
     {
         return Action::make('create')
-            ->label(__('filament-panels::resources/pages/create-record.form.actions.create.label'))
+            ->label(__('general.action.finish'))
             ->submit('create')
             ->keyBindings(['mod+s']);
     }

@@ -9,6 +9,7 @@ use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\ServiceResource;
 use App\Models\OrganizationService;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Contracts\Support\Htmlable;
@@ -62,5 +63,10 @@ class CreateService extends CreateRecord
             $this->redirect(ServiceResource::getUrl('view', ['record' => $organizationService]));
             throw new Halt();
         }
+    }
+
+    protected function getCreateFormAction(): Action
+    {
+        return parent::getCreateFormAction()->label(__('nomenclature.actions.create_service'));
     }
 }

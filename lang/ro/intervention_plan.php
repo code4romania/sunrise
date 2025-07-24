@@ -240,7 +240,7 @@ return [
         'monthly_plans' => 'Planuri lunare',
         'monthly_plan_details' => 'Detalii plan',
         'services_and_interventions' => 'Servicii și intervenții',
-        'create_monthly_plan' => 'Creează plan lunar',
+        'create_monthly_plan' => 'Creează plan',
         'service_count' => 'Serviciul :number',
         'interval' => 'Perioada de referință',
         'case_manager' => 'Manager caz',
