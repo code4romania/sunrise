@@ -148,6 +148,7 @@ class ListSpecialistsWidget extends BaseWidget
                     }
                 )
                 ->disableOptionWhen(
+                    //TODO refactor this to make it more readable
                     function (Get $get, ?Specialist $record, string $value): bool {
                         $contains = $this->record
                             ->specialistsTeam
