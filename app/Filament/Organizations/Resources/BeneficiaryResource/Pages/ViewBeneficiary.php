@@ -22,6 +22,7 @@ use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Models\Activity;
+use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
@@ -264,13 +265,22 @@ class ViewBeneficiary extends ViewRecord
                             ->label(__('field.aggressor_relationship')),
 
                         EnumEntry::make('has_violence_history')
+                            ->formatStateUsing(function ($state, Aggressor $record) {
+                                $agressorTypes = $record->violence_types ? implode(', ', array_map(fn ($item) => $item->getLabel(), $record->violence_types->toArray())) : null;
+                                if ($state === Ternary::YES) {
+                                    return \sprintf('%s (%s)', $state->getLabel(), $agressorTypes);
+                                }
+
+                                return $state ? $state->getLabel() : null;
+                            })
+
                             ->label(__('field.aggressor_has_violence_history')),
 
                         EnumEntry::make('has_protection_order')
                             ->label(__('field.has_protection_order')),
+                        TextEntry::make('electronically_monitored')
+                            ->label(__('field.electronically_monitored')),
 
-                        TextEntry::make('protection_order_notes')
-                            ->label(__('field.protection_order_notes')),
                     ]),
 
                 Grid::make()
