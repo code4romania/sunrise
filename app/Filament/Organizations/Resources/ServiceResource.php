@@ -49,6 +49,16 @@ class ServiceResource extends Resource
         return __('service.headings.navigation');
     }
 
+    public static function getModelLabel(): string
+    {
+        return __('service.label.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('service.label.plural');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
