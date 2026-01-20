@@ -39,6 +39,7 @@ class Beneficiary extends Model
 
     protected $fillable = [
         'initial_id',
+        'organization_beneficiary_id',
         'first_name',
         'last_name',
         'prior_name',
@@ -91,6 +92,17 @@ class Beneficiary extends Model
         'status' => CaseStatus::class,
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (self $beneficiary) {
+            $beneficiary->organization_beneficiary_id = 1 + (int) Beneficiary::query()
+                ->where('organization_id', $beneficiary->organization_id)
+                ->max('organization_beneficiary_id');
+        });
+    }
+
     public function scopeWhereUserHasAccess(Builder $query): Builder
     {
         $user = auth()->user();
@@ -106,7 +118,7 @@ class Beneficiary extends Model
 
     public function getBreadcrumb(): string
     {
-        return \sprintf('#%d %s', $this->id, $this->full_name);
+        return \sprintf('#%d %s', $this->organization_beneficiary_id, $this->full_name);
     }
 
     public function children(): HasMany

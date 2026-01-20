@@ -147,7 +147,7 @@ class ViewBeneficiary extends ViewRecord
             'action' => BackAction::make()
                 ->url(BeneficiaryResource::getUrl())->toHtml(),
             'name' => $this->record->full_name,
-            'id' => $this->record->id,
+            'id' => $this->record->organization_beneficiary_id,
             'badge' => $statusBadge,
         ]));
     }

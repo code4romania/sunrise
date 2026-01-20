@@ -11,7 +11,7 @@ trait RedirectToDetailedEvaluation
     protected function getRedirectUrl(): string
     {
         return self::$resource::getUrl('view_detailed_evaluation', [
-            'record' => $this->record->id,
+            'record' => $this->record,
             'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
     }
