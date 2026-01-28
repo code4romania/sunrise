@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource;
 use App\Infolists\Components\HistoryChanges;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Schemas\Components\Section;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiaryHistories extends ViewRecord

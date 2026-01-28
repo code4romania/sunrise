@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tables\Filters;
 
-use Filament\Tables\Filters\Concerns\HasOptions;
-use Filament\Tables\Filters\Concerns\HasRelationship;
 use App\Models\Service;
 use Closure;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Tables\Filters\BaseFilter;
-use Filament\Tables\Filters\Concerns;
+use Filament\Tables\Filters\Concerns\HasOptions;
+use Filament\Tables\Filters\Concerns\HasRelationship;
 use Filament\Tables\Filters\Indicator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

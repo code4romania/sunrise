@@ -7,7 +7,6 @@ namespace App\Actions;
 use App\Enums\ReportType;
 use App\Exports\Report;
 use App\Services\Reports\BeneficiariesV2;
-use Filament\Infolists\Components\Actions\Action;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 

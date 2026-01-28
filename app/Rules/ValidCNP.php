@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Rules;
 
-use Illuminate\Translation\PotentiallyTranslatedString;
 use alcea\cnp\Cnp;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
 class ValidCNP implements ValidationRule
 {

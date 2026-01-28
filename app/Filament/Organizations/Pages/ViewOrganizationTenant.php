@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Pages;
 
-use Filament\Schemas\Schema;
 use App\Filament\Admin\Resources\InstitutionResource\Pages\ViewInstitution;
 use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\OrganizationsRelationManager;
 use App\Infolists\Components\Notice;
 use Filament\Facades\Filament;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewOrganizationTenant extends Page implements HasInfolists

@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 use App\Concerns\HasViewContentFooter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;

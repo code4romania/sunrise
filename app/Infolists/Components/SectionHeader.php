@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infolists\Components;
 
+use Closure;
+use Filament\Infolists\Components\Entry;
 use Filament\Support\Concerns\HasFontFamily;
 use Filament\Support\Concerns\HasWeight;
-use Closure;
-use Filament\Infolists\Components\Concerns;
-use Filament\Infolists\Components\Entry;
 
 class SectionHeader extends Entry
 {

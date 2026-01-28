@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Pages;
 
-use App\Filament\Admin\Schemas\UserInstitutionResourceSchema;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource;
-use Filament\Schemas\Schema;
+use App\Filament\Admin\Schemas\UserInstitutionResourceSchema;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class EditUserInstitution extends EditRecord
@@ -22,7 +22,7 @@ class EditUserInstitution extends EditRecord
     protected function getRedirectUrl(): ?string
     {
         $parentRecord = $this->getParentRecord();
-        
+
         return InstitutionResource::getUrl('view', [
             'record' => $parentRecord,
             'activeRelationManager' => 'admins',
@@ -33,7 +33,7 @@ class EditUserInstitution extends EditRecord
     {
         $parentRecord = $this->getParentRecord();
         $record = $this->getRecord();
-        
+
         return [
             InstitutionResource::getUrl() => __('institution.headings.list_title'),
             InstitutionResource::getUrl('view', ['record' => $parentRecord]) => $parentRecord->name,

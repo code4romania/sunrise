@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
 use App\Enums\AggressorLegalHistory;
@@ -24,14 +23,14 @@ use App\Forms\Components\Select;
 use App\Rules\MultipleIn;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
@@ -82,14 +81,14 @@ class EditAggressor extends EditRecord
                 ->columns()
                 ->minItems(1)
                 ->addAction(
-                    fn (\Filament\Actions\Action $action): \Filament\Actions\Action => $action
+                    fn (Action $action): Action => $action
                         ->label(__('beneficiary.section.personal_information.actions.add_aggressor'))
                         ->link()
                         ->color('primary')
                         ->extraAttributes(['class' => 'pull-left'])
                 )
                 ->deleteAction(
-                    fn (\Filament\Actions\Action $action) => $action
+                    fn (Action $action) => $action
                         ->label(__('beneficiary.section.personal_information.actions.delete_aggressor'))
                         ->icon(null)
                         ->link()

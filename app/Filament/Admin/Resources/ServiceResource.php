@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Schemas\ServiceResourceSchema;
+use App\Filament\Admin\Resources\ServiceResource\Pages\CreateService;
+use App\Filament\Admin\Resources\ServiceResource\Pages\EditService;
 use App\Filament\Admin\Resources\ServiceResource\Pages\ListServices;
 use App\Filament\Admin\Resources\ServiceResource\Pages\ViewService;
-use App\Filament\Admin\Resources\ServiceResource\Pages\EditService;
-use App\Filament\Admin\Resources\ServiceResource\Pages\CreateService;
+use App\Filament\Admin\Schemas\ServiceResourceSchema;
 use App\Models\Service;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class ServiceResource extends Resource

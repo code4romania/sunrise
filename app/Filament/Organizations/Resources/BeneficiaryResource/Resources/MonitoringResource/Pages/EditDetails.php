@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToMonitoring;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
@@ -15,14 +14,14 @@ use App\Models\Monitoring;
 use App\Models\UserRole;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Awcodes\TableRepeater\Header;
-use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
@@ -36,6 +35,7 @@ class EditDetails extends EditRecord
     public function getBreadcrumbs(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return BeneficiaryBreadcrumb::make($parentRecord)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
     }
 
@@ -61,7 +61,8 @@ class EditDetails extends EditRecord
     public static function getFormSchemaStatic(): array
     {
         $instance = new static();
-        $instance->record = new \App\Models\Monitoring();
+        $instance->record = new Monitoring();
+
         return $instance->getFormSchema();
     }
 

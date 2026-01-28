@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
-use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Infolists\Components\Actions\EditAction;
@@ -12,9 +11,10 @@ use App\Infolists\Components\DocumentPreview;
 use App\Models\Institution;
 use Filament\Facades\Filament;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 
 class OrganizationsRelationManager extends RelationManager

@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
-use Filament\Schemas\Components\Wizard\Step;
 use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
-use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\EditDetails;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\EditChildren;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\EditGeneral;
 use App\Models\Monitoring;
 use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Carbon\Carbon;
 use Filament\Actions\Action;
-use Filament\Schemas\Components\Wizard;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Wizard\Step;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Js;
 
@@ -59,6 +54,7 @@ class CreateMonitoring extends CreateRecord
     protected function getRedirectUrl(): string
     {
         $parentRecord = $this->getParentRecord();
+
         return static::getResource()::getUrl('view', [
             'beneficiary' => $parentRecord,
             'record' => $this->record,
@@ -68,6 +64,7 @@ class CreateMonitoring extends CreateRecord
     protected function getHeaderActions(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return [
             BackAction::make()
                 ->url(static::getResource()::getUrl('index', ['beneficiary' => $parentRecord])),
@@ -148,7 +145,7 @@ class CreateMonitoring extends CreateRecord
     private function getChildren(): array
     {
         $ownerRecord = $this->getParentRecord();
-        
+
         if ($this->lastFile && $this->lastFile->children->isNotEmpty()) {
             return $this->lastFile->children->toArray();
         }
@@ -159,7 +156,7 @@ class CreateMonitoring extends CreateRecord
     private function getSpecialists(): array
     {
         $ownerRecord = $this->getParentRecord();
-        
+
         if ($this->lastFile && $this->lastFile->specialistsTeam->isNotEmpty()) {
             return $this->lastFile
                 ->specialistsTeam

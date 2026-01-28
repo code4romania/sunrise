@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infolists\Components\Actions;
 
-use Filament\Schemas\Schema;
 use Closure;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Actions\Concerns\InteractsWithRecord;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Actions\Action;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;

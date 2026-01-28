@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\RelationManagers;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource;
-use Filament\Schemas\Schema;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class DocumentsRelationManager extends RelationManager

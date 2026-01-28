@@ -7,14 +7,14 @@ namespace App\Filament\Organizations\Schemas;
 use App\Forms\Components\Select;
 use App\Models\CommunityProfile;
 use App\Models\Service;
-use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class CommunityProfileResourceSchema

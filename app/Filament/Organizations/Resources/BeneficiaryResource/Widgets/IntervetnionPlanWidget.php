@@ -9,8 +9,6 @@ use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionPlan;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;

@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Filament\Organizations\Resources\ServiceResource;
 use App\Infolists\Components\Notice;
-use Filament\Infolists\Components\RepeatableEntry;
 use App\Models\BeneficiaryIntervention;
 use Filament\Actions\EditAction;
-use Filament\Actions\StaticAction;
-use Filament\Infolists\Components\Actions\Action;
-use Filament\Schemas\Components\Section;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewService extends ViewRecord

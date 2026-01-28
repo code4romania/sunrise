@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Http\Responses\LoginResponse;
 use App\Models\Activity;
 use App\Models\Address;
 use App\Models\Aggressor;
@@ -58,9 +59,7 @@ use App\Models\UserRole;
 use App\Models\UserStatus;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
-use App\Http\Responses\LoginResponse;
 use Filament\Forms\Components\TextInput;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Facades\FilamentView;
 use Filament\Tables\Columns\Column;

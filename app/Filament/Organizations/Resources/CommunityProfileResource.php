@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Filament\Organizations\Resources\CommunityProfileResource\Pages\EditCommunityProfile;
 use App\Filament\Organizations\Schemas\CommunityProfileResourceSchema;
-use App\Filament\Organizations\Resources\CommunityProfileResource\Pages;
 use App\Models\CommunityProfile;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

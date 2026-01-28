@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tables\Columns;
 
-use Filament\Tables\Columns\Concerns\HasColor;
 use Closure;
 use Filament\Tables\Columns\Column;
-use Filament\Tables\Columns\Concerns;
+use Filament\Tables\Columns\Concerns\HasColor;
 use Illuminate\Support\Collection;
 
 class ServiceChipsColumn extends Column

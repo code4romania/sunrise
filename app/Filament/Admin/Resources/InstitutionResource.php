@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Schemas\InstitutionResourceSchema;
-use App\Filament\Admin\Resources\InstitutionResource\Pages\ListInstitutions;
 use App\Filament\Admin\Resources\InstitutionResource\Pages\CreateInstitution;
-use App\Filament\Admin\Resources\InstitutionResource\Pages\ViewInstitution;
-use App\Filament\Admin\Resources\InstitutionResource\Pages\EditInstitutionDetails;
 use App\Filament\Admin\Resources\InstitutionResource\Pages\EditInstitutionCenters;
+use App\Filament\Admin\Resources\InstitutionResource\Pages\EditInstitutionDetails;
+use App\Filament\Admin\Resources\InstitutionResource\Pages\ListInstitutions;
+use App\Filament\Admin\Resources\InstitutionResource\Pages\ViewInstitution;
 use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\AdminsRelationManager;
 use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\OrganizationsRelationManager;
+use App\Filament\Admin\Schemas\InstitutionResourceSchema;
 use App\Models\Institution;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class InstitutionResource extends Resource

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Widgets;
 
-use Filament\Actions\ViewAction;
 use App\Enums\DashboardIntervalFilter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\BeneficiaryIntervention;
 use App\Tables\Filters\SelectFilter;
-use Filament\Tables;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;

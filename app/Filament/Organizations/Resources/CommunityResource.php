@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
-use App\Filament\Organizations\Schemas\CommunityResourceSchema;
 use App\Filament\Organizations\Resources\CommunityResource\Pages\ListCommunityProfiles;
 use App\Filament\Organizations\Resources\CommunityResource\Pages\ViewCommunityProfile;
+use App\Filament\Organizations\Schemas\CommunityResourceSchema;
 use App\Models\CommunityProfile;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

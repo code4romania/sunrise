@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
-use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\ListInterventionServices;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\EditBeneficiaryIntervention;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewBeneficiaryIntervention;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewMeetings;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewUnfoldedMeetings;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
+use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\ListInterventionServices;
 use App\Models\InterventionService;
 use Filament\Resources\Resource;
 

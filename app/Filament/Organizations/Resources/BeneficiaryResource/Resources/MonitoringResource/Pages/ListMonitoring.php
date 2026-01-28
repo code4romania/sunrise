@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
-use Filament\Actions\Action;
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
@@ -12,9 +11,8 @@ use App\Models\Monitoring;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use App\Tables\Columns\DateColumn;
 use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -27,6 +25,7 @@ class ListMonitoring extends ListRecords
     public function getBreadcrumbs(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return BeneficiaryBreadcrumb::make($parentRecord)
             ->getBreadcrumbs('monitorings.index');
     }
@@ -39,6 +38,7 @@ class ListMonitoring extends ListRecords
     protected function getHeaderActions(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return [
             BackAction::make()
                 ->url(BeneficiaryResource::getUrl('view', ['record' => $parentRecord])),
@@ -82,6 +82,7 @@ class ListMonitoring extends ListRecords
     public function table(Table $table): Table
     {
         $parentRecord = $this->getParentRecord();
+
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->where('beneficiary_id', $parentRecord->id)->with('beneficiary'))
             ->columns([
@@ -106,7 +107,7 @@ class ListMonitoring extends ListRecords
                     ->listWithLineBreaks(),
             ])
             ->recordActions([
-                \Filament\Actions\ViewAction::make()
+                Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->color('primary')
                     ->url(fn (Monitoring $record) => static::getResource()::getUrl('view', [
@@ -126,7 +127,7 @@ class ListMonitoring extends ListRecords
             ->emptyStateDescription(__('monitoring.labels.empty_state_table'))
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateActions([
-                \Filament\Actions\CreateAction::make()
+                Actions\CreateAction::make()
                     ->label(__('monitoring.actions.create'))
                     ->url(
                         fn () => static::getResource()::getUrl('create', [

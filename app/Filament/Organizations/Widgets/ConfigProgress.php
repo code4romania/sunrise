@@ -13,7 +13,6 @@ use App\Models\OrganizationService;
 use App\Models\User;
 use App\Widgets\InfolistWidget;
 use Filament\Facades\Filament;
-use Filament\Infolists\Components\Actions\Action;
 use Illuminate\Database\Eloquent\Model;
 
 class ConfigProgress extends InfolistWidget

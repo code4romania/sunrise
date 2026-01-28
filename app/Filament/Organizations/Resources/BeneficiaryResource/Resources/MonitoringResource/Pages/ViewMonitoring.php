@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
-use Filament\Actions\DeleteAction;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Support\Enums\TextSize;
 use App\Actions\BackAction;
-use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Actions;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Group;
+use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\TextSize;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewMonitoring extends ViewRecord
@@ -34,6 +32,7 @@ class ViewMonitoring extends ViewRecord
     public function getBreadcrumbs(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return BeneficiaryBreadcrumb::make($parentRecord)->getBreadcrumbsForMonitoringFile($this->getRecord());
     }
 
@@ -45,6 +44,7 @@ class ViewMonitoring extends ViewRecord
     protected function getHeaderActions(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return [
             BackAction::make()
                 ->url(static::getResource()::getUrl('index', ['beneficiary' => $parentRecord])),

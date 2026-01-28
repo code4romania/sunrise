@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources;
 
+use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource\Pages;
 use App\Filament\Organizations\Schemas\DocumentResourceSchema;
-use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Document;
 use Filament\Resources\ParentResourceRegistration;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;

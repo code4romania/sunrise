@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
-use Filament\Actions\CreateAction;
 use App\Filament\Organizations\Resources\UserResource;
-use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;

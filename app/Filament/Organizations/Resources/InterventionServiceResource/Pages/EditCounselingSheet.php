@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\AllowancePerson;
@@ -32,18 +31,18 @@ use Awcodes\TableRepeater\Components\TableRepeater;
 use Awcodes\TableRepeater\Header;
 use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\RichEditor;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
@@ -430,7 +429,7 @@ class EditCounselingSheet extends EditRecord
                         })
                         ->columns()
                         ->addAction(
-                            fn (\Filament\Actions\Action $action) => $action->link()
+                            fn (Action $action) => $action->link()
                                 ->label(__('intervention_plan.actions.add_social_relationship'))
                         )
                         ->reorderable(false)
@@ -491,7 +490,7 @@ class EditCounselingSheet extends EditRecord
                         })
                         ->columns()
                         ->addAction(
-                            fn (\Filament\Actions\Action $action) => $action->link()
+                            fn (Action $action) => $action->link()
                                 ->label(__('intervention_plan.actions.add_social_relationship'))
                         )
                         ->reorderable(false)
@@ -565,7 +564,7 @@ class EditCounselingSheet extends EditRecord
             Section::make(__('intervention_plan.headings.children_details'))
                 ->visible(fn () => ! $interventionService || $interventionService?->beneficiary->children->count())
                 ->headerActions([
-                    \Filament\Actions\Action::make('view_children_identity')
+                    Action::make('view_children_identity')
                         ->label(__('intervention_plan.actions.view_children_identity'))
                         ->icon('heroicon-o-arrow-top-right-on-square')
                         ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
@@ -599,7 +598,7 @@ class EditCounselingSheet extends EditRecord
                         ->hiddenLabel()
                         ->deletable(false)
                         ->reorderable(false)
-                        ->addAction(fn (\Filament\Actions\Action $action) => $action->hidden())
+                        ->addAction(fn (Action $action) => $action->hidden())
                         ->schema([
                             Grid::make()
                                 ->columns(15)

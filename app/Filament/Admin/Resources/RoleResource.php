@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Schemas\RoleResourceSchema;
-use App\Filament\Admin\Resources\RoleResource\Pages\ListRoles;
 use App\Filament\Admin\Resources\RoleResource\Pages\CreateRole;
-use App\Filament\Admin\Resources\RoleResource\Pages\ViewRole;
 use App\Filament\Admin\Resources\RoleResource\Pages\EditRole;
+use App\Filament\Admin\Resources\RoleResource\Pages\ListRoles;
+use App\Filament\Admin\Resources\RoleResource\Pages\ViewRole;
+use App\Filament\Admin\Schemas\RoleResourceSchema;
 use App\Models\Role;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class RoleResource extends Resource

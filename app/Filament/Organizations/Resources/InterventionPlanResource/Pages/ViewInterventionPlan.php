@@ -4,25 +4,24 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Pages;
 
-use Filament\Actions\EditAction;
-use Filament\Schemas\Schema;
-use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\ServicesWidget;
-use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\BenefitsWidget;
-use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\ResultsWidget;
-use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\MonthlyPlanWidget;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\BenefitsWidget;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\MonthlyPlanWidget;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\ResultsWidget;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\ServicesWidget;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
-use Filament\Actions;
-use Filament\Schemas\Components\Grid;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewInterventionPlan extends ViewRecord

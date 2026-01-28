@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
-use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\OrganizationsRelationManager;
-use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\AdminsRelationManager;
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\ActivateInstitution;
@@ -17,6 +13,8 @@ use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\Location;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewInstitution extends ViewRecord
@@ -142,5 +140,4 @@ class ViewInstitution extends ViewRecord
     {
         return __('institution.headings.institution_details');
     }
-
 }

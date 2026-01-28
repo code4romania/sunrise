@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
-use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\ListMonthlyPlans;
 use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\CreateMonthlyPlan;
 use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\EditMonthlyPlanDetails;
-use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
+use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\ListMonthlyPlans;
 use App\Models\MonthlyPlan;
 use Filament\Resources\Resource;
 
