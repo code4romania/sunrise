@@ -222,12 +222,14 @@ class EditBeneficiaryIdentity extends EditRecord
                                 ->label(__('field.county'))
                                 ->placeholder(__('placeholder.county'))
                                 ->searchable()
+                                ->options(County::pluck('name', 'id')->toArray())
                                 ->getSearchResultsUsing(fn (string $search): array => County::query()
                                     ->where('name', 'like', "%{$search}%")
                                     ->limit(50)
                                     ->get()
                                     ->pluck('name', 'id')
                                     ->toArray())
+                                ->getOptionLabelUsing(fn ($value) => County::find($value)?->name)
                                 ->live()
                                 ->afterStateUpdated(function (Set $set, Get $get) {
                                     $set('legal_residence.city_id', null);
@@ -241,6 +243,7 @@ class EditBeneficiaryIdentity extends EditRecord
                                 ->label(__('field.city'))
                                 ->placeholder(__('placeholder.city'))
                                 ->searchable()
+                                ->options([])
                                 ->disabled(fn (Get $get) => ! $get('legal_residence.county_id'))
                                 ->getSearchResultsUsing(function (string $search, Get $get): array {
                                     if (! $get('legal_residence.county_id')) {
@@ -255,6 +258,7 @@ class EditBeneficiaryIdentity extends EditRecord
                                         ->pluck('name_with_uat', 'id')
                                         ->toArray();
                                 })
+                                ->getOptionLabelUsing(fn ($value) => City::find($value)?->name_with_uat ?? City::find($value)?->name)
                                 ->live()
                                 ->afterStateUpdated(function (Set $set, Get $get, $state) {
                                     if ($get('same_as_legal_residence')) {
@@ -315,12 +319,14 @@ class EditBeneficiaryIdentity extends EditRecord
                                 ->label(__('field.county'))
                                 ->placeholder(__('placeholder.county'))
                                 ->searchable()
+                                ->options(County::pluck('name', 'id')->toArray())
                                 ->getSearchResultsUsing(fn (string $search): array => County::query()
                                     ->where('name', 'like', "%{$search}%")
                                     ->limit(50)
                                     ->get()
                                     ->pluck('name', 'id')
                                     ->toArray())
+                                ->getOptionLabelUsing(fn ($value) => County::find($value)?->name)
                                 ->live()
                                 ->afterStateUpdated(fn (Set $set) => $set('effective_residence.city_id', null))
                                 ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
@@ -329,6 +335,7 @@ class EditBeneficiaryIdentity extends EditRecord
                                 ->label(__('field.city'))
                                 ->placeholder(__('placeholder.city'))
                                 ->searchable()
+                                ->options([])
                                 ->disabled(fn (Get $get) => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
                                 ->getSearchResultsUsing(function (string $search, Get $get): array {
                                     if (! $get('effective_residence.county_id')) {
@@ -343,6 +350,7 @@ class EditBeneficiaryIdentity extends EditRecord
                                         ->pluck('name_with_uat', 'id')
                                         ->toArray();
                                 })
+                                ->getOptionLabelUsing(fn ($value) => City::find($value)?->name_with_uat ?? City::find($value)?->name)
                                 ->live(),
 
                             TextInput::make('effective_residence.address')

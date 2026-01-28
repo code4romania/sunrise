@@ -95,12 +95,14 @@ class InstitutionResourceSchema
                         ->label(__('organization.field.county'))
                         ->placeholder(__('organization.placeholders.county'))
                         ->searchable()
+                        ->options(County::pluck('name', 'id')->toArray())
                         ->getSearchResultsUsing(fn (string $search): array => County::query()
                             ->where('name', 'like', "%{$search}%")
                             ->limit(50)
                             ->get()
                             ->pluck('name', 'id')
                             ->toArray())
+                        ->getOptionLabelUsing(fn ($value) => County::find($value)?->name)
                         ->required()
                         ->live()
                         ->afterStateUpdated(fn (Set $set) => $set('city_id', null)),
@@ -109,6 +111,7 @@ class InstitutionResourceSchema
                         ->label(__('organization.field.city'))
                         ->placeholder(__('placeholder.city'))
                         ->searchable()
+                        ->options([])
                         ->required()
                         ->disabled(fn (Get $get) => ! $get('county_id'))
                         ->getSearchResultsUsing(function (string $search, Get $get): array {
@@ -124,6 +127,7 @@ class InstitutionResourceSchema
                                 ->pluck('name_with_uat', 'id')
                                 ->toArray();
                         })
+                        ->getOptionLabelUsing(fn ($value) => City::find($value)?->name_with_uat ?? City::find($value)?->name)
                         ->live(),
 
                     TextInput::make('address')
