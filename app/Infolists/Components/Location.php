@@ -7,8 +7,6 @@ namespace App\Infolists\Components;
 use App\Models\City;
 use App\Models\County;
 use Closure;
-use Filament\Infolists\Components\Component;
-use Filament\Infolists\Components\Concerns\EntanglesStateWithSingularRelationship;
 use Filament\Infolists\Components\TextEntry;
 
 class Location extends \Filament\Schemas\Components\Component

@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widgets;
 
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\ViewAction;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionService;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Hidden;
-use Filament\Tables;
-use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 

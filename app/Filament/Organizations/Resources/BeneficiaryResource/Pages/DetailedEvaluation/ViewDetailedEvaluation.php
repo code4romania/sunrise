@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Tabs\Tab;
 use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -14,13 +12,14 @@ use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\Location;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewDetailedEvaluation extends ViewRecord

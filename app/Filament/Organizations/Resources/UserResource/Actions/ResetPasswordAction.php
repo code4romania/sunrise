@@ -8,7 +8,6 @@ use App\Models\User;
 use Exception;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
-use Filament\Notifications\Auth\ResetPassword as ResetPasswordNotification;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Password;

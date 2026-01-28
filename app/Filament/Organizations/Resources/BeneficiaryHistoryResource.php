@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources;
 
 use App\Enums\ActivityDescription;
 use App\Models\Activity;
-use App\Models\Beneficiary;
 use Filament\Resources\Resource;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,8 +20,6 @@ class BeneficiaryHistoryResource extends Resource
     protected static bool $isScopedToTenant = false;
 
     public static ?string $parentResource = BeneficiaryResource::class;
-
-
 
     public static function getEloquentQuery(): Builder
     {

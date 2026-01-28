@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Infolists\Components\DocumentPreview;
@@ -13,15 +12,16 @@ use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewDocument extends ViewRecord
 {
-    protected static string $resource = \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource::class;
+    protected static string $resource = BeneficiaryResource\Resources\DocumentResource::class;
 
     public function getTitle(): string|Htmlable
     {
@@ -31,6 +31,7 @@ class ViewDocument extends ViewRecord
     public function getBreadcrumbs(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return BeneficiaryBreadcrumb::make($parentRecord)
             ->getBreadcrumbs('documents.index');
     }
@@ -38,7 +39,7 @@ class ViewDocument extends ViewRecord
     protected function getHeaderActions(): array
     {
         $parentRecord = $this->getParentRecord();
-        
+
         return [
             BackAction::make()
                 ->url(static::getResource()::getUrl('index', [

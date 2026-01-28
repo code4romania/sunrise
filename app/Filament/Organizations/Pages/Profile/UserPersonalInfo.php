@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Pages\Profile;
 
-use Filament\Schemas\Schema;
+use Filament\Actions\Action;
 use Filament\Facades\Filament;
-use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\SimplePage;
-use Filament\Actions\Action;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Schema;
 
 class UserPersonalInfo extends SimplePage implements HasForms
 {
@@ -76,7 +76,7 @@ class UserPersonalInfo extends SimplePage implements HasForms
     {
         $user = Filament::getCurrentOrDefaultPanel()->auth()->user();
         $user->update($this->form->getState());
-        
+
         $this->notify('success', __('user.notifications.profile_updated'));
     }
 }

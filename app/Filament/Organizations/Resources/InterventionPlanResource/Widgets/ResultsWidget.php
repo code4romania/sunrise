@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Widgets;
 
-use Filament\Actions\CreateAction;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\InterventionPlan;
 use App\Models\User;
 use App\Tables\Actions\EditAction;
+use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Checkbox;
-use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Support\Enums\Alignment;
-use Filament\Tables;
-use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;

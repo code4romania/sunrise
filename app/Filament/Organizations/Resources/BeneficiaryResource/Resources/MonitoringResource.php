@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources;
 use App\Models\Monitoring;
 use Filament\Resources\ParentResourceRegistration;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,12 +33,12 @@ class MonitoringResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\ListMonitoring::route('/'),
-            'create' => \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\CreateMonitoring::route('/create'),
-            'view' => \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\ViewMonitoring::route('/{record}'),
-            'edit_details' => \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\EditDetails::route('/{record}/editDetails'),
-            'edit_children' => \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\EditChildren::route('/{record}/editChildren'),
-            'edit_general' => \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages\EditGeneral::route('/{record}/editGeneral'),
+            'index' => MonitoringResource\Pages\ListMonitoring::route('/'),
+            'create' => MonitoringResource\Pages\CreateMonitoring::route('/create'),
+            'view' => MonitoringResource\Pages\ViewMonitoring::route('/{record}'),
+            'edit_details' => MonitoringResource\Pages\EditDetails::route('/{record}/editDetails'),
+            'edit_children' => MonitoringResource\Pages\EditChildren::route('/{record}/editChildren'),
+            'edit_general' => MonitoringResource\Pages\EditGeneral::route('/{record}/editGeneral'),
         ];
     }
 }

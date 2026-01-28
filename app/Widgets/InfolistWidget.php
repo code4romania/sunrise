@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Widgets;
 
-use Filament\Schemas\Schema;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
-use Filament\Infolists\Infolist;
 use Filament\Pages\Concerns\InteractsWithHeaderActions;
+use Filament\Schemas\Schema;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Str;
 
@@ -25,12 +24,19 @@ class InfolistWidget extends Widget implements HasInfolists, HasForms, HasAction
 
     protected string $view = 'widgets.infolist-widget';
 
-    protected function getWidgetInfolist()
+    public function infolist(Schema $schema): Schema
     {
-        return Schema::make()
+        return $schema
             ->record($this->record)
             ->name($this->getDisplayName())
-            ->components($this->getInfolistSchema());
+            ->schema($this->getInfolistSchema());
+    }
+
+    protected function getWidgetInfolist()
+    {
+        return $this->cacheSchema('infolist', function () {
+            return $this->infolist(Schema::make());
+        });
     }
 
     protected function getInfolistSchema(): array

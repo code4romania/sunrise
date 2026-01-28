@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource;
@@ -13,14 +12,16 @@ use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionRe
 use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Actions\ResendInvitationAction;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateTimeEntry;
-use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewUserInstitution extends ViewRecord
 {
     protected static string $resource = UserInstitutionResource::class;
+
     protected static ?string $parentResource = InstitutionResource::class;
 
     protected function getRedirectUrl(): ?string

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
@@ -18,17 +17,17 @@ use App\Models\Service;
 use App\Models\ServiceIntervention;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\TableRepeater\Header;
-use Filament\Facades\Filament;
 use Filament\Actions\Action;
-use Filament\Schemas\Components\Grid;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
-use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Support\Str;
 
@@ -94,7 +93,7 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                     ]);
                 })
                 ->addAction(
-                    fn (\Filament\Actions\Action $action) => $action
+                    fn (Action $action) => $action
                         ->link()
                         ->label(__('intervention_plan.actions.add_service_repeater'))
                         ->color('primary')

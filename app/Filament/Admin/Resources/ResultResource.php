@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Schemas\ResultResourceSchema;
-use App\Filament\Admin\Resources\ResultResource\Pages\ListResults;
 use App\Filament\Admin\Resources\ResultResource\Pages\CreateResult;
 use App\Filament\Admin\Resources\ResultResource\Pages\EditResult;
+use App\Filament\Admin\Resources\ResultResource\Pages\ListResults;
+use App\Filament\Admin\Schemas\ResultResourceSchema;
 use App\Models\Result;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class ResultResource extends Resource

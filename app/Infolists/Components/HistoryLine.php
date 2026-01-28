@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infolists\Components;
 
-use Filament\Support\Enums\TextSize;
 use BackedEnum;
-use Filament\Infolists\Components\Component;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Enums\TextSize;
 
 class HistoryLine extends \Filament\Schemas\Components\Component
 {

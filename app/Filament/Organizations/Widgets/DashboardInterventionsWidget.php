@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Widgets;
 
-use Filament\Actions\ViewAction;
 use App\Enums\DashboardIntervalFilter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\BeneficiaryIntervention;
 use App\Tables\Filters\SelectFilter;
-use Filament\Tables;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -45,7 +44,9 @@ class DashboardInterventionsWidget extends BaseWidget
                     ->with([
                         'organizationServiceIntervention.serviceInterventionWithoutStatusCondition.service',
                         'interventionService',
+                        'interventionService.interventionPlan',
                         'beneficiary',
+                        'interventionPlan',
                         'specialist.user',
                     ])
             )
@@ -80,14 +81,18 @@ class DashboardInterventionsWidget extends BaseWidget
                     ->label(__('intervention_plan.actions.view_intervention'))
                     ->url(
                         fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                            'parent' => $record->intervention_service_id,
+                            'beneficiary' => $record->beneficiary,
+                            'intervention_plan' => $record->interventionPlan,
+                            'parent' => $record->interventionService,
                             'record' => $record,
                         ])
                     ),
             ])
             ->recordUrl(
                 fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                    'parent' => $record->intervention_service_id,
+                    'beneficiary' => $record->beneficiary,
+                    'intervention_plan' => $record->interventionPlan,
+                    'parent' => $record->interventionService,
                     'record' => $record,
                 ])
             )

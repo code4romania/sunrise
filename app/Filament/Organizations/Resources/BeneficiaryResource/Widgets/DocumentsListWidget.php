@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\CreateAction;
 use App\Concerns\HasViewContentFooter;
-use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource;
 use App\Models\Beneficiary;
 use App\Models\Document;
-use Filament\Tables;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\CreateAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 

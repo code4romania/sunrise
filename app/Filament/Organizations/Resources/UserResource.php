@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
-use App\Filament\Organizations\Schemas\UserResourceSchema;
-use App\Filament\Organizations\Resources\UserResource\Pages\ListUsers;
 use App\Filament\Organizations\Resources\UserResource\Pages\CreateUser;
-use App\Filament\Organizations\Resources\UserResource\Pages\ViewUser;
 use App\Filament\Organizations\Resources\UserResource\Pages\EditUser;
+use App\Filament\Organizations\Resources\UserResource\Pages\ListUsers;
+use App\Filament\Organizations\Resources\UserResource\Pages\ViewUser;
+use App\Filament\Organizations\Schemas\UserResourceSchema;
 use App\Models\User;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class UserResource extends Resource
@@ -63,5 +63,4 @@ class UserResource extends Resource
             'edit' => EditUser::route('/{record}/edit'),
         ];
     }
-
 }

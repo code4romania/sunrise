@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Resources;
 
-use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Pages\ListUserInstitutions;
-use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Pages;
 use App\Filament\Admin\Resources\InstitutionResource;
+use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Pages;
+use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Pages\ListUserInstitutions;
 use App\Models\User;
 use Filament\Resources\ParentResourceRegistration;
 use Filament\Resources\Resource;

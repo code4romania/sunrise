@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Pages;
 
-use Filament\Actions\DeleteAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
-use Filament\Actions;
+use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditInterventionPlan extends EditRecord

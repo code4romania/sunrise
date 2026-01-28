@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
-use App\Filament\Organizations\Resources\InterventionServiceResource\Widgets\CounselingSheetWidget;
-use App\Filament\Organizations\Resources\InterventionServiceResource\Widgets\InterventionsWidget;
-use App\Filament\Organizations\Resources\InterventionServiceResource\Widgets\ServiceDescriptionWidget;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
+use App\Filament\Organizations\Resources\InterventionServiceResource\Widgets\CounselingSheetWidget;
+use App\Filament\Organizations\Resources\InterventionServiceResource\Widgets\InterventionsWidget;
+use App\Filament\Organizations\Resources\InterventionServiceResource\Widgets\ServiceDescriptionWidget;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;

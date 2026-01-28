@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
-use App\Filament\Organizations\Schemas\BeneficiaryInterventionResourceSchema;
-use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ListBeneficiaryInterventions;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
-use App\Models\InterventionService;
+use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ListBeneficiaryInterventions;
+use App\Filament\Organizations\Schemas\BeneficiaryInterventionResourceSchema;
 use App\Models\BeneficiaryIntervention;
+use App\Models\InterventionService;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;

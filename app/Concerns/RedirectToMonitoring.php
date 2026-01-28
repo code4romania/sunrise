@@ -11,6 +11,7 @@ trait RedirectToMonitoring
     protected function getRedirectUrl(): ?string
     {
         $parentRecord = $this->getParentRecord();
+
         return static::getResource()::getUrl('view', [
             'beneficiary' => $parentRecord,
             'record' => $this->getRecord(),

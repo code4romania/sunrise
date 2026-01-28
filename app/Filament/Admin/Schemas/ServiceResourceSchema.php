@@ -9,12 +9,11 @@ use App\Enums\GeneralStatus;
 use App\Forms\Components\Select;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
-use Filament\Forms\Components\Placeholder;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Actions\CreateAction;
-use Filament\Actions\ViewAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -103,7 +102,7 @@ class ServiceResourceSchema
                                     $items = $component->getState();
                                     $currentItem = $items[$arguments['item']] ?? null;
 
-                                    if (!isset($currentItem['id'])) {
+                                    if (! isset($currentItem['id'])) {
                                         return false;
                                     }
 

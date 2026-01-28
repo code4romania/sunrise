@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -13,17 +12,16 @@ use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Infolists\Components\Notice;
-use Filament\Infolists\Components\RepeatableEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewBeneficiaryIdentity extends ViewRecord

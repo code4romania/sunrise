@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Pages\Tenancy;
 
-use Filament\Schemas\Schema;
 use App\Filament\Admin\Resources\OrganizationResource;
-use Filament\Forms\Form;
 use Filament\Pages\Tenancy\EditTenantProfile;
+use Filament\Schemas\Schema;
 
 class EditOrganizationProfile extends EditTenantProfile
 {

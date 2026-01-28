@@ -18,17 +18,16 @@ use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
-use App\Models\Beneficiary;
 use App\Models\User;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 
 class InitialEvaluationSchema
@@ -244,30 +243,35 @@ class InitialEvaluationSchema
     public static function getViolenceHistorySchema(): array
     {
         $enumOptions = ViolenceHistorySchema::options();
+
         return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getViolencesTypesSchema(): array
     {
         $enumOptions = ViolencesTypesSchema::options();
+
         return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getRiskFactorsSchema(): array
     {
         $enumOptions = RiskFactorsSchema::options();
+
         return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getVictimPerceptionOfTheRiskSchema(): array
     {
         $enumOptions = VictimPerceptionOfTheRiskSchema::options();
+
         return self::getSchemaFromEnum($enumOptions);
     }
 
     public static function getAggravatingFactorsSchema(): array
     {
         $enumOptions = AggravatingFactorsSchema::options();
+
         return self::getSchemaFromEnum($enumOptions);
     }
 
@@ -289,6 +293,7 @@ class InitialEvaluationSchema
                                 if ($state) {
                                     $set('extended_family_can_provide_old_values', $get('extended_family_can_provide'));
                                     $set('extended_family_can_provide', null);
+
                                     return;
                                 }
                                 $set('extended_family_can_provide', $get('extended_family_can_provide_old_values'));
@@ -314,6 +319,7 @@ class InitialEvaluationSchema
                                 if ($state) {
                                     $set('friends_can_provide_old_values', $get('friends_can_provide'));
                                     $set('friends_can_provide', null);
+
                                     return;
                                 }
                                 $set('friends_can_provide', $get('friends_can_provide_old_values'));
@@ -341,6 +347,7 @@ class InitialEvaluationSchema
                 ->placeholder(__('beneficiary.placeholder.observations'))
                 ->maxLength(100);
         }
+
         return $fields;
     }
 
@@ -367,6 +374,7 @@ class InitialEvaluationSchema
                 })
                 ->inlineLabel(false);
         }
+
         return $fields;
     }
 }

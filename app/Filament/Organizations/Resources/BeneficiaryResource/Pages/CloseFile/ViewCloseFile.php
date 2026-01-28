@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Tabs\Tab;
 use App\Actions\BackAction;
 use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -15,12 +13,12 @@ use App\Infolists\Components\Notice;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\DeleteAction;
-use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewCloseFile extends ViewRecord

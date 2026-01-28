@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace App\Infolists\Components;
 
 use Filament\Infolists\Components\Concerns\HasColor;
-use Filament\Support\Concerns\HasFontFamily;
 use Filament\Infolists\Components\Concerns\HasIcon;
 use Filament\Infolists\Components\Concerns\HasIconColor;
-use Filament\Support\Concerns\HasWeight;
-use Filament\Infolists\Components\Concerns;
 use Filament\Infolists\Components\Entry;
+use Filament\Support\Concerns\HasFontFamily;
+use Filament\Support\Concerns\HasWeight;
 
 class Notice extends Entry
 {

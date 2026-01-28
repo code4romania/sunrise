@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Infolists\Components;
 
-use ReflectionEnum;
 use BackedEnum;
 use Filament\Infolists\Components\TextEntry;
+use ReflectionEnum;
 
 class EnumEntry extends TextEntry
 {

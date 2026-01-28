@@ -7,7 +7,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\Mon
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Models\Beneficiary;
 use App\Tables\Columns\DateColumn;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;

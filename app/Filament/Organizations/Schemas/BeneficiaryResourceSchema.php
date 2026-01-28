@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Schemas;
 
 use App\Enums\CaseStatus;
 use App\Filters\DateFilter;
-use App\Models\Beneficiary;
 use App\Tables\Filters\SelectFilter;
 use Filament\Actions\ViewAction;
 use Filament\Schemas\Schema;

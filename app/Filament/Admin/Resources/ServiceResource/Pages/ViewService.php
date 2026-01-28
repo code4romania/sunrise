@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
-use Filament\Actions\EditAction;
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Filament\Admin\Resources\ServiceResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Infolists\Components\Notice;
-use Filament\Infolists\Components\RepeatableEntry;
 use App\Models\Service;
 use Filament\Actions;
-use Filament\Actions\StaticAction;
-use Filament\Infolists\Components\Actions\Action;
-use Filament\Schemas\Components\Section;
+use Filament\Actions\EditAction;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewService extends ViewRecord
@@ -61,7 +58,7 @@ class ViewService extends ViewRecord
                         ->state(__('service.helper_texts.counseling_sheet'))
                         ->icon('heroicon-o-document-text')
                         ->action(
-                            \Filament\Actions\Action::make('view_counseling_sheet')
+                            Actions\Action::make('view_counseling_sheet')
                                 ->label(__('service.actions.view_counseling_sheet'))
                                 ->modalHeading(fn (Service $record) => $record->counseling_sheet?->getLabel())
                                 ->schema(fn (Service $record) => match ($record->counseling_sheet) {
@@ -72,7 +69,7 @@ class ViewService extends ViewRecord
                                 })
                                 ->disabledForm()
                                 ->modalAutofocus(false)
-                                ->modalSubmitAction(fn (\Filament\Actions\Action $action) => $action->hidden())
+                                ->modalSubmitAction(fn (Actions\Action $action) => $action->hidden())
                                 ->link(),
                         ),
                 ]),

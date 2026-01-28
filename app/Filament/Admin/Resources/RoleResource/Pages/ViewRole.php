@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
-use Filament\Actions\EditAction;
-use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\RoleResource;
-use Filament\Actions;
-use Filament\Schemas\Components\Section;
+use Filament\Actions\EditAction;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewRole extends ViewRecord

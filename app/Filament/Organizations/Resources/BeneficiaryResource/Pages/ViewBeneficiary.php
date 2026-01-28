@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use Filament\Schemas\Schema;
-use Filament\Support\Enums\TextSize;
 use App\Actions\BackAction;
 use App\Enums\ActivityDescription;
 use App\Enums\AddressType;
@@ -14,12 +12,12 @@ use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ChangeStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Actions\ViewDetailsAction;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CaseTeamListWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\IntervetnionPlanWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
-use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
@@ -31,17 +29,17 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Placeholder;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Schemas\Components\Section;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\TextEntry\TextEntrySize;
-use Filament\Infolists\Infolist;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
+use Filament\Support\Enums\TextSize;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
@@ -239,7 +237,7 @@ class ViewBeneficiary extends ViewRecord
                 'class' => 'h-full',
             ])
             ->schema([
-            \Filament\Schemas\Components\Grid::make()
+                Grid::make()
                     ->relationship('flowPresentation')
                     ->schema([
                         EnumEntry::make('presentation_mode')
@@ -416,7 +414,7 @@ class ViewBeneficiary extends ViewRecord
             CloseFileWidget::class,
             CaseTeamListWidget::class,
             DocumentsListWidget::class,
-//            RelatedCases::class,
+            //            RelatedCases::class,
         ];
     }
 }

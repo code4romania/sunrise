@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Schemas\BenefitResourceSchema;
-use App\Filament\Admin\Resources\BenefitResource\Pages\ListBenefits;
 use App\Filament\Admin\Resources\BenefitResource\Pages\CreateBenefit;
-use App\Filament\Admin\Resources\BenefitResource\Pages\ViewBenefit;
 use App\Filament\Admin\Resources\BenefitResource\Pages\EditBenefit;
+use App\Filament\Admin\Resources\BenefitResource\Pages\ListBenefits;
+use App\Filament\Admin\Resources\BenefitResource\Pages\ViewBenefit;
+use App\Filament\Admin\Schemas\BenefitResourceSchema;
 use App\Models\Benefit;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 
 class BenefitResource extends Resource

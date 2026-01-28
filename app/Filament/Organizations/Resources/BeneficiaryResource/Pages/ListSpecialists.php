@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
-use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\ListSpecialistsWidget;
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\ListSpecialistsWidget;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;

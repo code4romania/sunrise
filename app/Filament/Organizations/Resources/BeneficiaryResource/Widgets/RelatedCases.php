@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;

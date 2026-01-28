@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource\Pages;
 
-use Filament\Support\Enums\Size;
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Document;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Enums\Size;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ListDocuments extends ListRecords
 {
-    protected static string $resource = \App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource::class;
+    protected static string $resource = BeneficiaryResource\Resources\DocumentResource::class;
 
     public function __construct()
     {
@@ -26,6 +26,7 @@ class ListDocuments extends ListRecords
     public function getBreadcrumbs(): array
     {
         $parentRecord = $this->getParentRecord();
+
         return BeneficiaryBreadcrumb::make($parentRecord)
             ->getBreadcrumbs('documents.index');
     }
@@ -38,7 +39,7 @@ class ListDocuments extends ListRecords
     protected function getHeaderActions(): array
     {
         $parentRecord = $this->getParentRecord();
-        
+
         return [
             BackAction::make()
                 ->url(BeneficiaryResource::getUrl('view', ['record' => $parentRecord])),
@@ -51,6 +52,7 @@ class ListDocuments extends ListRecords
                 ->modalCancelActionLabel(__('general.action.cancel'))
                 ->mutateDataUsing(function (array $data) use ($parentRecord) {
                     $data['beneficiary_id'] = $parentRecord->id;
+
                     return $data;
                 })
                 ->relationship(null)
@@ -65,7 +67,7 @@ class ListDocuments extends ListRecords
     {
         return \App\Filament\Organizations\Schemas\DocumentResourceSchema::table($table)
             ->emptyStateActions([
-                \Filament\Actions\CreateAction::make()
+                Actions\CreateAction::make()
                     ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                     ->label(__('beneficiary.section.documents.actions.add'))
                     ->createAnother(false)
@@ -75,6 +77,7 @@ class ListDocuments extends ListRecords
                     ->modalCancelActionLabel(__('general.action.cancel'))
                     ->mutateDataUsing(function (array $data) {
                         $data['beneficiary_id'] = $this->getParentRecord()->id;
+
                         return $data;
                     })
                     ->successRedirectUrl(fn (Document $record) => static::getResource()::getUrl('view', [

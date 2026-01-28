@@ -91,7 +91,7 @@ return [
         'delete_benefit' => 'Șterge beneficiu',
         'add_result' => 'Adaugă rezultat',
         'delete_result' => 'Șterge rezultat',
-        'create_service' => 'Salvează modificările'
+        'create_service' => 'Salvează modificările',
     ],
 
     'placeholders' => [

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
-use App\Filament\Organizations\Schemas\BeneficiaryResource\InitialEvaluationSchema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\AggravatingFactorsSchema;
@@ -13,13 +12,14 @@ use App\Enums\VictimPerceptionOfTheRiskSchema;
 use App\Enums\ViolenceHistorySchema;
 use App\Enums\ViolencesTypesSchema;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Schemas\BeneficiaryResource\InitialEvaluationSchema;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 

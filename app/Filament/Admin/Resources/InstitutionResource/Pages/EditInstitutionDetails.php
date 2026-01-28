@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
-use App\Filament\Admin\Schemas\InstitutionResourceSchema;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
-use Filament\Schemas\Schema;
+use App\Filament\Admin\Schemas\InstitutionResourceSchema;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
 class EditInstitutionDetails extends EditRecord

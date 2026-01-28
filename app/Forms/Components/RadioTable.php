@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace App\Forms\Components;
 
+use Filament\Forms\Components\Concerns;
 use Filament\Forms\Components\Concerns\CanBeCloned;
-use Filament\Schemas\Components\Concerns\CanBeCollapsed;
 use Filament\Forms\Components\Concerns\CanGenerateUuids;
 use Filament\Forms\Components\Concerns\CanLimitItemsLength;
 use Filament\Forms\Components\Concerns\HasContainerGridLayout;
-use Filament\Forms\Components\Concerns;
-use Filament\Forms\Components\Contracts\HasExtraItemActions;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Placeholder;
+use Filament\Schemas\Components\Concerns\CanBeCollapsed;
 use Filament\Support\Concerns\HasReorderAnimationDuration;
 
 class RadioTable extends Field implements \Filament\Schemas\Components\Contracts\HasExtraItemActions
