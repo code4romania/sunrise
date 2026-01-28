@@ -1,5 +1,4 @@
 <?php
-
 return [
     'labels' => [
         'empty_state_table' => 'No hay planes de intervención disponibles',
