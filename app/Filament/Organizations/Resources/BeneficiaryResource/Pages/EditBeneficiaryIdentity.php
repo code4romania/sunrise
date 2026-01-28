@@ -7,18 +7,19 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 use alcea\cnp\Cnp;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToIdentity;
-use App\Enums\AddressType;
 use App\Enums\Citizenship;
 use App\Enums\CivilStatus;
 use App\Enums\Ethnicity;
 use App\Enums\Gender;
 use App\Enums\IDType;
+use App\Enums\ResidenceEnvironment;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\DatePicker;
-use App\Forms\Components\Location;
 use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
 use App\Models\Beneficiary;
+use App\Models\City;
+use App\Models\County;
 use App\Rules\ValidCNP;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\Checkbox;
@@ -38,14 +39,14 @@ use Illuminate\Validation\Rules\Unique;
 
 class EditBeneficiaryIdentity extends EditRecord
 {
-    use RedirectToIdentity;
     use PreventSubmitFormOnEnter;
+    use RedirectToIdentity;
 
     protected static string $resource = BeneficiaryResource::class;
 
     public function getTitle(): string|Htmlable
     {
-        return  __('beneficiary.page.edit_identity.title');
+        return __('beneficiary.page.edit_identity.title');
     }
 
     public function getBreadcrumbs(): array
@@ -215,17 +216,76 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     Spacer::make(),
 
-                    Location::make(AddressType::LEGAL_RESIDENCE->value)
-                        ->relationship(AddressType::LEGAL_RESIDENCE->value)
-                        ->city()
-                        ->address()
-                        ->addressMaxLength(50)
-                        ->environment()
-                        ->copyDataInPath(
-                            fn (Get $get) => $get('same_as_legal_residence') ?
-                                AddressType::EFFECTIVE_RESIDENCE->value :
-                                null
-                        ),
+                    Grid::make()
+                        ->schema([
+                            Select::make('legal_residence.county_id')
+                                ->label(__('field.county'))
+                                ->placeholder(__('placeholder.county'))
+                                ->searchable()
+                                ->getSearchResultsUsing(fn (string $search): array => County::query()
+                                    ->where('name', 'like', "%{$search}%")
+                                    ->limit(50)
+                                    ->get()
+                                    ->pluck('name', 'id')
+                                    ->toArray())
+                                ->live()
+                                ->afterStateUpdated(function (Set $set, Get $get) {
+                                    $set('legal_residence.city_id', null);
+                                    if ($get('same_as_legal_residence')) {
+                                        $set('effective_residence.county_id', $get('legal_residence.county_id'));
+                                        $set('effective_residence.city_id', null);
+                                    }
+                                }),
+
+                            Select::make('legal_residence.city_id')
+                                ->label(__('field.city'))
+                                ->placeholder(__('placeholder.city'))
+                                ->searchable()
+                                ->disabled(fn (Get $get) => ! $get('legal_residence.county_id'))
+                                ->getSearchResultsUsing(function (string $search, Get $get): array {
+                                    if (! $get('legal_residence.county_id')) {
+                                        return [];
+                                    }
+
+                                    return City::query()
+                                        ->where('county_id', (int) $get('legal_residence.county_id'))
+                                        ->where('name', 'like', "%{$search}%")
+                                        ->limit(50)
+                                        ->get()
+                                        ->pluck('name_with_uat', 'id')
+                                        ->toArray();
+                                })
+                                ->live()
+                                ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                    if ($get('same_as_legal_residence')) {
+                                        $set('effective_residence.city_id', $state);
+                                    }
+                                }),
+
+                            TextInput::make('legal_residence.address')
+                                ->label(__('field.address'))
+                                ->placeholder(__('placeholder.address'))
+                                ->maxLength(50)
+                                ->lazy()
+                                ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                    if ($get('same_as_legal_residence')) {
+                                        $set('effective_residence.address', $state);
+                                    }
+                                }),
+
+                            Select::make('legal_residence.environment')
+                                ->label(__('field.environment'))
+                                ->placeholder(__('placeholder.residence_environment'))
+                                ->options(ResidenceEnvironment::options())
+                                ->enum(ResidenceEnvironment::class)
+                                ->lazy()
+                                ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                    if ($get('same_as_legal_residence')) {
+                                        $set('effective_residence.environment', $state);
+                                    }
+                                }),
+                        ])
+                        ->columnSpanFull(),
 
                     Checkbox::make('same_as_legal_residence')
                         ->label(__('field.same_as_legal_residence'))
@@ -249,15 +309,56 @@ class EditBeneficiaryIdentity extends EditRecord
 
                     Spacer::make(),
 
-                    Location::make(AddressType::EFFECTIVE_RESIDENCE->value)
-                        ->relationship(AddressType::EFFECTIVE_RESIDENCE->value)
-                        ->city()
-                        ->address()
-                        ->addressMaxLength(50)
-                        ->environment()
-                        ->disabled(function (Get $get) {
-                            return  $get('same_as_legal_residence');
-                        }),
+                    Grid::make()
+                        ->schema([
+                            Select::make('effective_residence.county_id')
+                                ->label(__('field.county'))
+                                ->placeholder(__('placeholder.county'))
+                                ->searchable()
+                                ->getSearchResultsUsing(fn (string $search): array => County::query()
+                                    ->where('name', 'like', "%{$search}%")
+                                    ->limit(50)
+                                    ->get()
+                                    ->pluck('name', 'id')
+                                    ->toArray())
+                                ->live()
+                                ->afterStateUpdated(fn (Set $set) => $set('effective_residence.city_id', null))
+                                ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
+
+                            Select::make('effective_residence.city_id')
+                                ->label(__('field.city'))
+                                ->placeholder(__('placeholder.city'))
+                                ->searchable()
+                                ->disabled(fn (Get $get) => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
+                                ->getSearchResultsUsing(function (string $search, Get $get): array {
+                                    if (! $get('effective_residence.county_id')) {
+                                        return [];
+                                    }
+
+                                    return City::query()
+                                        ->where('county_id', (int) $get('effective_residence.county_id'))
+                                        ->where('name', 'like', "%{$search}%")
+                                        ->limit(50)
+                                        ->get()
+                                        ->pluck('name_with_uat', 'id')
+                                        ->toArray();
+                                })
+                                ->live(),
+
+                            TextInput::make('effective_residence.address')
+                                ->label(__('field.address'))
+                                ->placeholder(__('placeholder.address'))
+                                ->maxLength(50)
+                                ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
+
+                            Select::make('effective_residence.environment')
+                                ->label(__('field.environment'))
+                                ->placeholder(__('placeholder.residence_environment'))
+                                ->options(ResidenceEnvironment::options())
+                                ->enum(ResidenceEnvironment::class)
+                                ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
+                        ])
+                        ->columnSpanFull(),
 
                     Spacer::make(),
 

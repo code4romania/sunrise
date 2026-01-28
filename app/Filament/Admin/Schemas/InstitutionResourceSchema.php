@@ -4,8 +4,20 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Schemas;
 
+use App\Enums\AreaType;
+use App\Enums\OrganizationType;
+use App\Forms\Components\Repeater;
+use App\Forms\Components\Select;
+use App\Models\City;
+use App\Models\County;
 use App\Models\Institution;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -40,92 +52,124 @@ class InstitutionResourceSchema
     public static function getFormSchemaForDetails(): array
     {
         return [
-            \Filament\Schemas\Components\Section::make()
+            Section::make()
                 ->maxWidth('3xl')
                 ->columns()
                 ->schema([
-                    \Filament\Forms\Components\TextInput::make('name')
+                    TextInput::make('name')
                         ->label(__('organization.field.name'))
                         ->placeholder(__('organization.placeholders.name'))
                         ->maxLength(200)
                         ->required(),
 
-                    \Filament\Forms\Components\TextInput::make('short_name')
+                    TextInput::make('short_name')
                         ->label(__('organization.field.short_name'))
                         ->placeholder(__('organization.placeholders.short_name'))
                         ->maxLength(50),
 
-                    \App\Forms\Components\Select::make('type')
+                    Select::make('type')
                         ->label(__('organization.field.type'))
                         ->placeholder(__('organization.placeholders.type'))
-                        ->options(\App\Enums\OrganizationType::options())
-                        ->enum(\App\Enums\OrganizationType::class)
+                        ->options(OrganizationType::options())
+                        ->enum(OrganizationType::class)
                         ->required(),
 
-                    \Filament\Forms\Components\TextInput::make('cif')
+                    TextInput::make('cif')
                         ->label(__('organization.field.cif'))
                         ->placeholder(__('organization.placeholders.cif'))
                         ->required(),
 
-                    \Filament\Forms\Components\TextInput::make('main_activity')
+                    TextInput::make('main_activity')
                         ->label(__('organization.field.main_activity'))
                         ->placeholder(__('organization.placeholders.main_activity'))
                         ->maxLength(200)
                         ->required(),
 
-                    \App\Forms\Components\Select::make('area')
+                    Select::make('area')
                         ->label(__('organization.field.area'))
                         ->placeholder(__('organization.placeholders.area'))
-                        ->options(\App\Enums\AreaType::options())
+                        ->options(AreaType::options())
                         ->required(),
 
-                    \App\Forms\Components\Location::make()
-                        ->city()
-                        ->address()
-                        ->countyLabel(__('organization.field.county'))
-                        ->cityLabel(__('organization.field.city'))
-                        ->addressLabel(__('organization.field.address'))
-                        ->addressMaxLength(200)
-                        ->addressColumnSpanFull()
+                    Select::make('county_id')
+                        ->label(__('organization.field.county'))
+                        ->placeholder(__('organization.placeholders.county'))
+                        ->searchable()
+                        ->getSearchResultsUsing(fn (string $search): array => County::query()
+                            ->where('name', 'like', "%{$search}%")
+                            ->limit(50)
+                            ->get()
+                            ->pluck('name', 'id')
+                            ->toArray())
+                        ->required()
+                        ->live()
+                        ->afterStateUpdated(fn (Set $set) => $set('city_id', null)),
+
+                    Select::make('city_id')
+                        ->label(__('organization.field.city'))
+                        ->placeholder(__('placeholder.city'))
+                        ->searchable()
+                        ->required()
+                        ->disabled(fn (Get $get) => ! $get('county_id'))
+                        ->getSearchResultsUsing(function (string $search, Get $get): array {
+                            if (! $get('county_id')) {
+                                return [];
+                            }
+
+                            return City::query()
+                                ->where('county_id', (int) $get('county_id'))
+                                ->where('name', 'like', "%{$search}%")
+                                ->limit(50)
+                                ->get()
+                                ->pluck('name_with_uat', 'id')
+                                ->toArray();
+                        })
+                        ->live(),
+
+                    TextInput::make('address')
+                        ->label(__('organization.field.address'))
+                        ->placeholder(__('placeholder.address'))
+                        ->maxLength(200)
+                        ->columnSpanFull()
                         ->required(),
 
-                    \Filament\Schemas\Components\Grid::make()
+                    Grid::make()
                         ->schema([
-                            \Filament\Forms\Components\TextInput::make('representative_person.name')
+                            TextInput::make('representative_person.name')
                                 ->label(__('organization.field.representative_name'))
                                 ->placeholder(__('organization.placeholders.representative_name'))
                                 ->maxLength(50)
                                 ->required(),
 
-                            \Filament\Forms\Components\TextInput::make('representative_person.email')
+                            TextInput::make('representative_person.email')
                                 ->label(__('organization.field.representative_email'))
                                 ->placeholder(__('organization.placeholders.representative_email'))
                                 ->maxLength(50)
                                 ->email(),
 
-                            \Filament\Forms\Components\TextInput::make('representative_person.phone')
+                            TextInput::make('representative_person.phone')
                                 ->label(__('organization.field.representative_phone'))
                                 ->placeholder(__('organization.placeholders.representative_phone'))
                                 ->maxLength(13)
                                 ->tel(),
                         ])->columnSpanFull(),
 
-                    \Filament\Schemas\Components\Grid::make()
+                    Grid::make()
                         ->schema([
-                            \Filament\Forms\Components\TextInput::make('contact_person.name')
+                            TextInput::make('contact_person.name')
                                 ->label(__('organization.field.contact_person'))
                                 ->placeholder(__('organization.placeholders.contact_person'))
                                 ->maxLength(50)
                                 ->required(),
 
-                            \Filament\Forms\Components\TextInput::make('contact_person.email')
+                            TextInput::make('contact_person.email')
                                 ->label(__('organization.field.contact_person_email'))
                                 ->placeholder(__('organization.placeholders.contact_person_email'))
                                 ->maxLength(50)
                                 ->required()
                                 ->email(),
 
-                            \Filament\Forms\Components\TextInput::make('contact_person.phone')
+                            TextInput::make('contact_person.phone')
                                 ->label(__('organization.field.contact_person_phone'))
                                 ->placeholder(__('organization.placeholders.contact_person_phone'))
                                 ->maxLength(13)
@@ -133,13 +177,13 @@ class InstitutionResourceSchema
                                 ->required(),
                         ])->columnSpanFull(),
 
-                    \Filament\Forms\Components\TextInput::make('website')
+                    TextInput::make('website')
                         ->label(__('organization.field.website'))
                         ->placeholder(__('organization.placeholders.website'))
                         ->maxLength(200)
                         ->url(),
 
-                    \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('organization_status')
+                    SpatieMediaLibraryFileUpload::make('organization_status')
                         ->label(__('institution.labels.organization_status'))
                         ->maxSize(config('media-library.max_file_size'))
                         ->helperText(__('institution.helper_texts.organization_status'))
@@ -153,7 +197,7 @@ class InstitutionResourceSchema
                         ->columnSpanFull()
                         ->required(),
 
-                    \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('social_service_provider_certificate')
+                    SpatieMediaLibraryFileUpload::make('social_service_provider_certificate')
                         ->label(__('institution.labels.social_service_provider_certificate'))
                         ->maxSize(config('media-library.max_file_size'))
                         ->helperText(__('institution.helper_texts.social_service_provider_certificate'))
@@ -172,7 +216,7 @@ class InstitutionResourceSchema
     public static function getFormSchemaForCenters(): array
     {
         return [
-            \App\Forms\Components\Repeater::make('organizations')
+            Repeater::make('organizations')
                 ->maxWidth('3xl')
                 ->hiddenLabel()
                 ->columns()
@@ -180,25 +224,25 @@ class InstitutionResourceSchema
                 ->relationship('organizations')
                 ->addActionLabel(__('institution.actions.add_organization'))
                 ->schema([
-                    \Filament\Forms\Components\TextInput::make('name')
+                    TextInput::make('name')
                         ->label(__('institution.labels.center_name'))
                         ->placeholder(__('organization.placeholders.center_name'))
                         ->maxLength(200)
                         ->required(),
 
-                    \Filament\Forms\Components\TextInput::make('short_name')
+                    TextInput::make('short_name')
                         ->label(__('organization.field.short_name'))
                         ->placeholder(__('organization.placeholders.center_short_name'))
                         ->maxLength(50),
 
-                    \Filament\Forms\Components\TextInput::make('main_activity')
+                    TextInput::make('main_activity')
                         ->label(__('organization.field.main_activity'))
                         ->placeholder(__('organization.placeholders.main_activity'))
                         ->columnSpanFull()
                         ->maxLength(200)
                         ->required(),
 
-                    \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('social_service_licensing_certificate')
+                    SpatieMediaLibraryFileUpload::make('social_service_licensing_certificate')
                         ->label(__('institution.labels.social_service_licensing_certificate'))
                         ->helperText(__('institution.helper_texts.social_service_licensing_certificate'))
                         ->maxSize(config('media-library.max_file_size'))
@@ -211,7 +255,7 @@ class InstitutionResourceSchema
                         ])
                         ->columnSpanFull(),
 
-                    \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('logo')
+                    SpatieMediaLibraryFileUpload::make('logo')
                         ->label(__('institution.labels.logo_center'))
                         ->helperText(__('institution.helper_texts.logo'))
                         ->maxSize(config('media-library.max_file_size'))
@@ -223,7 +267,7 @@ class InstitutionResourceSchema
                         ])
                         ->columnSpanFull(),
 
-                    \Filament\Forms\Components\SpatieMediaLibraryFileUpload::make('organization_header')
+                    SpatieMediaLibraryFileUpload::make('organization_header')
                         ->label(__('institution.labels.organization_header'))
                         ->helperText(__('institution.helper_texts.organization_header'))
                         ->maxSize(config('media-library.max_file_size'))
