@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Pages;
 
+use Filament\Actions\EditAction;
+use Filament\Schemas\Schema;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\ServicesWidget;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\BenefitsWidget;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\ResultsWidget;
+use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\MonthlyPlanWidget;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -12,9 +18,9 @@ use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Actions;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -46,12 +52,12 @@ class ViewInterventionPlan extends ViewRecord
             BackAction::make()
                 ->url(BeneficiaryResource::getUrl('view', ['record' => $this->parent])),
 
-            Actions\EditAction::make()
+            EditAction::make()
                 ->label(__('intervention_plan.actions.edit_intervention_plan'))
                 ->icon('heroicon-o-pencil')
                 ->outlined()
                 ->modal()
-                ->form([
+                ->schema([
                     Grid::make()
                         ->relationship('beneficiary')
                         ->schema([
@@ -87,9 +93,9 @@ class ViewInterventionPlan extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make(__('intervention_plan.headings.plan_details'))
                 ->columns(3)
                 ->schema([
@@ -117,7 +123,10 @@ class ViewInterventionPlan extends ViewRecord
     protected function getFooterWidgets(): array
     {
         return [
-            InterventionPlanResource\Widgets\Interventions::class,
+            ServicesWidget::class,
+            BenefitsWidget::class,
+            ResultsWidget::class,
+            MonthlyPlanWidget::class,
         ];
     }
 }

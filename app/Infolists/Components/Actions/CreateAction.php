@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infolists\Components\Actions;
 
+use Filament\Schemas\Schema;
 use Closure;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Actions\Concerns\InteractsWithRecord;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
-class CreateAction extends Action
+class CreateAction extends \Filament\Actions\Action
 {
     use CanCustomizeProcess;
     use InteractsWithRecord;
@@ -24,7 +25,7 @@ class CreateAction extends Action
     protected function setUp(): void
     {
         parent::setUp();
-        $this->action(function (array $arguments, Form $form): void {
+        $this->action(function (array $arguments, Schema $schema): void {
             $model = $this->getModel();
 
             $record = $this->process(function (array $data, HasActions $livewire) use ($model): Model {
@@ -48,7 +49,7 @@ class CreateAction extends Action
             });
 
             $this->record($record);
-            $form->model($record)->saveRelationships();
+            $schema->model($record)->saveRelationships();
 
             if ($arguments['another'] ?? false) {
                 $this->callAfter();
@@ -57,9 +58,9 @@ class CreateAction extends Action
                 $this->record(null);
 
                 // Ensure that the form record is anonymized so that relationships aren't loaded.
-                $form->model($model);
+                $schema->model($model);
 
-                $form->fill();
+                $schema->fill();
 
                 $this->halt();
 

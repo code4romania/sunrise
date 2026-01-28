@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns\Enums\Comparable;
+use App\Concerns\Enums\Arrayable;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
 enum DashboardIntervalFilter: string implements HasLabel
 {
     use Enums\HasLabel;
-    use Enums\Comparable;
-    use Enums\Arrayable;
+    use Comparable;
+    use Arrayable;
 
     case TODAY = 'today';
     case TOMORROW = 'tomorrow';

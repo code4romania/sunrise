@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs\Tab;
 use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -13,10 +15,10 @@ use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\Location;
 use App\Infolists\Components\TableEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Group;
+use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -45,15 +47,15 @@ class ViewDetailedEvaluation extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->columns(1)
             ->schema([
                 Tabs::make()
                     ->persistTabInQueryString()
                     ->tabs([
-                        Tabs\Tab::make(__('beneficiary.wizard.detailed_evaluation.label'))
+                        Tab::make(__('beneficiary.wizard.detailed_evaluation.label'))
                             ->maxWidth('3xl')
                             ->schema([
                                 Section::make(__('beneficiary.wizard.detailed_evaluation.label'))
@@ -67,15 +69,15 @@ class ViewDetailedEvaluation extends ViewRecord
                                     ->schema($this->getDetailedEvaluationSchema()),
                             ]),
 
-                        Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                        Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                             ->maxWidth('3xl')
                             ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->record)),
 
-                        Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
+                        Tab::make(__('beneficiary.section.identity.tab.children'))
                             ->maxWidth('3xl')
                             ->schema(ViewBeneficiaryIdentity::childrenSchemaForOtherPage($this->record)),
 
-                        Tabs\Tab::make(__('beneficiary.wizard.partner.label'))
+                        Tab::make(__('beneficiary.wizard.partner.label'))
                             ->maxWidth('3xl')
                             ->schema([
                                 Group::make()
@@ -94,7 +96,7 @@ class ViewDetailedEvaluation extends ViewRecord
                                     ]),
                             ]),
 
-                        Tabs\Tab::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
+                        Tab::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
                             ->maxWidth('3xl')
                             ->schema([
                                 Section::make(__('beneficiary.wizard.multidisciplinary_evaluation.label'))
@@ -108,7 +110,7 @@ class ViewDetailedEvaluation extends ViewRecord
                                     ->schema($this->getMultidisciplinarySchema()),
                             ]),
 
-                        Tabs\Tab::make(__('beneficiary.wizard.results.label'))
+                        Tab::make(__('beneficiary.wizard.results.label'))
                             ->maxWidth('3xl')
                             ->schema([
                                 Group::make()

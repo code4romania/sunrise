@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\ListMonthlyPlans;
+use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\CreateMonthlyPlan;
+use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages\EditMonthlyPlanDetails;
 use App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 use App\Models\MonthlyPlan;
 use Filament\Resources\Resource;
@@ -14,14 +17,14 @@ class MonthlyPlanResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static string $parentResource = InterventionPlanResource::class;
+    public static ?string $parentResource = InterventionPlanResource::class;
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListMonthlyPlans::route('/'),
-            'create' => Pages\CreateMonthlyPlan::route('/create'),
-            'edit' => Pages\EditMonthlyPlanDetails::route('/{record}/edit'),
+            'index' => ListMonthlyPlans::route('/'),
+            'create' => CreateMonthlyPlan::route('/create'),
+            'edit' => EditMonthlyPlanDetails::route('/{record}/edit'),
         ];
     }
 }

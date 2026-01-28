@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\BenefitResource;
 use App\Infolists\Components\TableEntry;
 use Filament\Actions\EditAction;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -18,7 +19,7 @@ class ViewBenefit extends ViewRecord
 {
     protected static string $resource = BenefitResource::class;
 
-    public function getFooterWidgetsColumns(): int|string|array
+    public function getFooterWidgetsColumns(): int|array
     {
         return 1;
     }
@@ -47,9 +48,9 @@ class ViewBenefit extends ViewRecord
         return $this->record->name;
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->maxWidth('3xl')
                 ->schema([

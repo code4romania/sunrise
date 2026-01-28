@@ -1,14 +1,14 @@
-<x-filament-tables::row>
-    <x-filament-tables::cell class="p-2 whitespace-normal">
+<tr>
+    <td class="p-2 whitespace-normal">
         {{ $fieldLabel }}
-    </x-filament-tables::cell>
+    </td>
 
-    <x-filament-tables::cell class="p-2 whitespace-normal">
+    <td class="p-2 whitespace-normal">
         {{ $oldValue }}
-    </x-filament-tables::cell>
+    </td>
 
-    <x-filament-tables::cell class="p-2 whitespace-normal">
+    <td class="p-2 whitespace-normal">
         {{ $newValue }}
-    </x-filament-tables::cell>
+    </td>
 
-</x-filament-tables::row>
+</tr>

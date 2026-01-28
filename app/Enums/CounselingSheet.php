@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns\Enums\Arrayable;
+use App\Concerns\Enums\Comparable;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
 enum CounselingSheet: string implements HasLabel
 {
     use Enums\HasLabel;
-    use Enums\Arrayable;
-    use Enums\Comparable;
+    use Arrayable;
+    use Comparable;
 
     case PSYCHOLOGICAL_ASSISTANCE = 'psychological_assistance';
     case LEGAL_ASSISTANCE = 'legal_assistance';

@@ -4,24 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\UserInstitutionResource\Pages;
-use App\Models\User;
-use Filament\Resources\Resource;
-
-class UserInstitutionResource extends Resource
+/**
+ * @deprecated This resource has been moved to InstitutionResource\Resources\UserInstitutionResource
+ * Use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource instead
+ */
+class UserInstitutionResource extends \App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource
 {
-    protected static ?string $model = User::class;
-
-    public static string $parentResource = InstitutionResource::class;
-
-    protected static bool $shouldRegisterNavigation = false;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListUserInstitutions::route('/'),
-        ];
-    }
+    // This class is kept for backward compatibility
+    // All functionality has been moved to InstitutionResource\Resources\UserInstitutionResource
 }

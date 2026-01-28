@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns\Enums\Arrayable;
+use App\Concerns\Enums\Comparable;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
 enum ReportType: string implements HasLabel
 {
     use Enums\HasLabel;
-    use Enums\Arrayable;
-    use Enums\Comparable;
+    use Arrayable;
+    use Comparable;
 
     case CASES_BY_AGE = 'cases_by_age';
     case CASES_BY_AGE_SEGMENTATION = 'cases_by_age_segmentation';

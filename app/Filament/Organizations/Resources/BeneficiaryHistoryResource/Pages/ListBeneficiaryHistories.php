@@ -91,9 +91,9 @@ class ListBeneficiaryHistories extends ListRecords
                     ->label(__('beneficiary.section.history.labels.subsection'))
                     ->state(fn ($record) => self::getResource()::getSubsectionLabel($record)),
             ])
-            ->actionsColumnLabel(__('beneficiary.section.history.labels.view_action'))
-            ->actions([
-                ViewAction::make()
+            ->recordActionsColumnLabel(__('beneficiary.section.history.labels.view_action'))
+            ->recordActions([
+                \Filament\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->color('primary')
                     ->url(fn (Activity $record) => self::getParentResource()::getUrl('beneficiary-histories.view', [

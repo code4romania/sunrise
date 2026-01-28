@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
@@ -18,15 +19,15 @@ use App\Models\ServiceIntervention;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\TableRepeater\Header;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Grid;
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Support\Str;
@@ -71,15 +72,15 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
         ];
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Section::make(__('intervention_plan.headings.services_and_interventions'))
-                ->schema($this->getSchema()),
+                ->schema($this->getFormSchema()),
         ]);
     }
 
-    public static function getSchema(): array
+    protected function getFormSchema(): array
     {
         return [
             Repeater::make('monthlyPlanServices')
@@ -93,7 +94,7 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                     ]);
                 })
                 ->addAction(
-                    fn (Action $action) => $action
+                    fn (\Filament\Actions\Action $action) => $action
                         ->link()
                         ->label(__('intervention_plan.actions.add_service_repeater'))
                         ->color('primary')

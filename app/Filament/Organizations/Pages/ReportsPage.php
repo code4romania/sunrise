@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Pages;
 
+use Filament\Forms\Contracts\HasForms;
+use Filament\Schemas\Schema;
 use App\Actions\ExportReport;
 use App\Enums\ReportType;
 use App\Forms\Components\DatePicker;
@@ -13,8 +15,8 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Concerns\InteractsWithFormActions;
@@ -22,16 +24,16 @@ use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
 
-class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
+class ReportsPage extends Page implements HasForms, HasInfolists
 {
     use InteractsWithForms;
     use InteractsWithFormActions;
 
     protected static ?int $navigationSort = 11;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static string $view = 'filament.organizations.pages.reports-page';
+    protected string $view = 'filament.organizations.pages.reports-page';
 
     public $report_type;
 
@@ -68,16 +70,16 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
         $this->form->getState();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema($this->getFormSchema());
+        return $schema
+            ->components($this->getFormSchema());
     }
 
     protected function getFormSchema(): array
     {
         return [
-            Forms\Components\Section::make()
+            Section::make()
                 ->columns(12)
                 ->schema([
                     Select::make('report_type')
@@ -128,9 +130,9 @@ class ReportsPage extends Page implements Forms\Contracts\HasForms, HasInfolists
         $this->form->fill();
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make(fn () => $this->report_type ? __('report.table_heading.' . $this->report_type) : null)
                 ->hiddenLabel()
                 ->headerActions([

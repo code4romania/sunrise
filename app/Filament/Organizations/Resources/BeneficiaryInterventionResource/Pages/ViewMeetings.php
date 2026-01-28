@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\HasGroupPages;
 use App\Concerns\HasParentResource;
@@ -24,7 +25,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -39,7 +40,7 @@ class ViewMeetings extends ViewRecord
 
     protected static string $resource = BeneficiaryInterventionResource::class;
 
-    protected static string $view = 'filament.organizations.pages.view-beneficiary-interventions';
+    protected string $view = 'filament.organizations.pages.view-beneficiary-interventions';
 
     public function getBreadcrumbs(): array
     {
@@ -108,14 +109,14 @@ class ViewMeetings extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
         $this->getRecord()->loadMissing([
             'meetings.specialist.user:id,first_name,last_name',
             'meetings.specialist.role:id,name',
         ]);
 
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->key('meetings')
                 ->headerActions([
@@ -124,7 +125,7 @@ class ViewMeetings extends ViewRecord
                         ->model(InterventionMeeting::class)
                         ->relationship(fn () => $this->record->meetings())
                         ->modalHeading(__('intervention_plan.actions.add_meeting'))
-                        ->form($this->getFormSchema())
+                        ->schema($this->getFormSchema())
                         ->icon('heroicon-o-plus-circle')
                         ->successRedirectUrl(fn () => InterventionServiceResource::getUrl('view_meetings', [
                             'parent' => $this->getRecord()->interventionService,
@@ -148,11 +149,11 @@ class ViewMeetings extends ViewRecord
                                 ->action(
                                     EditAction::make()
                                         ->modalHeading(__('general.action.edit'))
-                                        ->form($this->getFormSchema())
+                                        ->schema($this->getFormSchema())
                                         ->fillForm(fn (InterventionMeeting $record) => $record->toArray())
                                         ->extraModalFooterActions(
                                             fn () => [
-                                                Action::make('delete')
+                                                \Filament\Actions\Action::make('delete')
                                                     ->label(__('intervention_plan.actions.delete_meeting'))
                                                     ->link()
                                                     ->color('danger')

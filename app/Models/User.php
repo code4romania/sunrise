@@ -30,7 +30,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\CausesActivity;
@@ -48,7 +47,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     use LogsActivityOptions;
     use MustSetInitialPassword;
     use Notifiable;
-    use TwoFactorAuthenticatable;
     use HasPermissions;
 
     /**
@@ -222,18 +220,18 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
 
     public function scopeWithLastLoginAt(Builder $query): Builder
     {
-        return $query
-            ->addSelect([
-                'last_login_at' => Activity::query()
-                    ->select('created_at')
-                    ->where('subject_type', $this->getMorphClass())
-                    ->whereColumn('subject_id', 'users.id')
-                    ->where('log_name', 'system')
-                    ->where('event', 'logged_in')
-                    ->latest()
-                    ->take(1),
-            ])
-            ->withCasts(['last_login_at' => 'datetime']);
+        return $query;
+//            ->addSelect([
+//                'last_login_at' => Activity::query()
+//                    ->select('created_at')
+//                    ->where('subject_type', $this->getMorphClass())
+//                    ->whereColumn('subject_id', 'users.id')
+//                    ->where('log_name', 'system')
+//                    ->where('event', 'logged_in')
+//                    ->latest()
+//                    ->take(1),
+//            ])
+//            ->withCasts(['last_login_at' => 'datetime']);
     }
 
     public function getFullNameAttribute(): string

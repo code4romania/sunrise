@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infolists\Components;
 
+use ReflectionEnum;
 use BackedEnum;
 use Filament\Infolists\Components\TextEntry;
 
@@ -31,7 +32,7 @@ class EnumEntry extends TextEntry
 
             if ($this->enumClass) {
                 $state = collect(explode(',', $state));
-                $reflectionClass = new \ReflectionEnum($this->enumClass);
+                $reflectionClass = new ReflectionEnum($this->enumClass);
                 $returnType = $reflectionClass->getBackingtype();
 
                 return $state->map(

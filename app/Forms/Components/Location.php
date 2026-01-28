@@ -8,22 +8,21 @@ use App\Enums\ResidenceEnvironment;
 use App\Models\City;
 use App\Models\County;
 use Closure;
-use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Concerns\CanBeValidated;
-use Filament\Forms\Components\Concerns\EntanglesStateWithSingularRelationship;
-use Filament\Forms\Components\Contracts\CanEntangleWithSingularRelationships;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Illuminate\Support\Facades\Cache;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Components\Concerns\EntanglesStateWithSingularRelationship;
+use Filament\Schemas\Components\Contracts\CanEntangleWithSingularRelationships;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 
 class Location extends Component implements CanEntangleWithSingularRelationships
 {
     use EntanglesStateWithSingularRelationship;
     use CanBeValidated;
 
-    protected string $view = 'filament-forms::components.grid';
+    protected string $view = 'filament-schemas::components.grid';
 
     protected string | Closure | null $countyField = null;
 
@@ -205,7 +204,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             ->join('_'));
     }
 
-    public function getChildComponents(): array
+    public function getDefaultChildComponents(): array
     {
         $addressInput = TextInput::make($this->getAddressField())
             ->label($this->getAddressLabel())
@@ -228,16 +227,10 @@ class Location extends Component implements CanEntangleWithSingularRelationships
             Select::make($this->getCountyField())
                 ->label($this->getCountyLabel())
                 ->placeholder(__('placeholder.county'))
-                ->options(function () {
-                    return Cache::driver('array')
-                        ->rememberForever(
-                            'counties',
-                            fn () => County::pluck('name', 'id')
-                        );
-                })
+                ->options(County::pluck('name', 'id'))
                 ->searchable()
                 ->preload()
-//                ->getSearchResultsUsing(fn (string $search): array => County::search($search)->get()->pluck('name', 'id')->toArray())
+                ->getSearchResultsUsing(fn (string $search): array => County::search($search)->get()->pluck('name', 'id')->toArray())
                 ->live()
                 ->required($this->isRequired())
                 ->disabled($this->isDisabled())
@@ -256,9 +249,8 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->live()
                 ->searchable()
                 ->required($this->isRequired())
-                ->disabled(fn (Get $get) => $this->isDisabled() || ! $get($this->getCountyField()))
+                ->disabled(fn (Get $get) => $this->isDisabled() || ! debug($get($this->getCountyField())))
                 ->getSearchResultsUsing(function (string $search, Get $get) {
-
                     return City::search($search)
                         ->where('county_id', (int) $get($this->getCountyField()))
                         ->get()

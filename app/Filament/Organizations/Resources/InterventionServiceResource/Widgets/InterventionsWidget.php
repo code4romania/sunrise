@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\BeneficiaryIntervention;
@@ -26,31 +28,31 @@ class InterventionsWidget extends BaseWidget
                 ->withCount('meetings'))
             ->heading(__('intervention_plan.headings.interventions'))
             ->columns([
-                Tables\Columns\TextColumn::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
+                TextColumn::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
                     ->label(__('intervention_plan.labels.intervention')),
 
-                Tables\Columns\TextColumn::make('specialist.name_role')
+                TextColumn::make('specialist.name_role')
                     ->label(__('intervention_plan.labels.specialist')),
 
-                Tables\Columns\TextColumn::make('interval')
+                TextColumn::make('interval')
                     ->label(__('intervention_plan.labels.interval')),
 
-                Tables\Columns\TextColumn::make('meetings_count')
+                TextColumn::make('meetings_count')
                     ->label(__('intervention_plan.labels.meetings_count')),
             ])
             ->headerActions([
-                CreateAction::make()
+                \Filament\Actions\CreateAction::make()
                     ->label(__('intervention_plan.actions.add_intervention'))
                     ->createAnother(false)
                     ->modalHeading(__('intervention_plan.headings.add_intervention', ['name' => $this->record->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition->name]))
-                    ->form([
+                    ->schema([
                         Hidden::make('intervention_service_id')
                             ->default($this->record->id),
                         ...BeneficiaryInterventionResource::getSchema($this->record->beneficiary, $this->record->organization_service_id),
                     ]),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make()
+            ->recordActions([
+                ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->url(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_meetings', [
                         'parent' => $this->record,

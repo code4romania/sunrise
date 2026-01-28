@@ -22,14 +22,14 @@ class EnsureUserIsActive
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (Filament::getCurrentPanel()->getId()=== 'admin' && auth()->user()->isAdmin()) {
+        if (Filament::getCurrentOrDefaultPanel()->getId()=== 'admin' && auth()->user()->isAdmin()) {
             return $next($request);
         }
         if ($this->userAndInstitutionIsActive() ) {
             return $next($request);
         }
 
-        if (Filament::getCurrentPanel()->getId() === 'organization') {
+        if (Filament::getCurrentOrDefaultPanel()->getId() === 'organization') {
             $activeOrganization = UserStatus::query()
                 ->withoutGlobalScopes([BelongsToCurrentTenant::class])
                 ->where('user_id', auth()->id())
@@ -64,7 +64,7 @@ class EnsureUserIsActive
             ]) : null)
             ->danger()->send();
 
-        return redirect()->to(Filament::getCurrentPanel()->getLoginUrl());
+        return redirect()->to(Filament::getCurrentOrDefaultPanel()->getLoginUrl());
     }
 
     public function userAndInstitutionIsActive(): bool|RedirectResponse
@@ -77,7 +77,7 @@ class EnsureUserIsActive
         /** @var User $user */
         $user = auth()->user();
 
-        if ($user->isAdmin() && Filament::getCurrentPanel()->getId() === 'admin') {
+        if ($user->isAdmin() && Filament::getCurrentOrDefaultPanel()->getId() === 'admin') {
             $query->whereNull('organization_id');
         } else {
             $query->where('organization_id', $user->latest_organization_id)

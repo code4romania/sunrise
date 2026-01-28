@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\UserResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\AdminPermission;
 use App\Enums\CasePermission;
@@ -17,8 +18,8 @@ use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateTimeEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Models\User;
-use Filament\Infolists\Components\Group;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -27,9 +28,9 @@ class ViewUser extends ViewRecord
 {
     protected static string $resource = UserResource::class;
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->columns()
                 ->maxWidth('3xl')

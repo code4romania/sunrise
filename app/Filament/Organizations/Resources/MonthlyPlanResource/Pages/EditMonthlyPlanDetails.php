@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
@@ -14,7 +15,7 @@ use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Str;
@@ -59,12 +60,12 @@ class EditMonthlyPlanDetails extends EditRecord
         ];
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema(self::getSchema($this->parent->beneficiary));
+        return $schema->components($this->getFormSchema($this->parent->beneficiary));
     }
 
-    public static function getSchema(?Beneficiary $beneficiary = null): array
+    protected function getFormSchema(?Beneficiary $beneficiary = null): array
     {
         return [
             Section::make()

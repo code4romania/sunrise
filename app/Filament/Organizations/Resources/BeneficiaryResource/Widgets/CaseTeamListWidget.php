@@ -32,7 +32,7 @@ class CaseTeamListWidget extends BaseWidget
             ->heading(__('beneficiary.section.specialists.title'))
             ->paginated(false)
             ->headerActions([
-                Action::make('view')
+                \Filament\Actions\Action::make('view')
                     ->label(__('general.action.view_details'))
                     ->link()
                     ->url(fn () => BeneficiaryResource::getUrl('view_specialists', ['record' => $this->record])),

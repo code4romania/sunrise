@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ServiceResource\Pages;
 
+use Filament\Actions\EditAction;
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Filament\Admin\Resources\ServiceResource;
@@ -14,7 +16,7 @@ use App\Models\Service;
 use Filament\Actions;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -43,14 +45,14 @@ class ViewService extends ViewRecord
             BackAction::make()
                 ->url(ServiceResource::getUrl()),
 
-            Actions\EditAction::make()
+            EditAction::make()
                 ->label(__('nomenclature.actions.edit_service')),
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->visible(fn (Service $record) => $record->counseling_sheet)
                 ->maxWidth('3xl')
@@ -59,10 +61,10 @@ class ViewService extends ViewRecord
                         ->state(__('service.helper_texts.counseling_sheet'))
                         ->icon('heroicon-o-document-text')
                         ->action(
-                            Action::make('view_counseling_sheet')
+                            \Filament\Actions\Action::make('view_counseling_sheet')
                                 ->label(__('service.actions.view_counseling_sheet'))
                                 ->modalHeading(fn (Service $record) => $record->counseling_sheet?->getLabel())
-                                ->form(fn (Service $record) => match ($record->counseling_sheet) {
+                                ->schema(fn (Service $record) => match ($record->counseling_sheet) {
                                     CounselingSheet::LEGAL_ASSISTANCE => EditCounselingSheet::getLegalAssistanceForm(),
                                     CounselingSheet::PSYCHOLOGICAL_ASSISTANCE => EditCounselingSheet::getSchemaForPsychologicalAssistance(),
                                     CounselingSheet::SOCIAL_ASSISTANCE => EditCounselingSheet::getSchemaForSocialAssistance(),
@@ -70,7 +72,7 @@ class ViewService extends ViewRecord
                                 })
                                 ->disabledForm()
                                 ->modalAutofocus(false)
-                                ->modalSubmitAction(fn (StaticAction $action) => $action->hidden())
+                                ->modalSubmitAction(fn (\Filament\Actions\Action $action) => $action->hidden())
                                 ->link(),
                         ),
                 ]),

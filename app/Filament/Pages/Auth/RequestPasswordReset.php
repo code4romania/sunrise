@@ -13,7 +13,7 @@ use Filament\Pages\Auth\PasswordReset\RequestPasswordReset as BaseRequestPasswor
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Password;
 
-class RequestPasswordReset extends BaseRequestPasswordReset
+class RequestPasswordReset extends \Filament\Auth\Pages\PasswordReset\RequestPasswordReset
 {
     public function request(): void
     {

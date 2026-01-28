@@ -29,7 +29,7 @@ class MonitoringWidget extends BaseWidget
             ->paginated(false)
             ->heading(__('monitoring.headings.widget_table'))
             ->headerActions([
-                Action::make('view_monitoring')
+                \Filament\Actions\Action::make('view_monitoring')
                     ->label(__('general.action.view_details'))
                     ->link()
                     ->visible(fn () => $this->record->monitoring->count())
@@ -45,7 +45,7 @@ class MonitoringWidget extends BaseWidget
             ])
             ->emptyStateHeading(__('monitoring.headings.widget_empty_state'))
             ->emptyStateActions([
-                Action::make('create_monitoring')
+                \Filament\Actions\Action::make('create_monitoring')
                     ->label(__('monitoring.actions.create_widget'))
                     ->outlined()
                     ->url(BeneficiaryResource::getUrl('monitorings.create', ['parent' => $this->record])),

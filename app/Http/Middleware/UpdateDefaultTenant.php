@@ -23,28 +23,28 @@ class UpdateDefaultTenant
         $user = Filament::auth()->user();
         $tenant = Filament::getTenant();
 
-        if ($user->latest_organization_id !== $tenant->id) {
-            $user->update([
-                'latest_organization_id' => $tenant->id,
-            ]);
-
-            if ($tenant->institution->isInactivated()) {
-                return redirect()->to(Dashboard::getUrl());
-            }
-
-            if (! $user->userStatus) {
-                $user->initializeStatus();
-                $user->loadMissing('userStatus');
-            }
-
-            if ($user->userStatus->status === UserStatus::PENDING) {
-                $user->userStatus->activate();
-            }
-
-            if ($tenant->institution->isPending()) {
-                $tenant->institution->activate();
-            }
-        }
+//        if ($user->latest_organization_id !== $tenant->id) {
+//            $user->update([
+//                'latest_organization_id' => $tenant->id,
+//            ]);
+//
+//            if ($tenant->institution->isInactivated()) {
+//                return redirect()->to(Dashboard::getUrl());
+//            }
+//
+//            if (! $user->userStatus) {
+//                $user->initializeStatus();
+//                $user->loadMissing('userStatus');
+//            }
+//
+//            if ($user->userStatus->status === UserStatus::PENDING) {
+//                $user->userStatus->activate();
+//            }
+//
+//            if ($tenant->institution->isPending()) {
+//                $tenant->institution->activate();
+//            }
+//        }
 
         return $next($request);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\AllowancePerson;
@@ -29,19 +30,19 @@ use App\Models\InterventionService;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Awcodes\TableRepeater\Components\TableRepeater;
 use Awcodes\TableRepeater\Header;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -84,7 +85,7 @@ class EditCounselingSheet extends EditRecord
         ];
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         $counselingSheet = $this->getRecord()
             ->organizationServiceWithoutStatusCondition
@@ -98,7 +99,7 @@ class EditCounselingSheet extends EditRecord
             default => [],
         };
 
-        return $form->schema([
+        return $form->components([
             Section::make()
                 ->relationship('counselingSheet')
                 ->schema($schema),
@@ -291,7 +292,7 @@ class EditCounselingSheet extends EditRecord
                                 ->hidden(
                                     fn (Get $get) => ! $get('data.physics') ||
                                     ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NONE) ||
-                                ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NO_ANSWER)
+                                    ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NO_ANSWER)
                                 )
                                 ->maxLength(1500),
 
@@ -300,7 +301,7 @@ class EditCounselingSheet extends EditRecord
                                 ->hidden(
                                     fn (Get $get) => ! $get('data.sexed') ||
                                     ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NONE) ||
-                                ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NO_ANSWER)
+                                    ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NO_ANSWER)
                                 )
                                 ->maxLength(1500),
 
@@ -429,7 +430,7 @@ class EditCounselingSheet extends EditRecord
                         })
                         ->columns()
                         ->addAction(
-                            fn (Action $action) => $action->link()
+                            fn (\Filament\Actions\Action $action) => $action->link()
                                 ->label(__('intervention_plan.actions.add_social_relationship'))
                         )
                         ->reorderable(false)
@@ -490,7 +491,7 @@ class EditCounselingSheet extends EditRecord
                         })
                         ->columns()
                         ->addAction(
-                            fn (Action $action) => $action->link()
+                            fn (\Filament\Actions\Action $action) => $action->link()
                                 ->label(__('intervention_plan.actions.add_social_relationship'))
                         )
                         ->reorderable(false)
@@ -564,7 +565,7 @@ class EditCounselingSheet extends EditRecord
             Section::make(__('intervention_plan.headings.children_details'))
                 ->visible(fn () => ! $interventionService || $interventionService?->beneficiary->children->count())
                 ->headerActions([
-                    Action::make('view_children_identity')
+                    \Filament\Actions\Action::make('view_children_identity')
                         ->label(__('intervention_plan.actions.view_children_identity'))
                         ->icon('heroicon-o-arrow-top-right-on-square')
                         ->url(fn () => BeneficiaryResource::getUrl('view_identity', [
@@ -598,7 +599,7 @@ class EditCounselingSheet extends EditRecord
                         ->hiddenLabel()
                         ->deletable(false)
                         ->reorderable(false)
-                        ->addAction(fn (Action $action) => $action->hidden())
+                        ->addAction(fn (\Filament\Actions\Action $action) => $action->hidden())
                         ->schema([
                             Grid::make()
                                 ->columns(15)

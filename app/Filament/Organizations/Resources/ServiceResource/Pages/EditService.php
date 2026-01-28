@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\ServiceResource;
@@ -45,7 +46,7 @@ class EditService extends EditRecord
             ChangeStatusAction::make()
                 ->disabled(fn () => ! $this->getRecord()->service),
 
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->label(__('service.actions.delete'))
                 ->icon('heroicon-s-trash')
                 ->outlined()

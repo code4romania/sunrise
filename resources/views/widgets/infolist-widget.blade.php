@@ -10,9 +10,9 @@
     </x-filament::section>
 
     <x-filament-actions::modals />
-        @if (filled($this->defaultAction))
-            <div
-                wire:init="mountAction(@js($this->defaultAction) @if (filled($this->defaultActionArguments)) , @js($this->defaultActionArguments) @endif)"
-            ></div>
-        @endif
+    @if (filled($this->defaultAction))
+        <div
+            wire:init="mountAction(@js($this->defaultAction) @if (filled($this->defaultActionArguments)) , @js($this->defaultActionArguments) @endif)"
+        ></div>
+    @endif
 </x-filament-widgets::widget>

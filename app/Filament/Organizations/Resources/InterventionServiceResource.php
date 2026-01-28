@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\ListInterventionServices;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\EditBeneficiaryIntervention;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewBeneficiaryIntervention;
 use App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages\ViewMeetings;
@@ -18,12 +19,12 @@ class InterventionServiceResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static string $parentResource = InterventionPlanResource::class;
+    public static ?string $parentResource = InterventionPlanResource::class;
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListInterventionServices::route('/'),
+            'index' => ListInterventionServices::route('/'),
             'view_intervention' => ViewBeneficiaryIntervention::route('/{parent}/beneficiaryIntervention/{record}'),
             'edit_intervention' => EditBeneficiaryIntervention::route('/{parent}/beneficiaryIntervention/{record}/edit'),
             'view_meetings' => ViewMeetings::route('/{parent}/meetings/{record}'),

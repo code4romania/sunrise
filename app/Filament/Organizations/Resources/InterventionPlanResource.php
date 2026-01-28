@@ -20,7 +20,7 @@ class InterventionPlanResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static string $parentResource = BeneficiaryResource::class;
+    public static ?string $parentResource = BeneficiaryResource::class;
 
     public static function getPages(): array
     {

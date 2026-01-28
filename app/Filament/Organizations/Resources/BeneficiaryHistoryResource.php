@@ -11,7 +11,6 @@ use Filament\Resources\Resource;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 class BeneficiaryHistoryResource extends Resource
 {
@@ -19,32 +18,11 @@ class BeneficiaryHistoryResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static string $parentResource = BeneficiaryResource::class;
+    protected static bool $isScopedToTenant = false;
 
-    public static function getTenantOwnershipRelationship(Beneficiary|Model $record): Relation
-    {
-        $parent = Beneficiary::find(request('parent'));
+    public static ?string $parentResource = BeneficiaryResource::class;
 
-        return $parent->organization();
-    }
 
-    public static function resolveRecordRouteBinding(int | string $key): ?Model
-    {
-        return app(static::getModel())
-            ->resolveRouteBindingQuery(static::getEloquentQuery(), $key, static::getRecordRouteKeyName())
-            ->when(
-                ! auth()->user()->hasAccessToAllCases() && ! auth()->user()->isNgoAdmin(),
-                fn (Builder $query) => $query->whereHasMorph(
-                    'subject',
-                    Beneficiary::class,
-                    fn (Builder $query) => $query->whereHas(
-                        'specialistsTeam',
-                        fn (Builder $query) => $query->where('user_id', auth()->id())
-                    )
-                )
-            )
-            ->first();
-    }
 
     public static function getEloquentQuery(): Builder
     {

@@ -4,6 +4,60 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Activity;
+use App\Models\Address;
+use App\Models\Aggressor;
+use App\Models\Beneficiary;
+use App\Models\BeneficiaryAntecedents;
+use App\Models\BeneficiaryDetails;
+use App\Models\BeneficiaryIntervention;
+use App\Models\BeneficiaryPartner;
+use App\Models\BeneficiarySituation;
+use App\Models\Benefit;
+use App\Models\BenefitService;
+use App\Models\BenefitType;
+use App\Models\Children;
+use App\Models\City;
+use App\Models\CloseFile;
+use App\Models\CommunityProfile;
+use App\Models\Country;
+use App\Models\County;
+use App\Models\DetailedEvaluationResult;
+use App\Models\DetailedEvaluationSpecialist;
+use App\Models\Document;
+use App\Models\EvaluateDetails;
+use App\Models\FlowPresentation;
+use App\Models\Institution;
+use App\Models\InterventionMeeting;
+use App\Models\InterventionPlan;
+use App\Models\InterventionPlanResult;
+use App\Models\InterventionService;
+use App\Models\Meeting;
+use App\Models\Monitoring;
+use App\Models\MonitoringChild;
+use App\Models\MonthlyPlan;
+use App\Models\MonthlyPlanInterventions;
+use App\Models\MonthlyPlanService;
+use App\Models\MultidisciplinaryEvaluation;
+use App\Models\Organization;
+use App\Models\OrganizationService;
+use App\Models\OrganizationServiceIntervention;
+use App\Models\OrganizationUserPermissions;
+use App\Models\ReferringInstitution;
+use App\Models\RequestedServices;
+use App\Models\Result;
+use App\Models\RiskFactors;
+use App\Models\Role;
+use App\Models\Service;
+use App\Models\ServiceCounselingSheet;
+use App\Models\ServiceIntervention;
+use App\Models\ServicePivot;
+use App\Models\Specialist;
+use App\Models\User;
+use App\Models\UserRole;
+use App\Models\UserStatus;
+use App\Models\Violence;
+use App\Models\ViolenceHistory;
 use App\Http\Responses\LoginResponse;
 use Filament\Forms\Components\TextInput;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
@@ -29,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
         $this->registerBlueprintMacros();
         $this->registerViteMacros();
 
-        $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+        $this->app->bind(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class, LoginResponse::class);
 
         Table::configureUsing(function (Table $table) {
             return $table->defaultSort('created_at', 'desc');
@@ -75,60 +129,60 @@ class AppServiceProvider extends ServiceProvider
     protected function enforceMorphMap(): void
     {
         Relation::enforceMorphMap([
-            'activity' => \App\Models\Activity::class,
-            'address' => \App\Models\Address::class,
-            'aggressor' => \App\Models\Aggressor::class,
-            'beneficiary' => \App\Models\Beneficiary::class,
-            'beneficiaryAntecedents' => \App\Models\BeneficiaryAntecedents::class,
-            'beneficiaryDetails' => \App\Models\BeneficiaryDetails::class,
-            'beneficiaryIntervention' => \App\Models\BeneficiaryIntervention::class,
-            'beneficiaryPartner' => \App\Models\BeneficiaryPartner::class,
-            'beneficiarySituation' => \App\Models\BeneficiarySituation::class,
-            'benefit' => \App\Models\Benefit::class,
-            'benefitService' => \App\Models\BenefitService::class,
-            'benefit_type' => \App\Models\BenefitType::class,
-            'children' => \App\Models\Children::class,
-            'city' => \App\Models\City::class,
-            'closeFile' => \App\Models\CloseFile::class,
-            'community_profile' => \App\Models\CommunityProfile::class,
-            'country' => \App\Models\Country::class,
-            'county' => \App\Models\County::class,
-            'detailedEvaluationResult' => \App\Models\DetailedEvaluationResult::class,
-            'detailedEvaluationSpecialist' => \App\Models\DetailedEvaluationSpecialist::class,
-            'document' => \App\Models\Document::class,
-            'evaluateDetails' => \App\Models\EvaluateDetails::class,
-            'flowPresentation' => \App\Models\FlowPresentation::class,
-            'institution' => \App\Models\Institution::class,
-            'interventionMeeting' => \App\Models\InterventionMeeting::class,
-            'interventionPlan' => \App\Models\InterventionPlan::class,
-            'interventionPlanResult' => \App\Models\InterventionPlanResult::class,
-            'interventionService' => \App\Models\InterventionService::class,
-            'meeting' => \App\Models\Meeting::class,
-            'monitoring' => \App\Models\Monitoring::class,
-            'monitoringChild' => \App\Models\MonitoringChild::class,
-            'monthlyPlan' => \App\Models\MonthlyPlan::class,
-            'monthlyPlanInterventions' => \App\Models\MonthlyPlanInterventions::class,
-            'monthlyPlanService' => \App\Models\MonthlyPlanService::class,
-            'multidisciplinaryEvaluation' => \App\Models\MultidisciplinaryEvaluation::class,
-            'organization' => \App\Models\Organization::class,
-            'organization_service' => \App\Models\OrganizationService::class,
-            'organization_service_intervention' => \App\Models\OrganizationServiceIntervention::class,
-            'organization_user_permissions' => \App\Models\OrganizationUserPermissions::class,
-            'referring_institution' => \App\Models\ReferringInstitution::class,
-            'requestedServices' => \App\Models\RequestedServices::class,
-            'result' => \App\Models\Result::class,
-            'riskFactors' => \App\Models\RiskFactors::class,
-            'role' => \App\Models\Role::class,
-            'service' => \App\Models\Service::class,
-            'service_counseling_sheet' => \App\Models\ServiceCounselingSheet::class,
-            'service_intervention' => \App\Models\ServiceIntervention::class,
-            'service_pivot' => \App\Models\ServicePivot::class,
-            'specialist' => \App\Models\Specialist::class,
-            'user' => \App\Models\User::class,
-            'user_role' => \App\Models\UserRole::class,
-            'user_status' => \App\Models\UserStatus::class,
-            'violence' => \App\Models\Violence::class,
-            'violenceHistory' => \App\Models\ViolenceHistory::class,
+            'activity' => Activity::class,
+            'address' => Address::class,
+            'aggressor' => Aggressor::class,
+            'beneficiary' => Beneficiary::class,
+            'beneficiaryAntecedents' => BeneficiaryAntecedents::class,
+            'beneficiaryDetails' => BeneficiaryDetails::class,
+            'beneficiaryIntervention' => BeneficiaryIntervention::class,
+            'beneficiaryPartner' => BeneficiaryPartner::class,
+            'beneficiarySituation' => BeneficiarySituation::class,
+            'benefit' => Benefit::class,
+            'benefitService' => BenefitService::class,
+            'benefit_type' => BenefitType::class,
+            'children' => Children::class,
+            'city' => City::class,
+            'closeFile' => CloseFile::class,
+            'community_profile' => CommunityProfile::class,
+            'country' => Country::class,
+            'county' => County::class,
+            'detailedEvaluationResult' => DetailedEvaluationResult::class,
+            'detailedEvaluationSpecialist' => DetailedEvaluationSpecialist::class,
+            'document' => Document::class,
+            'evaluateDetails' => EvaluateDetails::class,
+            'flowPresentation' => FlowPresentation::class,
+            'institution' => Institution::class,
+            'interventionMeeting' => InterventionMeeting::class,
+            'interventionPlan' => InterventionPlan::class,
+            'interventionPlanResult' => InterventionPlanResult::class,
+            'interventionService' => InterventionService::class,
+            'meeting' => Meeting::class,
+            'monitoring' => Monitoring::class,
+            'monitoringChild' => MonitoringChild::class,
+            'monthlyPlan' => MonthlyPlan::class,
+            'monthlyPlanInterventions' => MonthlyPlanInterventions::class,
+            'monthlyPlanService' => MonthlyPlanService::class,
+            'multidisciplinaryEvaluation' => MultidisciplinaryEvaluation::class,
+            'organization' => Organization::class,
+            'organization_service' => OrganizationService::class,
+            'organization_service_intervention' => OrganizationServiceIntervention::class,
+            'organization_user_permissions' => OrganizationUserPermissions::class,
+            'referring_institution' => ReferringInstitution::class,
+            'requestedServices' => RequestedServices::class,
+            'result' => Result::class,
+            'riskFactors' => RiskFactors::class,
+            'role' => Role::class,
+            'service' => Service::class,
+            'service_counseling_sheet' => ServiceCounselingSheet::class,
+            'service_intervention' => ServiceIntervention::class,
+            'service_pivot' => ServicePivot::class,
+            'specialist' => Specialist::class,
+            'user' => User::class,
+            'user_role' => UserRole::class,
+            'user_status' => UserStatus::class,
+            'violence' => Violence::class,
+            'violenceHistory' => ViolenceHistory::class,
         ]);
     }
 
@@ -139,7 +193,7 @@ class AppServiceProvider extends ServiceProvider
                 ->filter()
                 ->join('_');
 
-            return $this->foreignIdFor(\App\Models\County::class, $column)
+            return $this->foreignIdFor(County::class, $column)
                 ->nullable()
                 ->constrained('countries')
                 ->cascadeOnDelete();
@@ -150,7 +204,7 @@ class AppServiceProvider extends ServiceProvider
                 ->filter()
                 ->join('_');
 
-            return $this->foreignIdFor(\App\Models\City::class, $column)
+            return $this->foreignIdFor(City::class, $column)
                 ->nullable()
                 ->constrained('cities')
                 ->cascadeOnDelete();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
@@ -44,14 +45,14 @@ class EditBenefit extends EditRecord
 
             ChangeNomenclatureStatusAction::make(),
 
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->label(__('nomenclature.actions.delete_benefit'))
                 ->icon('heroicon-s-trash')
                 ->outlined()
                 ->disabled(fn () => $this->getRecord()->benefitServices()->count())
                 ->successRedirectUrl(self::$resource::getUrl())
                 // tooltip doesn't work if action is disabled
-                ->tooltip(fn (Actions\DeleteAction $action) => $action->isDisabled() ? __('nomenclature.helper_texts.delete_benefit') : ''),
+                ->tooltip(fn (DeleteAction $action) => $action->isDisabled() ? __('nomenclature.helper_texts.delete_benefit') : ''),
         ];
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionServiceResource\Pages;
 
+use Filament\Actions\DeleteAction;
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
@@ -13,7 +15,7 @@ use App\Filament\Organizations\Resources\InterventionPlanResource\Widgets\Servic
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Filament\Actions;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -52,7 +54,7 @@ class EditInterventionService extends EditRecord
             BackAction::make()
                 ->url($this->getRedirectUrl()),
 
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->label(__('intervention_plan.actions.delete_service'))
                 ->icon('heroicon-o-trash')
                 ->modalHeading(__('intervention_plan.actions.delete_service'))
@@ -64,9 +66,9 @@ class EditInterventionService extends EditRecord
         ];
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Section::make()
                 ->maxWidth('3xl')
                 ->schema(ServicesWidget::getServiceSchema()),

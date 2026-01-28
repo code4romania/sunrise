@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tables\Filters;
 
+use Filament\Tables\Filters\Concerns\HasOptions;
+use Filament\Tables\Filters\Concerns\HasRelationship;
 use App\Models\Service;
 use Closure;
 use Filament\Forms\Components\CheckboxList;
@@ -16,8 +18,8 @@ use Illuminate\Support\Facades\Cache;
 
 class ServicesFilter extends BaseFilter
 {
-    use Concerns\HasOptions;
-    use Concerns\HasRelationship;
+    use HasOptions;
+    use HasRelationship;
 
     protected string | Closure | null $attribute = null;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
+use Filament\Actions\Action;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -43,13 +44,13 @@ class ListMonitoring extends ListRecords
             BackAction::make()
                 ->url(BeneficiaryResource::getUrl('view', ['record' => $this->parent])),
 
-            Actions\Action::make('open_modal')
+            Action::make('open_modal')
                 ->label(__('monitoring.actions.create'))
                 ->visible(fn () => $this->parent->monitoring->count())
                 ->modalHeading(__('monitoring.headings.modal_create'))
                 ->modalDescription(__('monitoring.labels.modal_create_description'))
                 ->modalSubmitAction(
-                    Actions\Action::make('crete_from_last')
+                    Action::make('crete_from_last')
                         ->label(__('monitoring.actions.create_from_last'))
                         ->url(
                             fn () => self::getParentResource()::getUrl('monitorings.create', [
@@ -59,7 +60,7 @@ class ListMonitoring extends ListRecords
                         )
                 )
                 ->modalCancelAction(
-                    Actions\Action::make('create_simple')
+                    Action::make('create_simple')
                         ->label(__('monitoring.actions.create_simple'))
                         ->url(
                             fn () => self::getParentResource()::getUrl('monitorings.create', [
@@ -103,8 +104,8 @@ class ListMonitoring extends ListRecords
                     ->sortable()
                     ->listWithLineBreaks(),
             ])
-            ->actions([
-                ViewAction::make()
+            ->recordActions([
+                \Filament\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->color('primary')
                     ->url(fn (Monitoring $record) => (static::getParentResource()::getUrl('monitorings.view', [
@@ -112,7 +113,7 @@ class ListMonitoring extends ListRecords
                         'record' => $record,
                     ]))),
             ])
-            ->actionsColumnLabel(__('monitoring.headings.actions'))
+            ->recordActionsColumnLabel(__('monitoring.headings.actions'))
             ->modifyQueryUsing(
                 fn (Builder $query) => $query->with([
                     'specialistsTeam.user',
@@ -124,7 +125,7 @@ class ListMonitoring extends ListRecords
             ->emptyStateDescription(__('monitoring.labels.empty_state_table'))
             ->emptyStateIcon('heroicon-o-document')
             ->emptyStateActions([
-                CreateAction::make()
+                \Filament\Actions\CreateAction::make()
                     ->label(__('monitoring.actions.create'))
                     ->url(
                         fn () => self::getParentResource()::getUrl('monitorings.create', [

@@ -12,13 +12,13 @@ use Filament\Support\Concerns\HasColor;
 use Filament\Support\Concerns\HasIcon;
 use Filament\Support\Concerns\HasIconColor;
 
-class Notice extends Placeholder implements HasAffixActions
+class Notice extends Placeholder implements \Filament\Schemas\Components\Contracts\HasAffixActions
 {
     use HasIcon;
     use HasColor;
     use HasIconColor;
     use HasAffixes;
-    use HasKey;
+    use \Filament\Schemas\Components\Concerns\HasKey;
 
     protected string $view = 'forms.components.notice';
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Str;
 use App\Models\Scopes\AlphabeticalOrder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,16 +47,16 @@ class County extends Model
     {
         $aliases = [];
 
-        if (\Str::of($this->name)->contains('Târgul')) {
-            $aliases[] = \Str::of($this->name)->replace('Târgul', 'Tg')->toString();
-            $aliases[] = \Str::of($this->name)->replace('Târgul', 'Târgu')->toString();
-            $aliases[] = \Str::of($this->name)->replace('Târgul', 'Tirgul')->toString();
-            $aliases[] = \Str::of($this->name)->replace('Târgul', 'Tirgu')->toString();
+        if (Str::of($this->name)->contains('Târgul')) {
+            $aliases[] = Str::of($this->name)->replace('Târgul', 'Tg')->toString();
+            $aliases[] = Str::of($this->name)->replace('Târgul', 'Târgu')->toString();
+            $aliases[] = Str::of($this->name)->replace('Târgul', 'Tirgul')->toString();
+            $aliases[] = Str::of($this->name)->replace('Târgul', 'Tirgu')->toString();
         }
 
-        if (\Str::of($this->name)->contains('Satu')) {
-            $aliases[] = \Str::of($this->name)->replace('Satu', 'Sat')->toString();
-            $aliases[] = \Str::of($this->name)->replace('Satu', 'Satu Mare')->toString();
+        if (Str::of($this->name)->contains('Satu')) {
+            $aliases[] = Str::of($this->name)->replace('Satu', 'Sat')->toString();
+            $aliases[] = Str::of($this->name)->replace('Satu', 'Satu Mare')->toString();
         }
 
         return $aliases;

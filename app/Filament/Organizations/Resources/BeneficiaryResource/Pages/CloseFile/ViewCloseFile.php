@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs\Tab;
 use App\Actions\BackAction;
 use App\Enums\CloseMethod;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -14,8 +16,8 @@ use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -58,14 +60,14 @@ class ViewCloseFile extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Tabs::make()
                 ->columnSpanFull()
                 ->persistTabInQueryString()
                 ->tabs([
-                    Tabs\Tab::make(__('beneficiary.section.close_file.headings.file_details'))
+                    Tab::make(__('beneficiary.section.close_file.headings.file_details'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.section.close_file.headings.file_details_simple'))
@@ -89,7 +91,7 @@ class ViewCloseFile extends ViewRecord
                                 ]),
                         ]),
 
-                    Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                    Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make()
@@ -100,7 +102,7 @@ class ViewCloseFile extends ViewRecord
                                         ->state(__('beneficiary.section.identity.heading_description'))
                                         ->color('primary')
                                         ->action(
-                                            Action::make('view')
+                                            \Filament\Actions\Action::make('view')
                                                 ->label(__('beneficiary.section.identity.title'))
                                                 ->url(self::$resource::getUrl('view_identity', ['record' => $this->getRecord()]))
                                                 ->link(),
@@ -117,7 +119,7 @@ class ViewCloseFile extends ViewRecord
                                 ]),
                         ]),
 
-                    Tabs\Tab::make(__('beneficiary.section.close_file.headings.general_details'))
+                    Tab::make(__('beneficiary.section.close_file.headings.general_details'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.section.close_file.headings.general_details'))

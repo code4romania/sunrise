@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\AggressorRelationship;
 use App\Enums\Diseases;
@@ -15,11 +16,11 @@ use App\Infolists\Components\SectionHeader;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
-use Filament\Infolists\Components\Tabs\Tab;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -48,9 +49,9 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->columns()
             ->schema(static::getPersonalInformationFormSchema());
     }
@@ -124,17 +125,17 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
                             TextEntry::make('observations_chronic_diseases')
                                 ->label(__('beneficiary.section.personal_information.label.observations_chronic_diseases'))
                                 ->columnSpanFull()
-                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::CHRONIC_DISEASES)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => $record->health_status?->contains(Diseases::CHRONIC_DISEASES)),
 
                             TextEntry::make('observations_degenerative_diseases')
                                 ->label(__('beneficiary.section.personal_information.label.observations_degenerative_diseases'))
                                 ->columnSpanFull()
-                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::DEGENERATIVE_DISEASES)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => $record->health_status?->contains(Diseases::DEGENERATIVE_DISEASES)),
 
                             TextEntry::make('observations_mental_illness')
                                 ->label(__('beneficiary.section.personal_information.label.observations_mental_illness'))
                                 ->columnSpanFull()
-                                ->visible(fn (Beneficiary $record) => $record->details->health_status?->contains(Diseases::MENTAL_ILLNESSES)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => $record->health_status?->contains(Diseases::MENTAL_ILLNESSES)),
                         ]),
 
                     Grid::make()
@@ -144,7 +145,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                             TextEntry::make('drug_types')
                                 ->label(__('beneficiary.section.personal_information.label.drug_types'))
-                                ->visible(fn (Beneficiary $record) => Ternary::isYes($record->details->drug_consumption)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => Ternary::isYes($record->drug_consumption)),
                         ]),
 
                     Grid::make()
@@ -178,15 +179,15 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                             TextEntry::make('type_of_disability')
                                 ->label(__('beneficiary.section.personal_information.label.type_of_disability'))
-                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->disabilities)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => Ternary::isYes($record->disabilities)),
 
                             TextEntry::make('degree_of_disability')
                                 ->label(__('beneficiary.section.personal_information.label.degree_of_disability'))
-                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->disabilities)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => Ternary::isYes($record->disabilities)),
 
                             TextEntry::make('observations_disability')
                                 ->label(__('beneficiary.section.personal_information.label.observations_disability'))
-                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->disabilities)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => Ternary::isYes($record->disabilities)),
                         ]),
 
                     Grid::make()
@@ -196,7 +197,7 @@ class ViewBeneficiaryPersonalInformation extends ViewRecord
 
                             TextEntry::make('medication_observations')
                                 ->label(__('beneficiary.section.personal_information.label.medication_observations'))
-                                ->visible(fn (Beneficiary $beneficiary) => Ternary::isYes($beneficiary->details->other_current_medication)),
+                                ->visible(fn (\App\Models\BeneficiaryDetails $record) => Ternary::isYes($record->other_current_medication)),
                         ]),
 
                     Grid::make()

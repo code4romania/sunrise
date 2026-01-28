@@ -34,6 +34,9 @@ class IntervetnionPlanWidget extends BaseWidget
                         'specialist.user',
                         'specialist.role',
                         'nextMeeting',
+                        'interventionService',
+                        'interventionPlan',
+                        'beneficiary',
                     ])
                     ->withCount('meetings') ?:
                     $this->record->interventionPlan()
@@ -57,20 +60,24 @@ class IntervetnionPlanWidget extends BaseWidget
             ->defaultPaginationPageOption(5)
             ->paginationPageOptions([5])
             ->heading(__('intervention_plan.headings.table'))
-            ->actions([
-                ViewAction::make('view_intervention')
+            ->recordActions([
+                \Filament\Actions\ViewAction::make('view_intervention')
                     ->label(__('intervention_plan.actions.view_intervention'))
                     ->url(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                        'parent' => $record->intervention_service_id,
+                        'beneficiary' => $record->beneficiary,
+                        'intervention_plan' => $record->interventionPlan,
+                        'parent' => $record->interventionService,
                         'record' => $record,
                     ])),
             ])
             ->recordUrl(fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                'parent' => $record->intervention_service_id,
+                'beneficiary' => $record->beneficiary,
+                'intervention_plan' => $record->interventionPlan,
+                'parent' => $record->interventionService,
                 'record' => $record,
             ]))
             ->headerActions([
-                Action::make('view_intervention_plan')
+                \Filament\Actions\Action::make('view_intervention_plan')
                     ->label(__('intervention_plan.actions.view_intervention_plan'))
                     ->visible((bool) $this->record->interventionPlan)
                     ->link()
@@ -93,7 +100,7 @@ class IntervetnionPlanWidget extends BaseWidget
             )
             ->emptyStateIcon('heroicon-o-presentation-chart-bar')
             ->emptyStateActions([
-                Action::make('create_intervention_plan')
+                \Filament\Actions\Action::make('create_intervention_plan')
                     ->label(__('intervention_plan.actions.create'))
                     ->hidden((bool) $this->record->interventionPlan)
                     ->outlined()

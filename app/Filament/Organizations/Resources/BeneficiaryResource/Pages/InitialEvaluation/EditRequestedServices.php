@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
+use App\Filament\Organizations\Schemas\BeneficiaryResource\InitialEvaluationSchema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToInitialEvaluation;
-use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -41,14 +39,14 @@ class EditRequestedServices extends EditRecord
         return Str::slug(__('beneficiary.wizard.requested_services.label'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema(
-            self::getSchema()
+        return $schema->components(
+            $this->getFormSchema()
         );
     }
 
-    public static function getSchema(): array
+    protected function getFormSchema(): array
     {
         return [
             Group::make()

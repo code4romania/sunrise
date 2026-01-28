@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\RoleResource\Pages;
 
+use Filament\Actions\EditAction;
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\RoleResource;
 use Filament\Actions;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -36,14 +38,14 @@ class ViewRole extends ViewRecord
             BackAction::make()
                 ->url(RoleResource::getUrl()),
 
-            Actions\EditAction::make()
+            EditAction::make()
                 ->label(__('nomenclature.actions.edit_role')),
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->maxWidth('3xl')
                 ->columns()

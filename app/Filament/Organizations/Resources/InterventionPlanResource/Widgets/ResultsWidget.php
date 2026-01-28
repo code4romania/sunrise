@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Widgets;
 
+use Filament\Actions\CreateAction;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\InterventionPlan;
 use App\Models\User;
 use App\Tables\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
@@ -35,10 +36,10 @@ class ResultsWidget extends BaseWidget
             )
             ->heading(__('intervention_plan.headings.results_table'))
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label(__('intervention_plan.actions.add_result'))
                     ->createAnother(false)
-                    ->form($this->getFormSchema())
+                    ->schema($this->getFormSchema())
                     ->modalHeading(__('intervention_plan.actions.add_result')),
             ])
             ->columns([
@@ -73,12 +74,12 @@ class ResultsWidget extends BaseWidget
                     ->label(__('intervention_plan.headings.observations'))
                     ->html(),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make()
-                    ->form($this->getFormSchema())
+                    ->schema($this->getFormSchema())
                     ->modalHeading(__('intervention_plan.headings.edit_result'))
                     ->extraModalFooterActions([
-                        DeleteAction::make()
+                        \Filament\Actions\DeleteAction::make()
                             ->cancelParentActions()
                             ->label(__('intervention_plan.actions.delete_result'))
                             ->link()

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Infolists\Components;
 
+use Filament\Support\Enums\TextSize;
 use BackedEnum;
 use Filament\Infolists\Components\Component;
 use Filament\Infolists\Components\TextEntry;
 
-class HistoryLine extends Component
+class HistoryLine extends \Filament\Schemas\Components\Component
 {
-    protected string $view = 'filament-forms::components.grid';
+    protected string $view = 'filament-schemas::components.grid';
 
     protected string | null $fieldLabel = null;
 
@@ -178,7 +179,7 @@ class HistoryLine extends Component
         return \sprintf('%s_new_description', $this->id);
     }
 
-    public function getChildComponents(): array
+    public function getDefaultChildComponents(): array
     {
         $hiddenDescriptions = blank($this->getOldDescription()) && blank($this->getNewDescription());
 
@@ -187,7 +188,7 @@ class HistoryLine extends Component
                 ->hiddenLabel()
                 ->state($this->getFieldHeading())
                 ->columnSpanFull()
-                ->size(TextEntry\TextEntrySize::Medium),
+                ->size(TextSize::Medium),
 
             TextEntry::make($this->getOldValueId())
                 ->hiddenLabel()

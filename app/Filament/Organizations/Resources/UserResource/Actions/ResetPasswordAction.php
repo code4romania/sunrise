@@ -49,7 +49,7 @@ class ResetPasswordAction extends Action
                             throw new Exception("Model [{$userClass}] does not have a [notify()] method.");
                         }
 
-                        $notification = new ResetPasswordNotification($token);
+                        $notification = new \Filament\Auth\Notifications\ResetPassword($token);
                         $notification->url = Filament::getResetPasswordUrl($token, $user);
 
                         $user->notify($notification);

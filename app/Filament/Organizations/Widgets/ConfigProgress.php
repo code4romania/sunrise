@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ConfigProgress extends InfolistWidget
 {
-    protected static string $view = 'filament.organizations.widgets.config-progress';
+    protected string $view = 'filament.organizations.widgets.config-progress';
 
     protected Model | null $record = null;
 
@@ -70,7 +70,7 @@ class ConfigProgress extends InfolistWidget
             SectionHeader::make('header')
                 ->state(fn () => $this->getWidgetTitle())
                 ->action(
-                    Action::make('close_action')
+                    \Filament\Actions\Action::make('close_action')
                         ->icon('heroicon-o-x-mark')
                         ->iconButton()
                         ->url(Dashboard::getUrl(['close_config_progress' => true]))

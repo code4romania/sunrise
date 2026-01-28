@@ -13,7 +13,7 @@ use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -36,10 +36,10 @@ class BenefitsWidget extends BaseWidget
             )
             ->heading(__('intervention_plan.headings.benefit_services'))
             ->headerActions([
-                CreateAction::make()
+                \Filament\Actions\CreateAction::make()
                     ->label(__('intervention_plan.actions.add_benefit'))
                     ->modalHeading(__('intervention_plan.headings.add_benefit_modal'))
-                    ->form($this->getBenefitSchema())
+                    ->schema($this->getBenefitSchema())
                     ->createAnother(false),
             ])
             ->columns([
@@ -61,12 +61,12 @@ class BenefitsWidget extends BaseWidget
                     ->label(__('intervention_plan.headings.benefit_description'))
                     ->html(),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make()
-                    ->form($this->getBenefitSchema())
+                    ->schema($this->getBenefitSchema())
                     ->modalHeading(__('intervention_plan.headings.edit_benefit'))
                     ->extraModalFooterActions([
-                        DeleteAction::make()
+                        \Filament\Actions\DeleteAction::make()
                             ->label(__('intervention_plan.actions.delete_benefit'))
                             ->link()
                             ->icon(null)

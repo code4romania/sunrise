@@ -24,10 +24,10 @@ use App\Infolists\Components\SectionHeader;
 use App\Models\InterventionService;
 use App\Widgets\InfolistWidget;
 use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Support\Str;
 
@@ -401,7 +401,7 @@ class CounselingSheetWidget extends InfolistWidget
                 ->visible(fn ($record) => $record->beneficiary->children->count())
                 ->compact()
                 ->headerActions([
-                    Action::make('view_children_identity')
+                    \Filament\Actions\Action::make('view_children_identity')
                         ->label(__('intervention_plan.actions.view_children_identity'))
                         ->icon('heroicon-o-arrow-top-right-on-square')
                         ->url(fn ($record) => BeneficiaryResource::getUrl('view_identity', [

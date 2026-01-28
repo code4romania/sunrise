@@ -11,11 +11,11 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class UserActivity extends ChartWidget
 {
-    protected static ?string $heading = 'Chart';
+    protected ?string $heading = 'Chart';
 
     protected int | string | array $columnSpan = 2;
 
-    protected static ?string $maxHeight = '300px';
+    protected ?string $maxHeight = '300px';
 
     protected function getData(): array
     {

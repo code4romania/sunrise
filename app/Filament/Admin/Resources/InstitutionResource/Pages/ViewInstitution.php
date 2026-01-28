@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\OrganizationsRelationManager;
+use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\AdminsRelationManager;
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Filament\Admin\Resources\InstitutionResource\Actions\ActivateInstitution;
@@ -11,7 +15,6 @@ use App\Filament\Admin\Resources\InstitutionResource\Actions\InactivateInstituti
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\Location;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -46,9 +49,9 @@ class ViewInstitution extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make(__('institution.headings.institution_details'))
                 ->headerActions([
                     EditAction::make()
@@ -141,11 +144,4 @@ class ViewInstitution extends ViewRecord
         return __('institution.headings.institution_details');
     }
 
-    public function getRelationManagers(): array
-    {
-        return [
-            'organizations' => InstitutionResource\RelationManagers\OrganizationsRelationManager::make(),
-            'admins' => InstitutionResource\RelationManagers\AdminsRelationManager::make(),
-        ];
-    }
 }

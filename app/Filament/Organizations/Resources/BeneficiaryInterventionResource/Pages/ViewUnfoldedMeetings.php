@@ -21,7 +21,7 @@ class ViewUnfoldedMeetings extends ViewRecord
 
     protected static string $resource = BeneficiaryInterventionResource::class;
 
-    protected static string $view = 'filament.organizations.pages.view-beneficiary-interventions';
+    protected string $view = 'filament.organizations.pages.view-beneficiary-interventions';
 
     public function getBreadcrumbs(): array
     {

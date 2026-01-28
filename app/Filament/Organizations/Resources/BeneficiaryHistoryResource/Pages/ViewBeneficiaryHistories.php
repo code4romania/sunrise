@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource;
 use App\Infolists\Components\HistoryChanges;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -40,9 +41,9 @@ class ViewBeneficiaryHistories extends ViewRecord
         return self::getResource()::getEventLabel($this->getRecord());
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->columns()
                 ->maxWidth('3xl')

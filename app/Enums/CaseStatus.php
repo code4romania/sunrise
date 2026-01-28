@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns\Enums\Arrayable;
+use App\Concerns\Enums\Comparable;
 use App\Concerns;
 use Filament\Support\Colors\Color;
 use Filament\Support\Contracts\HasColor;
@@ -11,8 +13,8 @@ use Filament\Support\Contracts\HasLabel;
 
 enum CaseStatus: string implements HasLabel, HasColor
 {
-    use Concerns\Enums\Arrayable;
-    use Concerns\Enums\Comparable;
+    use Arrayable;
+    use Comparable;
     use Concerns\Enums\HasLabel;
 
     case ACTIVE = 'active';

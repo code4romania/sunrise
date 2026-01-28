@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
+use Filament\Schemas\Components\Wizard\Step;
 use App\Actions\BackAction;
-use App\Concerns\HasParentResource;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -15,8 +15,8 @@ use App\Models\Specialist;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Carbon\Carbon;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Illuminate\Contracts\Support\Htmlable;
@@ -25,7 +25,6 @@ use Illuminate\Support\Js;
 class CreateMonitoring extends CreateRecord
 {
     use HasWizard;
-    use HasParentResource;
     use PreventMultipleSubmit;
     use PreventSubmitFormOnEnter;
 
@@ -40,9 +39,10 @@ class CreateMonitoring extends CreateRecord
     public function getBreadcrumbs(): array
     {
         $breadcrumb = __('monitoring.breadcrumbs.file', ['file_number' => null]);
+        $ownerRecord = $this->getOwnerRecord();
 
         return array_merge(
-            BeneficiaryBreadcrumb::make($this->parent)
+            BeneficiaryBreadcrumb::make($ownerRecord)
                 ->getBreadcrumbsForCreateMonitoring(),
             [$breadcrumb],
         );
@@ -55,8 +55,7 @@ class CreateMonitoring extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        return static::getParentResource()::getUrl('monitorings.view', [
-            'parent' => $this->parent,
+        return MonitoringResource::getUrl('view', [
             'record' => $this->record,
         ]);
     }
@@ -65,15 +64,16 @@ class CreateMonitoring extends CreateRecord
     {
         return [
             BackAction::make()
-                ->url(BeneficiaryResource::getUrl('monitorings.index', ['parent' => $this->parent])),
+                ->url(MonitoringResource::getUrl('index')),
         ];
     }
 
     protected function afterFill(): void
     {
         $copyLastFile = (bool) request('copyLastFile');
-        $this->lastFile = self::getParent()
-            ?->monitoring
+        $ownerRecord = $this->getOwnerRecord();
+        $this->lastFile = $ownerRecord
+            ->monitorings
             ->sortByDesc('id')
             ->first()
             ?->loadMissing(['children', 'specialistsTeam']);
@@ -99,17 +99,17 @@ class CreateMonitoring extends CreateRecord
     {
         return [
 
-            Wizard\Step::make(__('monitoring.headings.details'))
+            Step::make(__('monitoring.headings.details'))
                 ->schema(EditDetails::getSchema())
                 ->afterStateHydrated(fn (Set $set) => $set('specialistsTeam', $this->specialistTeam)),
 
-            Wizard\Step::make(__('monitoring.headings.child_info'))
+            Step::make(__('monitoring.headings.child_info'))
                 ->schema(EditChildren::getSchema())
                 ->afterStateHydrated(function (Set $set) {
                     $set('children', $this->children);
                 }),
 
-            Wizard\Step::make(__('monitoring.headings.general'))
+            Step::make(__('monitoring.headings.general'))
                 ->schema(EditGeneral::getSchema()),
 
         ];
@@ -127,29 +127,33 @@ class CreateMonitoring extends CreateRecord
     {
         return Action::make('cancel')
             ->label(__('filament-panels::resources/pages/create-record.form.actions.cancel.label'))
-            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from($this->previousUrl ?? static::getParentResource()::getUrl('monitorings.index', ['parent' => $this->parent])) . ')')
+            ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = ' . Js::from($this->previousUrl ?? MonitoringResource::getUrl('index')) . ')')
             ->color('gray');
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         // Set the parent relationship key to the parent resource's ID.
-        $data[$this->getParentRelationshipKey()] = $this->parent->id;
+        $data['beneficiary_id'] = $this->getOwnerRecord()->id;
 
         return $data;
     }
 
     private function getChildren(): array
     {
+        $ownerRecord = $this->getOwnerRecord();
+        
         if ($this->lastFile && $this->lastFile->children->isNotEmpty()) {
             return $this->lastFile->children->toArray();
         }
 
-        return $this->parent->children->toArray();
+        return $ownerRecord->children->toArray();
     }
 
     private function getSpecialists(): array
     {
+        $ownerRecord = $this->getOwnerRecord();
+        
         if ($this->lastFile && $this->lastFile->specialistsTeam->isNotEmpty()) {
             return $this->lastFile
                 ->specialistsTeam
@@ -157,7 +161,7 @@ class CreateMonitoring extends CreateRecord
                 ->toArray();
         }
 
-        return $this->parent
+        return $ownerRecord
             ->specialistsTeam
             ?->filter(fn (Specialist $specialist) => $specialist->role_id)
             ->each(
