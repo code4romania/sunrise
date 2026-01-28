@@ -180,7 +180,6 @@ class CreateBeneficiary extends CreateRecord
                                 )
                                 ->content(function (Get $get) {
                                     $organization = $get('organization_where_beneficiary_exist');
-                                    debug($organization);
 
                                     $beneficiary = Beneficiary::query()
                                         ->where('cnp', $get('cnp'))

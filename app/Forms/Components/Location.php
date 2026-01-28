@@ -249,7 +249,7 @@ class Location extends Component implements CanEntangleWithSingularRelationships
                 ->live()
                 ->searchable()
                 ->required($this->isRequired())
-                ->disabled(fn (Get $get) => $this->isDisabled() || ! debug($get($this->getCountyField())))
+                ->disabled(fn (Get $get) => $this->isDisabled() || ! $get($this->getCountyField()))
                 ->getSearchResultsUsing(function (string $search, Get $get) {
                     return City::search($search)
                         ->where('county_id', (int) $get($this->getCountyField()))
