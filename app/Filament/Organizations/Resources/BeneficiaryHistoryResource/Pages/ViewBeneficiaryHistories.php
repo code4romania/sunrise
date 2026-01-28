@@ -10,7 +10,6 @@ use App\Filament\Organizations\Resources\BeneficiaryHistoryResource;
 use App\Infolists\Components\HistoryChanges;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Schemas\Components\Section;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 

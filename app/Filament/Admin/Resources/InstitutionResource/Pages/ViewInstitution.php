@@ -16,7 +16,6 @@ use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DocumentPreview;
 use App\Infolists\Components\Location;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 

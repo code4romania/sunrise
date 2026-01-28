@@ -18,7 +18,6 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Infolists\Infolist;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\Page;
 use Filament\Panel;

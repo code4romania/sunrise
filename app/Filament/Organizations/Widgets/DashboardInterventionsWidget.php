@@ -45,7 +45,9 @@ class DashboardInterventionsWidget extends BaseWidget
                     ->with([
                         'organizationServiceIntervention.serviceInterventionWithoutStatusCondition.service',
                         'interventionService',
+                        'interventionService.interventionPlan',
                         'beneficiary',
+                        'interventionPlan',
                         'specialist.user',
                     ])
             )
@@ -80,14 +82,18 @@ class DashboardInterventionsWidget extends BaseWidget
                     ->label(__('intervention_plan.actions.view_intervention'))
                     ->url(
                         fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                            'parent' => $record->intervention_service_id,
+                            'beneficiary' => $record->beneficiary,
+                            'intervention_plan' => $record->interventionPlan,
+                            'parent' => $record->interventionService,
                             'record' => $record,
                         ])
                     ),
             ])
             ->recordUrl(
                 fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                    'parent' => $record->intervention_service_id,
+                    'beneficiary' => $record->beneficiary,
+                    'intervention_plan' => $record->interventionPlan,
+                    'parent' => $record->interventionService,
                     'record' => $record,
                 ])
             )
