@@ -13,7 +13,7 @@ use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;
 use App\Infolists\Components\Notice;
-use App\Infolists\Components\TableEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
@@ -276,7 +276,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
             Section::make(__('enum.notifier.child'))
                 ->compact()
                 ->schema([
-                    TableEntry::make('children')
+                    RepeatableEntry::make('children')
                         ->hiddenLabel()
                         ->columnSpanFull()
                         ->columns()

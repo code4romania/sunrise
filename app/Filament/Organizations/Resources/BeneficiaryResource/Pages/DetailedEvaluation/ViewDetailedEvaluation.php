@@ -13,7 +13,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficia
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\Location;
-use App\Infolists\Components\TableEntry;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
@@ -301,7 +300,7 @@ class ViewDetailedEvaluation extends ViewRecord
             Section::make(__('beneficiary.section.detailed_evaluation.labels.specialists'))
                 ->compact()
                 ->schema([
-                    TableEntry::make('detailedEvaluationSpecialists')
+                    RepeatableEntry::make('detailedEvaluationSpecialists')
                         ->hiddenLabel()
                         ->schema([
                             TextEntry::make('full_name')
