@@ -1,10 +1,11 @@
 <x-filament-panels::page.simple>
-    <x-filament-panels::form wire:submit="handle">
+    <form wire:submit="handle">
         {{ $this->form }}
 
-        <x-filament-panels::form.actions
-            :actions="$this->getCachedFormActions()"
-            :full-width="$this->hasFullWidthFormActions()"
-        />
-    </x-filament-panels::form>
+        <div class="fi-form-actions">
+            @foreach($this->getCachedFormActions() as $action)
+                {{ $action }}
+            @endforeach
+        </div>
+    </form>
 </x-filament-panels::page.simple>

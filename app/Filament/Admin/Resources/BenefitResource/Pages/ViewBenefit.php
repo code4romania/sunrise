@@ -7,7 +7,7 @@ namespace App\Filament\Admin\Resources\BenefitResource\Pages;
 use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Filament\Admin\Resources\BenefitResource;
-use App\Infolists\Components\TableEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Actions\EditAction;
 use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -54,7 +54,7 @@ class ViewBenefit extends ViewRecord
             Section::make()
                 ->maxWidth('3xl')
                 ->schema([
-                    TableEntry::make('benefitTypes')
+                    RepeatableEntry::make('benefitTypes')
                         ->hiddenLabel()
                         ->schema([
                             TextEntry::make('name')

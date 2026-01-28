@@ -11,7 +11,7 @@ use App\Enums\CounselingSheet;
 use App\Filament\Admin\Resources\ServiceResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Infolists\Components\Notice;
-use App\Infolists\Components\TableEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use App\Models\Service;
 use Filament\Actions;
 use Filament\Actions\StaticAction;
@@ -79,7 +79,8 @@ class ViewService extends ViewRecord
 
             Section::make()
                 ->schema([
-                    TableEntry::make('serviceInterventions')
+                    RepeatableEntry::make('serviceInterventions')
+                        ->columns(4)
                         ->hiddenLabel()
                         ->schema([
                             TextEntry::make('name')

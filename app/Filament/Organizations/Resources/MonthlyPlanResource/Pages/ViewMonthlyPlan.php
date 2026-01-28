@@ -12,7 +12,6 @@ use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Filament\Organizations\Resources\MonthlyPlanResource;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
-use App\Infolists\Components\TableEntry;
 use App\Models\Specialist;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Carbon\Carbon;
@@ -173,7 +172,7 @@ class ViewMonthlyPlan extends ViewRecord
                                             TextEntry::make('objective')
                                                 ->label(__('intervention_plan.labels.service_objective')),
 
-                                            TableEntry::make('monthlyPlanInterventions')
+                                            RepeatableEntry::make('monthlyPlanInterventions')
                                                 ->columnSpanFull()
                                                 ->hiddenLabel()
                                                 ->schema([

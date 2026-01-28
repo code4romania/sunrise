@@ -10,7 +10,7 @@ use App\Enums\CounselingSheet;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
 use App\Filament\Organizations\Resources\ServiceResource;
 use App\Infolists\Components\Notice;
-use App\Infolists\Components\TableEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use App\Models\BeneficiaryIntervention;
 use Filament\Actions\EditAction;
 use Filament\Actions\StaticAction;
@@ -98,8 +98,9 @@ class ViewService extends ViewRecord
                         ),
                 ]),
 
-            TableEntry::make('interventions')
+            RepeatableEntry::make('interventions')
                 ->columnSpanFull()
+                ->columns(2)
                 ->hiddenLabel()
                 ->schema([
                     TextEntry::make('serviceInterventionWithoutStatusCondition.name')
