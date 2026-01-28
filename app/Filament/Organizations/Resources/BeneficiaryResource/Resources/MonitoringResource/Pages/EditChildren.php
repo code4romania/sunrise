@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
 use Filament\Schemas\Schema;
-use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToMonitoring;
 use App\Enums\ChildAggressorRelationship;
 use App\Enums\MaintenanceSources;
-use App\Filament\Organizations\Resources\MonitoringResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
@@ -28,7 +27,6 @@ use Illuminate\Support\Str;
 
 class EditChildren extends EditRecord
 {
-    use HasParentResource;
     use RedirectToMonitoring;
     use PreventSubmitFormOnEnter;
 
@@ -36,7 +34,8 @@ class EditChildren extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
+        $parentRecord = $this->getParentRecord();
+        return BeneficiaryBreadcrumb::make($parentRecord)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
     }
 
     public function getTitle(): string|Htmlable
@@ -55,6 +54,13 @@ class EditChildren extends EditRecord
             Section::make()
                 ->maxWidth('3xl')
                 ->schema($this->getFormSchema())]);
+    }
+
+    public static function getFormSchemaStatic(): array
+    {
+        $instance = new static();
+        $instance->record = new \App\Models\Monitoring();
+        return $instance->getFormSchema();
     }
 
     protected function getFormSchema(): array

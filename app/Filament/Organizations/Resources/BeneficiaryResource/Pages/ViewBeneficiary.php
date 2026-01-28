@@ -19,7 +19,7 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\CloseFileWi
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\DocumentsListWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\IntervetnionPlanWidget;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\RelatedCases;
-use App\Filament\Organizations\Resources\MonitoringResource\Widgets\MonitoringWidget;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Widgets\MonitoringWidget;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\Location;

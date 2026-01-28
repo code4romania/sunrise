@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Support\Enums\TextSize;
 use App\Actions\BackAction;
-use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
-use App\Filament\Organizations\Resources\MonitoringResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\SectionHeader;
@@ -31,13 +30,12 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class ViewMonitoring extends ViewRecord
 {
-    use HasParentResource;
-
     protected static string $resource = MonitoringResource::class;
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoringFile($this->getRecord());
+        $parentRecord = $this->getParentRecord();
+        return BeneficiaryBreadcrumb::make($parentRecord)->getBreadcrumbsForMonitoringFile($this->getRecord());
     }
 
     public function getTitle(): string|Htmlable
@@ -47,9 +45,10 @@ class ViewMonitoring extends ViewRecord
 
     protected function getHeaderActions(): array
     {
+        $parentRecord = $this->getParentRecord();
         return [
             BackAction::make()
-                ->url(BeneficiaryResource::getUrl('monitorings.index', ['parent' => $this->parent])),
+                ->url(static::getResource()::getUrl('index', ['beneficiary' => $parentRecord])),
 
             DeleteAction::make()
                 ->label(__('monitoring.actions.delete'))
@@ -76,8 +75,8 @@ class ViewMonitoring extends ViewRecord
                             Section::make(__('monitoring.headings.details'))
                                 ->headerActions([
                                     EditAction::make()
-                                        ->url(self::getParentResource()::getUrl('monitoring.edit_details', [
-                                            'parent' => $this->parent,
+                                        ->url(static::getResource()::getUrl('edit_details', [
+                                            'beneficiary' => $this->getParentRecord(),
                                             'record' => $this->getRecord(),
                                         ])),
                                 ])
@@ -106,7 +105,7 @@ class ViewMonitoring extends ViewRecord
                         ->schema([
                             Group::make()
                                 ->relationship('beneficiary')
-                                ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->parent))]),
+                                ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->getParentRecord()))]),
 
                     Tab::make(__('monitoring.headings.child_info'))
                         ->maxWidth('3xl')
@@ -115,8 +114,8 @@ class ViewMonitoring extends ViewRecord
                                 ->visible(fn () => $this->getRecord()->children->isNotEmpty())
                                 ->headerActions([
                                     EditAction::make()
-                                        ->url(self::getParentResource()::getUrl('monitoring.edit_children', [
-                                            'parent' => $this->parent,
+                                        ->url(static::getResource()::getUrl('edit_children', [
+                                            'beneficiary' => $this->getParentRecord(),
                                             'record' => $this->getRecord(),
                                         ])),
                                 ])
@@ -170,8 +169,8 @@ class ViewMonitoring extends ViewRecord
                             Section::make(__('monitoring.headings.general'))
                                 ->headerActions([
                                     EditAction::make()
-                                        ->url(self::getParentResource()::getUrl('monitoring.edit_general', [
-                                            'parent' => $this->parent,
+                                        ->url(static::getResource()::getUrl('edit_general', [
+                                            'beneficiary' => $this->getParentRecord(),
                                             'record' => $this->getRecord(),
                                         ])),
                                 ])
@@ -247,10 +246,11 @@ class ViewMonitoring extends ViewRecord
     protected function configureDeleteAction(DeleteAction $action): void
     {
         $resource = static::getResource();
+        $parentRecord = $this->getParentRecord();
 
         $action->authorize($resource::canDelete($this->getRecord()))
-            ->successRedirectUrl(static::getParentResource()::getUrl('monitorings.index', [
-                'parent' => $this->parent,
+            ->successRedirectUrl(static::getResource()::getUrl('index', [
+                'beneficiary' => $parentRecord,
             ]));
     }
 }
