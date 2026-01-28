@@ -29,3 +29,9 @@ npm-debug.log
 phpunit.xml
 yarn-error.log
 .DS_Store
+/.junie/
+/.opencode/
+/.gemini/
+/.cursor/
+/.codex/
+/.claude/

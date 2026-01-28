@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
 use App\Enums\ActLocation;
@@ -15,11 +16,11 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Select;
 use App\Rules\MultipleIn;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -47,10 +48,10 @@ class EditFlowPresentation extends EditRecord
         return Str::slug(__('beneficiary.section.personal_information.section.flow'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema(static::getPersonalInformationFormSchema());
+        return $schema
+            ->components(static::getPersonalInformationFormSchema());
     }
 
     public static function getPersonalInformationFormSchema(): array

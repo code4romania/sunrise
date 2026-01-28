@@ -4,32 +4,21 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
+use App\Filament\Organizations\Schemas\BeneficiaryResource\InitialEvaluationSchema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToInitialEvaluation;
 use App\Enums\AggravatingFactorsSchema;
-use App\Enums\Helps;
 use App\Enums\RiskFactorsSchema;
-use App\Enums\Ternary;
 use App\Enums\VictimPerceptionOfTheRiskSchema;
 use App\Enums\ViolenceHistorySchema;
 use App\Enums\ViolencesTypesSchema;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Forms\Components\Select;
 use App\Infolists\Components\EnumEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Infolists\Components\Group as InfolistGroup;
-use Filament\Infolists\Components\Section as InfolistSection;
-use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -57,152 +46,33 @@ class EditRiskFactors extends EditRecord
         return Str::slug(__('beneficiary.wizard.risk_factors.label'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema(self::getSchema());
-    }
-
-    public static function getSchema(): array
-    {
-        return [
-            Group::make()
-                ->relationship('riskFactors')
-                ->schema([
-                    Section::make(__('beneficiary.section.initial_evaluation.heading.violence_history'))
-                        ->schema(self::getViolenceHistorySchema()),
-                    Section::make(__('beneficiary.section.initial_evaluation.heading.violences_types'))
-                        ->schema(self::getViolencesTypesSchema()),
-                    Section::make(__('beneficiary.section.initial_evaluation.heading.risk_factors'))
-                        ->schema(self::getRiskFactorsSchema()),
-                    Section::make(__('beneficiary.section.initial_evaluation.heading.victim_perception_of_the_risk'))
-                        ->schema(self::getVictimPerceptionOfTheRiskSchema()),
-                    Section::make(__('beneficiary.section.initial_evaluation.heading.aggravating_factors'))
-                        ->schema(self::getAggravatingFactorsSchema()),
-                    Section::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
-                        ->columns()
-                        ->schema(self::getSocialSupportSchema()),
-                ]),
-        ];
-    }
-
-    public static function getViolenceHistorySchema(): array
-    {
-        $enumOptions = ViolenceHistorySchema::options();
-
-        return self::getSchemaFromEnum($enumOptions);
-    }
-
-    public static function getViolencesTypesSchema(): array
-    {
-        $enumOptions = ViolencesTypesSchema::options();
-
-        return self::getSchemaFromEnum($enumOptions);
-    }
-
-    public static function getRiskFactorsSchema(): array
-    {
-        $enumOptions = RiskFactorsSchema::options();
-
-        return self::getSchemaFromEnum($enumOptions);
-    }
-
-    public static function getVictimPerceptionOfTheRiskSchema(): array
-    {
-        $enumOptions = VictimPerceptionOfTheRiskSchema::options();
-
-        return self::getSchemaFromEnum($enumOptions);
-    }
-
-    public static function getAggravatingFactorsSchema(): array
-    {
-        $enumOptions = AggravatingFactorsSchema::options();
-
-        return self::getSchemaFromEnum($enumOptions);
-    }
-
-    public static function getSocialSupportSchema(): array
-    {
-        return [
-            Group::make()
-                ->schema([
-                    Select::make('extended_family_can_provide')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
-                        ->multiple()
-                        ->options(Helps::options())
-                        ->disabled(fn (Get $get) => $get('extended_family_can_not_provide')),
-
-                    Checkbox::make('extended_family_can_not_provide')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_not_provide'))
-                        ->afterStateUpdated(
-                            function ($state, Get $get, Set $set) {
-                                if ($state) {
-                                    $set('extended_family_can_provide_old_values', $get('extended_family_can_provide'));
-                                    $set('extended_family_can_provide', null);
-
-                                    return;
-                                }
-
-                                $set('extended_family_can_provide', $get('extended_family_can_provide_old_values'));
-                            }
-                        )
-                        ->live(),
-
-                    Hidden::make('extended_family_can_provide_old_values'),
-                ]),
-
-            Group::make()
-                ->schema([
-                    Select::make('friends_can_provide')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
-                        ->multiple()
-                        ->options(Helps::options())
-                        ->disabled(fn (Get $get) => $get('friends_can_not_provide')),
-
-                    Checkbox::make('friends_can_not_provide')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_not_provide'))
-                        ->afterStateUpdated(
-                            function ($state, Get $get, Set $set) {
-                                if ($state) {
-                                    $set('friends_can_provide_old_values', $get('friends_can_provide'));
-                                    $set('friends_can_provide', null);
-
-                                    return;
-                                }
-
-                                $set('friends_can_provide', $get('friends_can_provide_old_values'));
-                            }
-                        )
-                        ->live(),
-
-                    Hidden::make('friends_can_provide_old_values'),
-
-                ]),
-
-        ];
+        return $schema->components(InitialEvaluationSchema::getRiskFactorsFormComponents());
     }
 
     public static function getInfoListSchema(): array
     {
         return [
-            InfolistGroup::make()
+            Group::make()
                 ->relationship('riskFactors')
                 ->schema([
-                    InfolistSection::make(fn (Beneficiary $record) => self::getViolenceHeading($record))
+                    Section::make(fn (Beneficiary $record) => self::getViolenceHeading($record))
                         ->collapsed()
                         ->schema(self::getViolenceHistoryInfolistSchema()),
-                    InfolistSection::make(fn (Beneficiary $record) => self::getViolencesTypesHeading($record))
+                    Section::make(fn (Beneficiary $record) => self::getViolencesTypesHeading($record))
                         ->collapsed()
                         ->schema(self::getViolencesTypesInfolistSchema()),
-                    InfolistSection::make(fn (Beneficiary $record) => self::getRiskFactorsHeading($record))
+                    Section::make(fn (Beneficiary $record) => self::getRiskFactorsHeading($record))
                         ->collapsed()
                         ->schema(self::getRiskFactorsInfolistSchema()),
-                    InfolistSection::make(fn (Beneficiary $record) => self::getVictimPerceptionOfTherRiskHeading($record))
+                    Section::make(fn (Beneficiary $record) => self::getVictimPerceptionOfTherRiskHeading($record))
                         ->collapsed()
                         ->schema(self::getVictimPerceptionOfTheRiskInfolistSchema()),
-                    InfolistSection::make(fn (Beneficiary $record) => self::getAggravatingFactorsHeading($record))
+                    Section::make(fn (Beneficiary $record) => self::getAggravatingFactorsHeading($record))
                         ->collapsed()
                         ->schema(self::getAggravatingFactorsInfolistSchema()),
-                    InfolistSection::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
                         ->collapsed()
                         ->columns()
                         ->schema(self::getSocialSupportInfolistSchema()),

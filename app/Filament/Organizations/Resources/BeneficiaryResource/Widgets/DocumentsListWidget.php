@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\CreateAction;
 use App\Concerns\HasViewContentFooter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Filament\Organizations\Resources\DocumentResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\DocumentResource;
 use App\Models\Beneficiary;
 use App\Models\Document;
 use Filament\Tables;
@@ -28,18 +30,20 @@ class DocumentsListWidget extends BaseWidget
             ->query(fn () => $this->record->documents()->limit($this->limit))
             ->heading(__('beneficiary.section.documents.title.page'))
             ->headerActions([
-                Action::make('view')
+                \Filament\Actions\Action::make('view')
                     ->label(__('general.action.view_details'))
-                    ->url(fn () => BeneficiaryResource::getUrl('documents.index', ['parent' => $this->record]))
+                    ->url(fn () => DocumentResource::getUrl('index', [
+                        'beneficiary' => $this->record,
+                    ]))
                     ->link()
                     ->visible(fn () => $this->record->documents->count()),
             ])
             ->paginated(false)
             ->columns([
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->label(__('beneficiary.section.documents.labels.type')),
 
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('beneficiary.section.documents.labels.name')),
             ])
             ->contentFooter(
@@ -49,21 +53,21 @@ class DocumentsListWidget extends BaseWidget
             ->emptyStateHeading(__('beneficiary.helper_text.documents'))
             ->emptyStateDescription(__('beneficiary.helper_text.documents_2'))
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make()
-                    ->form(DocumentResource::getSchema())
+                CreateAction::make()
+                    ->schema(\App\Filament\Organizations\Schemas\DocumentResourceSchema::getFormComponents())
                     ->modalHeading(__('beneficiary.section.documents.title.add_modal'))
                     ->label(__('beneficiary.section.documents.actions.add'))
                     ->outlined()
                     ->createAnother(false)
                     ->modalSubmitActionLabel(__('beneficiary.section.documents.actions.create'))
                     ->modalCancelActionLabel(__('general.action.cancel'))
-                    ->mutateFormDataUsing(function (array $data) {
+                    ->mutateDataUsing(function (array $data) {
                         $data['beneficiary_id'] = $this->record->id;
 
                         return $data;
                     })
-                    ->successRedirectUrl(fn (Document $record) => BeneficiaryResource::getUrl('documents.view', [
-                        'parent' => $this->record,
+                    ->successRedirectUrl(fn (Document $record) => DocumentResource::getUrl('view', [
+                        'beneficiary' => $this->record,
                         'record' => $record,
                     ])),
             ]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -16,10 +17,10 @@ use App\Infolists\Components\TableEntry;
 use App\Models\Beneficiary;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
-use Filament\Infolists\Components\Tabs\Tab;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -48,9 +49,9 @@ class ViewBeneficiaryIdentity extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Tabs::make()
                     ->persistTabInQueryString()
@@ -92,7 +93,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->state(__('beneficiary.section.identity.heading_description'))
                         ->color('primary')
                         ->action(
-                            Action::make('view')
+                            \Filament\Actions\Action::make('view')
                                 ->label(__('beneficiary.section.identity.title'))
                                 ->url(self::$resource::getUrl('view_identity', ['record' => $record]))
                                 ->link(),
@@ -229,7 +230,7 @@ class ViewBeneficiaryIdentity extends ViewRecord
                         ->state(__('beneficiary.section.identity.heading_description'))
                         ->color('primary')
                         ->action(
-                            Action::make('view')
+                            \Filament\Actions\Action::make('view')
                                 ->label(__('beneficiary.section.identity.title'))
                                 ->url(self::$resource::getUrl('view_identity', ['record' => $record]))
                                 ->link(),

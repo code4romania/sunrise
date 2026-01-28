@@ -7,7 +7,7 @@ namespace App\Infolists\Components\Actions;
 use App\Concerns\HasModalExtraFooterActionsAlignment;
 use Filament\Infolists\Components\Actions\Action;
 
-class EditAction extends Action
+class EditAction extends \Filament\Actions\Action
 {
     use HasModalExtraFooterActionsAlignment;
 

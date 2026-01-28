@@ -7,7 +7,7 @@ namespace App\Tables\Actions;
 use App\Concerns\HasModalExtraFooterActionsAlignment;
 use Filament\Tables\Actions\EditAction as BaseEditAction;
 
-class EditAction extends BaseEditAction
+class EditAction extends \Filament\Actions\EditAction
 {
     use HasModalExtraFooterActionsAlignment;
 

@@ -14,7 +14,7 @@ class EditCommunityProfile extends EditRecord
 {
     protected static string $resource = CommunityProfileResource::class;
 
-    protected static string $view = 'filament.organizations.pages.empty-page';
+    protected string $view = 'filament.organizations.pages.empty-page';
 
     public function getBreadcrumbs(): array
     {

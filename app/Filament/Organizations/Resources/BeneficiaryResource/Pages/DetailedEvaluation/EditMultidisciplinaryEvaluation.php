@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\Applicant;
@@ -11,13 +12,13 @@ use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -41,9 +42,9 @@ class EditMultidisciplinaryEvaluation extends EditRecord
             ->getBreadcrumbs('view_detailed_evaluation');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema(self::getSchema());
+        return $schema->components($this->getFormSchema());
     }
 
     protected function getTabSlug(): string
@@ -51,7 +52,7 @@ class EditMultidisciplinaryEvaluation extends EditRecord
         return Str::slug(__('beneficiary.wizard.multidisciplinary_evaluation.label'));
     }
 
-    public static function getSchema(): array
+    protected function getFormSchema(): array
     {
         return [
             Section::make()

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Pages;
 
+use Filament\Schemas\Schema;
 use App\Filament\Admin\Resources\InstitutionResource\Pages\ViewInstitution;
 use App\Filament\Admin\Resources\InstitutionResource\RelationManagers\OrganizationsRelationManager;
 use App\Infolists\Components\Notice;
 use Filament\Facades\Filament;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
@@ -20,9 +21,9 @@ class ViewOrganizationTenant extends Page implements HasInfolists
 {
     use InteractsWithInfolists;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-building-office';
 
-    protected static string $view = 'filament.organizations.pages.view-organization-tenant';
+    protected string $view = 'filament.organizations.pages.view-organization-tenant';
 
     protected static ?int $navigationSort = 31;
 
@@ -43,8 +44,8 @@ class ViewOrganizationTenant extends Page implements HasInfolists
 
     public function infolist()
     {
-        return Infolist::make()
-            ->schema([
+        return Schema::make()
+            ->components([
                 Section::make()
                     ->maxWidth('3xl')
                     ->schema([

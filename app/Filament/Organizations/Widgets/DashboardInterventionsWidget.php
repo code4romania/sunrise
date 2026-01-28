@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Widgets;
 
+use Filament\Actions\ViewAction;
 use App\Enums\DashboardIntervalFilter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
@@ -74,8 +75,8 @@ class DashboardInterventionsWidget extends BaseWidget
                     ->label(__('intervention_plan.labels.specialist'))
                     ->searchable(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make()
+            ->recordActions([
+                ViewAction::make()
                     ->label(__('intervention_plan.actions.view_intervention'))
                     ->url(
                         fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
@@ -90,7 +91,7 @@ class DashboardInterventionsWidget extends BaseWidget
                     'record' => $record,
                 ])
             )
-            ->actionsColumnLabel(__('intervention_plan.labels.actions'))
+            ->recordActionsColumnLabel(__('intervention_plan.labels.actions'))
             ->filters([
                 SelectFilter::make('selected_interval')
                     ->label(__('intervention_plan.labels.selected_interval'))

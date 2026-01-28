@@ -12,7 +12,7 @@ class ListCommunityProfiles extends ListRecords
 {
     protected static string $resource = CommunityResource::class;
 
-    protected static string $view = 'filament.organizations.pages.empty-page';
+    protected string $view = 'filament.organizations.pages.empty-page';
 
     public function getBreadcrumbs(): array
     {

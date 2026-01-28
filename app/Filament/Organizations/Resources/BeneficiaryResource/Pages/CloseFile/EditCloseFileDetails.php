@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToCloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -12,7 +13,7 @@ use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\CloseFile;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -45,18 +46,18 @@ class EditCloseFileDetails extends EditRecord
         return Str::slug(__('beneficiary.section.close_file.headings.file_details'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Section::make()
                 ->maxWidth('3xl')
                 ->columns()
                 ->relationship('closeFile')
-                ->schema($this->getSchema()),
+                ->schema($this->getFormSchema()),
         ]);
     }
 
-    public static function getSchema(?Beneficiary $recordParam = null): array
+    protected function getFormSchema(?Beneficiary $recordParam = null): array
     {
         return [
             DatePicker::make('date')

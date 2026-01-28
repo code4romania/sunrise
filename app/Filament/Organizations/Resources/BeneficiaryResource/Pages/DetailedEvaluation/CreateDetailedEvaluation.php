@@ -10,7 +10,7 @@ use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\BeneficiaryPartner;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Wizard\Step;
+use Filament\Schemas\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;

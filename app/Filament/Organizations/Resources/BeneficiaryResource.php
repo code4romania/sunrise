@@ -4,6 +4,37 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources;
 
+use App\Filament\Organizations\Schemas\BeneficiaryResourceSchema;
+use App\Filament\Organizations\Resources\BeneficiaryResource\RelationManagers\DocumentsRelationManager;
+use Filament\Actions\ViewAction;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListBeneficiaries;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CreateBeneficiary;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiary;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\EditBeneficiaryIdentity;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\EditChildrenIdentity;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryPersonalInformation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\EditBeneficiaryPersonalInformation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\EditAggressor;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\EditAntecedents;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\EditFlowPresentation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation\ViewInitialEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation\CreateInitialEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation\EditEvaluationDetails;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation\EditViolence;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation\EditRiskFactors;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation\EditRequestedServices;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation\EditBeneficiarySituation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation\ViewDetailedEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation\CreateDetailedEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation\EditDetailedEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation\EditBeneficiaryPartner;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation\EditMultidisciplinaryEvaluation;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation\EditDetailedEvaluationResult;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile\CreateCloseFile;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile\ViewCloseFile;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile\EditCloseFileDetails;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile\EditCloseFileGeneralDetails;
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ListBeneficiaryHistories;
 use App\Filament\Organizations\Resources\BeneficiaryHistoryResource\Pages\ViewBeneficiaryHistories;
@@ -12,8 +43,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
-use App\Filament\Organizations\Resources\DocumentResource\Pages\ListDocuments;
-use App\Filament\Organizations\Resources\DocumentResource\Pages\ViewDocument;
 use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\CreateInterventionPlan;
 use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\ViewInterventionPlan;
 use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
@@ -32,7 +61,7 @@ class BeneficiaryResource extends Resource
 {
     protected static ?string $model = Beneficiary::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-folder';
 
     protected static ?string $slug = 'cases';
 
@@ -70,133 +99,49 @@ class BeneficiaryResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->modifyQueryUsing(function (Builder $query) {
-                return $query
-                    ->with([
-                        'managerTeam',
-                        'lastMonitoring',
-                        // used for permissions
-                        'specialistsMembers',
-                    ])
-                    ->whereUserHasAccess();
-            })
-            ->columns([
-                TextColumn::make('id')
-                    ->label(__('field.case_id'))
-                    ->sortable()
-                    ->searchable(true, fn (Builder $query, $search) => $query->where('beneficiaries.id', 'LIKE', '%' . $search . '%')),
-
-                TextColumn::make('full_name')
-                    ->label(__('field.beneficiary'))
-                    ->description(fn ($record) => $record->initial_id ? __('beneficiary.labels.reactivated') : '')
-                    ->sortable()
-                    ->searchable(true, fn (Builder $query, $search) => $query->where('beneficiaries.full_name', 'LIKE', '%' . $search . '%')),
-
-                TextColumn::make('created_at')
-                    ->label(__('field.open_at'))
-                    ->date()
-                    ->toggleable()
-                    ->sortable(),
-
-                TextColumn::make('lastMonitoring.date')
-                    ->label(__('field.last_evaluated_at'))
-                    ->date()
-                    ->toggleable(),
-
-                TextColumn::make('managerTeam.user.full_name')
-                    ->label(__('beneficiary.labels.case_manager'))
-                    ->toggleable()
-                    ->formatStateUsing(
-                        fn ($state) => collect(explode(',', $state))
-                            ->map(fn ($item) => trim($item))
-                            ->unique()
-                            ->join(', ')
-                    ),
-
-                TextColumn::make('status')
-                    ->label(__('field.status'))
-                    ->badge(),
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->label(__('general.action.view_details')),
-            ])
-            ->filters([
-                SelectFilter::make('status')
-                    ->label(__('field.status'))
-                    ->options(CaseStatus::options())
-                    ->modifyQueryUsing(fn (Builder $query, $state) => $state['value'] ? $query->where('beneficiaries.status', $state) : $query),
-
-                SelectFilter::make('case_manager')
-                    ->label(__('beneficiary.labels.case_manager'))
-                    ->searchable()
-                    ->preload()
-                    ->relationship('managerTeam.user', 'full_name'),
-
-                DateFilter::make('created_at')
-                    ->label(__('field.open_at'))
-                    ->attribute('beneficiaries.created_at'),
-
-                DateFilter::make('monitorings.date')
-                    ->label(__('field.last_evaluated_at'))
-                    ->modifyQueryUsing(
-                        fn (Builder $query, array $state) => $query
-                            ->when(data_get($state, 'date_from'), function (Builder $query, string $date) {
-                                $query->whereHas('lastMonitoring', fn (Builder $query) => $query->whereDate('date', '>=', $date));
-                            })
-                            ->when(data_get($state, 'date_until'), function (Builder $query, string $date) {
-                                $query->whereHas('lastMonitoring', fn (Builder $query) => $query->whereDate('date', '<=', $date));
-                            })
-                    ),
-            ])
-            ->paginationPageOptions([10, 20, 40, 60, 80, 100])
-            ->defaultPaginationPageOption(20)
-            ->defaultSort('id', 'desc');
+        return BeneficiaryResourceSchema::table($table);
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            'documents' => DocumentsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBeneficiaries::route('/'),
-            'create' => Pages\CreateBeneficiary::route('/create/{parent?}'),
-            'view' => Pages\ViewBeneficiary::route('/{record}'),
+            'index' => ListBeneficiaries::route('/'),
+            'create' => CreateBeneficiary::route('/create/{parent?}'),
+            'view' => ViewBeneficiary::route('/{record}'),
 
-            'view_identity' => Pages\ViewBeneficiaryIdentity::route('/{record}/identity'),
-            'edit_identity' => Pages\EditBeneficiaryIdentity::route('/{record}/identity/edit'),
-            'edit_children' => Pages\EditChildrenIdentity::route('{record}/children/edit'),
-            'view_personal_information' => Pages\ViewBeneficiaryPersonalInformation::route('/{record}/personal'),
-            'edit_personal_information' => Pages\EditBeneficiaryPersonalInformation::route('/{record}/personal/edit'),
-            'edit_aggressor' => Pages\EditAggressor::route('/{record}/aggressor/edit'),
-            'edit_antecedents' => Pages\EditAntecedents::route('{record}/antecedents/edit'),
-            'edit_flow_presentation' => Pages\EditFlowPresentation::route('{record}/flowPresentation/edit'),
+            'view_identity' => ViewBeneficiaryIdentity::route('/{record}/identity'),
+            'edit_identity' => EditBeneficiaryIdentity::route('/{record}/identity/edit'),
+            'edit_children' => EditChildrenIdentity::route('{record}/children/edit'),
+            'view_personal_information' => ViewBeneficiaryPersonalInformation::route('/{record}/personal'),
+            'edit_personal_information' => EditBeneficiaryPersonalInformation::route('/{record}/personal/edit'),
+            'edit_aggressor' => EditAggressor::route('/{record}/aggressor/edit'),
+            'edit_antecedents' => EditAntecedents::route('{record}/antecedents/edit'),
+            'edit_flow_presentation' => EditFlowPresentation::route('{record}/flowPresentation/edit'),
 
-            'view_initial_evaluation' => InitialEvaluation\ViewInitialEvaluation::route('/{record}/initialEvaluation'),
-            'create_initial_evaluation' => InitialEvaluation\CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
-            'edit_initial_evaluation_details' => InitialEvaluation\EditEvaluationDetails::route('/{record}/initialEvaluation/details/edit'),
-            'edit_initial_evaluation_violence' => InitialEvaluation\EditViolence::route('/{record}/initialEvaluation/violence/edit'),
-            'edit_initial_evaluation_risk_factors' => InitialEvaluation\EditRiskFactors::route('/{record}/initialEvaluation/riskFactors/edit'),
-            'edit_initial_evaluation_requested_services' => InitialEvaluation\EditRequestedServices::route('/{record}/initialEvaluation/requestedServices/edit'),
-            'edit_initial_evaluation_beneficiary_situation' => InitialEvaluation\EditBeneficiarySituation::route('/{record}/initialEvaluation/beneficiarySituation/edit'),
+            'view_initial_evaluation' => ViewInitialEvaluation::route('/{record}/initialEvaluation'),
+            'create_initial_evaluation' => CreateInitialEvaluation::route('/{record}/initialEvaluation/create'),
+            'edit_initial_evaluation_details' => EditEvaluationDetails::route('/{record}/initialEvaluation/details/edit'),
+            'edit_initial_evaluation_violence' => EditViolence::route('/{record}/initialEvaluation/violence/edit'),
+            'edit_initial_evaluation_risk_factors' => EditRiskFactors::route('/{record}/initialEvaluation/riskFactors/edit'),
+            'edit_initial_evaluation_requested_services' => EditRequestedServices::route('/{record}/initialEvaluation/requestedServices/edit'),
+            'edit_initial_evaluation_beneficiary_situation' => EditBeneficiarySituation::route('/{record}/initialEvaluation/beneficiarySituation/edit'),
 
-            'view_detailed_evaluation' => DetailedEvaluation\ViewDetailedEvaluation::route('/{record}/detailedEvaluation'),
-            'create_detailed_evaluation' => DetailedEvaluation\CreateDetailedEvaluation::route('/{record}/detailedEvaluation/create'),
-            'edit_detailed_evaluation' => DetailedEvaluation\EditDetailedEvaluation::route('/{record}/detailedEvaluation/edit'),
-            'edit_beneficiary_partner' => DetailedEvaluation\EditBeneficiaryPartner::route('/{record}/beneficiaryPartner/edit'),
-            'edit_multidisciplinary_evaluation' => DetailedEvaluation\EditMultidisciplinaryEvaluation::route('/{record}/multidisciplinaryEvaluation/edit'),
-            'edit_detailed_evaluation_result' => DetailedEvaluation\EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
+            'view_detailed_evaluation' => ViewDetailedEvaluation::route('/{record}/detailedEvaluation'),
+            'create_detailed_evaluation' => CreateDetailedEvaluation::route('/{record}/detailedEvaluation/create'),
+            'edit_detailed_evaluation' => EditDetailedEvaluation::route('/{record}/detailedEvaluation/edit'),
+            'edit_beneficiary_partner' => EditBeneficiaryPartner::route('/{record}/beneficiaryPartner/edit'),
+            'edit_multidisciplinary_evaluation' => EditMultidisciplinaryEvaluation::route('/{record}/multidisciplinaryEvaluation/edit'),
+            'edit_detailed_evaluation_result' => EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
 
             'view_specialists' => ListSpecialists::route('/{record}/specialists'),
 
-            'documents.index' => ListDocuments::route('/{parent}/documents'),
-            'documents.view' => ViewDocument::route('/{parent}/documents/{record}'),
 
             'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create/{copyLastFile?}'),
             'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
@@ -208,10 +153,10 @@ class BeneficiaryResource extends Resource
             'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
             'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),
 
-            'create_close_file' => CloseFile\CreateCloseFile::route('/{record}/createCloseFile'),
-            'view_close_file' => CloseFile\ViewCloseFile::route('/{record}/closeFile'),
-            'edit_close_file_details' => CloseFile\EditCloseFileDetails::route('{record}/closeFile/editDetails'),
-            'edit_close_file_general_details' => CloseFile\EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
+            'create_close_file' => CreateCloseFile::route('/{record}/createCloseFile'),
+            'view_close_file' => ViewCloseFile::route('/{record}/closeFile'),
+            'edit_close_file_details' => EditCloseFileDetails::route('{record}/closeFile/editDetails'),
+            'edit_close_file_general_details' => EditCloseFileGeneralDetails::route('{record}/closeFile/editGeneralDetails'),
 
             'create_intervention_plan' => CreateInterventionPlan::route('/{parent}/createInterventionPlan'),
             'view_intervention_plan' => ViewInterventionPlan::route('/{parent}/interventionPlan/{record}'),

@@ -24,7 +24,7 @@
                 @break
 
             @default
-                <x-filament-tables::empty-state
+                <x-filament::empty-state
                     icon="heroicon-o-eye-slash"
                     :heading="__('beneficiary.section.documents.labels.empty_state_header')"
                     :description="__('beneficiary.section.documents.labels.empty_state_description')" />

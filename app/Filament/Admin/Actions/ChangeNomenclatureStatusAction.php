@@ -35,14 +35,14 @@ class ChangeNomenclatureStatusAction extends Action
                 $record->$relationship()->update(['status' => GeneralStatus::INACTIVE]);
             }
         });
-
-        $recordClass = \get_class($this->getRecord());
-        $recordClass = strtolower(substr($recordClass, strrpos($recordClass, '\\') + 1));
-        $modalLabelKey = \sprintf('inactivate_%s_modal', $recordClass);
-
-        $this->modalHeading(fn ($record) => GeneralStatus::isValue($record->status, GeneralStatus::ACTIVE) ? __('nomenclature.headings.' . $modalLabelKey) : null);
-        $this->modalDescription(fn ($record) => GeneralStatus::isValue($record->status, GeneralStatus::ACTIVE) ? __('nomenclature.helper_texts.' . $modalLabelKey) : null);
-        $this->modalSubmitActionLabel(fn ($record) => GeneralStatus::isValue($record->status, GeneralStatus::ACTIVE) ? __('nomenclature.actions.change_status.' . $modalLabelKey) : null);
+//
+//        $recordClass = \get_class($this->getRecord());
+//        $recordClass = strtolower(substr($recordClass, strrpos($recordClass, '\\') + 1));
+//        $modalLabelKey = \sprintf('inactivate_%s_modal', $recordClass);
+//
+//        $this->modalHeading(fn ($record) => GeneralStatus::isValue($record->status, GeneralStatus::ACTIVE) ? __('nomenclature.headings.' . $modalLabelKey) : null);
+//        $this->modalDescription(fn ($record) => GeneralStatus::isValue($record->status, GeneralStatus::ACTIVE) ? __('nomenclature.helper_texts.' . $modalLabelKey) : null);
+//        $this->modalSubmitActionLabel(fn ($record) => GeneralStatus::isValue($record->status, GeneralStatus::ACTIVE) ? __('nomenclature.actions.change_status.' . $modalLabelKey) : null);
 
         $this->modalFooterActionsAlignment(Alignment::Right);
     }

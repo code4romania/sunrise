@@ -12,7 +12,7 @@ class ListServices extends ManageRecords
 {
     protected static string $resource = ServiceResource::class;
 
-    protected static string $view = 'filament.admin.pages.nomenclature-list';
+    protected string $view = 'filament.admin.pages.nomenclature-list';
 
     public function getTitle(): string|Htmlable
     {

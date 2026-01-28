@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\InterventionPlanResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\InterventionPlanResource;
 use Filament\Actions;
@@ -18,7 +19,7 @@ class EditInterventionPlan extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

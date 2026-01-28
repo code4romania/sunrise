@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
 use App\Infolists\Components\Actions\EditAction;
@@ -11,7 +12,7 @@ use App\Infolists\Components\DocumentPreview;
 use App\Models\Institution;
 use Filament\Facades\Filament;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -23,16 +24,16 @@ class OrganizationsRelationManager extends RelationManager
 
     protected static string $relationship = 'organizations';
 
-    protected static string $view = 'infolists.infolist-relation-manager';
+    protected string $view = 'infolists.infolist-relation-manager';
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
         return __('institution.headings.center_details');
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->heading(__('institution.headings.center_details'))
                 ->headerActions([

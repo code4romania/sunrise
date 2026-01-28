@@ -17,7 +17,7 @@ class RelatedCases extends BaseWidget
 {
     public ?Model $record = null;
 
-    protected static string $view = 'widgets.related-cases-table';
+    protected string $view = 'widgets.related-cases-table';
 
     protected int | string | array $columnSpan = 2;
 
@@ -60,8 +60,8 @@ class RelatedCases extends BaseWidget
             ])
             ->heading(__('beneficiary.labels.related_cases'))
             ->paginated(false)
-            ->actions([
-                ViewAction::make()
+            ->recordActions([
+                \Filament\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->color('primary')
                     ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view', ['record' => $record->id])),

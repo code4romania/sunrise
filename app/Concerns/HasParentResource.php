@@ -59,10 +59,10 @@ trait HasParentResource
         return null;
     }
 
-    protected function applyFiltersToTableQuery(Builder $query): Builder
+    protected function applyFiltersToTableQuery(Builder $query, bool $isResolvingRecord = false): Builder
     {
         // Apply any filters before the parent relationship key is applied.
-        $query = parent::applyFiltersToTableQuery($query);
+        $query = parent::applyFiltersToTableQuery($query, $isResolvingRecord);
 
         return $query->where($this->getParentRelationshipKey(), $this->parent->getKey());
     }

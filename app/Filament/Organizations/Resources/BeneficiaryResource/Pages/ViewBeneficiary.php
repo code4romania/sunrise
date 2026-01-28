@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Support\Enums\TextSize;
 use App\Actions\BackAction;
 use App\Enums\ActivityDescription;
 use App\Enums\AddressType;
@@ -29,11 +31,10 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Placeholder;
-use Filament\Infolists\Components\Actions;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\TextEntry\TextEntrySize;
 use Filament\Infolists\Infolist;
@@ -107,7 +108,7 @@ class ViewBeneficiary extends ViewRecord
                                     && $record->status !== CaseStatus::ARCHIVED
                                 )
                                 ->modalHeading(__('beneficiary.section.identity.headings.reactivate_modal'))
-                                ->form([
+                                ->schema([
                                     Placeholder::make('reactivate_text_1')
                                         ->hiddenLabel()
                                         ->content(__('beneficiary.placeholder.reactivate_text_1')),
@@ -152,11 +153,11 @@ class ViewBeneficiary extends ViewRecord
         ]));
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->columns()
-            ->schema([
+            ->components([
                 $this->identitySectionSection(),
                 $this->personalInformationSection(),
                 $this->initialEvaluation(),
@@ -238,7 +239,7 @@ class ViewBeneficiary extends ViewRecord
                 'class' => 'h-full',
             ])
             ->schema([
-                Grid::make()
+            \Filament\Schemas\Components\Grid::make()
                     ->relationship('flowPresentation')
                     ->schema([
                         EnumEntry::make('presentation_mode')
@@ -288,13 +289,13 @@ class ViewBeneficiary extends ViewRecord
                     ->schema([
                         EnumEntry::make('has_police_reports')
                             ->label(__('field.has_police_reports'))
-                            ->suffix(fn (Beneficiary $record, $state) => Ternary::isYes($state)
-                                ? " ({$record->antecedents->police_report_count})" : null),
+                            ->suffix(fn (\App\Models\BeneficiaryAntecedents $record, $state) => Ternary::isYes($state)
+                                ? " ({$record->police_report_count})" : null),
 
                         EnumEntry::make('has_medical_reports')
                             ->label(__('field.has_medical_reports'))
-                            ->suffix(fn (Beneficiary $record, $state) => Ternary::isYes($state)
-                                ? " ({$record->antecedents->medical_report_count})" : null),
+                            ->suffix(fn (\App\Models\BeneficiaryAntecedents $record, $state) => Ternary::isYes($state)
+                                ? " ({$record->medical_report_count})" : null),
                     ]),
             ]);
     }
@@ -334,19 +335,23 @@ class ViewBeneficiary extends ViewRecord
                                 ->default(__('beneficiary.helper_text.initial_evaluation'))
                                 ->alignCenter()
                                 ->weight(FontWeight::SemiBold)
-                                ->size(TextEntrySize::Medium),
+                                ->size(TextSize::Medium),
                             TextEntry::make('empty_state_description')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.initial_evaluation_2'))
                                 ->alignCenter()
                                 ->color(Color::Gray)
-                                ->size(TextEntrySize::Small),
-                            Actions::make([
-                                Actions\Action::make('create_initial_evaluation')
-                                    ->label(__('beneficiary.action.start_evaluation'))
-                                    ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
-                                    ->outlined(),
-                            ])
+                                ->size(TextSize::Small),
+                            Placeholder::make('actions_placeholder')
+                                ->hiddenLabel()
+                                ->content(
+                                    ActionGroup::make([
+                                        Action::make('create_initial_evaluation')
+                                            ->label(__('beneficiary.action.start_evaluation'))
+                                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                            ->outlined(),
+                                    ])
+                                )
                                 ->alignCenter(),
                         ]),
                 ]);
@@ -381,19 +386,23 @@ class ViewBeneficiary extends ViewRecord
                                 ->default(__('beneficiary.helper_text.detailed_evaluation'))
                                 ->alignCenter()
                                 ->weight(FontWeight::SemiBold)
-                                ->size(TextEntrySize::Medium),
+                                ->size(TextSize::Medium),
                             TextEntry::make('empty_state_description')
                                 ->hiddenLabel()
                                 ->default(__('beneficiary.helper_text.detailed_evaluation_2'))
                                 ->alignCenter()
                                 ->color(Color::Gray)
-                                ->size(TextEntrySize::Small),
-                            Actions::make([
-                                Actions\Action::make('create_detailed_evaluation')
-                                    ->label(__('beneficiary.action.start_evaluation'))
-                                    ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
-                                    ->outlined(),
-                            ])
+                                ->size(TextSize::Small),
+                            Placeholder::make('actions_placeholder')
+                                ->hiddenLabel()
+                                ->content(
+                                    ActionGroup::make([
+                                        Action::make('create_detailed_evaluation')
+                                            ->label(__('beneficiary.action.start_evaluation'))
+                                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                            ->outlined(),
+                                    ])
+                                )
                                 ->alignCenter(),
                         ]),
                 ]);
@@ -407,7 +416,7 @@ class ViewBeneficiary extends ViewRecord
             CloseFileWidget::class,
             CaseTeamListWidget::class,
             DocumentsListWidget::class,
-            RelatedCases::class,
+//            RelatedCases::class,
         ];
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToMonitoring;
@@ -15,13 +16,13 @@ use App\Models\Monitoring;
 use App\Models\UserRole;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Awcodes\TableRepeater\Header;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -49,16 +50,16 @@ class EditDetails extends EditRecord
         return Str::slug(__('monitoring.headings.details'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Section::make()
                 ->maxWidth('3xl')
-                ->schema(self::getSchema()),
+                ->schema($this->getFormSchema()),
         ]);
     }
 
-    public static function getSchema(): array
+    protected function getFormSchema(): array
     {
         return [
             Grid::make()

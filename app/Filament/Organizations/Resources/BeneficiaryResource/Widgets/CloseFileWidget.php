@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Widgets;
 
+use Filament\Actions\Action;
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Models\Beneficiary;
@@ -27,7 +28,7 @@ class CloseFileWidget extends BaseWidget
             ->paginated(false)
             ->heading(__('beneficiary.section.close_file.headings.widget'))
             ->headerActions([
-                Tables\Actions\Action::make('view_monitoring')
+                Action::make('view_monitoring')
                     ->label(__('general.action.view_details'))
                     ->link()
                     ->visible(fn () => $this->record->closeFile)
@@ -42,7 +43,7 @@ class CloseFileWidget extends BaseWidget
             ])
             ->emptyStateHeading(__('beneficiary.section.close_file.headings.widget_empty_state'))
             ->emptyStateActions([
-                Tables\Actions\Action::make('create_close_file')
+                Action::make('create_close_file')
                     ->label(__('beneficiary.section.close_file.actions.create_widget'))
                     ->outlined()
                     ->disabled(fn () => ! CaseStatus::isValue($this->record->status, CaseStatus::CLOSED))

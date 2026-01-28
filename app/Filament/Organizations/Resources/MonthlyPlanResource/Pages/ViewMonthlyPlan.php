@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonthlyPlanResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -17,9 +18,9 @@ use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
 use Carbon\Carbon;
 use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
-use Filament\Infolists\Components\Tabs\Tab;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -66,7 +67,7 @@ class ViewMonthlyPlan extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
         $this->getRecord()
             ->loadMissing([
@@ -74,7 +75,7 @@ class ViewMonthlyPlan extends ViewRecord
                 'monthlyPlanServices.monthlyPlanInterventions.serviceIntervention',
             ]);
 
-        return $infolist->schema([
+        return $schema->components([
             Tabs::make()
                 ->persistTabInQueryString()
                 ->schema([

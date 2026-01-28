@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use App\Filament\Organizations\Resources\BeneficiaryResource\Widgets\ListSpecialistsWidget;
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
@@ -31,11 +32,11 @@ class ListSpecialists extends ViewRecord
     protected function getHeaderWidgets(): array
     {
         return [
-            BeneficiaryResource\Widgets\ListSpecialistsWidget::class,
+            ListSpecialistsWidget::class,
         ];
     }
 
-    public function getHeaderWidgetsColumns(): int|string|array
+    public function getHeaderWidgetsColumns(): int|array
     {
         return 1;
     }

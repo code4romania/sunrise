@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace App\Forms\Components;
 
+use Filament\Forms\Components\Concerns\CanBeCloned;
+use Filament\Schemas\Components\Concerns\CanBeCollapsed;
+use Filament\Forms\Components\Concerns\CanGenerateUuids;
+use Filament\Forms\Components\Concerns\CanLimitItemsLength;
+use Filament\Forms\Components\Concerns\HasContainerGridLayout;
 use Filament\Forms\Components\Concerns;
 use Filament\Forms\Components\Contracts\HasExtraItemActions;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Placeholder;
 use Filament\Support\Concerns\HasReorderAnimationDuration;
 
-class RadioTable extends Field implements HasExtraItemActions
+class RadioTable extends Field implements \Filament\Schemas\Components\Contracts\HasExtraItemActions
 {
-    use Concerns\CanBeCloned;
-    use Concerns\CanBeCollapsed;
-    use Concerns\CanGenerateUuids;
-    use Concerns\CanLimitItemsLength;
-    use Concerns\HasContainerGridLayout;
+    use CanBeCloned;
+    use CanBeCollapsed;
+    use CanGenerateUuids;
+    use CanLimitItemsLength;
+    use HasContainerGridLayout;
     use Concerns\HasExtraItemActions;
     use HasReorderAnimationDuration;
 
@@ -64,7 +69,7 @@ class RadioTable extends Field implements HasExtraItemActions
         return $this;
     }
 
-    public function getChildComponents(): array
+    public function getDefaultChildComponents(): array
     {
         $components = [];
 //        foreach ($this->radioOptions as $key => $radioOption) {

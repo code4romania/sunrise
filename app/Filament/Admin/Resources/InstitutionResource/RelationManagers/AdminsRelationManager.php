@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\InstitutionResource\RelationManagers;
 
+use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource;
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
-use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
+use App\Filament\Admin\Schemas\UserInstitutionResourceSchema;
 use App\Tables\Columns\DateTimeColumn;
-use Filament\Forms\Components\Hidden;
-use Filament\Forms\Form;
+use Filament\Actions\ViewAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,24 +24,22 @@ class AdminsRelationManager extends RelationManager
 
     protected static string $relationship = 'admins';
 
+    protected static ?string $relatedResource = UserInstitutionResource::class;
+
     public function isReadOnly(): bool
     {
         return false;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                ...EditUserInstitution::getSchema(),
-
-                Hidden::make('ngo_admin')
-                    ->default(1),
-            ]);
+        return UserInstitutionResourceSchema::form($schema);
     }
 
     public function table(Table $table): Table
     {
+        $ownerRecord = $this->getOwnerRecord();
+
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with('roles'))
             ->heading(__('institution.headings.admin_users'))
@@ -62,20 +60,14 @@ class AdminsRelationManager extends RelationManager
                     ->label(__('institution.labels.last_login_at')),
             ])
             ->headerActions([
-                CreateAction::make()
+                \Filament\Actions\CreateAction::make()
                     ->label(__('institution.actions.add_ngo_admin'))
                     ->modalHeading(__('institution.actions.add_ngo_admin'))
                     ->createAnother(false),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make()
-                    ->label(__('general.action.view_details'))
-                    ->url(
-                        fn ($record) => InstitutionResource::getUrl('user.view', [
-                            'parent' => $this->getOwnerRecord(),
-                            'record' => $record,
-                        ])
-                    ),
+                    ->label(__('general.action.view_details')),
             ]);
     }
 

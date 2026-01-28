@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -13,7 +14,7 @@ use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Awcodes\TableRepeater\Header;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
@@ -32,9 +33,9 @@ class EditDetailedEvaluation extends EditRecord
         return __('beneficiary.page.edit_evaluation_details.title');
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema(self::getSchema());
+        return $schema->components($this->getFormSchema());
     }
 
     public function getBreadcrumbs(): array
@@ -48,7 +49,7 @@ class EditDetailedEvaluation extends EditRecord
         return Str::slug(__('beneficiary.wizard.detailed_evaluation.label'));
     }
 
-    public static function getSchema(): array
+    protected function getFormSchema(): array
     {
         return [
             Section::make()

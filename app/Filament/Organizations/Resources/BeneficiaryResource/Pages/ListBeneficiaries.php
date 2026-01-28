@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -21,7 +22,7 @@ class ListBeneficiaries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->label(__('beneficiary.action.create')),
         ];
     }

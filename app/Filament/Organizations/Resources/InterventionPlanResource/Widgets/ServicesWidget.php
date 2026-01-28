@@ -12,8 +12,8 @@ use App\Models\InterventionService;
 use App\Models\OrganizationService;
 use App\Models\Specialist;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
@@ -51,14 +51,14 @@ class ServicesWidget extends BaseWidget
                     ->label(__('intervention_plan.labels.meetings_count')),
             ])
             ->headerActions([
-                CreateAction::make()
+                \Filament\Actions\CreateAction::make()
                     ->label(__('intervention_plan.actions.add_service'))
                     ->modalHeading(__('intervention_plan.headings.add_service'))
-                    ->form(self::getServiceSchema($this->record))
+                    ->schema(self::getServiceSchema($this->record))
                     ->createAnother(false),
             ])
-            ->actions([
-                ViewAction::make()
+            ->recordActions([
+                \Filament\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->url(fn (InterventionService $record) => InterventionPlanResource::getUrl('view_intervention_service', [
                         'parent' => $this->record,

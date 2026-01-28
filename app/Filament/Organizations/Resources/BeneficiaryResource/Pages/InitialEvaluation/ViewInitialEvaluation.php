@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvaluation;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs\Tab;
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ViewBeneficiaryIdentity;
@@ -11,9 +13,9 @@ use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\Notice;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Infolists\Components\Group;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -42,14 +44,14 @@ class ViewInitialEvaluation extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Tabs::make()
                 ->persistTabInQueryString()
                 ->columnSpanFull()
                 ->schema([
-                    Tabs\Tab::make(__('beneficiary.wizard.details.label'))
+                    Tab::make(__('beneficiary.wizard.details.label'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.details.label'))
@@ -62,15 +64,15 @@ class ViewInitialEvaluation extends ViewRecord
                                 ])
                                 ->schema(EditEvaluationDetails::getInfoListSchema())]),
 
-                    Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                    Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
                         ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->record)),
 
-                    Tabs\Tab::make(__('beneficiary.section.identity.tab.children'))
+                    Tab::make(__('beneficiary.section.identity.tab.children'))
                         ->maxWidth('3xl')
                         ->schema(ViewBeneficiaryIdentity::childrenSchemaForOtherPage($this->record)),
 
-                    Tabs\Tab::make(__('beneficiary.wizard.violence.label'))
+                    Tab::make(__('beneficiary.wizard.violence.label'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.violence.label'))
@@ -82,7 +84,7 @@ class ViewInitialEvaluation extends ViewRecord
                                         )),
                                 ])
                                 ->schema(EditViolence::getInfoListSchema())]),
-                    Tabs\Tab::make(__('beneficiary.wizard.risk_factors.label'))
+                    Tab::make(__('beneficiary.wizard.risk_factors.label'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make()
@@ -102,7 +104,7 @@ class ViewInitialEvaluation extends ViewRecord
                                     ...EditRiskFactors::getInfoListSchema(),
                                 ]),
                         ]),
-                    Tabs\Tab::make(__('beneficiary.wizard.requested_services.label'))
+                    Tab::make(__('beneficiary.wizard.requested_services.label'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.requested_services.label'))
@@ -114,7 +116,7 @@ class ViewInitialEvaluation extends ViewRecord
                                         )),
                                 ])
                                 ->schema($this->getRequestedServicesInfoListSchema())]),
-                    Tabs\Tab::make(__('beneficiary.wizard.beneficiary_situation.label'))
+                    Tab::make(__('beneficiary.wizard.beneficiary_situation.label'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('beneficiary.wizard.beneficiary_situation.label'))

@@ -9,7 +9,7 @@ use App\Services\Reports\BeneficiariesV2;
 use Filament\Infolists\Components\Component;
 use Illuminate\Support\Collection;
 
-class ReportTable extends Component
+class ReportTable extends \Filament\Schemas\Components\Component
 {
     protected string $view = 'forms.components.report-table';
 

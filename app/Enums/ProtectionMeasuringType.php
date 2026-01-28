@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns\Enums\Arrayable;
+use App\Concerns\Enums\Comparable;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
 enum ProtectionMeasuringType: string implements HasLabel
 {
     use Enums\HasLabel;
-    use Enums\Arrayable;
-    use Enums\Comparable;
+    use Arrayable;
+    use Comparable;
 
     case EMERGENCY_PLACEMENT = 'emergency_placement';
     case PLACEMENT_IN_FAMILY = 'placement_in_family';

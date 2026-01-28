@@ -7,11 +7,11 @@ namespace App\Filament\Admin\Resources\InstitutionResource\Pages;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Resources\InstitutionResource;
-use App\Filament\Admin\Resources\UserInstitutionResource\Pages\EditUserInstitution;
+use App\Filament\Admin\Resources\InstitutionResource\Resources\UserInstitutionResource\Pages\EditUserInstitution;
 use App\Forms\Components\Repeater;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Wizard\Step;
+use Filament\Schemas\Components\Wizard\Step;
 use Filament\Resources\Pages\Concerns\HasWizard;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Contracts\Support\Htmlable;
@@ -38,7 +38,7 @@ class CreateInstitution extends CreateRecord
     {
         return [
             Step::make(__('institution.headings.institution_details'))
-                ->schema(EditInstitutionDetails::getSchema()),
+                ->schema(EditInstitutionDetails::getFormComponents()),
 
             Step::make(__('institution.headings.center_details'))
                 ->schema([
@@ -47,7 +47,7 @@ class CreateInstitution extends CreateRecord
                         ->maxWidth('3xl')
                         ->content(__('institution.placeholders.center_details')),
 
-                    ...EditInstitutionCenters::getSchema(),
+                    ...\App\Filament\Admin\Schemas\InstitutionResourceSchema::getFormSchemaForCenters(),
                 ]),
 
             Step::make(__('institution.headings.ngo_admin'))
@@ -65,7 +65,7 @@ class CreateInstitution extends CreateRecord
                         ->relationship('admins')
                         ->addActionLabel(__('institution.actions.add_admin'))
                         ->schema([
-                            ...EditUserInstitution::getSchema(),
+                            ...EditUserInstitution::getFormComponents(),
 
                             Hidden::make('ngo_admin')
                                 ->default(1),

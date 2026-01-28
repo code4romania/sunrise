@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToIdentity;
 use App\Enums\GenderShortValues;
@@ -15,14 +16,14 @@ use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Awcodes\TableRepeater\Header;
 use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -50,11 +51,11 @@ class EditChildrenIdentity extends EditRecord
         return Str::slug(__('beneficiary.section.identity.tab.children'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns(1)
-            ->schema([
+            ->components([
                 Section::make()
                     ->schema(static::getChildrenIdentityFormSchema()),
             ]);
@@ -145,45 +146,18 @@ class EditChildrenIdentity extends EditRecord
                         ]),
                 ]),
 
-            TableRepeater::make('children')
-                ->reorderable(false)
+            Repeater::make('children')
                 ->relationship('children')
                 ->columnSpanFull()
-                ->extraAttributes(['class' => 'm'])
-                ->hiddenLabel()
                 ->addActionLabel(__('beneficiary.action.add_child'))
                 ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                 ->hidden(fn (Get $get) => $get('doesnt_have_children'))
-                ->emptyLabel(false)
                 ->defaultItems(fn (Get $get) => $get('doesnt_have_children') ? 0 : 1)
-                ->headers([
-                    Header::make('name')
-                        ->label(__('field.child_name')),
-
-                    Header::make('birthdate')
-                        ->label(__('field.birthdate')),
-
-                    Header::make('age')
-                        ->label(__('field.age'))
-                        ->width('60px'),
-
-                    Header::make('gender')
-                        ->label(__('field.gender'))
-                        ->width('120px'),
-
-                    Header::make('current_address')
-                        ->label(__('field.current_address')),
-
-                    Header::make('status')
-                        ->label(__('field.child_status')),
-
-                    Header::make('workspace')
-                        ->label(__('field.workspace')),
-                ])
                 ->schema([
                     TextInput::make('name')
                         ->label(__('field.child_name'))
-                        ->maxLength(70),
+                        ->maxLength(70)
+                        ->required(),
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
@@ -203,7 +177,8 @@ class EditChildrenIdentity extends EditRecord
 
                     TextInput::make('age')
                         ->label(__('field.age'))
-                        ->disabled(),
+                        ->disabled()
+                        ->dehydrated(false),
 
                     Select::make('gender')
                         ->label(__('field.gender'))
@@ -221,7 +196,10 @@ class EditChildrenIdentity extends EditRecord
                     TextInput::make('workspace')
                         ->label(__('field.workspace'))
                         ->maxLength(70),
-                ]),
+                ])
+                ->columns(7)
+                ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                ->collapsible(),
 
             Textarea::make('children_notes')
                 ->label(__('field.children_notes'))

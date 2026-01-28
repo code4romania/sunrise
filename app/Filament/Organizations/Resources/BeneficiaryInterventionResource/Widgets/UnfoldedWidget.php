@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Widgets;
 
+use stdClass;
 use App\Filament\Organizations\Resources\InterventionServiceResource;
 use App\Models\BeneficiaryIntervention;
 use Filament\Tables\Actions\ViewAction;
@@ -31,7 +32,7 @@ class UnfoldedWidget extends BaseWidget
             ->columns([
                 TextColumn::make('meet_number')
                     ->label(__('intervention_plan.labels.meet_number'))
-                    ->state(static function (\stdClass $rowLoop) {
+                    ->state(static function (stdClass $rowLoop) {
                         return $rowLoop->iteration ?? null;
                     }),
                 TextColumn::make('status')
@@ -67,8 +68,8 @@ class UnfoldedWidget extends BaseWidget
                             ->useTableQuery(),
                     ]),
             ])
-            ->actions([
-                ViewAction::make()
+            ->recordActions([
+                \Filament\Actions\ViewAction::make()
                     ->label(__('general.action.view_observations'))
                     ->url(fn () => InterventionServiceResource::getUrl('view_meetings', [
                         'parent' => $this->record->interventionService,

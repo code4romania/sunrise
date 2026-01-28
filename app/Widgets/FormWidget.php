@@ -11,5 +11,5 @@ class FormWidget extends InfolistWidget implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string $view = 'widgets.form-widget';
+    protected string $view = 'widgets.form-widget';
 }

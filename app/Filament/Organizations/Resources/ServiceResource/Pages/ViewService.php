@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\ServiceResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Filament\Organizations\Resources\InterventionServiceResource\Pages\EditCounselingSheet;
@@ -14,7 +15,7 @@ use App\Models\BeneficiaryIntervention;
 use Filament\Actions\EditAction;
 use Filament\Actions\StaticAction;
 use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -48,7 +49,7 @@ class ViewService extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
         $this->getRecord()
             ->loadMissing([
@@ -56,7 +57,7 @@ class ViewService extends ViewRecord
                 'interventions.beneficiaryInterventions.interventionPlan',
             ]);
 
-        return $infolist->schema([
+        return $schema->components([
             Section::make()
                 ->visible(fn () => $this->getRecord()->serviceWithoutStatusCondition->counseling_sheet)
                 ->maxWidth('3xl')
@@ -65,7 +66,7 @@ class ViewService extends ViewRecord
                         ->state(__('service.helper_texts.counseling_sheet'))
                         ->icon('heroicon-o-document-text')
                         ->action(
-                            Action::make('view_counseling_sheet')
+                            \Filament\Actions\Action::make('view_counseling_sheet')
                                 ->label(__('service.actions.view_counseling_sheet'))
                                 ->modalHeading(
                                     $this->getRecord()
@@ -73,7 +74,7 @@ class ViewService extends ViewRecord
                                         ->counseling_sheet
                                         ?->getLabel()
                                 )
-                                ->form(function () {
+                                ->schema(function () {
                                     $counselingSheet = $this->getRecord()->serviceWithoutStatusCondition->counseling_sheet;
 
                                     if (CounselingSheet::isValue($counselingSheet, CounselingSheet::LEGAL_ASSISTANCE)) {
@@ -91,7 +92,7 @@ class ViewService extends ViewRecord
                                     return [];
                                 })
                                 ->disabledForm()
-                                ->modalSubmitAction(fn (StaticAction $action) => $action->hidden())
+                                ->modalSubmitAction(fn (\Filament\Actions\Action $action) => $action->hidden())
                                 ->link()
                                 ->modalAutofocus(false),
                         ),

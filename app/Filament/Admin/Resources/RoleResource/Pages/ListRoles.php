@@ -12,7 +12,7 @@ class ListRoles extends ManageRecords
 {
     protected static string $resource = RoleResource::class;
 
-    protected static string $view = 'filament.admin.pages.nomenclature-list';
+    protected string $view = 'filament.admin.pages.nomenclature-list';
 
     public function getTitle(): string|Htmlable
     {

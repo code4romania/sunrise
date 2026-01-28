@@ -9,7 +9,7 @@ use Filament\Infolists\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class DocumentPreview extends Component
+class DocumentPreview extends \Filament\Schemas\Components\Component
 {
     protected string $view = 'infolists.components.document-preview';
 
@@ -40,12 +40,16 @@ class DocumentPreview extends Component
     public function getFile(): ?Media
     {
         return $this->getRecord()
-            ->getFirstMedia($this->getCollection());
+           ?->getFirstMedia($this->getCollection());
     }
 
-    public function getRecord(): ?Model
+    public function getRecord(bool $withContainerRecord = true): Model|array|null
     {
-        return $this->evaluate($this->record) ?: parent::getRecord();
+        $record = $this->evaluate($this->record);
+        if ($record !== null) {
+            return $record;
+        }
+        return parent::getRecord($withContainerRecord);
     }
 
     public function record(Model | Closure $record): static

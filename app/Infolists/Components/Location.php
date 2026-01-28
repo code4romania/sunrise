@@ -11,11 +11,11 @@ use Filament\Infolists\Components\Component;
 use Filament\Infolists\Components\Concerns\EntanglesStateWithSingularRelationship;
 use Filament\Infolists\Components\TextEntry;
 
-class Location extends Component
+class Location extends \Filament\Schemas\Components\Component
 {
-    use EntanglesStateWithSingularRelationship;
+    use \Filament\Schemas\Components\Concerns\EntanglesStateWithSingularRelationship;
 
-    protected string $view = 'filament-forms::components.grid';
+    protected string $view = 'filament-schemas::components.grid';
 
     protected string | Closure | null $countyField = null;
 
@@ -39,6 +39,8 @@ class Location extends Component
 
     protected string | Closure | null $environmentLabel = null;
 
+    protected string | Closure | null $label = null;
+
     final public function __construct(string | null $id)
     {
         $this->id($id);
@@ -59,6 +61,13 @@ class Location extends Component
         $this->columnSpan('full');
 
         $this->columns();
+    }
+
+    public function label(string | Closure | null $label): static
+    {
+        $this->label = $label;
+
+        return $this;
     }
 
     public function getCountyField(): string
@@ -198,7 +207,7 @@ class Location extends Component
             ->join('_'));
     }
 
-    public function getChildComponents(): array
+    public function getDefaultChildComponents(): array
     {
         return [
             TextEntry::make($this->getCountyField())

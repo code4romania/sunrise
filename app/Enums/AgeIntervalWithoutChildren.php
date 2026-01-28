@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns\Enums\Arrayable;
+use App\Concerns\Enums\Comparable;
 use App\Concerns\Enums;
 use Filament\Support\Contracts\HasLabel;
 
 enum AgeIntervalWithoutChildren: string implements HasLabel
 {
     use Enums\HasLabel;
-    use Enums\Arrayable;
-    use Enums\Comparable;
+    use Arrayable;
+    use Comparable;
 
     case BETWEEN_14_AND_17_YEARS = 'between_14_and_17_years';
     case BETWEEN_18_AND_25_YEARS = 'between_18_and_25_years';

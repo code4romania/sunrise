@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\AddressType;
@@ -15,19 +16,19 @@ use App\Models\Scopes\BelongsToCurrentTenant;
 use App\Rules\ValidCNP;
 use Carbon\Carbon;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Illuminate\Contracts\Support\Htmlable;
@@ -83,10 +84,10 @@ class CreateBeneficiary extends CreateRecord
         $this->parentBeneficiary = $parentBeneficiaryID ? Beneficiary::find($parentBeneficiaryID) : null;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return parent::form($form)
-            ->schema([
+        return parent::form($schema)
+            ->components([
                 Wizard::make($this->getSteps())
                     ->extraAlpineAttributes([
                         '@copy_beneficiary_data.window' => "step='beneficiary'",
@@ -208,7 +209,7 @@ class CreateBeneficiary extends CreateRecord
                                     ]));
                                 })
                                 ->registerActions([
-                                    Action::make('view_beneficiary')
+                                    \Filament\Actions\Action::make('view_beneficiary')
                                         ->label(__('beneficiary.action.view_case_details'))
                                         ->link()
                                         ->url(
@@ -224,7 +225,7 @@ class CreateBeneficiary extends CreateRecord
                                                 ->first()
                                         ),
 
-                                    Action::make('view_beneficiary_from_another_tenant')
+                                    \Filament\Actions\Action::make('view_beneficiary_from_another_tenant')
                                         ->label(__('beneficiary.action.copy_beneficiary_data'))
                                         ->link()
                                         ->modalHeading(__('beneficiary.headings.modal_create_beneficiary_from_anther_tenant'))

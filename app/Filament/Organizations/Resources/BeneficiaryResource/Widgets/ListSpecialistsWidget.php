@@ -14,8 +14,8 @@ use App\Models\UserRole;
 use App\Tables\Actions\EditAction;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Actions\CreateAction;
@@ -52,16 +52,16 @@ class ListSpecialistsWidget extends BaseWidget
                     ->label(__('beneficiary.section.specialists.labels.status')),
             ])
             ->headerActions([
-                CreateAction::make()
-                    ->form($this->getFormSchema())
+                \Filament\Actions\CreateAction::make()
+                    ->schema($this->getFormSchema())
                     ->label(__('beneficiary.section.specialists.add_action'))
                     ->modalHeading(__('beneficiary.section.specialists.heading.add_modal'))
                     ->createAnother(false)
                     ->modalSubmitActionLabel(),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make()
-                    ->form($this->getFormSchema())
+                    ->schema($this->getFormSchema())
                     ->fillForm(function (Specialist $record) {
                         if (! $record->role_id) {
                             $record->role_id = -1;
@@ -71,7 +71,7 @@ class ListSpecialistsWidget extends BaseWidget
                     })
                     ->modalHeading(__('beneficiary.section.specialists.heading.edit_modal'))
                     ->extraModalFooterActions([
-                        DeleteAction::make()
+                        \Filament\Actions\DeleteAction::make()
                             ->cancelParentActions()
                             ->label(__('beneficiary.section.specialists.action.delete'))
                             ->modalHeading(__('beneficiary.section.specialists.heading.delete_modal'))

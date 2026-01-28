@@ -8,7 +8,7 @@ use App\Filament\Organizations\Resources\InterventionPlanResource;
 use App\Infolists\Components\Actions\EditAction;
 use App\Models\InterventionService;
 use App\Widgets\InfolistWidget;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 
 class ServiceDescriptionWidget extends InfolistWidget

@@ -11,7 +11,7 @@ use Filament\Infolists\Components\Actions\Action;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class ExportReport extends Action
+class ExportReport extends \Filament\Actions\Action
 {
     protected ReportType | null $reportType = null;
 

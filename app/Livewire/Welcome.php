@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use Filament\Schemas\Schema;
 use App\Models\User;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
@@ -27,7 +28,7 @@ class Welcome extends SimplePage
     /**
      * @var view-string
      */
-    protected static string $view = 'livewire.welcome';
+    protected string $view = 'livewire.welcome';
 
     public User $user;
 
@@ -61,7 +62,7 @@ class Welcome extends SimplePage
         return __('auth.set_password');
     }
 
-    public function handle(): ?LoginResponse
+    public function handle(): ?\Filament\Auth\Http\Responses\Contracts\LoginResponse
     {
         try {
             $this->rateLimit(5);
@@ -84,13 +85,13 @@ class Welcome extends SimplePage
 
         Filament::auth()->login($this->user);
 
-        return app(LoginResponse::class);
+        return app(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('email')
                     ->label(__('filament-panels::pages/auth/register.form.email.label'))
                     ->email()

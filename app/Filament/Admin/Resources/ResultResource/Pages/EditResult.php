@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\ResultResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Admin\Actions\ChangeNomenclatureStatusAction;
@@ -39,7 +40,7 @@ class EditResult extends EditRecord
 
             ChangeNomenclatureStatusAction::make(),
 
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->label(__('nomenclature.actions.delete_result'))
                 ->modalHeading(__('nomenclature.headings.delete_result_modal_heading'))
                 ->outlined()

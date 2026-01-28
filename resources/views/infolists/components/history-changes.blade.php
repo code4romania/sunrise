@@ -4,20 +4,23 @@
 @endphp
 
 <div class="w-full overflow-x-auto border border-gray-200 rounded-lg dark:border-white/5">
-    <x-filament-tables::table>
-        <x-slot:header>
-            <x-filament-tables::header-cell class="!p-2">
-                {{ __('general.field') }}
-            </x-filament-tables::header-cell>
+    <table class="w-full divide-y divide-gray-950/5 dark:divide-white/20">
+        <thead>
+            <tr>
+                <th class="!p-2">
+                    {{ __('general.field') }}
+                </th>
 
-            <x-filament-tables::header-cell class="!p-2">
-                {{ __('general.old') }}
-            </x-filament-tables::header-cell>
+                <th class="!p-2">
+                    {{ __('general.old') }}
+                </th>
 
-            <x-filament-tables::header-cell class="!p-2">
-                {{ __('general.new') }}
-            </x-filament-tables::header-cell>
-        </x-slot:header>
+                <th class="!p-2">
+                    {{ __('general.new') }}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
 
         @foreach ($fields as $field)
             @php
@@ -92,11 +95,13 @@
                             @endphp
 
                             @if(!$headerIsDisplayed)
-                                <x-filament-tables::row>
-                                    <x-filament-tables::header-cell class="p-2">
+                                <tr>
+                                    <th class="p-2">
                                         {{ $lineData->get('label') }}
-                                    </x-filament-tables::header-cell>
-                                </x-filament-tables::row>
+                                    </th>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
 
                                 @php $headerIsDisplayed = true; @endphp
                             @endif
@@ -123,5 +128,6 @@
                 </x-history-line>
             @endif
         @endforeach
-    </x-filament-tables::table>
+        </tbody>
+    </table>
 </div>

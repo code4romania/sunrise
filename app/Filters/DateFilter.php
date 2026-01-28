@@ -31,8 +31,8 @@ class DateFilter extends BaseFilter
     {
         parent::setUp();
 
-        $this->form(fn () => [
-            Fieldset::make($this->getLabel())
+        $this->schema(fn () => [
+            \Filament\Schemas\Components\Fieldset::make($this->getLabel())
                 ->columns($this->getColumns())
                 ->schema([
                     DatePicker::make('date_from')

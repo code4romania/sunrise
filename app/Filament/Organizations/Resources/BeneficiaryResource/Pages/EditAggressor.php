@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
 use App\Enums\AggressorLegalHistory;
@@ -22,14 +23,14 @@ use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Rules\MultipleIn;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
+use Filament\Actions\Action;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -57,10 +58,10 @@ class EditAggressor extends EditRecord
         return Str::slug(__('beneficiary.section.personal_information.section.aggressor'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema(static::getPersonalInformationFormSchema());
+        return $schema
+            ->components(static::getPersonalInformationFormSchema());
     }
 
     public static function getPersonalInformationFormSchema(): array
@@ -81,14 +82,14 @@ class EditAggressor extends EditRecord
                 ->columns()
                 ->minItems(1)
                 ->addAction(
-                    fn (Action $action): Action => $action
+                    fn (\Filament\Actions\Action $action): \Filament\Actions\Action => $action
                         ->label(__('beneficiary.section.personal_information.actions.add_aggressor'))
                         ->link()
                         ->color('primary')
                         ->extraAttributes(['class' => 'pull-left'])
                 )
                 ->deleteAction(
-                    fn (Action $action) => $action
+                    fn (\Filament\Actions\Action $action) => $action
                         ->label(__('beneficiary.section.personal_information.actions.delete_aggressor'))
                         ->icon(null)
                         ->link()

@@ -90,7 +90,7 @@ class TableEntry extends RepeatableEntry
 
         $customHeaders = $this->evaluate($this->headers);
 
-        foreach ($this->getChildComponents() as $field) {
+        foreach ($this->getDefaultChildComponents() as $field) {
             if ($field instanceof Hidden || $field->isHidden()) {
                 continue;
             }

@@ -35,35 +35,37 @@
                 'xl:ring-gray-950/5 dark:xl:ring-white/20' => ! $hasContainers && $breakPoint === 'xl',
                 '2xl:ring-gray-950/5 dark:2xl:ring-white/20' => ! $hasContainers && $breakPoint === '2xl',
             ])>
-                <x-filament-tables::table>
-                    <x-slot:header @class([
+                <table class="w-full divide-y divide-gray-950/5 dark:divide-white/20">
+                    <thead @class([
                         'filament-table-repeater-header-hidden sr-only' => $hasHiddenHeader,
                         'filament-table-repeater-header rounded-t-xl overflow-hidden border-b border-gray-950/5 dark:border-white/20' => ! $hasHiddenHeader,
                     ])>
-                        @foreach ($headers as $key => $header)
-                            <x-filament-tables::header-cell
-                                @class([
-                                    'filament-table-repeater-header-column px-3 py-2 font-medium  bg-gray-100 dark:text-gray-300 dark:bg-gray-900/60',
-                                    'ltr:rounded-tl-xl rtl:rounded-tr-xl' => $loop->first,
-                                    'ltr:rounded-tr-xl rtl:rounded-tl-xl' => $loop->last,
-                                    match($getHeadersAlignment()) {
-                                        'center' => 'text-center',
-                                        'right' => 'text-right rtl:text-left',
-                                        default => 'text-left rtl:text-right'
-                                    }
-                                ])
-                                @style([
-                                    'width: ' . $header['width'] => $header['width'],
-                                ])
-                            >
-                                {{ $header['label'] }}
-                            </x-filament-tables::header-cell>
-                        @endforeach
-                    </x-slot:header>
+                        <tr>
+                            @foreach ($headers as $key => $header)
+                                <th
+                                    @class([
+                                        'filament-table-repeater-header-column px-3 py-2 font-medium  bg-gray-100 dark:text-gray-300 dark:bg-gray-900/60',
+                                        'ltr:rounded-tl-xl rtl:rounded-tr-xl' => $loop->first,
+                                        'ltr:rounded-tr-xl rtl:rounded-tl-xl' => $loop->last,
+                                        match($getHeadersAlignment()) {
+                                            'center' => 'text-center',
+                                            'right' => 'text-right rtl:text-left',
+                                            default => 'text-left rtl:text-right'
+                                        }
+                                    ])
+                                    @style([
+                                        'width: ' . $header['width'] => $header['width'],
+                                    ])
+                                >
+                                    {{ $header['label'] }}
+                                </th>
+                            @endforeach
+                        </tr>
+                    </thead>
                     <tbody class="filament-table-repeater-rows-wrapper divide-y divide-gray-950/5 dark:divide-white/20" >
                         @if (count($containers))
                             @foreach ($containers as $uuid => $row)
-                                <x-filament-tables::row class="filament-table-repeater-row md:divide-x md:divide-gray-950/5 dark:md:divide-white/20">
+                                <tr class="filament-table-repeater-row md:divide-x md:divide-gray-950/5 dark:md:divide-white/20">
                                     @foreach($row->getComponents() as $cell)
                                         @if(! $cell instanceof \Filament\Forms\Components\Hidden && ! $cell->isHidden())
                                             @php
@@ -84,17 +86,17 @@
                                         @endif
                                     @endforeach
 
-                                </x-filament-tables::row>
+                                </tr>
                             @endforeach
                         @else
-                            <x-filament-tables::row class="filament-table-repeater-row filament-table-repeater-empty-row md:divide-x md:divide-gray-950/5 dark:md:divide-divide-white/20">
-                                <x-filament-tables::cell colspan="{{ count($headers) }}" class="filament-table-repeater-column filament-table-repeater-empty-column p-4 w-px text-center italic">
+                            <tr class="filament-table-repeater-row filament-table-repeater-empty-row md:divide-x md:divide-gray-950/5 dark:md:divide-divide-white/20">
+                                <td colspan="{{ count($headers) }}" class="filament-table-repeater-column filament-table-repeater-empty-column p-4 w-px text-center italic">
                                     {{ $emptyLabel ?: __('filament-table-repeater::components.repeater.empty.label') }}
-                                </x-filament-tables::cell>
-                            </x-filament-tables::row>
+                                </td>
+                            </tr>
                         @endif
                     </tbody>
-                </x-filament-tables::table>
+                </table>
             </div>
         @endif
     </div>

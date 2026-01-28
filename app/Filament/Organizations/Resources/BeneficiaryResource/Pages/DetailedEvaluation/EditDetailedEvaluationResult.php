@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\DetailedEvaluation;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToDetailedEvaluation;
 use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
@@ -42,12 +43,12 @@ class EditDetailedEvaluationResult extends EditRecord
         return Str::slug(__('beneficiary.wizard.results.label'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema(self::getSchema());
+        return $schema->components($this->getFormSchema());
     }
 
-    public static function getSchema(): array
+    protected function getFormSchema(): array
     {
         return [
             Group::make()

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns\Enums\Arrayable;
+use App\Concerns\Enums\Comparable;
 use App\Concerns;
 use Filament\Support\Contracts\HasLabel;
 
 enum CivilStatus: string implements HasLabel
 {
-    use Concerns\Enums\Arrayable;
-    use Concerns\Enums\Comparable;
+    use Arrayable;
+    use Comparable;
     use Concerns\Enums\HasLabel;
 
     case SINGLE = 'single';

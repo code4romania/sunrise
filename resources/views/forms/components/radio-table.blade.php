@@ -5,28 +5,28 @@
     :component="$getFieldWrapperView()"
 >
     <div>
-        <x-filament-tables::table>
-            <x-slot:header>
-                <x-filament-tables::row>
-                    <x-filament-tables::header-cell>
+        <table class="w-full divide-y divide-gray-950/5 dark:divide-white/20">
+            <thead>
+                <tr>
+                    <th>
 
-                    </x-filament-tables::header-cell>
+                    </th>
                     @foreach($getRadioOptions() as $options)
-                        <x-filament-tables::header-cell :alignment="Alignment::Center" class="!p-2 text-center">
+                        <th class="!p-2 text-center">
                             {{ $options }}
-                        </x-filament-tables::header-cell>
+                        </th>
                     @endforeach
-                </x-filament-tables::row>
-            </x-slot:header>
-
+                </tr>
+            </thead>
+            <tbody>
                 @foreach($getChildComponents() as $radio)
-                    <x-filament-tables::row>
-                        <x-filament-tables::header-cell>
+                    <tr>
+                        <th>
                             {{ $radio }}
-                        </x-filament-tables::header-cell>
+                        </th>
 
 {{--                        @foreach($radio->getOptions() as $value => $label)--}}
-{{--                            <x-filament-tables::cell>--}}
+{{--                            <td>--}}
 {{--                                {{ dd($radio->getId()) }}--}}
 {{--                                <x-filament::input.radio--}}
 {{--                                    :valid="! $errors->has($statePath)"--}}
@@ -43,15 +43,15 @@
 {{--                                ->class(['mt-1'])--}}
 {{--                        "--}}
 {{--                                />--}}
-{{--                            </x-filament-tables::cell>--}}
+{{--                            </td>--}}
 {{--                        @endforeach--}}
 
 {{--                            {{ $radio->render() }}--}}
 
-                    </x-filament-tables::row>
+                    </tr>
                 @endforeach
-
-        </x-filament-tables::table>
+            </tbody>
+        </table>
     </div>
 {{--    <div x-data="{ state: $wire.$entangle('{{ $getStatePath() }}') }">--}}
 {{--        <!-- Interact with the `state` property in Alpine.js -->--}}

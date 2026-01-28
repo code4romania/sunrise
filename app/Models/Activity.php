@@ -49,12 +49,5 @@ class Activity extends BaseActivity
             });
     }
 
-    public function organization()
-    {
-        if (method_exists($this->subject, 'organization')) {
-            return $this->subject->organization();
-        }
 
-        return null;
-    }
 }

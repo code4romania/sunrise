@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryResource\Pages\CloseFile;
 
+use Filament\Schemas\Schema;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToCloseFile;
 use App\Enums\AdmittanceReason;
@@ -13,10 +14,10 @@ use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -47,17 +48,17 @@ class EditCloseFileGeneralDetails extends EditRecord
         return Str::slug(__('beneficiary.section.close_file.headings.general_details'));
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Section::make()
                 ->maxWidth('3xl')
                 ->relationship('closeFile')
-                ->schema($this->getSchema()),
+                ->schema($this->getFormSchema()),
         ]);
     }
 
-    public static function getSchema(): array
+    protected function getFormSchema(): array
     {
         return [
             CheckboxList::make('admittance_reason')

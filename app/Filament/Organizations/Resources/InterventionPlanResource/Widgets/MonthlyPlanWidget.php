@@ -28,12 +28,12 @@ class MonthlyPlanWidget extends BaseWidget
             )
             ->heading(__('intervention_plan.headings.monthly_plans'))
             ->headerActions([
-                Action::make('create_modal')
+                \Filament\Actions\Action::make('create_modal')
                     ->label(__('intervention_plan.actions.create_monthly_plan'))
                     ->modalHeading(__('intervention_plan.headings.create_monthly_plan_modal'))
                     ->modalDescription(__('intervention_plan.labels.create_monthly_plan_modal'))
                     ->modalSubmitAction(
-                        Action::make('crete_from_last')
+                        \Filament\Actions\Action::make('crete_from_last')
                             ->label(__('intervention_plan.actions.create_monthly_plan_from_last'))
                             ->url(InterventionPlanResource::getUrl('create_monthly_plan', [
                                 'parent' => $this->record,
@@ -41,14 +41,14 @@ class MonthlyPlanWidget extends BaseWidget
                             ]))
                     )
                     ->modalCancelAction(
-                        Action::make('create_simple')
+                        \Filament\Actions\Action::make('create_simple')
                             ->label(__('intervention_plan.actions.create_monthly_plan_simple'))
                             ->outlined()
                             ->url(InterventionPlanResource::getUrl('create_monthly_plan', ['parent' => $this->record]))
                     )
                     ->visible(fn () => $this->record->monthlyPlans->count()),
 
-                CreateAction::make()
+                \Filament\Actions\CreateAction::make()
                     ->label(__('intervention_plan.actions.create_monthly_plan'))
                     ->url(InterventionPlanResource::getUrl('create_monthly_plan', ['parent' => $this->record]))
                     ->visible(fn () => ! $this->record->monthlyPlans->count()),
@@ -66,8 +66,8 @@ class MonthlyPlanWidget extends BaseWidget
                 TextColumn::make('monthly_plan_interventions_count')
                     ->label(__('intervention_plan.headings.interventions_count')),
             ])
-            ->actions([
-                ViewAction::make()
+            ->recordActions([
+                \Filament\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->url(fn (MonthlyPlan $record) => InterventionPlanResource::getUrl('view_monthly_plan', [
                         'parent' => $this->record,

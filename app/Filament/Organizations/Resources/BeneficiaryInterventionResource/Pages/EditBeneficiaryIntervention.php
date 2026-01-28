@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\BeneficiaryInterventionResource\Pages;
 
+use Filament\Actions\DeleteAction;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
@@ -49,7 +50,7 @@ class EditBeneficiaryIntervention extends EditRecord
             BackAction::make()
                 ->url($this->getRedirectUrl()),
 
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->label(__('intervention_plan.actions.delete_beneficiary_intervention'))
                 ->outlined()
                 ->modalHeading(__('intervention_plan.headings.delete_beneficiary_intervention_modal'))

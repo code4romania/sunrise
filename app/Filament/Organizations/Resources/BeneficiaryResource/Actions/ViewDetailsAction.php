@@ -6,7 +6,7 @@ namespace App\Filament\Organizations\Resources\BeneficiaryResource\Actions;
 
 use Filament\Infolists\Components\Actions\Action;
 
-class ViewDetailsAction extends Action
+class ViewDetailsAction extends \Filament\Actions\Action
 {
     protected function setUp(): void
     {

@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
 
+use Filament\Actions\DeleteAction;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Support\Enums\TextSize;
 use App\Actions\BackAction;
 use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
@@ -14,11 +18,11 @@ use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Actions;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Tabs;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
@@ -47,7 +51,7 @@ class ViewMonitoring extends ViewRecord
             BackAction::make()
                 ->url(BeneficiaryResource::getUrl('monitorings.index', ['parent' => $this->parent])),
 
-            Actions\DeleteAction::make()
+            DeleteAction::make()
                 ->label(__('monitoring.actions.delete'))
                 ->outlined()
                 ->icon('heroicon-o-trash')
@@ -59,14 +63,14 @@ class ViewMonitoring extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist->schema([
+        return $schema->components([
             Tabs::make()
                 ->columnSpanFull()
                 ->persistTabInQueryString()
                 ->schema([
-                    Tabs\Tab::make(__('monitoring.headings.details'))
+                    Tab::make(__('monitoring.headings.details'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('monitoring.headings.details'))
@@ -97,14 +101,14 @@ class ViewMonitoring extends ViewRecord
                                 ]),
                         ]),
 
-                    Tabs\Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
+                    Tab::make(__('beneficiary.section.identity.tab.beneficiary'))
                         ->maxWidth('3xl')
                         ->schema([
                             Group::make()
                                 ->relationship('beneficiary')
                                 ->schema(ViewBeneficiaryIdentity::identitySchemaForOtherPage($this->parent))]),
 
-                    Tabs\Tab::make(__('monitoring.headings.child_info'))
+                    Tab::make(__('monitoring.headings.child_info'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('monitoring.headings.child_info'))
@@ -160,7 +164,7 @@ class ViewMonitoring extends ViewRecord
                                 ]),
                         ]),
 
-                    Tabs\Tab::make(__('monitoring.headings.general'))
+                    Tab::make(__('monitoring.headings.general'))
                         ->maxWidth('3xl')
                         ->schema([
                             Section::make(__('monitoring.headings.general'))
@@ -189,7 +193,7 @@ class ViewMonitoring extends ViewRecord
                                     TextEntry::make('progress_placeholder')
                                         ->hiddenLabel()
                                         ->default(__('monitoring.headings.progress'))
-                                        ->size(TextEntry\TextEntrySize::Medium),
+                                        ->size(TextSize::Medium),
 
                                     TextEntry::make('progress')
                                         ->label(__('monitoring.labels.progress')),
@@ -197,7 +201,7 @@ class ViewMonitoring extends ViewRecord
                                     TextEntry::make('progress_placeholder')
                                         ->hiddenLabel()
                                         ->default(__('monitoring.headings.observation'))
-                                        ->size(TextEntry\TextEntrySize::Medium),
+                                        ->size(TextSize::Medium),
 
                                     TextEntry::make('observation')
                                         ->label(__('monitoring.labels.observation')),
@@ -225,7 +229,7 @@ class ViewMonitoring extends ViewRecord
             $formFields[] = TextEntry::make('progress_placeholder')
                 ->hiddenLabel()
                 ->default(__(\sprintf('monitoring.headings.%s', $field)))
-                ->size(TextEntry\TextEntrySize::Medium);
+                ->size(TextSize::Medium);
 
             $formFields[] = TextEntry::make($field . '.objection')
                 ->label(__('monitoring.labels.objection'));
@@ -240,7 +244,7 @@ class ViewMonitoring extends ViewRecord
         return $formFields;
     }
 
-    protected function configureDeleteAction(Actions\DeleteAction $action): void
+    protected function configureDeleteAction(DeleteAction $action): void
     {
         $resource = static::getResource();
 
