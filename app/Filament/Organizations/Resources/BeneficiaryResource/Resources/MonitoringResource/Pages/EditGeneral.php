@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
 use Filament\Schemas\Schema;
-use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToMonitoring;
-use App\Filament\Organizations\Resources\MonitoringResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Forms\Components\DatePicker;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use Filament\Schemas\Components\Grid;
@@ -24,7 +23,6 @@ use Illuminate\Support\Str;
 
 class EditGeneral extends EditRecord
 {
-    use HasParentResource;
     use RedirectToMonitoring;
     use PreventSubmitFormOnEnter;
 
@@ -32,7 +30,8 @@ class EditGeneral extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
+        $parentRecord = $this->getParentRecord();
+        return BeneficiaryBreadcrumb::make($parentRecord)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
     }
 
     public function getTitle(): string|Htmlable
@@ -54,6 +53,13 @@ class EditGeneral extends EditRecord
         ]);
     }
 
+    public static function getFormSchemaStatic(): array
+    {
+        $instance = new static();
+        $instance->record = new \App\Models\Monitoring();
+        return $instance->getFormSchema();
+    }
+
     protected function getFormSchema(): array
     {
         return [
@@ -64,7 +70,7 @@ class EditGeneral extends EditRecord
                         ->schema([
                             DatePicker::make('admittance_date')
                                 ->label(__('monitoring.labels.admittance_date'))
-                                ->default(self::getParent()?->created_at),
+                                ->default($this->getParentRecord()?->created_at),
 
                             TextInput::make('admittance_disposition')
                                 ->label(__('monitoring.labels.admittance_disposition'))

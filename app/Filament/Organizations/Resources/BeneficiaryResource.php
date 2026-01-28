@@ -45,7 +45,6 @@ use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\InitialEvalua
 use App\Filament\Organizations\Resources\BeneficiaryResource\Pages\ListSpecialists;
 use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\CreateInterventionPlan;
 use App\Filament\Organizations\Resources\InterventionPlanResource\Pages\ViewInterventionPlan;
-use App\Filament\Organizations\Resources\MonitoringResource\Pages as MonitoringResourcePages;
 use App\Filters\DateFilter;
 use App\Models\Beneficiary;
 use App\Tables\Filters\SelectFilter;
@@ -141,14 +140,6 @@ class BeneficiaryResource extends Resource
             'edit_detailed_evaluation_result' => EditDetailedEvaluationResult::route('/{record}/detailedEvaluationResult/edit'),
 
             'view_specialists' => ListSpecialists::route('/{record}/specialists'),
-
-
-            'monitorings.create' => MonitoringResourcePages\CreateMonitoring::route('/{parent}/monitoring/create/{copyLastFile?}'),
-            'monitorings.index' => MonitoringResourcePages\ListMonitoring::route('/{parent}/monitoring'),
-            'monitorings.view' => MonitoringResourcePages\ViewMonitoring::route('/{parent}/monitoring/{record}'),
-            'monitoring.edit_details' => MonitoringResourcePages\EditDetails::route('/{parent}/monitoring/{record}/editDetails'),
-            'monitoring.edit_children' => MonitoringResourcePages\EditChildren::route('/{parent}/monitoring/{record}/editChildren'),
-            'monitoring.edit_general' => MonitoringResourcePages\EditGeneral::route('/{parent}/monitoring/{record}/editGeneral'),
 
             'beneficiary-histories.index' => ListBeneficiaryHistories::route('{parent}/history'),
             'beneficiary-histories.view' => ViewBeneficiaryHistories::route('{parent}/history/{record}'),

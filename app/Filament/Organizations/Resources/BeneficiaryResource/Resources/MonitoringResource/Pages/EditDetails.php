@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
 use Filament\Schemas\Schema;
-use App\Concerns\HasParentResource;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToMonitoring;
-use App\Filament\Organizations\Resources\MonitoringResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Forms\Components\TableRepeater;
@@ -29,7 +28,6 @@ use Illuminate\Support\Str;
 
 class EditDetails extends EditRecord
 {
-    use HasParentResource;
     use RedirectToMonitoring;
     use PreventSubmitFormOnEnter;
 
@@ -37,7 +35,8 @@ class EditDetails extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
+        $parentRecord = $this->getParentRecord();
+        return BeneficiaryBreadcrumb::make($parentRecord)->getBreadcrumbsForMonitoringFileEdit($this->getRecord());
     }
 
     public function getTitle(): string|Htmlable
@@ -57,6 +56,13 @@ class EditDetails extends EditRecord
                 ->maxWidth('3xl')
                 ->schema($this->getFormSchema()),
         ]);
+    }
+
+    public static function getFormSchemaStatic(): array
+    {
+        $instance = new static();
+        $instance->record = new \App\Models\Monitoring();
+        return $instance->getFormSchema();
     }
 
     protected function getFormSchema(): array
@@ -79,8 +85,8 @@ class EditDetails extends EditRecord
                     DatePicker::make('end_date')
                         ->label(__('monitoring.labels.end_date')),
 
-                    Hidden::make('parent_id')
-                        ->formatStateUsing(fn ($record, $state) => $state ?? ($record?->beneficiary_id ?? request('parent'))),
+                    Hidden::make('beneficiary_id')
+                        ->formatStateUsing(fn ($record, $state) => $state ?? ($record?->beneficiary_id ?? $this->getParentRecord()?->id)),
 
                     TableRepeater::make('specialistsTeam')
                         ->relationship('specialistsTeam')

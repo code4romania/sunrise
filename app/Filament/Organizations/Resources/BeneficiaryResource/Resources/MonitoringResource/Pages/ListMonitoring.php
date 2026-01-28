@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\MonitoringResource\Pages;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Pages;
 
 use Filament\Actions\Action;
 use App\Actions\BackAction;
-use App\Concerns\HasParentResource;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Filament\Organizations\Resources\MonitoringResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Models\Monitoring;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
 use App\Tables\Columns\DateColumn;
@@ -23,13 +22,12 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ListMonitoring extends ListRecords
 {
-    use HasParentResource;
-
     protected static string $resource = MonitoringResource::class;
 
     public function getBreadcrumbs(): array
     {
-        return BeneficiaryBreadcrumb::make($this->parent)
+        $parentRecord = $this->getParentRecord();
+        return BeneficiaryBreadcrumb::make($parentRecord)
             ->getBreadcrumbs('monitorings.index');
     }
 
@@ -40,21 +38,22 @@ class ListMonitoring extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $parentRecord = $this->getParentRecord();
         return [
             BackAction::make()
-                ->url(BeneficiaryResource::getUrl('view', ['record' => $this->parent])),
+                ->url(BeneficiaryResource::getUrl('view', ['record' => $parentRecord])),
 
             Action::make('open_modal')
                 ->label(__('monitoring.actions.create'))
-                ->visible(fn () => $this->parent->monitoring->count())
+                ->visible(fn () => $parentRecord->monitoring->count())
                 ->modalHeading(__('monitoring.headings.modal_create'))
                 ->modalDescription(__('monitoring.labels.modal_create_description'))
                 ->modalSubmitAction(
                     Action::make('crete_from_last')
                         ->label(__('monitoring.actions.create_from_last'))
                         ->url(
-                            fn () => self::getParentResource()::getUrl('monitorings.create', [
-                                'parent' => $this->parent,
+                            fn () => static::getResource()::getUrl('create', [
+                                'beneficiary' => $parentRecord,
                                 'copyLastFile' => 'copyLastFile',
                             ])
                         )
@@ -63,18 +62,18 @@ class ListMonitoring extends ListRecords
                     Action::make('create_simple')
                         ->label(__('monitoring.actions.create_simple'))
                         ->url(
-                            fn () => self::getParentResource()::getUrl('monitorings.create', [
-                                'parent' => $this->parent,
+                            fn () => static::getResource()::getUrl('create', [
+                                'beneficiary' => $parentRecord,
                             ])
                         )
                 ),
 
             Actions\CreateAction::make()
                 ->label(__('monitoring.actions.create'))
-                ->hidden(fn () => $this->parent->monitoring->count())
+                ->hidden(fn () => $parentRecord->monitoring->count())
                 ->url(
-                    fn () => self::getParentResource()::getUrl('monitorings.create', [
-                        'parent' => $this->parent,
+                    fn () => static::getResource()::getUrl('create', [
+                        'beneficiary' => $parentRecord,
                     ])
                 ),
         ];
@@ -82,7 +81,9 @@ class ListMonitoring extends ListRecords
 
     public function table(Table $table): Table
     {
-        return $table->modifyQueryUsing(fn (Builder $query) => $query->with('beneficiary'))
+        $parentRecord = $this->getParentRecord();
+        return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('beneficiary_id', $parentRecord->id)->with('beneficiary'))
             ->columns([
                 TextColumn::make('id')
                     ->label(__('monitoring.headings.id')),
@@ -108,10 +109,10 @@ class ListMonitoring extends ListRecords
                 \Filament\Actions\ViewAction::make()
                     ->label(__('general.action.view_details'))
                     ->color('primary')
-                    ->url(fn (Monitoring $record) => (static::getParentResource()::getUrl('monitorings.view', [
-                        'parent' => $this->parent,
+                    ->url(fn (Monitoring $record) => static::getResource()::getUrl('view', [
+                        'beneficiary' => $this->getParentRecord(),
                         'record' => $record,
-                    ]))),
+                    ])),
             ])
             ->recordActionsColumnLabel(__('monitoring.headings.actions'))
             ->modifyQueryUsing(
@@ -128,8 +129,8 @@ class ListMonitoring extends ListRecords
                 \Filament\Actions\CreateAction::make()
                     ->label(__('monitoring.actions.create'))
                     ->url(
-                        fn () => self::getParentResource()::getUrl('monitorings.create', [
-                            'parent' => $this->parent,
+                        fn () => static::getResource()::getUrl('create', [
+                            'beneficiary' => $this->getParentRecord(),
                         ])
                     ),
             ]);

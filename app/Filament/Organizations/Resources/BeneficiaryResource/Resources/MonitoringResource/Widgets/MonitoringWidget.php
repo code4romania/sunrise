@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Organizations\Resources\MonitoringResource\Widgets;
+namespace App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource\Widgets;
 
-use App\Filament\Organizations\Resources\BeneficiaryResource;
+use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Models\Beneficiary;
 use App\Tables\Columns\DateColumn;
 use Filament\Tables\Actions\Action;
@@ -33,7 +33,7 @@ class MonitoringWidget extends BaseWidget
                     ->label(__('general.action.view_details'))
                     ->link()
                     ->visible(fn () => $this->record->monitoring->count())
-                    ->url(BeneficiaryResource::getUrl('monitorings.index', ['parent' => $this->record])),
+                    ->url(MonitoringResource::getUrl('index', ['beneficiary' => $this->record])),
             ])
             ->columns([
                 DateColumn::make('date')
@@ -48,7 +48,7 @@ class MonitoringWidget extends BaseWidget
                 \Filament\Actions\Action::make('create_monitoring')
                     ->label(__('monitoring.actions.create_widget'))
                     ->outlined()
-                    ->url(BeneficiaryResource::getUrl('monitorings.create', ['parent' => $this->record])),
+                    ->url(MonitoringResource::getUrl('create', ['beneficiary' => $this->record])),
             ])
             ->emptyStateIcon('heroicon-o-clipboard-document-check');
     }

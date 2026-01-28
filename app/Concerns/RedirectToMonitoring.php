@@ -10,8 +10,9 @@ trait RedirectToMonitoring
 
     protected function getRedirectUrl(): ?string
     {
-        return self::getParentResource()::getUrl('monitorings.view', [
-            'parent' => $this->getRecord()->beneficiary_id,
+        $parentRecord = $this->getParentRecord();
+        return static::getResource()::getUrl('view', [
+            'beneficiary' => $parentRecord,
             'record' => $this->getRecord(),
             'tab' => \sprintf('-%s-tab', $this->getTabSlug()),
         ]);
