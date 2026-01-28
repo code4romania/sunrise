@@ -165,13 +165,13 @@ class CreateBeneficiary extends CreateRecord
                                                 fn (EloquentBuilder $query) => $query->whereIn(
                                                     'organization_id',
                                                     auth()->user()
-                                                        ->whereHas(
-                                                            'organizations',
-                                                            fn (EloquentBuilder $query) => $query
-                                                                ->where('institution_id', Filament::getTenant()->institution_id)
+                                                        ->organizations
+                                                        ->filter(
+                                                            fn (Organization $organization) => $organization->institution_id == Filament::getTenant()->institution_id
                                                         )
-                                                )->pluck('id')
-                                                    ->toArray()
+                                                        ->pluck('id')
+                                                        ->toArray()
+                                                )
                                             )
                                             ->withoutGlobalScope(BelongsToCurrentTenant::class)
                                             ->first();

@@ -270,7 +270,7 @@ class ViewBeneficiary extends ViewRecord
                                     return \sprintf('%s (%s)', $state->getLabel(), $agressorTypes);
                                 }
 
-                                return $state ? $state->getLabel() : null;
+                                return $state ?? null;
                             })
 
                             ->label(__('field.aggressor_has_violence_history')),
@@ -305,13 +305,13 @@ class ViewBeneficiary extends ViewRecord
                 ->columnSpan(1)
                 ->headerActions([
                     ViewDetailsAction::make('view')
-                        ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]))
-                        ->visible(fn (Beneficiary $record) => $record->violence?->violence_types),
+                        ->url(fn (?Beneficiary $record) => $record ? BeneficiaryResource::getUrl('view_initial_evaluation', ['record' => $record]) : '#')
+                        ->visible(fn (?Beneficiary $record) => $record?->violence?->violence_types ?? false),
                 ])
                 ->schema([
                     Group::make()
                         ->columns()
-                        ->visible(fn (Beneficiary $record) => $record->violence?->violence_types)
+                        ->visible(fn (?Beneficiary $record) => $record?->violence?->violence_types ?? false)
                         ->schema([
                             DateEntry::make('evaluateDetails.registered_date')
                                 ->label(__('beneficiary.section.initial_evaluation.labels.registered_date')),
@@ -326,7 +326,7 @@ class ViewBeneficiary extends ViewRecord
                                 ->icon(false),
                         ]),
                     Group::make()
-                        ->visible(fn (Beneficiary $record) => ! $record->violence?->violence_types)
+                        ->visible(fn (?Beneficiary $record) => ! ($record?->violence?->violence_types ?? false))
                         ->schema([
                             TextEntry::make('empty_state_heading')
                                 ->hiddenLabel()
@@ -346,7 +346,7 @@ class ViewBeneficiary extends ViewRecord
                                     ActionGroup::make([
                                         Action::make('create_initial_evaluation')
                                             ->label(__('beneficiary.action.start_evaluation'))
-                                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                            ->url(fn (?Beneficiary $record) => $record ? BeneficiaryResource::getUrl('create_initial_evaluation', ['record' => $record]) : '#')
                                             ->outlined(),
                                     ])
                                 )
@@ -363,21 +363,21 @@ class ViewBeneficiary extends ViewRecord
                 ->headerActions(
                     [
                         ViewDetailsAction::make('view')
-                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]))
-                            ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult),
+                            ->url(fn (?Beneficiary $record) => $record ? BeneficiaryResource::getUrl('view_detailed_evaluation', ['record' => $record]) : '#')
+                            ->visible(fn (?Beneficiary $record) => $record?->detailedEvaluationResult ?? false),
                     ]
                 )
                 ->schema([
                     Group::make()
                         ->relationship('detailedEvaluationResult')
-                        ->visible(fn (Beneficiary $record) => $record->detailedEvaluationResult)
+                        ->visible(fn (?Beneficiary $record) => $record?->detailedEvaluationResult ?? false)
                         ->schema([
                             TextEntry::make('recommendation_services')
                                 ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
                                 ->listWithLineBreaks(),
                         ]),
                     Group::make()
-                        ->visible(fn (Beneficiary $record) => ! $record->detailedEvaluationResult)
+                        ->visible(fn (?Beneficiary $record) => ! ($record?->detailedEvaluationResult ?? false))
                         ->schema([
                             TextEntry::make('empty_state_heading')
                                 ->hiddenLabel()
@@ -397,7 +397,7 @@ class ViewBeneficiary extends ViewRecord
                                     ActionGroup::make([
                                         Action::make('create_detailed_evaluation')
                                             ->label(__('beneficiary.action.start_evaluation'))
-                                            ->url(fn (Beneficiary $record) => BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                            ->url(fn (?Beneficiary $record) => $record ? BeneficiaryResource::getUrl('create_detailed_evaluation', ['record' => $record]) : '#')
                                             ->outlined(),
                                     ])
                                 )
