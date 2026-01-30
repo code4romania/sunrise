@@ -182,7 +182,7 @@ class EditBeneficiaryIdentity extends EditRecord
                         ->enum(IDType::class)
                         ->live()
                         ->afterStateUpdated(function ($state, Set $set) {
-                            if (! $state || IDType::tryFrom($state)?->is(IDType::NONE)) {
+                            if (! $state || $state->is(IDType::NONE)) {
                                 $set('id_serial', null);
                                 $set('id_number', null);
                             }
@@ -197,7 +197,7 @@ class EditBeneficiaryIdentity extends EditRecord
                                 return true;
                             }
 
-                            return IDType::tryFrom($get('id_type'))?->is(IDType::NONE);
+                            return $get('id_type')?->is(IDType::NONE);
                         }),
 
                     TextInput::make('id_number')
@@ -211,7 +211,7 @@ class EditBeneficiaryIdentity extends EditRecord
                                 return true;
                             }
 
-                            return IDType::tryFrom($get('id_type'))?->is(IDType::NONE);
+                            return $get('id_type')?->is(IDType::NONE);
                         }),
 
                     Spacer::make(),

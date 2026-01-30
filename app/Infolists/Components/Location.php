@@ -8,10 +8,12 @@ use App\Models\City;
 use App\Models\County;
 use Closure;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Components\Concerns\EntanglesStateWithSingularRelationship;
 
-class Location extends \Filament\Schemas\Components\Component
+class Location extends Component
 {
-    use \Filament\Schemas\Components\Concerns\EntanglesStateWithSingularRelationship;
+    use EntanglesStateWithSingularRelationship;
 
     protected string $view = 'filament-schemas::components.grid';
 
