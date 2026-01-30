@@ -12,11 +12,9 @@ use App\Filament\Organizations\Resources\MonthlyPlanResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
-use App\Forms\Components\TableRepeater;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
-use Awcodes\TableRepeater\Header;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Placeholder;
@@ -40,7 +38,7 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        return  InterventionPlanBreadcrumb::make($this->parent)
+        return InterventionPlanBreadcrumb::make($this->parent)
             ->getViewMonthlyPlan($this->getRecord());
     }
 
@@ -146,23 +144,12 @@ class EditMonthlyPlanServicesAndInterventions extends EditRecord
                                 ->maxLength(2000),
                         ]),
 
-                    TableRepeater::make('monthlyPlanInterventions')
+                    Repeater::make('monthlyPlanInterventions')
                         ->relationship('monthlyPlanInterventions')
                         ->hiddenLabel()
                         ->addActionLabel(__('intervention_plan.actions.add_intervention_repeater'))
-                        ->headers([
-                            Header::make('number')
-                                ->label(__('intervention_plan.labels.count')),
-
-                            Header::make('service_intervention_id')
-                                ->label(__('intervention_plan.headings.interventions')),
-
-                            Header::make('objections')
-                                ->label(__('intervention_plan.labels.objections')),
-
-                            Header::make('observations')
-                                ->label(__('intervention_plan.labels.observations')),
-                        ])
+                        ->columns(4)
+                        ->itemLabel(fn (array $state): ?string => $state['service_intervention_id'] ? ServiceIntervention::find($state['service_intervention_id'])?->name : null)
                         ->schema([
                             Placeholder::make('number')
                                 ->label(__('intervention_plan.labels.count'))

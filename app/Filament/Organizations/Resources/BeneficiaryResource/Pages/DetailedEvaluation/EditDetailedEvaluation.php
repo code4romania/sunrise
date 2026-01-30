@@ -9,9 +9,7 @@ use App\Concerns\RedirectToDetailedEvaluation;
 use App\Filament\Organizations\Resources\BeneficiaryResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
-use App\Forms\Components\TableRepeater;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Awcodes\TableRepeater\Header;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\EditRecord;
@@ -22,8 +20,8 @@ use Illuminate\Support\Str;
 
 class EditDetailedEvaluation extends EditRecord
 {
-    use RedirectToDetailedEvaluation;
     use PreventSubmitFormOnEnter;
+    use RedirectToDetailedEvaluation;
 
     protected static string $resource = BeneficiaryResource::class;
 
@@ -54,26 +52,14 @@ class EditDetailedEvaluation extends EditRecord
             Section::make()
                 ->maxWidth('3xl')
                 ->schema([
-                    TableRepeater::make('detailedEvaluationSpecialists')
+                    Repeater::make('detailedEvaluationSpecialists')
                         ->relationship('detailedEvaluationSpecialists')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
-                        ->defaultItems(3)
+                        ->minItems(3)
                         ->addActionLabel(__('beneficiary.action.add_row'))
-                        ->showLabels(false)
                         ->deletable()
-                        ->headers([
-                            Header::make('full_name')
-                                ->label(__('beneficiary.section.detailed_evaluation.labels.full_name')),
-
-                            Header::make('institution')
-                                ->label(__('beneficiary.section.detailed_evaluation.labels.institution')),
-
-                            Header::make('relationship')
-                                ->label(__('beneficiary.section.detailed_evaluation.labels.relationship')),
-
-                            Header::make('date')
-                                ->label(__('beneficiary.section.detailed_evaluation.labels.contact_date')),
-                        ])
+                        ->columns(4)
+                        ->itemLabel(fn (array $state): ?string => $state['full_name'] ?? null)
                         ->schema([
                             TextInput::make('full_name')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))

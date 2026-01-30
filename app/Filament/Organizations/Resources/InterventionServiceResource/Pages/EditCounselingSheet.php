@@ -27,8 +27,6 @@ use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Models\InterventionService;
 use App\Services\Breadcrumb\InterventionPlanBreadcrumb;
-use Awcodes\TableRepeater\Components\TableRepeater;
-use Awcodes\TableRepeater\Header;
 use Filament\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
@@ -163,22 +161,11 @@ class EditCounselingSheet extends EditRecord
 
             Section::make(__('intervention_plan.headings.institution_contacted'))
                 ->schema([
-                    TableRepeater::make('data.institutions')
+                    Repeater::make('data.institutions')
                         ->hiddenLabel()
                         ->addActionLabel(__('intervention_plan.actions.add_institution'))
-                        ->headers([
-                            Header::make('institution')
-                                ->label(__('intervention_plan.labels.responsible_institution')),
-
-                            Header::make('contact_date')
-                                ->label(__('intervention_plan.labels.contact_date')),
-
-                            Header::make('phone')
-                                ->label(__('intervention_plan.labels.phone')),
-
-                            Header::make('contact_person')
-                                ->label(__('intervention_plan.labels.contact_person')),
-                        ])
+                        ->columns(4)
+                        ->itemLabel(fn (array $state): ?string => $state['institution'] ?? null)
                         ->schema([
                             TextInput::make('institution')
                                 ->label(__('intervention_plan.labels.responsible_institution'))

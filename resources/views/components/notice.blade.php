@@ -20,7 +20,7 @@
 
     $actions = array_filter(
         $getActions(),
-        fn(\Filament\Infolists\Components\Actions\Action $action): bool => $action->isVisible(),
+        fn (\Filament\Actions\Action $action): bool => $action->isVisible(),
     );
 
 @endphp

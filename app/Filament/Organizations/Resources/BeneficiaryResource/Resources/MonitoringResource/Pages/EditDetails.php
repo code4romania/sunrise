@@ -8,12 +8,11 @@ use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToMonitoring;
 use App\Filament\Organizations\Resources\BeneficiaryResource\Resources\MonitoringResource;
 use App\Forms\Components\DatePicker;
+use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
-use App\Forms\Components\TableRepeater;
 use App\Models\Monitoring;
 use App\Models\UserRole;
 use App\Services\Breadcrumb\BeneficiaryBreadcrumb;
-use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
@@ -27,8 +26,8 @@ use Illuminate\Support\Str;
 
 class EditDetails extends EditRecord
 {
-    use RedirectToMonitoring;
     use PreventSubmitFormOnEnter;
+    use RedirectToMonitoring;
 
     protected static string $resource = MonitoringResource::class;
 
@@ -60,8 +59,8 @@ class EditDetails extends EditRecord
 
     public static function getFormSchemaStatic(): array
     {
-        $instance = new static();
-        $instance->record = new Monitoring();
+        $instance = new static;
+        $instance->record = new Monitoring;
 
         return $instance->getFormSchema();
     }
@@ -89,23 +88,14 @@ class EditDetails extends EditRecord
                     Hidden::make('beneficiary_id')
                         ->formatStateUsing(fn ($record, $state) => $state ?? ($record?->beneficiary_id ?? $this->getParentRecord()?->id)),
 
-                    TableRepeater::make('specialistsTeam')
+                    Repeater::make('specialistsTeam')
                         ->relationship('specialistsTeam')
-                        ->defaultItems(1)
+                        ->minItems(1)
                         ->hiddenLabel()
-                        ->emptyLabel()
                         ->columnSpanFull()
                         ->addActionLabel(__('monitoring.actions.add_specialist'))
-                        ->headers([
-                            Header::make('id')
-                                ->label(__('nomenclature.labels.nr')),
-
-                            Header::make('role_id')
-                                ->label(__('monitoring.labels.role')),
-
-                            Header::make('user_id')
-                                ->label(__('monitoring.labels.specialist_name')),
-                        ])
+                        ->columns(3)
+                        ->itemLabel(fn (array $state): ?string => $state['user_id'] ? \App\Models\User::find($state['user_id'])?->name : null)
                         ->schema([
                             Placeholder::make('id')
                                 ->label(__('nomenclature.labels.nr'))
@@ -137,7 +127,7 @@ class EditDetails extends EditRecord
                                 ),
 
                             Hidden::make('specialistable_type')
-                                ->formatStateUsing(fn ($state) => (new Monitoring())->getMorphClass()),
+                                ->formatStateUsing(fn ($state) => (new Monitoring)->getMorphClass()),
 
                         ]),
                 ]),
