@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin\Pages\Auth\Login;
-use App\Filament\Admin\Pages\Dashboard;
-use App\Filament\Admin\Resources\ServiceResource;
-use App\Filament\Pages\Auth\RequestPasswordReset;
+use App\Filament\Admin\Resources\Institutions\InstitutionResource;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
 use Filament\Actions\Action;
@@ -23,7 +20,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Table;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -57,12 +53,12 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->login()
+            ->default()
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups(false)
-            ->login(Login::class)
-            ->passwordReset(RequestPasswordReset::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Violet,
             ])
             ->font('DM Sans')
             ->maxContentWidth('full')
@@ -78,9 +74,6 @@ class AdminPanelProvider extends PanelProvider
                 in: app_path('Filament/Admin/Pages'),
                 for: 'App\\Filament\\Admin\\Pages'
             )
-            ->pages([
-                Dashboard::class,
-            ])
             ->routes(function () {
                 Route::get('/welcome/{user:ulid}', Welcome::class)->name('auth.welcome');
             })
@@ -88,9 +81,6 @@ class AdminPanelProvider extends PanelProvider
                 in: app_path('Filament/Admin/Widgets'),
                 for: 'App\\Filament\\Admin\\Widgets'
             )
-            ->widgets([
-                // Widgets\AccountWidget::class,
-            ])
             ->bootUsing(function () {
                 Page::stickyFormActions();
                 Page::alignFormActionsEnd();
@@ -103,21 +93,11 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-rectangle-stack')
                     ->sort(2)
                     ->isActiveWhen(
-                        fn () => request()->routeIs('filament.admin.resources.roles.*') ||
-                            request()->routeIs('filament.admin.resources.services.*') ||
-                            request()->routeIs('filament.admin.resources.benefits.*')
+                        fn () => request()->routeIs('filament.admin.resources.institutions.*')
                     )
-                    ->url(fn () => ServiceResource::getUrl()),
+                    ->url(fn () => InstitutionResource::getUrl()),
             ])
             ->unsavedChangesAlerts()
-            ->plugins([
-                //                BreezyCore::make()
-                //                    ->myProfile(
-                //                        hasAvatars: true,
-                //                        slug: 'settings'
-                //                    )
-                //                    ->enableTwoFactorAuthentication(),
-            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

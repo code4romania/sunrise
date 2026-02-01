@@ -22,10 +22,10 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 class Institution extends Model implements HasMedia
 {
     use HasFactory;
-    use HasUlid;
-    use HasSlug;
-    use InteractsWithMedia;
     use HasRelationships;
+    use HasSlug;
+    use HasUlid;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'name',
@@ -50,6 +50,12 @@ class Institution extends Model implements HasMedia
         'representative_person' => 'array',
         'contact_person' => 'array',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('organization_status')->singleFile();
+        $this->addMediaCollection('social_service_provider_certificate')->singleFile();
+    }
 
     protected function getSlugSource(): string
     {
@@ -93,7 +99,7 @@ class Institution extends Model implements HasMedia
 
     public function getCountyAndCityAttribute(): string
     {
-        return $this->city?->name . ' (' . $this->county?->name . ')';
+        return $this->city?->name.' ('.$this->county?->name.')';
     }
 
     public function isPending(): bool
