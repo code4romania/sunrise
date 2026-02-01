@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\MediaLibrary;
+namespace App\MediaLibrary;
 
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\DefaultPathGenerator;

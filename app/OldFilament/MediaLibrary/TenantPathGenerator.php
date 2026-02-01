@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\MediaLibrary;
+namespace App\OldFilament\MediaLibrary;
 
 use App\Models\Organization;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -13,7 +13,6 @@ class TenantPathGenerator extends DefaultPathGenerator
     protected function getBasePath(Media $media): string
     {
         $ulid = filament()->getTenant()?->ulid;
-        $media->load('model');
 
         if (! $ulid && $media->model instanceof Organization) {
             $ulid = $media->model->ulid;
