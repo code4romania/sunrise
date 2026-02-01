@@ -19,8 +19,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class FlowPresentation extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -37,10 +37,10 @@ class FlowPresentation extends Model
 
     protected $casts = [
         'presentation_mode' => PresentationMode::class,
-        'referral_mode' => AsEnumCollection::class . ':' . ReferralMode::class,
+        'referral_mode' => AsEnumCollection::class.':'.ReferralMode::class,
         'notification_mode' => NotificationMode::class,
         'notifier' => Notifier::class,
-        'act_location' => AsEnumCollection::class . ':' . ActLocation::class,
+        'act_location' => AsEnumCollection::class.':'.ActLocation::class,
     ];
 
     public function firstCalledInstitution(): BelongsTo

@@ -22,8 +22,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BeneficiaryDetails extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -74,13 +74,13 @@ class BeneficiaryDetails extends Model
         'elder_care_count' => 'integer',
         'homeownership' => HomeOwnership::class,
         'health_insurance' => Ternary::class,
-        'health_status' => AsEnumCollection::class . ':' . Diseases::class,
+        'health_status' => AsEnumCollection::class.':'.Diseases::class,
         'disabilities' => Ternary::class,
-        'type_of_disability' => AsEnumCollection::class . ':' . DisabilityType::class,
+        'type_of_disability' => AsEnumCollection::class.':'.DisabilityType::class,
         'degree_of_disability' => DisabilityDegree::class,
-        'income_source' => AsEnumCollection::class . ':' . IncomeSource::class,
+        'income_source' => AsEnumCollection::class.':'.IncomeSource::class,
         'drug_consumption' => Ternary::class,
-        'drug_types' => AsEnumCollection::class . ':' . Drug::class,
+        'drug_types' => AsEnumCollection::class.':'.Drug::class,
         'other_current_medication' => Ternary::class,
         'current_contraception' => Ternary::class,
         'treatment_for_psychiatric_pathology' => Ternary::class,

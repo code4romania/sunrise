@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin\Resources\Institutions\InstitutionResource;
+use App\Filament\Admin\Pages\NomenclatorPage;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
 use Filament\Actions\Action;
@@ -93,9 +93,9 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-rectangle-stack')
                     ->sort(2)
                     ->isActiveWhen(
-                        fn () => request()->routeIs('filament.admin.resources.institutions.*')
+                        fn () => request()->routeIs('filament.admin.pages.nomenclator-page')
                     )
-                    ->url(fn () => InstitutionResource::getUrl()),
+                    ->url(fn () => NomenclatorPage::getUrl()),
             ])
             ->unsavedChangesAlerts()
             ->middleware([

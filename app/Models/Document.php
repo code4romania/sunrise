@@ -16,10 +16,10 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class Document extends Model implements HasMedia
 {
-    use HasFactory;
-    use InteractsWithMedia;
     use BelongsToBeneficiary;
     use BelongsToThroughTrait;
+    use HasFactory;
+    use InteractsWithMedia;
     use LogsActivityOptions;
 
     protected $fillable = [

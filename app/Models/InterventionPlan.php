@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class InterventionPlan extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
     use BelongsToOrganization;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [

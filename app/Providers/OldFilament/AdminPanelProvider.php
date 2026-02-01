@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers\OldFilament;
 
-
-use App\Filament\Admin\Resources\Institutions\InstitutionResource;
-use App\OldFilament\Admin\Pages\Auth\Login;
+use App\Filament\Admin\Pages\NomenclatorPage;
 use App\Filament\Pages\Auth\RequestPasswordReset;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
+use App\OldFilament\Admin\Pages\Auth\Login;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
@@ -79,7 +78,7 @@ class AdminPanelProvider extends PanelProvider
                 for: 'App\\Filament\\Admin\\Pages'
             )
             ->pages([
-//                Dashboard::class,
+                //                Dashboard::class,
             ])
             ->routes(function () {
                 Route::get('/welcome/{user:ulid}', Welcome::class)->name('auth.welcome');
@@ -103,9 +102,9 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-rectangle-stack')
                     ->sort(2)
                     ->isActiveWhen(
-                        fn () => request()->routeIs('filament.admin.resources.institutions.*')
+                        fn () => request()->routeIs('filament.admin.pages.nomenclator-page')
                     )
-                    ->url(fn () => InstitutionResource::getUrl()),
+                    ->url(fn () => NomenclatorPage::getUrl()),
             ])
             ->unsavedChangesAlerts()
             ->plugins([

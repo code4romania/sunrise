@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CloseFile extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -37,7 +37,7 @@ class CloseFile extends Model
         'date' => 'date',
         'admittance_date' => 'date',
         'exit_date' => 'date',
-        'admittance_reason' => AsEnumCollection::class . ':' . AdmittanceReason::class,
+        'admittance_reason' => AsEnumCollection::class.':'.AdmittanceReason::class,
         'close_method' => CloseMethod::class,
     ];
 

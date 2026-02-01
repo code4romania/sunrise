@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EvaluateDetails extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [

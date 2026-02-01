@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class BeneficiaryPartner extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
     use HasEffectiveAddress;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [

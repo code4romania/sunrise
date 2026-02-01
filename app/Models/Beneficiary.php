@@ -27,15 +27,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Beneficiary extends Model
 {
     use BelongsToOrganization;
+    use HasBirthdate;
     use HasCaseStatus;
     use HasCitizenship;
+    use HasEffectiveAddress;
     use HasEthnicity;
     use HasFactory;
-    use HasUlid;
-    use HasEffectiveAddress;
-    use LogsActivityOptions;
     use HasSpecialistsTeam;
-    use HasBirthdate;
+    use HasUlid;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'initial_id',
