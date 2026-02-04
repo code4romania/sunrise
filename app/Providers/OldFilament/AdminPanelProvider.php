@@ -78,7 +78,7 @@ class AdminPanelProvider extends PanelProvider
                 for: 'App\\Filament\\Admin\\Pages'
             )
             ->pages([
-                //                Dashboard::class,
+                \App\Filament\Admin\Pages\Dashboard::class,
             ])
             ->routes(function () {
                 Route::get('/welcome/{user:ulid}', Welcome::class)->name('auth.welcome');
