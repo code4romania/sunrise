@@ -31,6 +31,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    private const AdminNamespace = 'App\\Filament\\Admin';
+
     public static string $defaultDateDisplayFormat = 'd.m.Y';
 
     public static string $defaultDateTimeDisplayFormat = 'd.m.Y H:i';
@@ -68,18 +70,18 @@ class AdminPanelProvider extends PanelProvider
             ->darkMode(false)
             ->discoverResources(
                 in: app_path('Filament/Admin/Resources'),
-                for: 'App\\Filament\\Admin\\Resources'
+                for: self::AdminNamespace.'\\Resources'
             )
             ->discoverPages(
                 in: app_path('Filament/Admin/Pages'),
-                for: 'App\\Filament\\Admin\\Pages'
+                for: self::AdminNamespace.'\\Pages'
             )
             ->routes(function () {
                 Route::get('/welcome/{user:ulid}', Welcome::class)->name('auth.welcome');
             })
             ->discoverWidgets(
                 in: app_path('Filament/Admin/Widgets'),
-                for: 'App\\Filament\\Admin\\Widgets'
+                for: self::AdminNamespace.'\\Widgets'
             )
             ->bootUsing(function () {
                 Page::stickyFormActions();
