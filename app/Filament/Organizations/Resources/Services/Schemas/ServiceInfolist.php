@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Services\Schemas;
 
+use App\Enums\CounselingSheet;
+use App\Infolists\Components\Notice;
 use App\Models\BeneficiaryIntervention;
+use App\Models\OrganizationService;
+use App\Schemas\CounselingSheetFormSchemas;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -22,6 +27,29 @@ class ServiceInfolist
                     TextEntry::make('status')
                         ->label(__('service.labels.status'))
                         ->badge(),
+                ]),
+
+            Section::make()
+                ->visible(fn (OrganizationService $record) => $record->serviceWithoutStatusCondition?->counseling_sheet !== null)
+                ->schema([
+                    Notice::make('counseling_sheet')
+                        ->state(__('service.helper_texts.counseling_sheet'))
+                        ->icon('heroicon-o-document-text')
+                        ->action(
+                            Action::make('view_counseling_sheet')
+                                ->label(__('service.actions.view_counseling_sheet'))
+                                ->modalHeading(fn (OrganizationService $record) => $record->serviceWithoutStatusCondition?->counseling_sheet?->getLabel())
+                                ->schema(fn (OrganizationService $record) => match ($record->serviceWithoutStatusCondition?->counseling_sheet) {
+                                    CounselingSheet::LEGAL_ASSISTANCE => CounselingSheetFormSchemas::getLegalAssistanceForm(),
+                                    CounselingSheet::PSYCHOLOGICAL_ASSISTANCE => CounselingSheetFormSchemas::getSchemaForPsychologicalAssistance(),
+                                    CounselingSheet::SOCIAL_ASSISTANCE => CounselingSheetFormSchemas::getSchemaForSocialAssistance(null),
+                                    default => [],
+                                })
+                                ->disabledForm()
+                                ->modalSubmitAction(false)
+                                ->modalCancelActionLabel(__('filament-actions::view.single.modal.actions.close.label'))
+                                ->link(),
+                        ),
                 ]),
 
             Section::make(__('service.headings.interventions'))

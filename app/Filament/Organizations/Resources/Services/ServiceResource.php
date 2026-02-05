@@ -16,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class ServiceResource extends Resource
@@ -23,6 +24,16 @@ class ServiceResource extends Resource
     protected static ?string $model = OrganizationService::class;
 
     protected static ?string $tenantOwnershipRelationshipName = 'organization';
+
+    public static function getRecordRouteBindingEloquentQuery(): Builder
+    {
+        return parent::getRecordRouteBindingEloquentQuery()
+            ->with([
+                'serviceWithoutStatusCondition',
+                'interventions.serviceInterventionWithoutStatusCondition',
+                'interventions.beneficiaryInterventions.interventionPlan',
+            ]);
+    }
 
     public static function getRecordTitle(?Model $record): ?string
     {

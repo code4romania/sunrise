@@ -48,7 +48,10 @@ class ViewMeetings extends ViewRecord
 
     public function getTitle(): string|Htmlable
     {
-        return $this->getRecord()->organizationServiceIntervention->serviceInterventionWithoutStatusCondition->name;
+        return $this->getRecord()->loadMissing('organizationServiceIntervention')
+            ->organizationServiceIntervention
+            ->serviceInterventionWithoutStatusCondition
+            ->name;
     }
 
     protected function getHeaderActions(): array

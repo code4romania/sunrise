@@ -162,7 +162,7 @@ class ServiceForm
                                     Hidden::make('service_intervention_id'),
                                 ])
                                 ->columns(3)
-                                ->itemLabel(fn (array $state): string => ServiceIntervention::find($state['service_intervention_id'] ?? null)?->name ?? $state['name'] ?? __('service.labels.intervention_item'))
+                                ->itemLabel(fn (array $state): string => $state['name'] ?? ServiceIntervention::find($state['service_intervention_id'] ?? null)?->name ?? __('service.labels.intervention_item'))
                                 ->collapsible(),
                         ]),
                 ]),
@@ -170,7 +170,7 @@ class ServiceForm
     }
 
     /**
-     * @param  array<int, array<string, mixed>>|null $interventions
+     * @param  array<int, array<string, mixed>>|null  $interventions
      * @return array<int, array<string, mixed>>|null
      */
     public static function processInterventionsBeforeSave(?array $interventions): ?array
