@@ -8,7 +8,6 @@ use App\Forms\Components\Select;
 use App\Models\OrganizationService;
 use App\Models\Service;
 use App\Models\ServiceIntervention;
-use Closure;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Checkbox;
@@ -61,7 +60,36 @@ class ServiceForm
                                 ->pluck('name', 'id')
                                 ->toArray();
                         })
-                        ->afterStateUpdated(self::populateInterventions())
+                        ->afterStateUpdated(function (mixed $state, Get $get, Set $set): void {
+                            $serviceId = $state ?? $get('service_id');
+
+                            if (! $serviceId) {
+                                return;
+                            }
+                            $existing = $get('interventions');
+                            $existing = collect($existing)
+                                ->filter(fn (array $item) => $item['service_intervention_id'] !== null)
+                                ->all();
+                            if (\is_array($existing) && \count($existing) > 0) {
+                                return;
+                            }
+                            $interventions = ServiceIntervention::query()
+                                ->where('service_id', $serviceId)
+                                ->active()
+                                ->orderBy('sort')
+                                ->get();
+                            $items = [];
+
+                            foreach ($interventions as $i) {
+                                $items[(string) Str::uuid()] = [
+                                    'active' => false,
+                                    'name' => $i->name,
+                                    'service_intervention_id' => $i->id,
+                                    'status' => false,
+                                ];
+                            }
+                            $set('interventions', $items);
+                        })
                         ->live()
                         ->required(fn (string $operation): bool => $operation === 'create'),
 
@@ -141,41 +169,8 @@ class ServiceForm
         ];
     }
 
-    public static function populateInterventions(): Closure
-    {
-        return function (Get $get, Set $set): void {
-            $serviceId = $get('service_id');
-            if (! $serviceId) {
-                return;
-            }
-
-            $existing = $get('interventions');
-            if (is_array($existing) && count($existing) > 0) {
-                return;
-            }
-
-            $interventions = ServiceIntervention::query()
-                ->where('service_id', $serviceId)
-                ->active()
-                ->orderBy('sort')
-                ->get();
-
-            $items = [];
-            foreach ($interventions as $i) {
-                $items[(string) Str::uuid()] = [
-                    'active' => false,
-                    'name' => $i->name,
-                    'service_intervention_id' => $i->id,
-                    'status' => false,
-                ];
-            }
-
-            $set('interventions', $items);
-        };
-    }
-
     /**
-     * @param  array<int, array<string, mixed>>|null  $interventions
+     * @param  array<int, array<string, mixed>>|null $interventions
      * @return array<int, array<string, mixed>>|null
      */
     public static function processInterventionsBeforeSave(?array $interventions): ?array
