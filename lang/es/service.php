@@ -16,6 +16,7 @@ return [
             'activate' => 'Activar',
             'inactivate' => 'Desactivar',
             'inactivate_modal' => 'Desactivar servicio',
+            'inactivate_intervention' => 'Desactivar intervención',
         ],
         'create' => 'Crear',
         'delete' => 'Eliminar',
@@ -25,6 +26,7 @@ return [
     'labels' => [
         'name' => 'Nombre',
         'interventions' => 'Intervenciones',
+        'intervention_item' => 'Intervención',
         'cases' => 'Casos',
         'status' => 'Estado',
         'select' => 'Seleccionar',
@@ -38,6 +40,7 @@ return [
         'edit_page' => 'Editar servicio',
         'interventions' => 'Intervenciones',
         'inactivate_modal' => 'Desactivar servicio',
+        'inactivate_intervention_modal' => 'Desactivar intervención en el nomenclador',
         'view_service_page' => 'Ver servicio',
     ],
     'helper_texts' => [
@@ -46,6 +49,7 @@ return [
         'interventions' => 'Gestionar intervenciones',
         'under_interventions_table' => 'Lista de intervenciones para este servicio',
         'inactivate_modal' => '¿Está seguro que desea desactivar este servicio?',
+        'inactivate_intervention_modal' => 'Al desactivar la intervención, ya no estará disponible para añadirla a los planes de intervención de los beneficiarios. La información no se eliminará del historial de casos en los que se haya utilizado.',
         'counseling_sheet' => 'Hoja de asesoramiento',
     ],
 ];
