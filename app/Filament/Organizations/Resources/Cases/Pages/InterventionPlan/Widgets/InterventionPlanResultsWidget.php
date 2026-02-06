@@ -58,12 +58,12 @@ class InterventionPlanResultsWidget extends TableWidget
                     ->label(__('intervention_plan.actions.add_result'))
                     ->modalHeading(__('intervention_plan.actions.add_result'))
                     ->model(InterventionPlanResult::class)
-                    ->mutateFormDataUsing(function (array $data): array {
+                    ->mutateDataUsing(function (array $data): array {
                         $data['intervention_plan_id'] = $this->record?->interventionPlan?->id;
 
                         return $data;
                     })
-                    ->form([
+                    ->schema([
                         Grid::make()
                             ->columns(3)
                             ->schema([

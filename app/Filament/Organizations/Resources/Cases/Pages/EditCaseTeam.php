@@ -1,0 +1,67 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Organizations\Resources\Cases\Pages;
+
+use App\Actions\BackAction;
+use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Organizations\Resources\Cases\Pages\Widgets\CaseTeamWidget;
+use App\Models\Beneficiary;
+use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
+use Illuminate\Contracts\Support\Htmlable;
+
+class EditCaseTeam extends ViewRecord
+{
+    protected static string $resource = CaseResource::class;
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('case.view.case_team');
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        $record = $this->getRecord();
+
+        return [
+            CaseResource::getUrl('index') => __('case.view.breadcrumb_all'),
+            CaseResource::getUrl('view', ['record' => $record]) => $record instanceof Beneficiary ? $record->getBreadcrumb() : '',
+            '' => __('case.view.case_team'),
+        ];
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            BackAction::make()
+                ->url(CaseResource::getUrl('view', ['record' => $this->getRecord()])),
+        ];
+    }
+
+    public function content(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                Grid::make(1)
+                    ->schema(fn (): array => $this->getWidgetsSchemaComponents($this->getFooterWidgets())),
+            ]);
+    }
+
+    /**
+     * @return array<int, class-string<\Filament\Widgets\Widget>>
+     */
+    protected function getFooterWidgets(): array
+    {
+        return [
+            CaseTeamWidget::class,
+        ];
+    }
+
+    protected function hasInfolist(): bool
+    {
+        return false;
+    }
+}

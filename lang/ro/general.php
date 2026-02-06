@@ -11,6 +11,7 @@ return [
         'edit' => 'Editează',
         'actions' => 'Acțiuni',
         'cancel' => 'Renunță',
+        'close' => 'Închide',
         'save' => 'Salvează modificările',
         'delete' => 'Șterge',
         'view_observations' => 'Vezi observații',

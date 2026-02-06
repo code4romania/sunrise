@@ -8,14 +8,20 @@ use App\Filament\Organizations\Resources\Cases\Pages\CreateCase;
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\CreateCaseDetailedEvaluation;
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\ViewCaseDetailedEvaluation;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAggressor;
+use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAntecedents;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseChildren;
+use App\Filament\Organizations\Resources\Cases\Pages\EditCaseDocuments;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseIdentity;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCasePersonalInformation;
+use App\Filament\Organizations\Resources\Cases\Pages\EditCaseTeam;
 use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\CreateCaseInitialEvaluation;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\CreateCaseInterventionPlan;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\CreateCaseMonthlyPlan;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseInterventionPlan;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseMonthlyPlan;
 use App\Filament\Organizations\Resources\Cases\Pages\ListCases;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCase;
+use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseDocument;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseIdentity;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCasePersonalInformation;
 use App\Filament\Organizations\Resources\Cases\RelationManagers\EvaluateDetailsRelationManager;
@@ -132,6 +138,10 @@ class CaseResource extends Resource
             'view_personal_information' => ViewCasePersonalInformation::route('/{record}/personal'),
             'edit_personal_information' => EditCasePersonalInformation::route('/{record}/personal/edit'),
             'edit_aggressor' => EditCaseAggressor::route('/{record}/personal/aggressor/edit'),
+            'edit_case_team' => EditCaseTeam::route('/{record}/case-team/edit'),
+            'edit_case_documents' => EditCaseDocuments::route('/{record}/documents'),
+            'view_case_document' => ViewCaseDocument::route('/{record}/documents/{document}'),
+            'edit_antecedents' => EditCaseAntecedents::route('/{record}/personal/antecedents/edit'),
             'create_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/create'),
             'edit_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/edit'),
             'view_detailed_evaluation' => ViewCaseDetailedEvaluation::route('/{record}/detailed-evaluation'),
@@ -139,6 +149,8 @@ class CaseResource extends Resource
             'edit_detailed_evaluation' => CreateCaseDetailedEvaluation::route('/{record}/detailed-evaluation/edit'),
             'create_intervention_plan' => CreateCaseInterventionPlan::route('/{record}/intervention-plan/create'),
             'view_intervention_plan' => ViewCaseInterventionPlan::route('/{record}/intervention-plan'),
+            'create_monthly_plan' => CreateCaseMonthlyPlan::route('/{record}/intervention-plan/monthly-plans/create'),
+            'view_monthly_plan' => ViewCaseMonthlyPlan::route('/{record}/intervention-plan/monthly-plans/{monthlyPlan}'),
         ];
     }
 

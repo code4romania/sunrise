@@ -179,6 +179,12 @@ class CaseInfolist
 
                         Section::make(__('case.view.case_team'))
                             ->description(__('case.view.see_details'))
+                            ->headerActions([
+                                Action::make('edit_case_team')
+                                    ->label(__('case.view.manage_case_team'))
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_case_team', ['record' => $record]))
+                                    ->link(),
+                            ])
                             ->schema([
                                 RepeatableEntry::make('specialistsTeam')
                                     ->schema([
@@ -192,11 +198,19 @@ class CaseInfolist
                             ]),
 
                         Section::make(__('case.view.documents'))
+                            ->description(__('case.view.see_details'))
+                            ->headerActions([
+                                Action::make('edit_documents')
+                                    ->label(__('case.view.manage_documents'))
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_case_documents', ['record' => $record]))
+                                    ->link(),
+                            ])
                             ->schema([
                                 RepeatableEntry::make('documents')
                                     ->schema([
                                         TextEntry::make('type')
-                                            ->label(__('document.labels.type')),
+                                            ->label(__('document.labels.type'))
+                                            ->formatStateUsing(fn ($state) => $state?->getLabel() ?? '—'),
                                         TextEntry::make('name')
                                             ->label(__('document.labels.name')),
                                     ])

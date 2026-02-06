@@ -57,12 +57,12 @@ class InterventionPlanBenefitsWidget extends TableWidget
                     ->label(__('intervention_plan.actions.add_benefit'))
                     ->modalHeading(__('intervention_plan.headings.add_benefit_modal'))
                     ->model(BenefitService::class)
-                    ->mutateFormDataUsing(function (array $data): array {
+                    ->mutateDataUsing(function (array $data): array {
                         $data['intervention_plan_id'] = $this->record?->interventionPlan?->id;
 
                         return $data;
                     })
-                    ->form([
+                    ->schema([
                         Select::make('benefit_id')
                             ->label(__('intervention_plan.labels.benefit_category'))
                             ->placeholder(__('intervention_plan.placeholders.benefit_category'))

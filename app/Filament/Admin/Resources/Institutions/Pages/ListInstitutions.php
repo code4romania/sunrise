@@ -25,7 +25,7 @@ class ListInstitutions extends ListRecords
             Action::make('selectAccountType')
                 ->label(__('institution.actions.create'))
                 ->modalHeading(__('institution.account_type.modal_title'))
-                ->form([
+                ->schema([
                     Radio::make('account_type')
                         ->label('')
                         ->options([

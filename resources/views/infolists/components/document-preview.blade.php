@@ -3,7 +3,7 @@
 @endphp
 
 @if($file)
-    <div class="fi-in-document-preview">
+    <div class="fi-in-document-preview w-full">
         @if($file->mime_type === 'application/pdf' || str_starts_with($file->mime_type, 'image/'))
             <iframe
                 src="{{ $file->getUrl() }}"

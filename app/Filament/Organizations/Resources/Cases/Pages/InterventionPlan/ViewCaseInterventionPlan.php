@@ -76,7 +76,7 @@ class ViewCaseInterventionPlan extends ViewRecord
                     'plan_date',
                     'last_revise_date',
                 ]))
-                ->form([
+                ->schema([
                     Grid::make(1)
                         ->schema([
                             Placeholder::make('beneficiary_name')
