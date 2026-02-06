@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets;
 
+use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use App\Models\InterventionService;
+use App\Models\OrganizationService;
+use App\Models\Specialist;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
@@ -28,6 +36,7 @@ class InterventionPlanServicesWidget extends TableWidget
                     ? $plan->services()
                         ->with(['organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition', 'specialist.user', 'specialist.role'])
                         ->withCount(['beneficiaryInterventions', 'meetings'])
+                        ->getQuery()
                     : InterventionService::query()->whereRaw('1 = 0')
             )
             ->heading(__('intervention_plan.headings.services'))
@@ -41,6 +50,67 @@ class InterventionPlanServicesWidget extends TableWidget
                     ->label(__('intervention_plan.labels.interventions_count')),
                 TextColumn::make('meetings_count')
                     ->label(__('intervention_plan.labels.meetings_count')),
+            ])
+            ->headerActions([
+                \Filament\Actions\CreateAction::make()
+                    ->label(__('intervention_plan.actions.add_service'))
+                    ->modalHeading(__('intervention_plan.headings.add_service'))
+                    ->model(InterventionService::class)
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['intervention_plan_id'] = $this->record?->interventionPlan?->id;
+
+                        return $data;
+                    })
+                    ->form([
+                        Grid::make()
+                            ->schema([
+                                Select::make('organization_service_id')
+                                    ->label(__('intervention_plan.labels.service_type'))
+                                    ->placeholder(__('intervention_plan.placeholders.organization_service'))
+                                    ->options(
+                                        OrganizationService::with('serviceWithoutStatusCondition')
+                                            ->active()
+                                            ->get()
+                                            ->filter(fn (OrganizationService $item) => $item->serviceWithoutStatusCondition)
+                                            ->pluck('serviceWithoutStatusCondition.name', 'id')
+                                    )
+                                    ->required(),
+                                TextInput::make('institution')
+                                    ->label(__('intervention_plan.labels.responsible_institution'))
+                                    ->placeholder(__('intervention_plan.placeholders.institution'))
+                                    ->default(fn () => Filament::getTenant()?->name)
+                                    ->maxLength(100),
+                                Select::make('specialist_id')
+                                    ->label(__('intervention_plan.labels.responsible_specialist'))
+                                    ->placeholder(__('intervention_plan.placeholders.specialist'))
+                                    ->options(function (): array {
+                                        $plan = $this->record?->interventionPlan;
+                                        if (! $plan) {
+                                            return [];
+                                        }
+
+                                        return $plan->beneficiary
+                                            ->specialistsTeam()
+                                            ->with(['user:id,first_name,last_name', 'role:id,name'])
+                                            ->get()
+                                            ->mapWithKeys(fn (Specialist $s) => [$s->id => $s->name_role])
+                                            ->all();
+                                    }),
+                            ]),
+                        Grid::make()
+                            ->columns(2)
+                            ->schema([
+                                DatePicker::make('start_date_interval')
+                                    ->label(__('intervention_plan.labels.start_date_interval')),
+                                DatePicker::make('end_date_interval')
+                                    ->label(__('intervention_plan.labels.end_date_interval')),
+                            ]),
+                        RichEditor::make('objections')
+                            ->label(__('intervention_plan.labels.objections'))
+                            ->placeholder(__('intervention_plan.placeholders.objections'))
+                            ->maxLength(1000),
+                    ])
+                    ->createAnother(false),
             ])
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_table'))

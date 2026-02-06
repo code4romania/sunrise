@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases;
 use App\Filament\Organizations\Resources\Cases\Pages\CreateCase;
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\CreateCaseDetailedEvaluation;
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\ViewCaseDetailedEvaluation;
+use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAggressor;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseChildren;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseIdentity;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCasePersonalInformation;
@@ -130,6 +131,7 @@ class CaseResource extends Resource
             'edit_children' => EditCaseChildren::route('/{record}/children/edit'),
             'view_personal_information' => ViewCasePersonalInformation::route('/{record}/personal'),
             'edit_personal_information' => EditCasePersonalInformation::route('/{record}/personal/edit'),
+            'edit_aggressor' => EditCaseAggressor::route('/{record}/personal/aggressor/edit'),
             'create_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/create'),
             'edit_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/edit'),
             'view_detailed_evaluation' => ViewCaseDetailedEvaluation::route('/{record}/detailed-evaluation'),
