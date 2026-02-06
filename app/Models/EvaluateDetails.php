@@ -9,6 +9,7 @@ use App\Concerns\LogsActivityOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class EvaluateDetails extends Model
 {
@@ -26,6 +27,18 @@ class EvaluateDetails extends Model
     protected $casts = [
         'registered_date' => 'date',
     ];
+
+    public function organization(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Organization::class,
+            Beneficiary::class,
+            'id',              // FK on Beneficiary (referenced by evaluate_details.beneficiary_id)
+            'id',              // FK on Organization (referenced by beneficiaries.organization_id)
+            'beneficiary_id',  // Local key on EvaluateDetails
+            'organization_id' // Local key on Beneficiary
+        );
+    }
 
     public function specialist(): BelongsTo
     {

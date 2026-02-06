@@ -43,7 +43,9 @@ class CreateCaseInitialEvaluation extends EditRecord
         if ($record instanceof Beneficiary) {
             $breadcrumbs[CaseResource::getUrl('view', ['record' => $record])] = $record->getBreadcrumb();
         }
-        $breadcrumbs[''] = __('beneficiary.page.create_initial_evaluation.title');
+        $breadcrumbs[''] = request()->routeIs('*.edit_initial_evaluation')
+            ? __('beneficiary.page.initial_evaluation.title')
+            : __('beneficiary.page.create_initial_evaluation.title');
 
         return $breadcrumbs;
     }

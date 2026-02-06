@@ -76,6 +76,16 @@ class IdentityInfolist
     }
 
     /**
+     * Identity fields schema for embedding in other pages (e.g. detailed evaluation view).
+     *
+     * @return array<int, mixed>
+     */
+    public static function getIdentityFieldsSchemaForEmbedding(): array
+    {
+        return static::identityFieldsSchema();
+    }
+
+    /**
      * @return array<int, mixed>
      */
     protected static function identityFieldsSchema(): array

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Schemas;
 
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
 use App\Models\Beneficiary;
 use Carbon\Carbon;
 use Filament\Actions\Action;
@@ -90,6 +91,14 @@ class CaseInfolist
                         Section::make(__('case.view.initial_evaluation'))
                             ->description(__('case.view.empty_initial_eval'))
                             ->headerActions([
+                                Action::make('view_initial_evaluation')
+                                    ->label(__('case.view.see_details'))
+                                    ->url(fn (Beneficiary $record): string => InitialEvaluationResource::getUrl('view', [
+                                        'beneficiary' => $record,
+                                        'record' => $record->evaluateDetails,
+                                    ]))
+                                    ->visible(fn (Beneficiary $record): bool => $record->evaluateDetails !== null)
+                                    ->link(),
                                 Action::make('create_initial_evaluation')
                                     ->label(__('case.view.start_evaluation'))
                                     ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_initial_evaluation', ['record' => $record]))
@@ -106,13 +115,37 @@ class CaseInfolist
 
                         Section::make(__('case.view.detailed_evaluation'))
                             ->description(__('case.view.empty_detailed_eval'))
+                            ->headerActions([
+                                Action::make('view_detailed_evaluation')
+                                    ->label(__('case.view.see_details'))
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('view_detailed_evaluation', ['record' => $record]))
+                                    ->visible(fn (Beneficiary $record): bool => $record->multidisciplinaryEvaluation !== null || $record->detailedEvaluationResult !== null || $record->detailedEvaluationSpecialists()->exists())
+                                    ->link(),
+                                Action::make('start_detailed_evaluation')
+                                    ->label(__('case.view.start_evaluation'))
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                    ->visible(fn (Beneficiary $record): bool => $record->multidisciplinaryEvaluation === null && $record->detailedEvaluationResult === null && ! $record->detailedEvaluationSpecialists()->exists())
+                                    ->link(),
+                            ])
                             ->schema([]),
 
                         Section::make(__('case.view.intervention_plan'))
                             ->description(__('case.view.empty_intervention_plan'))
-                            ->schema([
-                                TextEntry::make('interventionPlan.id')
+                            ->headerActions([
+                                Action::make('create_plan')
+                                    ->label(__('case.view.create_plan'))
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_intervention_plan', ['record' => $record]))
+                                    ->visible(fn (Beneficiary $record): bool => $record->interventionPlan === null),
+                                Action::make('view_plan')
                                     ->label(__('case.view.see_plan_details'))
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('view_intervention_plan', ['record' => $record]))
+                                    ->visible(fn (Beneficiary $record): bool => $record->interventionPlan !== null)
+                                    ->link(),
+                            ])
+                            ->schema([
+                                TextEntry::make('interventionPlan.plan_date')
+                                    ->label(__('intervention_plan.labels.plan_date'))
+                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
                                     ->placeholder('—')
                                     ->visible(fn (Beneficiary $record): bool => $record->interventionPlan !== null),
                             ])
