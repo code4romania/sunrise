@@ -6,6 +6,10 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanBenefitsWidget;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanMonthlyPlansWidget;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanResultsWidget;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanServicesWidget;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use Carbon\Carbon;
@@ -158,5 +162,18 @@ class ViewCaseInterventionPlan extends ViewRecord
         ]);
 
         return implode(', ', $parts);
+    }
+
+    /**
+     * @return array<int, class-string<\Filament\Widgets\Widget>>
+     */
+    protected function getFooterWidgets(): array
+    {
+        return [
+            InterventionPlanServicesWidget::class,
+            InterventionPlanBenefitsWidget::class,
+            InterventionPlanResultsWidget::class,
+            InterventionPlanMonthlyPlansWidget::class,
+        ];
     }
 }
