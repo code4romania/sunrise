@@ -173,11 +173,29 @@ class ViewCaseMonthlyPlan extends ViewRecord
 
                                             TextEntry::make('start_date')
                                                 ->label(__('intervention_plan.labels.monthly_plan_service_interval_start'))
-                                                ->formatStateUsing(fn ($state) => $state ? Carbon::parse($state)->format('d.m.Y') : '—'),
+                                                ->formatStateUsing(function ($state) {
+                                                    if ($state === null || $state === '' || $state === '-') {
+                                                        return '—';
+                                                    }
+                                                    try {
+                                                        return Carbon::parse($state)->format('d.m.Y');
+                                                    } catch (\Throwable) {
+                                                        return '—';
+                                                    }
+                                                }),
 
                                             TextEntry::make('end_date')
                                                 ->label(__('intervention_plan.labels.monthly_plan_service_interval_end'))
-                                                ->formatStateUsing(fn ($state) => $state ? Carbon::parse($state)->format('d.m.Y') : '—'),
+                                                ->formatStateUsing(function ($state) {
+                                                    if ($state === null || $state === '' || $state === '-') {
+                                                        return '—';
+                                                    }
+                                                    try {
+                                                        return Carbon::parse($state)->format('d.m.Y');
+                                                    } catch (\Throwable) {
+                                                        return '—';
+                                                    }
+                                                }),
 
                                             TextEntry::make('objective')
                                                 ->label(__('intervention_plan.labels.service_objective')),

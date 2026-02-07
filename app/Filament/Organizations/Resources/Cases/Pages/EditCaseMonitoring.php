@@ -6,20 +6,20 @@ namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
-use App\Filament\Organizations\Resources\Cases\Pages\Widgets\DocumentsWidget;
+use App\Filament\Organizations\Resources\Cases\Pages\Widgets\MonitoringWidget;
 use App\Models\Beneficiary;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 
-class EditCaseDocuments extends ViewRecord
+class EditCaseMonitoring extends ViewRecord
 {
     protected static string $resource = CaseResource::class;
 
     public function getTitle(): string|Htmlable
     {
-        return __('case.view.documents');
+        return __('monitoring.titles.list');
     }
 
     public function getBreadcrumbs(): array
@@ -29,7 +29,7 @@ class EditCaseDocuments extends ViewRecord
         return [
             CaseResource::getUrl('index') => __('case.view.breadcrumb_all'),
             CaseResource::getUrl('view', ['record' => $record]) => $record instanceof Beneficiary ? $record->getBreadcrumb() : '',
-            '' => __('case.view.documents'),
+            '' => __('monitoring.titles.list'),
         ];
     }
 
@@ -46,7 +46,7 @@ class EditCaseDocuments extends ViewRecord
         return $schema
             ->components([
                 Grid::make(1)
-                    ->schema(fn (): array => $this->getWidgetsSchemaComponents([DocumentsWidget::class])),
+                    ->schema(fn (): array => $this->getWidgetsSchemaComponents([MonitoringWidget::class])),
             ]);
     }
 

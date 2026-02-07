@@ -36,7 +36,7 @@ class ViewCase extends ViewRecord
             Action::make('modification_history')
                 ->label(__('case.view.modification_history'))
                 ->link()
-                ->url('#'),
+                ->url(fn () => CaseResource::getUrl('modification_history', ['record' => $record])),
             ActionGroup::make([
                 Action::make('reopen_case')
                     ->label(__('beneficiary.action.active'))

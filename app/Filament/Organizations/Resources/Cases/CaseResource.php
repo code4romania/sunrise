@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAntecedents;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseChildren;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseDocuments;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseIdentity;
+use App\Filament\Organizations\Resources\Cases\Pages\EditCaseMonitoring;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCasePersonalInformation;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseTeam;
 use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\CreateCaseInitialEvaluation;
@@ -23,6 +24,7 @@ use App\Filament\Organizations\Resources\Cases\Pages\ListCases;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCase;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseDocument;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseIdentity;
+use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseModificationHistory;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCasePersonalInformation;
 use App\Filament\Organizations\Resources\Cases\RelationManagers\EvaluateDetailsRelationManager;
 use App\Filament\Organizations\Resources\Cases\Schemas\CaseInfolist;
@@ -132,6 +134,7 @@ class CaseResource extends Resource
             'index' => ListCases::route('/'),
             'create' => CreateCase::route('/create'),
             'view' => ViewCase::route('/{record}'),
+            'modification_history' => ViewCaseModificationHistory::route('/{record}/modification-history'),
             'identity' => ViewCaseIdentity::route('/{record}/identity'),
             'edit_identity' => EditCaseIdentity::route('/{record}/identity/edit'),
             'edit_children' => EditCaseChildren::route('/{record}/children/edit'),
@@ -141,6 +144,7 @@ class CaseResource extends Resource
             'edit_case_team' => EditCaseTeam::route('/{record}/case-team/edit'),
             'edit_case_documents' => EditCaseDocuments::route('/{record}/documents'),
             'view_case_document' => ViewCaseDocument::route('/{record}/documents/{document}'),
+            'edit_case_monitoring' => EditCaseMonitoring::route('/{record}/monitoring'),
             'edit_antecedents' => EditCaseAntecedents::route('/{record}/personal/antecedents/edit'),
             'create_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/create'),
             'edit_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/edit'),
@@ -149,7 +153,7 @@ class CaseResource extends Resource
             'edit_detailed_evaluation' => CreateCaseDetailedEvaluation::route('/{record}/detailed-evaluation/edit'),
             'create_intervention_plan' => CreateCaseInterventionPlan::route('/{record}/intervention-plan/create'),
             'view_intervention_plan' => ViewCaseInterventionPlan::route('/{record}/intervention-plan'),
-            'create_monthly_plan' => CreateCaseMonthlyPlan::route('/{record}/intervention-plan/monthly-plans/create'),
+            'create_monthly_plan' => CreateCaseMonthlyPlan::route('/{case}/intervention-plan/monthly-plans/create'),
             'view_monthly_plan' => ViewCaseMonthlyPlan::route('/{record}/intervention-plan/monthly-plans/{monthlyPlan}'),
         ];
     }

@@ -62,7 +62,7 @@ class ViewService extends ViewRecord
     {
         parent::mount($record);
 
-        $this->getRecord()->loadMissing([
+        $this->getRecord()->load([
             'serviceWithoutStatusCondition',
             'interventions.serviceInterventionWithoutStatusCondition',
             'interventions.beneficiaryInterventions.interventionPlan',

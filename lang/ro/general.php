@@ -40,4 +40,7 @@ return [
     'placeholders' => [
         'date' => 'zz-ll-aaaa',
     ],
+
+    'yes' => 'Da',
+    'no' => 'Nu',
 ];

@@ -46,18 +46,18 @@ class EditCaseTeam extends ViewRecord
         return $schema
             ->components([
                 Grid::make(1)
-                    ->schema(fn (): array => $this->getWidgetsSchemaComponents($this->getFooterWidgets())),
+                    ->schema(fn (): array => $this->getWidgetsSchemaComponents([CaseTeamWidget::class])),
             ]);
     }
 
     /**
+     * Return empty so the table is only shown once in content(); otherwise it would also appear in the page footer.
+     *
      * @return array<int, class-string<\Filament\Widgets\Widget>>
      */
     protected function getFooterWidgets(): array
     {
-        return [
-            CaseTeamWidget::class,
-        ];
+        return [];
     }
 
     protected function hasInfolist(): bool

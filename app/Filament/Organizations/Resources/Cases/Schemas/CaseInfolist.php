@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Schemas;
 
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Organizations\Resources\Cases\Resources\CloseFile\CloseFileResource;
 use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
 use App\Models\Beneficiary;
 use Carbon\Carbon;
@@ -27,7 +28,6 @@ class CaseInfolist
                     ->schema([
 
                         Section::make(__('case.view.identity'))
-                            ->description(__('case.view.see_details'))
                             ->headerActions([
                                 Action::make('view_identity')
                                     ->label(__('case.view.see_details'))
@@ -75,7 +75,6 @@ class CaseInfolist
                             ]),
 
                         Section::make(__('case.view.case_info'))
-                            ->description(__('case.view.see_details'))
                             ->headerActions([
                                 Action::make('view_personal_information')
                                     ->label(__('case.view.see_details'))
@@ -89,7 +88,6 @@ class CaseInfolist
                             ]),
 
                         Section::make(__('case.view.initial_evaluation'))
-                            ->description(__('case.view.empty_initial_eval'))
                             ->headerActions([
                                 Action::make('view_initial_evaluation')
                                     ->label(__('case.view.see_details'))
@@ -114,7 +112,6 @@ class CaseInfolist
                             ]),
 
                         Section::make(__('case.view.detailed_evaluation'))
-                            ->description(__('case.view.empty_detailed_eval'))
                             ->headerActions([
                                 Action::make('view_detailed_evaluation')
                                     ->label(__('case.view.see_details'))
@@ -130,7 +127,6 @@ class CaseInfolist
                             ->schema([]),
 
                         Section::make(__('case.view.intervention_plan'))
-                            ->description(__('case.view.empty_intervention_plan'))
                             ->headerActions([
                                 Action::make('create_plan')
                                     ->label(__('case.view.create_plan'))
@@ -152,6 +148,12 @@ class CaseInfolist
                             ->columnSpan(2),
 
                         Section::make(__('case.view.case_monitoring'))
+                            ->headerActions([
+                                Action::make('edit_monitoring')
+                                    ->label(__('case.view.manage_monitoring'))
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_case_monitoring', ['record' => $record]))
+                                    ->link(),
+                            ])
                             ->schema([
                                 TextEntry::make('lastMonitoring.date')
                                     ->label(__('case.view.last_monitoring'))
@@ -164,7 +166,18 @@ class CaseInfolist
                             ]),
 
                         Section::make(__('case.view.case_closure'))
-                            ->description(__('case.view.empty_closure'))
+                            ->headerActions([
+                                Action::make('create_close_file')
+                                    ->label(__('case.view.complete_closure_sheet'))
+                                    ->url(fn (Beneficiary $record): string => CloseFileResource::getUrl('create', ['beneficiary' => $record]))
+                                    ->visible(fn (Beneficiary $record): bool => $record->closeFile === null)
+                                    ->link(),
+                                Action::make('view_close_file')
+                                    ->label(__('beneficiary.section.close_file.headings.file_details_simple'))
+                                    ->url(fn (Beneficiary $record): string => CloseFileResource::getUrl('view', ['beneficiary' => $record, 'record' => $record->closeFile]))
+                                    ->visible(fn (Beneficiary $record): bool => $record->closeFile !== null)
+                                    ->link(),
+                            ])
                             ->schema([
                                 TextEntry::make('closeFile.date')
                                     ->label(__('case.view.closed_at'))
@@ -173,12 +186,12 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->closeFile !== null),
                                 TextEntry::make('closeFile.close_method')
                                     ->label(__('case.view.closure_method'))
+                                    ->formatStateUsing(fn ($state) => $state?->getLabel() ?? '—')
                                     ->placeholder('—')
                                     ->visible(fn (Beneficiary $record): bool => $record->closeFile !== null),
                             ]),
 
                         Section::make(__('case.view.case_team'))
-                            ->description(__('case.view.see_details'))
                             ->headerActions([
                                 Action::make('edit_case_team')
                                     ->label(__('case.view.manage_case_team'))
@@ -198,7 +211,6 @@ class CaseInfolist
                             ]),
 
                         Section::make(__('case.view.documents'))
-                            ->description(__('case.view.see_details'))
                             ->headerActions([
                                 Action::make('edit_documents')
                                     ->label(__('case.view.manage_documents'))

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Pages\CreateCase;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseIdentity;
+use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseModificationHistory;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCasePersonalInformation;
 use App\Models\Beneficiary;
 use App\Models\User;
@@ -91,6 +92,32 @@ it('can see personal information tabs on personal information page', function ()
         ->create(['first_name' => 'Test', 'last_name' => 'Beneficiary']);
 
     livewire(ViewCasePersonalInformation::class, [
+        'record' => $beneficiary->getKey(),
+        'tenant' => $this->organization,
+    ])
+        ->assertSuccessful();
+});
+
+it('can render modification history page for a case', function () {
+    $beneficiary = Beneficiary::factory()
+        ->for($this->organization)
+        ->create(['first_name' => 'Test', 'last_name' => 'Beneficiary']);
+
+    $url = CaseResource::getUrl('modification_history', [
+        'record' => $beneficiary,
+        'tenant' => $this->organization,
+    ]);
+
+    $this->get($url)
+        ->assertSuccessful();
+});
+
+it('can see modification history page with livewire', function () {
+    $beneficiary = Beneficiary::factory()
+        ->for($this->organization)
+        ->create(['first_name' => 'Test', 'last_name' => 'Beneficiary']);
+
+    livewire(ViewCaseModificationHistory::class, [
         'record' => $beneficiary->getKey(),
         'tenant' => $this->organization,
     ])

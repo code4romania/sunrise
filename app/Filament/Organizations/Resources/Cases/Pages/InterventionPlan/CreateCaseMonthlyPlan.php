@@ -28,13 +28,9 @@ class CreateCaseMonthlyPlan extends CreateRecord
 
     public function mount(): void
     {
-        $recordKey = request()->route('record');
-        $this->record = CaseResource::resolveRecordRouteBinding($recordKey);
-        if ($this->record === null) {
-            abort(404);
-        }
-
-        if (! $this->record instanceof Beneficiary) {
+        $caseKey = request()->route('case');
+        $this->record = CaseResource::resolveRecordRouteBinding($caseKey);
+        if ($this->record === null || ! $this->record instanceof Beneficiary) {
             abort(404);
         }
 
@@ -67,16 +63,34 @@ class CreateCaseMonthlyPlan extends CreateRecord
 
     protected function authorizeAccess(): void
     {
-        abort_unless(CaseResource::canEdit($this->beneficiary), 403);
+        $beneficiary = $this->getBeneficiary();
+        abort_unless($beneficiary !== null && CaseResource::canEdit($beneficiary), 403);
+    }
+
+    protected function getBeneficiary(): ?Beneficiary
+    {
+        if ($this->beneficiary !== null) {
+            return $this->beneficiary;
+        }
+        if ($this->record instanceof Beneficiary) {
+            return $this->record;
+        }
+        $record = $this->getRecord();
+        if ($record instanceof MonthlyPlan && $record->relationLoaded('interventionPlan')) {
+            return $record->interventionPlan?->beneficiary;
+        }
+
+        return null;
     }
 
     protected function fillForm(): void
     {
+        $beneficiary = $this->getBeneficiary();
         $this->callHook('beforeFill');
         $this->form->fill([
             'start_date' => Carbon::now()->startOfMonth()->format('Y-m-d'),
             'end_date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
-            'case_manager_user_id' => $this->beneficiary->managerTeam?->first()?->user_id ?? auth()->id(),
+            'case_manager_user_id' => $beneficiary?->managerTeam?->first()?->user_id ?? auth()->id(),
         ]);
         $this->callHook('afterFill');
     }
@@ -88,7 +102,7 @@ class CreateCaseMonthlyPlan extends CreateRecord
 
     public function getBreadcrumbs(): array
     {
-        $record = $this->beneficiary ?? $this->getRecord();
+        $record = $this->getBeneficiary() ?? $this->getRecord();
 
         return [
             CaseResource::getUrl('index') => __('case.view.breadcrumb_all'),
@@ -100,7 +114,7 @@ class CreateCaseMonthlyPlan extends CreateRecord
 
     protected function getHeaderActions(): array
     {
-        $record = $this->beneficiary ?? $this->getRecord();
+        $record = $this->getBeneficiary() ?? $this->getRecord();
 
         return [
             BackAction::make()
@@ -141,15 +155,20 @@ class CreateCaseMonthlyPlan extends CreateRecord
      */
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['intervention_plan_id'] = $this->beneficiary->interventionPlan->id;
+        $beneficiary = $this->getBeneficiary();
+        abort_unless($beneficiary?->interventionPlan !== null, 404);
+        $data['intervention_plan_id'] = $beneficiary->interventionPlan->id;
+        $data['specialists'] = $data['specialists'] ?? [];
 
         return $data;
     }
 
     protected function getRedirectUrl(): string
     {
+        $beneficiary = $this->getBeneficiary();
+
         return CaseResource::getUrl('view_monthly_plan', [
-            'record' => $this->beneficiary,
+            'record' => $beneficiary ?? $this->getRecord()->interventionPlan?->beneficiary,
             'monthlyPlan' => $this->getRecord(),
         ]);
     }

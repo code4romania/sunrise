@@ -52,7 +52,7 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
                         \Filament\Actions\Action::make('create_from_last')
                             ->label(__('intervention_plan.actions.create_monthly_plan_from_last'))
                             ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', [
-                                'record' => $this->record,
+                                'case' => $this->record,
                                 'copyLastPlan' => '1',
                             ]))
                     )
@@ -60,12 +60,12 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
                         \Filament\Actions\Action::make('create_simple')
                             ->label(__('intervention_plan.actions.create_monthly_plan_simple'))
                             ->outlined()
-                            ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', ['record' => $this->record]))
+                            ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', ['case' => $this->record]))
                     )
                     ->visible(fn (): bool => (bool) ($plan && $plan->monthlyPlans()->count() > 0)),
                 \Filament\Actions\Action::make('create_direct')
                     ->label(__('intervention_plan.actions.create_monthly_plan'))
-                    ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', ['record' => $this->record]))
+                    ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', ['case' => $this->record]))
                     ->visible(fn (): bool => (bool) ($plan && $plan->monthlyPlans()->count() === 0)),
             ])
             ->recordUrl(

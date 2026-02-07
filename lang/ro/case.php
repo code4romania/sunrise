@@ -44,6 +44,8 @@ return [
     'view' => [
         'breadcrumb_all' => 'Toate cazurile',
         'modification_history' => 'Istoric modificări',
+        'modification_history_download' => 'Descarcă Excel',
+        'modification_history_download_csv' => 'Descarcă CSV',
         'case_actions' => 'Acțiuni caz',
         'see_details' => 'Vezi detalii',
         'see_plan_details' => 'Vezi detalii plan',
@@ -62,6 +64,7 @@ return [
         'manage_case_team' => 'Gestionează echipa',
         'documents' => 'Documente',
         'manage_documents' => 'Gestionează documente',
+        'manage_monitoring' => 'Gestionează monitorizare',
         'related_files' => 'Fișe conectate cazului (istoric caz)',
         'empty_initial_eval' => 'Identificarea nevoilor inițiale pentru oferirea de servicii imediate',
         'empty_detailed_eval' => 'Evaluarea multidisciplinară pentru informarea planului de intervenție',

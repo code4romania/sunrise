@@ -7,6 +7,7 @@
         @if($file->mime_type === 'application/pdf' || str_starts_with($file->mime_type, 'image/'))
             <iframe
                 src="{{ $file->getUrl() }}"
+                style="width: 100%; height: 600px;"
                 class="w-full h-[600px] border rounded-lg"
                 frameborder="0"
             ></iframe>
