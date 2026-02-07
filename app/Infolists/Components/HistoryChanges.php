@@ -64,7 +64,7 @@ class HistoryChanges extends Entry
     public function getFieldValue(string $field, mixed $value): mixed
     {
         if ($field === 'created_at' || $field === 'updated_at') {
-            return Carbon::parse($value)->format('d.m.Y H:i:s');
+            return $this->safeParseDateTime($value, 'd.m.Y H:i:s');
         }
 
         $castType = $this->getCastType($field);
@@ -85,7 +85,7 @@ class HistoryChanges extends Entry
             }
 
             if ($castType === 'date' && $value) {
-                return Carbon::parse($value)->format('d.m.Y');
+                return $this->safeParseDateTime($value, 'd.m.Y');
             }
 
             $value = $this->convertToEnum($castType, $value);
@@ -128,7 +128,7 @@ class HistoryChanges extends Entry
             $record->event = 'specialist';
         }
         $modelName = \sprintf('\App\Models\%s', ucfirst($record->event));
-        $modelClass = new $modelName();
+        $modelClass = new $modelName;
 
         return $modelClass->getCasts()[$field] ?? null;
     }
@@ -148,7 +148,7 @@ class HistoryChanges extends Entry
         }
 
         if (str_contains($castType, AsEnumCollection::class)) {
-            $castType = str_replace(AsEnumCollection::class . ':', '', $castType);
+            $castType = str_replace(AsEnumCollection::class.':', '', $castType);
             if (enum_exists($castType)) {
                 if ($fieldValue) {
                     foreach ($fieldValue as &$value) {
@@ -170,7 +170,7 @@ class HistoryChanges extends Entry
             $value = $item['value'] ? Ternary::tryFrom((int) $item['value'])->getLabel() : '-';
 
             if ($item['description']) {
-                return $value . ' (' . $item['description'] . ')';
+                return $value.' ('.$item['description'].')';
             }
 
             return $value;
@@ -233,5 +233,18 @@ class HistoryChanges extends Entry
             'method_ofentifying_the_service' => 'method_of_identifying_the_service',
             default => $field,
         };
+    }
+
+    private function safeParseDateTime(mixed $value, string $format): string
+    {
+        if (blank($value) || $value === '-') {
+            return '-';
+        }
+
+        try {
+            return Carbon::parse($value)->format($format);
+        } catch (\Throwable) {
+            return '-';
+        }
     }
 }

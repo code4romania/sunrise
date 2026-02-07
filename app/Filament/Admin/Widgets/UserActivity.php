@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Widgets;
 
 use App\Models\Activity;
-use DB;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\DB;
 
 class UserActivity extends ChartWidget
 {
     protected ?string $heading = 'Chart';
 
-    protected int | string | array $columnSpan = 2;
+    protected int|string|array $columnSpan = 2;
 
     protected ?string $maxHeight = '300px';
 
@@ -36,14 +36,14 @@ class UserActivity extends ChartWidget
             'datasets' => [
                 [
                     'label' => __('user.label.plural'),
-                    'data' => $userActivity->map(fn ($value) => $value->total),
+                    'data' => $userActivity->map(fn ($value) => $value->total)->values()->all(),
                 ],
             ],
             'labels' => $userActivity->map(function ($value) {
                 $month = explode(' ', $value->year_and_month)[1];
 
-                return __('enum.short_months.' . (int) $month);
-            }),
+                return __('enum.short_months.'.(int) $month);
+            })->values()->all(),
         ];
     }
 

@@ -14,10 +14,10 @@ class Dashboard extends BaseDashboard
         return __('dashboard.labels.navigation');
     }
 
-    public function getHeading(): string | Htmlable
+    public function getHeading(): string|Htmlable
     {
         return __('dashboard.welcome', [
-            'name' => auth()->user()->first_name,
+            'name' => auth()->user()->first_name ?? auth()->user()->name ?? 'Admin',
         ]);
     }
 }

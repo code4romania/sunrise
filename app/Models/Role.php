@@ -22,13 +22,23 @@ class Role extends Model
         'case_manager',
         'case_permissions',
         'ngo_admin_permissions',
+        'sort',
     ];
 
     protected $casts = [
-        'case_permissions' => AsEnumCollection::class . ':' . CasePermission::class,
-        'ngo_admin_permissions' => AsEnumCollection::class . ':' . AdminPermission::class,
+        'case_permissions' => AsEnumCollection::class.':'.CasePermission::class,
+        'ngo_admin_permissions' => AsEnumCollection::class.':'.AdminPermission::class,
         'case_manager' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Role $model): void {
+            if (! isset($model->sort)) {
+                $model->sort = static::max('sort') + 1;
+            }
+        });
+    }
 
     public function users(): BelongsToMany
     {

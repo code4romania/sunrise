@@ -14,10 +14,10 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class OrganizationServiceIntervention extends Model
 {
-    use HasFactory;
     use BelongsToOrganization;
-    use HasGeneralStatus;
     use BelongsToThroughTrait;
+    use HasFactory;
+    use HasGeneralStatus;
 
     protected $fillable = [
         'id',

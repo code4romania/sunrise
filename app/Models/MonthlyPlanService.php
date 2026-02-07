@@ -14,9 +14,9 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class MonthlyPlanService extends Model
 {
+    use BelongsToThroughTrait;
     use HasFactory;
     use LogsActivityOptions;
-    use BelongsToThroughTrait;
 
     protected $fillable = [
         'monthly_plan_id',

@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BenefitService extends Model
 {
+    use BelongsToInterventionPlan;
     use HasFactory;
     use LogsActivityOptions;
-    use BelongsToInterventionPlan;
 
     protected $fillable = [
         'benefit_id',
@@ -27,7 +27,7 @@ class BenefitService extends Model
 
     protected $casts = [
         'benefit_types' => 'json',
-        'award_methods' => AsEnumCollection::class . ':' . AwardMethod::class,
+        'award_methods' => AsEnumCollection::class.':'.AwardMethod::class,
     ];
 
     public function benefit(): BelongsTo

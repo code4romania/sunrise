@@ -29,6 +29,8 @@ return [
         'organization_status' => 'Statut organizație sau hotărâre de înființare',
         'social_service_provider_certificate' => 'Certificat furnizor de servicii sociale',
         'center_name' => 'Nume centru',
+        'center_short_name' => 'Acronim (nume scurt centru)',
+        'information_center' => 'Centru de informare',
         'social_service_licensing_certificate' => 'Certificat de licențiere serviciu social',
         'logo_center' => 'Logo centru',
         'organization_header' => 'Antet centru',
@@ -52,12 +54,25 @@ return [
     ],
 
     'placeholders' => [
+        'search_specialist' => 'Caută specialist',
         'center_details' => 'Dacă instituția are multiple centre acreditate pentru servicii diferite și necesită menținearea unor baze de date diferite de beneficiari, se pot crea tenants (profile) diferite pentru fiecare dintre acestea.',
         'ngo_admins' => 'Adăugați cel puțin un rol de administrator în sistem. Această persoană are drepturi depline asupra întregii aplicații Sunrise pentru toate centrele instituției (ale organizației). Un email de invitație va fi transmis administratorului odată cu finalizarea adăugării instituției.',
         'first_name' => 'Nume administrator platformă',
         'last_name' => 'Prenume administrator platformă',
         'email' => 'Adresă de email administrator platformă',
         'phone' => 'Număr de telefon administrator platformă',
+    ],
+
+    'account_type' => [
+        'modal_title' => 'Selectează tipul de cont pentru utilizator',
+        'full_access' => 'Cont cu toate funcționalitățile',
+        'full_access_description' => 'Utilizator instituțional cu licență de furnizor servicii sociale VD, care va avea acces la toate funcționalitățile platformei, atât Managerul de Caz cât și Comunitatea Sunrise.',
+        'community_only' => 'Cont exclusiv pentru Comunitatea Sunrise',
+        'community_only_description' => 'Utilizator instituțional fără licență de furnizor de servicii sociale VD, care va avea acces doar la Comunitatea Sunrise (fără acces la Managerul de Caz / Secțiunea Beneficiari).',
+        'cancel' => 'Renunță',
+        'next_step' => 'Pasul următor',
+        'finalize' => 'Finalizează',
+        'coming_soon' => 'Această funcționalitate va fi disponibilă în curând.',
     ],
 
     'helper_texts' => [

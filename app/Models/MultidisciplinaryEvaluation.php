@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class MultidisciplinaryEvaluation extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [

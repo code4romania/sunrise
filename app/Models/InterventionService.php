@@ -16,10 +16,10 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class InterventionService extends Model
 {
+    use BelongsToInterventionPlan;
     use HasFactory;
     use HasIntervalAttribute;
     use LogsActivityOptions;
-    use BelongsToInterventionPlan;
 
     protected $fillable = [
         'intervention_plan_id',

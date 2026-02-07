@@ -1,0 +1,96 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Organizations\Resources\Staff\Schemas;
+
+use App\Enums\AdminPermission;
+use App\Enums\CasePermission;
+use App\Enums\Ternary;
+use App\Infolists\Components\DateTimeEntry;
+use App\Infolists\Components\SectionHeader;
+use App\Models\User;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+
+class StaffInfolist
+{
+    public static function configure(Schema $schema): Schema
+    {
+        return $schema->components([
+            Section::make()
+                ->columns()
+                ->maxWidth('3xl')
+                ->schema([
+                    TextEntry::make('userStatus.status')
+                        ->label(__('user.labels.status')),
+
+                    DateTimeEntry::make('last_login_at')
+                        ->label(__('user.labels.last_login_at_date_time')),
+                ]),
+
+            Section::make(__('user.heading.specialist_details'))
+                ->columns()
+                ->maxWidth('3xl')
+                ->schema([
+                    TextEntry::make('first_name')
+                        ->label(__('user.labels.first_name')),
+
+                    TextEntry::make('last_name')
+                        ->label(__('user.labels.last_name')),
+
+                    TextEntry::make('email')
+                        ->label(__('user.labels.email')),
+
+                    TextEntry::make('phone_number')
+                        ->label(__('user.labels.phone_number')),
+
+                    TextEntry::make('rolesInOrganization.name')
+                        ->label(__('user.labels.select_roles')),
+
+                    TextEntry::make('can_be_case_manager')
+                        ->label(__('user.labels.can_be_case_manager'))
+                        ->state(fn (User $record) => Ternary::tryFrom((int) $record->canBeCaseManager())),
+
+                    Group::make()
+                        ->columnSpanFull()
+                        ->schema(function (User $record) {
+                            $fields = [];
+                            $fields[] = SectionHeader::make('case_permissions_group')
+                                ->state(__('user.labels.case_permissions'));
+                            foreach (CasePermission::cases() as $option) {
+                                if ($option === CasePermission::CAN_BE_CASE_MANAGER) {
+                                    continue;
+                                }
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->permissions?->case_permissions->contains($option)
+                                        ? Ternary::YES
+                                        : Ternary::NO);
+                            }
+
+                            return $fields;
+                        }),
+
+                    Group::make()
+                        ->columnSpanFull()
+                        ->schema(function (User $record) {
+                            $fields = [];
+                            $fields[] = SectionHeader::make('admin_permissions')
+                                ->state(__('user.labels.admin_permissions'));
+                            foreach (AdminPermission::cases() as $option) {
+                                $fields[] = TextEntry::make($option->value)
+                                    ->label($option->getLabel())
+                                    ->state($record->permissions?->admin_permissions->contains($option)
+                                        ? Ternary::YES
+                                        : Ternary::NO);
+                            }
+
+                            return $fields;
+                        }),
+                ]),
+        ]);
+    }
+}

@@ -73,7 +73,7 @@ return [
     /*
      * The class that contains the strategy for determining a media file's path.
      */
-    'path_generator' => App\Filament\MediaLibrary\TenantPathGenerator::class,
+    'path_generator' => App\MediaLibrary\TenantPathGenerator::class,
 
     /*
      * The class that contains the strategy for determining how to remove files.
@@ -87,7 +87,7 @@ return [
         // Model::class => PathGenerator::class
         // or
         // 'model_morph_alias' => PathGenerator::class
-        App\Models\User::class => App\Filament\MediaLibrary\UserPathGenerator::class,
+        App\Models\User::class => App\MediaLibrary\UserPathGenerator::class,
     ],
 
     /*

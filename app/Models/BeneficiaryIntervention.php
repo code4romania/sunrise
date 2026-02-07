@@ -16,8 +16,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class BeneficiaryIntervention extends Model
 {
-    use HasFactory;
     use BelongsToThroughTrait;
+    use HasFactory;
     use HasIntervalAttribute;
     use LogsActivityOptions;
 

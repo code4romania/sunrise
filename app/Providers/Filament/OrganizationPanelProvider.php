@@ -4,27 +4,20 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Organizations\Pages\Auth\Login;
-use App\Filament\Organizations\Pages\Dashboard;
-use App\Filament\Pages\Auth\RequestPasswordReset;
+use App\Filament\Organizations\Pages\Tenancy\EditOrganizationProfile;
 use App\Http\Middleware\EnsureUserIsActive;
-use App\Http\Middleware\UpdateDefaultTenant;
 use App\Livewire\Welcome;
 use App\Models\Organization;
-use Filament\Actions\Action;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationItem;
-use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\Alignment;
-use Filament\Tables\Table;
+use Filament\Support\Icons\Heroicon;
+use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -36,39 +29,18 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class OrganizationPanelProvider extends PanelProvider
 {
-    public static string $defaultDateDisplayFormat = 'd.m.Y';
-
-    public static string $defaultDateTimeDisplayFormat = 'd.m.Y H:i';
-
-    public static string $defaultDateTimeWithSecondsDisplayFormat = 'd.m.Y H:i:s';
-
-    public static string $defaultTimeDisplayFormat = 'H:i';
-
-    public static string $defaultTimeWithSecondsDisplayFormat = 'H:i:s';
-
-    public function register(): void
-    {
-        parent::register();
-
-        $this->setDefaultDateTimeDisplayFormats();
-    }
-
-    public function boot(): void
-    {
-        // UserPersonalInfo is now a standalone Livewire component
-    }
+    private const OrganizationsNamespace = 'App\\Filament\\Organizations';
 
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
             ->id('organization')
-            ->sidebarCollapsibleOnDesktop()
-            ->collapsibleNavigationGroups(false)
-            ->login(Login::class)
-            ->passwordReset(RequestPasswordReset::class)
+            ->path('')
+            ->login()
+            ->tenant(Organization::class, slugAttribute: 'slug')
+            ->tenantProfile(EditOrganizationProfile::class)
             ->colors([
-                'primary' => Color::Violet,
+                'primary' => Color::Amber,
             ])
             ->font('DM Sans')
             ->maxContentWidth('full')
@@ -78,47 +50,31 @@ class OrganizationPanelProvider extends PanelProvider
             ->darkMode(false)
             ->discoverResources(
                 in: app_path('Filament/Organizations/Resources'),
-                for: 'App\\Filament\\Organizations\\Resources'
+                for: self::OrganizationsNamespace.'\\Resources'
             )
             ->discoverPages(
                 in: app_path('Filament/Organizations/Pages'),
-                for: 'App\\Filament\\Organizations\\Pages'
+                for: self::OrganizationsNamespace.'\\Pages'
             )
-            ->pages([
-                Dashboard::class,
-            ])
-            ->routes(function () {
+            ->routes(function (): void {
                 Route::get('/welcome/{user:ulid}', Welcome::class)->name('auth.welcome');
             })
             ->discoverWidgets(
                 in: app_path('Filament/Organizations/Widgets'),
-                for: 'App\\Filament\\Organizations\\Widgets'
+                for: self::OrganizationsNamespace.'\\Widgets'
             )
             ->widgets([
-                // Widgets\AccountWidget::class,
-            ])
-            ->bootUsing(function () {
-                Page::stickyFormActions();
-                Page::alignFormActionsEnd();
-                Action::configureUsing(function (Action $action) {
-                    $action->modalFooterActionsAlignment(Alignment::Right);
-                });
-            })
-            ->unsavedChangesAlerts()
-            // ->databaseNotifications()
-            ->plugins([
-                // Breezy removed - using native Filament profile
+                AccountWidget::class,
             ])
             ->navigationItems([
                 NavigationItem::make(__('navigation.configurations.organization'))
+                    ->url(fn (): string => EditOrganizationProfile::getUrl(['tenant' => Filament::getTenant()]))
+                    ->icon(Heroicon::OutlinedBuildingOffice)
                     ->group(__('navigation.configurations._group'))
-                    ->icon('heroicon-o-cog-6-tooth')
-                    ->url(fn () => Filament::getTenantProfileUrl())
-                    ->isActiveWhen(
-                        fn () => url()->current() === Filament::getTenantProfileUrl()
-                    )
-                    ->sort(30),
+                    ->sort(1)
+                    ->visible(fn (): bool => auth()->user()?->hasAccessToOrganizationConfig() ?? false),
             ])
+            ->unsavedChangesAlerts()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -133,28 +89,6 @@ class OrganizationPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 EnsureUserIsActive::class,
-            ])
-            ->tenant(Organization::class, 'slug')
-            ->tenantRoutePrefix('org')
-            ->tenantMiddleware([
-                UpdateDefaultTenant::class,
             ]);
-    }
-
-    protected function setDefaultDateTimeDisplayFormats(): void
-    {
-        Table::configureUsing(fn (Table $table) => $table->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
-        Table::configureUsing(fn (Table $table) => $table->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
-        Table::configureUsing(fn (Table $table) => $table->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
-
-        Schema::configureUsing(fn (Schema $schema) => $schema->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
-        Schema::configureUsing(fn (Schema $schema) => $schema->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
-        Schema::configureUsing(fn (Schema $schema) => $schema->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
-
-        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
-        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
-        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateTimeWithSecondsDisplayFormat(static::$defaultDateTimeWithSecondsDisplayFormat));
-        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
-        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultTimeWithSecondsDisplayFormat(static::$defaultTimeWithSecondsDisplayFormat));
     }
 }

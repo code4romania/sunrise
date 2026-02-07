@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Violence extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -25,7 +25,7 @@ class Violence extends Model
     ];
 
     protected $casts = [
-        'violence_types' => AsEnumCollection::class . ':' . \App\Enums\Violence::class,
+        'violence_types' => AsEnumCollection::class.':'.\App\Enums\Violence::class,
         'violence_primary_type' => \App\Enums\Violence::class,
         'frequency_violence' => Frequency::class,
     ];

@@ -17,25 +17,27 @@ use App\Enums\CaseStatus;
 use App\Enums\CivilStatus;
 use App\Enums\Gender;
 use App\Enums\IDType;
+use App\Models\Scopes\BelongsToCurrentTenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 class Beneficiary extends Model
 {
     use BelongsToOrganization;
+    use HasBirthdate;
     use HasCaseStatus;
     use HasCitizenship;
+    use HasEffectiveAddress;
     use HasEthnicity;
     use HasFactory;
-    use HasUlid;
-    use HasEffectiveAddress;
-    use LogsActivityOptions;
     use HasSpecialistsTeam;
-    use HasBirthdate;
+    use HasUlid;
+    use LogsActivityOptions;
 
     protected $fillable = [
         'initial_id',
@@ -228,5 +230,24 @@ class Beneficiary extends Model
     public function details(): HasOne
     {
         return $this->hasOne(BeneficiaryDetails::class);
+    }
+
+    /**
+     * Related case files (same person: initial case + reactivations, excluding this record).
+     *
+     * @return Collection<int, Beneficiary>
+     */
+    public function getRelatedCases(): Collection
+    {
+        $initialId = $this->initial_id ?? $this->id;
+
+        return self::query()
+            ->withoutGlobalScope(BelongsToCurrentTenant::class)
+            ->where('organization_id', $this->organization_id)
+            ->where('id', '!=', $this->id)
+            ->where(fn (Builder $q) => $q->where('initial_id', $initialId)->orWhere('id', $initialId))
+            ->orderByDesc('created_at')
+            ->with(['managerTeam.user'])
+            ->get();
     }
 }

@@ -10,19 +10,19 @@ use Illuminate\Support\Collection;
 
 class BeneficiariesV2
 {
-    protected ReportType | string | null $reportType;
+    protected ReportType|string|null $reportType;
 
-    protected ReportGenerator | null $generator = null;
+    protected ?ReportGenerator $generator = null;
 
-    protected string | null $startDate = null;
+    protected ?string $startDate = null;
 
-    protected string | null $endDate = null;
+    protected ?string $endDate = null;
 
-    protected bool | null $showMissingValue = false;
+    protected ?bool $showMissingValue = false;
 
-    protected bool | null $addCasesInMonitoring = false;
+    protected ?bool $addCasesInMonitoring = false;
 
-    public function setReportType(ReportType | string | null $reportType): self
+    public function setReportType(ReportType|string|null $reportType): self
     {
         $this->reportType = $reportType;
 
@@ -60,13 +60,13 @@ class BeneficiariesV2
     public function composeReport(): void
     {
         $generatorClass = str_replace(' ', '', ucwords(str_replace('_', ' ', $this->reportType->value)));
-        $generatorClass = 'App\\Services\\Reports\\BeneficiariesReports\\' . $generatorClass;
+        $generatorClass = __NAMESPACE__.'\\BeneficiariesReports\\'.$generatorClass;
 
         if (! class_exists($generatorClass)) {
             return;
         }
 
-        $this->generator = new $generatorClass();
+        $this->generator = new $generatorClass;
         $this->generator
             ->setStartDate($this->startDate)
             ->setEndDate($this->endDate)

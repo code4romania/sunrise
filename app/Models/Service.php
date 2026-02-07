@@ -19,11 +19,21 @@ class Service extends Model
     protected $fillable = [
         'name',
         'counseling_sheet',
+        'sort',
     ];
 
     protected $casts = [
         'counseling_sheet' => CounselingSheet::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Service $model): void {
+            if (! isset($model->sort)) {
+                $model->sort = static::max('sort') + 1;
+            }
+        });
+    }
 
     public function serviceInterventions(): HasMany
     {

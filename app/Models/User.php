@@ -37,17 +37,17 @@ use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, HasMedia, HasTenants, HasDefaultTenant
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasDefaultTenant, HasMedia, HasName, HasTenants
 {
     use CausesActivity;
     use HasApiTokens;
     use HasFactory;
+    use HasPermissions;
     use HasUlid;
     use InteractsWithMedia;
     use LogsActivityOptions;
     use MustSetInitialPassword;
     use Notifiable;
-    use HasPermissions;
 
     /**
      * The attributes that are mass assignable.
@@ -221,22 +221,22 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
     public function scopeWithLastLoginAt(Builder $query): Builder
     {
         return $query;
-//            ->addSelect([
-//                'last_login_at' => Activity::query()
-//                    ->select('created_at')
-//                    ->where('subject_type', $this->getMorphClass())
-//                    ->whereColumn('subject_id', 'users.id')
-//                    ->where('log_name', 'system')
-//                    ->where('event', 'logged_in')
-//                    ->latest()
-//                    ->take(1),
-//            ])
-//            ->withCasts(['last_login_at' => 'datetime']);
+        //            ->addSelect([
+        //                'last_login_at' => Activity::query()
+        //                    ->select('created_at')
+        //                    ->where('subject_type', $this->getMorphClass())
+        //                    ->whereColumn('subject_id', 'users.id')
+        //                    ->where('log_name', 'system')
+        //                    ->where('event', 'logged_in')
+        //                    ->latest()
+        //                    ->take(1),
+        //            ])
+        //            ->withCasts(['last_login_at' => 'datetime']);
     }
 
     public function getFullNameAttribute(): string
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     public static function getTenantOrganizationUsers(): Collection
@@ -253,7 +253,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName, 
             ->count();
     }
 
-    public function hasRoleInOrganization(Role | int $role): bool
+    public function hasRoleInOrganization(Role|int $role): bool
     {
         $roleID = \is_int($role) ? $role : $role->id;
         foreach ($this->rolesInOrganization as $roleInOrganization) {
