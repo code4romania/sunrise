@@ -92,6 +92,7 @@ return [
         'open' => 'Cazuri deschise',
         'monitoring' => 'Cazuri în monitorizare',
         'closed' => 'Cazuri închise',
+        'total' => 'Total cazuri',
     ],
 
     'wizard' => [

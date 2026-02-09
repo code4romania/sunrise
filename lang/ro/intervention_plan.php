@@ -209,6 +209,7 @@ return [
         'psychological_evaluation' => 'Evaluare psihologică',
         'intervention_indicators' => 'Indicatori intervenție',
         'edit_intervention_plan' => 'Actualizează detalii plan intervenție',
+        'edit_intervention_plan_modal' => 'Actualizează detalii plan',
         'empty_state_service_table' => 'Nici un serviciu adăugat',
         'empty_state_service_intervention_table' => 'Nici o interventie planificată pentru acest serviciu',
         'add_intervention' => 'Adaugă Intervenție de :name',

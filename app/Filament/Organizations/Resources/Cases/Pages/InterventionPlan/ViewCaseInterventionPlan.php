@@ -29,6 +29,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\View\View;
 
 class ViewCaseInterventionPlan extends ViewRecord
 {
@@ -76,7 +77,7 @@ class ViewCaseInterventionPlan extends ViewRecord
                 ->label(__('intervention_plan.actions.edit_intervention_plan'))
                 ->icon(Heroicon::OutlinedPencilSquare)
                 ->outlined()
-                ->modalHeading(__('intervention_plan.headings.edit_intervention_plan'))
+                ->modalHeading(__('intervention_plan.headings.edit_intervention_plan_modal'))
                 ->fillForm(fn (): array => $record->interventionPlan->only([
                     'admit_date_in_center',
                     'plan_date',
@@ -125,6 +126,15 @@ class ViewCaseInterventionPlan extends ViewRecord
                         ->send();
                 }),
         ];
+    }
+
+    public function getFooter(): ?View
+    {
+        $record = $this->getRecord();
+
+        return view('filament.organizations.pages.intervention-plan.fab-beneficiary-details', [
+            'beneficiaryDetailsUrl' => CaseResource::getUrl('view', ['record' => $record]),
+        ]);
     }
 
     public function infolist(Schema $schema): Schema

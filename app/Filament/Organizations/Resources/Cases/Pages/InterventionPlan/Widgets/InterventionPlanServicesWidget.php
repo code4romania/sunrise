@@ -54,6 +54,7 @@ class InterventionPlanServicesWidget extends TableWidget
             ->headerActions([
                 \Filament\Actions\CreateAction::make()
                     ->label(__('intervention_plan.actions.add_service'))
+                    ->color('primary')
                     ->modalHeading(__('intervention_plan.headings.add_service'))
                     ->model(InterventionService::class)
                     ->mutateDataUsing(function (array $data): array {

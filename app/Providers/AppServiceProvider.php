@@ -101,7 +101,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         FilamentView::registerRenderHook(
-            PanelsRenderHook::SIDEBAR_NAV_END,
+            PanelsRenderHook::SIDEBAR_FOOTER,
             fn () => view('filament.sidebar-footer')
         );
     }
