@@ -48,7 +48,7 @@
                             </span>
                         @else
                             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-800" aria-hidden="true">
-                                <x-filament::icon icon="heroicon-m-circle" class="h-4 w-4 text-gray-300 dark:text-gray-500" />
+                                <x-filament::icon icon="heroicon-m-minus-circle" class="h-4 w-4 text-gray-300 dark:text-gray-500" />
                             </span>
                         @endif
                         <span class="text-sm font-medium leading-tight break-words {{ $step['completed'] ? 'text-[#6010FF] dark:text-[#a78bfa]' : 'text-gray-500 dark:text-gray-400' }} group-hover:underline">
