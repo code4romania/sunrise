@@ -11,6 +11,7 @@ use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAggressor;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAntecedents;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseChildren;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseDocuments;
+use App\Filament\Organizations\Resources\Cases\Pages\EditCaseFlowPresentation;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseIdentity;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseMonitoring;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCasePersonalInformation;
@@ -141,6 +142,7 @@ class CaseResource extends Resource
             'view_personal_information' => ViewCasePersonalInformation::route('/{record}/personal'),
             'edit_personal_information' => EditCasePersonalInformation::route('/{record}/personal/edit'),
             'edit_aggressor' => EditCaseAggressor::route('/{record}/personal/aggressor/edit'),
+            'edit_flow_presentation' => EditCaseFlowPresentation::route('/{record}/personal/flow-presentation/edit'),
             'edit_case_team' => EditCaseTeam::route('/{record}/case-team/edit'),
             'edit_case_documents' => EditCaseDocuments::route('/{record}/documents'),
             'view_case_document' => ViewCaseDocument::route('/{record}/documents/{document}'),
