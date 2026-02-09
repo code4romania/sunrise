@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Pages;
 
 use App\Filament\Organizations\Widgets\CaseStatsWidget;
+use App\Filament\Organizations\Widgets\ConfigProgressWidget;
 use Filament\Facades\Filament;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Icons\Heroicon;
@@ -39,6 +40,7 @@ class Dashboard extends BaseDashboard
     {
         return [
             CaseStatsWidget::class,
+            ConfigProgressWidget::class,
         ];
     }
 
@@ -49,9 +51,11 @@ class Dashboard extends BaseDashboard
     {
         $all = Filament::getWidgets();
 
+        $excludeFromBody = [CaseStatsWidget::class, ConfigProgressWidget::class];
+
         return array_values(array_filter(
             $all,
-            fn (string|WidgetConfiguration $widget): bool => (is_string($widget) ? $widget : $widget->widget) !== CaseStatsWidget::class
+            fn (string|WidgetConfiguration $widget): bool => ! in_array(is_string($widget) ? $widget : $widget->widget, $excludeFromBody, true)
         ));
     }
 
