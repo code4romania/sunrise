@@ -37,7 +37,14 @@ class CaseInfolist
                             ->schema([
                                 TextEntry::make('age')
                                     ->label(__('field.age'))
-                                    ->formatStateUsing(fn (?int $state): string => $state ? "{$state} ani" : '—'),
+                                    ->formatStateUsing(function (mixed $state): string {
+                                        if ($state === null || $state === '' || $state === '-') {
+                                            return '—';
+                                        }
+                                        $age = is_numeric($state) ? (int) $state : null;
+
+                                        return $age !== null ? "{$age} ani" : '—';
+                                    }),
                                 TextEntry::make('birthdate')
                                     ->label(__('field.birthdate'))
                                     ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd M Y'))

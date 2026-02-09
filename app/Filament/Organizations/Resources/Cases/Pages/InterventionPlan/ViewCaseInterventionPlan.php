@@ -8,20 +8,26 @@ use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanBenefitsWidget;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanMonthlyPlansWidget;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanParticipationWidget;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanResultsWidget;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanServicesWidget;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use Carbon\Carbon;
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\RenderHook;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\Support\Htmlable;
 
 class ViewCaseInterventionPlan extends ViewRecord
@@ -107,6 +113,17 @@ class ViewCaseInterventionPlan extends ViewRecord
                         ->title(__('filament-actions::edit.single.notifications.saved.title'))
                         ->send();
                 }),
+            Action::make('download_plan')
+                ->label(__('intervention_plan.actions.download_plan'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->outlined()
+                ->action(function (): void {
+                    Notification::make()
+                        ->info()
+                        ->title(__('intervention_plan.actions.download_plan'))
+                        ->body(__('intervention_plan.labels.download_plan_coming_soon'))
+                        ->send();
+                }),
         ];
     }
 
@@ -172,8 +189,36 @@ class ViewCaseInterventionPlan extends ViewRecord
         return [
             InterventionPlanServicesWidget::class,
             InterventionPlanBenefitsWidget::class,
+            InterventionPlanParticipationWidget::class,
             InterventionPlanResultsWidget::class,
             InterventionPlanMonthlyPlansWidget::class,
         ];
+    }
+
+    public function footerWidgets(Schema $schema): Schema
+    {
+        $widgets = $this->getFooterWidgets();
+
+        return $schema
+            ->components([
+                RenderHook::make(PanelsRenderHook::PAGE_FOOTER_WIDGETS_START),
+                Tabs::make()
+                    ->columnSpanFull()
+                    ->persistTabInQueryString('intervention-plan-tab')
+                    ->tabs([
+                        Tab::make(__('intervention_plan.headings.social_services'))
+                            ->schema($this->getWidgetsSchemaComponents([InterventionPlanServicesWidget::class])),
+                        Tab::make(__('intervention_plan.headings.benefit_services'))
+                            ->schema($this->getWidgetsSchemaComponents([InterventionPlanBenefitsWidget::class])),
+                        Tab::make(__('intervention_plan.headings.social_service_participation'))
+                            ->schema($this->getWidgetsSchemaComponents([InterventionPlanParticipationWidget::class])),
+                        Tab::make(__('intervention_plan.headings.results_table'))
+                            ->schema($this->getWidgetsSchemaComponents([InterventionPlanResultsWidget::class])),
+                        Tab::make(__('intervention_plan.headings.monthly_plans'))
+                            ->schema($this->getWidgetsSchemaComponents([InterventionPlanMonthlyPlansWidget::class])),
+                    ]),
+                RenderHook::make(PanelsRenderHook::PAGE_FOOTER_WIDGETS_END),
+            ])
+            ->hidden(fn (): bool => empty(array_filter($widgets, fn (string $widget): bool => $this->normalizeWidgetClass($widget)::canView())));
     }
 }

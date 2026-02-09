@@ -17,6 +17,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class CreateCaseMonthlyPlan extends CreateRecord
 {
@@ -137,14 +138,20 @@ class CreateCaseMonthlyPlan extends CreateRecord
                 ->maxWidth('3xl')
                 ->schema([
                     DatePicker::make('start_date')
-                        ->label(__('intervention_plan.labels.monthly_plan_service_interval_start'))
+                        ->label(__('intervention_plan.labels.monthly_plan_start_date'))
                         ->required(),
                     DatePicker::make('end_date')
-                        ->label(__('intervention_plan.labels.monthly_plan_service_interval_end'))
+                        ->label(__('intervention_plan.labels.monthly_plan_end_date'))
                         ->required(),
                     Select::make('case_manager_user_id')
                         ->label(__('intervention_plan.headings.case_manager'))
-                        ->options(User::getTenantOrganizationUsers()->all()),
+                        ->options(User::getTenantOrganizationUsers()->all())
+                        ->placeholder(__('intervention_plan.placeholders.specialist')),
+                    Select::make('specialists')
+                        ->label(__('intervention_plan.labels.specialists'))
+                        ->multiple()
+                        ->options(fn (): Collection => $this->getBeneficiary()?->specialistsTeam()->with('user', 'role')->get()->pluck('name_role', 'id') ?? collect())
+                        ->placeholder(__('intervention_plan.placeholders.specialists')),
                 ]),
         ]);
     }

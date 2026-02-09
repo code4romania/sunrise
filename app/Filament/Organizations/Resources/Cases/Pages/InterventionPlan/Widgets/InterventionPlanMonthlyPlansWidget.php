@@ -35,17 +35,24 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
             ->heading(__('intervention_plan.headings.monthly_plans'))
             ->columns([
                 TextColumn::make('interval')
-                    ->label(__('intervention_plan.headings.interval')),
+                    ->label(__('intervention_plan.headings.interval_column')),
                 TextColumn::make('caseManager.full_name')
                     ->label(__('intervention_plan.headings.case_manager')),
                 TextColumn::make('monthly_plan_services_count')
                     ->label(__('intervention_plan.headings.services_count')),
                 TextColumn::make('monthly_plan_interventions_count')
                     ->label(__('intervention_plan.headings.interventions_count')),
+                TextColumn::make('view_details')
+                    ->label('')
+                    ->state(__('intervention_plan.actions.view_details'))
+                    ->url(fn (MonthlyPlan $monthlyPlan): string => CaseResource::getUrl('view_monthly_plan', [
+                        'record' => $this->record,
+                        'monthlyPlan' => $monthlyPlan,
+                    ])),
             ])
             ->headerActions([
                 \Filament\Actions\Action::make('create_modal')
-                    ->label(__('intervention_plan.actions.create_monthly_plan'))
+                    ->label(__('intervention_plan.actions.create_monthly_plan_with_plans'))
                     ->modalHeading(__('intervention_plan.headings.create_monthly_plan_modal'))
                     ->modalDescription(__('intervention_plan.labels.create_monthly_plan_modal'))
                     ->modalSubmitAction(
