@@ -5,12 +5,12 @@ declare(strict_types=1);
 return [
 
     'beneficiaries' => [
-        '_group' => 'Beneficiari',
+        '_group' => 'BENEFICIARI',
         'cases' => 'Cazuri',
     ],
 
     'statistics' => [
-        '_group' => 'Beneficiari',
+        '_group' => 'BENEFICIARI',
         'label' => 'Rapoarte statistice',
     ],
 
@@ -21,10 +21,10 @@ return [
     ],
 
     'configurations' => [
-        '_group' => 'Configurări',
+        '_group' => 'CONFIGURĂRI',
         'organization' => 'Informații organizație',
         'services' => 'Nomenclator servicii',
-        'staff' => 'Staff',
+        'staff' => 'Specialiști',
     ],
 
     'developed_by' => 'o soluție dezvoltată de',

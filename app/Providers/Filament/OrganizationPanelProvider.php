@@ -40,7 +40,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->tenant(Organization::class, slugAttribute: 'slug')
             ->tenantProfile(EditOrganizationProfile::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Violet,
             ])
             ->font('DM Sans')
             ->maxContentWidth('full')
@@ -66,12 +66,16 @@ class OrganizationPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
             ])
+            ->navigationGroups([
+                __('navigation.beneficiaries._group'),
+                __('navigation.configurations._group'),
+            ])
             ->navigationItems([
                 NavigationItem::make(__('navigation.configurations.organization'))
                     ->url(fn (): string => EditOrganizationProfile::getUrl(['tenant' => Filament::getTenant()]))
                     ->icon(Heroicon::OutlinedBuildingOffice)
                     ->group(__('navigation.configurations._group'))
-                    ->sort(1)
+//                    ->sort(1)
                     ->visible(fn (): bool => auth()->user()?->hasAccessToOrganizationConfig() ?? false),
             ])
             ->unsavedChangesAlerts()
