@@ -201,17 +201,16 @@ protected function isAccessible(User $user, ?string $path = null): bool
 # Laravel 12
 
 - CRITICAL: ALWAYS use `search-docs` tool for version-specific Laravel documentation and updated code examples.
-- This project upgraded from Laravel 10 without migrating to the new streamlined Laravel file structure.
-- This is perfectly fine and recommended by Laravel. Follow the existing structure from Laravel 10. We do not need to migrate to the new Laravel structure unless the user explicitly requests it.
+- Since Laravel 11, Laravel has a new streamlined file structure which this project uses.
 
-## Laravel 10 Structure
+## Laravel 12 Structure
 
-- Middleware typically lives in `app/Http/Middleware/` and service providers in `app/Providers/`.
-- There is no `bootstrap/app.php` application configuration in a Laravel 10 structure:
-    - Middleware registration happens in `app/Http/Kernel.php`
-    - Exception handling is in `app/Exceptions/Handler.php`
-    - Console commands and schedule register in `app/Console/Kernel.php`
-    - Rate limits likely exist in `RouteServiceProvider` or `app/Http/Kernel.php`
+- In Laravel 12, middleware are no longer registered in `app/Http/Kernel.php`.
+- Middleware are configured declaratively in `bootstrap/app.php` using `Application::configure()->withMiddleware()`.
+- `bootstrap/app.php` is the file to register middleware, exceptions, and routing files.
+- `bootstrap/providers.php` contains application specific service providers.
+- The `app\Console\Kernel.php` file no longer exists; use `bootstrap/app.php` or `routes/console.php` for console configuration.
+- Console commands in `app/Console/Commands/` are automatically available and do not require manual registration.
 
 ## Database
 
@@ -279,6 +278,7 @@ Select::make('type')
 TextInput::make('company_name')
     ->required()
     ->visible(fn (Get $get): bool => $get('type') === 'business'),
+
 </code-snippet>
 
 Use `state()` with a `Closure` to compute derived column values:
@@ -288,6 +288,7 @@ use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('full_name')
     ->state(fn (User $record): string => "{$record->first_name} {$record->last_name}"),
+
 </code-snippet>
 
 Actions encapsulate a button with optional modal form and logic:
@@ -301,6 +302,7 @@ Action::make('updateEmail')
         TextInput::make('email')->email()->required(),
     ])
     ->action(fn (array $data, User $record): void => $record->update($data)),
+
 </code-snippet>
 
 ### Testing
@@ -313,6 +315,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
         ->searchTable($users->first()->name)
         ->assertCanSeeTableRecords($users->take(1))
         ->assertCanNotSeeTableRecords($users->skip(1));
+
 </code-snippet>
 
 <code-snippet name="Filament Create Resource Test" lang="php">
@@ -329,6 +332,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
         'name' => 'Test',
         'email' => 'test@example.com',
     ]);
+
 </code-snippet>
 
 <code-snippet name="Testing Validation" lang="php">
@@ -343,6 +347,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
             'email' => 'email',
         ])
         ->assertNotNotified();
+
 </code-snippet>
 
 <code-snippet name="Calling Actions" lang="php">
@@ -359,6 +364,7 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
             'role' => 'admin',
         ])
         ->assertNotified();
+
 </code-snippet>
 
 ### Common Mistakes

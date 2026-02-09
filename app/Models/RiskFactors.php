@@ -15,8 +15,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RiskFactors extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -30,8 +30,8 @@ class RiskFactors extends Model
 
     protected $casts = [
         'risk_factors' => 'json',
-        'extended_family_can_provide' => AsEnumCollection::class . ':' . Helps::class,
-        'friends_can_provide' => AsEnumCollection::class . ':' . Helps::class,
+        'extended_family_can_provide' => AsEnumCollection::class.':'.Helps::class,
+        'friends_can_provide' => AsEnumCollection::class.':'.Helps::class,
         'risk_level' => Level::class,
         'extended_family_can_not_provide' => Ternary::class,
         'friends_can_not_provide' => Ternary::class,

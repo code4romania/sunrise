@@ -38,7 +38,12 @@ class OrganizationPolicy
      */
     public function update(User $user, Organization $organization): bool
     {
-        return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        return $user->organizations->contains($organization)
+            && $user->canChangeOrganizationProfile();
     }
 
     /**

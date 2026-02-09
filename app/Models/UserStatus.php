@@ -13,10 +13,10 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class UserStatus extends Model
 {
-    use HasFactory;
-    use HasUserStatus;
     use BelongsToOrganization;
     use BelongsToThroughTrait;
+    use HasFactory;
+    use HasUserStatus;
 
     protected $fillable = [
         'user_id',

@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrganizationService extends Model
 {
-    use HasFactory;
     use BelongsToOrganization;
+    use HasFactory;
     use HasGeneralStatus;
 
     protected $fillable = [

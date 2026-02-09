@@ -13,6 +13,20 @@ class DateTimeEntry extends TextEntry
     {
         parent::setUp();
 
-        $this->formatStateUsing(fn (string | Carbon $state) => $state === '-' ? $state : $state->format('d.m.Y H:i:s'));
+        $this->formatStateUsing(function (string|Carbon|null $state) {
+            if ($state === null || $state === '' || $state === '-') {
+                return '—';
+            }
+
+            if ($state instanceof Carbon) {
+                return $state->format('d.m.Y H:i:s');
+            }
+
+            try {
+                return Carbon::parse($state)->format('d.m.Y H:i:s');
+            } catch (\Throwable) {
+                return '—';
+            }
+        });
     }
 }

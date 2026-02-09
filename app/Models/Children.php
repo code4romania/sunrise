@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Children extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
     use HasBirthdate;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -31,7 +31,7 @@ class Children extends Model
         'gender' => GenderShortValues::class,
     ];
 
-    public function getAgeAttribute(): int | string | null
+    public function getAgeAttribute(): int|string|null
     {
         $age = $this->birthdate ? Carbon::parse($this->birthdate)->diffInYears(now()) : null;
 

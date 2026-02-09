@@ -143,6 +143,7 @@ return [
         'identity' => [
             'title' => 'Date identitate',
             'heading_description' => 'Pentru a modifica informațiile din această pagină, vă rugăm accesați secțiunea',
+            'empty_children' => 'Beneficiarul nu are copii',
             'tab' => [
                 'beneficiary' => 'Identitate beneficiar',
                 'children' => 'Identitate copii',
@@ -456,6 +457,8 @@ return [
                 'beneficiary_request' => 'Specificǎ motivul beneficiarei',
                 'other_details' => 'Specificǎ altă situație',
                 'close_situation' => 'Situația cazului la închidere',
+                'confirm_closure_criteria' => 'Confirm că cazul îndeplinește criteriile de închidere',
+                'confirm_documentation' => 'Confirm că documentația cazului este completă',
                 'close_date' => 'Închis la data (zi-lună-an)',
                 'close_method_widget' => 'Modalitatea de închidere',
                 'modal_delete_description' => 'Odată ștearsă o fișă, acesta nu mai poate fi recuperată. Te rugăm să te asiguri că nu mai este nevoie de acest document în dosarul de caz.',
