@@ -75,7 +75,6 @@ class OrganizationPanelProvider extends PanelProvider
                     ->url(fn (): string => EditOrganizationProfile::getUrl(['tenant' => Filament::getTenant()]))
                     ->icon(Heroicon::OutlinedBuildingOffice)
                     ->group(__('navigation.configurations._group'))
-//                    ->sort(1)
                     ->visible(fn (): bool => auth()->user()?->hasAccessToOrganizationConfig() ?? false),
             ])
             ->unsavedChangesAlerts()

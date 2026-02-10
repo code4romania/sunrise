@@ -25,6 +25,9 @@ return [
         'view' => [
             'title' => '<div class="flex flex-wrap justify-items-center items-center gap-3">:action #:id :name :badge</div>',
         ],
+        'view_case_details' => [
+            'title' => 'Vezii detaliile cazului',
+        ],
         'identity' => [
             'title' => 'Date identitate',
         ],

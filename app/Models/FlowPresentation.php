@@ -33,6 +33,7 @@ class FlowPresentation extends Model
 
         'act_location',
         'act_location_other',
+        'first_called_institution_id',
     ];
 
     protected $casts = [

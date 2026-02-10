@@ -61,6 +61,7 @@ use App\Models\Violence;
 use App\Models\ViolenceHistory;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Grid;
 use Filament\Support\Facades\FilamentView;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Table;
@@ -98,6 +99,11 @@ class AppServiceProvider extends ServiceProvider
             if ($input->isNumeric()) {
                 $input->minValue(0);
             }
+        });
+        Grid::configureUsing(function (Grid $grid) {
+            $grid->extraAttributes([
+                'class' => 'bg-white dark:bg-gray-800/50 rounded-xl p-6 shadow',
+            ]);
         });
 
         FilamentView::registerRenderHook(

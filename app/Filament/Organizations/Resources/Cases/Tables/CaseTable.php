@@ -23,13 +23,6 @@ class CaseTable
                     ->whereUserHasAccess();
             })
             ->columns(self::getColumns())
-            ->headerActions([
-                Action::make('register_case')
-                    ->label(__('case.headings.register_new'))
-                    ->url(CaseResource::getUrl('create'))
-                    ->icon('heroicon-m-plus')
-                    ->button(),
-            ])
             ->recordActions([
                 ViewAction::make()
                     ->label(__('general.action.view_details')),
@@ -50,7 +43,7 @@ class CaseTable
     }
 
     /**
-     * @return array<int, \Filament\Tables\Columns\TextColumn>
+     * @return array<int, TextColumn>
      */
     public static function getColumns(): array
     {

@@ -8,10 +8,10 @@ use App\Filament\Admin\Resources\Institutions\InstitutionResource;
 use App\Filament\Admin\Resources\Institutions\Schemas\InstitutionFormSchema;
 use App\Models\User;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Schemas\Components\Section;
@@ -42,16 +42,16 @@ class CreateInstitution extends CreateRecord
                 ->schema($this->getInstitutionDetailsSchema()),
             Step::make(__('institution.headings.center_details'))
                 ->schema([
-                    Placeholder::make('center_details')
+                    TextEntry::make('center_details')
                         ->hiddenLabel()
-                        ->content(__('institution.placeholders.center_details')),
+                        ->state(__('institution.placeholders.center_details')),
                     ...$this->getCentersSchema(),
                 ]),
             Step::make(__('institution.headings.ngo_admin'))
                 ->schema([
-                    Placeholder::make('ngo_admins')
+                    TextEntry::make('ngo_admins')
                         ->hiddenLabel()
-                        ->content(__('institution.placeholders.ngo_admins')),
+                        ->state(__('institution.placeholders.ngo_admins')),
                     ...$this->getAdminsSchema(),
                 ]),
         ];

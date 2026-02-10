@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Service::class)->constrained()->cascadeOnDelete();
             $table->string('name');
+            $table->string('identifier')->unique();
             $table->boolean('status');
             $table->timestamps();
         });

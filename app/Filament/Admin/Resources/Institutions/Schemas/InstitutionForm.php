@@ -6,13 +6,11 @@ namespace App\Filament\Admin\Resources\Institutions\Schemas;
 
 use App\Enums\AreaType;
 use App\Enums\OrganizationType;
-use App\Models\City;
+use App\Forms\Components\CountyCitySelect;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
 class InstitutionForm
@@ -61,35 +59,14 @@ class InstitutionForm
                             ->enum(AreaType::class)
                             ->required(),
 
-                        Select::make('county_id')
-                            ->label(__('organization.field.county'))
-                            ->placeholder(__('organization.placeholders.county'))
-                            ->relationship('county', 'name')
-                            ->searchable()
-                            ->preload()
+                        ...CountyCitySelect::make()
+                            ->countyLabel(__('organization.field.county'))
+                            ->cityLabel(__('organization.field.city'))
+                            ->countyPlaceholder(__('organization.placeholders.county'))
+                            ->cityPlaceholder(__('placeholder.city'))
                             ->required()
-                            ->live()
-                            ->afterStateUpdated(fn (Set $set) => $set('city_id', null)),
-
-                        Select::make('city_id')
-                            ->label(__('organization.field.city'))
-                            ->placeholder(__('placeholder.city'))
-                            ->options(function (Get $get): array {
-                                $countyId = $get('county_id');
-
-                                if (! $countyId) {
-                                    return [];
-                                }
-
-                                return City::query()
-                                    ->where('county_id', $countyId)
-                                    ->get()
-                                    ->mapWithKeys(fn (City $city) => [$city->id => $city->name_with_uat ?? $city->name])
-                                    ->toArray();
-                            })
-                            ->searchable()
-                            ->required()
-                            ->disabled(fn (Get $get) => ! $get('county_id')),
+                            ->useRelationship()
+                            ->schema(),
 
                         TextInput::make('address')
                             ->label(__('organization.field.address'))

@@ -16,7 +16,7 @@ class CnpLookupService
     {
         $beneficiaryInTenant = Beneficiary::query()
             ->withoutGlobalScope(BelongsToCurrentTenant::class)
-            ->where('organization_id', $tenant->id)
+            ->forTenant($tenant)
             ->where('cnp', $cnp)
             ->first();
 

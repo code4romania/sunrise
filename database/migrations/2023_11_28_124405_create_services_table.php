@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('identifier')->unique();
             $table->string('counseling_sheet')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();

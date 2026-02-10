@@ -93,6 +93,19 @@ class Beneficiary extends Model
         'status' => CaseStatus::class,
     ];
 
+    /**
+     * Scope beneficiaries to a given tenant (centru = Organization).
+     * Use when building queries that bypass the global scope (e.g. cross-center lookup).
+     *
+     * @param  Organization|int  $tenant  Organization instance or organization_id
+     */
+    public function scopeForTenant(Builder $query, Organization|int $tenant): Builder
+    {
+        $id = $tenant instanceof Organization ? $tenant->id : $tenant;
+
+        return $query->where('organization_id', $id);
+    }
+
     public function scopeWhereUserHasAccess(Builder $query): Builder
     {
         $user = auth()->user();
@@ -243,7 +256,7 @@ class Beneficiary extends Model
 
         return self::query()
             ->withoutGlobalScope(BelongsToCurrentTenant::class)
-            ->where('organization_id', $this->organization_id)
+            ->forTenant($this->organization_id)
             ->where('id', '!=', $this->id)
             ->where(fn (Builder $q) => $q->where('initial_id', $initialId)->orWhere('id', $initialId))
             ->orderByDesc('created_at')

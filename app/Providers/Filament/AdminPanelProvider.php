@@ -67,6 +67,9 @@ class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/common/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('3rem')
+            ->colors([
+                'primary' => Color::Amber,
+            ])
             ->darkMode(false)
             ->discoverResources(
                 in: app_path('Filament/Admin/Resources'),

@@ -11,12 +11,11 @@ use App\Enums\Ethnicity;
 use App\Enums\Gender;
 use App\Enums\IDType;
 use App\Enums\ResidenceEnvironment;
+use App\Forms\Components\CountyCitySelect;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
 use App\Models\Beneficiary;
-use App\Models\City;
-use App\Models\County;
 use App\Rules\ValidCNP;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Hidden;
@@ -181,53 +180,26 @@ class BeneficiaryIdentityFormSchema
 
                     Grid::make()
                         ->schema([
-                            Select::make('legal_residence.county_id')
-                                ->label(__('field.county'))
-                                ->placeholder(__('placeholder.county'))
-                                ->searchable()
-                                ->options(County::pluck('name', 'id')->toArray())
-                                ->getSearchResultsUsing(fn (string $search): array => County::query()
-                                    ->where('name', 'like', "%{$search}%")
-                                    ->limit(50)
-                                    ->get()
-                                    ->pluck('name', 'id')
-                                    ->toArray())
-                                ->getOptionLabelUsing(fn ($value) => County::find($value)?->name)
-                                ->live()
-                                ->afterStateUpdated(function (Set $set, Get $get) {
-                                    $set('legal_residence.city_id', null);
+                            ...CountyCitySelect::make()
+                                ->countyField('legal_residence.county_id')
+                                ->cityField('legal_residence.city_id')
+                                ->countyLabel(__('field.county'))
+                                ->cityLabel(__('field.city'))
+                                ->countyPlaceholder(__('placeholder.county'))
+                                ->cityPlaceholder(__('placeholder.city'))
+                                ->required()
+                                ->countyAfterStateUpdated(function (Set $set, Get $get): void {
                                     if ($get('same_as_legal_residence')) {
                                         $set('effective_residence.county_id', $get('legal_residence.county_id'));
                                         $set('effective_residence.city_id', null);
                                     }
-                                }),
-
-                            Select::make('legal_residence.city_id')
-                                ->label(__('field.city'))
-                                ->placeholder(__('placeholder.city'))
-                                ->searchable()
-                                ->options([])
-                                ->disabled(fn (Get $get) => ! $get('legal_residence.county_id'))
-                                ->getSearchResultsUsing(function (string $search, Get $get): array {
-                                    if (! $get('legal_residence.county_id')) {
-                                        return [];
-                                    }
-
-                                    return City::query()
-                                        ->where('county_id', (int) $get('legal_residence.county_id'))
-                                        ->where('name', 'like', "%{$search}%")
-                                        ->limit(50)
-                                        ->get()
-                                        ->pluck('name_with_uat', 'id')
-                                        ->toArray();
                                 })
-                                ->getOptionLabelUsing(fn ($value) => City::find($value)?->name_with_uat ?? City::find($value)?->name)
-                                ->live()
-                                ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                ->cityAfterStateUpdated(function (Set $set, Get $get, $state): void {
                                     if ($get('same_as_legal_residence')) {
                                         $set('effective_residence.city_id', $state);
                                     }
-                                }),
+                                })
+                                ->schema(),
 
                             TextInput::make('legal_residence.address')
                                 ->label(__('field.address'))
@@ -278,43 +250,17 @@ class BeneficiaryIdentityFormSchema
 
                     Grid::make()
                         ->schema([
-                            Select::make('effective_residence.county_id')
-                                ->label(__('field.county'))
-                                ->placeholder(__('placeholder.county'))
-                                ->searchable()
-                                ->options(County::pluck('name', 'id')->toArray())
-                                ->getSearchResultsUsing(fn (string $search): array => County::query()
-                                    ->where('name', 'like', "%{$search}%")
-                                    ->limit(50)
-                                    ->get()
-                                    ->pluck('name', 'id')
-                                    ->toArray())
-                                ->getOptionLabelUsing(fn ($value) => County::find($value)?->name)
-                                ->live()
-                                ->afterStateUpdated(fn (Set $set) => $set('effective_residence.city_id', null))
-                                ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
-
-                            Select::make('effective_residence.city_id')
-                                ->label(__('field.city'))
-                                ->placeholder(__('placeholder.city'))
-                                ->searchable()
-                                ->options([])
-                                ->disabled(fn (Get $get) => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
-                                ->getSearchResultsUsing(function (string $search, Get $get): array {
-                                    if (! $get('effective_residence.county_id')) {
-                                        return [];
-                                    }
-
-                                    return City::query()
-                                        ->where('county_id', (int) $get('effective_residence.county_id'))
-                                        ->where('name', 'like', "%{$search}%")
-                                        ->limit(50)
-                                        ->get()
-                                        ->pluck('name_with_uat', 'id')
-                                        ->toArray();
-                                })
-                                ->getOptionLabelUsing(fn ($value) => City::find($value)?->name_with_uat ?? City::find($value)?->name)
-                                ->live(),
+                            ...CountyCitySelect::make()
+                                ->countyField('effective_residence.county_id')
+                                ->cityField('effective_residence.city_id')
+                                ->countyLabel(__('field.county'))
+                                ->cityLabel(__('field.city'))
+                                ->countyPlaceholder(__('placeholder.county'))
+                                ->cityPlaceholder(__('placeholder.city'))
+                                ->required()
+                                ->countyDisabled(fn (Get $get) => $get('same_as_legal_residence'))
+                                ->cityDisabled(fn (Get $get) => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
+                                ->schema(),
 
                             TextInput::make('effective_residence.address')
                                 ->label(__('field.address'))

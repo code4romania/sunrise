@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class ServiceIntervention extends Model
 {
@@ -20,6 +21,7 @@ class ServiceIntervention extends Model
     protected $fillable = [
         'service_id',
         'name',
+        'identifier',
         'sort',
     ];
 
@@ -27,6 +29,14 @@ class ServiceIntervention extends Model
     {
         parent::booted();
         static::addGlobalScope(new SortOrder);
+        static::creating(function (Service $model): void {
+            if (! isset($model->sort)) {
+                $model->sort = static::max('sort') + 1;
+            }
+            if (! isset($model->identifier)) {
+                $model->identifier = Str::slug($model->name);
+            }
+        });
     }
 
     public function service(): BelongsTo
