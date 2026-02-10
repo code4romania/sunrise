@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Cases\Schemas;
 
+use App\Enums\AggressorRelationship;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\CloseFile\CloseFileResource;
 use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
+use App\Infolists\Components\SectionHeader;
+use App\Models\Aggressor;
 use App\Models\Beneficiary;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\EmptyState;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Collection;
 
 class CaseInfolist
 {
@@ -22,6 +28,9 @@ class CaseInfolist
     {
         return $schema
             ->columns(2)
+            ->extraAttributes([
+                'class' => 'h-full',
+            ])
             ->components([
                 Grid::make(2)
                     ->columnSpanFull()
@@ -91,7 +100,88 @@ class CaseInfolist
                             ->schema([
                                 TextEntry::make('flowPresentation.presentation_mode')
                                     ->label(__('field.presentation_mode'))
+                                    ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
                                     ->placeholder('—'),
+                                TextEntry::make('flowPresentation.referringInstitution.name')
+                                    ->label(__('field.referring_institution'))
+                                    ->placeholder('—'),
+                                TextEntry::make('details.family_doctor_name')
+                                    ->label(__('field.family_doctor_name'))
+                                    ->placeholder('—'),
+                                TextEntry::make('details.family_doctor_contact')
+                                    ->label(__('field.family_doctor_contact'))
+                                    ->placeholder('—'),
+                                RepeatableEntry::make('aggressors')
+                                    ->label(__('case.view.aggressor'))
+                                    ->hiddenLabel()
+                                    ->columns(2)
+                                    ->schema([
+                                        SectionHeader::make('header')
+                                            ->state(function (SectionHeader $component): string {
+                                                $path = $component->getStatePath();
+                                                $parts = explode('.', $path);
+                                                $index = (int) ($parts[1] ?? 0);
+                                                $parentState = $component->getContainer()?->getParentComponent()?->getState();
+                                                $total = $parentState instanceof Collection ? $parentState->count() : (is_countable($parentState) ? count($parentState) : 0);
+
+                                                return $total > 1
+                                                    ? __('case.view.aggressor').' ('.($index + 1).' din '.$total.' '.__('case.aggressors_documented').')'
+                                                    : __('case.view.aggressor');
+                                            })
+                                            ->visible(fn (SectionHeader $component): bool => $component->getContainer()?->getParentComponent()?->getState() instanceof Collection
+                                                && $component->getContainer()->getParentComponent()->getState()->count() > 0),
+                                        TextEntry::make('relationship')
+                                            ->label(__('field.aggressor_relationship'))
+                                            ->formatStateUsing(fn ($state, Aggressor $record): string => $record->relationship !== null
+                                                ? ($record->relationship === AggressorRelationship::OTHER && $record->relationship_other
+                                                    ? $record->relationship->getLabel().' ('.$record->relationship_other.')'
+                                                    : $record->relationship->getLabel())
+                                                : '—')
+                                            ->placeholder('—'),
+                                        TextEntry::make('violence_types')
+                                            ->label(__('field.aggressor_violence_types'))
+                                            ->formatStateUsing(function ($state): string {
+                                                if ($state === null) {
+                                                    return '—';
+                                                }
+                                                if ($state instanceof Collection) {
+                                                    return $state->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->join(', ');
+                                                }
+                                                if (is_iterable($state)) {
+                                                    return collect($state)->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->join(', ');
+                                                }
+
+                                                return '—';
+                                            })
+                                            ->placeholder('—'),
+                                        TextEntry::make('has_protection_order')
+                                            ->label(__('field.has_protection_order'))
+                                            ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
+                                            ->placeholder('—'),
+                                        TextEntry::make('electronically_monitored')
+                                            ->label(__('field.electronically_monitored'))
+                                            ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
+                                            ->placeholder('—'),
+                                    ])
+                                    ->visible(fn (Beneficiary $record): bool => $record->aggressors->isNotEmpty()),
+                                Grid::make(2)
+                                    ->schema([
+                                        TextEntry::make('antecedents.has_police_reports')
+                                            ->label(__('field.has_police_reports'))
+                                            ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
+                                            ->placeholder('—'),
+                                        TextEntry::make('antecedents.police_report_count')
+                                            ->label(__('field.police_report_count'))
+                                            ->placeholder('—'),
+                                        TextEntry::make('antecedents.has_medical_reports')
+                                            ->label(__('field.has_medical_reports'))
+                                            ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
+                                            ->placeholder('—'),
+                                        TextEntry::make('antecedents.medical_report_count')
+                                            ->label(__('field.medical_report_count'))
+                                            ->placeholder('—'),
+                                    ])
+                                    ->visible(fn (Beneficiary $record): bool => $record->antecedents !== null),
                             ]),
 
                         Section::make(__('case.view.initial_evaluation'))
@@ -111,6 +201,16 @@ class CaseInfolist
                                     ->link(),
                             ])
                             ->schema([
+                                EmptyState::make(__('case.view.initial_evaluation'))
+                                    ->description(__('case.view.empty_initial_eval'))
+                                    ->icon(Heroicon::OutlinedClipboardDocumentList)
+                                    ->visible(fn (Beneficiary $record): bool => $record->evaluateDetails === null)
+                                    ->footer([
+                                        Action::make('create_initial_evaluation_empty')
+                                            ->label(__('case.view.start_evaluation'))
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_initial_evaluation', ['record' => $record]))
+                                            ->button(),
+                                    ]),
                                 TextEntry::make('evaluateDetails.registered_date')
                                     ->label(__('beneficiary.labels.registered_date'))
                                     ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
@@ -131,7 +231,18 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->multidisciplinaryEvaluation === null && $record->detailedEvaluationResult === null && ! $record->detailedEvaluationSpecialists()->exists())
                                     ->link(),
                             ])
-                            ->schema([]),
+                            ->schema([
+                                EmptyState::make(__('case.view.detailed_evaluation'))
+                                    ->description(__('case.view.empty_detailed_eval'))
+                                    ->icon(Heroicon::OutlinedChartBarSquare)
+                                    ->visible(fn (Beneficiary $record): bool => $record->multidisciplinaryEvaluation === null && $record->detailedEvaluationResult === null && ! $record->detailedEvaluationSpecialists()->exists())
+                                    ->footer([
+                                        Action::make('start_detailed_evaluation_empty')
+                                            ->label(__('case.view.start_evaluation'))
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_detailed_evaluation', ['record' => $record]))
+                                            ->button(),
+                                    ]),
+                            ]),
 
                         Section::make(__('case.view.intervention_plan'))
                             ->headerActions([
@@ -146,6 +257,16 @@ class CaseInfolist
                                     ->link(),
                             ])
                             ->schema([
+                                EmptyState::make(__('case.view.intervention_plan'))
+                                    ->description(__('case.view.empty_intervention_plan'))
+                                    ->icon(Heroicon::OutlinedClipboardDocumentCheck)
+                                    ->visible(fn (Beneficiary $record): bool => $record->interventionPlan === null)
+                                    ->footer([
+                                        Action::make('create_plan_empty')
+                                            ->label(__('case.view.create_plan'))
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_intervention_plan', ['record' => $record]))
+                                            ->button(),
+                                    ]),
                                 TextEntry::make('interventionPlan.plan_date')
                                     ->label(__('intervention_plan.labels.plan_date'))
                                     ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
@@ -162,14 +283,26 @@ class CaseInfolist
                                     ->link(),
                             ])
                             ->schema([
+                                EmptyState::make(__('case.view.case_monitoring'))
+                                    ->description(__('case.view.empty_monitoring'))
+                                    ->icon(Heroicon::OutlinedDocumentChartBar)
+                                    ->visible(fn (Beneficiary $record): bool => $record->monitoring()->count() === 0)
+                                    ->footer([
+                                        Action::make('complete_monitoring_empty')
+                                            ->label(__('case.view.complete_monitoring_sheet'))
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_case_monitoring', ['record' => $record]))
+                                            ->button(),
+                                    ]),
                                 TextEntry::make('lastMonitoring.date')
                                     ->label(__('case.view.last_monitoring'))
                                     ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
-                                    ->placeholder('—'),
+                                    ->placeholder('—')
+                                    ->visible(fn (Beneficiary $record): bool => $record->monitoring()->count() > 0),
                                 TextEntry::make('monitoring_count')
                                     ->label(__('case.view.total_monitorings'))
                                     ->state(fn (Beneficiary $record): string => (string) $record->monitoring()->count())
-                                    ->placeholder('0'),
+                                    ->placeholder('0')
+                                    ->visible(fn (Beneficiary $record): bool => $record->monitoring()->count() > 0),
                             ]),
 
                         Section::make(__('case.view.case_closure'))
@@ -186,6 +319,17 @@ class CaseInfolist
                                     ->link(),
                             ])
                             ->schema([
+                                EmptyState::make(__('case.view.case_closure'))
+                                    ->description(__('case.view.empty_closure'))
+                                    ->icon(Heroicon::OutlinedDocumentCheck)
+                                    ->visible(fn (Beneficiary $record): bool => $record->closeFile === null)
+                                    ->footer([
+                                        Action::make('complete_closure_empty')
+                                            ->label(__('case.view.complete_closure_sheet'))
+                                            ->url(fn (Beneficiary $record): string => CloseFileResource::getUrl('create', ['beneficiary' => $record]))
+                                            ->button()
+                                            ->visible(fn (Beneficiary $record): bool => $record->status?->value === 'closed'),
+                                    ]),
                                 TextEntry::make('closeFile.date')
                                     ->label(__('case.view.closed_at'))
                                     ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
@@ -193,7 +337,7 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->closeFile !== null),
                                 TextEntry::make('closeFile.close_method')
                                     ->label(__('case.view.closure_method'))
-                                    ->formatStateUsing(fn ($state) => $state?->getLabel() ?? '—')
+                                    ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
                                     ->placeholder('—')
                                     ->visible(fn (Beneficiary $record): bool => $record->closeFile !== null),
                             ]),
@@ -225,11 +369,21 @@ class CaseInfolist
                                     ->link(),
                             ])
                             ->schema([
+                                EmptyState::make(__('case.view.documents'))
+                                    ->description(__('case.view.empty_documents'))
+                                    ->icon(Heroicon::OutlinedDocument)
+                                    ->visible(fn (Beneficiary $record): bool => $record->documents()->count() === 0)
+                                    ->footer([
+                                        Action::make('upload_document_empty')
+                                            ->label(__('case.view.upload_document'))
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_case_documents', ['record' => $record]))
+                                            ->button(),
+                                    ]),
                                 RepeatableEntry::make('documents')
                                     ->schema([
                                         TextEntry::make('type')
                                             ->label(__('document.labels.type'))
-                                            ->formatStateUsing(fn ($state) => $state?->getLabel() ?? '—'),
+                                            ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—'),
                                         TextEntry::make('name')
                                             ->label(__('document.labels.name')),
                                     ])

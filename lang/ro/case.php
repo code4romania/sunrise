@@ -44,6 +44,8 @@ return [
 
     'count' => ':count cazuri',
 
+    'aggressors_documented' => 'agresori documentați',
+
     'view' => [
         'breadcrumb_all' => 'Toate cazurile',
         'modification_history' => 'Istoric modificări',
@@ -58,6 +60,7 @@ return [
             'fab_beneficiary_details' => 'Detalii beneficiar',
         ],
         'case_info' => 'Informații caz',
+        'aggressor' => 'Agresor',
         'initial_evaluation' => 'Evaluare inițială',
         'detailed_evaluation' => 'Evaluare detaliată',
         'intervention_plan' => 'Plan de intervenție',
