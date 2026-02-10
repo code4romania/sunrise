@@ -133,6 +133,7 @@ class CreateCase extends CreateRecord
                 ->schema([
                     ...PersonalInfoFormSchema::getSchema(),
                     Section::make(__('case.create.wizard.aggressor'))
+                        ->maxWidth('3xl')
                         ->schema([
                             Repeater::make('aggressors')
                                 ->schema(AggressorFormSchema::getRepeaterItemSchema())
@@ -149,6 +150,7 @@ class CreateCase extends CreateRecord
                                 ->defaultItems(1),
                         ]),
                     Section::make(__('case.create.wizard.flow_presentation'))
+                        ->maxWidth('3xl')
                         ->schema(FlowPresentationFormSchema::getSchemaForCreateWizard()),
                 ]),
 
@@ -304,15 +306,13 @@ class CreateCase extends CreateRecord
             }
         }
 
-        $selected = $this->pendingCaseTeamSelection;
-        $roleIds = self::normalizeCaseTeamSelection($selected);
-        if ($roleIds === null || $roleIds === []) {
-            return;
-        }
+
+        $roleIds=$state['case_team'] ?? [];
         $currentUserId = auth()->id();
         if (! $currentUserId) {
             return;
         }
+
         foreach ($roleIds as $roleId) {
             $beneficiary->specialistsTeam()->create([
                 'role_id' => $roleId,

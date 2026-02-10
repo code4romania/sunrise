@@ -66,6 +66,7 @@ class ChildrenIdentityFormSchema
                     Grid::make()
                         ->disabled(fn (Get $get) => $get('doesnt_have_children'))
                         ->hidden(fn (Get $get) => $get('doesnt_have_children'))
+                        ->columnSpanFull()
                         ->schema([
                             TextInput::make('children_total_count')
                                 ->label(__('field.children_total_count'))
@@ -160,14 +161,18 @@ class ChildrenIdentityFormSchema
                 ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
                 ->collapsible(),
 
-            Textarea::make('children_notes')
-                ->label(__('field.children_notes'))
-                ->placeholder(__('placeholder.other_relevant_details'))
-                ->disabled(fn (Get $get) => $get('doesnt_have_children'))
-                ->hidden(fn (Get $get) => $get('doesnt_have_children'))
-                ->maxLength(500)
+            Grid::make()
                 ->maxWidth('3xl')
-                ->columnSpanFull(),
+                ->hidden(fn (Get $get) => $get('doesnt_have_children'))
+                ->schema([
+                    Textarea::make('children_notes')
+                        ->label(__('field.children_notes'))
+                        ->placeholder(__('placeholder.other_relevant_details'))
+                        ->disabled(fn (Get $get) => $get('doesnt_have_children'))
+                        ->maxLength(500)
+                        ->maxWidth('3xl')
+                        ->columnSpanFull(),
+                ]),
         ];
     }
 }

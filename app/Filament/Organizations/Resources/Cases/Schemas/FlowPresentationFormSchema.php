@@ -14,6 +14,7 @@ use App\Models\ReferringInstitution;
 use App\Rules\MultipleIn;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Utilities\Get;
 
 class FlowPresentationFormSchema
@@ -32,11 +33,14 @@ class FlowPresentationFormSchema
             ->all();
 
         return [
-            Grid::make()
+            Group::make()
                 ->statePath('flow_presentation')
                 ->maxWidth('3xl')
+                ->columns(2)
                 ->schema([
-                    Grid::make()
+                    Group::make()
+                        ->columnSpanFull()
+                        ->columns(2)
                         ->schema([
                             Select::make('presentation_mode')
                                 ->label(__('field.presentation_mode'))
@@ -44,30 +48,35 @@ class FlowPresentationFormSchema
                                 ->options(PresentationMode::options())
                                 ->enum(PresentationMode::class)
                                 ->live(),
+                            Group::make()
+                                ->schema([
+                                    Select::make('referring_institution_id')
+                                        ->label(__('field.referring_institution'))
+                                        ->placeholder(__('placeholder.select_one'))
+                                        ->options($institutionOptions)
+                                        ->visible(fn (Get $get) => PresentationMode::isValue(
+                                            $get('presentation_mode'),
+                                            PresentationMode::FORWARDED
+                                        ))
+                                        ->nullable(),
 
-                            Select::make('referring_institution_id')
-                                ->label(__('field.referring_institution'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options($institutionOptions)
-                                ->visible(fn (Get $get) => PresentationMode::isValue(
-                                    $get('presentation_mode'),
-                                    PresentationMode::FORWARDED
-                                ))
-                                ->nullable(),
+                                    Select::make('referral_mode')
+                                        ->label(__('field.referral_mode'))
+                                        ->placeholder(__('placeholder.select_one'))
+                                        ->options(ReferralMode::options())
+                                        ->enum(ReferralMode::class)
+                                        ->visible(fn (Get $get) => PresentationMode::isValue(
+                                            $get('presentation_mode'),
+                                            PresentationMode::FORWARDED
+                                        ))
+                                        ->nullable(),
+                                ]),
 
-                            Select::make('referral_mode')
-                                ->label(__('field.referral_mode'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(ReferralMode::options())
-                                ->enum(ReferralMode::class)
-                                ->visible(fn (Get $get) => PresentationMode::isValue(
-                                    $get('presentation_mode'),
-                                    PresentationMode::FORWARDED
-                                ))
-                                ->nullable(),
                         ]),
 
-                    Grid::make()
+                    Group::make()
+                        ->columnSpanFull()
+                        ->columns(2)
                         ->schema([
                             Select::make('notifier')
                                 ->label(__('field.notifier'))
@@ -75,23 +84,27 @@ class FlowPresentationFormSchema
                                 ->options(Notifier::options())
                                 ->enum(Notifier::class)
                                 ->live(),
+                            Group::make()
+                                ->schema([
 
-                            Select::make('notification_mode')
-                                ->label(__('field.notification_mode'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(NotificationMode::options())
-                                ->enum(NotificationMode::class),
+                                    Select::make('notification_mode')
+                                        ->label(__('field.notification_mode'))
+                                        ->placeholder(__('placeholder.select_one'))
+                                        ->options(NotificationMode::options())
+                                        ->enum(NotificationMode::class),
 
-                            TextInput::make('notifier_other')
-                                ->label(__('field.notifier_other'))
-                                ->maxLength(100)
-                                ->visible(fn (Get $get) => Notifier::isValue(
-                                    $get('notifier'),
-                                    Notifier::OTHER
-                                )),
+                                    TextInput::make('notifier_other')
+                                        ->label(__('field.notifier_other'))
+                                        ->maxLength(100)
+                                        ->visible(fn (Get $get) => Notifier::isValue(
+                                            $get('notifier'),
+                                            Notifier::OTHER
+                                        ))]),
                         ]),
 
-                    Grid::make()
+                    Group::make()
+                        ->columnSpanFull()
+                        ->columns(2)
                         ->schema([
                             Select::make('act_location')
                                 ->label(__('field.act_location'))

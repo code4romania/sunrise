@@ -159,7 +159,6 @@ class CountyCitySelect
             ->searchable()
             ->preload()
             ->getSearchResultsUsing(fn (string $search) => County::search($search)
-                ->orderBy('name')
                 ->get()
                 ->pluck('name', 'id')
                 ->toArray())
