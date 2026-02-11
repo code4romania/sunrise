@@ -126,10 +126,10 @@ class ViewMonitoring extends ViewRecord
                                                         ->formatStateUsing(fn ($state) => $this->formatDateSafe($state)),
                                                     TextEntry::make('aggressor_relationship')
                                                         ->label(__('monitoring.labels.aggressor_relationship'))
-                                                        ->formatStateUsing(fn ($state) => $state?->getLabel() ?? '—'),
+                                                        ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—'),
                                                     TextEntry::make('maintenance_sources')
                                                         ->label(__('monitoring.labels.maintenance_sources'))
-                                                        ->formatStateUsing(fn ($state) => $state?->getLabel() ?? '—'),
+                                                        ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—'),
                                                     TextEntry::make('location')
                                                         ->label(__('monitoring.labels.location')),
                                                     TextEntry::make('observations')
