@@ -29,7 +29,7 @@ class ServiceIntervention extends Model
     {
         parent::booted();
         static::addGlobalScope(new SortOrder);
-        static::creating(function (Service $model): void {
+        static::creating(function (ServiceIntervention $model): void {
             if (! isset($model->sort)) {
                 $model->sort = static::max('sort') + 1;
             }
