@@ -143,6 +143,7 @@ class ViewCaseMonthlyPlan extends ViewRecord
 
                                             return Specialist::query()
                                                 ->whereIn('id', $ids)
+                                                ->with(['user', 'roleForDisplay'])
                                                 ->get()
                                                 ->pluck('name_role')
                                                 ->implode(', ');

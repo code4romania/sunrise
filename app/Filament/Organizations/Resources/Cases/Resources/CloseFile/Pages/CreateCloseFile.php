@@ -62,9 +62,9 @@ class CreateCloseFile extends CreateRecord
         }
 
         $caseManager = $beneficiary->specialistsTeam()
-            ->with('role:id,case_manager')
+            ->with('roleForDisplay:id,case_manager')
             ->get()
-            ->filter(fn (Specialist $s) => $s->role?->case_manager ?? false)
+            ->filter(fn (Specialist $s) => $s->roleForDisplay?->case_manager ?? false)
             ->first();
 
         $data = [
@@ -145,7 +145,7 @@ class CreateCloseFile extends CreateRecord
                         ->options(
                             fn (): array => $beneficiary instanceof Beneficiary
                                 ? $beneficiary->specialistsTeam()
-                                    ->with(['user:id,first_name,last_name', 'role:id,name'])
+                                    ->with(['user:id,first_name,last_name', 'roleForDisplay:id,name'])
                                     ->get()
                                     ->pluck('name_role', 'id')
                                     ->all()

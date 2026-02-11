@@ -34,12 +34,12 @@ class CaseTeamWidget extends TableWidget
         return $table
             ->query(
                 $record
-                    ? $record->specialistsTeam()->with(['role', 'user'])->getQuery()
+                    ? $record->specialistsTeam()->with(['roleForDisplay', 'user'])->getQuery()
                     : Specialist::query()->whereRaw('1 = 0')
             )
             ->heading(__('case.view.case_team'))
             ->columns([
-                TextColumn::make('role.name')
+                TextColumn::make('roleForDisplay.name')
                     ->label(__('beneficiary.section.specialists.labels.roles'))
                     ->placeholder(__('beneficiary.section.specialists.labels.empty_state_role')),
                 TextColumn::make('user.full_name')

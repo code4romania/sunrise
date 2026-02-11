@@ -24,10 +24,6 @@ class Specialist extends Model
         'specialistable_type',
     ];
 
-    protected $appends = [
-        'name_role',
-    ];
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class)
@@ -40,18 +36,28 @@ class Specialist extends Model
             ->active();
     }
 
+    /**
+     * Role relationship without active scope, for display when the role may be inactive.
+     * Use when eager loading to avoid lazy load violations.
+     */
+    public function roleForDisplay(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function specialistable(): MorphTo
     {
         return $this->morphTo();
     }
 
+    /**
+     * Display name with role. Requires user and roleForDisplay to be eager loaded.
+     */
     public function getNameRoleAttribute(): string
     {
-        $this->loadMissing([
-            'user:id,first_name,last_name',
-            'role:id,name',
-        ]);
+        $user = $this->relationLoaded('user') ? $this->user : null;
+        $role = $this->relationLoaded('roleForDisplay') ? $this->roleForDisplay : null;
 
-        return \sprintf('%s (%s)', $this->user->full_name, $this->role?->name);
+        return \sprintf('%s (%s)', $user?->full_name ?? '—', $role?->name ?? '—');
     }
 }

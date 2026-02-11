@@ -9,6 +9,8 @@ use App\Models\Beneficiary;
 use App\Models\Benefit;
 use App\Models\BenefitService;
 use App\Models\BenefitType;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -46,7 +48,7 @@ class InterventionPlanBenefitsWidget extends TableWidget
                     ->formatStateUsing(fn ($state, BenefitService $record): string => self::formatBenefitTypes($record)),
                 TextColumn::make('award_methods')
                     ->label(__('intervention_plan.headings.award_methods'))
-                    ->formatStateUsing(fn ($state): string => $state instanceof BaseCollection ? $state->map(fn ($e) => $e->getLabel())->join(', ') : '—'),
+                    ->formatStateUsing(fn ($state): string => self::formatAwardMethods($state)),
                 TextColumn::make('description')
                     ->label(__('intervention_plan.headings.benefit_description'))
                     ->html()
@@ -84,6 +86,50 @@ class InterventionPlanBenefitsWidget extends TableWidget
                             ->maxLength(1000),
                     ])
                     ->createAnother(false),
+            ])
+            ->recordActionsColumnLabel(__('intervention_plan.labels.actions'))
+            ->recordActions([
+                EditAction::make()
+                    ->label(__('intervention_plan.actions.edit_benefit'))
+                    ->modalHeading(__('intervention_plan.headings.edit_benefit'))
+                    ->fillForm(fn (BenefitService $record): array => [
+                        'benefit_id' => $record->benefit_id,
+                        'benefit_types' => $record->benefit_types ?? [],
+                        'award_methods' => $record->award_methods?->map(fn ($e) => $e->value)->all() ?? [],
+                        'description' => $record->description,
+                    ])
+                    ->schema([
+                        Select::make('benefit_id')
+                            ->label(__('intervention_plan.labels.benefit_category'))
+                            ->placeholder(__('intervention_plan.placeholders.benefit_category'))
+                            ->options(Benefit::query()->active()->pluck('name', 'id')->all())
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->required(),
+                        CheckboxList::make('benefit_types')
+                            ->label(__('intervention_plan.labels.benefit_types'))
+                            ->options(fn (Get $get): array => self::getBenefitTypesOptions((int) $get('benefit_id')))
+                            ->visible(fn (Get $get): bool => (int) $get('benefit_id') > 0),
+                        CheckboxList::make('award_methods')
+                            ->label(__('intervention_plan.labels.award_methods'))
+                            ->options(AwardMethod::options()),
+                        RichEditor::make('description')
+                            ->label(__('intervention_plan.labels.benefit_description'))
+                            ->placeholder(__('intervention_plan.placeholders.benefit_description'))
+                            ->maxLength(1000),
+                    ])
+                    ->action(function (array $data, BenefitService $record): void {
+                        $record->update($data);
+                    })
+                    ->extraModalFooterActions([
+                        DeleteAction::make()
+                            ->label(__('intervention_plan.actions.delete_benefit'))
+                            ->modalHeading(__('intervention_plan.headings.delete_benefit_modal'))
+                            ->modalDescription(fn (BenefitService $record): string => $record->benefit?->name ?? '')
+                            ->modalSubmitActionLabel(__('intervention_plan.actions.delete_benefit'))
+                            ->cancelParentActions(),
+                    ]),
             ])
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_benefit_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_benefit_table'))
@@ -123,6 +169,21 @@ class InterventionPlanBenefitsWidget extends TableWidget
         }
 
         return $types->whereIn('id', $ids)->pluck('name')->join(', ');
+    }
+
+    private static function formatAwardMethods(mixed $state): string
+    {
+        if ($state === null) {
+            return '—';
+        }
+        if ($state instanceof BaseCollection) {
+            return $state->map(fn ($e) => is_object($e) && method_exists($e, 'getLabel') ? $e->getLabel() : (string) $e)->join(', ');
+        }
+        if (is_iterable($state)) {
+            return collect($state)->map(fn ($e) => is_object($e) && method_exists($e, 'getLabel') ? $e->getLabel() : (string) $e)->join(', ');
+        }
+
+        return '—';
     }
 
     public static function canView(): bool

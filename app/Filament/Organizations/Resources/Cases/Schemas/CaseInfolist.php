@@ -351,8 +351,9 @@ class CaseInfolist
                             ])
                             ->schema([
                                 RepeatableEntry::make('specialistsTeam')
+                                    ->state(fn (Beneficiary $record) => $record->specialistsTeam()->with(['user', 'roleForDisplay'])->get())
                                     ->schema([
-                                        TextEntry::make('role.name')
+                                        TextEntry::make('roleForDisplay.name')
                                             ->label(__('case.view.role')),
                                         TextEntry::make('user.full_name')
                                             ->label(__('case.view.specialist')),

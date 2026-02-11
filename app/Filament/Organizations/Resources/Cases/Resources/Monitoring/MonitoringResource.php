@@ -50,7 +50,7 @@ class MonitoringResource extends Resource
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
-            ->with(['children', 'specialistsTeam.user', 'specialistsTeam.role']);
+            ->with(['children', 'specialistsTeam.user', 'specialistsTeam.roleForDisplay']);
     }
 
     public static function form(Schema $schema): Schema

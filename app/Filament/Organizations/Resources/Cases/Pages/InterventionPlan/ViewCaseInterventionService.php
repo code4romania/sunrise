@@ -43,7 +43,7 @@ class ViewCaseInterventionService extends ViewRecord
             ->with([
                 'organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition',
                 'specialist.user',
-                'specialist.role',
+                'specialist.roleForDisplay',
             ])
             ->firstOrFail();
 

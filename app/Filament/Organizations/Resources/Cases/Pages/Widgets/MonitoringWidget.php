@@ -26,7 +26,7 @@ class MonitoringWidget extends TableWidget
         return $table
             ->query(
                 $record
-                    ? $record->monitoring()->with(['specialistsTeam.user', 'specialistsTeam.role'])->getQuery()
+                    ? $record->monitoring()->with(['specialistsTeam.user', 'specialistsTeam.roleForDisplay'])->getQuery()
                     : Monitoring::query()->whereRaw('1 = 0')
             )
             ->heading(__('monitoring.headings.widget_table'))

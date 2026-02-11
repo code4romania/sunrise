@@ -56,7 +56,7 @@ class CaseResource extends Resource
         return parent::getRecordRouteBindingEloquentQuery()
             ->with([
                 'managerTeam.user',
-                'managerTeam.role',
+                'managerTeam.roleForDisplay',
                 'lastMonitoring',
                 'interventionPlan',
                 'closeFile',
@@ -73,7 +73,7 @@ class CaseResource extends Resource
                 'aggressors',
                 'antecedents',
                 'specialistsTeam.user',
-                'specialistsTeam.role',
+                'specialistsTeam.roleForDisplay',
                 'evaluateDetails',
                 'children',
                 'detailedEvaluationSpecialists',

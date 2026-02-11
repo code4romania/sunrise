@@ -150,7 +150,7 @@ class CreateCaseMonthlyPlan extends CreateRecord
                     Select::make('specialists')
                         ->label(__('intervention_plan.labels.specialists'))
                         ->multiple()
-                        ->options(fn (): Collection => $this->getBeneficiary()?->specialistsTeam()->with('user', 'role')->get()->pluck('name_role', 'id') ?? collect())
+                        ->options(fn (): Collection => $this->getBeneficiary()?->specialistsTeam()->with('user', 'roleForDisplay')->get()->pluck('name_role', 'id') ?? collect())
                         ->placeholder(__('intervention_plan.placeholders.specialists')),
                 ]),
         ]);

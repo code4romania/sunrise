@@ -52,7 +52,7 @@ class CloseFileResource extends Resource
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()
-            ->with(['caseManager.user', 'caseManager.role']);
+            ->with(['caseManager.user', 'caseManager.roleForDisplay']);
     }
 
     public static function form(Schema $schema): Schema

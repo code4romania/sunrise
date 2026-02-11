@@ -35,7 +35,7 @@ class InterventionPlanServicesWidget extends TableWidget
             ->query(
                 $plan
                     ? $plan->services()
-                        ->with(['organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition', 'specialist.user', 'specialist.role'])
+                        ->with(['organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition', 'specialist.user', 'specialist.roleForDisplay'])
                         ->withCount(['beneficiaryInterventions', 'meetings'])
                         ->getQuery()
                     : InterventionService::query()->whereRaw('1 = 0')
@@ -104,7 +104,7 @@ class InterventionPlanServicesWidget extends TableWidget
 
                                         return $plan->beneficiary
                                             ->specialistsTeam()
-                                            ->with(['user:id,first_name,last_name', 'role:id,name'])
+                                            ->with(['user:id,first_name,last_name', 'roleForDisplay:id,name'])
                                             ->get()
                                             ->mapWithKeys(fn (Specialist $s) => [$s->id => $s->name_role])
                                             ->all();

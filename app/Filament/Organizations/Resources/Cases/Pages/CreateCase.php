@@ -48,6 +48,52 @@ class CreateCase extends CreateRecord
     /** Beneficiary found in same center when validating CNP step (shows "CNP identificat" message + link). */
     public ?Beneficiary $cnpBeneficiaryInTenant = null;
 
+    /** Parent beneficiary when reactivating a closed/archived case (from ?parent= query param). */
+    public ?Beneficiary $parentBeneficiary = null;
+
+    public function mount(): void
+    {
+        $parentId = (int) request('parent');
+        if ($parentId > 0) {
+            $this->parentBeneficiary = Beneficiary::find($parentId);
+        }
+        parent::mount();
+        if ($this->parentBeneficiary !== null) {
+            $this->fillFormFromParentBeneficiary();
+        }
+    }
+
+    protected function getStartStep(): int
+    {
+        return $this->parentBeneficiary !== null ? 3 : 1;
+    }
+
+    protected function fillFormFromParentBeneficiary(): void
+    {
+        $parent = $this->parentBeneficiary;
+        if ($parent === null) {
+            return;
+        }
+        $data = [
+            'consent' => true,
+            'without_cnp' => false,
+            'cnp' => $parent->cnp,
+            'last_name' => $parent->last_name,
+            'first_name' => $parent->first_name,
+            'prior_name' => $parent->prior_name,
+            'civil_status' => $parent->civil_status?->value,
+            'gender' => $parent->gender?->value,
+            'birthdate' => $this->formatBirthdateForForm($parent->birthdate),
+            'birthplace' => $parent->birthplace,
+            'ethnicity' => $parent->ethnicity?->value,
+            'id_type' => $parent->id_type?->value,
+            'id_serial' => $parent->id_serial,
+            'id_number' => $parent->id_number,
+            'initial_id' => $parent->initial_id ?? $parent->id,
+        ];
+        $this->form->fill(array_merge($this->form->getRawState(), $data));
+    }
+
     public function getTitle(): string|Htmlable
     {
         return __('case.create.title');
@@ -278,6 +324,9 @@ class CreateCase extends CreateRecord
     {
         unset($data['consent'], $data['without_cnp']);
         $data['status'] = $data['status'] ?? CaseStatus::ACTIVE;
+        if ($this->parentBeneficiary !== null) {
+            $data['initial_id'] = $this->parentBeneficiary->initial_id ?? $this->parentBeneficiary->id;
+        }
 
         $fillable = (new Beneficiary)->getFillable();
 
@@ -306,8 +355,7 @@ class CreateCase extends CreateRecord
             }
         }
 
-
-        $roleIds=$state['case_team'] ?? [];
+        $roleIds = $state['case_team'] ?? [];
         $currentUserId = auth()->id();
         if (! $currentUserId) {
             return;
