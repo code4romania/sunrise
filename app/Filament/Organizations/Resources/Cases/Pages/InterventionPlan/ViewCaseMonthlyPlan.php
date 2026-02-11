@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Beneficiary;
 use App\Models\MonthlyPlan;
@@ -115,7 +116,16 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                 ->columns(2)
                                 ->schema([
                                     SectionHeader::make('monthly_plan_details')
-                                        ->state(__('intervention_plan.headings.monthly_plan_details')),
+                                        ->state(__('intervention_plan.headings.monthly_plan_details'))
+                                        ->action(
+                                            EditAction::make()
+                                                ->url(
+                                                    CaseResource::getUrl('edit_monthly_plan_details', [
+                                                        'record' => $this->getRecord(),
+                                                        'monthlyPlan' => $this->monthlyPlan,
+                                                    ])
+                                                )
+                                        ),
 
                                     TextEntry::make('beneficiary.full_name')
                                         ->label(__('intervention_plan.labels.full_name')),

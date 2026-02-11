@@ -192,10 +192,6 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                         ->link(),
                 ]),
             Section::make(__('beneficiary.wizard.children.label'))
-                ->headerActions([
-                    EditAction::make('edit')
-                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_children', ['record' => $record])),
-                ])
                 ->schema([
                     Grid::make(2)
                         ->schema([

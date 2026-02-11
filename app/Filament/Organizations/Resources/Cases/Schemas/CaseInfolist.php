@@ -44,6 +44,12 @@ class CaseInfolist
                                     ->link(),
                             ])
                             ->schema([
+                                TextEntry::make('status')
+                                    ->label(__('case.table.status'))
+                                    ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
+                                    ->color(fn ($state) => is_object($state) && method_exists($state, 'getColor') ? $state->getColor() : 'gray')
+                                    ->badge()
+                                    ->placeholder('—'),
                                 TextEntry::make('age')
                                     ->label(__('field.age'))
                                     ->formatStateUsing(function (mixed $state): string {
@@ -60,12 +66,14 @@ class CaseInfolist
                                     ->placeholder('—'),
                                 TextEntry::make('gender')
                                     ->label(__('field.gender'))
+                                    ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
                                     ->placeholder('—'),
                                 TextEntry::make('cnp')
                                     ->label(__('field.cnp'))
                                     ->placeholder('—'),
                                 TextEntry::make('civil_status')
                                     ->label(__('field.civil_status'))
+                                    ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
                                     ->placeholder('—'),
                                 TextEntry::make('children_care_count')
                                     ->label(__('field.children_care_count'))
@@ -411,6 +419,8 @@ class CaseInfolist
                                             ->state(fn (Beneficiary $related): string => $related->managerTeam->first()?->user?->full_name ?? '—'),
                                         TextEntry::make('status')
                                             ->label(__('case.table.status'))
+                                            ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
+                                            ->color(fn ($state) => is_object($state) && method_exists($state, 'getColor') ? $state->getColor() : 'gray')
                                             ->badge(),
                                     ])
                                     ->columns(5)

@@ -127,7 +127,7 @@ class CreateMonitoring extends CreateRecord
                     'name' => $c->name,
                     'status' => $c->status,
                     'age' => $c->age,
-                    'birthdate' => $c->birthdate?->format('d.m.Y'),
+                    'birthdate' => $c->birthdate?->format('Y-m-d'),
                     'aggressor_relationship' => $c->aggressor_relationship?->value,
                     'maintenance_sources' => $c->maintenance_sources?->value,
                     'location' => $c->location,
@@ -135,6 +135,8 @@ class CreateMonitoring extends CreateRecord
                 ])
                 ->all();
         } else {
+            $beneficiary->loadMissing('children');
+
             $data['specialistsTeam'] = $beneficiary->specialistsTeam
                 ->filter(fn (Specialist $s): bool => (bool) $s->role_id)
                 ->map(fn (Specialist $s): array => [
@@ -150,7 +152,7 @@ class CreateMonitoring extends CreateRecord
                     'name' => $c->name ?? '',
                     'status' => $c->status ?? '',
                     'age' => $c->age !== null ? (string) $c->age : '',
-                    'birthdate' => $c->birthdate?->format('d.m.Y'),
+                    'birthdate' => $c->birthdate?->format('Y-m-d'),
                     'aggressor_relationship' => null,
                     'maintenance_sources' => null,
                     'location' => $c->current_address ?? '',
@@ -293,7 +295,8 @@ class CreateMonitoring extends CreateRecord
                                 ->maxLength(2)
                                 ->mask('99'),
                             DatePicker::make('birthdate')
-                                ->label(__('monitoring.labels.birthdate')),
+                                ->label(__('monitoring.labels.birthdate'))
+                                ->format('Y-m-d'),
                             Select::make('aggressor_relationship')
                                 ->label(__('monitoring.labels.aggressor_relationship'))
                                 ->placeholder(__('monitoring.placeholders.select_an_answer'))
@@ -441,7 +444,7 @@ class CreateMonitoring extends CreateRecord
             $birthdateRaw = trim((string) ($item['birthdate'] ?? ''));
             if ($birthdateRaw !== '' && $birthdateRaw !== '-') {
                 try {
-                    $child['birthdate'] = Carbon::createFromFormat('d.m.Y', $birthdateRaw)->format('Y-m-d');
+                    $child['birthdate'] = Carbon::parse($birthdateRaw)->format('Y-m-d');
                 } catch (\Throwable) {
                     $child['birthdate'] = null;
                 }

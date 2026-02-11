@@ -9,6 +9,8 @@ use App\Models\Beneficiary;
 use App\Models\InterventionPlanResult;
 use App\Models\Result;
 use App\Models\User;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -63,42 +65,78 @@ class InterventionPlanResultsWidget extends TableWidget
 
                         return $data;
                     })
-                    ->schema([
-                        Grid::make()
-                            ->columns(3)
-                            ->schema([
-                                Select::make('result_id')
-                                    ->label(__('intervention_plan.labels.result'))
-                                    ->options(Result::query()->active()->pluck('name', 'id')->all())
-                                    ->required(),
-                                Select::make('user_id')
-                                    ->label(__('intervention_plan.labels.specialist'))
-                                    ->options(User::getTenantOrganizationUsers()->all()),
-                                DatePicker::make('started_at')
-                                    ->label(__('intervention_plan.labels.started_at'))
-                                    ->required(),
-                                DatePicker::make('ended_at')
-                                    ->label(__('intervention_plan.labels.ended_at'))
-                                    ->disabled(fn (Get $get): bool => (bool) $get('retried')),
-                                Checkbox::make('retried')
-                                    ->label(__('intervention_plan.labels.retried'))
-                                    ->live(),
-                                Checkbox::make('lost_from_monitoring')
-                                    ->label(__('intervention_plan.labels.lost_from_monitoring'))
-                                    ->disabled(fn (Get $get): bool => (bool) $get('retried')),
-                                DatePicker::make('retried_at')
-                                    ->label(__('intervention_plan.labels.retried_at'))
-                                    ->visible(fn (Get $get): bool => (bool) $get('retried')),
-                            ]),
-                        RichEditor::make('observations')
-                            ->label(__('intervention_plan.labels.result_observations'))
-                            ->placeholder(__('intervention_plan.placeholders.result_observations')),
-                    ])
+                    ->schema($this->getResultFormSchema())
                     ->createAnother(false),
+            ])
+            ->recordActionsColumnLabel(__('intervention_plan.labels.actions'))
+            ->recordActions([
+                EditAction::make()
+                    ->label(__('intervention_plan.actions.edit_result'))
+                    ->modalHeading(__('intervention_plan.headings.edit_result'))
+                    ->fillForm(fn (InterventionPlanResult $record): array => [
+                        'result_id' => $record->result_id,
+                        'user_id' => $record->user_id,
+                        'started_at' => $record->started_at,
+                        'ended_at' => $record->ended_at,
+                        'retried' => $record->retried ?? false,
+                        'retried_at' => $record->retried_at,
+                        'lost_from_monitoring' => $record->lost_from_monitoring ?? false,
+                        'observations' => $record->observations,
+                    ])
+                    ->schema($this->getResultFormSchema())
+                    ->action(function (array $data, InterventionPlanResult $record): void {
+                        $record->update($data);
+                    })
+                    ->extraModalFooterActions([
+                        DeleteAction::make()
+                            ->label(__('intervention_plan.actions.delete_result'))
+                            ->modalHeading(__('intervention_plan.headings.delete_result_modal'))
+                            ->modalDescription(fn (InterventionPlanResult $record): string => $record->result?->name ?? '')
+                            ->modalSubmitActionLabel(__('intervention_plan.actions.delete_result'))
+                            ->cancelParentActions(),
+                    ]),
             ])
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_result_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_result_table'))
             ->emptyStateIcon('heroicon-o-document');
+    }
+
+    /**
+     * @return array<int, \Filament\Forms\Components\Component>
+     */
+    private function getResultFormSchema(): array
+    {
+        return [
+            Grid::make()
+                ->columns(3)
+                ->schema([
+                    Select::make('result_id')
+                        ->label(__('intervention_plan.labels.result'))
+                        ->options(Result::query()->active()->pluck('name', 'id')->all())
+                        ->required(),
+                    Select::make('user_id')
+                        ->label(__('intervention_plan.labels.specialist'))
+                        ->options(User::getTenantOrganizationUsers()->all()),
+                    DatePicker::make('started_at')
+                        ->label(__('intervention_plan.labels.started_at'))
+                        ->required(),
+                    DatePicker::make('ended_at')
+                        ->label(__('intervention_plan.labels.ended_at'))
+                        ->disabled(fn (Get $get): bool => (bool) $get('retried')),
+                    Checkbox::make('retried')
+                        ->label(__('intervention_plan.labels.retried'))
+                        ->live(),
+                    Checkbox::make('lost_from_monitoring')
+                        ->label(__('intervention_plan.labels.lost_from_monitoring'))
+                        ->disabled(fn (Get $get): bool => (bool) $get('retried')),
+                    DatePicker::make('retried_at')
+                        ->label(__('intervention_plan.labels.retried_at'))
+                        ->visible(fn (Get $get): bool => (bool) $get('retried')),
+                ]),
+            RichEditor::make('observations')
+                ->label(__('intervention_plan.labels.result_observations'))
+                ->placeholder(__('intervention_plan.placeholders.result_observations')),
+        ];
     }
 
     public static function canView(): bool
