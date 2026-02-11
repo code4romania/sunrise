@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets;
 
+use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use App\Models\InterventionService;
@@ -50,7 +51,18 @@ class InterventionPlanServicesWidget extends TableWidget
                     ->label(__('intervention_plan.labels.interventions_count')),
                 TextColumn::make('meetings_count')
                     ->label(__('intervention_plan.labels.meetings_count')),
+                TextColumn::make('view_details')
+                    ->label('')
+                    ->state(__('intervention_plan.actions.view_details'))
+                    ->url(fn (InterventionService $record): string => CaseResource::getUrl('view_intervention_service', [
+                        'record' => $this->record,
+                        'interventionService' => $record->id,
+                    ])),
             ])
+            ->recordUrl(fn (InterventionService $record): string => CaseResource::getUrl('view_intervention_service', [
+                'record' => $this->record,
+                'interventionService' => $record->id,
+            ]))
             ->headerActions([
                 \Filament\Actions\CreateAction::make()
                     ->label(__('intervention_plan.actions.add_service'))

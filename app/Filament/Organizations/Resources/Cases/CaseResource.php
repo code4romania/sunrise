@@ -20,6 +20,7 @@ use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\CreateCas
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\CreateCaseInterventionPlan;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\CreateCaseMonthlyPlan;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseInterventionPlan;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseInterventionService;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseMonthlyPlan;
 use App\Filament\Organizations\Resources\Cases\Pages\ListCases;
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCase;
@@ -155,6 +156,7 @@ class CaseResource extends Resource
             'edit_detailed_evaluation' => CreateCaseDetailedEvaluation::route('/{record}/detailed-evaluation/edit'),
             'create_intervention_plan' => CreateCaseInterventionPlan::route('/{record}/intervention-plan/create'),
             'view_intervention_plan' => ViewCaseInterventionPlan::route('/{record}/intervention-plan'),
+            'view_intervention_service' => ViewCaseInterventionService::route('/{record}/intervention-plan/services/{interventionService}'),
             'create_monthly_plan' => CreateCaseMonthlyPlan::route('/{case}/intervention-plan/monthly-plans/create'),
             'view_monthly_plan' => ViewCaseMonthlyPlan::route('/{record}/intervention-plan/monthly-plans/{monthlyPlan}'),
         ];
