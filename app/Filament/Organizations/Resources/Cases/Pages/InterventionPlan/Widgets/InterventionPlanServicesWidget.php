@@ -123,7 +123,11 @@ class InterventionPlanServicesWidget extends TableWidget
                             ->placeholder(__('intervention_plan.placeholders.objections'))
                             ->maxLength(1000),
                     ])
-                    ->createAnother(false),
+                    ->createAnother(false)
+                    ->successRedirectUrl(fn (InterventionService $record): string => CaseResource::getUrl('view_intervention_service', [
+                        'record' => $this->record,
+                        'interventionService' => $record->id,
+                    ])),
             ])
             ->emptyStateHeading(__('intervention_plan.headings.empty_state_service_table'))
             ->emptyStateDescription(__('intervention_plan.labels.empty_state_service_table'))

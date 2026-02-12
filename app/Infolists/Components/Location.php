@@ -10,6 +10,7 @@ use Closure;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Concerns\EntanglesStateWithSingularRelationship;
+use Filament\Support\Contracts\HasLabel as HasLabelContract;
 
 class Location extends Component
 {
@@ -17,36 +18,36 @@ class Location extends Component
 
     protected string $view = 'filament-schemas::components.grid';
 
-    protected string | Closure | null $countyField = null;
+    protected string|Closure|null $countyField = null;
 
-    protected string | Closure | null $countyLabel = null;
+    protected string|Closure|null $countyLabel = null;
 
     protected bool $hasCity = false;
 
-    protected string | Closure | null $cityField = null;
+    protected string|Closure|null $cityField = null;
 
-    protected string | Closure | null $cityLabel = null;
+    protected string|Closure|null $cityLabel = null;
 
     protected bool $hasAddress = false;
 
-    protected string | Closure | null $addressField = null;
+    protected string|Closure|null $addressField = null;
 
-    protected string | Closure | null $addressLabel = null;
+    protected string|Closure|null $addressLabel = null;
 
     protected bool $hasEnvironment = false;
 
-    protected string | Closure | null $environmentField = null;
+    protected string|Closure|null $environmentField = null;
 
-    protected string | Closure | null $environmentLabel = null;
+    protected string|Closure|null $environmentLabel = null;
 
-    protected string | Closure | null $label = null;
+    protected string|Closure|null $label = null;
 
-    final public function __construct(string | null $id)
+    final public function __construct(?string $id)
     {
         $this->id($id);
     }
 
-    public static function make(string | null $id = null): static
+    public static function make(?string $id = null): static
     {
         $static = app(static::class, ['id' => $id]);
         $static->configure();
@@ -63,7 +64,7 @@ class Location extends Component
         $this->columns();
     }
 
-    public function label(string | Closure | null $label): static
+    public function label(string|Closure|null $label): static
     {
         $this->label = $label;
 
@@ -89,7 +90,7 @@ class Location extends Component
 
     public function getCountyLabel(): string
     {
-        return $this->countyLabel ?? __('field.' . collect([
+        return $this->countyLabel ?? __('field.'.collect([
             $this->getId(),
             'county',
         ])
@@ -97,7 +98,7 @@ class Location extends Component
             ->join('_'));
     }
 
-    public function city(bool | Closure $condition = true): static
+    public function city(bool|Closure $condition = true): static
     {
         $this->hasCity = $condition;
 
@@ -128,7 +129,7 @@ class Location extends Component
 
     public function getCityLabel(): string
     {
-        return $this->cityLabel ?? __('field.' . collect([
+        return $this->cityLabel ?? __('field.'.collect([
             $this->getId(),
             'city',
         ])
@@ -136,7 +137,7 @@ class Location extends Component
             ->join('_'));
     }
 
-    public function address(bool | Closure $condition = true): static
+    public function address(bool|Closure $condition = true): static
     {
         $this->hasAddress = $condition;
 
@@ -167,7 +168,7 @@ class Location extends Component
 
     public function getAddressLabel(): string
     {
-        return  $this->addressLabel ?? __('field.' . collect([
+        return $this->addressLabel ?? __('field.'.collect([
             $this->getId(),
             'address',
         ])
@@ -175,7 +176,7 @@ class Location extends Component
             ->join('_'));
     }
 
-    public function environment(bool | Closure $condition = true): static
+    public function environment(bool|Closure $condition = true): static
     {
         $this->hasEnvironment = $condition;
 
@@ -199,7 +200,7 @@ class Location extends Component
 
     public function getEnvironmentLabel(): string
     {
-        return  __('field.' . collect([
+        return __('field.'.collect([
             $this->getId(),
             'environment',
         ])
@@ -209,21 +210,56 @@ class Location extends Component
 
     public function getDefaultChildComponents(): array
     {
+        $relationshipName = $this->getRelationshipName();
+
         return [
             TextEntry::make($this->getCountyField())
                 ->label($this->getCountyLabel())
-                ->formatStateUsing(fn ($state) => County::find($state)?->name ?? '-'),
+                ->formatStateUsing(function (mixed $state, $record) use ($relationshipName): string {
+                    $name = County::find($state)?->name;
+                    if ($name !== null) {
+                        return $name;
+                    }
+                    $address = $record?->{$relationshipName} ?? null;
+
+                    return $address?->county?->name ?? '-';
+                }),
 
             TextEntry::make($this->getCityField())
                 ->label($this->getCityLabel())
-                ->formatStateUsing(fn ($state) => City::find($state)?->name ?? '-'),
+                ->formatStateUsing(function (mixed $state, $record) use ($relationshipName): string {
+                    $name = City::find($state)?->name;
+                    if ($name !== null) {
+                        return $name;
+                    }
+                    $address = $record?->{$relationshipName} ?? null;
+
+                    return $address?->city?->name ?? '-';
+                }),
 
             TextEntry::make($this->getAddressField())
-                ->label($this->getAddressLabel()),
+                ->label($this->getAddressLabel())
+                ->formatStateUsing(function (mixed $state, $record) use ($relationshipName): ?string {
+                    if (filled($state)) {
+                        return $state;
+                    }
+                    $address = $record?->{$relationshipName} ?? null;
+
+                    return $address?->address ?? null;
+                }),
 
             TextEntry::make($this->getEnvironmentField())
                 ->label($this->getEnvironmentLabel())
-                ->visible($this->hasEnvironment()),
+                ->visible($this->hasEnvironment())
+                ->formatStateUsing(function (mixed $state, $record) use ($relationshipName): ?string {
+                    $value = $state;
+                    if (blank($value)) {
+                        $address = $record?->{$relationshipName} ?? null;
+                        $value = $address?->environment ?? null;
+                    }
+
+                    return $value instanceof HasLabelContract ? $value->getLabel() : ($value !== null ? (string) $value : null);
+                }),
         ];
     }
 }

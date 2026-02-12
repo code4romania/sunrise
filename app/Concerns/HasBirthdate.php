@@ -15,10 +15,34 @@ trait HasBirthdate
         $this->fillable[] = 'birthdate';
     }
 
-    public function setBirthdateAttribute(?string $value = null): void
+    public function setBirthdateAttribute(mixed $value = null): void
     {
-        $date = $value ? Carbon::createFromFormat('d.m.Y', $value) : null;
+        if ($value === null || $value === '') {
+            $this->attributes['birthdate'] = null;
 
-        $this->attributes['birthdate'] = $date?->format('Y-m-d');
+            return;
+        }
+
+        if ($value instanceof \DateTimeInterface) {
+            $this->attributes['birthdate'] = Carbon::instance($value)->format('Y-m-d');
+
+            return;
+        }
+
+        $value = (string) $value;
+
+        //        dd($value);
+        $date = Carbon::createFromFormat('Y-m-d', $value);
+        if ($date === false) {
+            try {
+                $date = Carbon::parse($value);
+            } catch (\Throwable) {
+                $this->attributes['birthdate'] = null;
+
+                return;
+            }
+        }
+
+        $this->attributes['birthdate'] = $date->format('Y-m-d');
     }
 }

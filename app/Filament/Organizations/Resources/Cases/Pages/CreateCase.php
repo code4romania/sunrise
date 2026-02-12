@@ -355,9 +355,9 @@ class CreateCase extends CreateRecord
             }
         }
 
-        $roleIds = $state['case_team'] ?? [];
+        $roleIds = self::normalizeCaseTeamSelection($state['case_team'] ?? []);
         $currentUserId = auth()->id();
-        if (! $currentUserId) {
+        if (! $currentUserId || $roleIds === null || empty($roleIds)) {
             return;
         }
 

@@ -124,12 +124,12 @@ class CaseResource extends Resource
         return CaseTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            'evaluateDetails' => EvaluateDetailsRelationManager::class,
-        ];
-    }
+    //    public static function getRelations(): array
+    //    {
+    //        return [
+    //            'evaluateDetails' => EvaluateDetailsRelationManager::class,
+    //        ];
+    //    }
 
     public static function getPages(): array
     {

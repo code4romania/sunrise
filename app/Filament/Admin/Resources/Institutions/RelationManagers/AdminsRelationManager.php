@@ -55,7 +55,7 @@ class AdminsRelationManager extends RelationManager
 
                 TextColumn::make('last_login_at')
                     ->label(__('institution.labels.last_login_at'))
-                    ->date('d.m.Y')
+                    ->date('Y-m-d')
                     ->sortable(),
             ])
             ->headerActions([

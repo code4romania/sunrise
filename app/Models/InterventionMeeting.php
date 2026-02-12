@@ -22,6 +22,7 @@ class InterventionMeeting extends Model
         'date',
         'time',
         'duration',
+        'topic',
         'observations',
     ];
 

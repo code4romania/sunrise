@@ -29,7 +29,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
 
 class ViewCaseInterventionPlan extends ViewRecord
 {
@@ -125,16 +124,59 @@ class ViewCaseInterventionPlan extends ViewRecord
                         ->body(__('intervention_plan.labels.download_plan_coming_soon'))
                         ->send();
                 }),
+            Action::make('beneficiary_details')
+                ->record($record)
+                ->visible(false)
+                ->slideOver()
+                ->modalHeading(__('case.view.identity_page.fab_beneficiary_details'))
+                ->modalSubmitAction(false)
+                ->modalCancelActionLabel(__('general.action.close'))
+                ->schema([
+                    Section::make(__('case.view.identity'))
+                        ->schema([
+                            TextEntry::make('full_name')
+                                ->label(__('intervention_plan.labels.full_name')),
+                            TextEntry::make('cnp')
+                                ->label(__('intervention_plan.labels.cnp')),
+                            TextEntry::make('address')
+                                ->label(__('intervention_plan.labels.address'))
+                                ->state(fn (Beneficiary $record): string => self::formatAddress($record))
+                                ->placeholder('—'),
+                            TextEntry::make('status')
+                                ->label(__('case.table.status'))
+                                ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
+                                ->placeholder('—'),
+                            TextEntry::make('age')
+                                ->label(__('field.age'))
+                                ->formatStateUsing(function (mixed $state): string {
+                                    if ($state === null || $state === '' || $state === '-') {
+                                        return '—';
+                                    }
+                                    $age = is_numeric($state) ? (int) $state : null;
+
+                                    return $age !== null ? "{$age} ani" : '—';
+                                })
+                                ->placeholder('—'),
+                            TextEntry::make('birthdate')
+                                ->label(__('field.birthdate'))
+                                ->formatStateUsing(fn (mixed $state): string => $state ? Carbon::parse($state)->translatedFormat('d M Y') : '—')
+                                ->placeholder('—'),
+                        ])
+                        ->columns(2),
+                ])
+                ->extraModalFooterActions([
+                    Action::make('view_full_beneficiary')
+                        ->label(__('case.view.view_full_beneficiary'))
+                        ->url(fn (): string => CaseResource::getUrl('view', ['record' => $record]))
+                        ->button()
+                        ->close(),
+                ]),
         ];
     }
 
-    public function getFooter(): ?View
+    public function openBeneficiaryDetailsSlideOver(): void
     {
-        $record = $this->getRecord();
-
-        return view('filament.organizations.pages.intervention-plan.fab-beneficiary-details', [
-            'beneficiaryDetailsUrl' => CaseResource::getUrl('view', ['record' => $record]),
-        ]);
+        $this->mountAction('beneficiary_details');
     }
 
     public function infolist(Schema $schema): Schema

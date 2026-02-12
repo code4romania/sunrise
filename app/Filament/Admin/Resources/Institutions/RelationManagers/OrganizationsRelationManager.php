@@ -72,8 +72,7 @@ class OrganizationsRelationManager extends RelationManager
                 Action::make('edit_centers')
                     ->label(__('general.action.edit'))
                     ->icon('heroicon-o-pencil-square')
-                    ->url(fn () => InstitutionResource::getUrl('edit', ['record' => $this->getOwnerRecord()]))
-                    ->visible(fn () => $this->isReadOnly()),
+                    ->url(fn () => InstitutionResource::getUrl('edit', ['record' => $this->getOwnerRecord()])),
             ])
             ->recordActions([
                 ViewAction::make()

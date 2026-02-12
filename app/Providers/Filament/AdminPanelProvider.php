@@ -33,11 +33,11 @@ class AdminPanelProvider extends PanelProvider
 {
     private const AdminNamespace = 'App\\Filament\\Admin';
 
-    public static string $defaultDateDisplayFormat = 'd.m.Y';
+    public static string $defaultDateDisplayFormat = 'Y-m-d';
 
-    public static string $defaultDateTimeDisplayFormat = 'd.m.Y H:i';
+    public static string $defaultDateTimeDisplayFormat = 'Y-m-d H:i';
 
-    public static string $defaultDateTimeWithSecondsDisplayFormat = 'd.m.Y H:i:s';
+    public static string $defaultDateTimeWithSecondsDisplayFormat = 'Y-m-d H:i:s';
 
     public static string $defaultTimeDisplayFormat = 'H:i';
 

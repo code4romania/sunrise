@@ -58,6 +58,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Models\UserStatus;
 use App\Models\Violence;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseInterventionPlan;
 use App\Models\ViolenceHistory;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
@@ -109,6 +110,12 @@ class AppServiceProvider extends ServiceProvider
         FilamentView::registerRenderHook(
             PanelsRenderHook::SIDEBAR_FOOTER,
             fn () => view('filament.sidebar-footer')
+        );
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::PAGE_FOOTER_WIDGETS_AFTER,
+            fn (): \Illuminate\Contracts\View\View => view('filament.organizations.pages.intervention-plan.fab-beneficiary-details'),
+            scopes: ViewCaseInterventionPlan::class,
         );
     }
 

@@ -43,7 +43,7 @@ class DocumentsWidget extends TableWidget
             ->columns([
                 TextColumn::make('date')
                     ->label(__('beneficiary.section.documents.labels.date'))
-                    ->date('d.m.Y')
+                    ->date('Y-m-d')
                     ->sortable(),
                 TextColumn::make('type')
                     ->label(__('beneficiary.section.documents.labels.type'))

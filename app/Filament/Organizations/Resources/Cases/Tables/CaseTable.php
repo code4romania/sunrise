@@ -61,12 +61,12 @@ class CaseTable
 
             TextColumn::make('created_at')
                 ->label(__('case.table.opened_at'))
-                ->date('d.m.Y')
+                ->date('Y-m-d')
                 ->sortable(),
 
             TextColumn::make('lastMonitoring.date')
                 ->label(__('case.table.monitored_at'))
-                ->date('d.m.Y')
+                ->date('Y-m-d')
                 ->placeholder('—'),
 
             TextColumn::make('managerTeam.user.full_name')

@@ -46,10 +46,10 @@ class InterventionPlanResultsWidget extends TableWidget
                     ->label(__('intervention_plan.headings.specialist')),
                 TextColumn::make('started_at')
                     ->label(__('intervention_plan.headings.started_at'))
-                    ->date('d.m.Y'),
+                    ->date('Y-m-d'),
                 TextColumn::make('ended_at')
                     ->label(__('intervention_plan.headings.ended_at'))
-                    ->formatStateUsing(fn (InterventionPlanResult $record) => $record->ended_at?->format('d.m.Y') ?? '—'),
+                    ->formatStateUsing(fn (InterventionPlanResult $record) => $record?->ended_at ?? '—'),
                 TextColumn::make('observations')
                     ->label(__('intervention_plan.headings.observations'))
                     ->html()

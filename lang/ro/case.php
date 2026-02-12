@@ -54,6 +54,8 @@ return [
         'case_actions' => 'Acțiuni caz',
         'see_details' => 'Vezi detalii',
         'see_plan_details' => 'Vezi detalii plan',
+        'view_full_plan' => 'Vezi plan complet',
+        'view_full_beneficiary' => 'Vezi detalii complete',
         'identity' => 'Date identitate',
         'identity_page' => [
             'download_sheet' => 'Descarcă fișă',

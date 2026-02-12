@@ -9,7 +9,6 @@ use App\Concerns\LogsActivityOptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class EvaluateDetails extends Model
 {
@@ -18,6 +17,8 @@ class EvaluateDetails extends Model
     use LogsActivityOptions;
 
     protected $fillable = [
+        'beneficiary_id',
+        'organization_id',
         'specialist_id',
         'registered_date',
         'file_number',
@@ -28,16 +29,18 @@ class EvaluateDetails extends Model
         'registered_date' => 'date',
     ];
 
-    public function organization(): HasOneThrough
+    protected static function booted(): void
     {
-        return $this->hasOneThrough(
-            Organization::class,
-            Beneficiary::class,
-            'id',              // FK on Beneficiary (referenced by evaluate_details.beneficiary_id)
-            'id',              // FK on Organization (referenced by beneficiaries.organization_id)
-            'beneficiary_id',  // Local key on EvaluateDetails
-            'organization_id' // Local key on Beneficiary
-        );
+        static::creating(function (EvaluateDetails $model): void {
+            if ($model->organization_id === null && $model->beneficiary_id !== null) {
+                $model->organization_id = Beneficiary::find($model->beneficiary_id)?->organization_id;
+            }
+        });
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
     }
 
     public function specialist(): BelongsTo

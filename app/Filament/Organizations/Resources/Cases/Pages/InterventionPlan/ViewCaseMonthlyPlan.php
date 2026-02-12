@@ -135,7 +135,7 @@ class ViewCaseMonthlyPlan extends ViewRecord
 
                                     TextEntry::make('start_date')
                                         ->label(__('intervention_plan.labels.plan_date'))
-                                        ->date('d.m.Y'),
+                                        ->date('Y-m-d'),
 
                                     TextEntry::make('interval')
                                         ->label(__('intervention_plan.labels.interval')),

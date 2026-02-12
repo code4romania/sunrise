@@ -12,6 +12,6 @@ class DateTimeColumn extends TextColumn
     protected function setUp(): void
     {
         parent::setUp();
-        $this->formatStateUsing(fn (string | Carbon $state) => $state === '-' ? $state : $state->format('d.m.Y H:i:s'));
+        $this->formatStateUsing(fn (string|Carbon $state) => $state === '-' ? $state : $state->format('Y-m-d H:i:s'));
     }
 }

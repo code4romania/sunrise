@@ -36,7 +36,7 @@ class MonitoringWidget extends TableWidget
                     ->sortable(),
                 TextColumn::make('date')
                     ->label(__('monitoring.headings.date'))
-                    ->date('d.m.Y')
+                    ->date('Y-m-d')
                     ->sortable(),
                 TextColumn::make('interval')
                     ->label(__('monitoring.headings.interval')),

@@ -260,9 +260,46 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->interventionPlan === null),
                                 Action::make('view_plan')
                                     ->label(__('case.view.see_plan_details'))
-                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('view_intervention_plan', ['record' => $record]))
                                     ->visible(fn (Beneficiary $record): bool => $record->interventionPlan !== null)
-                                    ->link(),
+                                    ->slideOver()
+                                    ->modal()
+                                    ->modalHeading(__('intervention_plan.headings.view_page'))
+                                    ->modalSubmitAction(false)
+                                    ->modalCancelActionLabel(__('general.action.close'))
+                                    ->record(fn (Beneficiary $record): Beneficiary => $record)
+                                    ->schema([
+                                        Section::make(__('intervention_plan.headings.plan_details'))
+                                            ->columns(3)
+                                            ->schema([
+                                                TextEntry::make('full_name')
+                                                    ->label(__('intervention_plan.labels.full_name')),
+                                                TextEntry::make('cnp')
+                                                    ->label(__('intervention_plan.labels.cnp')),
+                                                TextEntry::make('address')
+                                                    ->label(__('intervention_plan.labels.address'))
+                                                    ->state(fn (Beneficiary $record): string => self::formatAddress($record))
+                                                    ->placeholder('—'),
+                                                TextEntry::make('interventionPlan.admit_date_in_center')
+                                                    ->label(__('intervention_plan.labels.admit_date_in_center'))
+                                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
+                                                    ->placeholder('—'),
+                                                TextEntry::make('interventionPlan.plan_date')
+                                                    ->label(__('intervention_plan.labels.plan_date'))
+                                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
+                                                    ->placeholder('—'),
+                                                TextEntry::make('interventionPlan.last_revise_date')
+                                                    ->label(__('intervention_plan.labels.last_revise_date'))
+                                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
+                                                    ->placeholder('—'),
+                                            ]),
+                                    ])
+                                    ->extraModalFooterActions([
+                                        Action::make('view_full_plan')
+                                            ->label(__('case.view.view_full_plan'))
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('view_intervention_plan', ['record' => $record]))
+                                            ->button()
+                                            ->close(),
+                                    ]),
                             ])
                             ->schema([
                                 EmptyState::make(__('case.view.intervention_plan'))

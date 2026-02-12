@@ -94,7 +94,7 @@ class BeneficiaryIdentityFormSchema
                         return;
                     }
 
-                    if (filled($birthdate = (new Cnp($state))->getBirthDateFromCNP('d.m.Y'))) {
+                    if (filled($birthdate = (new Cnp($state))->getBirthDateFromCNP('Y-m-d'))) {
                         $set('birthdate', $birthdate);
                     }
                 });
@@ -114,7 +114,7 @@ class BeneficiaryIdentityFormSchema
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
-                        ->format('d.m.Y')
+                        ->format('Y-m-d')
                         ->live(),
 
                     TextInput::make('birthplace')

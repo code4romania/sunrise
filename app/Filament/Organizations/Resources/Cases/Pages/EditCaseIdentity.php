@@ -64,4 +64,39 @@ class EditCaseIdentity extends EditRecord
                     ->schema(BeneficiaryIdentityFormSchema::getSchema($record instanceof Beneficiary ? $record : null)),
             ]);
     }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $record = $this->getRecord();
+
+        if (! $record instanceof Beneficiary) {
+            return $data;
+        }
+
+        $record->loadMissing(['legal_residence', 'effective_residence']);
+
+        if ($record->legal_residence) {
+            $data['legal_residence'] = array_merge(
+                $data['legal_residence'] ?? [],
+                $record->legal_residence->only([
+                    'county_id', 'city_id', 'address', 'environment',
+                ])
+            );
+        }
+
+        if ($record->effective_residence) {
+            $data['effective_residence'] = array_merge(
+                $data['effective_residence'] ?? [],
+                $record->effective_residence->only([
+                    'county_id', 'city_id', 'address', 'environment',
+                ])
+            );
+        }
+
+        return $data;
+    }
 }

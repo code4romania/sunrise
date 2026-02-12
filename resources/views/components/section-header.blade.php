@@ -2,7 +2,6 @@
 
     $actions = array_filter(
         $getActions(),
-        fn(\Filament\Infolists\Components\Actions\Action $action): bool => $action->isVisible(),
     );
 
 @endphp

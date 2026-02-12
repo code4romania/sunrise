@@ -121,11 +121,11 @@ class ChildrenIdentityFormSchema
 
                     DatePicker::make('birthdate')
                         ->label(__('field.birthdate'))
-                        ->format('d.m.Y')
+                        ->format('Y-m-d')
                         ->afterStateUpdated(function (Set $set, $state) {
                             $set('age', rescue(
                                 function () use ($state) {
-                                    $age = (int) Carbon::createFromFormat('d.m.Y', (string) $state)->diffInYears(today());
+                                    $age = (int) Carbon::createFromFormat('Y-m-d', (string) $state)->diffInYears(today());
 
                                     return $age < 1 ? '<1' : $age;
                                 },

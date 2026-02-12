@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Cases\Schemas;
 
-use App\Models\Role;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Schemas\Components\Utilities\Get;
 
@@ -14,11 +14,10 @@ class CaseTeamFormSchema
 
     public static function getSchemaForCreateWizard(): array
     {
-        $roleOptions = Role::query()
-            ->active()
-            ->orderBy('sort')
-            ->pluck('name', 'id')
-            ->all();
+        $user = auth()->user();
+        $roleOptions = $user && Filament::getTenant()
+            ? $user->rolesInOrganization->sortBy('sort')->pluck('name', 'id')->all()
+            : [];
 
         $options = $roleOptions + [self::NO_OTHER_ROLE_VALUE => __('beneficiary.section.specialists.labels.without_role')];
 
@@ -41,10 +40,10 @@ class CaseTeamFormSchema
      * - If any other option is selected, the special option should be disabled.
      * - Otherwise, no options are disabled.
      */
-    public static function shouldDisableOption(array|null $selected, string $value): bool
+    public static function shouldDisableOption(?array $selected, string $value): bool
     {
         $selected = $selected ?? [];
-        if (!\is_array($selected)) {
+        if (! \is_array($selected)) {
             $selected = [];
         }
 
