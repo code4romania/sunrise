@@ -50,7 +50,7 @@ class InitialEvaluationResource extends Resource
 
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
-        return parent::getRecordRouteBindingEloquentQuery()->with(['beneficiary']);
+        return parent::getRecordRouteBindingEloquentQuery()->with(['beneficiary', 'specialist']);
     }
 
     public static function form(Schema $schema): Schema

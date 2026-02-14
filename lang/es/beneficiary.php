@@ -269,6 +269,9 @@ return [
                 'child_address' => 'Domicilio actual',
                 'child_status' => 'Estado/ocupación',
             ],
+            'placeholders' => [
+                'select_many' => 'Elige todas las opciones que correspondan',
+            ],
         ],
         'detailed_evaluation' => [
             'labels' => [

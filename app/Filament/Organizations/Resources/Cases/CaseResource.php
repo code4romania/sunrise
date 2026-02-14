@@ -76,7 +76,7 @@ class CaseResource extends Resource
                 'antecedents',
                 'specialistsTeam.user',
                 'specialistsTeam.roleForDisplay',
-                'evaluateDetails',
+                'evaluateDetails.specialist',
                 'children',
                 'detailedEvaluationSpecialists',
                 'meetings',

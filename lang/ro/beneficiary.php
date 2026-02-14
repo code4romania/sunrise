@@ -222,9 +222,9 @@ return [
                 'method_of_identifying_the_service' => 'Modalitatea de identificare a serviciului de către solicitant',
                 'violence_type' => 'Tipurile violenței domestice',
                 'violence_primary_type' => 'Dintre care tipul primar',
-                'frequency_violence' => 'Frecvența agresiunii',
+                'frequency_violence' => 'Frecvența violenței',
                 'violence_means' => 'Care au fost mijloacele folosite de agresor?',
-                'violence_means_specify' => 'Specificați mijloace folosite de agresor',
+                'violence_means_specify' => 'Specificați mijloacele folosite de agresor',
                 'description' => 'Descrierea succintă a problemei de violență domestică cu care se confruntă persoana',
                 'previous_acts_of_violence' => '1. Au existat acte de violență domestică anterioare?',
                 'violence_against_children_or_family_members' => '2. Au existat acte de violență asupra copiilor/altor membrii ai familiei/animalelor de companie?',
@@ -288,6 +288,9 @@ return [
                 'child_age' => 'Vârsta',
                 'child_address' => 'Domiciliul actual',
                 'child_status' => 'Statut/ ocupație',
+            ],
+            'placeholders' => [
+                'select_many' => 'Alege toate variantele care se potrivesc',
             ],
         ],
 

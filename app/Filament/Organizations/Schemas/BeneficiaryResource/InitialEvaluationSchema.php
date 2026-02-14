@@ -13,11 +13,16 @@ use App\Enums\Ternary;
 use App\Enums\VictimPerceptionOfTheRiskSchema;
 use App\Enums\Violence;
 use App\Enums\ViolenceHistorySchema;
+use App\Enums\ViolenceMeans;
 use App\Enums\ViolencesTypesSchema;
+use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Schemas\Components\SectionWithRecordActions;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
+use App\Models\Beneficiary;
 use App\Models\User;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
@@ -68,25 +73,33 @@ class InitialEvaluationSchema
     public static function getEvaluationDetailsInfolistComponents(): array
     {
         return [
-            Group::make()
-                ->columns()
-                ->relationship('evaluateDetails')
+            SectionWithRecordActions::make(__('beneficiary.wizard.details.label'))
+                ->headerActions([
+                    EditAction::make()
+                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_initial_evaluation', ['record' => $record])),
+                ])
                 ->schema([
-                    DateEntry::make('registered_date')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.registered_date')),
+                    Group::make()
+                        ->columns(2)
+                        ->relationship('evaluateDetails')
+                        ->schema([
+                            DateEntry::make('registered_date')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.registered_date')),
 
-                    TextEntry::make('file_number')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.file_number'))
-                        ->placeholder(__('beneficiary.placeholder.file_number')),
+                            TextEntry::make('file_number')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.file_number'))
+                                ->placeholder(__('beneficiary.placeholder.file_number')),
 
-                    TextEntry::make('specialist.full_name')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.specialist'))
-                        ->placeholder(__('beneficiary.placeholder.specialist')),
+                            TextEntry::make('specialist.full_name')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.specialist'))
+                                ->placeholder(__('beneficiary.placeholder.specialist'))
+                                ->columnSpanFull(),
 
-                    TextEntry::make('method_of_identifying_the_service')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.method_of_identifying_the_service'))
-                        ->placeholder(__('beneficiary.placeholder.method_of_identifying_the_service'))
-                        ->columnSpanFull(),
+                            TextEntry::make('method_of_identifying_the_service')
+                                ->label(__('beneficiary.section.initial_evaluation.labels.method_of_identifying_the_service'))
+                                ->placeholder(__('beneficiary.placeholder.method_of_identifying_the_service'))
+                                ->columnSpanFull(),
+                        ]),
                 ]),
         ];
     }
@@ -120,11 +133,11 @@ class InitialEvaluationSchema
             Section::make()
                 ->relationship('violence')
                 ->maxWidth('3xl')
-                ->columns()
+                ->columns(2)
                 ->schema([
                     Select::make('violence_types')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
-                        ->placeholder(__('beneficiary.placeholder.violence_type'))
+                        ->placeholder(__('beneficiary.section.initial_evaluation.placeholders.select_many'))
                         ->options(Violence::options())
                         ->multiple()
                         ->required(),
@@ -141,6 +154,18 @@ class InitialEvaluationSchema
                         ->options(Frequency::options())
                         ->required(),
 
+                    Select::make('violence_means')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_means'))
+                        ->placeholder(__('beneficiary.section.initial_evaluation.placeholders.select_many'))
+                        ->options(ViolenceMeans::options())
+                        ->multiple(),
+
+                    TextInput::make('violence_means_specify')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_means_specify'))
+                        ->placeholder(__('beneficiary.placeholder.violence_means_specify'))
+                        ->maxLength(100)
+                        ->columnSpanFull(),
+
                     RichEditor::make('description')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description'))
                         ->placeholder(__('beneficiary.placeholder.description'))
@@ -156,7 +181,7 @@ class InitialEvaluationSchema
         return [
             Group::make()
                 ->relationship('violence')
-                ->columns()
+                ->columns(2)
                 ->schema([
                     TextEntry::make('violence_types')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_type')),
@@ -168,6 +193,15 @@ class InitialEvaluationSchema
                     EnumEntry::make('frequency_violence')
                         ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
                         ->placeholder(__('beneficiary.placeholder.frequency_violence')),
+
+                    TextEntry::make('violence_means')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_means'))
+                        ->placeholder(__('beneficiary.placeholder.violence_means_specify')),
+
+                    TextEntry::make('violence_means_specify')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_means_specify'))
+                        ->placeholder(__('beneficiary.placeholder.violence_means_specify'))
+                        ->columnSpanFull(),
 
                     TextEntry::make('description')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description'))
@@ -236,6 +270,69 @@ class InitialEvaluationSchema
                     TextEntry::make('description_of_situation')
                         ->label(__('beneficiary.section.initial_evaluation.labels.description_of_situation'))
                         ->html(),
+                ]),
+        ];
+    }
+
+    public static function getRiskFactorsInfolistComponents(): array
+    {
+        return [
+            Group::make()
+                ->relationship('riskFactors')
+                ->schema([
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.violence_history'))
+                        ->schema(self::getInfolistSchemaFromEnum(ViolenceHistorySchema::options())),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.violences_types'))
+                        ->schema(self::getInfolistSchemaFromEnum(ViolencesTypesSchema::options())),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.risk_factors'))
+                        ->schema(self::getInfolistSchemaFromEnum(RiskFactorsSchema::options())),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.victim_perception_of_the_risk'))
+                        ->schema(self::getInfolistSchemaFromEnum(VictimPerceptionOfTheRiskSchema::options())),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.aggravating_factors'))
+                        ->schema(self::getInfolistSchemaFromEnum(AggravatingFactorsSchema::options())),
+                    Section::make(__('beneficiary.section.initial_evaluation.heading.social_support'))
+                        ->columns()
+                        ->schema(self::getSocialSupportInfolistSchema()),
+                ]),
+        ];
+    }
+
+    public static function getSocialSupportInfolistSchema(): array
+    {
+        return [
+            TextEntry::make('extended_family_can_provide')
+                ->label(__('beneficiary.section.initial_evaluation.labels.extended_family_can_provide'))
+                ->formatStateUsing(fn ($record) => $record?->extended_family_can_not_provide
+                    ? $record->extended_family_can_not_provide->label()
+                    : ($record?->extended_family_can_provide
+                        ? $record->extended_family_can_provide->map(fn ($v) => $v->label())->implode(', ')
+                        : null)),
+
+            TextEntry::make('friends_can_provide')
+                ->label(__('beneficiary.section.initial_evaluation.labels.friends_can_provide'))
+                ->formatStateUsing(fn ($record) => $record?->friends_can_not_provide
+                    ? $record->friends_can_not_provide->label()
+                    : ($record?->friends_can_provide
+                        ? $record->friends_can_provide->map(fn ($v) => $v->label())->implode(', ')
+                        : null)),
+        ];
+    }
+
+    public static function getRequestedServicesInfolistComponents(): array
+    {
+        return [
+            Group::make()
+                ->relationship('requestedServices')
+                ->schema([
+                    TextEntry::make('requested_services')
+                        ->label(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
+                        ->formatStateUsing(fn ($state) => filled($state)
+                            ? collect($state)->map(fn ($v) => $v->label())->implode(', ')
+                            : null),
+
+                    TextEntry::make('other_services_description')
+                        ->label(__('beneficiary.section.initial_evaluation.labels.other_services_description'))
+                        ->placeholder(__('beneficiary.placeholder.other_services')),
                 ]),
         ];
     }
@@ -364,7 +461,7 @@ class InitialEvaluationSchema
 
                     $result ??= '-';
 
-                    $description = data_get($record->riskFactors->risk_factors, "{$key}.description");
+                    $description = data_get($record?->riskFactors?->risk_factors, "{$key}.description");
 
                     if (filled($description)) {
                         $result .= " ({$description})";
