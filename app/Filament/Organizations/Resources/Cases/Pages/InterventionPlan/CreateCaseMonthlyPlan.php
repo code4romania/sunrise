@@ -214,6 +214,10 @@ class CreateCaseMonthlyPlan extends CreateRecord
                     'service_intervention_id' => $oldIntervention->service_intervention_id,
                     'objections' => $oldIntervention->objections,
                     'observations' => $oldIntervention->observations,
+                    'expected_results' => $oldIntervention->expected_results,
+                    'procedure' => $oldIntervention->procedure,
+                    'indicators' => $oldIntervention->indicators,
+                    'achievement_degree' => $oldIntervention->achievement_degree,
                 ]);
             }
         }

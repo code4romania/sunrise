@@ -8,10 +8,11 @@ use App\Enums\AggressorRelationship;
 use App\Enums\Diseases;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
-use App\Infolists\Components\Actions\EditAction;
+use App\Filament\Schemas\Components\SectionWithRecordActions;
 use App\Infolists\Components\EnumEntry;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Aggressor;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
@@ -59,12 +60,14 @@ class PersonalInfoInfolist
     protected static function beneficiarySection(): array
     {
         return [
-            Section::make(__('beneficiary.section.personal_information.section.beneficiary'))
+            SectionWithRecordActions::make(__('beneficiary.section.personal_information.section.beneficiary'))
                 ->columns()
                 ->relationship('details')
                 ->headerActions([
-                    EditAction::make()
-                        ->url(fn ($record) => CaseResource::getUrl('edit_personal_information', ['record' => $record])),
+                    Action::make('edit')
+                        ->label(__('general.action.edit'))
+                        ->url(fn ($record) => CaseResource::getUrl('edit_personal_information', ['record' => $record instanceof \App\Models\Beneficiary ? $record : $record->beneficiary ?? $record]))
+                        ->link(),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -231,11 +234,13 @@ class PersonalInfoInfolist
     protected static function aggressorSection(): array
     {
         return [
-            Section::make(__('beneficiary.section.personal_information.section.aggressor'))
+            SectionWithRecordActions::make(__('beneficiary.section.personal_information.section.aggressor'))
                 ->columns()
                 ->headerActions([
-                    EditAction::make()
-                        ->url(fn ($record) => CaseResource::getUrl('edit_aggressor', ['record' => $record])),
+                    Action::make('edit')
+                        ->label(__('general.action.edit'))
+                        ->url(fn ($record) => CaseResource::getUrl('edit_aggressor', ['record' => $record instanceof \App\Models\Beneficiary ? $record : $record->beneficiary ?? $record]))
+                        ->link(),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -351,12 +356,14 @@ class PersonalInfoInfolist
     protected static function antecedentsSection(): array
     {
         return [
-            Section::make(__('beneficiary.section.personal_information.section.antecedents'))
+            SectionWithRecordActions::make(__('beneficiary.section.personal_information.section.antecedents'))
                 ->columns()
                 ->relationship('antecedents')
                 ->headerActions([
-                    EditAction::make()
-                        ->url(fn ($record) => CaseResource::getUrl('edit_antecedents', ['record' => $record])),
+                    Action::make('edit')
+                        ->label(__('general.action.edit'))
+                        ->url(fn ($record) => CaseResource::getUrl('edit_antecedents', ['record' => $record instanceof \App\Models\Beneficiary ? $record : $record->beneficiary ?? $record]))
+                        ->link(),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',
@@ -398,12 +405,14 @@ class PersonalInfoInfolist
     protected static function flowSection(): array
     {
         return [
-            Section::make(__('beneficiary.section.personal_information.section.flow'))
+            SectionWithRecordActions::make(__('beneficiary.section.personal_information.section.flow'))
                 ->columns()
                 ->relationship('flowPresentation')
                 ->headerActions([
-                    EditAction::make()
-                        ->url(fn ($record) => CaseResource::getUrl('edit_flow_presentation', ['record' => $record])),
+                    Action::make('edit')
+                        ->label(__('general.action.edit'))
+                        ->url(fn ($record) => CaseResource::getUrl('edit_flow_presentation', ['record' => $record instanceof \App\Models\Beneficiary ? $record : $record->beneficiary ?? $record]))
+                        ->link(),
                 ])
                 ->extraAttributes([
                     'class' => 'h-full',

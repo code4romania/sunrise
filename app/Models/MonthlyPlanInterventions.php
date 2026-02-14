@@ -21,6 +21,10 @@ class MonthlyPlanInterventions extends Model
         'service_intervention_id',
         'objections',
         'observations',
+        'expected_results',
+        'procedure',
+        'indicators',
+        'achievement_degree',
     ];
 
     public function monthlyPlanService(): BelongsTo

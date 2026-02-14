@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Schemas;
 
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Schemas\Components\SectionWithRecordActions;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
@@ -47,7 +48,7 @@ class IdentityInfolist
     public static function beneficiarySectionSchema(): array
     {
         return [
-            Section::make(__('beneficiary.section.identity.tab.beneficiary'))
+            SectionWithRecordActions::make(__('beneficiary.section.identity.tab.beneficiary'))
                 ->headerActions([
                     EditAction::make('edit')
                         ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_identity', ['record' => $record])),
@@ -65,7 +66,7 @@ class IdentityInfolist
             Notice::make('empty_children')
                 ->state(__('beneficiary.section.identity.empty_children'))
                 ->visible(fn (Beneficiary $record): bool => (bool) $record->doesnt_have_children),
-            Section::make(__('beneficiary.section.identity.tab.children'))
+            SectionWithRecordActions::make(__('beneficiary.section.identity.tab.children'))
                 ->hidden(fn (Beneficiary $record): bool => (bool) $record->doesnt_have_children)
                 ->headerActions([
                     EditAction::make('edit')

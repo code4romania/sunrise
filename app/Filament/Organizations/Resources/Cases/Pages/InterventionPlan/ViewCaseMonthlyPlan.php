@@ -6,7 +6,6 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
-use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Beneficiary;
 use App\Models\MonthlyPlan;
@@ -50,7 +49,9 @@ class ViewCaseMonthlyPlan extends ViewRecord
             ->with([
                 'monthlyPlanServices.service',
                 'monthlyPlanServices.monthlyPlanInterventions.serviceIntervention',
-                'interventionPlan.beneficiary',
+                'interventionPlan',
+                'interventionPlan.beneficiary.effective_residence.county',
+                'interventionPlan.beneficiary.effective_residence.city',
             ])
             ->firstOrFail();
 
@@ -109,33 +110,43 @@ class ViewCaseMonthlyPlan extends ViewRecord
             Tabs::make()
                 ->persistTabInQueryString()
                 ->schema([
-                    Tab::make(__('intervention_plan.headings.monthly_plan_details'))
+                    Tab::make(__('intervention_plan.headings.plan_intervention_details'))
                         ->schema([
                             Section::make()
                                 ->maxWidth('3xl')
                                 ->columns(2)
                                 ->schema([
                                     SectionHeader::make('monthly_plan_details')
-                                        ->state(__('intervention_plan.headings.monthly_plan_details'))
-                                        ->action(
-                                            EditAction::make()
-                                                ->url(
-                                                    CaseResource::getUrl('edit_monthly_plan_details', [
-                                                        'record' => $this->getRecord(),
-                                                        'monthlyPlan' => $this->monthlyPlan,
-                                                    ])
-                                                )
+                                        ->state(__('intervention_plan.headings.plan_intervention_details'))
+                                        ->link(
+                                            CaseResource::getUrl('edit_monthly_plan_details', [
+                                                'record' => $this->getRecord(),
+                                                'monthlyPlan' => $this->monthlyPlan,
+                                            ]),
+                                            __('general.action.edit')
                                         ),
 
                                     TextEntry::make('beneficiary.full_name')
-                                        ->label(__('intervention_plan.labels.full_name')),
+                                        ->label(__('intervention_plan.labels.beneficiary_full_name')),
 
-                                    TextEntry::make('beneficiary.organization_beneficiary_id')
-                                        ->label(__('intervention_plan.labels.organization_beneficiary_id')),
+                                    TextEntry::make('beneficiary.cnp')
+                                        ->label(__('field.cnp')),
 
-                                    TextEntry::make('start_date')
+                                    TextEntry::make('domiciliu')
+                                        ->label(__('intervention_plan.labels.domiciliu'))
+                                        ->state(fn (MonthlyPlan $record): string => self::formatAddress($record->beneficiary)),
+
+                                    TextEntry::make('interventionPlan.admit_date_in_center')
+                                        ->label(__('intervention_plan.labels.admit_date_in_center'))
+                                        ->date('d.m.Y'),
+
+                                    TextEntry::make('interventionPlan.plan_date')
                                         ->label(__('intervention_plan.labels.plan_date'))
-                                        ->date('Y-m-d'),
+                                        ->date('d.m.Y'),
+
+                                    TextEntry::make('interventionPlan.last_revise_date')
+                                        ->label(__('intervention_plan.labels.last_revise_date'))
+                                        ->date('d.m.Y'),
 
                                     TextEntry::make('interval')
                                         ->label(__('intervention_plan.labels.interval')),
@@ -161,13 +172,13 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                 ]),
                         ]),
 
-                    Tab::make(__('intervention_plan.headings.services_and_interventions'))
+                    Tab::make(__('intervention_plan.headings.social_services'))
                         ->schema([
                             Section::make()
                                 ->maxWidth('3xl')
                                 ->schema([
                                     SectionHeader::make('services_header')
-                                        ->state(__('intervention_plan.headings.services_and_interventions')),
+                                        ->state(__('intervention_plan.headings.social_services')),
 
                                     RepeatableEntry::make('monthlyPlanServices')
                                         ->hiddenLabel()
@@ -175,7 +186,7 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                         ->columnSpanFull()
                                         ->schema([
                                             TextEntry::make('service.name')
-                                                ->label(__('intervention_plan.headings.service')),
+                                                ->label(__('intervention_plan.labels.service_type')),
 
                                             TextEntry::make('institution')
                                                 ->label(__('intervention_plan.labels.responsible_institution')),
@@ -183,34 +194,24 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                             TextEntry::make('responsible_person')
                                                 ->label(__('intervention_plan.labels.responsible_person')),
 
-                                            TextEntry::make('start_date')
-                                                ->label(__('intervention_plan.labels.monthly_plan_service_interval_start'))
-                                                ->formatStateUsing(function ($state) {
-                                                    if ($state === null || $state === '' || $state === '-') {
+                                            TextEntry::make('period_of_provision')
+                                                ->label(__('intervention_plan.labels.period_of_provision'))
+                                                ->state(function ($record): string {
+                                                    if (! $record) {
                                                         return '—';
                                                     }
-                                                    try {
-                                                        return Carbon::parse($state)->format('d.m.Y');
-                                                    } catch (\Throwable) {
+                                                    $start = $record->start_date;
+                                                    $end = $record->end_date;
+                                                    if (! $start && ! $end) {
                                                         return '—';
                                                     }
-                                                }),
+                                                    $fmt = fn ($d) => $d ? Carbon::parse($d)->format('d.m.Y') : '—';
 
-                                            TextEntry::make('end_date')
-                                                ->label(__('intervention_plan.labels.monthly_plan_service_interval_end'))
-                                                ->formatStateUsing(function ($state) {
-                                                    if ($state === null || $state === '' || $state === '-') {
-                                                        return '—';
-                                                    }
-                                                    try {
-                                                        return Carbon::parse($state)->format('d.m.Y');
-                                                    } catch (\Throwable) {
-                                                        return '—';
-                                                    }
+                                                    return trim(sprintf('%s - %s', $fmt($start), $fmt($end)), ' -');
                                                 }),
 
                                             TextEntry::make('objective')
-                                                ->label(__('intervention_plan.labels.service_objective')),
+                                                ->label(__('intervention_plan.labels.specific_objectives')),
 
                                             RepeatableEntry::make('monthlyPlanInterventions')
                                                 ->columnSpanFull()
@@ -221,7 +222,23 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                                         ->hiddenLabel(),
 
                                                     TextEntry::make('objections')
-                                                        ->label(__('intervention_plan.labels.objections'))
+                                                        ->label(__('intervention_plan.labels.specific_objectives'))
+                                                        ->hiddenLabel(),
+
+                                                    TextEntry::make('expected_results')
+                                                        ->label(__('intervention_plan.labels.expected_results'))
+                                                        ->hiddenLabel(),
+
+                                                    TextEntry::make('procedure')
+                                                        ->label(__('intervention_plan.labels.procedure'))
+                                                        ->hiddenLabel(),
+
+                                                    TextEntry::make('indicators')
+                                                        ->label(__('intervention_plan.labels.indicators'))
+                                                        ->hiddenLabel(),
+
+                                                    TextEntry::make('achievement_degree')
+                                                        ->label(__('intervention_plan.labels.achievement_degree'))
                                                         ->hiddenLabel(),
 
                                                     TextEntry::make('observations')
@@ -237,5 +254,20 @@ class ViewCaseMonthlyPlan extends ViewRecord
                         ]),
                 ]),
         ]);
+    }
+
+    private static function formatAddress(Beneficiary $beneficiary): string
+    {
+        $addr = $beneficiary->effective_residence;
+        if (! $addr) {
+            return '';
+        }
+        $parts = array_filter([
+            $addr->address,
+            $addr->city?->name,
+            $addr->county ? __('field.county').' '.$addr->county->name : null,
+        ]);
+
+        return implode(', ', $parts);
     }
 }

@@ -104,6 +104,16 @@ return [
         'deprivation' => 'Prin deprivare/ neglijare',
     ],
 
+    'violence_means' => [
+        'body_parts' => 'Părți ale corpului',
+        'cutting_objects' => 'Obiecte tăioase',
+        'piercing_objects' => 'Obiecte înțepătoare',
+        'blunt_objects' => 'Obiecte contondente',
+        'firearms' => 'Arme de foc',
+        'no_answer' => 'Nu știe/ Nu răspunde',
+        'other' => 'Altele',
+    ],
+
     'drug' => [
         'alcohol_occasional' => 'Alcool ocazional',
         'alcohol_frequent' => 'Alcool frecvent',

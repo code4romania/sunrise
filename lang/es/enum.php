@@ -92,6 +92,15 @@ return [
         'cyber' => 'Cibernética',
         'deprivation' => 'Privación',
     ],
+    'violence_means' => [
+        'body_parts' => 'Partes del cuerpo',
+        'cutting_objects' => 'Objetos cortantes',
+        'piercing_objects' => 'Objetos punzantes',
+        'blunt_objects' => 'Objetos contundentes',
+        'firearms' => 'Armas de fuego',
+        'no_answer' => 'No sabe/ No responde',
+        'other' => 'Otros',
+    ],
     'drug' => [
         'alcohol_occasional' => 'Alcohol ocasional',
         'alcohol_frequent' => 'Alcohol frecuente',

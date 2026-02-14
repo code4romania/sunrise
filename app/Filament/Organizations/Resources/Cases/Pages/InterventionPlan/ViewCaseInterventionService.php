@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
+use App\Enums\CounselingSheet;
 use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
+use App\Models\ServiceCounselingSheet;
 use App\Models\Specialist;
+use App\Schemas\CounselingSheetFormSchemas;
+use App\Schemas\CounselingSheetInfolistSchemas;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -24,10 +28,12 @@ use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Components\EmptyState;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
@@ -140,67 +146,67 @@ class ViewCaseInterventionService extends ViewRecord
                     ->persistTabInQueryString('intervention-service-tab')
                     ->columnSpanFull()
                     ->tabs([
-                        Tab::make(__('intervention_plan.headings.intervention_meetings'))
-                            ->icon(Heroicon::OutlinedCalendarDays)
+                        Tab::make(__('intervention_plan.headings.service_details'))
                             ->schema([
                                 Section::make()
+                                    ->columns(2)
                                     ->schema([
                                         TextEntry::make('organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition.name')
-                                            ->label(__('intervention_plan.labels.service'))
-                                            ->placeholder('—'),
-                                        TextEntry::make('specialist.name_role')
-                                            ->label(__('intervention_plan.labels.specialist'))
+                                            ->label(__('intervention_plan.labels.service_type'))
                                             ->placeholder('—'),
                                         TextEntry::make('institution')
                                             ->label(__('intervention_plan.labels.responsible_institution'))
                                             ->placeholder('—'),
-                                        TextEntry::make('start_date_interval')
-                                            ->label(__('intervention_plan.labels.start_date_interval'))
-                                            ->formatStateUsing(fn ($state) => self::formatDate($state))
+                                        TextEntry::make('specialist.name_role')
+                                            ->label(__('intervention_plan.labels.responsible_person'))
                                             ->placeholder('—'),
-                                        TextEntry::make('end_date_interval')
-                                            ->label(__('intervention_plan.labels.end_date_interval'))
-                                            ->formatStateUsing(fn ($state) => self::formatDate($state))
+                                        TextEntry::make('interval')
+                                            ->label(__('intervention_plan.labels.period_of_provision'))
+                                            ->formatStateUsing(fn ($state) => $state ?: '—')
                                             ->placeholder('—'),
-                                        TextEntry::make('interventions_count')
-                                            ->label(__('intervention_plan.labels.interventions_count'))
-                                            ->state((string) $service->beneficiaryInterventions()->count())
-                                            ->placeholder('0'),
-                                        TextEntry::make('meetings_count')
-                                            ->label(__('intervention_plan.labels.meetings_count'))
-                                            ->state((string) $service->meetings()->count())
-                                            ->placeholder('0'),
+                                        TextEntry::make('objections')
+                                            ->label(__('intervention_plan.labels.specific_objectives'))
+                                            ->columnSpanFull()
+                                            ->placeholder('—'),
+                                    ]),
+                            ]),
+                        Tab::make(__('intervention_plan.headings.counseling_sheet'))
+                            ->visible(fn () => $this->interventionService?->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition?->counseling_sheet !== null)
+                            ->schema([
+                                Section::make(__('intervention_plan.headings.counseling_sheet'))
+                                    ->schema([
+                                        EmptyState::make(__('intervention_plan.headings.counseling_sheet'))
+                                            ->description(__('intervention_plan.labels.counseling_sheet_empty'))
+                                            ->icon(Heroicon::OutlinedDocumentText)
+                                            ->visible(fn () => $this->isCounselingSheetEmpty()),
+                                        Section::make(__('intervention_plan.labels.counseling_sheet_completed'))
+                                            ->description(fn () => $this->interventionService?->counselingSheet?->updated_at
+                                                ? Carbon::parse($this->interventionService->counselingSheet->updated_at)->translatedFormat('d.m.Y H:i')
+                                                : null)
+                                            ->visible(fn () => ! $this->isCounselingSheetEmpty())
+                                            ->relationship('counselingSheet')
+                                            ->schema(fn () => $this->getCounselingSheetDisplaySchema()),
                                     ])
-                                    ->columns(2)
                                     ->headerActions([
-                                        Action::make('add_meeting')
-                                            ->label(__('intervention_plan.actions.add_meeting'))
-                                            ->icon(Heroicon::OutlinedPlus)
-                                            ->color('primary')
-                                            ->modalHeading(__('intervention_plan.actions.add_meeting'))
-                                            ->schema($this->getAddMeetingFormSchema())
+                                        Action::make('edit_counseling_sheet')
+                                            ->label(fn () => $this->isCounselingSheetEmpty()
+                                                ? __('intervention_plan.actions.complete_counseling_sheet')
+                                                : __('intervention_plan.actions.edit_counseling_sheet'))
+                                            ->icon(Heroicon::OutlinedPencilSquare)
+                                            ->slideOver()
+                                            ->modalHeading(fn () => $this->getCounselingSheetModalHeading())
+                                            ->schema(fn () => $this->getCounselingSheetFormSchema())
+                                            ->fillForm(fn () => ['data' => $this->interventionService?->counselingSheet?->data ?? []])
                                             ->action(function (array $data): void {
-                                                $beneficiaryIntervention = $this->interventionService->beneficiaryInterventions()->create([
-                                                    'organization_service_intervention_id' => $data['organization_service_intervention_id'],
-                                                    'specialist_id' => $data['specialist_id'] ?? null,
-                                                    'start_date_interval' => $data['date'] ?? null,
-                                                    'end_date_interval' => $data['date'] ?? null,
-                                                ]);
-                                                $status = $data['status'] instanceof MeetingStatus
-                                                    ? $data['status']
-                                                    : MeetingStatus::tryFrom($data['status']);
-                                                $beneficiaryIntervention->meetings()->create([
-                                                    'specialist_id' => $data['specialist_id'] ?? null,
-                                                    'status' => $status ?? MeetingStatus::PLANED,
-                                                    'date' => $data['date'] ?? null,
-                                                    'time' => $data['time'] ?? null,
-                                                    'duration' => isset($data['duration']) ? (int) $data['duration'] : null,
-                                                    'topic' => $data['topic'] ?? null,
-                                                    'observations' => $data['observations'] ?? null,
-                                                ]);
+                                                $sheet = $this->interventionService->counselingSheet;
+                                                if (! $sheet) {
+                                                    $sheet = new ServiceCounselingSheet(['intervention_service_id' => $this->interventionService->getKey()]);
+                                                }
+                                                $sheet->data = $data['data'] ?? [];
+                                                $sheet->save();
                                                 Notification::make()
                                                     ->success()
-                                                    ->title(__('filament-actions::create.single.notifications.created.title'))
+                                                    ->title(__('filament-actions::edit.single.notifications.saved.title'))
                                                     ->send();
                                                 $this->redirect(CaseResource::getUrl('view_intervention_service', [
                                                     'record' => $this->record,
@@ -208,102 +214,200 @@ class ViewCaseInterventionService extends ViewRecord
                                                 ]));
                                             }),
                                     ]),
-                                Section::make(__('intervention_plan.headings.meetings_list'))
+                            ]),
+                        Tab::make(__('intervention_plan.headings.interventions'))
+                            ->schema([
+                                Section::make(__('intervention_plan.headings.interventions'))
                                     ->schema([
-                                        RepeatableEntry::make('meetings')
+                                        View::make('filament.organizations.components.intervention-cards'),
+                                    ])
+                                    ->headerActions([
+                                        Action::make('add_intervention')
+                                            ->label(__('intervention_plan.actions.add_intervention'))
+                                            ->icon(Heroicon::OutlinedPlus)
+                                            ->color('primary')
+                                            ->modalHeading(__('intervention_plan.actions.add_intervention'))
+                                            ->schema($this->getAddInterventionFormSchema())
+                                            ->action(function (array $data): void {
+                                                $intervention = $this->interventionService->beneficiaryInterventions()->create([
+                                                    'organization_service_intervention_id' => $data['organization_service_intervention_id'],
+                                                    'specialist_id' => $data['specialist_id'] ?? null,
+                                                    'start_date_interval' => $data['start_date_interval'] ?? null,
+                                                    'end_date_interval' => $data['end_date_interval'] ?? null,
+                                                    'objections' => $data['objections'] ?? null,
+                                                    'expected_results' => $data['expected_results'] ?? null,
+                                                    'procedure' => $data['procedure'] ?? null,
+                                                    'indicators' => $data['indicators'] ?? null,
+                                                    'achievement_degree' => $data['achievement_degree'] ?? null,
+                                                ]);
+                                                Notification::make()
+                                                    ->success()
+                                                    ->title(__('filament-actions::create.single.notifications.created.title'))
+                                                    ->send();
+                                                $this->redirect(CaseResource::getUrl('view_beneficiary_intervention', [
+                                                    'record' => $this->record,
+                                                    'interventionService' => $this->interventionService,
+                                                    'beneficiaryIntervention' => $intervention->getKey(),
+                                                ]));
+                                            }),
+                                    ]),
+                            ]),
+                        Tab::make(__('intervention_plan.headings.results_obtained'))
+                            ->schema([
+                                Section::make(__('intervention_plan.headings.results_obtained'))
+                                    ->schema([
+                                        RepeatableEntry::make('beneficiaryInterventionsResults')
                                             ->hiddenLabel()
-                                            ->state(fn () => $service->meetings()->with('specialist.user', 'specialist.roleForDisplay')->orderByDesc('date')->orderByDesc('time')->get())
-                                            ->placeholder(__('intervention_plan.labels.empty_meetings_list'))
+                                            ->state(fn () => $service->beneficiaryInterventions()
+                                                ->with(['organizationServiceIntervention.serviceInterventionWithoutStatusCondition'])
+                                                ->orderByDesc('id')
+                                                ->get())
+                                            ->placeholder(__('intervention_plan.headings.empty_state_result_table'))
                                             ->table([
-                                                TableColumn::make(__('intervention_plan.labels.status')),
-                                                TableColumn::make(__('intervention_plan.labels.date')),
-                                                TableColumn::make(__('intervention_plan.labels.time')),
-                                                TableColumn::make(__('intervention_plan.labels.duration')),
-                                                TableColumn::make(__('intervention_plan.labels.topic')),
-                                                TableColumn::make(__('intervention_plan.labels.observations')),
+                                                TableColumn::make(__('intervention_plan.labels.service_type')),
+                                                TableColumn::make(__('intervention_plan.labels.expected_results')),
+                                                TableColumn::make(__('intervention_plan.labels.achievement_degree')),
+                                                TableColumn::make(__('intervention_plan.labels.procedure')),
                                             ])
                                             ->schema([
-                                                TextEntry::make('status'),
-                                                TextEntry::make('date')
-                                                    ->formatStateUsing(fn ($state) => self::formatDate($state)),
-                                                TextEntry::make('time')
-                                                    ->formatStateUsing(fn ($state) => $state instanceof \DateTimeInterface ? Carbon::instance($state)->format('H:i') : ($state ?: '—')),
-                                                TextEntry::make('duration')
-                                                    ->formatStateUsing(fn ($state) => $state !== null ? $state.' min' : '—'),
-                                                TextEntry::make('topic')
+                                                TextEntry::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
                                                     ->placeholder('—'),
-                                                TextEntry::make('observations')
+                                                TextEntry::make('expected_results')
                                                     ->placeholder('—')
                                                     ->limit(50),
-                                            ]),
-                                    ])
-                                    ->collapsible(),
-                            ]),
-                        Tab::make(__('intervention_plan.headings.intervention_indicators'))
-                            ->icon(Heroicon::OutlinedChartBar)
-                            ->schema([
-                                Section::make(__('intervention_plan.headings.intervention_indicators'))
-                                    ->schema([]),
-                            ]),
-                        Tab::make(__('intervention_plan.headings.unfolded'))
-                            ->icon(Heroicon::OutlinedTableCells)
-                            ->schema([
-                                Section::make(__('intervention_plan.headings.unfolded_table'))
-                                    ->schema([
-                                        RepeatableEntry::make('unfolded_meetings')
-                                            ->hiddenLabel()
-                                            ->state(function () use ($service) {
-                                                $meetings = $service->meetings()
-                                                    ->with(['specialist.user', 'specialist.roleForDisplay'])
-                                                    ->orderByDesc('date')
-                                                    ->orderByDesc('time')
-                                                    ->get();
-
-                                                return $meetings->map(function ($meeting, $index) {
-                                                    return [
-                                                        'meet_number' => $index + 1,
-                                                        'status' => $meeting->status,
-                                                        'date' => $meeting->date,
-                                                        'time' => $meeting->time,
-                                                        'duration' => $meeting->duration,
-                                                        'specialist_name' => $meeting->specialist?->name_role ?? '—',
-                                                        'topic' => $meeting->topic,
-                                                        'observations' => $meeting->observations,
-                                                    ];
-                                                })->values()->all();
-                                            })
-                                            ->placeholder(__('intervention_plan.labels.empty_meetings_list'))
-                                            ->table([
-                                                TableColumn::make(__('intervention_plan.labels.meet_number')),
-                                                TableColumn::make(__('intervention_plan.labels.status')),
-                                                TableColumn::make(__('intervention_plan.labels.date')),
-                                                TableColumn::make(__('intervention_plan.labels.time')),
-                                                TableColumn::make(__('intervention_plan.labels.duration')),
-                                                TableColumn::make(__('intervention_plan.labels.specialist')),
-                                                TableColumn::make(__('intervention_plan.labels.topic')),
-                                                TableColumn::make(__('intervention_plan.labels.observations')),
-                                            ])
-                                            ->schema([
-                                                TextEntry::make('meet_number'),
-                                                TextEntry::make('status'),
-                                                TextEntry::make('date')
-                                                    ->formatStateUsing(fn ($state) => $state ? self::formatDate($state) : '—'),
-                                                TextEntry::make('time')
-                                                    ->formatStateUsing(fn ($state) => $state instanceof \DateTimeInterface ? Carbon::instance($state)->format('H:i') : ($state ?: '—')),
-                                                TextEntry::make('duration')
-                                                    ->formatStateUsing(fn ($state) => $state !== null ? $state.' min' : '—'),
-                                                TextEntry::make('specialist_name')
+                                                TextEntry::make('achievement_degree')
                                                     ->placeholder('—'),
-                                                TextEntry::make('topic')
-                                                    ->placeholder('—'),
-                                                TextEntry::make('observations')
+                                                TextEntry::make('procedure')
                                                     ->placeholder('—')
-                                                    ->limit(80),
+                                                    ->limit(30),
                                             ]),
                                     ]),
                             ]),
                     ]),
             ]);
+    }
+
+    /**
+     * @return array<int, \Filament\Forms\Components\Component>
+     */
+    protected function getAddInterventionFormSchema(): array
+    {
+        $service = $this->interventionService;
+        $beneficiary = $this->record;
+        $organizationServiceId = $service->organization_service_id;
+
+        return [
+            Grid::make()
+                ->schema([
+                    Select::make('organization_service_intervention_id')
+                        ->label(__('intervention_plan.labels.intervention_type'))
+                        ->options(
+                            OrganizationServiceIntervention::with('serviceInterventionWithoutStatusCondition')
+                                ->where('organization_service_id', $organizationServiceId)
+                                ->active()
+                                ->get()
+                                ->filter(fn (OrganizationServiceIntervention $osi) => $osi->serviceInterventionWithoutStatusCondition)
+                                ->pluck('serviceInterventionWithoutStatusCondition.name', 'id')
+                        )
+                        ->required(),
+                    Select::make('specialist_id')
+                        ->label(__('intervention_plan.labels.responsible_person'))
+                        ->options(
+                            $beneficiary->specialistsTeam()
+                                ->with(['user:id,first_name,last_name', 'roleForDisplay:id,name'])
+                                ->get()
+                                ->mapWithKeys(fn (Specialist $s) => [$s->id => $s->name_role])
+                                ->all()
+                        )
+                        ->placeholder(__('intervention_plan.placeholders.specialist')),
+                ]),
+            Grid::make()
+                ->columns(2)
+                ->schema([
+                    DatePicker::make('start_date_interval')
+                        ->label(__('intervention_plan.labels.period_of_provision').' (început)'),
+                    DatePicker::make('end_date_interval')
+                        ->label(__('intervention_plan.labels.period_of_provision').' (sfârșit)'),
+                ]),
+            Section::make(__('intervention_plan.headings.intervention_indicators'))
+                ->schema([
+                    Textarea::make('objections')
+                        ->label(__('intervention_plan.labels.specific_objectives'))
+                        ->placeholder(__('intervention_plan.placeholders.add_details'))
+                        ->rows(3)
+                        ->columnSpanFull(),
+                    Textarea::make('expected_results')
+                        ->label(__('intervention_plan.labels.expected_results'))
+                        ->placeholder(__('intervention_plan.placeholders.add_details'))
+                        ->rows(3)
+                        ->columnSpanFull(),
+                    Textarea::make('procedure')
+                        ->label(__('intervention_plan.labels.procedure'))
+                        ->placeholder(__('intervention_plan.placeholders.add_details'))
+                        ->rows(3)
+                        ->columnSpanFull(),
+                    Textarea::make('indicators')
+                        ->label(__('intervention_plan.labels.indicators'))
+                        ->placeholder(__('intervention_plan.placeholders.add_details'))
+                        ->rows(3)
+                        ->columnSpanFull(),
+                    Textarea::make('achievement_degree')
+                        ->label(__('intervention_plan.labels.achievement_degree'))
+                        ->placeholder(__('intervention_plan.placeholders.add_details'))
+                        ->rows(3)
+                        ->columnSpanFull(),
+                ])
+                ->collapsible()
+                ->collapsed(true),
+        ];
+    }
+
+    protected function isCounselingSheetEmpty(): bool
+    {
+        $sheet = $this->interventionService?->counselingSheet;
+
+        return $sheet === null || empty($sheet->data);
+    }
+
+    protected function getCounselingSheetModalHeading(): string
+    {
+        $type = $this->interventionService?->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition?->counseling_sheet;
+
+        return $type instanceof CounselingSheet
+            ? __('intervention_plan.headings.edit_counseling_sheet', ['counseling_sheet_name' => strtolower($type->getLabel())])
+            : __('intervention_plan.headings.counseling_sheet');
+    }
+
+    /**
+     * @return array<int, \Filament\Forms\Components\Component>
+     */
+    protected function getCounselingSheetFormSchema(): array
+    {
+        $type = $this->getCounselingSheetType();
+
+        return $type !== null ? match ($type) {
+            CounselingSheet::LEGAL_ASSISTANCE => CounselingSheetFormSchemas::getLegalAssistanceForm(),
+            CounselingSheet::PSYCHOLOGICAL_ASSISTANCE => CounselingSheetFormSchemas::getSchemaForPsychologicalAssistance(),
+            CounselingSheet::SOCIAL_ASSISTANCE => CounselingSheetFormSchemas::getSchemaForSocialAssistance($this->interventionService),
+            default => [],
+        } : [];
+    }
+
+    /**
+     * @return array<int, \Filament\Schemas\Components\Section>
+     */
+    protected function getCounselingSheetDisplaySchema(): array
+    {
+        $type = $this->getCounselingSheetType();
+
+        return $type !== null ? CounselingSheetInfolistSchemas::getDisplaySchemaFor($type) : [];
+    }
+
+    protected function getCounselingSheetType(): ?CounselingSheet
+    {
+        $type = $this->interventionService?->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition?->counseling_sheet;
+
+        return $type instanceof CounselingSheet ? $type : null;
     }
 
     /**

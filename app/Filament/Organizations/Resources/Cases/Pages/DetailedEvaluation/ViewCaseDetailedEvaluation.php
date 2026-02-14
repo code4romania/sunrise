@@ -8,6 +8,7 @@ use App\Actions\BackAction;
 use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\IdentityInfolist;
+use App\Filament\Schemas\Components\SectionWithRecordActions;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\DateEntry;
 use App\Infolists\Components\EnumEntry;
@@ -60,6 +61,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
             BackAction::make()
                 ->url(CaseResource::getUrl('view', ['record' => $this->getRecord()])),
             \Filament\Actions\EditAction::make()
+                ->record($this->getRecord())
                 ->url(CaseResource::getUrl('edit_detailed_evaluation', ['record' => $this->getRecord()])),
         ];
     }
@@ -106,7 +108,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
     protected function getDetaliiEvaluareSchema(): array
     {
         return [
-            Section::make(__('beneficiary.wizard.details.label'))
+            SectionWithRecordActions::make(__('beneficiary.wizard.details.label'))
                 ->headerActions([
                     EditAction::make('edit')
                         ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_detailed_evaluation', ['record' => $record])),
@@ -169,6 +171,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                 ->registerActions([
                     \Filament\Actions\Action::make('go_identity')
                         ->label(__('case.view.identity'))
+                        ->record($this->getRecord())
                         ->url(fn (Beneficiary $record): string => CaseResource::getUrl('identity', ['record' => $record]))
                         ->link(),
                 ]),
@@ -188,6 +191,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                 ->registerActions([
                     \Filament\Actions\Action::make('go_identity')
                         ->label(__('case.view.identity'))
+                        ->record($this->getRecord())
                         ->url(fn (Beneficiary $record): string => CaseResource::getUrl('identity', ['record' => $record]))
                         ->link(),
                 ]),
@@ -244,7 +248,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
             Group::make()
                 ->relationship('partner')
                 ->schema([
-                    Section::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
+                    SectionWithRecordActions::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
                         ->headerActions([
                             EditAction::make('edit')
                                 ->url(fn (BeneficiaryPartner $record): string => CaseResource::getUrl('edit_detailed_evaluation', ['record' => $record->beneficiary])),
@@ -292,7 +296,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
             Group::make()
                 ->relationship('multidisciplinaryEvaluation')
                 ->schema([
-                    Section::make(__('beneficiary.section.detailed_evaluation.heading.reasons_for_start_evaluation'))
+                    SectionWithRecordActions::make(__('beneficiary.section.detailed_evaluation.heading.reasons_for_start_evaluation'))
                         ->compact()
                         ->headerActions([
                             EditAction::make('edit')
@@ -380,7 +384,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
             Group::make()
                 ->relationship('detailedEvaluationResult')
                 ->schema([
-                    Section::make(__('beneficiary.wizard.results.label'))
+                    SectionWithRecordActions::make(__('beneficiary.wizard.results.label'))
                         ->headerActions([
                             EditAction::make('edit')
                                 ->url(fn (DetailedEvaluationResult $record): string => CaseResource::getUrl('edit_detailed_evaluation', ['record' => $record->beneficiary])),

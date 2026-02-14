@@ -8,6 +8,7 @@ use App\Enums\AggressorRelationship;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\CloseFile\CloseFileResource;
 use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
+use App\Filament\Schemas\Components\SectionWithRecordActions;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Aggressor;
 use App\Models\Beneficiary;
@@ -36,7 +37,7 @@ class CaseInfolist
                     ->columnSpanFull()
                     ->schema([
 
-                        Section::make(__('case.view.identity'))
+                        SectionWithRecordActions::make(__('case.view.identity'))
                             ->headerActions([
                                 Action::make('view_identity')
                                     ->label(__('case.view.see_details'))
@@ -98,7 +99,7 @@ class CaseInfolist
                                     ->columnSpanFull(),
                             ]),
 
-                        Section::make(__('case.view.case_info'))
+                        SectionWithRecordActions::make(__('case.view.case_info'))
                             ->headerActions([
                                 Action::make('view_personal_information')
                                     ->label(__('case.view.see_details'))
@@ -192,7 +193,7 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->antecedents !== null),
                             ]),
 
-                        Section::make(__('case.view.initial_evaluation'))
+                        SectionWithRecordActions::make(__('case.view.initial_evaluation'))
                             ->headerActions([
                                 Action::make('view_initial_evaluation')
                                     ->label(__('case.view.see_details'))
@@ -226,7 +227,7 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->evaluateDetails !== null),
                             ]),
 
-                        Section::make(__('case.view.detailed_evaluation'))
+                        SectionWithRecordActions::make(__('case.view.detailed_evaluation'))
                             ->headerActions([
                                 Action::make('view_detailed_evaluation')
                                     ->label(__('case.view.see_details'))
@@ -252,7 +253,7 @@ class CaseInfolist
                                     ]),
                             ]),
 
-                        Section::make(__('case.view.intervention_plan'))
+                        SectionWithRecordActions::make(__('case.view.intervention_plan'))
                             ->headerActions([
                                 Action::make('create_plan')
                                     ->label(__('case.view.create_plan'))
@@ -320,7 +321,7 @@ class CaseInfolist
                             ])
                             ->columnSpan(2),
 
-                        Section::make(__('case.view.case_monitoring'))
+                        SectionWithRecordActions::make(__('case.view.case_monitoring'))
                             ->headerActions([
                                 Action::make('edit_monitoring')
                                     ->label(__('case.view.manage_monitoring'))
@@ -350,7 +351,7 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->monitoring()->count() > 0),
                             ]),
 
-                        Section::make(__('case.view.case_closure'))
+                        SectionWithRecordActions::make(__('case.view.case_closure'))
                             ->headerActions([
                                 Action::make('create_close_file')
                                     ->label(__('case.view.complete_closure_sheet'))
@@ -387,7 +388,7 @@ class CaseInfolist
                                     ->visible(fn (Beneficiary $record): bool => $record->closeFile !== null),
                             ]),
 
-                        Section::make(__('case.view.case_team'))
+                        SectionWithRecordActions::make(__('case.view.case_team'))
                             ->headerActions([
                                 Action::make('edit_case_team')
                                     ->label(__('case.view.manage_case_team'))
@@ -407,7 +408,7 @@ class CaseInfolist
                                     ->contained(false),
                             ]),
 
-                        Section::make(__('case.view.documents'))
+                        SectionWithRecordActions::make(__('case.view.documents'))
                             ->headerActions([
                                 Action::make('edit_documents')
                                     ->label(__('case.view.manage_documents'))

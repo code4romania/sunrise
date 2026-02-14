@@ -40,17 +40,21 @@ class InterventionPlanServicesWidget extends TableWidget
                         ->getQuery()
                     : InterventionService::query()->whereRaw('1 = 0')
             )
-            ->heading(__('intervention_plan.headings.services'))
+            ->heading(__('intervention_plan.headings.social_services'))
             ->columns([
                 TextColumn::make('organization_service_id')
-                    ->label(__('intervention_plan.labels.service'))
+                    ->label(__('intervention_plan.labels.service_type'))
                     ->formatStateUsing(fn (InterventionService $record) => $record->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition?->name ?? '—'),
+                TextColumn::make('institution')
+                    ->label(__('intervention_plan.labels.responsible_institution')),
                 TextColumn::make('specialist.name_role')
-                    ->label(__('intervention_plan.labels.specialist')),
-                TextColumn::make('beneficiary_interventions_count')
-                    ->label(__('intervention_plan.labels.interventions_count')),
-                TextColumn::make('meetings_count')
-                    ->label(__('intervention_plan.labels.meetings_count')),
+                    ->label(__('intervention_plan.labels.responsible_person')),
+                TextColumn::make('interval')
+                    ->label(__('intervention_plan.labels.period_of_provision'))
+                    ->formatStateUsing(fn (InterventionService $record) => $record->interval ?: '—'),
+                TextColumn::make('objections')
+                    ->label(__('intervention_plan.labels.specific_objectives'))
+                    ->limit(40),
                 TextColumn::make('view_details')
                     ->label('')
                     ->state(__('intervention_plan.actions.view_details'))
@@ -94,7 +98,7 @@ class InterventionPlanServicesWidget extends TableWidget
                                     ->default(fn () => Filament::getTenant()?->name)
                                     ->maxLength(100),
                                 Select::make('specialist_id')
-                                    ->label(__('intervention_plan.labels.responsible_specialist'))
+                                    ->label(__('intervention_plan.labels.responsible_person'))
                                     ->placeholder(__('intervention_plan.placeholders.specialist'))
                                     ->options(function (): array {
                                         $plan = $this->record?->interventionPlan;
@@ -114,12 +118,12 @@ class InterventionPlanServicesWidget extends TableWidget
                             ->columns(2)
                             ->schema([
                                 DatePicker::make('start_date_interval')
-                                    ->label(__('intervention_plan.labels.start_date_interval')),
+                                    ->label(__('intervention_plan.labels.period_of_provision').' (început)'),
                                 DatePicker::make('end_date_interval')
-                                    ->label(__('intervention_plan.labels.end_date_interval')),
+                                    ->label(__('intervention_plan.labels.period_of_provision').' (sfârșit)'),
                             ]),
                         RichEditor::make('objections')
-                            ->label(__('intervention_plan.labels.objections'))
+                            ->label(__('intervention_plan.labels.specific_objectives'))
                             ->placeholder(__('intervention_plan.placeholders.objections'))
                             ->maxLength(1000),
                     ])
