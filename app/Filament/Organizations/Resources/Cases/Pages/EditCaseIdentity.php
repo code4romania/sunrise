@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Enums\AddressType;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\BeneficiaryIdentityFormSchema;
 use App\Models\Beneficiary;
@@ -98,5 +99,80 @@ class EditCaseIdentity extends EditRecord
         }
 
         return $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        unset($data['legal_residence'], $data['effective_residence']);
+
+        return $data;
+    }
+
+    protected function afterSave(): void
+    {
+        $record = $this->getRecord();
+
+        if (! $record instanceof Beneficiary) {
+            return;
+        }
+
+        $state = $this->form->getState();
+        $legalData = $state['legal_residence'] ?? [];
+        $effectiveData = $state['effective_residence'] ?? [];
+        $sameAsLegal = (bool) ($state['same_as_legal_residence'] ?? false);
+
+        if ($this->hasAddressData($legalData)) {
+            $attrs = array_merge(
+                $this->buildAddressAttributes($legalData, AddressType::LEGAL_RESIDENCE),
+                ['address_type' => AddressType::LEGAL_RESIDENCE]
+            );
+            $record->legal_residence()->updateOrCreate([], $attrs);
+        } else {
+            $record->legal_residence?->delete();
+        }
+
+        $effectivePayload = $sameAsLegal ? $legalData : $effectiveData;
+        if ($this->hasAddressData($effectivePayload)) {
+            $attrs = array_merge(
+                $this->buildAddressAttributes($effectivePayload, AddressType::EFFECTIVE_RESIDENCE),
+                ['address_type' => AddressType::EFFECTIVE_RESIDENCE]
+            );
+            $record->effective_residence()->updateOrCreate([], $attrs);
+        } else {
+            $record->effective_residence?->delete();
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function hasAddressData(array $data): bool
+    {
+        $countyId = $data['county_id'] ?? null;
+        $cityId = $data['city_id'] ?? null;
+        $address = $data['address'] ?? null;
+
+        return $countyId !== null || $cityId !== null || filled($address);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function buildAddressAttributes(array $data, AddressType $type): array
+    {
+        $attrs = [
+            'country_id' => $data['country_id'] ?? null,
+            'county_id' => $data['county_id'] ?? null,
+            'city_id' => $data['city_id'] ?? null,
+            'address' => $data['address'] ?? null,
+            'environment' => $data['environment'] ?? null,
+        ];
+
+        return array_filter($attrs, fn ($v) => $v !== null && $v !== '');
     }
 }

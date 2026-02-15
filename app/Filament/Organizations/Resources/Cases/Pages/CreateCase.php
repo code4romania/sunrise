@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Cases\Pages;
 
+use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\AggressorFormSchema;
@@ -355,6 +356,8 @@ class CreateCase extends CreateRecord
             }
         }
 
+        $this->createAddressesFromFormState($beneficiary, $state);
+
         $roleIds = self::normalizeCaseTeamSelection($state['case_team'] ?? []);
         $currentUserId = auth()->id();
         if (! $currentUserId || $roleIds === null || empty($roleIds)) {
@@ -400,6 +403,57 @@ class CreateCase extends CreateRecord
         }
 
         return array_values(array_unique($roleIds));
+    }
+
+    /**
+     * Create legal_residence and effective_residence addresses from form state.
+     *
+     * @param  array<int|string, mixed>  $state
+     */
+    private function createAddressesFromFormState(Beneficiary $beneficiary, array $state): void
+    {
+        $legalData = $state['legal_residence'] ?? [];
+        $effectiveData = $state['effective_residence'] ?? [];
+        $sameAsLegal = (bool) ($state['same_as_legal_residence'] ?? false);
+
+        if ($this->hasAddressData($legalData)) {
+            $beneficiary->legal_residence()->create($this->buildAddressAttributes($legalData, AddressType::LEGAL_RESIDENCE));
+        }
+
+        $effectivePayload = $sameAsLegal ? ($legalData ?? []) : $effectiveData;
+        if ($this->hasAddressData($effectivePayload)) {
+            $beneficiary->effective_residence()->create($this->buildAddressAttributes($effectivePayload, AddressType::EFFECTIVE_RESIDENCE));
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function hasAddressData(array $data): bool
+    {
+        $countyId = $data['county_id'] ?? null;
+        $cityId = $data['city_id'] ?? null;
+        $address = $data['address'] ?? null;
+
+        return $countyId !== null || $cityId !== null || filled($address);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function buildAddressAttributes(array $data, AddressType $type): array
+    {
+        $attrs = [
+            'country_id' => $data['country_id'] ?? null,
+            'county_id' => $data['county_id'] ?? null,
+            'city_id' => $data['city_id'] ?? null,
+            'address' => $data['address'] ?? null,
+            'environment' => $data['environment'] ?? null,
+            'address_type' => $type,
+        ];
+
+        return array_filter($attrs, fn ($v) => $v !== null && $v !== '');
     }
 
     /**

@@ -187,19 +187,28 @@ class InitialEvaluationSchema
                 ->columns(2)
                 ->schema([
                     TextEntry::make('violence_types')
-                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type')),
+                        ->label(__('beneficiary.section.initial_evaluation.labels.violence_type'))
+                        ->formatStateUsing(fn (mixed $state): ?string => filled($state)
+                            ? collect($state)->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->implode('; ')
+                            : null)
+                        ->placeholder('—'),
 
                     EnumEntry::make('violence_primary_type')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_primary_type'))
+                        ->enumClass(Violence::class)
                         ->placeholder(__('beneficiary.placeholder.violence_primary_type')),
 
                     EnumEntry::make('frequency_violence')
                         ->label(__('beneficiary.section.initial_evaluation.labels.frequency_violence'))
+                        ->enumClass(Frequency::class)
                         ->placeholder(__('beneficiary.placeholder.frequency_violence')),
 
                     TextEntry::make('violence_means')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_means'))
-                        ->placeholder(__('beneficiary.placeholder.violence_means_specify')),
+                        ->formatStateUsing(fn (mixed $state): ?string => filled($state)
+                            ? collect($state)->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->implode('; ')
+                            : null)
+                        ->placeholder('—'),
 
                     TextEntry::make('violence_means_specify')
                         ->label(__('beneficiary.section.initial_evaluation.labels.violence_means_specify'))

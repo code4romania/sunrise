@@ -10,9 +10,9 @@ use ReflectionEnum;
 
 class EnumEntry extends TextEntry
 {
-    protected string | null $enumClass = null;
+    protected ?string $enumClass = null;
 
-    public function enumClass(string | null $enumClass): static
+    public function enumClass(?string $enumClass): static
     {
         $this->enumClass = $enumClass;
 
@@ -21,9 +21,13 @@ class EnumEntry extends TextEntry
 
     protected function setUp(): void
     {
-        $this->formatStateUsing(function ($state) {
+        $this->formatStateUsing(function (mixed $state): mixed {
+            if ($state === null || $state === '') {
+                return null;
+            }
+
             if ($state instanceof BackedEnum) {
-                return $state->getLabel();
+                return method_exists($state, 'getLabel') ? $state->getLabel() : (string) $state->value;
             }
 
             if ($state === '-') {
@@ -31,20 +35,23 @@ class EnumEntry extends TextEntry
             }
 
             if ($this->enumClass) {
-                $state = collect(explode(',', $state));
+                $stateCollection = collect(explode(',', (string) $state))->map(fn (string $item): string => trim($item))->filter();
                 $reflectionClass = new ReflectionEnum($this->enumClass);
-                $returnType = $reflectionClass->getBackingtype();
+                $returnType = $reflectionClass->getBackingType();
 
-                return $state->map(
-                    function ($item) use ($returnType) {
-                        $item = match ($returnType->getName()) {
+                return $stateCollection->map(
+                    function ($item) use ($returnType): ?string {
+                        $converted = match ($returnType->getName()) {
                             'string' => trim((string) $item),
                             'int' => (int) $item,
+                            default => $item,
                         };
 
-                        return $this->enumClass::tryFrom($item)?->getLabel();
+                        $enum = $this->enumClass::tryFrom($converted);
+
+                        return $enum !== null && method_exists($enum, 'getLabel') ? $enum->getLabel() : (string) $item;
                     }
-                )->join(', ');
+                )->filter()->join(', ') ?: null;
             }
 
             return $state;

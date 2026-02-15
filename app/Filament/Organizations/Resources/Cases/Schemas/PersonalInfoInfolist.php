@@ -303,7 +303,17 @@ class PersonalInfoInfolist
                                         ->placeholder(__('placeholder.select_one')),
 
                                     TextEntry::make('violence_types')
-                                        ->label(__('field.aggressor_violence_types')),
+                                        ->label(__('field.aggressor_violence_types'))
+                                        ->state(function (\App\Models\Aggressor $record): string {
+                                            $types = $record->violence_types;
+
+                                            if ($types === null || $types->isEmpty()) {
+                                                return '—';
+                                            }
+
+                                            return $types->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->implode(', ');
+                                        })
+                                        ->placeholder('—'),
                                 ]),
 
                             Grid::make()

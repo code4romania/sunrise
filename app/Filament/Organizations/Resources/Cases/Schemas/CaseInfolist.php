@@ -149,18 +149,14 @@ class CaseInfolist
                                             ->placeholder('—'),
                                         TextEntry::make('violence_types')
                                             ->label(__('field.aggressor_violence_types'))
-                                            ->formatStateUsing(function ($state): string {
-                                                if ($state === null) {
+                                            ->state(function (Aggressor $record): string {
+                                                $types = $record->violence_types;
+
+                                                if ($types === null || $types->isEmpty()) {
                                                     return '—';
                                                 }
-                                                if ($state instanceof Collection) {
-                                                    return $state->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->join(', ');
-                                                }
-                                                if (is_iterable($state)) {
-                                                    return collect($state)->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->join(', ');
-                                                }
 
-                                                return '—';
+                                                return $types->map(fn ($v) => is_object($v) && method_exists($v, 'getLabel') ? $v->getLabel() : (string) $v)->implode(', ');
                                             })
                                             ->placeholder('—'),
                                         TextEntry::make('has_protection_order')
@@ -424,10 +420,24 @@ class CaseInfolist
                                 RepeatableEntry::make('specialistsTeam')
                                     ->state(fn (Beneficiary $record) => $record->specialistsTeam()->with(['user', 'roleForDisplay'])->get())
                                     ->schema([
-                                        TextEntry::make('roleForDisplay.name')
-                                            ->label(__('case.view.role')),
                                         TextEntry::make('user.full_name')
-                                            ->label(__('case.view.specialist')),
+                                            ->label(__('beneficiary.section.specialists.labels.name'))
+                                            ->formatStateUsing(function (mixed $state, TextEntry $entry): string {
+                                                $specialist = $entry->getContainer()?->getRecord();
+
+                                                return $specialist instanceof \App\Models\Specialist && $specialist->user !== null
+                                                    ? $specialist->user->full_name
+                                                    : '—';
+                                            }),
+                                        TextEntry::make('roleForDisplay.name')
+                                            ->label(__('beneficiary.section.specialists.labels.roles'))
+                                            ->formatStateUsing(function (mixed $state, TextEntry $entry): string {
+                                                $specialist = $entry->getContainer()?->getRecord();
+
+                                                return $specialist instanceof \App\Models\Specialist && $specialist->roleForDisplay !== null
+                                                    ? $specialist->roleForDisplay->name
+                                                    : '—';
+                                            }),
                                     ])
                                     ->columns(2)
                                     ->contained(false),
