@@ -78,7 +78,8 @@ class InitialEvaluationSchema
             SectionWithRecordActions::make(__('beneficiary.wizard.details.label'))
                 ->headerActions([
                     EditAction::make()
-                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_initial_evaluation', ['record' => $record])),
+                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_evaluation_details', ['record' => $record]))
+                        ->openUrlInNewTab(),
                 ])
                 ->schema([
                     Group::make()

@@ -17,7 +17,9 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class CreateCaseInitialEvaluation extends EditRecord
 {
-    use HasWizard;
+    use HasWizard {
+        HasWizard::getWizardComponent as parentGetWizardComponent;
+    }
     use PreventMultipleSubmit;
     use PreventSubmitFormOnEnter;
 
@@ -64,15 +66,26 @@ class CreateCaseInitialEvaluation extends EditRecord
     {
         return [
             Step::make(__('beneficiary.wizard.details.label'))
+                ->id('details')
                 ->schema(InitialEvaluationSchema::getEvaluationDetailsFormComponents()),
             Step::make(__('beneficiary.wizard.violence.label'))
+                ->id('violence')
                 ->schema(InitialEvaluationSchema::getViolenceFormComponents()),
             Step::make(__('beneficiary.wizard.risk_factors.label'))
+                ->id('risk_factors')
                 ->schema(InitialEvaluationSchema::getRiskFactorsFormComponents()),
             Step::make(__('beneficiary.wizard.requested_services.label'))
+                ->id('requested_services')
                 ->schema(InitialEvaluationSchema::getRequestedServicesFormComponents()),
             Step::make(__('beneficiary.wizard.beneficiary_situation.label'))
+                ->id('beneficiary_situation')
                 ->schema(InitialEvaluationSchema::getBeneficiarySituationFormComponents()),
         ];
+    }
+
+    public function getWizardComponent(): \Filament\Schemas\Components\Component
+    {
+        return $this->parentGetWizardComponent()
+            ->persistStepInQueryString('step');
     }
 }

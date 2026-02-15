@@ -9,10 +9,11 @@ use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\IdentityInfolist;
 use App\Filament\Organizations\Schemas\BeneficiaryResource\InitialEvaluationSchema;
+use App\Filament\Schemas\Components\SectionWithRecordActions;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\Notice;
 use App\Models\Beneficiary;
 use App\Models\EvaluateDetails;
-use Filament\Actions\EditAction;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
@@ -43,7 +44,6 @@ class ViewInitialEvaluation extends ViewRecord
                 ->url($parent instanceof Beneficiary
                     ? CaseResource::getUrl('view', ['record' => $parent])
                     : CaseResource::getUrl('index')),
-            EditAction::make(),
         ];
     }
 
@@ -88,19 +88,51 @@ class ViewInitialEvaluation extends ViewRecord
 
                         Tab::make(__('beneficiary.wizard.violence.label'))
                             ->maxWidth('3xl')
-                            ->schema(InitialEvaluationSchema::getViolenceInfolistComponents()),
+                            ->schema([
+                                SectionWithRecordActions::make(__('beneficiary.wizard.violence.label'))
+                                    ->headerActions([
+                                        EditAction::make()
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_initial_violence', ['record' => $record]))
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->schema(InitialEvaluationSchema::getViolenceInfolistComponents()),
+                            ]),
 
                         Tab::make(__('beneficiary.wizard.risk_factors.label'))
                             ->maxWidth('3xl')
-                            ->schema(InitialEvaluationSchema::getRiskFactorsInfolistComponents()),
+                            ->schema([
+                                SectionWithRecordActions::make(__('beneficiary.wizard.risk_factors.label'))
+                                    ->headerActions([
+                                        EditAction::make()
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_initial_risk_factors', ['record' => $record]))
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->schema(InitialEvaluationSchema::getRiskFactorsInfolistComponents()),
+                            ]),
 
                         Tab::make(__('beneficiary.wizard.requested_services.label'))
                             ->maxWidth('3xl')
-                            ->schema(InitialEvaluationSchema::getRequestedServicesInfolistComponents()),
+                            ->schema([
+                                SectionWithRecordActions::make(__('beneficiary.wizard.requested_services.label'))
+                                    ->headerActions([
+                                        EditAction::make()
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_initial_requested_services', ['record' => $record]))
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->schema(InitialEvaluationSchema::getRequestedServicesInfolistComponents()),
+                            ]),
 
                         Tab::make(__('beneficiary.wizard.beneficiary_situation.label'))
                             ->maxWidth('3xl')
-                            ->schema(InitialEvaluationSchema::getBeneficiarySituationInfolistComponents()),
+                            ->schema([
+                                SectionWithRecordActions::make(__('beneficiary.wizard.beneficiary_situation.label'))
+                                    ->headerActions([
+                                        EditAction::make()
+                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_initial_beneficiary_situation', ['record' => $record]))
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->schema(InitialEvaluationSchema::getBeneficiarySituationInfolistComponents()),
+                            ]),
                     ]),
             ]);
     }
@@ -132,7 +164,12 @@ class ViewInitialEvaluation extends ViewRecord
                             : '#')
                         ->link(),
                 ]),
-            Section::make(__('beneficiary.section.identity.tab.beneficiary'))
+            SectionWithRecordActions::make(__('beneficiary.section.identity.tab.beneficiary'))
+                ->headerActions([
+                    EditAction::make()
+                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_identity', ['record' => $record]))
+                        ->openUrlInNewTab(),
+                ])
                 ->schema(IdentityInfolist::getIdentityFieldsSchemaForEmbedding()),
         ];
     }
@@ -156,7 +193,12 @@ class ViewInitialEvaluation extends ViewRecord
                             : '#')
                         ->link(),
                 ]),
-            Section::make(__('beneficiary.section.identity.tab.children'))
+            SectionWithRecordActions::make(__('beneficiary.section.identity.tab.children'))
+                ->headerActions([
+                    EditAction::make()
+                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_children', ['record' => $record]))
+                        ->openUrlInNewTab(),
+                ])
                 ->schema([
                     Grid::make(2)
                         ->schema([

@@ -17,6 +17,11 @@ use App\Filament\Organizations\Resources\Cases\Pages\EditCaseMonitoring;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCasePersonalInformation;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseTeam;
 use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\CreateCaseInitialEvaluation;
+use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\EditBeneficiarySituation;
+use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\EditEvaluationDetails;
+use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\EditRequestedServices;
+use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\EditRiskFactors;
+use App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation\EditViolence;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\CreateCaseInterventionPlan;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\CreateCaseMonthlyPlan;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\EditCaseMonthlyPlanDetails;
@@ -155,6 +160,11 @@ class CaseResource extends Resource
             'edit_antecedents' => EditCaseAntecedents::route('/{record}/personal/antecedents/edit'),
             'create_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/create'),
             'edit_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/edit'),
+            'edit_evaluation_details' => EditEvaluationDetails::route('/{record}/initial-evaluation/details/edit'),
+            'edit_initial_violence' => EditViolence::route('/{record}/initial-evaluation/violence/edit'),
+            'edit_initial_risk_factors' => EditRiskFactors::route('/{record}/initial-evaluation/risk-factors/edit'),
+            'edit_initial_requested_services' => EditRequestedServices::route('/{record}/initial-evaluation/requested-services/edit'),
+            'edit_initial_beneficiary_situation' => EditBeneficiarySituation::route('/{record}/initial-evaluation/beneficiary-situation/edit'),
             'view_detailed_evaluation' => ViewCaseDetailedEvaluation::route('/{record}/detailed-evaluation'),
             'create_detailed_evaluation' => CreateCaseDetailedEvaluation::route('/{record}/detailed-evaluation/create'),
             'edit_detailed_evaluation' => CreateCaseDetailedEvaluation::route('/{record}/detailed-evaluation/edit'),
