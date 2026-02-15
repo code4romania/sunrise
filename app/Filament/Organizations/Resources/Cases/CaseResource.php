@@ -87,6 +87,8 @@ class CaseResource extends Resource
                 'multidisciplinaryEvaluation',
                 'violenceHistory',
                 'detailedEvaluationResult',
+                'violence',
+                'riskFactors',
             ]);
     }
 

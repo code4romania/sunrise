@@ -220,11 +220,36 @@ class CaseInfolist
                                             ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_initial_evaluation', ['record' => $record]))
                                             ->button(),
                                     ]),
-                                TextEntry::make('evaluateDetails.registered_date')
-                                    ->label(__('beneficiary.labels.registered_date'))
-                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
-                                    ->placeholder('—')
-                                    ->visible(fn (Beneficiary $record): bool => $record->evaluateDetails !== null),
+                                Grid::make(2)
+                                    ->visible(fn (Beneficiary $record): bool => $record->evaluateDetails !== null)
+                                    ->schema([
+                                        TextEntry::make('evaluateDetails.registered_date')
+                                            ->label(__('beneficiary.section.initial_evaluation.labels.registered_date'))
+                                            ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
+                                            ->placeholder('—'),
+                                        TextEntry::make('_risk_level_overview')
+                                            ->hiddenLabel()
+                                            ->state(fn (Beneficiary $record) => $record->riskFactors?->risk_level ?? \App\Enums\Level::NONE)
+                                            ->badge()
+                                            ->color(fn (\App\Enums\Level $state): string => match ($state) {
+                                                \App\Enums\Level::HIGH => 'danger',
+                                                \App\Enums\Level::MEDIUM => 'warning',
+                                                \App\Enums\Level::LOW => 'warning',
+                                                \App\Enums\Level::NONE => 'success',
+                                            })
+                                            ->icon(fn (\App\Enums\Level $state): ?string => $state->getIcon())
+                                            ->formatStateUsing(fn (\App\Enums\Level $state): string => $state->label()),
+                                        TextEntry::make('violence.violence_types')
+                                            ->label(__('case.view.initial_eval.violence_type'))
+                                            ->formatStateUsing(fn ($state) => filled($state)
+                                                ? collect($state)->map(fn ($v) => $v->label())->implode('; ')
+                                                : null)
+                                            ->placeholder('—'),
+                                        TextEntry::make('_violence_means_overview')
+                                            ->label(__('case.view.initial_eval.violence_means'))
+                                            ->state(fn (Beneficiary $record): ?string => self::formatViolenceMeansOverview($record))
+                                            ->placeholder('—'),
+                                    ]),
                             ]),
 
                         SectionWithRecordActions::make(__('case.view.detailed_evaluation'))
@@ -503,5 +528,23 @@ class CaseInfolist
         $phones = array_filter([$record->primary_phone, $record->backup_phone]);
 
         return implode('; ', $phones);
+    }
+
+    private static function formatViolenceMeansOverview(Beneficiary $record): ?string
+    {
+        $violence = $record->violence;
+        if ($violence === null) {
+            return null;
+        }
+
+        $parts = [];
+        if (filled($violence->violence_means)) {
+            $parts[] = collect($violence->violence_means)->map(fn ($v) => $v->label())->implode('; ');
+        }
+        if (filled($violence->violence_means_specify)) {
+            $parts[] = $violence->violence_means_specify;
+        }
+
+        return $parts !== [] ? implode('; ', $parts) : null;
     }
 }

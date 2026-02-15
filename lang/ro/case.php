@@ -64,6 +64,10 @@ return [
         'case_info' => 'Informații caz',
         'aggressor' => 'Agresor',
         'initial_evaluation' => 'Evaluare inițială',
+        'initial_eval' => [
+            'violence_type' => 'Tipul VD',
+            'violence_means' => 'Mijloace folosite',
+        ],
         'detailed_evaluation' => 'Evaluare detaliată',
         'intervention_plan' => 'Plan de intervenție',
         'case_monitoring' => 'Monitorizare caz',

@@ -73,8 +73,7 @@ class RiskFactors extends Model
 
     private static function hasHighRiskLevel(array $riskFactors): bool
     {
-        $highRiskFields = ['use_weapons_in_act_of_violence', 'death_threats', 'victim_afraid_for_himself'];
-        foreach ($highRiskFields as $field) {
+        foreach (self::HIGH_RISK_QUESTION_KEYS as $field) {
             if (empty($riskFactors[$field])) {
                 continue;
             }
@@ -90,11 +89,22 @@ class RiskFactors extends Model
         return false;
     }
 
+    /**
+     * Question keys for high-risk questions (7, 11, 17 per legislation Annex 2).
+     * CRESCUT = min 1 yes on these OR min 5 yes on all 1-23.
+     * MEDIU/SCĂZUT count excludes these.
+     */
+    private const HIGH_RISK_QUESTION_KEYS = [
+        'use_weapons_in_act_of_violence',
+        'death_threats',
+        'victim_afraid_for_himself',
+    ];
+
     private static function getTrueAnswersCount(array $riskFactors): int
     {
         $count = 0;
         foreach ($riskFactors as $riskFactor) {
-            if (Ternary::isYes($riskFactor['value'])) {
+            if (Ternary::isYes($riskFactor['value'] ?? null)) {
                 $count++;
             }
         }
@@ -102,21 +112,28 @@ class RiskFactors extends Model
         return $count;
     }
 
-    private static function hasMediumRiskLevel(array $model): bool
+    private static function getTrueAnswersCountExcludingHighRisk(array $riskFactors): int
     {
-        if (self::getTrueAnswersCount($model) == 4) {
-            return true;
+        $count = 0;
+        foreach ($riskFactors as $key => $riskFactor) {
+            if (in_array($key, self::HIGH_RISK_QUESTION_KEYS, true)) {
+                continue;
+            }
+            if (Ternary::isYes($riskFactor['value'] ?? null)) {
+                $count++;
+            }
         }
 
-        return false;
+        return $count;
     }
 
-    private static function hasLowRiskLevel(array $model): bool
+    private static function hasMediumRiskLevel(array $riskFactors): bool
     {
-        if (self::getTrueAnswersCount($model) >= 1) {
-            return true;
-        }
+        return self::getTrueAnswersCountExcludingHighRisk($riskFactors) >= 4;
+    }
 
-        return false;
+    private static function hasLowRiskLevel(array $riskFactors): bool
+    {
+        return self::getTrueAnswersCountExcludingHighRisk($riskFactors) >= 1;
     }
 }

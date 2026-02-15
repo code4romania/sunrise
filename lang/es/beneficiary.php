@@ -189,6 +189,7 @@ return [
             ],
         ],
         'initial_evaluation' => [
+            'risk_categorization_intro' => 'Según la puntuación que recibe el beneficiario, puede categorizarse de la siguiente manera:',
             'heading' => [
                 'identity_beneficiary' => 'Identidad del beneficiario',
                 'identity_children' => 'Identidad de los hijos',

@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Schemas\BeneficiaryResource;
 use App\Enums\AggravatingFactorsSchema;
 use App\Enums\Frequency;
 use App\Enums\Helps;
+use App\Enums\Level;
 use App\Enums\RecommendationService;
 use App\Enums\RiskFactorsSchema;
 use App\Enums\Ternary;
@@ -34,6 +35,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Text;
 
 class InitialEvaluationSchema
 {
@@ -277,6 +279,19 @@ class InitialEvaluationSchema
     public static function getRiskFactorsInfolistComponents(): array
     {
         return [
+            Text::make(__('beneficiary.section.initial_evaluation.risk_categorization_intro')),
+            TextEntry::make('_risk_level')
+                ->hiddenLabel()
+                ->state(fn (Beneficiary $record): Level => $record->riskFactors?->risk_level ?? Level::NONE)
+                ->badge()
+                ->color(fn (Level $state): string => match ($state) {
+                    Level::HIGH => 'danger',
+                    Level::MEDIUM => 'warning',
+                    Level::LOW => 'warning',
+                    Level::NONE => 'success',
+                })
+                ->icon(fn (Level $state): ?string => $state->getIcon())
+                ->formatStateUsing(fn (Level $state): string => $state->label()),
             Group::make()
                 ->relationship('riskFactors')
                 ->schema([

@@ -203,6 +203,7 @@ return [
         ],
 
         'initial_evaluation' => [
+            'risk_categorization_intro' => 'În funcție de scorul pe care îl primește beneficiarul, acesta poate fi categorisit astfel:',
             'heading' => [
                 'identity_beneficiary' => 'Identitate beneficiar',
                 'identity_children' => 'Identitate copii',
