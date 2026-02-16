@@ -343,6 +343,7 @@ return [
                 'safety_plan' => 'Elaborarea Planului de siguranță',
                 'other_services' => 'Alte servicii',
                 'recommendations_for_intervention_plan' => 'Listați toate eventualele recomandări pentru planul de intervenție',
+                'recommendation_services' => 'Servicii recomandate',
             ],
             'heading' => [
                 'reasons_for_start_evaluation' => 'Motive pentru inițierea evaluării multidisciplinare',

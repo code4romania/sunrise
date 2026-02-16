@@ -22,6 +22,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\HtmlString;
 
 class CaseInfolist
 {
@@ -254,6 +255,7 @@ class CaseInfolist
                                     ->label(__('case.view.see_details'))
                                     ->url(fn (Beneficiary $record): string => CaseResource::getUrl('view_detailed_evaluation', ['record' => $record]))
                                     ->visible(fn (Beneficiary $record): bool => $record->multidisciplinaryEvaluation !== null || $record->detailedEvaluationResult !== null || $record->detailedEvaluationSpecialists()->exists())
+                                    ->color('primary')
                                     ->link(),
                                 Action::make('start_detailed_evaluation')
                                     ->label(__('case.view.start_evaluation'))
@@ -272,6 +274,19 @@ class CaseInfolist
                                             ->url(fn (Beneficiary $record): string => CaseResource::getUrl('create_detailed_evaluation', ['record' => $record]))
                                             ->button(),
                                     ]),
+                                TextEntry::make('_detailed_evaluation_recommendation_services')
+                                    ->label(__('beneficiary.section.detailed_evaluation.labels.recommendation_services'))
+                                    ->state(fn (Beneficiary $record) => $record->detailedEvaluationResult?->recommendation_services ?? collect())
+                                    ->formatStateUsing(function ($state): HtmlString {
+                                        if ($state === null || (is_countable($state) && count($state) === 0)) {
+                                            return new HtmlString('<span class="text-gray-500">—</span>');
+                                        }
+                                        $pills = collect($state)->map(fn ($service) => '<span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">'.e($service->getLabel()).'</span>')->implode('');
+
+                                        return new HtmlString('<div class="flex flex-wrap gap-2">'.$pills.'</div>');
+                                    })
+                                    ->html()
+                                    ->visible(fn (Beneficiary $record): bool => $record->multidisciplinaryEvaluation !== null || $record->detailedEvaluationResult !== null || $record->detailedEvaluationSpecialists()->exists()),
                             ]),
 
                         SectionWithRecordActions::make(__('case.view.intervention_plan'))

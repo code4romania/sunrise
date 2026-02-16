@@ -14,6 +14,7 @@ return [
         'close' => 'Închide',
         'save' => 'Salvează modificările',
         'delete' => 'Șterge',
+        'download' => 'Descarcă',
         'view_observations' => 'Vezi observații',
         'change' => 'Modifică',
         'finish' => 'Finalizează',
@@ -35,6 +36,7 @@ return [
     'labels' => [
         'village' => 'sat',
         'commune' => 'Comuna',
+        'no_document' => 'Niciun document',
     ],
 
     'placeholders' => [

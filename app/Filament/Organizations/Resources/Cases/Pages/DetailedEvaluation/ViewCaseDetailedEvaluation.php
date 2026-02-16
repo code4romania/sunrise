@@ -60,9 +60,6 @@ class ViewCaseDetailedEvaluation extends ViewRecord
         return [
             BackAction::make()
                 ->url(CaseResource::getUrl('view', ['record' => $this->getRecord()])),
-            \Filament\Actions\EditAction::make()
-                ->record($this->getRecord())
-                ->url(CaseResource::getUrl('edit_detailed_evaluation', ['record' => $this->getRecord()])),
         ];
     }
 
@@ -111,7 +108,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
             SectionWithRecordActions::make(__('beneficiary.wizard.details.label'))
                 ->headerActions([
                     EditAction::make('edit')
-                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_detailed_evaluation', ['record' => $record])),
+                        ->url(fn (Beneficiary $record): string => CaseResource::getUrl('edit_detailed_evaluation_details', ['record' => $record])),
                 ])
                 ->schema([
                     Section::make(__('beneficiary.section.detailed_evaluation.labels.specialists'))
@@ -251,7 +248,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                     SectionWithRecordActions::make(__('beneficiary.section.detailed_evaluation.heading.partner'))
                         ->headerActions([
                             EditAction::make('edit')
-                                ->url(fn (BeneficiaryPartner $record): string => CaseResource::getUrl('edit_detailed_evaluation', ['record' => $record->beneficiary])),
+                                ->url(fn (BeneficiaryPartner $record): string => CaseResource::getUrl('edit_detailed_evaluation_partner', ['record' => $record->beneficiary])),
                         ])
                         ->schema([
                             Grid::make(2)
@@ -300,7 +297,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                         ->compact()
                         ->headerActions([
                             EditAction::make('edit')
-                                ->url(fn (MultidisciplinaryEvaluation $record): string => CaseResource::getUrl('edit_detailed_evaluation', ['record' => $record->beneficiary])),
+                                ->url(fn (MultidisciplinaryEvaluation $record): string => CaseResource::getUrl('edit_detailed_evaluation_multidisciplinary', ['record' => $record->beneficiary])),
                         ])
                         ->schema([
                             EnumEntry::make('applicant')
@@ -387,7 +384,7 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                     SectionWithRecordActions::make(__('beneficiary.wizard.results.label'))
                         ->headerActions([
                             EditAction::make('edit')
-                                ->url(fn (DetailedEvaluationResult $record): string => CaseResource::getUrl('edit_detailed_evaluation', ['record' => $record->beneficiary])),
+                                ->url(fn (DetailedEvaluationResult $record): string => CaseResource::getUrl('edit_detailed_evaluation_results', ['record' => $record->beneficiary])),
                         ])
                         ->schema([
                             TextEntry::make('recommendation_services')

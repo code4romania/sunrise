@@ -6,6 +6,10 @@ namespace App\Filament\Organizations\Resources\Cases;
 
 use App\Filament\Organizations\Resources\Cases\Pages\CreateCase;
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\CreateCaseDetailedEvaluation;
+use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\EditCaseDetailedEvaluationDetails;
+use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\EditCaseDetailedEvaluationMultidisciplinary;
+use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\EditCaseDetailedEvaluationPartner;
+use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\EditCaseDetailedEvaluationResults;
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\ViewCaseDetailedEvaluation;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAggressor;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAntecedents;
@@ -168,6 +172,10 @@ class CaseResource extends Resource
             'view_detailed_evaluation' => ViewCaseDetailedEvaluation::route('/{record}/detailed-evaluation'),
             'create_detailed_evaluation' => CreateCaseDetailedEvaluation::route('/{record}/detailed-evaluation/create'),
             'edit_detailed_evaluation' => CreateCaseDetailedEvaluation::route('/{record}/detailed-evaluation/edit'),
+            'edit_detailed_evaluation_details' => EditCaseDetailedEvaluationDetails::route('/{record}/detailed-evaluation/details/edit'),
+            'edit_detailed_evaluation_partner' => EditCaseDetailedEvaluationPartner::route('/{record}/detailed-evaluation/partner/edit'),
+            'edit_detailed_evaluation_multidisciplinary' => EditCaseDetailedEvaluationMultidisciplinary::route('/{record}/detailed-evaluation/multidisciplinary/edit'),
+            'edit_detailed_evaluation_results' => EditCaseDetailedEvaluationResults::route('/{record}/detailed-evaluation/results/edit'),
             'create_intervention_plan' => CreateCaseInterventionPlan::route('/{record}/intervention-plan/create'),
             'view_intervention_plan' => ViewCaseInterventionPlan::route('/{record}/intervention-plan'),
             'view_intervention_service' => ViewCaseInterventionService::route('/{record}/intervention-plan/services/{interventionService}'),
