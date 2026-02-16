@@ -7,14 +7,18 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation;
 use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Enums\AddressType;
 use App\Enums\Applicant;
+use App\Enums\Occupation;
 use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Forms\Components\CountyCitySelect;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryPartner;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
@@ -22,8 +26,10 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Components\Wizard\Step;
 use Illuminate\Contracts\Support\Htmlable;
 
@@ -34,6 +40,13 @@ class CreateCaseDetailedEvaluation extends EditRecord
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;
+
+    /**
+     * Partner address data captured before save (form state is cleared of these after save).
+     *
+     * @var array{legal_residence?: array, effective_residence?: array, same_as_legal_residence?: bool}|null
+     */
+    protected ?array $pendingPartnerAddressData = null;
 
     public function getTitle(): string|Htmlable
     {
@@ -85,13 +98,166 @@ class CreateCaseDetailedEvaluation extends EditRecord
         ];
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $record = $this->getRecord();
+        if (! $record instanceof Beneficiary) {
+            return $data;
+        }
+
+        $partner = $record->partner;
+        if (! $partner) {
+            return $data;
+        }
+
+        $partner->loadMissing(['legal_residence', 'effective_residence']);
+        $partnerData = $data['partner'] ?? [];
+
+        if ($partner->legal_residence) {
+            $partnerData['legal_residence'] = array_merge(
+                $partnerData['legal_residence'] ?? [],
+                $partner->legal_residence->only(['county_id', 'city_id', 'address'])
+            );
+        }
+        if ($partner->effective_residence) {
+            $partnerData['effective_residence'] = array_merge(
+                $partnerData['effective_residence'] ?? [],
+                $partner->effective_residence->only(['county_id', 'city_id', 'address'])
+            );
+        }
+
+        $data['partner'] = $partnerData;
+
+        return $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $partnerData = $data['partner'] ?? [];
+
+        $rawState = method_exists($this->form, 'getRawState') ? $this->form->getRawState() : (array) $this->data;
+        $partnerFromState = $data['partner'] ?? $rawState['partner'] ?? [];
+        $partnerFromLivewire = $rawState['partner'] ?? $this->data['partner'] ?? [];
+        $legal = $partnerFromState['legal_residence'] ?? $partnerFromLivewire['legal_residence'] ?? [];
+        $effective = $partnerFromState['effective_residence'] ?? $partnerFromLivewire['effective_residence'] ?? [];
+        $this->pendingPartnerAddressData = [
+            'legal_residence' => is_array($legal) ? $legal : [],
+            'effective_residence' => is_array($effective) ? $effective : [],
+            'same_as_legal_residence' => (bool) ($partnerFromState['same_as_legal_residence'] ?? $partnerFromLivewire['same_as_legal_residence'] ?? false),
+        ];
+
+        unset($partnerData['legal_residence'], $partnerData['effective_residence']);
+        $data['partner'] = $partnerData;
+
+        return $data;
+    }
+
     public function afterSave(): void
     {
-        $partnerRecord = $this->getRecord()->partner;
+        $record = $this->getRecord();
+        if (! $record instanceof Beneficiary) {
+            return;
+        }
+
+        $partnerRecord = $record->partner;
         if ($partnerRecord && $partnerRecord->same_as_legal_residence) {
             $partnerRecord->loadMissing(['legal_residence', 'effective_residence']);
             BeneficiaryPartner::copyLegalResidenceToEffectiveResidence($partnerRecord);
         }
+
+        $this->savePartnerAddressesFromFormState();
+    }
+
+    private function savePartnerAddressesFromFormState(): void
+    {
+        $record = $this->getRecord();
+        if (! $record instanceof Beneficiary) {
+            return;
+        }
+
+        $partner = $record->partner;
+        if (! $partner) {
+            return;
+        }
+
+        $partnerState = $this->pendingPartnerAddressData ?? [];
+        $this->pendingPartnerAddressData = null;
+
+        $legalData = $partnerState['legal_residence'] ?? [];
+        $effectiveData = $partnerState['effective_residence'] ?? [];
+        $sameAsLegal = (bool) ($partnerState['same_as_legal_residence'] ?? false);
+
+        if ($this->hasPartnerAddressData($legalData)) {
+            $attrs = array_merge(
+                $this->buildPartnerAddressAttributes($legalData, AddressType::LEGAL_RESIDENCE),
+                [
+                    'address_type' => AddressType::LEGAL_RESIDENCE,
+                    'addressable_id' => $partner->getKey(),
+                    'addressable_type' => $partner->getMorphClass(),
+                ]
+            );
+            $partner->legal_residence()->updateOrCreate(
+                ['addressable_id' => $partner->getKey(), 'addressable_type' => $partner->getMorphClass()],
+                $attrs
+            );
+        } else {
+            $partner->legal_residence?->delete();
+        }
+
+        $effectivePayload = $sameAsLegal ? $legalData : $effectiveData;
+        if ($this->hasPartnerAddressData($effectivePayload)) {
+            $attrs = array_merge(
+                $this->buildPartnerAddressAttributes($effectivePayload, AddressType::EFFECTIVE_RESIDENCE),
+                [
+                    'address_type' => AddressType::EFFECTIVE_RESIDENCE,
+                    'addressable_id' => $partner->getKey(),
+                    'addressable_type' => $partner->getMorphClass(),
+                ]
+            );
+            $partner->effective_residence()->updateOrCreate(
+                ['addressable_id' => $partner->getKey(), 'addressable_type' => $partner->getMorphClass()],
+                $attrs
+            );
+        } else {
+            $partner->effective_residence?->delete();
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function hasPartnerAddressData(array $data): bool
+    {
+        $countyId = $data['county_id'] ?? null;
+        $cityId = $data['city_id'] ?? null;
+        $address = $data['address'] ?? null;
+
+        return $countyId !== null || $cityId !== null || filled($address);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function buildPartnerAddressAttributes(array $data, AddressType $type): array
+    {
+        $attrs = [
+            'country_id' => $data['country_id'] ?? null,
+            'county_id' => $data['county_id'] ?? null,
+            'city_id' => $data['city_id'] ?? null,
+            'address' => $data['address'] ?? null,
+            'environment' => $data['environment'] ?? null,
+        ];
+
+        return array_filter($attrs, fn ($v) => $v !== null && $v !== '');
     }
 
     /**
@@ -106,7 +272,6 @@ class CreateCaseDetailedEvaluation extends EditRecord
                     Repeater::make('detailedEvaluationSpecialists')
                         ->relationship('detailedEvaluationSpecialists')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
-                        ->minItems(3)
                         ->addActionLabel(__('beneficiary.action.add_row'))
                         ->deletable()
                         ->columns(4)
@@ -163,10 +328,96 @@ class CreateCaseDetailedEvaluation extends EditRecord
                 ->relationship('partner')
                 ->maxWidth('3xl')
                 ->schema([
-                    \Filament\Forms\Components\Textarea::make('observations')
+                    Grid::make(2)
+                        ->schema([
+                            TextInput::make('last_name')
+                                ->label(__('field.last_name'))
+                                ->placeholder(__('beneficiary.placeholder.partner_last_name'))
+                                ->maxLength(50),
+                            TextInput::make('first_name')
+                                ->label(__('field.first_name'))
+                                ->placeholder(__('beneficiary.placeholder.partner_first_name'))
+                                ->maxLength(50),
+                            TextInput::make('age')
+                                ->label(__('field.age'))
+                                ->placeholder(__('beneficiary.placeholder.partner_age'))
+                                ->numeric()
+                                ->minValue(0)
+                                ->maxValue(99)
+                                ->validationAttribute(__('field.age')),
+                            Select::make('occupation')
+                                ->label(__('field.occupation'))
+                                ->placeholder(__('beneficiary.placeholder.occupation'))
+                                ->options(Occupation::options())
+                                ->enum(Occupation::class),
+                        ]),
+                    Grid::make()
+                        ->schema([
+                            ...CountyCitySelect::make()
+                                ->countyField('legal_residence.county_id')
+                                ->cityField('legal_residence.city_id')
+                                ->countyLabel(__('field.legal_residence_county'))
+                                ->cityLabel(__('field.legal_residence_city'))
+                                ->countyPlaceholder(__('placeholder.county'))
+                                ->cityPlaceholder(__('placeholder.city'))
+                                ->required(false)
+                                ->countyAfterStateUpdated(function (Set $set, Get $get): void {
+                                    if ($get('same_as_legal_residence')) {
+                                        $set('effective_residence.county_id', $get('legal_residence.county_id'));
+                                        $set('effective_residence.city_id', null);
+                                    }
+                                })
+                                ->cityAfterStateUpdated(function (Set $set, Get $get, $state): void {
+                                    if ($get('same_as_legal_residence')) {
+                                        $set('effective_residence.city_id', $state);
+                                    }
+                                })
+                                ->schema(),
+                            TextInput::make('legal_residence.address')
+                                ->label(__('field.legal_residence_address'))
+                                ->placeholder(__('placeholder.address'))
+                                ->maxLength(50),
+                        ]),
+                    Checkbox::make('same_as_legal_residence')
+                        ->label(__('field.same_as_legal_residence'))
+                        ->live()
+                        ->afterStateUpdated(function (bool $state, Set $set, Get $get): void {
+                            if (! $state) {
+                                $set('effective_residence.county_id', null);
+                                $set('effective_residence.city_id', null);
+                                $set('effective_residence.address', null);
+                            }
+                            if ($state) {
+                                $set('effective_residence.county_id', $get('legal_residence.county_id'));
+                                $set('effective_residence.city_id', $get('legal_residence.city_id'));
+                                $set('effective_residence.address', $get('legal_residence.address'));
+                            }
+                        })
+                        ->columnSpanFull(),
+                    Grid::make()
+                        ->schema([
+                            ...CountyCitySelect::make()
+                                ->countyField('effective_residence.county_id')
+                                ->cityField('effective_residence.city_id')
+                                ->countyLabel(__('field.effective_residence_county'))
+                                ->cityLabel(__('field.effective_residence_city'))
+                                ->countyPlaceholder(__('placeholder.county'))
+                                ->cityPlaceholder(__('placeholder.city'))
+                                ->required(false)
+                                ->countyDisabled(fn (Get $get): bool => (bool) $get('same_as_legal_residence'))
+                                ->cityDisabled(fn (Get $get): bool => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
+                                ->schema(),
+                            TextInput::make('effective_residence.address')
+                                ->label(__('field.effective_residence_address'))
+                                ->placeholder(__('placeholder.address'))
+                                ->maxLength(50)
+                                ->disabled(fn (Get $get): bool => (bool) $get('same_as_legal_residence')),
+                        ]),
+                    Textarea::make('observations')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.observations'))
                         ->placeholder(__('beneficiary.placeholder.partner_relevant_observations'))
-                        ->maxLength(500),
+                        ->maxLength(500)
+                        ->columnSpanFull(),
                 ]),
         ];
     }

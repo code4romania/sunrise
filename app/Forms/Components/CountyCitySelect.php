@@ -41,6 +41,8 @@ class CountyCitySelect
     /** @var Closure(Get): bool|null */
     protected ?Closure $cityDisabled = null;
 
+    protected string $statePathPrefix = '';
+
     public static function make(): static
     {
         return new static;
@@ -103,7 +105,7 @@ class CountyCitySelect
     }
 
     /**
-     * @param Closure(Set, Get): void $callback
+     * @param  Closure(Set, Get): void  $callback
      */
     public function countyAfterStateUpdated(Closure $callback): static
     {
@@ -113,7 +115,7 @@ class CountyCitySelect
     }
 
     /**
-     * @param Closure(Set, Get, mixed): void $callback
+     * @param  Closure(Set, Get, mixed): void  $callback
      */
     public function cityAfterStateUpdated(Closure $callback): static
     {
@@ -123,7 +125,7 @@ class CountyCitySelect
     }
 
     /**
-     * @param Closure(Get): bool $callback
+     * @param  Closure(Get): bool  $callback
      */
     public function countyDisabled(Closure $callback): static
     {
@@ -133,7 +135,7 @@ class CountyCitySelect
     }
 
     /**
-     * @param Closure(Get): bool $callback
+     * @param  Closure(Get): bool  $callback
      */
     public function cityDisabled(Closure $callback): static
     {
@@ -143,12 +145,25 @@ class CountyCitySelect
     }
 
     /**
+     * Prefix for Get/Set state paths when component is inside a nested relationship (e.g. 'partner.').
+     */
+    public function statePathPrefix(string $prefix): static
+    {
+        $this->statePathPrefix = $prefix;
+
+        return $this;
+    }
+
+    /**
      * @return array<int, Select>
      */
     public function schema(): array
     {
+        $prefix = $this->statePathPrefix;
         $countyField = $this->countyField;
         $cityField = $this->cityField;
+        $countyFieldPath = $prefix.$countyField;
+        $cityFieldPath = $prefix.$cityField;
         $countyPlaceholder = $this->countyPlaceholder ?? __('placeholder.county');
         $cityPlaceholder = $this->cityPlaceholder ?? __('placeholder.city');
         $countyAfterStateUpdated = $this->countyAfterStateUpdated;
@@ -163,8 +178,8 @@ class CountyCitySelect
                 ->pluck('name', 'id')
                 ->toArray())
             ->live()
-            ->afterStateUpdated(function (Set $set, Get $get) use ($cityField, $countyAfterStateUpdated): void {
-                $set($cityField, null);
+            ->afterStateUpdated(function (Set $set, Get $get) use ($prefix, $cityField, $cityFieldPath, $countyAfterStateUpdated): void {
+                $set($prefix ? $cityFieldPath : $cityField, null);
                 if ($countyAfterStateUpdated instanceof Closure) {
                     $countyAfterStateUpdated($set, $get);
                 }
@@ -195,8 +210,8 @@ class CountyCitySelect
         $citySelect = Select::make($this->cityField)
             ->label($this->cityLabel)
             ->placeholder($cityPlaceholder)
-            ->options(function (Get $get) use ($countyField): array {
-                $countyId = $get($countyField);
+            ->options(function (Get $get) use ($countyFieldPath): array {
+                $countyId = $get($countyFieldPath);
                 if (! $countyId) {
                     return [];
                 }
@@ -210,14 +225,15 @@ class CountyCitySelect
             ->searchable()
             ->getSearchResultsUsing(
                 fn (string $search, Get $get) => City::search($search)
-                    ->where('county_id', $get($countyField))
+                    ->where('county_id', $get($countyFieldPath))
                     ->get()
                     ->pluck('name', 'id')
             )
+            ->live()
             ->disabled(
                 $cityDisabled instanceof Closure
                     ? $cityDisabled
-                    : fn (Get $get) => ! $get($countyField)
+                    : fn (Get $get) => ! $get($countyFieldPath)
             );
 
         if ($cityAfterStateUpdated instanceof Closure) {
