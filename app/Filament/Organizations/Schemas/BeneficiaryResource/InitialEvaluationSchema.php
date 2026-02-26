@@ -352,7 +352,7 @@ class InitialEvaluationSchema
                     TextEntry::make('requested_services')
                         ->label(__('beneficiary.section.initial_evaluation.heading.types_of_requested_services'))
                         ->formatStateUsing(fn ($state) => filled($state)
-                            ? collect($state)->map(fn ($v) => $v->label())->implode(', ')
+                            ? collect($state)->map(fn ($v) => $v)->implode(', ')
                             : null),
 
                     TextEntry::make('other_services_description')
