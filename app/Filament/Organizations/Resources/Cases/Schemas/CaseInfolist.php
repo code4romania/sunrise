@@ -281,7 +281,7 @@ class CaseInfolist
                                         if ($state === null || (is_countable($state) && count($state) === 0)) {
                                             return new HtmlString('<span class="text-gray-500">—</span>');
                                         }
-                                        $pills = collect($state)->map(fn ($service) => '<span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">'.e($service->getLabel()).'</span>')->implode('');
+                                        $pills = collect($state)->map(fn ($service) => '<span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">'.e($service).'</span>')->implode('');
 
                                         return new HtmlString('<div class="flex flex-wrap gap-2">'.$pills.'</div>');
                                     })
@@ -438,20 +438,30 @@ class CaseInfolist
                                         TextEntry::make('user.full_name')
                                             ->label(__('beneficiary.section.specialists.labels.name'))
                                             ->formatStateUsing(function (mixed $state, TextEntry $entry): string {
-                                                $specialist = $entry->getContainer()?->getRecord();
+                                                $specialist = $entry->getRecord();
 
                                                 return $specialist instanceof \App\Models\Specialist && $specialist->user !== null
                                                     ? $specialist->user->full_name
                                                     : '—';
                                             }),
-                                        TextEntry::make('roleForDisplay.name')
+                                        TextEntry::make('role_display')
                                             ->label(__('beneficiary.section.specialists.labels.roles'))
-                                            ->formatStateUsing(function (mixed $state, TextEntry $entry): string {
-                                                $specialist = $entry->getContainer()?->getRecord();
+                                            ->state(function (TextEntry $entry): string {
+                                                $specialist = $entry->getRecord();
 
-                                                return $specialist instanceof \App\Models\Specialist && $specialist->roleForDisplay !== null
-                                                    ? $specialist->roleForDisplay->name
-                                                    : '—';
+                                                if (! $specialist instanceof \App\Models\Specialist) {
+                                                    return '—';
+                                                }
+                                                if ($specialist->relationLoaded('roleForDisplay') && $specialist->roleForDisplay !== null) {
+                                                    return $specialist->roleForDisplay->name;
+                                                }
+                                                if ($specialist->role_id !== null) {
+                                                    $specialist->loadMissing('roleForDisplay');
+
+                                                    return $specialist->roleForDisplay?->name ?? '—';
+                                                }
+
+                                                return '—';
                                             }),
                                     ])
                                     ->columns(2)

@@ -42,7 +42,7 @@ class Specialist extends Model
      */
     public function roleForDisplay(): BelongsTo
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
     public function specialistable(): MorphTo
