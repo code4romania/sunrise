@@ -55,7 +55,28 @@ class EditCaseMonthlyPlanDetails extends EditRecord
 
     protected function authorizeAccess(): void
     {
-        abort_unless(CaseResource::canEdit($this->beneficiary ?? $this->getRecord()), 403);
+        abort_unless(CaseResource::canEdit($this->resolveCaseBeneficiary()), 403);
+    }
+
+    protected function resolveCaseBeneficiary(): Beneficiary
+    {
+        if ($this->beneficiary instanceof Beneficiary) {
+            return $this->beneficiary;
+        }
+
+        $monthlyPlan = $this->getRecord();
+        if (! $monthlyPlan instanceof MonthlyPlan) {
+            abort(404);
+        }
+
+        $monthlyPlan->loadMissing(['beneficiary', 'interventionPlan.beneficiary']);
+
+        $beneficiary = $monthlyPlan->beneficiary ?? $monthlyPlan->interventionPlan?->beneficiary;
+        if (! $beneficiary instanceof Beneficiary) {
+            abort(404);
+        }
+
+        return $beneficiary;
     }
 
     public function getTitle(): string|Htmlable
@@ -65,11 +86,11 @@ class EditCaseMonthlyPlanDetails extends EditRecord
 
     public function getBreadcrumbs(): array
     {
-        $record = $this->beneficiary ?? $this->getRecord();
+        $record = $this->resolveCaseBeneficiary();
 
         return [
             CaseResource::getUrl('index') => __('case.view.breadcrumb_all'),
-            CaseResource::getUrl('view', ['record' => $record]) => $record instanceof Beneficiary ? $record->getBreadcrumb() : '',
+            CaseResource::getUrl('view', ['record' => $record]) => $record->getBreadcrumb(),
             CaseResource::getUrl('view_intervention_plan', ['record' => $record]) => __('intervention_plan.headings.view_page'),
             CaseResource::getUrl('view_monthly_plan', ['record' => $record, 'monthlyPlan' => $this->getRecord()]) => __('intervention_plan.headings.monthly_plan'),
             '' => __('intervention_plan.headings.edit_monthly_plan_title'),
@@ -81,7 +102,7 @@ class EditCaseMonthlyPlanDetails extends EditRecord
         return [
             BackAction::make()
                 ->url(CaseResource::getUrl('view_monthly_plan', [
-                    'record' => $this->beneficiary,
+                    'record' => $this->resolveCaseBeneficiary(),
                     'monthlyPlan' => $this->getRecord(),
                     'tab' => '-'.str(\Illuminate\Support\Str::slug(__('intervention_plan.headings.monthly_plan_details')))->append('-tab')->toString(),
                 ])),
@@ -91,7 +112,7 @@ class EditCaseMonthlyPlanDetails extends EditRecord
     protected function getRedirectUrl(): ?string
     {
         return CaseResource::getUrl('view_monthly_plan', [
-            'record' => $this->beneficiary,
+            'record' => $this->resolveCaseBeneficiary(),
             'monthlyPlan' => $this->getRecord(),
             'tab' => '-'.str(\Illuminate\Support\Str::slug(__('intervention_plan.headings.monthly_plan_details')))->append('-tab')->toString(),
         ]);
@@ -143,13 +164,13 @@ class EditCaseMonthlyPlanDetails extends EditRecord
                         ->label(__('intervention_plan.labels.monthly_plan_end_date'))
                         ->required(),
                     Select::make('case_manager_user_id')
-                        ->label(__('intervention_plan.headings.case_manager'))
+                        ->label(__('intervention_plan.labels.case_manager'))
                         ->options(User::getTenantOrganizationUsers()->all())
                         ->placeholder(__('intervention_plan.placeholders.specialist')),
                     Select::make('specialists')
-                        ->label(__('intervention_plan.labels.specialists'))
+                        ->label(__('intervention_plan.labels.case_team'))
                         ->multiple()
-                        ->options(fn (): Collection => $this->beneficiary?->specialistsTeam()->with('user', 'roleForDisplay')->get()->pluck('name_role', 'id') ?? collect())
+                        ->options(fn (): Collection => $this->resolveCaseBeneficiary()->specialistsTeam()->with('user', 'roleForDisplay')->get()->pluck('name_role', 'id'))
                         ->placeholder(__('intervention_plan.placeholders.specialists')),
                 ]),
         ]);

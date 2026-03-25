@@ -482,7 +482,7 @@ class ViewCaseInterventionService extends ViewRecord
      */
     private static function formatDate(mixed $state): string
     {
-        if ($state === null || $state === '') {
+        if ($state === null || $state === '' || $state === '-') {
             return '—';
         }
 

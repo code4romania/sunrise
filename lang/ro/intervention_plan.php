@@ -16,12 +16,17 @@ return [
         'service_type' => 'Tipul serviciului',
         'responsible_institution' => 'Instituția responsabilă',
         'responsible_specialist' => 'Specialist responsabil',
+        'case_manager' => 'Manager de caz',
+        'case_team' => 'Echipă caz',
+        'service_objective' => 'Obiective specifice serviciu',
+        'service_details_label' => 'Detalii acordare serviciu',
         'start_date' => 'Dată începere',
         'start_date_interval' => 'Început perioada de acordare',
         'end_date_interval' => 'Sfârșit perioada de acordare',
         'end_date' => 'Dată sfârșit',
         'date_interval' => 'Perioada de acordare',
         'objections' => 'Obiective specifice',
+        'objectives_short' => 'Obiective',
         'intervention' => 'Intervenție',
         'intervention_type' => 'Tip intervenție',
         'expected_results' => 'Rezultate așteptate',
@@ -170,6 +175,9 @@ return [
         'case_manager' => 'Manager caz',
         'specialists' => 'Echipă caz',
         'responsible_person' => 'Persoana responsabilă',
+        'responsible_persons' => 'Persoane responsabile',
+        'monthly_plan_service_block_title' => 'Serviciul :name',
+        'observations_column' => 'Observații',
         'service_objective' => 'Obiective specifice serviciului',
         'monthly_plan_service_interval_start' => 'Început perioadă de acordare',
         'monthly_plan_service_interval_end' => 'Final perioadă de acordare',
@@ -373,5 +381,14 @@ return [
 
         ],
 
+    ],
+
+    'validation' => [
+        'service_end_date_after_start' => 'Finalul perioadei de acordare nu poate fi definit înainte de data de început a perioadei de acordare.',
+    ],
+
+    'helpers' => [
+        'select_service_first_for_interventions' => 'Selectați mai întâi tipul serviciului ca să apară lista de intervenții pentru acest serviciu.',
+        'no_active_interventions_for_service' => 'Serviciul ales nu are intervenții active în nomenclator (Superadmin). Adăugați sau activați intervențiile pentru acel serviciu.',
     ],
 ];

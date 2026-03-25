@@ -6,20 +6,22 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Beneficiary;
 use App\Models\MonthlyPlan;
 use App\Models\Specialist;
 use Carbon\Carbon;
 use Filament\Actions\DeleteAction;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Collection;
 
 class ViewCaseMonthlyPlan extends ViewRecord
 {
@@ -108,22 +110,23 @@ class ViewCaseMonthlyPlan extends ViewRecord
     {
         return $schema->components([
             Tabs::make()
+                ->columnSpanFull()
                 ->persistTabInQueryString()
                 ->schema([
-                    Tab::make(__('intervention_plan.headings.plan_intervention_details'))
+                    Tab::make(__('intervention_plan.headings.monthly_plan_details'))
                         ->schema([
                             Section::make()
                                 ->maxWidth('3xl')
                                 ->columns(2)
                                 ->schema([
                                     SectionHeader::make('monthly_plan_details')
-                                        ->state(__('intervention_plan.headings.plan_intervention_details'))
-                                        ->link(
-                                            CaseResource::getUrl('edit_monthly_plan_details', [
-                                                'record' => $this->getRecord(),
-                                                'monthlyPlan' => $this->monthlyPlan,
-                                            ]),
-                                            __('general.action.edit')
+                                        ->state(__('intervention_plan.headings.monthly_plan_details'))
+                                        ->action(
+                                            EditAction::make()
+                                                ->url(CaseResource::getUrl('edit_monthly_plan_details', [
+                                                    'record' => $this->getRecord(),
+                                                    'monthlyPlan' => $this->monthlyPlan,
+                                                ]))
                                         ),
 
                                     TextEntry::make('beneficiary.full_name')
@@ -138,15 +141,15 @@ class ViewCaseMonthlyPlan extends ViewRecord
 
                                     TextEntry::make('interventionPlan.admit_date_in_center')
                                         ->label(__('intervention_plan.labels.admit_date_in_center'))
-                                        ->date('d.m.Y'),
+                                        ->formatStateUsing(fn (mixed $state): string => self::formatDateState($state)),
 
                                     TextEntry::make('interventionPlan.plan_date')
                                         ->label(__('intervention_plan.labels.plan_date'))
-                                        ->date('d.m.Y'),
+                                        ->formatStateUsing(fn (mixed $state): string => self::formatDateState($state)),
 
                                     TextEntry::make('interventionPlan.last_revise_date')
                                         ->label(__('intervention_plan.labels.last_revise_date'))
-                                        ->date('d.m.Y'),
+                                        ->formatStateUsing(fn (mixed $state): string => self::formatDateState($state)),
 
                                     TextEntry::make('interval')
                                         ->label(__('intervention_plan.labels.interval')),
@@ -154,106 +157,138 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                     TextEntry::make('caseManager.full_name')
                                         ->label(__('intervention_plan.labels.case_manager')),
 
-                                    TextEntry::make('specialists')
+                                    TextEntry::make('case_team_display')
                                         ->label(__('intervention_plan.labels.specialists'))
-                                        ->formatStateUsing(function ($state): string {
-                                            if (blank($state) || ! is_iterable($state)) {
-                                                return '—';
-                                            }
-                                            $ids = is_array($state) ? $state : ($state instanceof \Illuminate\Support\Collection ? $state->all() : iterator_to_array($state));
-
-                                            return Specialist::query()
-                                                ->whereIn('id', $ids)
-                                                ->with(['user', 'roleForDisplay'])
-                                                ->get()
-                                                ->pluck('name_role')
-                                                ->implode(', ');
-                                        }),
+                                        ->state(fn (MonthlyPlan $record): string => self::formatMonthlyPlanCaseTeam($record)),
                                 ]),
                         ]),
 
-                    Tab::make(__('intervention_plan.headings.social_services'))
+                    Tab::make(__('intervention_plan.headings.services_and_interventions'))
                         ->schema([
                             Section::make()
+                                ->columnSpanFull()
                                 ->maxWidth('3xl')
                                 ->schema([
                                     SectionHeader::make('services_header')
-                                        ->state(__('intervention_plan.headings.social_services')),
+                                        ->state(__('intervention_plan.headings.services_and_interventions'))
+                                        ->action(
+                                            EditAction::make()
+                                                ->url(CaseResource::getUrl('edit_monthly_plan_services', [
+                                                    'record' => $this->getRecord(),
+                                                    'monthlyPlan' => $this->monthlyPlan,
+                                                ]))
+                                        ),
 
-                                    RepeatableEntry::make('monthlyPlanServices')
-                                        ->hiddenLabel()
-                                        ->columns(2)
-                                        ->columnSpanFull()
-                                        ->schema([
-                                            TextEntry::make('service.name')
-                                                ->label(__('intervention_plan.labels.service_type')),
-
-                                            TextEntry::make('institution')
-                                                ->label(__('intervention_plan.labels.responsible_institution')),
-
-                                            TextEntry::make('responsible_person')
-                                                ->label(__('intervention_plan.labels.responsible_person')),
-
-                                            TextEntry::make('period_of_provision')
-                                                ->label(__('intervention_plan.labels.period_of_provision'))
-                                                ->state(function ($record): string {
-                                                    if (! $record) {
-                                                        return '—';
-                                                    }
-                                                    $start = $record->start_date;
-                                                    $end = $record->end_date;
-                                                    if (! $start && ! $end) {
-                                                        return '—';
-                                                    }
-                                                    $fmt = fn ($d) => $d ? Carbon::parse($d)->format('d.m.Y') : '—';
-
-                                                    return trim(sprintf('%s - %s', $fmt($start), $fmt($end)), ' -');
-                                                }),
-
-                                            TextEntry::make('objective')
-                                                ->label(__('intervention_plan.labels.specific_objectives')),
-
-                                            RepeatableEntry::make('monthlyPlanInterventions')
-                                                ->columnSpanFull()
-                                                ->hiddenLabel()
-                                                ->schema([
-                                                    TextEntry::make('serviceIntervention.name')
-                                                        ->label(__('intervention_plan.headings.interventions'))
-                                                        ->hiddenLabel(),
-
-                                                    TextEntry::make('objections')
-                                                        ->label(__('intervention_plan.labels.specific_objectives'))
-                                                        ->hiddenLabel(),
-
-                                                    TextEntry::make('expected_results')
-                                                        ->label(__('intervention_plan.labels.expected_results'))
-                                                        ->hiddenLabel(),
-
-                                                    TextEntry::make('procedure')
-                                                        ->label(__('intervention_plan.labels.procedure'))
-                                                        ->hiddenLabel(),
-
-                                                    TextEntry::make('indicators')
-                                                        ->label(__('intervention_plan.labels.indicators'))
-                                                        ->hiddenLabel(),
-
-                                                    TextEntry::make('achievement_degree')
-                                                        ->label(__('intervention_plan.labels.achievement_degree'))
-                                                        ->hiddenLabel(),
-
-                                                    TextEntry::make('observations')
-                                                        ->label(__('intervention_plan.labels.observations'))
-                                                        ->hiddenLabel(),
-                                                ]),
-
-                                            TextEntry::make('service_details')
-                                                ->label(__('intervention_plan.labels.intervention_details'))
-                                                ->columnSpanFull(),
-                                        ]),
+                                    View::make('filament.organizations.components.monthly-plan-services-and-interventions')
+                                        ->columnSpanFull(),
                                 ]),
                         ]),
                 ]),
         ]);
+    }
+
+    /**
+     * @return list<int>
+     */
+    private static function monthlyPlanSpecialistIds(MonthlyPlan $record): array
+    {
+        $fromCast = $record->specialists;
+        if ($fromCast instanceof Collection && $fromCast->isNotEmpty()) {
+            return self::normalizeSpecialistIdList($fromCast->all());
+        }
+
+        $raw = $record->getRawOriginal('specialists');
+        if ($raw === null || $raw === '') {
+            return [];
+        }
+
+        if (! is_string($raw)) {
+            return [];
+        }
+
+        $decoded = json_decode($raw, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return self::normalizeSpecialistIdList($decoded);
+        }
+
+        return self::normalizeSpecialistIdList(array_map('trim', explode(',', $raw)));
+    }
+
+    /**
+     * @param  array<mixed>  $values
+     * @return list<int>
+     */
+    private static function normalizeSpecialistIdList(array $values): array
+    {
+        $ids = [];
+        foreach ($values as $value) {
+            if ($value === null || $value === '') {
+                continue;
+            }
+            $ids[] = (int) $value;
+        }
+
+        /** @var list<int> $unique */
+        $unique = array_values(array_unique(array_filter($ids, static fn (int $id): bool => $id > 0)));
+
+        return $unique;
+    }
+
+    private static function formatMonthlyPlanCaseTeam(MonthlyPlan $record): string
+    {
+        $ids = self::monthlyPlanSpecialistIds($record);
+        if ($ids === []) {
+            return '—';
+        }
+
+        $specialists = Specialist::query()
+            ->whereIn('id', $ids)
+            ->with(['user', 'roleForDisplay'])
+            ->get();
+
+        if ($specialists->isEmpty()) {
+            return '—';
+        }
+
+        $labels = collect($ids)
+            ->map(static function (int $id) use ($specialists): ?string {
+                $specialist = $specialists->firstWhere('id', $id);
+
+                return $specialist?->name_role;
+            })
+            ->filter()
+            ->values()
+            ->implode(', ');
+
+        return $labels !== '' ? $labels : '—';
+    }
+
+    private static function formatDateState(mixed $state): string
+    {
+        if ($state === null || $state === '' || $state === '-') {
+            return '—';
+        }
+
+        try {
+            return Carbon::parse($state)->translatedFormat('d.m.Y');
+        } catch (\Throwable) {
+            return '—';
+        }
+    }
+
+    private static function parseableDate(mixed $value): bool
+    {
+        if ($value === null || $value === '' || $value === '-') {
+            return false;
+        }
+
+        try {
+            Carbon::parse($value);
+
+            return true;
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     private static function formatAddress(Beneficiary $beneficiary): string

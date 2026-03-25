@@ -89,9 +89,10 @@ class CreateCaseMonthlyPlan extends CreateRecord
         $beneficiary = $this->getBeneficiary();
         $this->callHook('beforeFill');
         $this->form->fill([
-            'start_date' => Carbon::now()->startOfMonth()->format('Y-m-d'),
-            'end_date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
+            'start_date' => Carbon::today()->format('Y-m-d'),
+            'end_date' => Carbon::today()->addMonth()->format('Y-m-d'),
             'case_manager_user_id' => $beneficiary?->managerTeam?->first()?->user_id ?? auth()->id(),
+            'specialists' => $beneficiary?->specialistsTeam()->pluck('id')->values()->all() ?? [],
         ]);
         $this->callHook('afterFill');
     }
@@ -144,11 +145,12 @@ class CreateCaseMonthlyPlan extends CreateRecord
                         ->label(__('intervention_plan.labels.monthly_plan_end_date'))
                         ->required(),
                     Select::make('case_manager_user_id')
-                        ->label(__('intervention_plan.headings.case_manager'))
+                        ->label(__('intervention_plan.labels.case_manager'))
                         ->options(User::getTenantOrganizationUsers()->all())
+                        ->required()
                         ->placeholder(__('intervention_plan.placeholders.specialist')),
                     Select::make('specialists')
-                        ->label(__('intervention_plan.labels.specialists'))
+                        ->label(__('intervention_plan.labels.case_team'))
                         ->multiple()
                         ->options(fn (): Collection => $this->getBeneficiary()?->specialistsTeam()->with('user', 'roleForDisplay')->get()->pluck('name_role', 'id') ?? collect())
                         ->placeholder(__('intervention_plan.placeholders.specialists')),
@@ -172,11 +174,14 @@ class CreateCaseMonthlyPlan extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        $beneficiary = $this->getBeneficiary();
+        $record = $this->getRecord();
+        $beneficiary = $this->getBeneficiary()
+            ?? $record->beneficiary
+            ?? $record->interventionPlan?->beneficiary;
 
         return CaseResource::getUrl('view_monthly_plan', [
-            'record' => $beneficiary ?? $this->getRecord()->interventionPlan?->beneficiary,
-            'monthlyPlan' => $this->getRecord(),
+            'record' => $beneficiary,
+            'monthlyPlan' => $record,
         ]);
     }
 

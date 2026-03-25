@@ -46,7 +46,7 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
                     ->label('')
                     ->state(__('intervention_plan.actions.view_details'))
                     ->url(fn (MonthlyPlan $monthlyPlan): string => CaseResource::getUrl('view_monthly_plan', [
-                        'record' => $this->record,
+                        'record' => $monthlyPlan->beneficiary ?? $this->record,
                         'monthlyPlan' => $monthlyPlan,
                     ])),
             ])
@@ -77,7 +77,7 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
             ])
             ->recordUrl(
                 fn (MonthlyPlan $monthlyPlan): string => CaseResource::getUrl('view_monthly_plan', [
-                    'record' => $this->record,
+                    'record' => $monthlyPlan->beneficiary ?? $this->record,
                     'monthlyPlan' => $monthlyPlan,
                 ])
             )

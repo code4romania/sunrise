@@ -41,7 +41,7 @@ class MonthlyPlanService extends Model
 
     public function monthlyPlanInterventions(): HasMany
     {
-        return $this->hasMany(MonthlyPlanInterventions::class);
+        return $this->hasMany(MonthlyPlanInterventions::class)->orderBy('id');
     }
 
     public function beneficiary(): BelongsToThrough

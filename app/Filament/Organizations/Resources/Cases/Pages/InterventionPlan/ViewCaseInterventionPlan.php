@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanBenefitsWidget;
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanMonthlyPlansWidget;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanResultsWidget;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanServicesWidget;
 use App\Forms\Components\DatePicker;
@@ -211,6 +212,8 @@ class ViewCaseInterventionPlan extends ViewRecord
                         ->schema($this->getWidgetsSchemaComponents([InterventionPlanBenefitsWidget::class])),
                     Tab::make(__('intervention_plan.headings.results_centralizer'))
                         ->schema($this->getWidgetsSchemaComponents([InterventionPlanResultsWidget::class])),
+                    Tab::make(__('intervention_plan.headings.monthly_plan'))
+                        ->schema($this->getWidgetsSchemaComponents([InterventionPlanMonthlyPlansWidget::class])),
                 ]),
         ]);
     }
