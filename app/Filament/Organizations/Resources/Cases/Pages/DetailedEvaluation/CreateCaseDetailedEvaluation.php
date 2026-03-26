@@ -13,12 +13,12 @@ use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\CountyCitySelect;
 use App\Forms\Components\DatePicker;
+use App\Forms\Components\Repeater;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -129,6 +129,7 @@ class CreateCaseDetailedEvaluation extends EditRecord
                         ->deletable()
                         ->columns(4)
                         ->itemLabel(fn (array $state): ?string => $state['full_name'] ?? null)
+                        ->collapsible(false)
                         ->schema([
                             TextInput::make('full_name')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))
@@ -148,6 +149,7 @@ class CreateCaseDetailedEvaluation extends EditRecord
                         ->columns()
                         ->addActionLabel(__('beneficiary.action.add_meet_row'))
                         ->label(__('beneficiary.section.detailed_evaluation.labels.meetings'))
+                        ->collapsible(false)
                         ->schema([
                             TextInput::make('specialist')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.specialist'))
@@ -369,6 +371,10 @@ class CreateCaseDetailedEvaluation extends EditRecord
                         ->maxLength(1000),
                     Textarea::make('house')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.house'))
+                        ->placeholder(__('beneficiary.placeholder.need_description'))
+                        ->maxLength(1000),
+                    Textarea::make('workplace')
+                        ->label(__('beneficiary.section.detailed_evaluation.labels.workplace'))
                         ->placeholder(__('beneficiary.placeholder.need_description'))
                         ->maxLength(1000),
                 ]),

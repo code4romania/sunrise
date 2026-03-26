@@ -29,8 +29,6 @@ class BeneficiaryDetailsFactory extends Factory
             'family_doctor_contact' => fake()->phoneNumber(),
             'psychiatric_history' => fake()->randomElement(Ternary::values()),
             'psychiatric_history_notes' => fake()->text(100),
-            'criminal_history' => fake()->randomElement(Ternary::values()),
-            'criminal_history_notes' => fake()->text(100),
             'studies' => fake()->randomElement(Studies::values()),
             'occupation' => fake()->randomElement(Occupation::values()),
             'workplace' => fake()->text(100),

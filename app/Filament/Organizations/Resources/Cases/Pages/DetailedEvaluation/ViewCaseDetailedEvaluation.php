@@ -153,6 +153,14 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                                     TextEntry::make('observations'),
                                 ]),
                         ]),
+                    Section::make(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
+                        ->compact()
+                        ->schema([
+                            TextEntry::make('multidisciplinaryEvaluation.reporting_by')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
+                                ->placeholder('—')
+                                ->columnSpanFull(),
+                        ]),
                 ]),
         ];
     }
@@ -303,9 +311,6 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                             EnumEntry::make('applicant')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.applicant'))
                                 ->placeholder('—'),
-                            TextEntry::make('reporting_by')
-                                ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
-                                ->placeholder('—'),
                         ]),
                     Section::make(__('beneficiary.section.detailed_evaluation.heading.beneficiary_needs'))
                         ->compact()
@@ -343,6 +348,9 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                                 ->placeholder('—'),
                             TextEntry::make('house')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.house'))
+                                ->placeholder('—'),
+                            TextEntry::make('workplace')
+                                ->label(__('beneficiary.section.detailed_evaluation.labels.workplace'))
                                 ->placeholder('—'),
                         ]),
                     Section::make(__('beneficiary.section.detailed_evaluation.heading.risk'))

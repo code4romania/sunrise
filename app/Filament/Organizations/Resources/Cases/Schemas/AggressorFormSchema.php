@@ -185,6 +185,49 @@ class AggressorFormSchema
                         ->rule(new MultipleIn(Drug::values()))
                         ->multiple(),
                 ]),
+
+            Group::make()
+                ->columnSpanFull()
+                ->columns(2)
+                ->schema([
+                    Select::make('has_police_reports')
+                        ->label(__('field.has_police_reports'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+                    TextInput::make('police_report_count')
+                        ->label(__('field.police_report_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->visible(fn (Get $get): bool => Ternary::isYes($get('has_police_reports')))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(999),
+                    Select::make('has_medical_reports')
+                        ->label(__('field.has_medical_reports'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+                    TextInput::make('medical_report_count')
+                        ->label(__('field.medical_report_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->visible(fn (Get $get): bool => Ternary::isYes($get('has_medical_reports')))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(999),
+                    TextInput::make('hospitalization_days')
+                        ->label(__('field.hospitalization_days'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(9999),
+                    Textarea::make('hospitalization_observations')
+                        ->label(__('field.hospitalization_observations'))
+                        ->placeholder(__('placeholder.observations'))
+                        ->maxLength(1000)
+                        ->columnSpanFull(),
+                ]),
         ];
     }
 }

@@ -17,11 +17,13 @@ use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
 use App\Models\Beneficiary;
 use App\Rules\ValidCNP;
+use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Database\Query\Builder;
@@ -89,6 +91,19 @@ class BeneficiaryIdentityFormSchema
                 ->nullable()
                 ->rule(new ValidCNP)
                 ->lazy()
+                ->afterStateHydrated(function (?string $state, Set $set, Get $get): void {
+                    if ($state === null || $state === '') {
+                        return;
+                    }
+
+                    if (filled($get('birthdate'))) {
+                        return;
+                    }
+
+                    if (filled($birthdate = (new Cnp($state))->getBirthDateFromCNP('Y-m-d'))) {
+                        $set('birthdate', $birthdate);
+                    }
+                })
                 ->afterStateUpdated(function (?string $state, Set $set) {
                     if ($state === null) {
                         return;
@@ -116,6 +131,22 @@ class BeneficiaryIdentityFormSchema
                         ->label(__('field.birthdate'))
                         ->format('Y-m-d')
                         ->live(),
+
+                    Placeholder::make('beneficiary_age_display')
+                        ->label(__('field.age'))
+                        ->content(function (Get $get): string {
+                            $bd = $get('birthdate');
+                            if ($bd === null || $bd === '') {
+                                return '—';
+                            }
+                            try {
+                                $date = $bd instanceof \Carbon\CarbonInterface ? $bd : Carbon::parse($bd);
+                            } catch (\Throwable) {
+                                return '—';
+                            }
+
+                            return trans_choice('general.age', $date->age);
+                        }),
 
                     TextInput::make('birthplace')
                         ->label(__('field.birthplace'))
@@ -178,51 +209,56 @@ class BeneficiaryIdentityFormSchema
 
                     Spacer::make(),
 
-                    Grid::make()
+                    Section::make(__('field.legal_residence'))
+                        ->compact()
                         ->schema([
-                            ...CountyCitySelect::make()
-                                ->countyField('legal_residence.county_id')
-                                ->cityField('legal_residence.city_id')
-                                ->countyLabel(__('field.county'))
-                                ->cityLabel(__('field.city'))
-                                ->countyPlaceholder(__('placeholder.county'))
-                                ->cityPlaceholder(__('placeholder.city'))
-                                ->required()
-                                ->countyAfterStateUpdated(function (Set $set, Get $get): void {
-                                    if ($get('same_as_legal_residence')) {
-                                        $set('effective_residence.county_id', $get('legal_residence.county_id'));
-                                        $set('effective_residence.city_id', null);
-                                    }
-                                })
-                                ->cityAfterStateUpdated(function (Set $set, Get $get, $state): void {
-                                    if ($get('same_as_legal_residence')) {
-                                        $set('effective_residence.city_id', $state);
-                                    }
-                                })
-                                ->schema(),
+                            Grid::make()
+                                ->schema([
+                                    ...CountyCitySelect::make()
+                                        ->countyField('legal_residence.county_id')
+                                        ->cityField('legal_residence.city_id')
+                                        ->countyLabel(__('field.county'))
+                                        ->cityLabel(__('field.city'))
+                                        ->countyPlaceholder(__('placeholder.county'))
+                                        ->cityPlaceholder(__('placeholder.city'))
+                                        ->required()
+                                        ->countyAfterStateUpdated(function (Set $set, Get $get): void {
+                                            if ($get('same_as_legal_residence')) {
+                                                $set('effective_residence.county_id', $get('legal_residence.county_id'));
+                                                $set('effective_residence.city_id', null);
+                                            }
+                                        })
+                                        ->cityAfterStateUpdated(function (Set $set, Get $get, $state): void {
+                                            if ($get('same_as_legal_residence')) {
+                                                $set('effective_residence.city_id', $state);
+                                            }
+                                        })
+                                        ->schema(),
 
-                            TextInput::make('legal_residence.address')
-                                ->label(__('field.address'))
-                                ->placeholder(__('placeholder.address'))
-                                ->maxLength(50)
-                                ->lazy()
-                                ->afterStateUpdated(function (Set $set, Get $get, $state) {
-                                    if ($get('same_as_legal_residence')) {
-                                        $set('effective_residence.address', $state);
-                                    }
-                                }),
+                                    TextInput::make('legal_residence.address')
+                                        ->label(__('field.address'))
+                                        ->placeholder(__('placeholder.address'))
+                                        ->maxLength(50)
+                                        ->lazy()
+                                        ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                            if ($get('same_as_legal_residence')) {
+                                                $set('effective_residence.address', $state);
+                                            }
+                                        }),
 
-                            Select::make('legal_residence.environment')
-                                ->label(__('field.environment'))
-                                ->placeholder(__('placeholder.residence_environment'))
-                                ->options(ResidenceEnvironment::options())
-                                ->enum(ResidenceEnvironment::class)
-                                ->lazy()
-                                ->afterStateUpdated(function (Set $set, Get $get, $state) {
-                                    if ($get('same_as_legal_residence')) {
-                                        $set('effective_residence.environment', $state);
-                                    }
-                                }),
+                                    Select::make('legal_residence.environment')
+                                        ->label(__('field.environment'))
+                                        ->placeholder(__('placeholder.residence_environment'))
+                                        ->options(ResidenceEnvironment::options())
+                                        ->enum(ResidenceEnvironment::class)
+                                        ->lazy()
+                                        ->afterStateUpdated(function (Set $set, Get $get, $state) {
+                                            if ($get('same_as_legal_residence')) {
+                                                $set('effective_residence.environment', $state);
+                                            }
+                                        }),
+                                ])
+                                ->columnSpanFull(),
                         ])
                         ->columnSpanFull(),
 
@@ -248,32 +284,37 @@ class BeneficiaryIdentityFormSchema
 
                     Spacer::make(),
 
-                    Grid::make()
+                    Section::make(__('field.effective_residence'))
+                        ->compact()
                         ->schema([
-                            ...CountyCitySelect::make()
-                                ->countyField('effective_residence.county_id')
-                                ->cityField('effective_residence.city_id')
-                                ->countyLabel(__('field.county'))
-                                ->cityLabel(__('field.city'))
-                                ->countyPlaceholder(__('placeholder.county'))
-                                ->cityPlaceholder(__('placeholder.city'))
-                                ->required()
-                                ->countyDisabled(fn (Get $get) => $get('same_as_legal_residence'))
-                                ->cityDisabled(fn (Get $get) => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
-                                ->schema(),
+                            Grid::make()
+                                ->schema([
+                                    ...CountyCitySelect::make()
+                                        ->countyField('effective_residence.county_id')
+                                        ->cityField('effective_residence.city_id')
+                                        ->countyLabel(__('field.county'))
+                                        ->cityLabel(__('field.city'))
+                                        ->countyPlaceholder(__('placeholder.county'))
+                                        ->cityPlaceholder(__('placeholder.city'))
+                                        ->required()
+                                        ->countyDisabled(fn (Get $get) => $get('same_as_legal_residence'))
+                                        ->cityDisabled(fn (Get $get) => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
+                                        ->schema(),
 
-                            TextInput::make('effective_residence.address')
-                                ->label(__('field.address'))
-                                ->placeholder(__('placeholder.address'))
-                                ->maxLength(50)
-                                ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
+                                    TextInput::make('effective_residence.address')
+                                        ->label(__('field.address'))
+                                        ->placeholder(__('placeholder.address'))
+                                        ->maxLength(50)
+                                        ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
 
-                            Select::make('effective_residence.environment')
-                                ->label(__('field.environment'))
-                                ->placeholder(__('placeholder.residence_environment'))
-                                ->options(ResidenceEnvironment::options())
-                                ->enum(ResidenceEnvironment::class)
-                                ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
+                                    Select::make('effective_residence.environment')
+                                        ->label(__('field.environment'))
+                                        ->placeholder(__('placeholder.residence_environment'))
+                                        ->options(ResidenceEnvironment::options())
+                                        ->enum(ResidenceEnvironment::class)
+                                        ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
+                                ])
+                                ->columnSpanFull(),
                         ])
                         ->columnSpanFull(),
 
@@ -318,20 +359,6 @@ class BeneficiaryIdentityFormSchema
                         ->tel()
                         ->maxLength(14)
                         ->nullable(),
-
-                    Textarea::make('contact_notes')
-                        ->label(__('field.contact_notes'))
-                        ->placeholder(__('placeholder.contact_notes'))
-                        ->nullable()
-                        ->maxLength(1000)
-                        ->columnSpanFull(),
-
-                    Textarea::make('notes')
-                        ->label(__('field.notes'))
-                        ->placeholder(__('placeholder.notes'))
-                        ->nullable()
-                        ->maxLength(1000)
-                        ->columnSpanFull(),
                 ]),
         ];
     }

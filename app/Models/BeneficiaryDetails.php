@@ -32,8 +32,6 @@ class BeneficiaryDetails extends Model
         'family_doctor_contact',
         'psychiatric_history',
         'psychiatric_history_notes',
-        'criminal_history',
-        'criminal_history_notes',
         'studies',
         'occupation',
         'workplace',
@@ -67,7 +65,6 @@ class BeneficiaryDetails extends Model
     protected $casts = [
         'has_family_doctor' => Ternary::class,
         'psychiatric_history' => Ternary::class,
-        'criminal_history' => Ternary::class,
         'studies' => Studies::class,
         'occupation' => Occupation::class,
         'income' => Income::class,

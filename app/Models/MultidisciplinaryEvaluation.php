@@ -29,6 +29,7 @@ class MultidisciplinaryEvaluation extends Model
         'income',
         'community_resources',
         'house',
+        'workplace',
         'risk',
     ];
 

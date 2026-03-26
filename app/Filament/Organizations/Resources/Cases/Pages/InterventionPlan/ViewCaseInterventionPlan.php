@@ -25,7 +25,9 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Collection;
 
 class ViewCaseInterventionPlan extends ViewRecord
 {
@@ -123,43 +125,68 @@ class ViewCaseInterventionPlan extends ViewRecord
                 }),
             Action::make('beneficiary_details')
                 ->record($record)
-                ->visible(false)
                 ->slideOver()
                 ->modalHeading(__('case.view.identity_page.fab_beneficiary_details'))
                 ->modalSubmitAction(false)
                 ->modalCancelActionLabel(__('general.action.close'))
                 ->schema([
-                    Section::make(__('case.view.identity'))
-                        ->schema([
-                            TextEntry::make('full_name')
-                                ->label(__('intervention_plan.labels.full_name')),
-                            TextEntry::make('cnp')
-                                ->label(__('intervention_plan.labels.cnp')),
-                            TextEntry::make('address')
-                                ->label(__('intervention_plan.labels.address'))
-                                ->state(fn (Beneficiary $record): string => self::formatAddress($record))
-                                ->placeholder('—'),
-                            TextEntry::make('status')
-                                ->label(__('case.table.status'))
-                                ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
-                                ->placeholder('—'),
-                            TextEntry::make('age')
-                                ->label(__('field.age'))
-                                ->formatStateUsing(function (mixed $state): string {
-                                    if ($state === null || $state === '' || $state === '-') {
-                                        return '—';
-                                    }
-                                    $age = is_numeric($state) ? (int) $state : null;
+                    TextEntry::make('full_name')
+                        ->label('Nume și prenume')
+                        ->placeholder('—'),
+                    TextEntry::make('created_at')
+                        ->label('Data creării cazului')
+                        ->formatStateUsing(fn (mixed $state): string => self::formatDateState($state))
+                        ->placeholder('—'),
+                    TextEntry::make('age')
+                        ->label(__('field.age'))
+                        ->state(fn (Beneficiary $record): string => $record->age !== null ? (string) $record->age : '—'),
+                    TextEntry::make('civil_status')
+                        ->label(__('field.civil_status'))
+                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->civil_status)),
+                    TextEntry::make('children_total_count')
+                        ->label('Număr total copii')
+                        ->placeholder('—'),
+                    TextEntry::make('children_under_18_care_count')
+                        ->label('Număr copii în întreținere cu vârsta < 18 ani')
+                        ->placeholder('—'),
+                    TextEntry::make('legal_residence_city')
+                        ->label('Oraș/UAT domiciliu legal')
+                        ->state(fn (Beneficiary $record): string => $record->legal_residence?->city?->name ?? '—'),
+                    TextEntry::make('effective_residence_city')
+                        ->label('Localitate domiciliu efectiv')
+                        ->state(fn (Beneficiary $record): string => $record->effective_residence?->city?->name ?? '—'),
+                    TextEntry::make('details.studies')
+                        ->label(__('field.studies'))
+                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->details?->studies)),
+                    TextEntry::make('details.occupation')
+                        ->label(__('field.occupation'))
+                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->details?->occupation)),
+                    TextEntry::make('details.net_income')
+                        ->label('Venit lunar net (din toate sursele)')
+                        ->state(function (Beneficiary $record): string {
+                            $income = $record->details?->net_income;
 
-                                    return $age !== null ? "{$age} ani" : '—';
-                                })
-                                ->placeholder('—'),
-                            TextEntry::make('birthdate')
-                                ->label(__('field.birthdate'))
-                                ->formatStateUsing(fn (mixed $state): string => $state ? Carbon::parse($state)->translatedFormat('d M Y') : '—')
-                                ->placeholder('—'),
-                        ])
-                        ->columns(2),
+                            return blank($income) ? '—' : "{$income} RON";
+                        }),
+                    TextEntry::make('details.homeownership')
+                        ->label('Dreptul de proprietate asupra locuinței primare')
+                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->details?->homeownership)),
+                    TextEntry::make('aggressor_relationship')
+                        ->label('Relația victimei cu agresorul')
+                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->aggressors->first()?->relationship)),
+                    TextEntry::make('aggressor_legal_history')
+                        ->label('Aspecte legale agresor')
+                        ->state(function (Beneficiary $record): string {
+                            $values = $record->aggressors->first()?->legal_history;
+
+                            return self::formatCollectionLabels($values);
+                        }),
+                    TextEntry::make('flowPresentation.presentation_mode')
+                        ->label('Modalitatea de prezentare')
+                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->flowPresentation?->presentation_mode)),
+                    TextEntry::make('flowPresentation.act_location')
+                        ->label('Locul producerii actelor de VD')
+                        ->state(fn (Beneficiary $record): string => self::formatCollectionLabels($record->flowPresentation?->act_location)),
                 ])
                 ->extraModalFooterActions([
                     Action::make('view_full_beneficiary')
@@ -240,10 +267,35 @@ class ViewCaseInterventionPlan extends ViewRecord
         $parts = array_filter([
             $addr->address,
             $addr->city?->name,
-            $addr->county ? __('field.county').' '.$addr->county->name : null,
+            $addr->county ? __('field.county') . ' ' . $addr->county->name : null,
         ]);
 
         return implode(', ', $parts);
+    }
+
+    private static function formatEnumLabel(mixed $value): string
+    {
+        if ($value === null || $value === '') {
+            return '—';
+        }
+
+        return \is_object($value) && method_exists($value, 'getLabel')
+            ? (string) $value->getLabel()
+            : (string) $value;
+    }
+
+    private static function formatCollectionLabels(mixed $values): string
+    {
+        if ($values instanceof Collection || $values instanceof Arrayable || \is_array($values)) {
+            $items = collect($values)
+                ->map(fn (mixed $item): string => self::formatEnumLabel($item))
+                ->filter(fn (string $item): bool => $item !== '—')
+                ->values();
+
+            return $items->isNotEmpty() ? $items->implode('; ') : '—';
+        }
+
+        return self::formatEnumLabel($values);
     }
 
     /**

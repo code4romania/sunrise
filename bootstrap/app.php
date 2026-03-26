@@ -17,7 +17,7 @@ use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
 use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
@@ -26,24 +26,20 @@ use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\AuthenticateSession;
-use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__ . '/../routes/web.php',
-        api: __DIR__ . '/../routes/api.php',
-        commands: __DIR__ . '/../routes/console.php',
+        web: __DIR__.'/../routes/web.php',
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
     ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule) {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('beneficiaries:send-monitoring-sheet-reminders')->dailyAt('08:00');
     })
     ->withCommands([
-        __DIR__ . '/../app/Console/Commands',
+        __DIR__.'/../app/Console/Commands',
     ])
     ->withMiddleware(function (Illuminate\Foundation\Configuration\Middleware $middleware) {
         // Global middleware
@@ -69,7 +65,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // API middleware group
         $middleware->api(prepend: [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            ThrottleRequests::class . ':api',
+            ThrottleRequests::class.':api',
             SubstituteBindings::class,
         ]);
 

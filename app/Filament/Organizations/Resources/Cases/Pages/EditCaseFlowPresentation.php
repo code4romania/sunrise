@@ -15,6 +15,7 @@ use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
 use App\Rules\MultipleIn;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Schemas\Components\Grid;
@@ -74,7 +75,9 @@ class EditCaseFlowPresentation extends EditRecord
                 ->maxWidth('3xl')
                 ->relationship('flowPresentation')
                 ->schema([
-                    Grid::make()
+                    Section::make(__('beneficiary.section.flow.presentation_and_referral'))
+                        ->compact()
+                        ->columns(2)
                         ->schema([
                             Select::make('presentation_mode')
                                 ->label(__('field.presentation_mode'))
@@ -93,19 +96,21 @@ class EditCaseFlowPresentation extends EditRecord
                                 ))
                                 ->nullable(),
 
-                            Select::make('referral_mode')
+                            CheckboxList::make('referral_mode')
                                 ->label(__('field.referral_mode'))
-                                ->placeholder(__('placeholder.select_one'))
                                 ->options(ReferralMode::options())
-                                ->enum(ReferralMode::class)
                                 ->visible(fn (Get $get) => PresentationMode::isValue(
                                     $get('presentation_mode'),
                                     PresentationMode::FORWARDED
                                 ))
-                                ->nullable(),
+                                ->columns(2)
+                                ->gridDirection('row')
+                                ->columnSpanFull(),
                         ]),
 
-                    Grid::make()
+                    Section::make(__('beneficiary.section.flow.notification'))
+                        ->compact()
+                        ->columns(2)
                         ->schema([
                             Select::make('notifier')
                                 ->label(__('field.notifier'))
@@ -126,10 +131,13 @@ class EditCaseFlowPresentation extends EditRecord
                                 ->visible(fn (Get $get) => Notifier::isValue(
                                     $get('notifier'),
                                     Notifier::OTHER
-                                )),
+                                ))
+                                ->columnSpanFull(),
                         ]),
 
-                    Grid::make()
+                    Section::make(__('beneficiary.section.flow.act_location'))
+                        ->compact()
+                        ->columns(2)
                         ->schema([
                             Select::make('act_location')
                                 ->label(__('field.act_location'))
@@ -149,19 +157,24 @@ class EditCaseFlowPresentation extends EditRecord
                                 ),
                         ]),
 
-                    Select::make('first_called_institution_id')
-                        ->label(__('field.first_called_institution'))
-                        ->placeholder(__('placeholder.select_one'))
-                        ->relationship('firstCalledInstitution', 'name')
-                        ->nullable(),
+                    Section::make(__('beneficiary.section.flow.institutions_called'))
+                        ->compact()
+                        ->columns(2)
+                        ->schema([
+                            Select::make('first_called_institution_id')
+                                ->label(__('field.first_called_institution'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->relationship('firstCalledInstitution', 'name')
+                                ->nullable(),
 
-                    Select::make('other_called_institutions')
-                        ->label(__('field.other_called_institutions'))
-                        ->placeholder(__('beneficiary.section.personal_information.placeholders.select_many'))
-                        ->relationship('otherCalledInstitution', 'name')
-                        ->multiple()
-                        ->preload()
-                        ->nullable(),
+                            Select::make('other_called_institutions')
+                                ->label(__('field.other_called_institutions'))
+                                ->placeholder(__('beneficiary.section.personal_information.placeholders.select_many'))
+                                ->relationship('otherCalledInstitution', 'name')
+                                ->multiple()
+                                ->preload()
+                                ->nullable(),
+                        ]),
                 ]),
         ];
     }

@@ -9,6 +9,7 @@ use App\Filament\Organizations\Resources\Cases\Pages\ViewCaseModificationHistory
 use App\Filament\Organizations\Resources\Cases\Pages\ViewCasePersonalInformation;
 use App\Models\Beneficiary;
 use App\Models\User;
+use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -44,6 +45,25 @@ it('can advance from cnp step when without_cnp is checked and cnp is not entered
         ->goToNextWizardStep()
         ->assertHasNoFormErrors()
         ->assertWizardCurrentStep(3);
+});
+
+it('prefills birthdate from cnp after the cnp wizard step', function () {
+    $fromCnp = Beneficiary::factory()->withCNP()->make();
+    $cnp = (string) $fromCnp->cnp;
+    $expectedBirthdate = $fromCnp->birthdate instanceof \DateTimeInterface
+        ? $fromCnp->birthdate->format('Y-m-d')
+        : Carbon::createFromFormat('d.m.Y', (string) $fromCnp->birthdate)->format('Y-m-d');
+
+    livewire(CreateCase::class, ['tenant' => $this->organization])
+        ->fillForm(['consent' => true])
+        ->goToNextWizardStep()
+        ->assertHasNoFormErrors()
+        ->fillForm(['cnp' => $cnp, 'without_cnp' => false])
+        ->goToNextWizardStep()
+        ->assertHasNoFormErrors()
+        ->assertFormSet([
+            'birthdate' => $expectedBirthdate,
+        ]);
 });
 
 it('can render identity page for a case', function () {

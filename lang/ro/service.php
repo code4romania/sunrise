@@ -28,7 +28,9 @@ return [
     ],
 
     'labels' => [
-        'name' => 'Nume serviciu',
+        'name' => 'Tip serviciu',
+        'catalog_service' => 'Tip serviciu (din catalog)',
+        'intervention_name' => 'Nume intervenție',
         'interventions' => 'Intervenții',
         'intervention_item' => 'Intervenție',
         'cases' => 'Cazuri',
@@ -37,9 +39,9 @@ return [
     ],
 
     'headings' => [
-        'navigation' => 'Nomenclator servicii',
+        'navigation' => 'Lista tipuri de servicii',
         'empty_state_table' => 'Niciun serviciu identificat. Adaugă un prim serviciu  ca acesta să fie disponibil pentru a fi inclus în planurile de intervenție ale beneficiarilor.',
-        'list_page' => 'Nomenclator servicii specializate',
+        'list_page' => 'Lista tipuri de servicii specializate',
         'list_table' => 'Toate serviciile',
         'create_page' => 'Adaugă serviciu',
         'edit_page' => 'Modifică serviciu :name',

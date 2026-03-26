@@ -27,7 +27,7 @@ class FlowPresentationFactory extends Factory
     {
         return [
             'presentation_mode' => fake()->randomElement(PresentationMode::values()),
-            'referral_mode' => fake()->randomElement(ReferralMode::values()),
+            'referral_mode' => fake()->randomElements(ReferralMode::values(), fake()->numberBetween(1, 3)),
             'notifier' => fake()->randomElement(Notifier::values()),
             'notification_mode' => fake()->randomElement(NotificationMode::values()),
 

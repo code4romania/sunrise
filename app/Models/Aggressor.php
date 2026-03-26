@@ -47,6 +47,12 @@ class Aggressor extends Model
         'has_protection_order',
         'electronically_monitored',
         'protection_order_notes',
+        'has_police_reports',
+        'police_report_count',
+        'has_medical_reports',
+        'medical_report_count',
+        'hospitalization_days',
+        'hospitalization_observations',
     ];
 
     protected $casts = [
@@ -64,5 +70,8 @@ class Aggressor extends Model
         'violence_types' => AsEnumCollection::class.':'.Violence::class,
         'has_protection_order' => ProtectionOrder::class,
         'electronically_monitored' => Ternary::class,
+        'has_police_reports' => Ternary::class,
+        'has_medical_reports' => Ternary::class,
+        'hospitalization_days' => 'integer',
     ];
 }

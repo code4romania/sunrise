@@ -24,7 +24,9 @@ return [
         'view_counseling_sheet' => 'Ver hoja de asesoramiento',
     ],
     'labels' => [
-        'name' => 'Nombre',
+        'name' => 'Tipo de servicio',
+        'catalog_service' => 'Tipo de servicio (catálogo)',
+        'intervention_name' => 'Nombre de la intervención',
         'interventions' => 'Intervenciones',
         'intervention_item' => 'Intervención',
         'cases' => 'Casos',
@@ -32,9 +34,9 @@ return [
         'select' => 'Seleccionar',
     ],
     'headings' => [
-        'navigation' => 'Navegación',
+        'navigation' => 'Lista de tipos de servicios',
         'empty_state_table' => 'No hay servicios disponibles',
-        'list_page' => 'Servicios',
+        'list_page' => 'Lista de tipos de servicios especializados',
         'list_table' => 'Lista de servicios',
         'create_page' => 'Crear servicio',
         'edit_page' => 'Editar servicio',

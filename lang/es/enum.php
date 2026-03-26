@@ -124,6 +124,7 @@ return [
         'written' => 'Escrito',
         'phone' => 'Teléfono',
         'brought' => 'Acompañado',
+        'reporting_form' => 'Formulario de señalización',
     ],
     'notifier' => [
         'victim' => 'Víctima',

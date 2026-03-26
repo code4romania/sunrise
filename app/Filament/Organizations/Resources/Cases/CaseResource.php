@@ -12,7 +12,6 @@ use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\EditCase
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\EditCaseDetailedEvaluationResults;
 use App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation\ViewCaseDetailedEvaluation;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAggressor;
-use App\Filament\Organizations\Resources\Cases\Pages\EditCaseAntecedents;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseChildren;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseDocuments;
 use App\Filament\Organizations\Resources\Cases\Pages\EditCaseFlowPresentation;
@@ -83,7 +82,6 @@ class CaseResource extends Resource
                 'flowPresentation',
                 'details',
                 'aggressors',
-                'antecedents',
                 'specialistsTeam.user',
                 'specialistsTeam.roleForDisplay',
                 'evaluateDetails.specialist',
@@ -162,7 +160,6 @@ class CaseResource extends Resource
             'edit_case_documents' => EditCaseDocuments::route('/{record}/documents'),
             'view_case_document' => ViewCaseDocument::route('/{record}/documents/{document}'),
             'edit_case_monitoring' => EditCaseMonitoring::route('/{record}/monitoring'),
-            'edit_antecedents' => EditCaseAntecedents::route('/{record}/personal/antecedents/edit'),
             'create_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/create'),
             'edit_initial_evaluation' => CreateCaseInitialEvaluation::route('/{record}/initial-evaluation/edit'),
             'edit_evaluation_details' => EditEvaluationDetails::route('/{record}/initial-evaluation/details/edit'),

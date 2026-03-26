@@ -18,7 +18,7 @@ return [
         'intervention_name' => 'Nume intervenție',
         'active' => 'Activ',
         'inactive' => 'Inactiv',
-        'service_name' => 'Nume serviciu',
+        'service_name' => 'Denumire categorie tip serviciu',
         'empty_state_service_table' => 'Niciun serviciu identificat. Adaugă un prim serviciu pentru ca acesta să fie disponibil organizațiilor Sunrise',
         'empty_state_role_table' => 'Niciun rol de specialitate identificat. Adaugă un prim rol pentru ca acesta să fie disponibil organizațiilor Sunrise',
         'role_name' => 'Nume rol specialist',

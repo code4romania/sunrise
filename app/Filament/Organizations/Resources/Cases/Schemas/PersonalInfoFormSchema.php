@@ -119,32 +119,34 @@ class PersonalInfoFormSchema
 
                     Group::make()
                         ->schema([
-                            TextInput::make('psychiatric_history_notes')
+                            Textarea::make('psychiatric_history_notes')
                                 ->label(__('field.psychiatric_history_notes'))
                                 ->placeholder(__('placeholder.observations'))
-                                ->maxLength(100)
+                                ->maxLength(250)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
 
                             Select::make('investigations_for_psychiatric_pathology')
-                                ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
+                                ->label(__('field.investigations_for_psychiatric_pathology'))
                                 ->options(Ternary::options())
+                                ->enum(Ternary::class)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
 
-                            TextInput::make('investigations_observations')
-                                ->label(__('intervention_plan.labels.investigations_observations'))
+                            Textarea::make('investigations_observations')
+                                ->label(__('field.investigations_observations'))
                                 ->placeholder(__('placeholder.observations'))
-                                ->maxLength(100)
+                                ->maxLength(250)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
 
                             Select::make('treatment_for_psychiatric_pathology')
-                                ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
+                                ->label(__('field.treatment_for_psychiatric_pathology'))
                                 ->options(Ternary::options())
+                                ->enum(Ternary::class)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
 
-                            TextInput::make('treatment_observations')
-                                ->label(__('intervention_plan.labels.treatment_observations'))
+                            Textarea::make('treatment_observations')
+                                ->label(__('field.treatment_observations'))
                                 ->placeholder(__('placeholder.observations'))
-                                ->maxLength(100)
+                                ->maxLength(250)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
                         ]),
 
@@ -175,6 +177,22 @@ class PersonalInfoFormSchema
                                 ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
                         ]),
                     Group::make()
+                        ->columnSpanFull()
+                        ->columns(2)
+                        ->schema([
+                            Select::make('current_contraception')
+                                ->live()
+                                ->label(__('field.current_contraception'))
+                                ->enum(Ternary::class)
+                                ->options(Ternary::options()),
+
+                            Textarea::make('observations_contraception')
+                                ->placeholder(__('placeholder.observations'))
+                                ->visible(fn (Get $get) => Ternary::isYes($get('current_contraception')))
+                                ->label(__('field.observations_contraception'))
+                                ->maxLength(250),
+                        ]),
+                    Group::make()
                         ->schema([
                             Select::make('other_current_medication')
                                 ->label(__('beneficiary.section.personal_information.label.other_current_medication'))
@@ -188,41 +206,6 @@ class PersonalInfoFormSchema
                                 ->maxLength(100)
                                 ->visible(fn (Get $get) => Ternary::isYes($get('other_current_medication'))),
                         ])->columnSpanFull()->columns(2),
-
-                    Group::make()
-                        ->columnSpanFull()
-                        ->columns(2)
-                        ->schema([
-                            Select::make('criminal_history')
-                                ->label(__('field.criminal_history'))
-                                ->placeholder(__('placeholder.select_one'))
-                                ->options(Ternary::options())
-                                ->enum(Ternary::class)
-                                ->live(),
-
-                            TextInput::make('criminal_history_notes')
-                                ->label(__('field.criminal_history_notes'))
-                                ->placeholder(__('placeholder.observations'))
-                                ->maxLength(100)
-                                ->visible(fn (Get $get) => Ternary::isYes($get('criminal_history'))),
-                        ]),
-
-                    Group::make()
-                        ->columnSpanFull()
-                        ->columns(2)
-                        ->schema([
-                            Select::make('current_contraception')
-                                ->live()
-                                ->label(__('intervention_plan.labels.current_contraception'))
-                                ->enum(Ternary::class)
-                                ->options(Ternary::options()),
-
-                            TextInput::make('observations_contraception')
-                                ->placeholder(__('placeholder.observations'))
-                                ->visible(fn (Get $get) => Ternary::isYes($get('current_contraception')))
-                                ->label(__('intervention_plan.labels.observations_contraception'))
-                                ->maxLength(100),
-                        ]),
 
                     Select::make('studies')
                         ->label(__('field.studies'))

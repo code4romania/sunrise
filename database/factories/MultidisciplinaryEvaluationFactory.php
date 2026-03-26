@@ -34,6 +34,7 @@ class MultidisciplinaryEvaluationFactory extends Factory
             'income' => fake()->text(),
             'community_resources' => fake()->text(),
             'house' => fake()->text(),
+            'workplace' => fake()->optional()->text(),
             'risk' => fake()->text(),
         ];
     }

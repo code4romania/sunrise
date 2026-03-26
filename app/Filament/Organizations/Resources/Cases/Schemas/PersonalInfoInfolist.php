@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Schemas;
 
 use App\Enums\AggressorRelationship;
 use App\Enums\Diseases;
+use App\Enums\ReferralMode;
 use App\Enums\Ternary;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Schemas\Components\SectionWithRecordActions;
@@ -41,17 +42,38 @@ class PersonalInfoInfolist
                             ->maxWidth('3xl')
                             ->schema(static::aggressorSection()),
 
-                        Tab::make(__('beneficiary.section.personal_information.section.antecedents'))
-                            ->maxWidth('3xl')
-                            ->columns()
-                            ->schema(static::antecedentsSection()),
-
                         Tab::make(__('beneficiary.section.personal_information.section.flow'))
                             ->maxWidth('3xl')
                             ->columns()
                             ->schema(static::flowSection()),
                     ]),
             ]);
+    }
+
+    /**
+     * Schema components for embedding in other pages (e.g. intervention side panel).
+     *
+     * @return array<int, Section>
+     */
+    public static function getBeneficiarySectionForSidePanel(): array
+    {
+        return static::beneficiarySection();
+    }
+
+    /**
+     * @return array<int, Section>
+     */
+    public static function getAggressorSectionForSidePanel(): array
+    {
+        return static::aggressorSection();
+    }
+
+    /**
+     * @return array<int, Section>
+     */
+    public static function getFlowSectionForSidePanel(): array
+    {
+        return static::flowSection();
     }
 
     /**
@@ -132,18 +154,18 @@ class PersonalInfoInfolist
                                 ->label(__('field.psychiatric_history_notes')),
 
                             EnumEntry::make('investigations_for_psychiatric_pathology')
-                                ->label(__('intervention_plan.labels.investigations_for_psychiatric_pathology'))
+                                ->label(__('field.investigations_for_psychiatric_pathology'))
                                 ->enumClass(Ternary::class),
 
                             TextEntry::make('investigations_observations')
-                                ->label(__('intervention_plan.labels.investigations_observations')),
+                                ->label(__('field.investigations_observations')),
 
                             EnumEntry::make('treatment_for_psychiatric_pathology')
-                                ->label(__('intervention_plan.labels.treatment_for_psychiatric_pathology'))
+                                ->label(__('field.treatment_for_psychiatric_pathology'))
                                 ->enumClass(Ternary::class),
 
                             TextEntry::make('treatment_observations')
-                                ->label(__('intervention_plan.labels.treatment_observations')),
+                                ->label(__('field.treatment_observations')),
                         ]),
 
                     Grid::make()
@@ -163,6 +185,15 @@ class PersonalInfoInfolist
                                 ->label(__('beneficiary.section.personal_information.label.observations_disability'))
                                 ->visible(fn (\App\Models\BeneficiaryDetails $record) => Ternary::isYes($record->disabilities)),
                         ]),
+                    Grid::make()
+                        ->schema([
+                            EnumEntry::make('current_contraception')
+                                ->label(__('field.current_contraception'))
+                                ->enumClass(Ternary::class),
+
+                            TextEntry::make('observations_contraception')
+                                ->label(__('field.observations_contraception')),
+                        ]),
 
                     Grid::make()
                         ->schema([
@@ -172,25 +203,6 @@ class PersonalInfoInfolist
                             TextEntry::make('medication_observations')
                                 ->label(__('beneficiary.section.personal_information.label.medication_observations'))
                                 ->visible(fn (\App\Models\BeneficiaryDetails $record) => Ternary::isYes($record->other_current_medication)),
-                        ]),
-
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('current_contraception')
-                                ->label(__('intervention_plan.labels.current_contraception'))
-                                ->enumClass(Ternary::class),
-
-                            TextEntry::make('observations_contraception')
-                                ->label(__('intervention_plan.labels.observations_contraception')),
-                        ]),
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('criminal_history')
-                                ->label(__('field.criminal_history'))
-                                ->placeholder(__('placeholder.select_one')),
-
-                            TextEntry::make('criminal_history_notes')
-                                ->label(__('field.criminal_history_notes')),
                         ]),
 
                     EnumEntry::make('studies')
@@ -355,56 +367,40 @@ class PersonalInfoInfolist
                                     TextEntry::make('drugs')
                                         ->label(__('field.aggressor_drugs')),
                                 ]),
+
+                            Grid::make()
+                                ->schema([
+                                    EnumEntry::make('has_police_reports')
+                                        ->label(__('field.has_police_reports'))
+                                        ->placeholder(__('placeholder.select_one'))
+                                        ->enumClass(Ternary::class),
+
+                                    TextEntry::make('police_report_count')
+                                        ->label(__('field.police_report_count'))
+                                        ->placeholder(__('placeholder.number'))
+                                        ->visible(fn (Aggressor $record) => Ternary::isYes($record->has_police_reports)),
+
+                                    EnumEntry::make('has_medical_reports')
+                                        ->label(__('field.has_medical_reports'))
+                                        ->placeholder(__('placeholder.select_one'))
+                                        ->enumClass(Ternary::class),
+
+                                    TextEntry::make('medical_report_count')
+                                        ->label(__('field.medical_report_count'))
+                                        ->placeholder(__('placeholder.number'))
+                                        ->numeric()
+                                        ->visible(fn (Aggressor $record) => Ternary::isYes($record->has_medical_reports)),
+
+                                    TextEntry::make('hospitalization_days')
+                                        ->label(__('field.hospitalization_days'))
+                                        ->placeholder(__('placeholder.number'))
+                                        ->numeric(),
+
+                                    TextEntry::make('hospitalization_observations')
+                                        ->label(__('field.hospitalization_observations'))
+                                        ->columnSpanFull(),
+                                ]),
                         ]),
-                ]),
-        ];
-    }
-
-    /**
-     * @return array<int, Section>
-     */
-    protected static function antecedentsSection(): array
-    {
-        return [
-            SectionWithRecordActions::make(__('beneficiary.section.personal_information.section.antecedents'))
-                ->columns()
-                ->relationship('antecedents')
-                ->headerActions([
-                    Action::make('edit')
-                        ->label(__('general.action.edit'))
-                        ->url(fn ($record) => CaseResource::getUrl('edit_antecedents', ['record' => $record instanceof \App\Models\Beneficiary ? $record : $record->beneficiary ?? $record]))
-                        ->link(),
-                ])
-                ->extraAttributes([
-                    'class' => 'h-full',
-                ])
-                ->schema([
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('has_police_reports')
-                                ->label(__('field.has_police_reports'))
-                                ->placeholder(__('placeholder.select_one')),
-
-                            TextEntry::make('police_report_count')
-                                ->label(__('field.police_report_count'))
-                                ->placeholder(__('placeholder.number')),
-                        ]),
-
-                    Grid::make()
-                        ->schema([
-                            EnumEntry::make('has_medical_reports')
-                                ->label(__('field.has_medical_reports'))
-                                ->placeholder(__('placeholder.select_one')),
-
-                            TextEntry::make('medical_report_count')
-                                ->label(__('field.medical_report_count'))
-                                ->placeholder(__('placeholder.number'))
-                                ->numeric(),
-                        ]),
-
-                    TextEntry::make('observations')
-                        ->label(__('field.antecedents_observations'))
-                        ->columnSpanFull(),
                 ]),
         ];
     }
@@ -428,7 +424,9 @@ class PersonalInfoInfolist
                     'class' => 'h-full',
                 ])
                 ->schema([
-                    Grid::make()
+                    Section::make(__('beneficiary.section.flow.presentation_and_referral'))
+                        ->compact()
+                        ->columns(2)
                         ->schema([
                             EnumEntry::make('presentation_mode')
                                 ->label(__('field.presentation_mode'))
@@ -438,34 +436,77 @@ class PersonalInfoInfolist
                                 ->label(__('field.referring_institution'))
                                 ->placeholder(__('placeholder.select_one')),
 
-                            EnumEntry::make('referral_mode')
+                            TextEntry::make('referral_mode')
                                 ->label(__('field.referral_mode'))
+                                ->columnSpanFull()
+                                ->formatStateUsing(function (mixed $state): ?string {
+                                    if (blank($state)) {
+                                        return null;
+                                    }
+                                    $values = $state instanceof \Illuminate\Support\Collection
+                                        ? $state->all()
+                                        : (array) $state;
+
+                                    return collect($values)
+                                        ->map(function (mixed $value): ?string {
+                                            if ($value instanceof ReferralMode) {
+                                                return $value->getLabel();
+                                            }
+                                            if (is_string($value)) {
+                                                $enum = ReferralMode::tryFrom($value);
+
+                                                return $enum?->getLabel() ?? $value;
+                                            }
+
+                                            return null;
+                                        })
+                                        ->filter()
+                                        ->implode('; ');
+                                })
                                 ->placeholder(__('placeholder.select_one')),
                         ]),
 
-                    EnumEntry::make('notifier')
-                        ->label(__('field.notifier'))
-                        ->placeholder(__('placeholder.select_one')),
+                    Section::make(__('beneficiary.section.flow.notification'))
+                        ->compact()
+                        ->columns(2)
+                        ->schema([
+                            EnumEntry::make('notifier')
+                                ->label(__('field.notifier'))
+                                ->placeholder(__('placeholder.select_one')),
 
-                    EnumEntry::make('notification_mode')
-                        ->label(__('field.notification_mode'))
-                        ->placeholder(__('placeholder.select_one')),
+                            EnumEntry::make('notification_mode')
+                                ->label(__('field.notification_mode'))
+                                ->placeholder(__('placeholder.select_one')),
 
-                    TextEntry::make('notifier_other')
-                        ->label(__('field.notifier_other')),
+                            TextEntry::make('notifier_other')
+                                ->label(__('field.notifier_other'))
+                                ->columnSpanFull(),
+                        ]),
 
-                    TextEntry::make('act_location')
-                        ->label(__('field.act_location')),
+                    Section::make(__('beneficiary.section.flow.act_location'))
+                        ->compact()
+                        ->columns(2)
+                        ->schema([
+                            TextEntry::make('act_location')
+                                ->label(__('field.act_location'))
+                                ->columnSpanFull(),
 
-                    TextEntry::make('act_location_other')
-                        ->label(__('field.act_location_other')),
+                            TextEntry::make('act_location_other')
+                                ->label(__('field.act_location_other'))
+                                ->columnSpanFull(),
+                        ]),
 
-                    TextEntry::make('firstCalledInstitution.name')
-                        ->label(__('field.first_called_institution'))
-                        ->placeholder(__('placeholder.select_one')),
+                    Section::make(__('beneficiary.section.flow.institutions_called'))
+                        ->compact()
+                        ->columns(2)
+                        ->schema([
+                            TextEntry::make('firstCalledInstitution.name')
+                                ->label(__('field.first_called_institution'))
+                                ->placeholder(__('placeholder.select_one')),
 
-                    TextEntry::make('otherCalledInstitution.name')
-                        ->label(__('field.other_called_institutions')),
+                            TextEntry::make('otherCalledInstitution.name')
+                                ->label(__('field.other_called_institutions')),
+                        ]),
                 ]),
         ];
     }

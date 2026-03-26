@@ -93,4 +93,9 @@ return [
         'general' => 'Monitorizare caz',
         'file' => 'Fișă monitorizare :file_number',
     ],
+
+    'notifications' => [
+        'sheet_reminder_title' => 'Fișă de monitorizare',
+        'sheet_reminder_body' => 'Au trecut cel puțin 30 de zile de la înregistrarea cazului :name. Completați fișa de monitorizare pentru acest beneficiar.',
+    ],
 ];

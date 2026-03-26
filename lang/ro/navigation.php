@@ -23,7 +23,7 @@ return [
     'configurations' => [
         '_group' => 'CONFIGURĂRI',
         'organization' => 'Informații organizație',
-        'services' => 'Nomenclator servicii',
+        'services' => 'Lista tipuri de servicii',
         'staff' => 'Specialiști',
     ],
 

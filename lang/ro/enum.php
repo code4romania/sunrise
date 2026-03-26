@@ -140,6 +140,7 @@ return [
         'written' => 'Scris',
         'phone' => 'Telefonic',
         'brought' => 'Adus de reprezentant instituție',
+        'reporting_form' => 'Fișă de semnalare',
     ],
 
     'notifier' => [

@@ -19,6 +19,7 @@ enum ReferralMode: string implements HasLabel
     case WRITTEN = 'written';
     case PHONE = 'phone';
     case BROUGHT = 'brought';
+    case REPORTING_FORM = 'reporting_form';
 
     protected function labelKeyPrefix(): ?string
     {

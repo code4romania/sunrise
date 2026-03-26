@@ -150,6 +150,10 @@ class EditCaseDetailedEvaluationMultidisciplinary extends EditRecord
                             ->label(__('beneficiary.section.detailed_evaluation.labels.house'))
                             ->placeholder(__('beneficiary.placeholder.need_description'))
                             ->maxLength(1000),
+                        Textarea::make('workplace')
+                            ->label(__('beneficiary.section.detailed_evaluation.labels.workplace'))
+                            ->placeholder(__('beneficiary.placeholder.need_description'))
+                            ->maxLength(1000),
                     ]),
                 Section::make(__('beneficiary.section.detailed_evaluation.heading.risk'))
                     ->relationship('multidisciplinaryEvaluation')

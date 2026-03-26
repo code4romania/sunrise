@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Cases\Pages;
 
+use alcea\cnp\Cnp;
 use App\Enums\AddressType;
 use App\Enums\CaseStatus;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
@@ -246,6 +247,29 @@ class CreateCase extends CreateRecord
                 $this->fillFormFromBeneficiary($source);
             }
         }
+
+        $this->applyBirthdateFromCnpWizardState((string) $cnp);
+    }
+
+    /**
+     * Pre-fill birthdate on the identity step from the CNP captured in the previous wizard step.
+     */
+    protected function applyBirthdateFromCnpWizardState(string $cnpDigits): void
+    {
+        if ($cnpDigits === '') {
+            return;
+        }
+
+        if (! filled($birthdate = (new Cnp($cnpDigits))->getBirthDateFromCNP('Y-m-d'))) {
+            return;
+        }
+
+        $current = $this->form->getRawState();
+        if (filled($current['birthdate'] ?? null)) {
+            return;
+        }
+
+        $this->form->fill(array_merge($current, ['birthdate' => $birthdate]));
     }
 
     public function resetCnpBeneficiaryInTenant(): void

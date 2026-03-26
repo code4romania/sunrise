@@ -12,9 +12,10 @@ use App\Enums\ReferralMode;
 use App\Forms\Components\Select;
 use App\Models\ReferringInstitution;
 use App\Rules\MultipleIn;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 
 class FlowPresentationFormSchema
@@ -38,7 +39,8 @@ class FlowPresentationFormSchema
                 ->maxWidth('3xl')
                 ->columns(2)
                 ->schema([
-                    Group::make()
+                    Section::make(__('beneficiary.section.flow.presentation_and_referral'))
+                        ->compact()
                         ->columnSpanFull()
                         ->columns(2)
                         ->schema([
@@ -60,21 +62,21 @@ class FlowPresentationFormSchema
                                         ))
                                         ->nullable(),
 
-                                    Select::make('referral_mode')
+                                    CheckboxList::make('referral_mode')
                                         ->label(__('field.referral_mode'))
-                                        ->placeholder(__('placeholder.select_one'))
                                         ->options(ReferralMode::options())
-                                        ->enum(ReferralMode::class)
                                         ->visible(fn (Get $get) => PresentationMode::isValue(
                                             $get('presentation_mode'),
                                             PresentationMode::FORWARDED
                                         ))
-                                        ->nullable(),
+                                        ->columns(2)
+                                        ->gridDirection('row'),
                                 ]),
 
                         ]),
 
-                    Group::make()
+                    Section::make(__('beneficiary.section.flow.notification'))
+                        ->compact()
                         ->columnSpanFull()
                         ->columns(2)
                         ->schema([
@@ -102,7 +104,8 @@ class FlowPresentationFormSchema
                                         ))]),
                         ]),
 
-                    Group::make()
+                    Section::make(__('beneficiary.section.flow.act_location'))
+                        ->compact()
                         ->columnSpanFull()
                         ->columns(2)
                         ->schema([
@@ -124,18 +127,24 @@ class FlowPresentationFormSchema
                                 ),
                         ]),
 
-                    Select::make('first_called_institution_id')
-                        ->label(__('field.first_called_institution'))
-                        ->placeholder(__('placeholder.select_one'))
-                        ->options($institutionOptions)
-                        ->nullable(),
+                    Section::make(__('beneficiary.section.flow.institutions_called'))
+                        ->compact()
+                        ->columnSpanFull()
+                        ->columns(2)
+                        ->schema([
+                            Select::make('first_called_institution_id')
+                                ->label(__('field.first_called_institution'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options($institutionOptions)
+                                ->nullable(),
 
-                    Select::make('other_called_institutions')
-                        ->label(__('field.other_called_institutions'))
-                        ->placeholder(__('beneficiary.section.personal_information.placeholders.select_many'))
-                        ->options($institutionOptions)
-                        ->multiple()
-                        ->nullable(),
+                            Select::make('other_called_institutions')
+                                ->label(__('field.other_called_institutions'))
+                                ->placeholder(__('beneficiary.section.personal_information.placeholders.select_many'))
+                                ->options($institutionOptions)
+                                ->multiple()
+                                ->nullable(),
+                        ]),
                 ]),
         ];
     }

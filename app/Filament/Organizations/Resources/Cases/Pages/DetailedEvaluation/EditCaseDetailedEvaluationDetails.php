@@ -8,9 +8,10 @@ use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
-use Filament\Forms\Components\Repeater;
+use App\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
@@ -59,6 +60,14 @@ class EditCaseDetailedEvaluationDetails extends EditRecord
                 Section::make()
                     ->maxWidth('3xl')
                     ->schema([
+                        Grid::make()
+                            ->relationship('multidisciplinaryEvaluation')
+                            ->schema([
+                                TextInput::make('reporting_by')
+                                    ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
+                                    ->placeholder(__('beneficiary.placeholder.reporting_by'))
+                                    ->maxLength(255),
+                            ]),
                         Repeater::make('detailedEvaluationSpecialists')
                             ->relationship('detailedEvaluationSpecialists')
                             ->label(__('beneficiary.section.detailed_evaluation.labels.specialists'))
@@ -66,6 +75,7 @@ class EditCaseDetailedEvaluationDetails extends EditRecord
                             ->deletable()
                             ->columns(4)
                             ->itemLabel(fn (array $state): ?string => $state['full_name'] ?? null)
+                            ->collapsible(false)
                             ->schema([
                                 TextInput::make('full_name')
                                     ->label(__('beneficiary.section.detailed_evaluation.labels.full_name'))
@@ -85,6 +95,7 @@ class EditCaseDetailedEvaluationDetails extends EditRecord
                             ->columns()
                             ->addActionLabel(__('beneficiary.action.add_meet_row'))
                             ->label(__('beneficiary.section.detailed_evaluation.labels.meetings'))
+                            ->collapsible(false)
                             ->schema([
                                 TextInput::make('specialist')
                                     ->label(__('beneficiary.section.detailed_evaluation.labels.specialist'))

@@ -115,7 +115,7 @@ return [
             'label' => 'Detalii evaluare',
         ],
         'partner' => [
-            'label' => 'Partener',
+            'label' => 'Partener de viață al victimei',
         ],
         'multidisciplinary_evaluation' => [
             'label' => 'Evaluare multidisciplinară',
@@ -202,6 +202,13 @@ return [
             ],
         ],
 
+        'flow' => [
+            'presentation_and_referral' => 'Modalitate de prezentare și trimitere',
+            'notification' => 'Notificare',
+            'act_location' => 'Locul faptei',
+            'institutions_called' => 'Instituții apelate',
+        ],
+
         'initial_evaluation' => [
             'risk_categorization_intro' => 'În funcție de scorul pe care îl primește beneficiarul, acesta poate fi categorisit astfel:',
             'heading' => [
@@ -223,7 +230,7 @@ return [
                 'method_of_identifying_the_service' => 'Modalitatea de identificare a serviciului de către solicitant',
                 'violence_type' => 'Tipurile violenței domestice',
                 'violence_primary_type' => 'Dintre care tipul primar',
-                'frequency_violence' => 'Frecvența violenței',
+                'frequency_violence' => 'Frecvența agresiunii',
                 'violence_means' => 'Care au fost mijloacele folosite de agresor?',
                 'violence_means_specify' => 'Specificați mijloacele folosite de agresor',
                 'description' => 'Descrierea succintă a problemei de violență domestică cu care se confruntă persoana',
@@ -317,10 +324,11 @@ return [
                 'social_economic_need' => 'Nevoi din punct de vedere socio-economic',
                 'legal_needs' => 'Nevoi din punct de vedere juridic',
                 'extended_family' => 'Familia lărgită',
-                'family_social_integration' => 'Integrarea socială a familiei',
+                'family_social_integration' => 'Integrarea socială',
                 'income' => 'Venit',
                 'community_resources' => 'Resurse comunitare',
                 'house' => 'Locuință',
+                'workplace' => 'Loc de muncă',
                 'risk' => 'Riscuri pentru situații de criză cu intervenție imediată',
                 'psychological_advice' => 'Consiliere psihologică',
                 'legal_advice' => 'Consiliere juridică',
@@ -351,7 +359,7 @@ return [
                 'beneficiary_needs' => 'Nevoile beneficiarului',
                 'family' => 'Factori de mediu și specifici familiei',
                 'risk' => 'Riscuri',
-                'partner' => 'Soțul/ partenerul',
+                'partner' => 'Soțul / partenerul de viață al victimei',
                 'recommendations_for_intervention_plan' => 'Recomandari pentru planul de interventie',
                 'recommendation_services' => 'Servicii recomandate',
             ],
@@ -489,8 +497,8 @@ return [
                 'admittance_date' => 'Data admiterii în centru (zi-lună-an)',
                 'exit_date' => 'Data ieșirii din centru (zi-lună-an)',
                 'case_manager' => 'Manager de caz',
-                'admittance_reason' => 'Motivul admiterii în Centru',
-                'admittance_details' => 'Detalii motiv admitere',
+                'admittance_reason' => 'Motivul accesării serviciilor',
+                'admittance_details' => 'Detalii privind motivul accesării serviciilor',
                 'close_method' => 'Modalitatea de închidere a cazului',
                 'institution_name' => 'Specificǎ instituția/serviciul unde s-a realizat transferul',
                 'beneficiary_request' => 'Specificǎ motivul beneficiarei',
@@ -510,7 +518,7 @@ return [
 
             ],
             'placeholders' => [
-                'admittance_details' => 'Adaugă detalii referitoare la motivul admiterii',
+                'admittance_details' => 'Adaugă detalii referitoare la motivul accesării serviciilor',
                 'institution_name' => 'Introdu instituția/serviciului',
                 'add_details' => 'Adaugă detalii',
                 'close_situation' => 'Descrieți situația cazului la închidere',

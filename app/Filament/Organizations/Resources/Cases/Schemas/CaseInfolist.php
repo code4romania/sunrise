@@ -168,26 +168,29 @@ class CaseInfolist
                                             ->label(__('field.electronically_monitored'))
                                             ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
                                             ->placeholder('—'),
-                                    ])
-                                    ->visible(fn (Beneficiary $record): bool => $record->aggressors->isNotEmpty()),
-                                Grid::make(2)
-                                    ->schema([
-                                        TextEntry::make('antecedents.has_police_reports')
+                                        TextEntry::make('has_police_reports')
                                             ->label(__('field.has_police_reports'))
                                             ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
                                             ->placeholder('—'),
-                                        TextEntry::make('antecedents.police_report_count')
+                                        TextEntry::make('police_report_count')
                                             ->label(__('field.police_report_count'))
                                             ->placeholder('—'),
-                                        TextEntry::make('antecedents.has_medical_reports')
+                                        TextEntry::make('has_medical_reports')
                                             ->label(__('field.has_medical_reports'))
                                             ->formatStateUsing(fn ($state) => is_object($state) && method_exists($state, 'getLabel') ? $state->getLabel() : '—')
                                             ->placeholder('—'),
-                                        TextEntry::make('antecedents.medical_report_count')
+                                        TextEntry::make('medical_report_count')
                                             ->label(__('field.medical_report_count'))
                                             ->placeholder('—'),
+                                        TextEntry::make('hospitalization_days')
+                                            ->label(__('field.hospitalization_days'))
+                                            ->placeholder('—'),
+                                        TextEntry::make('hospitalization_observations')
+                                            ->label(__('field.hospitalization_observations'))
+                                            ->placeholder('—')
+                                            ->columnSpanFull(),
                                     ])
-                                    ->visible(fn (Beneficiary $record): bool => $record->antecedents !== null),
+                                    ->visible(fn (Beneficiary $record): bool => $record->aggressors->isNotEmpty()),
                             ]),
 
                         SectionWithRecordActions::make(__('case.view.initial_evaluation'))
@@ -298,45 +301,7 @@ class CaseInfolist
                                 Action::make('view_plan')
                                     ->label(__('case.view.see_plan_details'))
                                     ->visible(fn (Beneficiary $record): bool => $record->interventionPlan !== null)
-                                    ->slideOver()
-                                    ->modal()
-                                    ->modalHeading(__('intervention_plan.headings.view_page'))
-                                    ->modalSubmitAction(false)
-                                    ->modalCancelActionLabel(__('general.action.close'))
-                                    ->record(fn (Beneficiary $record): Beneficiary => $record)
-                                    ->schema([
-                                        Section::make(__('intervention_plan.headings.plan_details'))
-                                            ->columns(3)
-                                            ->schema([
-                                                TextEntry::make('full_name')
-                                                    ->label(__('intervention_plan.labels.full_name')),
-                                                TextEntry::make('cnp')
-                                                    ->label(__('intervention_plan.labels.cnp')),
-                                                TextEntry::make('address')
-                                                    ->label(__('intervention_plan.labels.address'))
-                                                    ->state(fn (Beneficiary $record): string => self::formatAddress($record))
-                                                    ->placeholder('—'),
-                                                TextEntry::make('interventionPlan.admit_date_in_center')
-                                                    ->label(__('intervention_plan.labels.admit_date_in_center'))
-                                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
-                                                    ->placeholder('—'),
-                                                TextEntry::make('interventionPlan.plan_date')
-                                                    ->label(__('intervention_plan.labels.plan_date'))
-                                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
-                                                    ->placeholder('—'),
-                                                TextEntry::make('interventionPlan.last_revise_date')
-                                                    ->label(__('intervention_plan.labels.last_revise_date'))
-                                                    ->formatStateUsing(fn (mixed $state): string => self::formatBirthdateState($state, 'd.m.Y'))
-                                                    ->placeholder('—'),
-                                            ]),
-                                    ])
-                                    ->extraModalFooterActions([
-                                        Action::make('view_full_plan')
-                                            ->label(__('case.view.view_full_plan'))
-                                            ->url(fn (Beneficiary $record): string => CaseResource::getUrl('view_intervention_plan', ['record' => $record]))
-                                            ->button()
-                                            ->close(),
-                                    ]),
+                                    ->url(fn (Beneficiary $record): string => CaseResource::getUrl('view_intervention_plan', ['record' => $record])),
                             ])
                             ->schema([
                                 EmptyState::make(__('case.view.intervention_plan'))

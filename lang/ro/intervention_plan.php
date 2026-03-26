@@ -390,5 +390,11 @@ return [
     'helpers' => [
         'select_service_first_for_interventions' => 'Selectați mai întâi tipul serviciului ca să apară lista de intervenții pentru acest serviciu.',
         'no_active_interventions_for_service' => 'Serviciul ales nu are intervenții active în nomenclator (Superadmin). Adăugați sau activați intervențiile pentru acel serviciu.',
+        'add_interventions_multiple' => 'Puteți bifa una sau mai multe intervenții; toate vor fi create cu aceleași detalii (perioadă, persoană responsabilă, obiective etc.).',
+        'empty_case_team_for_responsible' => 'Nu există încă membri în echipa de caz. Adăugați membri din secțiunea „Echipă de caz” pentru a alege persoana responsabilă.',
+    ],
+
+    'notifications' => [
+        'interventions_added' => '{1} A fost adăugată o intervenție.|[2,*] Au fost adăugate :count intervenții.',
     ],
 ];

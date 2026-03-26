@@ -19,6 +19,7 @@ use App\Schemas\CounselingSheetInfolistSchemas;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -38,6 +39,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ViewCaseInterventionService extends ViewRecord
 {
@@ -229,8 +231,19 @@ class ViewCaseInterventionService extends ViewRecord
                                             ->modalHeading(__('intervention_plan.actions.add_intervention'))
                                             ->schema($this->getAddInterventionFormSchema())
                                             ->action(function (array $data): void {
-                                                $intervention = $this->interventionService->beneficiaryInterventions()->create([
-                                                    'organization_service_intervention_id' => $data['organization_service_intervention_id'],
+                                                $rawIds = $data['organization_service_intervention_ids'] ?? [];
+                                                $ids = \is_array($rawIds)
+                                                    ? array_values(array_filter(
+                                                        $rawIds,
+                                                        static fn (mixed $id): bool => $id !== null && $id !== ''
+                                                    ))
+                                                    : [];
+
+                                                if ($ids === []) {
+                                                    return;
+                                                }
+
+                                                $payload = [
                                                     'specialist_id' => $data['specialist_id'] ?? null,
                                                     'start_date_interval' => $data['start_date_interval'] ?? null,
                                                     'end_date_interval' => $data['end_date_interval'] ?? null,
@@ -239,15 +252,25 @@ class ViewCaseInterventionService extends ViewRecord
                                                     'procedure' => $data['procedure'] ?? null,
                                                     'indicators' => $data['indicators'] ?? null,
                                                     'achievement_degree' => $data['achievement_degree'] ?? null,
-                                                ]);
+                                                ];
+
+                                                DB::transaction(function () use ($ids, $payload): void {
+                                                    foreach ($ids as $osiId) {
+                                                        $this->interventionService->beneficiaryInterventions()->create([
+                                                            'organization_service_intervention_id' => (int) $osiId,
+                                                            ...$payload,
+                                                        ]);
+                                                    }
+                                                });
+
                                                 Notification::make()
                                                     ->success()
-                                                    ->title(__('filament-actions::create.single.notifications.created.title'))
+                                                    ->title(trans_choice('intervention_plan.notifications.interventions_added', \count($ids)))
                                                     ->send();
-                                                $this->redirect(CaseResource::getUrl('view_beneficiary_intervention', [
+
+                                                $this->redirect(CaseResource::getUrl('view_intervention_service', [
                                                     'record' => $this->record,
                                                     'interventionService' => $this->interventionService,
-                                                    'beneficiaryIntervention' => $intervention->getKey(),
                                                 ]));
                                             }),
                                     ]),
@@ -292,34 +315,23 @@ class ViewCaseInterventionService extends ViewRecord
      */
     protected function getAddInterventionFormSchema(): array
     {
-        $service = $this->interventionService;
-        $beneficiary = $this->record;
-        $organizationServiceId = $service->organization_service_id;
-
         return [
             Grid::make()
                 ->schema([
-                    Select::make('organization_service_intervention_id')
+                    CheckboxList::make('organization_service_intervention_ids')
                         ->label(__('intervention_plan.labels.intervention_type'))
-                        ->options(
-                            OrganizationServiceIntervention::with('serviceInterventionWithoutStatusCondition')
-                                ->where('organization_service_id', $organizationServiceId)
-                                ->active()
-                                ->get()
-                                ->filter(fn (OrganizationServiceIntervention $osi) => $osi->serviceInterventionWithoutStatusCondition)
-                                ->pluck('serviceInterventionWithoutStatusCondition.name', 'id')
-                        )
-                        ->required(),
+                        ->options(fn (): array => $this->getAddInterventionOrganizationServiceInterventionOptions())
+                        ->required()
+                        ->columns(2)
+                        ->gridDirection('row')
+                        ->helperText(__('intervention_plan.helpers.add_interventions_multiple')),
                     Select::make('specialist_id')
                         ->label(__('intervention_plan.labels.responsible_person'))
-                        ->options(
-                            $beneficiary->specialistsTeam()
-                                ->with(['user:id,first_name,last_name', 'roleForDisplay:id,name'])
-                                ->get()
-                                ->mapWithKeys(fn (Specialist $s) => [$s->id => $s->name_role])
-                                ->all()
-                        )
-                        ->placeholder(__('intervention_plan.placeholders.specialist')),
+                        ->options(fn (): array => $this->getCaseTeamSpecialistOptionsForBeneficiary())
+                        ->placeholder(__('intervention_plan.placeholders.specialist'))
+                        ->helperText(fn (): ?string => \count($this->getCaseTeamSpecialistOptionsForBeneficiary()) === 0
+                            ? __('intervention_plan.helpers.empty_case_team_for_responsible')
+                            : null),
                 ]),
             Grid::make()
                 ->columns(2)
@@ -360,6 +372,44 @@ class ViewCaseInterventionService extends ViewRecord
                 ->collapsible()
                 ->collapsed(true),
         ];
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    protected function getAddInterventionOrganizationServiceInterventionOptions(): array
+    {
+        $service = $this->interventionService;
+        if ($service === null) {
+            return [];
+        }
+
+        return OrganizationServiceIntervention::with('serviceInterventionWithoutStatusCondition')
+            ->where('organization_service_id', $service->organization_service_id)
+            ->active()
+            ->get()
+            ->filter(fn (OrganizationServiceIntervention $osi) => $osi->serviceInterventionWithoutStatusCondition)
+            ->mapWithKeys(fn (OrganizationServiceIntervention $osi) => [
+                $osi->id => $osi->serviceInterventionWithoutStatusCondition->name,
+            ])
+            ->all();
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    protected function getCaseTeamSpecialistOptionsForBeneficiary(): array
+    {
+        $beneficiary = $this->record;
+        if (! $beneficiary instanceof Beneficiary) {
+            return [];
+        }
+
+        return $beneficiary->specialistsTeam()
+            ->with(['user:id,first_name,last_name', 'roleForDisplay:id,name'])
+            ->get()
+            ->mapWithKeys(fn (Specialist $s) => [$s->id => $s->name_role])
+            ->all();
     }
 
     protected function isCounselingSheetEmpty(): bool

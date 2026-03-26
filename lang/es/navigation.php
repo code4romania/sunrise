@@ -19,7 +19,7 @@ return [
     'configurations' => [
         '_group' => 'Configuraciones',
         'organization' => 'Organización',
-        'services' => 'Servicios',
+        'services' => 'Lista de tipos de servicios',
         'staff' => 'Personal',
     ],
     'developed_by' => 'Desarrollado por',

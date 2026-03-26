@@ -43,7 +43,7 @@ class ServiceForm
                         ->state(__('service.helper_texts.before_form')),
 
                     Select::make('service_id')
-                        ->label(__('service.labels.name'))
+                        ->label(__('service.labels.catalog_service'))
                         ->visible(fn (string $operation) => $operation === 'create')
                         ->options(function (): array {
                             $tenant = Filament::getTenant();
@@ -94,7 +94,7 @@ class ServiceForm
                         ->required(fn (string $operation): bool => $operation === 'create'),
 
                     TextEntry::make('service_name')
-                        ->label(__('service.labels.name'))
+                        ->label(__('service.labels.catalog_service'))
                         ->state(function (Get $get, $record = null) {
                             $name = $record?->serviceWithoutStatusCondition?->name ?? null;
                             if ($name !== null) {
@@ -125,7 +125,7 @@ class ServiceForm
                                         ->live(),
 
                                     TextEntry::make('name')
-                                        ->label(__('service.labels.name')),
+                                        ->label(__('service.labels.intervention_name')),
 
                                     TextEntry::make('status_display')
                                         ->label(__('service.labels.status'))

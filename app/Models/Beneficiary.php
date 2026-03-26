@@ -91,6 +91,7 @@ class Beneficiary extends Model
         'gender' => Gender::class,
         'same_as_legal_residence' => 'boolean',
         'status' => CaseStatus::class,
+        'monitoring_reminder_sent_at' => 'datetime',
     ];
 
     /**
