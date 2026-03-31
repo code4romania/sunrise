@@ -138,6 +138,7 @@ return [
 
     'presentation_mode' => 'Modalitate prezentare',
     'referring_institution' => 'Instituție care trimite victima',
+    'reporting_by' => 'Semnalare caz de către',
 
     'referral_mode' => 'Modalitatea de referire',
     'notifier' => 'Persoana care a anunțat cazul',

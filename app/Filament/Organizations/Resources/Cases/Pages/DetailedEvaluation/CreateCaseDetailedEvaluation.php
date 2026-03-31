@@ -299,9 +299,9 @@ class CreateCaseDetailedEvaluation extends EditRecord
                     TextInput::make('reporting_by')
                         ->label(__('beneficiary.section.detailed_evaluation.labels.reporting_by'))
                         ->placeholder(__('beneficiary.placeholder.reporting_by'))
-                        ->maxLength(100)
+                        ->maxLength(255)
                         ->default(fn () => $this->getRecord()?->flowPresentation?->referringInstitution?->name)
-                        ->visible(fn (Get $get): bool => Applicant::OTHER->is($get('multidisciplinaryEvaluation.applicant'))),
+                        ->required(fn (Get $get): bool => Applicant::OTHER->is($get('applicant'))),
                 ]),
             Section::make(__('beneficiary.section.detailed_evaluation.heading.historic_violence'))
                 ->maxWidth('3xl')

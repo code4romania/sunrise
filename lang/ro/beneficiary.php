@@ -315,7 +315,7 @@ return [
                 'location' => 'Locația',
                 'observations' => 'Observații',
                 'applicant' => 'Solicitant',
-                'reporting_by' => 'Semnalare de caz de către',
+                'reporting_by' => 'Semnalare caz de către',
                 'date_interval' => 'Data sau perioada raportată',
                 'significant_events' => 'Evenimente semnificative de la respectiva data',
                 'medical_need' => 'Nevoi din punct de vedere medical',
