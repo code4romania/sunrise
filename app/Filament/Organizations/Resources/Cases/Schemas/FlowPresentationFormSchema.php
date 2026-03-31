@@ -107,7 +107,7 @@ class FlowPresentationFormSchema
                     Section::make(__('beneficiary.section.flow.act_location'))
                         ->compact()
                         ->columnSpanFull()
-                        ->columns(2)
+                        ->columns(1)
                         ->schema([
                             Select::make('act_location')
                                 ->label(__('field.act_location'))
@@ -130,7 +130,7 @@ class FlowPresentationFormSchema
                     Section::make(__('beneficiary.section.flow.institutions_called'))
                         ->compact()
                         ->columnSpanFull()
-                        ->columns(2)
+                        ->columns(1)
                         ->schema([
                             Select::make('first_called_institution_id')
                                 ->label(__('field.first_called_institution'))

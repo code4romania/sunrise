@@ -71,12 +71,13 @@ class EditCaseFlowPresentation extends EditRecord
     public static function flowSection(): array
     {
         return [
-            Grid::make()
+            Grid::make(1)
                 ->maxWidth('3xl')
                 ->relationship('flowPresentation')
                 ->schema([
                     Section::make(__('beneficiary.section.flow.presentation_and_referral'))
                         ->compact()
+                        ->columnSpanFull()
                         ->columns(2)
                         ->schema([
                             Select::make('presentation_mode')
@@ -110,6 +111,7 @@ class EditCaseFlowPresentation extends EditRecord
 
                     Section::make(__('beneficiary.section.flow.notification'))
                         ->compact()
+                        ->columnSpanFull()
                         ->columns(2)
                         ->schema([
                             Select::make('notifier')
@@ -137,7 +139,8 @@ class EditCaseFlowPresentation extends EditRecord
 
                     Section::make(__('beneficiary.section.flow.act_location'))
                         ->compact()
-                        ->columns(2)
+                        ->columnSpanFull()
+                        ->columns(1)
                         ->schema([
                             Select::make('act_location')
                                 ->label(__('field.act_location'))
@@ -159,7 +162,8 @@ class EditCaseFlowPresentation extends EditRecord
 
                     Section::make(__('beneficiary.section.flow.institutions_called'))
                         ->compact()
-                        ->columns(2)
+                        ->columnSpanFull()
+                        ->columns(1)
                         ->schema([
                             Select::make('first_called_institution_id')
                                 ->label(__('field.first_called_institution'))

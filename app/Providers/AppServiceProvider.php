@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseInterventionPlan;
 use App\Http\Responses\LoginResponse;
 use App\Models\Activity;
 use App\Models\Address;
@@ -58,8 +59,8 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Models\UserStatus;
 use App\Models\Violence;
-use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseInterventionPlan;
 use App\Models\ViolenceHistory;
+use Filament\Forms\Components\Select as FormsSelect;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
@@ -101,6 +102,13 @@ class AppServiceProvider extends ServiceProvider
                 $input->minValue(0);
             }
         });
+
+        FormsSelect::configureUsing(function (FormsSelect $select): void {
+            $select->extraFieldWrapperAttributes([
+                'class' => 'min-w-0 w-full',
+            ]);
+        });
+
         Grid::configureUsing(function (Grid $grid) {
             $grid->extraAttributes([
                 'class' => 'bg-white dark:bg-gray-800/50 rounded-xl p-6 shadow',
