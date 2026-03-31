@@ -56,6 +56,7 @@ return [
         'see_plan_details' => 'Vezi detalii plan',
         'view_full_plan' => 'Vezi plan complet',
         'view_full_beneficiary' => 'Vezi detalii complete',
+        'case_created_at' => 'Data creării cazului',
         'identity' => 'Date identitate',
         'identity_page' => [
             'download_sheet' => 'Descarcă fișă',

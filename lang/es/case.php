@@ -40,6 +40,7 @@ return [
         'see_plan_details' => 'Ver detalles del plan',
         'view_full_plan' => 'Ver plan completo',
         'view_full_beneficiary' => 'Ver detalles completos',
+        'case_created_at' => 'Fecha de creación del caso',
         'identity' => 'Datos de identidad',
         'identity_page' => [
             'download_sheet' => 'Descargar ficha',
