@@ -11,6 +11,8 @@ use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\CloseFile\CloseFileResource;
 use App\Infolists\Components\DateEntry;
 use App\Models\Beneficiary;
+use App\Services\CaseExports\CaseExportManager;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
@@ -18,7 +20,9 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCloseFile extends ViewRecord
 {
@@ -54,6 +58,11 @@ class ViewCloseFile extends ViewRecord
                 ->modalDescription(__('beneficiary.section.close_file.labels.modal_delete_description'))
                 ->successRedirectUrl(CaseResource::getUrl('view', ['record' => $parent]))
                 ->outlined(),
+            Action::make('download_sheet')
+                ->label(__('case.view.identity_page.download_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->outlined()
+                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadCloseFilePdf($this->getRecord())),
         ];
     }
 

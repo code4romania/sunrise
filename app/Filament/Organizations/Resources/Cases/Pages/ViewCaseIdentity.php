@@ -8,11 +8,13 @@ use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\IdentityInfolist;
 use App\Models\Beneficiary;
+use App\Services\CaseExports\CaseExportManager;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseIdentity extends ViewRecord
 {
@@ -55,7 +57,7 @@ class ViewCaseIdentity extends ViewRecord
             Action::make('download_sheet')
                 ->label(__('case.view.identity_page.download_sheet'))
                 ->icon(Heroicon::OutlinedArrowDownTray)
-                ->url('#'),
+                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadIdentityPdf($record)),
         ];
     }
 

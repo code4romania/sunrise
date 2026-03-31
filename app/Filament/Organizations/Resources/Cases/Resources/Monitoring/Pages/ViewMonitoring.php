@@ -9,7 +9,9 @@ use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\MonitoringResource;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Beneficiary;
+use App\Services\CaseExports\CaseExportManager;
 use Carbon\Carbon;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
@@ -19,7 +21,9 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewMonitoring extends ViewRecord
 {
@@ -59,6 +63,11 @@ class ViewMonitoring extends ViewRecord
                 ->record($this->getRecord())
                 ->successRedirectUrl(CaseResource::getUrl('edit_case_monitoring', ['record' => $parent]))
                 ->outlined(),
+            Action::make('download_sheet')
+                ->label(__('case.view.identity_page.download_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->outlined()
+                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadMonitoringPdf($this->getRecord())),
         ];
     }
 

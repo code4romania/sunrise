@@ -13,6 +13,7 @@ use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionMeeting;
 use App\Models\InterventionService;
 use App\Models\Specialist;
+use App\Services\CaseExports\CaseExportManager;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\RichEditor;
@@ -205,47 +206,10 @@ class ViewCaseBeneficiaryIntervention extends ViewRecord
 
     public function downloadMeetingsTable(): \Symfony\Component\HttpFoundation\StreamedResponse
     {
-        $meetings = $this->beneficiaryIntervention?->meetings()
-            ->with(['specialist.user', 'specialist.roleForDisplay'])
-            ->orderByDesc('id')
-            ->get() ?? collect();
+        abort_unless($this->beneficiaryIntervention instanceof BeneficiaryIntervention, 404);
+        abort_unless($this->record instanceof Beneficiary, 404);
 
-        $filename = 'evidenta-sedinte-'.now()->format('Y-m-d').'.csv';
-
-        return response()->streamDownload(
-            function () use ($meetings): void {
-                $out = fopen('php://output', 'w');
-                if ($out === false) {
-                    return;
-                }
-                fprintf($out, chr(0xEF).chr(0xBB).chr(0xBF));
-                fputcsv($out, [
-                    __('intervention_plan.labels.meet_number'),
-                    __('intervention_plan.labels.status'),
-                    __('intervention_plan.labels.date'),
-                    __('intervention_plan.labels.time'),
-                    __('intervention_plan.labels.duration'),
-                    __('intervention_plan.labels.specialist'),
-                ]);
-                $number = $meetings->count();
-                foreach ($meetings as $meeting) {
-                    fputcsv($out, [
-                        $number,
-                        $meeting->status?->getLabel() ?? '',
-                        $meeting->date?->translatedFormat('d/m/Y') ?? '',
-                        $meeting->time ? \Carbon\Carbon::parse($meeting->time)->format('H:i') : '',
-                        $meeting->duration !== null ? $meeting->duration.' min' : '',
-                        $meeting->specialist?->name_role ?? '',
-                    ]);
-                    $number--;
-                }
-                fclose($out);
-            },
-            $filename,
-            [
-                'Content-Type' => 'text/csv; charset=UTF-8',
-            ]
-        );
+        return app(CaseExportManager::class)->downloadMeetingsCsv($this->beneficiaryIntervention, $this->record);
     }
 
     protected function getMeetingNumberForId(int $meetingId): int

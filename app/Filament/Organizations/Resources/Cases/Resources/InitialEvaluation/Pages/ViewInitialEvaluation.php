@@ -14,6 +14,8 @@ use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\Notice;
 use App\Models\Beneficiary;
 use App\Models\EvaluateDetails;
+use App\Services\CaseExports\CaseExportManager;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
@@ -23,8 +25,10 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewInitialEvaluation extends ViewRecord
 {
@@ -44,6 +48,10 @@ class ViewInitialEvaluation extends ViewRecord
                 ->url($parent instanceof Beneficiary
                     ? CaseResource::getUrl('view', ['record' => $parent])
                     : CaseResource::getUrl('index')),
+            Action::make('download_sheet')
+                ->label(__('case.view.identity_page.download_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadInitialEvaluationPdf($this->getParentRecord())),
         ];
     }
 

@@ -8,9 +8,13 @@ use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\PersonalInfoInfolist;
 use App\Models\Beneficiary;
+use App\Services\CaseExports\CaseExportManager;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCasePersonalInformation extends ViewRecord
 {
@@ -45,6 +49,10 @@ class ViewCasePersonalInformation extends ViewRecord
         return [
             BackAction::make()
                 ->url(CaseResource::getUrl('view', ['record' => $record])),
+            Action::make('download_sheet')
+                ->label(__('case.view.identity_page.download_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadCaseInfoPdf($record)),
         ];
     }
 

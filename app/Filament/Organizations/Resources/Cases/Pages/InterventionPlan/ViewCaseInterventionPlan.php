@@ -12,6 +12,7 @@ use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\In
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanServicesWidget;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
+use App\Services\CaseExports\CaseExportManager;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
@@ -28,6 +29,7 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseInterventionPlan extends ViewRecord
 {
@@ -116,85 +118,7 @@ class ViewCaseInterventionPlan extends ViewRecord
                 ->label(__('intervention_plan.actions.download_plan'))
                 ->icon(Heroicon::OutlinedArrowDownTray)
                 ->outlined()
-                ->action(function (): void {
-                    Notification::make()
-                        ->info()
-                        ->title(__('intervention_plan.actions.download_plan'))
-                        ->body(__('intervention_plan.labels.download_plan_coming_soon'))
-                        ->send();
-                }),
-            Action::make('beneficiary_details')
-                ->record($record)
-                ->slideOver()
-                ->modalHeading(__('case.view.identity_page.fab_beneficiary_details'))
-                ->modalSubmitAction(false)
-                ->modalCancelActionLabel(__('general.action.close'))
-                ->schema([
-                    TextEntry::make('full_name')
-                        ->label('Nume și prenume')
-                        ->placeholder('—'),
-                    TextEntry::make('created_at')
-                        ->label('Data creării cazului')
-                        ->formatStateUsing(fn (mixed $state): string => self::formatDateState($state))
-                        ->placeholder('—'),
-                    TextEntry::make('age')
-                        ->label(__('field.age'))
-                        ->state(fn (Beneficiary $record): string => $record->age !== null ? (string) $record->age : '—'),
-                    TextEntry::make('civil_status')
-                        ->label(__('field.civil_status'))
-                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->civil_status)),
-                    TextEntry::make('children_total_count')
-                        ->label('Număr total copii')
-                        ->placeholder('—'),
-                    TextEntry::make('children_under_18_care_count')
-                        ->label('Număr copii în întreținere cu vârsta < 18 ani')
-                        ->placeholder('—'),
-                    TextEntry::make('legal_residence_city')
-                        ->label('Oraș/UAT domiciliu legal')
-                        ->state(fn (Beneficiary $record): string => $record->legal_residence?->city?->name ?? '—'),
-                    TextEntry::make('effective_residence_city')
-                        ->label('Localitate domiciliu efectiv')
-                        ->state(fn (Beneficiary $record): string => $record->effective_residence?->city?->name ?? '—'),
-                    TextEntry::make('details.studies')
-                        ->label(__('field.studies'))
-                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->details?->studies)),
-                    TextEntry::make('details.occupation')
-                        ->label(__('field.occupation'))
-                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->details?->occupation)),
-                    TextEntry::make('details.net_income')
-                        ->label('Venit lunar net (din toate sursele)')
-                        ->state(function (Beneficiary $record): string {
-                            $income = $record->details?->net_income;
-
-                            return blank($income) ? '—' : "{$income} RON";
-                        }),
-                    TextEntry::make('details.homeownership')
-                        ->label('Dreptul de proprietate asupra locuinței primare')
-                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->details?->homeownership)),
-                    TextEntry::make('aggressor_relationship')
-                        ->label('Relația victimei cu agresorul')
-                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->aggressors->first()?->relationship)),
-                    TextEntry::make('aggressor_legal_history')
-                        ->label('Aspecte legale agresor')
-                        ->state(function (Beneficiary $record): string {
-                            $values = $record->aggressors->first()?->legal_history;
-
-                            return self::formatCollectionLabels($values);
-                        }),
-                    TextEntry::make('flowPresentation.presentation_mode')
-                        ->label('Modalitatea de prezentare')
-                        ->state(fn (Beneficiary $record): string => self::formatEnumLabel($record->flowPresentation?->presentation_mode)),
-                    TextEntry::make('flowPresentation.act_location')
-                        ->label('Locul producerii actelor de VD')
-                        ->state(fn (Beneficiary $record): string => self::formatCollectionLabels($record->flowPresentation?->act_location)),
-                ])
-                ->extraModalFooterActions([
-                    Action::make('view_full_beneficiary')
-                        ->label(__('case.view.view_full_beneficiary'))
-                        ->url(fn (): string => CaseResource::getUrl('view', ['record' => $record]))
-                        ->button()
-                        ->close(),
-                ]),
+                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadMonthlyPlanPdf($record)),
         ];
     }
 
