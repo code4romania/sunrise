@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 return [
     'labels' => [
-        'empty_state_table' => 'Creează chiar acum un plan și adaugă serviciile de care ar trebui să beneficieze',
+        'empty_state_table' => 'Creează chiar acum un Dosar servicii VD și adaugă serviciile de care ar trebui să beneficieze',
         'full_name' => 'Beneficiar',
         'cnp' => 'CNP',
         'address' => 'Domiciliu',
         'admit_date_in_center' => 'Data admiterii în centru',
-        'plan_date' => 'Data realizării planului',
+        'plan_date' => 'Data realizării dosarului',
         'last_revise_date' => 'Data ultimei revizuiri',
         'service' => 'Serviciu',
         'specialist' => 'Specialist',
@@ -85,9 +85,9 @@ return [
         'requests_description' => 'Descrierea solicitărilor',
         'first_meeting_psychological_evaluation' => 'Evaluarea psihologică la prima ședință',
         'beneficiary_name' => 'Nume beneficiar',
-        'empty_state_service_table' => 'Poți adăuga servicii acum sau oricând după crearea planului',
+        'empty_state_service_table' => 'Poți adăuga servicii acum sau oricând după crearea Dosarului servicii VD',
         'interventions_count' => 'Nr intervenții',
-        'empty_state_service_intervention_table' => 'Adaugă intervenții în planul beneficiarului, pentru a putea documenta activitățile și ședințele realizate în cadrul serviciului.',
+        'empty_state_service_intervention_table' => 'Adaugă intervenții în Dosarul servicii VD al beneficiarului, pentru a putea documenta activitățile și ședințele realizate în cadrul serviciului.',
         'status' => 'Status',
         'date' => 'Data',
         'time' => 'Ora',
@@ -106,8 +106,8 @@ return [
         'interval' => 'Perioada de acordare',
         'benefit_description' => 'Observații beneficii',
         'next_meeting' => 'Următoarea',
-        'empty_state_table_without_intervetntions' => 'Adaugă intervenții în planul beneficiarului, pentru a putea documenta activitățile și ședințele realizate în cadrul serviciilor',
-        'empty_state_result_table' => 'Poți adăuga rezultate acum sau oricând după crearea planului',
+        'empty_state_table_without_intervetntions' => 'Adaugă intervenții în Dosarul servicii VD al beneficiarului, pentru a putea documenta activitățile și ședințele realizate în cadrul serviciilor',
+        'empty_state_result_table' => 'Poți adăuga rezultate acum sau oricând după crearea Dosarului servicii VD',
         'empty_state_monthly_plan_table' => 'Mențineți activitățile de management de caz pentru perioada următoare.',
         'result' => 'Rezultat observat',
         'started_at' => 'Demers inițiat la',
@@ -229,8 +229,8 @@ return [
         'request' => 'Solicitări',
         'psychological_evaluation' => 'Evaluare psihologică',
         'intervention_indicators' => 'Indicatori intervenție',
-        'edit_intervention_plan' => 'Actualizează detalii plan intervenție',
-        'edit_intervention_plan_modal' => 'Actualizează detalii plan',
+        'edit_intervention_plan' => 'Actualizează detalii Dosar servicii VD',
+        'edit_intervention_plan_modal' => 'Actualizează detalii Dosar servicii VD',
         'empty_state_service_table' => 'Nici un serviciu adăugat',
         'empty_state_service_intervention_table' => 'Nici o interventie planificată pentru acest serviciu',
         'add_intervention' => 'Adaugă Intervenție de :name',
@@ -249,7 +249,7 @@ return [
         'benefit_description' => 'Descriere',
         'delete_benefit_modal' => 'Șterge beneficiu social',
         'delete_beneficiary_intervention_modal' => 'Șterge intervenția',
-        'empty_state_table_without_intervetntions' => 'Nici o interventie adăugată în planul de intervenție',
+        'empty_state_table_without_intervetntions' => 'Nici o interventie adăugată în Dosarul servicii VD',
         'edit_counseling_sheet' => 'Editează fișă consiliere :counseling_sheet_name',
         'results_table' => 'Rezultate realizate',
         'results_centralizer' => 'Rezultate realizate',
@@ -270,7 +270,7 @@ return [
         'integration_and_participation_in_social_service' => 'Integrare și participare în serviciul social',
         'monthly_plans' => 'Planuri lunare',
         'monthly_plan_details' => 'Detalii plan',
-        'plan_intervention_details' => 'Detalii plan intervenție',
+        'plan_intervention_details' => 'Detalii Dosar servicii VD',
         'services_and_interventions' => 'Servicii și intervenții',
         'create_monthly_plan' => 'Creează plan',
         'service_count' => 'Serviciul :number',
@@ -291,7 +291,7 @@ return [
     ],
 
     'actions' => [
-        'create' => 'Creează plan',
+        'create' => 'Creează Dosar servicii VD',
         'edit_intervention_plan' => 'Actualizează detalii',
         'add_service' => 'Adaugă serviciu',
         'add_service_repeater' => 'Adaugă încă un serviciu',
@@ -306,7 +306,7 @@ return [
         'delete_beneficiary_intervention' => 'Șterge intervenția',
         'view_intervention' => 'Vezi intervenția',
         'download_meetings' => 'Descarcă tabel',
-        'view_intervention_plan' => 'Vezi detalii plan',
+        'view_intervention_plan' => 'Vezi detalii Dosar servicii VD',
         'add_result' => 'Adaugă rezultat',
         'edit_result' => 'Editează rezultat',
         'delete_result' => 'Șterge rezultat',
@@ -319,7 +319,7 @@ return [
         'view_details' => 'Vezi detalii',
         'create_monthly_plan_with_plans' => '+ Creează un plan',
         'download_monthly_plan' => 'Descarcă plan',
-        'download_plan' => 'Descarcă plan',
+        'download_plan' => 'Descarcă dosar',
         'complete_counseling_sheet' => 'Completează fișa consiliere',
         'edit_counseling_sheet' => 'Editează fișa consiliere',
     ],
@@ -400,5 +400,9 @@ return [
 
     'notifications' => [
         'interventions_added' => '{1} A fost adăugată o intervenție.|[2,*] Au fost adăugate :count intervenții.',
+    ],
+
+    'pdf' => [
+        'monthly_report_title' => 'Dosar servicii VD – plan lunar pentru perioada :period',
     ],
 ];

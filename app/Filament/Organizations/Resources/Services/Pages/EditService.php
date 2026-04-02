@@ -9,6 +9,7 @@ use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\GeneralStatus;
 use App\Filament\Organizations\Resources\Services\ServiceResource;
 use App\Models\OrganizationServiceIntervention;
+use App\Models\ServiceIntervention;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
@@ -90,15 +91,26 @@ class EditService extends EditRecord
         try {
             $record = $this->getRecord();
             $record->load('interventions.serviceInterventionWithoutStatusCondition');
+            $existingInterventionsByServiceInterventionId = $record->interventions
+                ->keyBy('service_intervention_id');
+            $catalogInterventions = ServiceIntervention::query()
+                ->where('service_id', $record->service_id)
+                ->orderBy('sort')
+                ->get();
 
             $data['service_id'] = $record->service_id;
-            $data['interventions'] = $record->interventions->map(function (OrganizationServiceIntervention $i) {
+            $data['interventions'] = $catalogInterventions->map(function (ServiceIntervention $catalogIntervention) use ($existingInterventionsByServiceInterventionId): array {
+                /** @var OrganizationServiceIntervention|null $organizationIntervention */
+                $organizationIntervention = $existingInterventionsByServiceInterventionId->get($catalogIntervention->id);
+                $isActive = $organizationIntervention !== null
+                    && $organizationIntervention->status === GeneralStatus::ACTIVE;
+
                 return [
-                    'id' => $i->id,
-                    'active' => true,
-                    'name' => $i->serviceInterventionWithoutStatusCondition?->name,
-                    'status' => $i->status,
-                    'service_intervention_id' => $i->service_intervention_id,
+                    'id' => $organizationIntervention?->id,
+                    'active' => $isActive,
+                    'name' => $catalogIntervention->name,
+                    'status' => $isActive,
+                    'service_intervention_id' => $catalogIntervention->id,
                 ];
             })->toArray();
 

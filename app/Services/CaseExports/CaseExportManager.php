@@ -136,10 +136,10 @@ class CaseExportManager
         $this->logPdfExport($beneficiary, 'pdf_monthly_plan_exported');
 
         return $this->downloadPdf(
-            reportTitle: "Plan de intervenție lunar pentru perioada {$periodLabel}",
+            reportTitle: __('intervention_plan.pdf.monthly_report_title', ['period' => $periodLabel]),
             caseId: $beneficiary->id,
             sections: [
-                ['title' => 'Plan de intervenție', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->interventionPlan?->toArray())],
+                ['title' => __('intervention_plan.headings.view_page'), 'rows' => $this->formatter->normalizeArray((array) $beneficiary->interventionPlan?->toArray())],
                 ['title' => 'Servicii sociale', 'rows' => $this->formatter->normalizeArray(['services' => $beneficiary->interventionPlan?->services?->toArray() ?? []])],
                 ['title' => 'Beneficii sociale', 'rows' => $this->formatter->normalizeArray(['benefits' => $beneficiary->interventionPlan?->benefits?->toArray() ?? []])],
                 ['title' => 'Rezultate', 'rows' => $this->formatter->normalizeArray(['results' => $beneficiary->interventionPlan?->results?->toArray() ?? []])],
