@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\RecommendationService;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\RichEditor;
@@ -18,6 +19,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditCaseDetailedEvaluationResults extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;

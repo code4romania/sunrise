@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Resources\CloseFile\Pages;
 use App\Actions\BackAction;
 use App\Enums\AdmittanceReason;
 use App\Enums\CloseMethod;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\CloseFile\CloseFileResource;
 use App\Forms\Components\DatePicker;
@@ -29,6 +30,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class CreateCloseFile extends CreateRecord
 {
     use HasWizard;
+    use InteractsWithBeneficiaryDetailsPanel;
 
     protected static string $resource = CloseFileResource::class;
 

@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation;
 
 use App\Actions\BackAction;
 use App\Enums\AddressType;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\IdentityInfolist;
 use App\Filament\Schemas\Components\SectionWithRecordActions;
@@ -37,6 +38,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseDetailedEvaluation extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     public function getTitle(): string|Htmlable

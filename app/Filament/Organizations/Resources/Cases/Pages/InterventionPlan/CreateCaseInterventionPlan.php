@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Models\Beneficiary;
 use App\Models\InterventionPlan;
@@ -12,6 +13,7 @@ use Filament\Resources\Pages\Page;
 
 class CreateCaseInterventionPlan extends Page
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use InteractsWithRecord;
 
     protected static string $resource = CaseResource::class;

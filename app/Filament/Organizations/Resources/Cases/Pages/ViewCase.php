@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Actions\BackAction;
 use App\Enums\CaseStatus;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Models\Beneficiary;
 use Filament\Actions\Action;
@@ -18,6 +19,8 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class ViewCase extends ViewRecord
 {
+//    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     public function getTitle(): string|Htmlable

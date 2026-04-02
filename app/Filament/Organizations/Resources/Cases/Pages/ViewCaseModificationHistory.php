@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Actions\BackAction;
 use App\Exports\CaseModificationHistoryExport;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Pages\Widgets\ModificationHistoryWidget;
 use App\Models\Activity;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ViewCaseModificationHistory extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     public function getTitle(): string|Htmlable

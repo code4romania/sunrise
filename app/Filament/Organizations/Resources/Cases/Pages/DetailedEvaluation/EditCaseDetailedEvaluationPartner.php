@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\Occupation;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\CountyCitySelect;
 use Filament\Forms\Components\Checkbox;
@@ -23,6 +24,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditCaseDetailedEvaluationPartner extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
     use SavesPartnerAddresses;
 

@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation;
 use App\Actions\BackAction;
 use App\Concerns\PreventMultipleSubmit;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Schemas\BeneficiaryResource\InitialEvaluationSchema;
 use App\Models\Beneficiary;
@@ -20,6 +21,7 @@ class CreateCaseInitialEvaluation extends EditRecord
     use HasWizard {
         HasWizard::getWizardComponent as parentGetWizardComponent;
     }
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventMultipleSubmit;
     use PreventSubmitFormOnEnter;
 

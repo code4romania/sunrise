@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InitialEvaluation;
 
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
 use App\Filament\Organizations\Schemas\BeneficiaryResource\InitialEvaluationSchema;
@@ -15,6 +16,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditRiskFactors extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;

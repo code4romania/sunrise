@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\Pages;
 
 use App\Actions\BackAction;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\IdentityInfolist;
@@ -32,6 +33,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewInitialEvaluation extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = InitialEvaluationResource::class;
 
     public function getTitle(): string|Htmlable

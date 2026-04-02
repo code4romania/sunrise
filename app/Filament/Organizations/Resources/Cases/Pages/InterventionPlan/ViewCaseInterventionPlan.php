@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanBenefitsWidget;
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanMonthlyPlansWidget;
@@ -33,6 +34,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseInterventionPlan extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     public function mount(int|string $record): void
@@ -120,104 +123,6 @@ class ViewCaseInterventionPlan extends ViewRecord
                 ->outlined()
                 ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadMonthlyPlanPdf($record)),
         ];
-    }
-
-    /**
-     * Înregistrată pentru FAB / wire:click fără a apărea în header (vezi {@see openBeneficiaryDetailsSlideOver}).
-     */
-    protected function beneficiary_detailsAction(): Action
-    {
-        $record = $this->getRecord();
-
-        if ($record instanceof Beneficiary) {
-            $record->loadMissing([
-                'details',
-                'aggressors',
-                'flowPresentation',
-                'legal_residence.city',
-                'legal_residence.county',
-                'effective_residence.city',
-                'effective_residence.county',
-            ]);
-        }
-
-        return Action::make('beneficiary_details')
-            ->record($record)
-            ->slideOver()
-            ->modalHeading(__('case.view.identity_page.fab_beneficiary_details'))
-            ->modalSubmitAction(false)
-            ->modalCancelActionLabel(__('general.action.close'))
-            ->schema([
-                TextEntry::make('full_name')
-                    ->label(__('intervention_plan.labels.beneficiary_full_name'))
-                    ->placeholder('—'),
-                TextEntry::make('created_at')
-                    ->label(__('case.view.case_created_at'))
-                    ->formatStateUsing(fn (mixed $state): string => self::formatDateState($state))
-                    ->placeholder('—'),
-                TextEntry::make('age')
-                    ->label(__('field.age'))
-                    ->state(fn (Beneficiary $r): string => $r->age !== null ? (string) $r->age : '—'),
-                TextEntry::make('civil_status')
-                    ->label(__('field.civil_status'))
-                    ->state(fn (Beneficiary $r): string => self::formatEnumLabel($r->civil_status)),
-                TextEntry::make('children_total_count')
-                    ->label(__('field.children_total_count'))
-                    ->placeholder('—'),
-                TextEntry::make('children_under_18_care_count')
-                    ->label(__('field.children_under_18_care_count'))
-                    ->placeholder('—'),
-                TextEntry::make('legal_residence_city')
-                    ->label(__('field.legal_residence_city'))
-                    ->state(fn (Beneficiary $r): string => $r->legal_residence?->city?->name ?? '—'),
-                TextEntry::make('effective_residence_city')
-                    ->label(__('field.effective_residence_city'))
-                    ->state(fn (Beneficiary $r): string => $r->effective_residence?->city?->name ?? '—'),
-                TextEntry::make('details.studies')
-                    ->label(__('field.studies'))
-                    ->state(fn (Beneficiary $r): string => self::formatEnumLabel($r->details?->studies)),
-                TextEntry::make('details.occupation')
-                    ->label(__('field.occupation'))
-                    ->state(fn (Beneficiary $r): string => self::formatEnumLabel($r->details?->occupation)),
-                TextEntry::make('details.net_income')
-                    ->label(__('field.net_income'))
-                    ->state(function (Beneficiary $r): string {
-                        $income = $r->details?->net_income;
-
-                        return blank($income) ? '—' : "{$income} RON";
-                    }),
-                TextEntry::make('details.homeownership')
-                    ->label(__('field.homeownership'))
-                    ->state(fn (Beneficiary $r): string => self::formatEnumLabel($r->details?->homeownership)),
-                TextEntry::make('aggressor_relationship')
-                    ->label(__('field.aggressor_relationship'))
-                    ->state(fn (Beneficiary $r): string => self::formatEnumLabel($r->aggressors->first()?->relationship)),
-                TextEntry::make('aggressor_legal_history')
-                    ->label(__('field.aggressor_legal_history'))
-                    ->state(function (Beneficiary $r): string {
-                        $aggressor = $r->aggressors->first();
-
-                        return self::formatCollectionLabels($aggressor?->legal_history);
-                    }),
-                TextEntry::make('flowPresentation.presentation_mode')
-                    ->label(__('field.presentation_mode'))
-                    ->state(fn (Beneficiary $r): string => self::formatEnumLabel($r->flowPresentation?->presentation_mode)),
-                TextEntry::make('flowPresentation.act_location')
-                    ->label(__('field.act_location'))
-                    ->state(fn (Beneficiary $r): string => self::formatCollectionLabels($r->flowPresentation?->act_location)),
-            ])
-            ->extraModalFooterActions([
-                Action::make('view_full_beneficiary')
-                    ->label(__('case.view.view_full_beneficiary'))
-                    ->url(fn (): string => CaseResource::getUrl('view', ['record' => $this->getRecord()]))
-                    ->button()
-                    ->close(),
-            ]);
-    }
-
-    public function openBeneficiaryDetailsSlideOver(): void
-    {
-        $this->mountAction('beneficiary_details');
     }
 
     public function infolist(Schema $schema): Schema

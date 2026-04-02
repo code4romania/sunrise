@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Resources\Monitoring\Pages;
 use App\Actions\BackAction;
 use App\Enums\ChildAggressorRelationship;
 use App\Enums\MaintenanceSources;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\MonitoringResource;
 use App\Forms\Components\DatePicker;
@@ -35,6 +36,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class CreateMonitoring extends CreateRecord
 {
     use HasWizard;
+    use InteractsWithBeneficiaryDetailsPanel;
 
     protected static string $resource = MonitoringResource::class;
 

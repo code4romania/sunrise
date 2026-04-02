@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
@@ -25,6 +26,8 @@ use Illuminate\Support\Collection;
 
 class ViewCaseMonthlyPlan extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     protected ?MonthlyPlan $monthlyPlan = null;

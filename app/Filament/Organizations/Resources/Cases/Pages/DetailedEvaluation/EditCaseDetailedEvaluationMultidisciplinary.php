@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation;
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\Applicant;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
@@ -21,6 +22,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditCaseDetailedEvaluationMultidisciplinary extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;

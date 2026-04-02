@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\PersonalInfoFormSchema;
 use Filament\Resources\Pages\EditRecord;
@@ -16,6 +17,7 @@ use Illuminate\Support\Str;
 
 class EditCasePersonalInformation extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
     use RedirectToPersonalInformation;
 

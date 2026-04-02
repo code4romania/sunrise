@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation;
 
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\Repeater;
@@ -18,6 +19,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditCaseDetailedEvaluationDetails extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;

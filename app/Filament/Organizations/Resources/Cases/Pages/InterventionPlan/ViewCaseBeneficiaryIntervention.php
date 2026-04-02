@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Enums\MeetingStatus;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
@@ -36,6 +37,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViewCaseBeneficiaryIntervention extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     public ?BeneficiaryIntervention $beneficiaryIntervention = null;

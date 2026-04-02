@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\MonthlyPlanServicesAndInterventionsFormSchema;
 use App\Forms\Components\DatePicker;
@@ -28,6 +29,7 @@ class CreateCaseMonthlyPlan extends CreateRecord
     use HasWizard {
         HasWizard::getWizardComponent as parentGetWizardComponent;
     }
+    use InteractsWithBeneficiaryDetailsPanel;
 
     protected static string $resource = CaseResource::class;
 

@@ -10,6 +10,7 @@ use App\Concerns\PreventSubmitFormOnEnter;
 use App\Enums\Applicant;
 use App\Enums\Occupation;
 use App\Enums\RecommendationService;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\CountyCitySelect;
 use App\Forms\Components\DatePicker;
@@ -34,6 +35,7 @@ use Illuminate\Contracts\Support\Htmlable;
 class CreateCaseDetailedEvaluation extends EditRecord
 {
     use HasWizard;
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventMultipleSubmit;
     use PreventSubmitFormOnEnter;
     use SavesPartnerAddresses;

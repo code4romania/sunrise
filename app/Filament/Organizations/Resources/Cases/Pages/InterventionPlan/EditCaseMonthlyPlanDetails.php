@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
@@ -21,6 +22,7 @@ use Illuminate\Support\Collection;
 
 class EditCaseMonthlyPlanDetails extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;

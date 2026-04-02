@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Resources\Monitoring\Pages;
 
 use App\Actions\BackAction;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\MonitoringResource;
 use App\Infolists\Components\SectionHeader;
@@ -27,6 +28,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewMonitoring extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = MonitoringResource::class;
 
     public function getTitle(): string|Htmlable

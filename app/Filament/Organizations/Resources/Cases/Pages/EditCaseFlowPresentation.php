@@ -11,6 +11,7 @@ use App\Enums\NotificationMode;
 use App\Enums\Notifier;
 use App\Enums\PresentationMode;
 use App\Enums\ReferralMode;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\Select;
 use App\Models\Beneficiary;
@@ -27,6 +28,7 @@ use Illuminate\Support\Str;
 
 class EditCaseFlowPresentation extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
     use RedirectToPersonalInformation;
 

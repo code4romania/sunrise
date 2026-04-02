@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Actions\BackAction;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Infolists\Components\DocumentPreview;
 use App\Models\Beneficiary;
@@ -20,6 +21,8 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class ViewCaseDocument extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     protected ?Beneficiary $beneficiary = null;

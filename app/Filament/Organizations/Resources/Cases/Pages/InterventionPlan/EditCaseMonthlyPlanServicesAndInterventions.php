@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\MonthlyPlanServicesAndInterventionsFormSchema;
 use App\Models\Beneficiary;
@@ -18,6 +19,7 @@ use Illuminate\Support\Str;
 
 class EditCaseMonthlyPlanServicesAndInterventions extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;
@@ -101,7 +103,7 @@ class EditCaseMonthlyPlanServicesAndInterventions extends EditRecord
                 ->url(CaseResource::getUrl('view_monthly_plan', [
                     'record' => $this->resolveCaseBeneficiary(),
                     'monthlyPlan' => $this->getRecord(),
-                    'tab' => '-' . Str::slug(__('intervention_plan.headings.services_and_interventions')) . '-tab',
+                    'tab' => '-'.Str::slug(__('intervention_plan.headings.services_and_interventions')).'-tab',
                 ])),
         ];
     }
@@ -111,7 +113,7 @@ class EditCaseMonthlyPlanServicesAndInterventions extends EditRecord
         return CaseResource::getUrl('view_monthly_plan', [
             'record' => $this->resolveCaseBeneficiary(),
             'monthlyPlan' => $this->getRecord(),
-            'tab' => '-' . Str::slug(__('intervention_plan.headings.services_and_interventions')) . '-tab',
+            'tab' => '-'.Str::slug(__('intervention_plan.headings.services_and_interventions')).'-tab',
         ]);
     }
 

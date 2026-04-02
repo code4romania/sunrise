@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Actions\BackAction;
 use App\Concerns\PreventSubmitFormOnEnter;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\ChildrenIdentityFormSchema;
 use Filament\Resources\Pages\EditRecord;
@@ -15,6 +16,7 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class EditCaseChildren extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
 
     protected static string $resource = CaseResource::class;

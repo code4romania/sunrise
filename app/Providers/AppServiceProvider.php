@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\ViewCaseInterventionPlan;
 use App\Http\Responses\LoginResponse;
 use App\Models\Activity;
 use App\Models\Address;
@@ -120,11 +119,6 @@ class AppServiceProvider extends ServiceProvider
             fn () => view('filament.sidebar-footer')
         );
 
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::PAGE_FOOTER_WIDGETS_AFTER,
-            fn (): \Illuminate\Contracts\View\View => view('filament.organizations.pages.intervention-plan.fab-beneficiary-details'),
-            scopes: ViewCaseInterventionPlan::class,
-        );
     }
 
     /**

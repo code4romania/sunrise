@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Actions\BackAction;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\IdentityInfolist;
 use App\Models\Beneficiary;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseIdentity extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     public function getTitle(): string|Htmlable

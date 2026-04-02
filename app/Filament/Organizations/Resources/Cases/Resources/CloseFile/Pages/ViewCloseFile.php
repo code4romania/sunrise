@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Resources\CloseFile\Pages;
 use App\Actions\BackAction;
 use App\Enums\AdmittanceReason;
 use App\Enums\CloseMethod;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\CloseFile\CloseFileResource;
 use App\Infolists\Components\DateEntry;
@@ -26,6 +27,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCloseFile extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CloseFileResource::class;
 
     public function getTitle(): string|Htmlable

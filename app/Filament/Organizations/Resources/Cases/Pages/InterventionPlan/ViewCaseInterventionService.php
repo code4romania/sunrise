@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
 use App\Enums\MeetingStatus;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
@@ -43,6 +44,8 @@ use Illuminate\Support\Facades\DB;
 
 class ViewCaseInterventionService extends ViewRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
+
     protected static string $resource = CaseResource::class;
 
     public ?InterventionService $interventionService = null;
@@ -276,38 +279,37 @@ class ViewCaseInterventionService extends ViewRecord
                                     ]),
                             ]),
 
-
-//                        Tab::make(__('intervention_plan.headings.results_obtained'))
-//                            ->schema([
-//                                Section::make(__('intervention_plan.headings.results_obtained'))
-//                                    ->schema([
-//                                        RepeatableEntry::make('beneficiaryInterventionsResults')
-//                                            ->hiddenLabel()
-//                                            ->state(fn () => $service->beneficiaryInterventions()
-//                                                ->with(['organizationServiceIntervention.serviceInterventionWithoutStatusCondition'])
-//                                                ->orderByDesc('id')
-//                                                ->get())
-//                                            ->placeholder(__('intervention_plan.headings.empty_state_result_table'))
-//                                            ->table([
-//                                                TableColumn::make(__('intervention_plan.labels.service_type')),
-//                                                TableColumn::make(__('intervention_plan.labels.expected_results')),
-//                                                TableColumn::make(__('intervention_plan.labels.achievement_degree')),
-//                                                TableColumn::make(__('intervention_plan.labels.procedure')),
-//                                            ])
-//                                            ->schema([
-//                                                TextEntry::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
-//                                                    ->placeholder('—'),
-//                                                TextEntry::make('expected_results')
-//                                                    ->placeholder('—')
-//                                                    ->limit(50),
-//                                                TextEntry::make('achievement_degree')
-//                                                    ->placeholder('—'),
-//                                                TextEntry::make('procedure')
-//                                                    ->placeholder('—')
-//                                                    ->limit(30),
-//                                            ]),
-//                                    ]),
-//                            ]),
+                        //                        Tab::make(__('intervention_plan.headings.results_obtained'))
+                        //                            ->schema([
+                        //                                Section::make(__('intervention_plan.headings.results_obtained'))
+                        //                                    ->schema([
+                        //                                        RepeatableEntry::make('beneficiaryInterventionsResults')
+                        //                                            ->hiddenLabel()
+                        //                                            ->state(fn () => $service->beneficiaryInterventions()
+                        //                                                ->with(['organizationServiceIntervention.serviceInterventionWithoutStatusCondition'])
+                        //                                                ->orderByDesc('id')
+                        //                                                ->get())
+                        //                                            ->placeholder(__('intervention_plan.headings.empty_state_result_table'))
+                        //                                            ->table([
+                        //                                                TableColumn::make(__('intervention_plan.labels.service_type')),
+                        //                                                TableColumn::make(__('intervention_plan.labels.expected_results')),
+                        //                                                TableColumn::make(__('intervention_plan.labels.achievement_degree')),
+                        //                                                TableColumn::make(__('intervention_plan.labels.procedure')),
+                        //                                            ])
+                        //                                            ->schema([
+                        //                                                TextEntry::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
+                        //                                                    ->placeholder('—'),
+                        //                                                TextEntry::make('expected_results')
+                        //                                                    ->placeholder('—')
+                        //                                                    ->limit(50),
+                        //                                                TextEntry::make('achievement_degree')
+                        //                                                    ->placeholder('—'),
+                        //                                                TextEntry::make('procedure')
+                        //                                                    ->placeholder('—')
+                        //                                                    ->limit(30),
+                        //                                            ]),
+                        //                                    ]),
+                        //                            ]),
                     ]),
             ]);
     }

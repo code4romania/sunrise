@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages;
 
 use App\Concerns\PreventSubmitFormOnEnter;
 use App\Concerns\RedirectToPersonalInformation;
+use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\AggressorFormSchema;
 use App\Forms\Components\Repeater;
@@ -20,6 +21,7 @@ use Illuminate\Support\Str;
 
 class EditCaseAggressor extends EditRecord
 {
+    use InteractsWithBeneficiaryDetailsPanel;
     use PreventSubmitFormOnEnter;
     use RedirectToPersonalInformation;
 
