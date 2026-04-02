@@ -275,37 +275,37 @@ class ViewCaseInterventionService extends ViewRecord
                                             }),
                                     ]),
                             ]),
-                        Tab::make(__('intervention_plan.headings.results_obtained'))
-                            ->schema([
-                                Section::make(__('intervention_plan.headings.results_obtained'))
-                                    ->schema([
-                                        RepeatableEntry::make('beneficiaryInterventionsResults')
-                                            ->hiddenLabel()
-                                            ->state(fn () => $service->beneficiaryInterventions()
-                                                ->with(['organizationServiceIntervention.serviceInterventionWithoutStatusCondition'])
-                                                ->orderByDesc('id')
-                                                ->get())
-                                            ->placeholder(__('intervention_plan.headings.empty_state_result_table'))
-                                            ->table([
-                                                TableColumn::make(__('intervention_plan.labels.service_type')),
-                                                TableColumn::make(__('intervention_plan.labels.expected_results')),
-                                                TableColumn::make(__('intervention_plan.labels.achievement_degree')),
-                                                TableColumn::make(__('intervention_plan.labels.procedure')),
-                                            ])
-                                            ->schema([
-                                                TextEntry::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
-                                                    ->placeholder('—'),
-                                                TextEntry::make('expected_results')
-                                                    ->placeholder('—')
-                                                    ->limit(50),
-                                                TextEntry::make('achievement_degree')
-                                                    ->placeholder('—'),
-                                                TextEntry::make('procedure')
-                                                    ->placeholder('—')
-                                                    ->limit(30),
-                                            ]),
-                                    ]),
-                            ]),
+//                        Tab::make(__('intervention_plan.headings.results_obtained'))
+//                            ->schema([
+//                                Section::make(__('intervention_plan.headings.results_obtained'))
+//                                    ->schema([
+//                                        RepeatableEntry::make('beneficiaryInterventionsResults')
+//                                            ->hiddenLabel()
+//                                            ->state(fn () => $service->beneficiaryInterventions()
+//                                                ->with(['organizationServiceIntervention.serviceInterventionWithoutStatusCondition'])
+//                                                ->orderByDesc('id')
+//                                                ->get())
+//                                            ->placeholder(__('intervention_plan.headings.empty_state_result_table'))
+//                                            ->table([
+//                                                TableColumn::make(__('intervention_plan.labels.service_type')),
+//                                                TableColumn::make(__('intervention_plan.labels.expected_results')),
+//                                                TableColumn::make(__('intervention_plan.labels.achievement_degree')),
+//                                                TableColumn::make(__('intervention_plan.labels.procedure')),
+//                                            ])
+//                                            ->schema([
+//                                                TextEntry::make('organizationServiceIntervention.serviceInterventionWithoutStatusCondition.name')
+//                                                    ->placeholder('—'),
+//                                                TextEntry::make('expected_results')
+//                                                    ->placeholder('—')
+//                                                    ->limit(50),
+//                                                TextEntry::make('achievement_degree')
+//                                                    ->placeholder('—'),
+//                                                TextEntry::make('procedure')
+//                                                    ->placeholder('—')
+//                                                    ->limit(30),
+//                                            ]),
+//                                    ]),
+//                            ]),
                     ]),
             ]);
     }
