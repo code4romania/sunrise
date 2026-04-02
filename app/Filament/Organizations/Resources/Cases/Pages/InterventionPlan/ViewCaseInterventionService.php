@@ -148,75 +148,6 @@ class ViewCaseInterventionService extends ViewRecord
                     ->persistTabInQueryString('intervention-service-tab')
                     ->columnSpanFull()
                     ->tabs([
-                        Tab::make(__('intervention_plan.headings.service_details'))
-                            ->schema([
-                                Section::make()
-                                    ->columns(2)
-                                    ->schema([
-                                        TextEntry::make('organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition.name')
-                                            ->label(__('intervention_plan.labels.service_type'))
-                                            ->placeholder('—'),
-                                        TextEntry::make('institution')
-                                            ->label(__('intervention_plan.labels.responsible_institution'))
-                                            ->placeholder('—'),
-                                        TextEntry::make('specialist.name_role')
-                                            ->label(__('intervention_plan.labels.responsible_person'))
-                                            ->placeholder('—'),
-                                        TextEntry::make('interval')
-                                            ->label(__('intervention_plan.labels.period_of_provision'))
-                                            ->formatStateUsing(fn ($state) => $state ?: '—')
-                                            ->placeholder('—'),
-                                        TextEntry::make('objections')
-                                            ->label(__('intervention_plan.labels.specific_objectives'))
-                                            ->columnSpanFull()
-                                            ->placeholder('—'),
-                                    ]),
-                            ]),
-                        Tab::make(__('intervention_plan.headings.counseling_sheet'))
-                            ->visible(fn () => $this->interventionService?->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition?->counseling_sheet !== null)
-                            ->schema([
-                                Section::make(__('intervention_plan.headings.counseling_sheet'))
-                                    ->schema([
-                                        EmptyState::make(__('intervention_plan.headings.counseling_sheet'))
-                                            ->description(__('intervention_plan.labels.counseling_sheet_empty'))
-                                            ->icon(Heroicon::OutlinedDocumentText)
-                                            ->visible(fn () => $this->isCounselingSheetEmpty()),
-                                        Section::make(__('intervention_plan.labels.counseling_sheet_completed'))
-                                            ->description(fn () => $this->interventionService?->counselingSheet?->updated_at
-                                                ? Carbon::parse($this->interventionService->counselingSheet->updated_at)->translatedFormat('d.m.Y H:i')
-                                                : null)
-                                            ->visible(fn () => ! $this->isCounselingSheetEmpty())
-                                            ->relationship('counselingSheet')
-                                            ->schema(fn () => $this->getCounselingSheetDisplaySchema()),
-                                    ])
-                                    ->headerActions([
-                                        Action::make('edit_counseling_sheet')
-                                            ->label(fn () => $this->isCounselingSheetEmpty()
-                                                ? __('intervention_plan.actions.complete_counseling_sheet')
-                                                : __('intervention_plan.actions.edit_counseling_sheet'))
-                                            ->icon(Heroicon::OutlinedPencilSquare)
-                                            ->slideOver()
-                                            ->modalHeading(fn () => $this->getCounselingSheetModalHeading())
-                                            ->schema(fn () => $this->getCounselingSheetFormSchema())
-                                            ->fillForm(fn () => ['data' => $this->interventionService?->counselingSheet?->data ?? []])
-                                            ->action(function (array $data): void {
-                                                $sheet = $this->interventionService->counselingSheet;
-                                                if (! $sheet) {
-                                                    $sheet = new ServiceCounselingSheet(['intervention_service_id' => $this->interventionService->getKey()]);
-                                                }
-                                                $sheet->data = $data['data'] ?? [];
-                                                $sheet->save();
-                                                Notification::make()
-                                                    ->success()
-                                                    ->title(__('filament-actions::edit.single.notifications.saved.title'))
-                                                    ->send();
-                                                $this->redirect(CaseResource::getUrl('view_intervention_service', [
-                                                    'record' => $this->record,
-                                                    'interventionService' => $this->interventionService,
-                                                ]));
-                                            }),
-                                    ]),
-                            ]),
                         Tab::make(__('intervention_plan.headings.interventions'))
                             ->schema([
                                 Section::make(__('intervention_plan.headings.interventions'))
@@ -275,6 +206,77 @@ class ViewCaseInterventionService extends ViewRecord
                                             }),
                                     ]),
                             ]),
+                        Tab::make(__('intervention_plan.headings.counseling_sheet'))
+                            ->visible(fn () => $this->interventionService?->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition?->counseling_sheet !== null)
+                            ->schema([
+                                Section::make(__('intervention_plan.headings.counseling_sheet'))
+                                    ->schema([
+                                        EmptyState::make(__('intervention_plan.headings.counseling_sheet'))
+                                            ->description(__('intervention_plan.labels.counseling_sheet_empty'))
+                                            ->icon(Heroicon::OutlinedDocumentText)
+                                            ->visible(fn () => $this->isCounselingSheetEmpty()),
+                                        Section::make(__('intervention_plan.labels.counseling_sheet_completed'))
+                                            ->description(fn () => $this->interventionService?->counselingSheet?->updated_at
+                                                ? Carbon::parse($this->interventionService->counselingSheet->updated_at)->translatedFormat('d.m.Y H:i')
+                                                : null)
+                                            ->visible(fn () => ! $this->isCounselingSheetEmpty())
+                                            ->relationship('counselingSheet')
+                                            ->schema(fn () => $this->getCounselingSheetDisplaySchema()),
+                                    ])
+                                    ->headerActions([
+                                        Action::make('edit_counseling_sheet')
+                                            ->label(fn () => $this->isCounselingSheetEmpty()
+                                                ? __('intervention_plan.actions.complete_counseling_sheet')
+                                                : __('intervention_plan.actions.edit_counseling_sheet'))
+                                            ->icon(Heroicon::OutlinedPencilSquare)
+                                            ->slideOver()
+                                            ->modalHeading(fn () => $this->getCounselingSheetModalHeading())
+                                            ->schema(fn () => $this->getCounselingSheetFormSchema())
+                                            ->fillForm(fn () => ['data' => $this->interventionService?->counselingSheet?->data ?? []])
+                                            ->action(function (array $data): void {
+                                                $sheet = $this->interventionService->counselingSheet;
+                                                if (! $sheet) {
+                                                    $sheet = new ServiceCounselingSheet(['intervention_service_id' => $this->interventionService->getKey()]);
+                                                }
+                                                $sheet->data = $data['data'] ?? [];
+                                                $sheet->save();
+                                                Notification::make()
+                                                    ->success()
+                                                    ->title(__('filament-actions::edit.single.notifications.saved.title'))
+                                                    ->send();
+                                                $this->redirect(CaseResource::getUrl('view_intervention_service', [
+                                                    'record' => $this->record,
+                                                    'interventionService' => $this->interventionService,
+                                                ]));
+                                            }),
+                                    ]),
+                            ]),
+                        Tab::make(__('intervention_plan.headings.service_details'))
+                            ->schema([
+                                Section::make()
+                                    ->columns(2)
+                                    ->schema([
+                                        TextEntry::make('organizationServiceWithoutStatusCondition.serviceWithoutStatusCondition.name')
+                                            ->label(__('intervention_plan.labels.service_type'))
+                                            ->placeholder('—'),
+                                        TextEntry::make('institution')
+                                            ->label(__('intervention_plan.labels.responsible_institution'))
+                                            ->placeholder('—'),
+                                        TextEntry::make('specialist.name_role')
+                                            ->label(__('intervention_plan.labels.responsible_person'))
+                                            ->placeholder('—'),
+                                        TextEntry::make('interval')
+                                            ->label(__('intervention_plan.labels.period_of_provision'))
+                                            ->formatStateUsing(fn ($state) => $state ?: '—')
+                                            ->placeholder('—'),
+                                        TextEntry::make('objections')
+                                            ->label(__('intervention_plan.labels.specific_objectives'))
+                                            ->columnSpanFull()
+                                            ->placeholder('—'),
+                                    ]),
+                            ]),
+
+
 //                        Tab::make(__('intervention_plan.headings.results_obtained'))
 //                            ->schema([
 //                                Section::make(__('intervention_plan.headings.results_obtained'))
