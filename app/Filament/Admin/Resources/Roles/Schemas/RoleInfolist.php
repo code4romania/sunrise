@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\Roles\Schemas;
 
+use App\Enums\AdminPermission;
+use App\Enums\CasePermission;
 use App\Filament\Admin\Resources\Roles\RoleResource;
 use App\Models\Role;
 use Filament\Actions\EditAction;
@@ -17,16 +19,33 @@ class RoleInfolist
     /**
      * @param  \Illuminate\Support\Collection<int, \BackedEnum>|array<\BackedEnum>|\BackedEnum|null  $state
      */
-    private static function formatPermissionCollection(mixed $state): ?string
+    private static function formatPermissionCollection(mixed $state, string $enumClass): ?string
     {
         if ($state === null) {
             return null;
         }
+
         $items = is_iterable($state) && ! $state instanceof \BackedEnum
             ? collect($state)
             : collect([$state]);
 
-        return $items->map(fn ($p) => $p->getLabel())->implode(', ');
+        return $items
+            ->map(function (mixed $permission) use ($enumClass): string {
+                if ($permission instanceof \BackedEnum && method_exists($permission, 'getLabel')) {
+                    return $permission->getLabel();
+                }
+
+                if (is_string($permission) && enum_exists($enumClass)) {
+                    $enum = $enumClass::tryFrom($permission);
+
+                    if ($enum !== null && method_exists($enum, 'getLabel')) {
+                        return $enum->getLabel();
+                    }
+                }
+
+                return (string) $permission;
+            })
+            ->implode(', ');
     }
 
     public static function configure(Schema $schema): Schema
@@ -58,11 +77,11 @@ class RoleInfolist
                             ->schema([
                                 TextEntry::make('case_permissions')
                                     ->label(__('nomenclature.labels.case_permissions'))
-                                    ->formatStateUsing(fn ($state) => self::formatPermissionCollection($state))
+                                    ->formatStateUsing(fn ($state) => self::formatPermissionCollection($state, CasePermission::class))
                                     ->placeholder('—'),
                                 TextEntry::make('ngo_admin_permissions')
                                     ->label(__('nomenclature.labels.ngo_admin_permissions'))
-                                    ->formatStateUsing(fn ($state) => self::formatPermissionCollection($state))
+                                    ->formatStateUsing(fn ($state) => self::formatPermissionCollection($state, AdminPermission::class))
                                     ->placeholder('—'),
                             ])
                             ->columns(1),
