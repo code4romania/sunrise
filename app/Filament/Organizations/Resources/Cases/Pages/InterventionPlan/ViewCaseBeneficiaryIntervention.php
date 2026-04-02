@@ -290,6 +290,41 @@ class ViewCaseBeneficiaryIntervention extends ViewRecord
                     ->persistTabInQueryString('beneficiary-intervention-tab')
                     ->columnSpanFull()
                     ->tabs([
+                        Tab::make(__('intervention_plan.headings.intervention_meetings'))
+                            ->schema([
+                                Section::make(__('intervention_plan.headings.intervention_meetings'))
+                                    ->schema([
+                                        View::make('filament.organizations.components.meeting-cards'),
+                                    ])
+                                    ->headerActions([
+                                        Action::make('add_meeting')
+                                            ->label(__('intervention_plan.actions.add_meeting'))
+                                            ->icon(Heroicon::OutlinedPlus)
+                                            ->color('primary')
+                                            ->modalHeading(__('intervention_plan.actions.add_meeting'))
+                                            ->modalSubmitActionLabel(__('general.action.save'))
+                                            ->modalCancelActionLabel(__('general.action.cancel'))
+                                            ->form($this->getMeetingFormSchema())
+                                            ->fillForm(fn (): array => [
+                                                'status' => MeetingStatus::PLANED,
+                                                'date' => now()->format('Y-m-d'),
+                                                'time' => null,
+                                                'duration' => 60,
+                                                'specialist_id' => $this->beneficiaryIntervention?->specialist_id,
+                                                'topic' => null,
+                                                'observations' => null,
+                                            ])
+                                            ->action(function (array $data): void {
+                                                if ($this->beneficiaryIntervention) {
+                                                    $this->beneficiaryIntervention->meetings()->create($data);
+                                                    Notification::make()
+                                                        ->success()
+                                                        ->title(__('filament-actions::create.single.notifications.created.title'))
+                                                        ->send();
+                                                }
+                                            }),
+                                    ]),
+                            ]),
                         Tab::make(__('intervention_plan.headings.intervention_indicators'))
                             ->schema([
                                 Section::make(__('intervention_plan.headings.intervention_indicators'))
@@ -363,41 +398,6 @@ class ViewCaseBeneficiaryIntervention extends ViewRecord
                                                     Notification::make()
                                                         ->success()
                                                         ->title(__('filament-actions::edit.single.notifications.saved.title'))
-                                                        ->send();
-                                                }
-                                            }),
-                                    ]),
-                            ]),
-                        Tab::make(__('intervention_plan.headings.intervention_meetings'))
-                            ->schema([
-                                Section::make(__('intervention_plan.headings.intervention_meetings'))
-                                    ->schema([
-                                        View::make('filament.organizations.components.meeting-cards'),
-                                    ])
-                                    ->headerActions([
-                                        Action::make('add_meeting')
-                                            ->label(__('intervention_plan.actions.add_meeting'))
-                                            ->icon(Heroicon::OutlinedPlus)
-                                            ->color('primary')
-                                            ->modalHeading(__('intervention_plan.actions.add_meeting'))
-                                            ->modalSubmitActionLabel(__('general.action.save'))
-                                            ->modalCancelActionLabel(__('general.action.cancel'))
-                                            ->form($this->getMeetingFormSchema())
-                                            ->fillForm(fn (): array => [
-                                                'status' => MeetingStatus::PLANED,
-                                                'date' => now()->format('Y-m-d'),
-                                                'time' => null,
-                                                'duration' => 60,
-                                                'specialist_id' => $this->beneficiaryIntervention?->specialist_id,
-                                                'topic' => null,
-                                                'observations' => null,
-                                            ])
-                                            ->action(function (array $data): void {
-                                                if ($this->beneficiaryIntervention) {
-                                                    $this->beneficiaryIntervention->meetings()->create($data);
-                                                    Notification::make()
-                                                        ->success()
-                                                        ->title(__('filament-actions::create.single.notifications.created.title'))
                                                         ->send();
                                                 }
                                             }),
