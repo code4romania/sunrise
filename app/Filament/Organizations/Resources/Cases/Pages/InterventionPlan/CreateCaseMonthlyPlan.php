@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Organizations\Resources\Cases\Schemas\MonthlyPlanServicesAndInterventionsFormSchema;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use App\Models\InterventionPlan;
@@ -13,24 +14,40 @@ use App\Models\MonthlyPlan;
 use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
+use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
+use Filament\Schemas\Components\Component;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Wizard\Step;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class CreateCaseMonthlyPlan extends CreateRecord
 {
+    use HasWizard {
+        HasWizard::getWizardComponent as parentGetWizardComponent;
+    }
+
     protected static string $resource = CaseResource::class;
 
     protected static bool $canCreateAnother = false;
 
     protected ?Beneficiary $beneficiary = null;
 
+    /**
+     * Route `{case}` (id/slug/model) or value passed when testing Livewire.
+     */
+    public Beneficiary|int|string|null $case = null;
+
     public function mount(): void
     {
-        $caseKey = request()->route('case');
-        $this->record = CaseResource::resolveRecordRouteBinding($caseKey);
+        $rawCase = $this->case ?? request()->route('case');
+        $this->record = match (true) {
+            $rawCase instanceof Beneficiary => $rawCase,
+            $rawCase !== null => CaseResource::resolveRecordRouteBinding($rawCase),
+            default => null,
+        };
         if ($this->record === null || ! $this->record instanceof Beneficiary) {
             abort(404);
         }
@@ -84,6 +101,10 @@ class CreateCaseMonthlyPlan extends CreateRecord
         return null;
     }
 
+    /**
+     * Seeds one empty `monthlyPlanServices` row: Filament skips `loadStateFromRelationships` for
+     * relationship repeaters until the parent `MonthlyPlan` is persisted, so defaults would not apply.
+     */
     protected function fillForm(): void
     {
         $beneficiary = $this->getBeneficiary();
@@ -93,6 +114,11 @@ class CreateCaseMonthlyPlan extends CreateRecord
             'end_date' => Carbon::today()->addMonth()->format('Y-m-d'),
             'case_manager_user_id' => $beneficiary?->managerTeam?->first()?->user_id ?? auth()->id(),
             'specialists' => $beneficiary?->specialistsTeam()->pluck('id')->values()->all() ?? [],
+            'monthlyPlanServices' => [
+                (string) Str::uuid() => [
+                    'monthlyPlanInterventions' => [],
+                ],
+            ],
         ]);
         $this->callHook('afterFill');
     }
@@ -132,30 +158,47 @@ class CreateCaseMonthlyPlan extends CreateRecord
         return MonthlyPlan::class;
     }
 
-    public function form(Schema $schema): Schema
+    public function getSteps(): array
     {
-        return $schema->components([
-            Section::make(__('intervention_plan.headings.monthly_plan_details'))
-                ->maxWidth('3xl')
+        return [
+            Step::make(__('intervention_plan.wizard.monthly_plan_general'))
+                ->id('general')
                 ->schema([
-                    DatePicker::make('start_date')
-                        ->label(__('intervention_plan.labels.monthly_plan_start_date'))
-                        ->required(),
-                    DatePicker::make('end_date')
-                        ->label(__('intervention_plan.labels.monthly_plan_end_date'))
-                        ->required(),
-                    Select::make('case_manager_user_id')
-                        ->label(__('intervention_plan.labels.case_manager'))
-                        ->options(User::getTenantOrganizationUsers()->all())
-                        ->required()
-                        ->placeholder(__('intervention_plan.placeholders.specialist')),
-                    Select::make('specialists')
-                        ->label(__('intervention_plan.labels.case_team'))
-                        ->multiple()
-                        ->options(fn (): Collection => $this->getBeneficiary()?->specialistsTeam()->with('user', 'roleForDisplay')->get()->pluck('name_role', 'id') ?? collect())
-                        ->placeholder(__('intervention_plan.placeholders.specialists')),
+                    Grid::make(2)
+                        ->maxWidth('3xl')
+                        ->schema([
+                            DatePicker::make('start_date')
+                                ->label(__('intervention_plan.labels.monthly_plan_start_date'))
+                                ->placeholder('ZZ/LL/AN')
+                                ->required(),
+                            DatePicker::make('end_date')
+                                ->label(__('intervention_plan.labels.monthly_plan_end_date'))
+                                ->placeholder('ZZ/LL/AN')
+                                ->required(),
+                            Select::make('case_manager_user_id')
+                                ->label(__('intervention_plan.labels.case_manager'))
+                                ->options(User::getTenantOrganizationUsers()->all())
+                                ->required()
+                                ->placeholder(__('intervention_plan.placeholders.specialist')),
+                            Select::make('specialists')
+                                ->label(__('intervention_plan.labels.case_team'))
+                                ->multiple()
+                                ->options(fn (): Collection => $this->getBeneficiary()?->specialistsTeam()->with('user', 'roleForDisplay')->get()->pluck('name_role', 'id') ?? collect())
+                                ->placeholder(__('intervention_plan.placeholders.specialists')),
+                        ]),
                 ]),
-        ]);
+            Step::make(__('intervention_plan.headings.services_and_interventions'))
+                ->id('services')
+                ->schema([
+                    MonthlyPlanServicesAndInterventionsFormSchema::monthlyPlanServicesRepeater(),
+                ]),
+        ];
+    }
+
+    public function getWizardComponent(): Component
+    {
+        return $this->parentGetWizardComponent()
+            ->persistStepInQueryString('monthly-plan-step');
     }
 
     /**

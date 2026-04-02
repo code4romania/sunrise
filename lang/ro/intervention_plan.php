@@ -394,6 +394,10 @@ return [
         'empty_case_team_for_responsible' => 'Nu există încă membri în echipa de caz. Adăugați membri din secțiunea „Echipă de caz” pentru a alege persoana responsabilă.',
     ],
 
+    'wizard' => [
+        'monthly_plan_general' => 'Informații generale',
+    ],
+
     'notifications' => [
         'interventions_added' => '{1} A fost adăugată o intervenție.|[2,*] Au fost adăugate :count intervenții.',
     ],

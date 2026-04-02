@@ -347,4 +347,8 @@ return [
             'select_age' => 'Seleccionar edad',
         ],
     ],
+
+    'wizard' => [
+        'monthly_plan_general' => 'Información general',
+    ],
 ];
