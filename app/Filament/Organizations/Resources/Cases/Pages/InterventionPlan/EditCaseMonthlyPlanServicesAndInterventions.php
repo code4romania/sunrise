@@ -12,7 +12,6 @@ use App\Models\Beneficiary;
 use App\Models\MonthlyPlan;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -102,7 +101,7 @@ class EditCaseMonthlyPlanServicesAndInterventions extends EditRecord
                 ->url(CaseResource::getUrl('view_monthly_plan', [
                     'record' => $this->resolveCaseBeneficiary(),
                     'monthlyPlan' => $this->getRecord(),
-                    'tab' => '-'.Str::slug(__('intervention_plan.headings.services_and_interventions')).'-tab',
+                    'tab' => '-' . Str::slug(__('intervention_plan.headings.services_and_interventions')) . '-tab',
                 ])),
         ];
     }
@@ -112,7 +111,7 @@ class EditCaseMonthlyPlanServicesAndInterventions extends EditRecord
         return CaseResource::getUrl('view_monthly_plan', [
             'record' => $this->resolveCaseBeneficiary(),
             'monthlyPlan' => $this->getRecord(),
-            'tab' => '-'.Str::slug(__('intervention_plan.headings.services_and_interventions')).'-tab',
+            'tab' => '-' . Str::slug(__('intervention_plan.headings.services_and_interventions')) . '-tab',
         ]);
     }
 
@@ -126,10 +125,9 @@ class EditCaseMonthlyPlanServicesAndInterventions extends EditRecord
 
     public function form(Schema $schema): Schema
     {
-        return $schema->components([
-            Section::make(__('intervention_plan.headings.services_and_interventions'))
-                ->schema($this->getFormSchema()),
-        ]);
+        return $schema->components(
+            $this->getFormSchema(),
+        );
     }
 
     /**
