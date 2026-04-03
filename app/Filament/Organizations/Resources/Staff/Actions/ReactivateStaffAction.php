@@ -18,7 +18,7 @@ class ReactivateStaffAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->userStatus->isInactive());
+        $this->visible(fn (User $record): bool => $record->userStatus?->isInactive() ?? false);
         $this->label(__('user.actions.activate'));
         $this->icon('heroicon-o-arrow-path');
         $this->color('success');

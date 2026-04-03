@@ -23,7 +23,8 @@ class ResetPasswordAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->userStatus->isActive() && ! Filament::auth()->user()->is($record));
+        $this->visible(fn (User $record): bool => ($record->userStatus?->isActive() ?? false)
+            && (Filament::auth()->user()?->is($record) === false));
         $this->label(__('user.actions.reset_password'));
         $this->icon('heroicon-o-lock-open');
         $this->outlined();

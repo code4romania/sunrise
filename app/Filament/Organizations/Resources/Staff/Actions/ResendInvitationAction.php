@@ -20,7 +20,7 @@ class ResendInvitationAction extends Action
     {
         parent::setUp();
 
-        $this->visible(fn (User $record) => $record->userStatus->isPending());
+        $this->visible(fn (User $record): bool => $record->userStatus?->isPending() ?? false);
         $this->label(__('user.actions.resend_invitation'));
         $this->icon('heroicon-o-envelope-open');
         $this->outlined();

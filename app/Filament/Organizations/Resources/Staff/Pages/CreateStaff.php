@@ -59,7 +59,14 @@ class CreateStaff extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $existingUser = User::query()->where('email', $data['email'])->first();
+        $email = trim((string) ($data['email'] ?? ''));
+
+        $existingUser = blank($email)
+            ? null
+            : User::query()
+                ->withoutGlobalScopes()
+                ->whereRaw('LOWER(email) = ?', [strtolower($email)])
+                ->first();
 
         if ($existingUser) {
             $tenant = Filament::getTenant();
