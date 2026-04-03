@@ -91,12 +91,12 @@ class Welcome extends SimplePage
         return $schema
             ->components([
                 TextInput::make('email')
-                    ->label(__('filament-panels::pages/auth/register.form.email.label'))
+                    ->label(__('filament-panels::auth/pages/register.form.email.label'))
                     ->email()
                     ->disabled(),
 
                 TextInput::make('password')
-                    ->label(__('filament-panels::pages/auth/register.form.password.label'))
+                    ->label(__('filament-panels::auth/pages/register.form.password.label'))
                     ->password()
                     ->rule(
                         [
@@ -106,10 +106,11 @@ class Welcome extends SimplePage
                     )
                     ->revealable()
                     ->required()
+                    ->validationAttribute(__('filament-panels::auth/pages/register.form.password.validation_attribute'))
                     ->confirmed(),
 
                 TextInput::make('password_confirmation')
-                    ->label(__('filament-panels::pages/auth/register.form.password_confirmation.label'))
+                    ->label(__('filament-panels::auth/pages/register.form.password_confirmation.label'))
                     ->password()
                     ->revealable()
                     ->required(),
