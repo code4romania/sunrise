@@ -59,7 +59,12 @@ class CreateUser extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        if ($user = User::query()->where('email', $data['email'])->first()) {
+        $email = trim((string) ($data['email'] ?? ''));
+
+        if (! blank($email) && $user = User::query()
+            ->withoutGlobalScopes()
+            ->whereRaw('LOWER(email) = ?', [strtolower($email)])
+            ->first()) {
             $this->associateRecordWithTenant($user, Filament::getTenant());
             $user->initializeStatus();
             $user->sendWelcomeNotificationInAnotherTenant();
