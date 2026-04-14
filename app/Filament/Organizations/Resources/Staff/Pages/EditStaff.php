@@ -60,8 +60,12 @@ class EditStaff extends EditRecord
 
     protected function afterSave(): void
     {
+        if (! array_key_exists('role_id', $this->data) || ! is_array($this->data['role_id'])) {
+            return;
+        }
+
         $record = $this->getRecord();
-        $roles = $this->data['role_id'] ?? [];
+        $roles = $this->data['role_id'];
         $pivotData = [];
         foreach ($roles as $roleID) {
             $pivotData[$roleID] = ['organization_id' => Filament::getTenant()->id];

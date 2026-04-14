@@ -9,7 +9,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.4.16
+- php - 8.4.20
 - filament/filament (FILAMENT) - v4
 - laravel/framework (LARAVEL) - v12
 - laravel/prompts (PROMPTS) - v0
@@ -278,7 +278,6 @@ Select::make('type')
 TextInput::make('company_name')
     ->required()
     ->visible(fn (Get $get): bool => $get('type') === 'business'),
-
 </code-snippet>
 
 Use `state()` with a `Closure` to compute derived column values:
@@ -288,7 +287,6 @@ use Filament\Tables\Columns\TextColumn;
 
 TextColumn::make('full_name')
     ->state(fn (User $record): string => "{$record->first_name} {$record->last_name}"),
-
 </code-snippet>
 
 Actions encapsulate a button with optional modal form and logic:
@@ -302,7 +300,6 @@ Action::make('updateEmail')
         TextInput::make('email')->email()->required(),
     ])
     ->action(fn (array $data, User $record): void => $record->update($data)),
-
 </code-snippet>
 
 ### Testing
@@ -315,7 +312,6 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
         ->searchTable($users->first()->name)
         ->assertCanSeeTableRecords($users->take(1))
         ->assertCanNotSeeTableRecords($users->skip(1));
-
 </code-snippet>
 
 <code-snippet name="Filament Create Resource Test" lang="php">
@@ -332,7 +328,6 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
         'name' => 'Test',
         'email' => 'test@example.com',
     ]);
-
 </code-snippet>
 
 <code-snippet name="Testing Validation" lang="php">
@@ -347,7 +342,6 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
             'email' => 'email',
         ])
         ->assertNotNotified();
-
 </code-snippet>
 
 <code-snippet name="Calling Actions" lang="php">
@@ -364,7 +358,6 @@ Authenticate before testing panel functionality. Filament uses Livewire, so use 
             'role' => 'admin',
         ])
         ->assertNotified();
-
 </code-snippet>
 
 ### Common Mistakes

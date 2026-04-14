@@ -12,7 +12,8 @@ class DatePicker extends BaseDatePicker
     {
         parent::setUp();
 
-        $this->displayFormat('Y-m-d');
+        $this->native(false);
+        $this->displayFormat('d/m/Y');
         $this->format('Y-m-d');
 
         $this->closeOnDateSelection();

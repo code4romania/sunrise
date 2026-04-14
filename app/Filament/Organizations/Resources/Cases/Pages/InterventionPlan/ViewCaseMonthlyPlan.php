@@ -23,6 +23,7 @@ use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ViewCaseMonthlyPlan extends ViewRecord
 {
@@ -96,6 +97,17 @@ class ViewCaseMonthlyPlan extends ViewRecord
                 ->modalDescription(__('intervention_plan.labels.delete_monthly_plan_modal_description'))
                 ->modalSubmitActionLabel(__('intervention_plan.actions.delete_monthly_plan'))
                 ->record($this->monthlyPlan)
+                ->before(function (MonthlyPlan $record): void {
+                    DB::transaction(function () use ($record): void {
+                        $record->monthlyPlanServices()
+                            ->with('monthlyPlanInterventions')
+                            ->get()
+                            ->each(function ($service): void {
+                                $service->monthlyPlanInterventions()->delete();
+                                $service->delete();
+                            });
+                    });
+                })
                 ->successRedirectUrl(CaseResource::getUrl('view_intervention_plan', ['record' => $this->getRecord()]))
                 ->outlined(),
         ];

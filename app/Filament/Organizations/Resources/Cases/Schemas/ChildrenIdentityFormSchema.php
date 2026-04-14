@@ -133,7 +133,7 @@ class ChildrenIdentityFormSchema
                                 report: false
                             ));
                         })
-                        ->live(),
+                        ->live(onBlur: true),
 
                     TextInput::make('age')
                         ->label(__('field.age'))
