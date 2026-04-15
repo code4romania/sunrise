@@ -7,6 +7,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widg
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Models\Beneficiary;
 use App\Models\MonthlyPlan;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
@@ -51,12 +52,12 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
                     ])),
             ])
             ->headerActions([
-                \Filament\Actions\Action::make('create_modal')
+                Action::make('create_modal')
                     ->label(__('intervention_plan.actions.create_monthly_plan_with_plans'))
                     ->modalHeading(__('intervention_plan.headings.create_monthly_plan_modal'))
                     ->modalDescription(__('intervention_plan.labels.create_monthly_plan_modal'))
                     ->modalSubmitAction(
-                        \Filament\Actions\Action::make('create_from_last')
+                        Action::make('create_from_last')
                             ->label(__('intervention_plan.actions.create_monthly_plan_from_last'))
                             ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', [
                                 'case' => $this->record,
@@ -64,13 +65,13 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
                             ]))
                     )
                     ->modalCancelAction(
-                        \Filament\Actions\Action::make('create_simple')
+                        Action::make('create_simple')
                             ->label(__('intervention_plan.actions.create_monthly_plan_simple'))
                             ->outlined()
                             ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', ['case' => $this->record]))
                     )
                     ->visible(fn (): bool => (bool) ($plan && $plan->monthlyPlans()->count() > 0)),
-                \Filament\Actions\Action::make('create_direct')
+                Action::make('create_direct')
                     ->label(__('intervention_plan.actions.create_monthly_plan'))
                     ->url(fn (): string => CaseResource::getUrl('create_monthly_plan', ['case' => $this->record]))
                     ->visible(fn (): bool => (bool) ($plan && $plan->monthlyPlans()->count() === 0)),

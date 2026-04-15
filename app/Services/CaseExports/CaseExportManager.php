@@ -31,7 +31,7 @@ class CaseExportManager
 
     public function downloadIdentityPdf(Beneficiary $beneficiary): StreamedResponse
     {
-        $beneficiary->loadMissing(['children', 'citizenship']);
+        $beneficiary->loadMissing(['children']);
 
         $this->logPdfExport($beneficiary, 'pdf_identity_exported');
 
