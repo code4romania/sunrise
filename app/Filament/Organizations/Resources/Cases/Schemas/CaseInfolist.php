@@ -242,7 +242,7 @@ class CaseInfolist
                                         TextEntry::make('violence.violence_types')
                                             ->label(__('case.view.initial_eval.violence_type'))
                                             ->formatStateUsing(fn ($state) => filled($state)
-                                                ? collect($state)->map(fn ($v) => $v->label())->implode('; ')
+                                                ? collect($state)->map(fn ($value): string => self::formatEnumLikeValue($value))->implode('; ')
                                                 : null)
                                             ->placeholder('—'),
                                         TextEntry::make('_violence_means_overview')
@@ -539,12 +539,31 @@ class CaseInfolist
 
         $parts = [];
         if (filled($violence->violence_means)) {
-            $parts[] = collect($violence->violence_means)->map(fn ($v) => $v->label())->implode('; ');
+            $parts[] = collect($violence->violence_means)->map(fn ($value): string => self::formatEnumLikeValue($value))->implode('; ');
         }
         if (filled($violence->violence_means_specify)) {
             $parts[] = $violence->violence_means_specify;
         }
 
         return $parts !== [] ? implode('; ', $parts) : null;
+    }
+
+    private static function formatEnumLikeValue(mixed $value): string
+    {
+        if (is_object($value) && method_exists($value, 'label')) {
+            /** @var string $label */
+            $label = $value->label();
+
+            return $label;
+        }
+
+        if (is_object($value) && method_exists($value, 'getLabel')) {
+            /** @var string $label */
+            $label = $value->getLabel();
+
+            return $label;
+        }
+
+        return (string) $value;
     }
 }
