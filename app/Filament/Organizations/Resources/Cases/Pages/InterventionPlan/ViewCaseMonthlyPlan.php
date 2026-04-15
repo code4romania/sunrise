@@ -138,10 +138,13 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                         ->state(__('intervention_plan.headings.monthly_plan_details'))
                                         ->action(
                                             EditAction::make()
-                                                ->url(CaseResource::getUrl('edit_monthly_plan_details', [
-                                                    'record' => $this->getRecord(),
-                                                    'monthlyPlan' => $this->monthlyPlan,
-                                                ]))
+                                                ->url(fn (): ?string => $this->monthlyPlan instanceof MonthlyPlan
+                                                    ? CaseResource::getUrl('edit_monthly_plan_details', [
+                                                        'record' => $this->getRecord(),
+                                                        'monthlyPlan' => $this->monthlyPlan,
+                                                    ])
+                                                    : null)
+                                                ->visible(fn (): bool => $this->monthlyPlan instanceof MonthlyPlan)
                                         ),
 
                                     TextEntry::make('beneficiary.full_name')
@@ -188,10 +191,13 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                         ->state(__('intervention_plan.headings.services_and_interventions'))
                                         ->action(
                                             EditAction::make()
-                                                ->url(CaseResource::getUrl('edit_monthly_plan_services', [
-                                                    'record' => $this->getRecord(),
-                                                    'monthlyPlan' => $this->monthlyPlan,
-                                                ]))
+                                                ->url(fn (): ?string => $this->monthlyPlan instanceof MonthlyPlan
+                                                    ? CaseResource::getUrl('edit_monthly_plan_services', [
+                                                        'record' => $this->getRecord(),
+                                                        'monthlyPlan' => $this->monthlyPlan,
+                                                    ])
+                                                    : null)
+                                                ->visible(fn (): bool => $this->monthlyPlan instanceof MonthlyPlan)
                                         ),
 
                                     View::make('filament.organizations.components.monthly-plan-services-and-interventions')
