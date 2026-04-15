@@ -202,7 +202,7 @@ return [
     ],
 
     'headings' => [
-        'view_page' => 'Plan de intervenție',
+        'view_page' => 'Dosar servicii VD',
         'edit_page' => 'Editează :service_name',
         'empty_state_table' => 'Beneficiara nu are un plan de intervenție creat',
         'table' => 'Plan de intervenție',

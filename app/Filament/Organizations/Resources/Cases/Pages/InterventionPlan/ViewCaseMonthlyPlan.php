@@ -96,18 +96,6 @@ class ViewCaseMonthlyPlan extends ViewRecord
                 ->modalHeading(__('intervention_plan.headings.delete_monthly_plan_modal'))
                 ->modalDescription(__('intervention_plan.labels.delete_monthly_plan_modal_description'))
                 ->modalSubmitActionLabel(__('intervention_plan.actions.delete_monthly_plan'))
-                ->record($this->monthlyPlan)
-                ->before(function (MonthlyPlan $record): void {
-                    DB::transaction(function () use ($record): void {
-                        $record->monthlyPlanServices()
-                            ->with('monthlyPlanInterventions')
-                            ->get()
-                            ->each(function ($service): void {
-                                $service->monthlyPlanInterventions()->delete();
-                                $service->delete();
-                            });
-                    });
-                })
                 ->successRedirectUrl(CaseResource::getUrl('view_intervention_plan', ['record' => $this->getRecord()]))
                 ->outlined(),
         ];
