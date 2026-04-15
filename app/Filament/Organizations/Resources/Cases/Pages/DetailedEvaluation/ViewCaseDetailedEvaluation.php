@@ -6,6 +6,7 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\DetailedEvaluation;
 
 use App\Actions\BackAction;
 use App\Enums\AddressType;
+use App\Enums\RecommendationService;
 use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Schemas\IdentityInfolist;
@@ -409,7 +410,26 @@ class ViewCaseDetailedEvaluation extends ViewRecord
                             TextEntry::make('recommendation_services')
                                 ->label(__('beneficiary.section.detailed_evaluation.heading.recommendation_services'))
                                 ->placeholder('—')
-                                ->listWithLineBreaks(),
+                                ->formatStateUsing(function (mixed $state): ?string {
+                                    if (! filled($state)) {
+                                        return null;
+                                    }
+
+                                    $labels = collect($state)
+                                        ->map(function (mixed $value): string {
+                                            if ($value instanceof RecommendationService) {
+                                                return $value->getLabel();
+                                            }
+
+                                            $enum = RecommendationService::tryFrom((string) $value);
+
+                                            return $enum?->getLabel() ?? (string) $value;
+                                        })
+                                        ->filter()
+                                        ->values();
+
+                                    return $labels->isEmpty() ? null : $labels->implode(', ');
+                                }),
                             TextEntry::make('other_services_description')
                                 ->label(__('beneficiary.section.detailed_evaluation.labels.other_services'))
                                 ->placeholder('—'),
