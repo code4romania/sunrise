@@ -13,6 +13,7 @@ use App\Models\Monitoring;
 use App\Models\MonthlyPlan;
 use App\Services\CaseExports\Composers\DetailedEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\InitialEvaluationPdfComposer;
+use App\Services\CaseExports\Composers\MonitoringPdfComposer;
 use App\Services\CaseExports\Support\CaseTeamSignatureRowsBuilder;
 use App\Services\CaseExports\Support\ExportBrandingResolver;
 use App\Services\CaseExports\Support\ExportDataFormatter;
@@ -31,6 +32,7 @@ class CaseExportManager
         private readonly CaseTeamSignatureRowsBuilder $signatureRowsBuilder,
         private readonly InitialEvaluationPdfComposer $initialEvaluationPdfComposer,
         private readonly DetailedEvaluationPdfComposer $detailedEvaluationPdfComposer,
+        private readonly MonitoringPdfComposer $monitoringPdfComposer,
     ) {}
 
     public function downloadIdentityPdf(Beneficiary $beneficiary): StreamedResponse
@@ -172,20 +174,41 @@ class CaseExportManager
     public function downloadMonitoringPdf(Monitoring $monitoring): StreamedResponse
     {
         $monitoring->loadMissing(['beneficiary', 'children']);
+        $beneficiary = $monitoring->beneficiary;
 
-        if ($monitoring->beneficiary instanceof Beneficiary) {
-            $this->logPdfExport($monitoring->beneficiary, 'pdf_monitoring_exported');
+        if ($beneficiary instanceof Beneficiary) {
+            $beneficiary->loadMissing([
+                'details',
+                'legal_residence',
+                'effective_residence',
+                'children',
+            ]);
+            $this->logPdfExport($beneficiary, 'pdf_monitoring_exported');
         }
+
+        $reportTitle = $beneficiary instanceof Beneficiary
+            ? $this->monitoringPdfComposer->composeReportTitle($monitoring, $beneficiary)
+            : __('monitoring.pdf.report_title', [
+                'beneficiary' => '—',
+                'interval' => $monitoring->interval,
+            ]);
+
+        $sections = $beneficiary instanceof Beneficiary
+            ? $this->monitoringPdfComposer->composeSections($monitoring, $beneficiary)
+            : [
+                [
+                    'title' => __('monitoring.pdf.section_sheet_details'),
+                    'type' => 'monitoring_label_value_table',
+                    'rows' => $this->formatter->normalizeArray($monitoring->toArray()),
+                ],
+            ];
 
         return $this->downloadPdf(
             view: 'exports.reports.pdf-monitoring',
-            reportTitle: 'Fișa de monitorizare a cazului pentru perioada '.$monitoring->interval,
+            reportTitle: $reportTitle,
             caseId: $monitoring->beneficiary_id,
-            sections: [
-                ['title' => 'Date monitorizare', 'rows' => $this->formatter->normalizeArray($monitoring->toArray())],
-                ['title' => 'Copii', 'rows' => $this->formatter->normalizeArray(['children' => $monitoring->children->toArray()])],
-            ],
-            signatureRows: $monitoring->beneficiary ? $this->signatureRowsBuilder->build($monitoring->beneficiary) : [],
+            sections: $sections,
+            signatureRows: $beneficiary ? $this->signatureRowsBuilder->build($beneficiary) : [],
         );
     }
 

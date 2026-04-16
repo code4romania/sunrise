@@ -217,4 +217,48 @@
         font-weight: 700;
     }
     .page-break-after { page-break-after: always; }
+
+    .monitoring-label-value-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000;
+        margin-bottom: 10px;
+    }
+    .monitoring-label-value-table th,
+    .monitoring-label-value-table td {
+        border: 1px solid #000;
+        padding: 4px 6px;
+        font-size: 10px;
+        vertical-align: top;
+    }
+    .monitoring-label-value-table th {
+        width: 32%;
+        text-align: left;
+        font-weight: 700;
+        background: #f9fafb;
+    }
+    .monitoring-subheading {
+        font-size: 12px;
+        font-weight: 700;
+        margin: 12px 0 6px;
+        color: #111827;
+    }
+    .monitoring-children-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000;
+        margin-bottom: 10px;
+        font-size: 9px;
+    }
+    .monitoring-children-table th,
+    .monitoring-children-table td {
+        border: 1px solid #000;
+        padding: 3px 4px;
+        vertical-align: top;
+    }
+    .monitoring-children-table th {
+        font-weight: 700;
+        text-align: left;
+        background: #f9fafb;
+    }
 </style>

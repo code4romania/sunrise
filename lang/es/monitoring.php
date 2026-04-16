@@ -90,4 +90,12 @@ return [
         'general' => 'General',
         'file' => 'Expediente',
     ],
+
+    'pdf' => [
+        'report_title' => 'Ficha de seguimiento del caso para: :beneficiary (período :interval)',
+        'section_beneficiary_identity' => 'I. Datos de identidad del solicitante',
+        'section_sheet_details' => 'II. Detalles de la ficha de seguimiento',
+        'section_children' => 'III. Datos de los niños',
+        'section_general' => 'IV. Datos generales de seguimiento',
+    ],
 ];

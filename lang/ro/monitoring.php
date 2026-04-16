@@ -94,6 +94,14 @@ return [
         'file' => 'Fișă monitorizare :file_number',
     ],
 
+    'pdf' => [
+        'report_title' => 'Fișa de monitorizare a cazului pentru: :beneficiary (perioada :interval)',
+        'section_beneficiary_identity' => 'I. Date de identitate ale solicitantului',
+        'section_sheet_details' => 'II. Detalii fișă monitorizare',
+        'section_children' => 'III. Date copii',
+        'section_general' => 'IV. Date generale monitorizare',
+    ],
+
     'notifications' => [
         'sheet_reminder_title' => 'Fișă de monitorizare',
         'sheet_reminder_body' => 'Au trecut cel puțin 30 de zile de la înregistrarea cazului :name. Completați fișa de monitorizare pentru acest beneficiar.',

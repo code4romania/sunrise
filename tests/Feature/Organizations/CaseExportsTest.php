@@ -80,6 +80,17 @@ it('generates monitoring and close-file pdf exports', function (): void {
         ->whereMorphedTo('subject', $beneficiary)
         ->where('event', 'pdf_close_file_exported')
         ->exists())->toBeTrue();
+
+    $monitoringPdfBinary = collect(Storage::disk('private')->allFiles())
+        ->map(fn (string $path): string => (string) Storage::disk('private')->get($path))
+        ->first(fn (string $binary): bool => str_contains($binary, 'Fișa de monitorizare a cazului'));
+
+    expect($monitoringPdfBinary)->not->toBeEmpty();
+    expect($monitoringPdfBinary)->toContain(__('monitoring.pdf.section_beneficiary_identity'));
+    expect($monitoringPdfBinary)->toContain(__('monitoring.pdf.section_sheet_details'));
+    expect($monitoringPdfBinary)->toContain(__('monitoring.pdf.section_children'));
+    expect($monitoringPdfBinary)->toContain(__('monitoring.pdf.section_general'));
+    expect($monitoringPdfBinary)->toContain(__('monitoring.headings.protection_measures'));
 });
 
 it('generates meetings csv export with required framing', function (): void {

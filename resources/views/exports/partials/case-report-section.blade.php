@@ -24,6 +24,18 @@
     @case('detailed_multidisciplinary_section')
         @include('exports.partials.sections.detailed-multidisciplinary-section', ['data' => $section['data'] ?? []])
         @break
+    @case('monitoring_label_value_table')
+        @include('exports.partials.sections.monitoring-label-value-table', ['rows' => $section['rows'] ?? []])
+        @break
+    @case('monitoring_children_table')
+        @include('exports.partials.sections.monitoring-children-table', ['rows' => $section['rows'] ?? []])
+        @break
+    @case('monitoring_general_grouped')
+        @include('exports.partials.sections.monitoring-general-grouped', [
+            'topRows' => $section['topRows'] ?? [],
+            'measureBlocks' => $section['measureBlocks'] ?? [],
+        ])
+        @break
     @case('risk_factors_table')
         @include('exports.partials.sections.risk-factors', [
             'rows' => $section['rows'] ?? [],
