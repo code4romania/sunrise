@@ -11,6 +11,8 @@ use App\Models\BeneficiaryIntervention;
 use App\Models\CloseFile;
 use App\Models\Monitoring;
 use App\Models\MonthlyPlan;
+use App\Services\CaseExports\Composers\DetailedEvaluationPdfComposer;
+use App\Services\CaseExports\Composers\InitialEvaluationPdfComposer;
 use App\Services\CaseExports\Support\CaseTeamSignatureRowsBuilder;
 use App\Services\CaseExports\Support\ExportBrandingResolver;
 use App\Services\CaseExports\Support\ExportDataFormatter;
@@ -27,6 +29,8 @@ class CaseExportManager
         private readonly ExportBrandingResolver $brandingResolver,
         private readonly ExportDataFormatter $formatter,
         private readonly CaseTeamSignatureRowsBuilder $signatureRowsBuilder,
+        private readonly InitialEvaluationPdfComposer $initialEvaluationPdfComposer,
+        private readonly DetailedEvaluationPdfComposer $detailedEvaluationPdfComposer,
     ) {}
 
     public function downloadIdentityPdf(Beneficiary $beneficiary): StreamedResponse
@@ -49,6 +53,7 @@ class CaseExportManager
         ];
 
         return $this->downloadPdf(
+            view: 'exports.reports.pdf-beneficiary-identity',
             reportTitle: 'Fișa identitate beneficiar',
             caseId: $beneficiary->id,
             sections: $sections,
@@ -72,6 +77,7 @@ class CaseExportManager
         ];
 
         return $this->downloadPdf(
+            view: 'exports.reports.pdf-case-info',
             reportTitle: 'Fișa informații caz',
             caseId: $beneficiary->id,
             sections: $sections,
@@ -80,43 +86,56 @@ class CaseExportManager
 
     public function downloadInitialEvaluationPdf(Beneficiary $beneficiary): StreamedResponse
     {
-        $beneficiary->loadMissing(['evaluateDetails', 'violence', 'riskFactors', 'requestedServices', 'beneficiarySituation']);
+        $beneficiary->loadMissing([
+            'evaluateDetails',
+            'violence',
+            'riskFactors',
+            'requestedServices',
+            'beneficiarySituation',
+            'children',
+            'details',
+            'legal_residence',
+            'effective_residence',
+        ]);
 
         $this->logPdfExport($beneficiary, 'pdf_initial_evaluation_exported');
 
         return $this->downloadPdf(
+            view: 'exports.reports.pdf-initial-evaluation',
             reportTitle: 'Fișa evaluare inițială',
             caseId: $beneficiary->id,
-            sections: [
-                ['title' => 'Evaluare inițială - detalii', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->evaluateDetails?->toArray())],
-                ['title' => 'Violență', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->violence?->toArray())],
-                ['title' => 'Factori de risc', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->riskFactors?->toArray())],
-                ['title' => 'Servicii solicitate', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->requestedServices?->toArray())],
-                ['title' => 'Situația beneficiarului', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->beneficiarySituation?->toArray())],
-            ],
-            extraRows: [['label' => 'Data creării evaluării inițiale', 'value' => $beneficiary->evaluateDetails?->created_at?->format('d.m.Y') ?? '—']],
-            signatureRows: $this->signatureRowsBuilder->build($beneficiary),
+            sections: $this->initialEvaluationPdfComposer->composeSections($beneficiary),
+            extraRows: $this->initialEvaluationPdfComposer->composeExtraRows($beneficiary),
+            signatureRows: $this->signatureRowsBuilder->buildInitialEvaluationRows($beneficiary),
         );
     }
 
     public function downloadDetailedEvaluationPdf(Beneficiary $beneficiary): StreamedResponse
     {
-        $beneficiary->loadMissing(['detailedEvaluationSpecialists', 'meetings', 'partner', 'multidisciplinaryEvaluation', 'detailedEvaluationResult', 'violenceHistory', 'evaluateDetails']);
+        $beneficiary->loadMissing([
+            'detailedEvaluationSpecialists',
+            'meetings',
+            'partner',
+            'partner.legal_residence',
+            'partner.effective_residence',
+            'multidisciplinaryEvaluation',
+            'detailedEvaluationResult',
+            'violenceHistory',
+            'evaluateDetails',
+            'children',
+            'details',
+            'legal_residence',
+            'effective_residence',
+        ]);
 
         $this->logPdfExport($beneficiary, 'pdf_detailed_evaluation_exported');
 
         return $this->downloadPdf(
+            view: 'exports.reports.pdf-detailed-evaluation',
             reportTitle: 'Fișa evaluare detaliată',
             caseId: $beneficiary->id,
-            sections: [
-                ['title' => 'Specialiști evaluare', 'rows' => $this->formatter->normalizeArray(['specialists' => $beneficiary->detailedEvaluationSpecialists->toArray()])],
-                ['title' => 'Întâlniri', 'rows' => $this->formatter->normalizeArray(['meetings' => $beneficiary->meetings->toArray()])],
-                ['title' => 'Partener', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->partner?->toArray())],
-                ['title' => 'Evaluare multidisciplinară', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->multidisciplinaryEvaluation?->toArray())],
-                ['title' => 'Rezultate', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->detailedEvaluationResult?->toArray())],
-                ['title' => 'Istoric violență', 'rows' => $this->formatter->normalizeArray(['history' => $beneficiary->violenceHistory->toArray()])],
-            ],
-            extraRows: [['label' => 'Data creării evaluării inițiale', 'value' => $beneficiary->evaluateDetails?->created_at?->format('d.m.Y') ?? '—']],
+            sections: $this->detailedEvaluationPdfComposer->composeSections($beneficiary),
+            extraRows: $this->detailedEvaluationPdfComposer->composeExtraRows($beneficiary),
             signatureRows: $this->signatureRowsBuilder->build($beneficiary),
         );
     }
@@ -136,6 +155,7 @@ class CaseExportManager
         $this->logPdfExport($beneficiary, 'pdf_monthly_plan_exported');
 
         return $this->downloadPdf(
+            view: 'exports.reports.pdf-monthly-plan',
             reportTitle: __('intervention_plan.pdf.monthly_report_title', ['period' => $periodLabel]),
             caseId: $beneficiary->id,
             sections: [
@@ -158,6 +178,7 @@ class CaseExportManager
         }
 
         return $this->downloadPdf(
+            view: 'exports.reports.pdf-monitoring',
             reportTitle: 'Fișa de monitorizare a cazului pentru perioada '.$monitoring->interval,
             caseId: $monitoring->beneficiary_id,
             sections: [
@@ -177,6 +198,7 @@ class CaseExportManager
         }
 
         return $this->downloadPdf(
+            view: 'exports.reports.pdf-close-file',
             reportTitle: 'Fișa de închidere a cazului',
             caseId: $closeFile->beneficiary_id,
             sections: [
@@ -247,11 +269,12 @@ class CaseExportManager
     }
 
     /**
-     * @param  array<int, array{title:string, rows:array<int, array{label:string,value:string}>}>  $sections
+     * @param  array<int, array<string, mixed>>  $sections
      * @param  array<int, array{label:string,value:string}>  $extraRows
      * @param  array<int, array{name:string,role:string,signature:string}>  $signatureRows
      */
     private function downloadPdf(
+        string $view,
         string $reportTitle,
         int|string $caseId,
         array $sections,
@@ -260,7 +283,7 @@ class CaseExportManager
     ): StreamedResponse {
         $branding = $this->brandingResolver->resolve();
         $filename = $this->filenameBuilder->build($reportTitle, $caseId, 'pdf');
-        $binary = Pdf::loadView('exports.layouts.case-report-pdf', [
+        $binary = Pdf::loadView($view, [
             'branding' => $branding,
             'reportTitle' => $reportTitle,
             'caseId' => $caseId,

@@ -122,3 +122,41 @@ it('generates monthly plan pdf export', function (): void {
         ->where('event', 'pdf_monthly_plan_exported')
         ->exists())->toBeTrue();
 });
+
+it('generates initial evaluation pdf export with identity and risk factors layout', function (): void {
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+
+    $response = app(CaseExportManager::class)->downloadInitialEvaluationPdf($beneficiary);
+
+    expect($response)->toBeInstanceOf(StreamedResponse::class);
+    expect((string) $response->headers->get('content-type'))->toContain('application/pdf');
+
+    $files = Storage::disk('private')->allFiles();
+    expect($files)->not->toBeEmpty();
+
+    $pdfBinary = Storage::disk('private')->get($files[0]);
+
+    expect($pdfBinary)->toContain('DATE DE IDENTITATE ALE SOLICITANTULUI');
+    expect($pdfBinary)->toContain('DATE DE IDENTITATE DESPRE COPII');
+    expect($pdfBinary)->toContain('Factori de risc');
+});
+
+it('generates detailed evaluation pdf export with tabular sections', function (): void {
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+
+    $response = app(CaseExportManager::class)->downloadDetailedEvaluationPdf($beneficiary);
+
+    expect($response)->toBeInstanceOf(StreamedResponse::class);
+    expect((string) $response->headers->get('content-type'))->toContain('application/pdf');
+
+    $files = Storage::disk('private')->allFiles();
+    expect($files)->not->toBeEmpty();
+
+    $pdfBinary = Storage::disk('private')->get($files[0]);
+
+    expect($pdfBinary)->toContain('I. Date despre beneficiar');
+    expect($pdfBinary)->toContain('II. Date despre copii');
+    expect($pdfBinary)->toContain('III. Întrevederi/convorbiri telefonice pentru culegerea informațiilor');
+    expect($pdfBinary)->toContain('IV. Specialiști care au colaborat la elaborarea acestei evaluări');
+    expect($pdfBinary)->toContain('V. Evaluarea multidisciplinară a situației beneficiarului');
+});
