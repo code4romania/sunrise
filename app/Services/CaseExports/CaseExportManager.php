@@ -11,6 +11,7 @@ use App\Models\BeneficiaryIntervention;
 use App\Models\CloseFile;
 use App\Models\Monitoring;
 use App\Models\MonthlyPlan;
+use App\Services\CaseExports\Composers\CloseFilePdfComposer;
 use App\Services\CaseExports\Composers\DetailedEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\InitialEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\MonitoringPdfComposer;
@@ -33,6 +34,7 @@ class CaseExportManager
         private readonly InitialEvaluationPdfComposer $initialEvaluationPdfComposer,
         private readonly DetailedEvaluationPdfComposer $detailedEvaluationPdfComposer,
         private readonly MonitoringPdfComposer $monitoringPdfComposer,
+        private readonly CloseFilePdfComposer $closeFilePdfComposer,
     ) {}
 
     public function downloadIdentityPdf(Beneficiary $beneficiary): StreamedResponse
@@ -220,14 +222,18 @@ class CaseExportManager
             $this->logPdfExport($closeFile->beneficiary, 'pdf_close_file_exported');
         }
 
+        $beneficiary = $closeFile->beneficiary;
+        $managerName = (string) ($closeFile->caseManager?->user?->full_name ?? '');
+
         return $this->downloadPdf(
             view: 'exports.reports.pdf-close-file',
-            reportTitle: 'Fișa de închidere a cazului',
+            reportTitle: __('beneficiary.section.close_file.titles.create'),
             caseId: $closeFile->beneficiary_id,
             sections: [
-                ['title' => 'Date inchidere caz', 'rows' => $this->formatter->normalizeArray($closeFile->toArray())],
+                $this->closeFilePdfComposer->composeMainSection($closeFile, $beneficiary instanceof Beneficiary ? $beneficiary : null),
             ],
-            signatureRows: $closeFile->beneficiary ? $this->signatureRowsBuilder->build($closeFile->beneficiary) : [],
+            signatureRows: [],
+            signaturePreparedByManager: $managerName,
         );
     }
 
@@ -303,6 +309,7 @@ class CaseExportManager
         array $sections,
         array $extraRows = [],
         array $signatureRows = [],
+        ?string $signaturePreparedByManager = null,
     ): StreamedResponse {
         $branding = $this->brandingResolver->resolve();
         $filename = $this->filenameBuilder->build($reportTitle, $caseId, 'pdf');
@@ -313,6 +320,7 @@ class CaseExportManager
             'sections' => $sections,
             'extraRows' => $extraRows,
             'signatureRows' => $signatureRows,
+            'signaturePreparedByManager' => $signaturePreparedByManager,
         ])
             ->setOption('defaultFont', 'DejaVu Sans')
             ->setOption('isHtml5ParserEnabled', true)

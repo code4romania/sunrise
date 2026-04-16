@@ -261,4 +261,87 @@
         text-align: left;
         background: #f9fafb;
     }
+
+    .close-file-main-title {
+        text-align: center;
+        font-size: 15px;
+        font-weight: 700;
+        margin: 6px 0 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .close-file-field-row { margin-bottom: 10px; font-size: 10px; line-height: 1.45; }
+    .close-file-label { font-weight: 700; margin-right: 6px; }
+    .close-file-dotted-value {
+        border-bottom: 1px dotted #111827;
+        min-width: 62%;
+        display: inline-block;
+        padding: 0 4px 1px;
+        min-height: 14px;
+        vertical-align: bottom;
+    }
+    .close-file-cnp-row { margin-top: 2px; }
+    .close-file-cnp-cell {
+        display: inline-block;
+        width: 16px;
+        height: 18px;
+        border: 1px solid #000;
+        text-align: center;
+        line-height: 18px;
+        font-size: 9px;
+        margin-right: 3px;
+        vertical-align: middle;
+    }
+    .close-file-subheading {
+        font-size: 11px;
+        font-weight: 700;
+        margin: 14px 0 6px;
+        color: #111827;
+    }
+    .close-file-bordered {
+        border: 1px solid #000;
+        padding: 8px 10px 10px;
+        margin-bottom: 12px;
+    }
+    .close-file-checkbox-line { margin: 3px 0; font-size: 10px; }
+    .close-file-checkbox-label { display: block; line-height: 1.35; }
+    .close-file-checkbox-label input { margin-right: 8px; vertical-align: middle; }
+    .close-file-inline-dots {
+        border-bottom: 1px dotted #111827;
+        min-width: 200px;
+        display: inline-block;
+        margin-left: 4px;
+        padding: 0 6px 1px;
+        vertical-align: bottom;
+        min-height: 12px;
+    }
+    .close-file-extra-line { margin-top: 8px; font-size: 10px; }
+    .close-file-label-inline { font-weight: 700; margin-right: 6px; }
+    .close-file-situation-box {
+        border: 1px solid #000;
+        min-height: 110px;
+        padding: 8px;
+        font-size: 10px;
+        margin-bottom: 14px;
+        white-space: pre-wrap;
+    }
+    .close-file-date-row { margin-top: 18px; }
+    .close-file-date-value { min-width: 100px; }
+    .close-file-muted {
+        font-size: 9px;
+        color: #374151;
+        margin: 6px 0 12px;
+        font-style: italic;
+    }
+    .close-file-signature-page { page-break-before: always; padding-top: 28px; }
+    .close-file-signature-line { font-size: 11px; margin: 0; line-height: 1.7; }
+    .close-file-signature-name { font-weight: 600; margin: 0 6px; }
+    .close-file-signature-dots {
+        border-bottom: 1px dotted #111827;
+        display: inline-block;
+        min-width: 52%;
+        margin-left: 6px;
+        vertical-align: bottom;
+        min-height: 14px;
+    }
 </style>

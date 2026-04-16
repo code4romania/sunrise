@@ -81,6 +81,14 @@ it('generates monitoring and close-file pdf exports', function (): void {
         ->where('event', 'pdf_close_file_exported')
         ->exists())->toBeTrue();
 
+    $closePdfBinary = collect(Storage::disk('private')->allFiles())
+        ->map(fn (string $path): string => (string) Storage::disk('private')->get($path))
+        ->first(fn (string $binary): bool => str_contains($binary, __('beneficiary.section.close_file.pdf.document_title')));
+
+    expect($closePdfBinary)->not->toBeEmpty();
+    expect($closePdfBinary)->toContain(__('beneficiary.section.close_file.pdf.case_manager_role'));
+    expect($closePdfBinary)->toContain(__('beneficiary.section.close_file.pdf.admission_reason_heading'));
+
     $monitoringPdfBinary = collect(Storage::disk('private')->allFiles())
         ->map(fn (string $path): string => (string) Storage::disk('private')->get($path))
         ->first(fn (string $binary): bool => str_contains($binary, 'Fișa de monitorizare a cazului'));
