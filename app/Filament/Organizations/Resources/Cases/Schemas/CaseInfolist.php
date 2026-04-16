@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Schemas;
 
 use App\Enums\AggressorRelationship;
+use App\Enums\RecommendationService;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\CloseFile\CloseFileResource;
 use App\Filament\Organizations\Resources\Cases\Resources\InitialEvaluation\InitialEvaluationResource;
@@ -22,7 +23,6 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
 
 class CaseInfolist
 {
@@ -280,15 +280,19 @@ class CaseInfolist
                                 TextEntry::make('_detailed_evaluation_recommendation_services')
                                     ->label(__('beneficiary.section.detailed_evaluation.labels.recommendation_services'))
                                     ->state(fn (Beneficiary $record) => $record->detailedEvaluationResult?->recommendation_services ?? collect())
-                                    ->formatStateUsing(function ($state): HtmlString {
+                                    ->formatStateUsing(function ($state): ?string {
                                         if ($state === null || (is_countable($state) && count($state) === 0)) {
-                                            return new HtmlString('<span class="text-gray-500">—</span>');
+                                            return null;
                                         }
-                                        $pills = collect($state)->map(fn ($service) => '<span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800">'.e($service).'</span>')->implode('');
 
-                                        return new HtmlString('<div class="flex flex-wrap gap-2">'.$pills.'</div>');
+                                        $line = collect($state)
+                                            ->map(fn (mixed $value): string => self::formatRecommendationServiceLabel($value))
+                                            ->filter()
+                                            ->implode(', ');
+
+                                        return $line !== '' ? $line : null;
                                     })
-                                    ->html()
+                                    ->placeholder('—')
                                     ->visible(fn (Beneficiary $record): bool => $record->multidisciplinaryEvaluation !== null || $record->detailedEvaluationResult !== null || $record->detailedEvaluationSpecialists()->exists()),
                             ]),
 
@@ -546,6 +550,17 @@ class CaseInfolist
         }
 
         return $parts !== [] ? implode('; ', $parts) : null;
+    }
+
+    private static function formatRecommendationServiceLabel(mixed $value): string
+    {
+        if ($value instanceof RecommendationService) {
+            return $value->getLabel();
+        }
+
+        $enum = RecommendationService::tryFrom((string) $value);
+
+        return $enum?->getLabel() ?? (string) $value;
     }
 
     private static function formatEnumLikeValue(mixed $value): string
