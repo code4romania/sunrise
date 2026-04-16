@@ -344,6 +344,13 @@ return [
         'cases_by_primary_violence_frequency_and_age' => 'Tipul de violență primară, frecvența agresiunii și vârsta victimei (minor/major)',
         'cases_by_presentation_mode' => 'Modalitatea de prezentare a victimei',
         'cases_by_referring_institution' => 'Instituția care trimite victima',
+        'cases_by_results_status' => 'Rezultatele intervenției după status',
+        'cases_by_service_types' => 'Tipul serviciilor oferite',
+        'cases_by_service_types_and_age' => 'Tipul serviciilor oferite și vârsta victimei (minor/major)',
+        'cases_by_violence_types_and_age' => 'Tipurile de violență și vârsta victimei (minor/major)',
+        'cases_by_aggressor_risk_factors' => 'Factori de risc la nivel de agresor',
+        'cases_by_victim_risk_factors' => 'Factori de risc la nivel de victimă',
+        'cases_by_evaluation_initial_risk_factors' => 'Factori de risc/aggravanti din evaluarea inițială',
     ],
 
     'age_interval' => [

@@ -11,9 +11,9 @@ use Filament\Support\Contracts\HasLabel;
 
 enum ReportType: string implements HasLabel
 {
-    use Enums\HasLabel;
     use Arrayable;
     use Comparable;
+    use Enums\HasLabel;
 
     case CASES_BY_AGE = 'cases_by_age';
     case CASES_BY_AGE_SEGMENTATION = 'cases_by_age_segmentation';
@@ -50,6 +50,13 @@ enum ReportType: string implements HasLabel
     case CASES_BY_PRIMARY_VIOLENCE_FREQUENCY_AND_AGE = 'cases_by_primary_violence_frequency_and_age';
     case CASES_BY_PRESENTATION_MODE = 'cases_by_presentation_mode';
     case CASES_BY_REFERRING_INSTITUTION = 'cases_by_referring_institution';
+    case CASES_BY_RESULTS_STATUS = 'cases_by_results_status';
+    case CASES_BY_SERVICE_TYPES = 'cases_by_service_types';
+    case CASES_BY_SERVICE_TYPES_AND_AGE = 'cases_by_service_types_and_age';
+    case CASES_BY_VIOLENCE_TYPES_AND_AGE = 'cases_by_violence_types_and_age';
+    case CASES_BY_AGGRESSOR_RISK_FACTORS = 'cases_by_aggressor_risk_factors';
+    case CASES_BY_VICTIM_RISK_FACTORS = 'cases_by_victim_risk_factors';
+    case CASES_BY_EVALUATION_INITIAL_RISK_FACTORS = 'cases_by_evaluation_initial_risk_factors';
 
     protected function labelKeyPrefix(): ?string
     {

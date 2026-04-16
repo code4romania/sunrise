@@ -10,6 +10,7 @@ return [
     'statistics' => [
         '_group' => 'Estadísticas',
         'label' => 'Estadísticas',
+        'new_reports' => 'Nuevos reportes',
     ],
     'community' => [
         '_group' => 'Comunidad',

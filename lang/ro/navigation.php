@@ -12,6 +12,7 @@ return [
     'statistics' => [
         '_group' => 'BENEFICIARI',
         'label' => 'Rapoarte statistice',
+        'new_reports' => 'Rapoarte',
     ],
 
     'community' => [
