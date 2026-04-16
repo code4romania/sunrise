@@ -114,9 +114,9 @@ return [
     ],
 
     'new' => [
-        'title' => 'Rapoarte noi',
+        'title' => 'Rapoarte',
         'labels' => [
-            'report_feature' => 'Selectează raportul nou',
+            'report_feature' => 'Selectează raportul',
         ],
         'options' => [
             'report_36' => '#36 Rezultate intervenție după status (inițiate / realizate / retrase)',
