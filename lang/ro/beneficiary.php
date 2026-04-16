@@ -438,6 +438,7 @@ return [
                 'pdf_initial_evaluation_exported' => 'Export PDF: evaluare inițială',
                 'pdf_detailed_evaluation_exported' => 'Export PDF: evaluare detaliată',
                 'pdf_monthly_plan_exported' => 'Export PDF: plan lunar Dosar servicii VD',
+                'pdf_monthly_plan_sheet_exported' => 'Export PDF: fișă plan lunar (plan de intervenție)',
                 'pdf_monitoring_exported' => 'Export PDF: monitorizare',
                 'pdf_close_file_exported' => 'Export PDF: închidere caz',
                 'meeting' => 'Evaluare detaliată, Întâlniri',

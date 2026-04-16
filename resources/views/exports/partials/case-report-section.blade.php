@@ -39,6 +39,9 @@
     @case('close_file_form')
         @include('exports.partials.sections.close-file-form', ['data' => $section['data'] ?? []])
         @break
+    @case('monthly_plan_sheet')
+        @include('exports.partials.sections.monthly-plan-sheet', ['data' => $section['data'] ?? []])
+        @break
     @case('risk_factors_table')
         @include('exports.partials.sections.risk-factors', [
             'rows' => $section['rows'] ?? [],

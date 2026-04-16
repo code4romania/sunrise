@@ -15,6 +15,7 @@ use App\Services\CaseExports\Composers\CloseFilePdfComposer;
 use App\Services\CaseExports\Composers\DetailedEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\InitialEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\MonitoringPdfComposer;
+use App\Services\CaseExports\Composers\MonthlyPlanSheetPdfComposer;
 use App\Services\CaseExports\Support\CaseTeamSignatureRowsBuilder;
 use App\Services\CaseExports\Support\ExportBrandingResolver;
 use App\Services\CaseExports\Support\ExportDataFormatter;
@@ -35,6 +36,7 @@ class CaseExportManager
         private readonly DetailedEvaluationPdfComposer $detailedEvaluationPdfComposer,
         private readonly MonitoringPdfComposer $monitoringPdfComposer,
         private readonly CloseFilePdfComposer $closeFilePdfComposer,
+        private readonly MonthlyPlanSheetPdfComposer $monthlyPlanSheetPdfComposer,
     ) {}
 
     public function downloadIdentityPdf(Beneficiary $beneficiary): StreamedResponse
@@ -170,6 +172,29 @@ class CaseExportManager
                 ['title' => 'Planuri lunare', 'rows' => $this->formatter->normalizeArray(['monthly_plans' => $beneficiary->interventionPlan?->monthlyPlans?->toArray() ?? []])],
             ],
             signatureRows: $this->signatureRowsBuilder->build($beneficiary, includeBeneficiary: true),
+        );
+    }
+
+    public function downloadMonthlyPlanSheetPdf(MonthlyPlan $monthlyPlan): StreamedResponse
+    {
+        $monthlyPlan->loadMissing(['interventionPlan.beneficiary']);
+        $beneficiary = $monthlyPlan->interventionPlan?->beneficiary;
+
+        if ($beneficiary instanceof Beneficiary) {
+            $this->logPdfExport($beneficiary, 'pdf_monthly_plan_sheet_exported');
+        }
+
+        $caseId = $monthlyPlan->interventionPlan?->beneficiary_id ?? $monthlyPlan->id;
+
+        return $this->downloadPdf(
+            view: 'exports.reports.pdf-monthly-plan-sheet',
+            reportTitle: __('intervention_plan.pdf.monthly_sheet_title'),
+            caseId: $caseId,
+            sections: [[
+                'title' => '',
+                'type' => 'monthly_plan_sheet',
+                'data' => $this->monthlyPlanSheetPdfComposer->compose($monthlyPlan),
+            ]],
         );
     }
 

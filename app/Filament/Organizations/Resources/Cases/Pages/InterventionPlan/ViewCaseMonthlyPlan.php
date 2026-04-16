@@ -12,7 +12,9 @@ use App\Infolists\Components\SectionHeader;
 use App\Models\Beneficiary;
 use App\Models\MonthlyPlan;
 use App\Models\Specialist;
+use App\Services\CaseExports\CaseExportManager;
 use Carbon\Carbon;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Pages\ViewRecord;
@@ -21,9 +23,10 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseMonthlyPlan extends ViewRecord
 {
@@ -31,9 +34,16 @@ class ViewCaseMonthlyPlan extends ViewRecord
 
     protected static string $resource = CaseResource::class;
 
-    protected ?MonthlyPlan $monthlyPlan = null;
+    /**
+     * Monthly plan primary key from the URL. Must be public so Livewire keeps it
+     * across requests; {@see request()->route('monthlyPlan')} is unavailable on
+     * Livewire subrequests (e.g. header actions).
+     */
+    public null|int|string $monthlyPlan = null;
 
-    public function mount(int|string $record): void
+    private ?MonthlyPlan $resolvedMonthlyPlan = null;
+
+    public function mount(int|string $record, MonthlyPlan|int|string|null $monthlyPlan = null): void
     {
         $this->record = $this->resolveRecord($record);
 
@@ -48,10 +58,50 @@ class ViewCaseMonthlyPlan extends ViewRecord
             return;
         }
 
-        $monthlyPlanId = request()->route('monthlyPlan');
-        $this->monthlyPlan = MonthlyPlan::query()
+        $this->monthlyPlan = $this->normalizeMonthlyPlanRouteKey($monthlyPlan)
+            ?? $this->normalizeMonthlyPlanRouteKey(request()->route('monthlyPlan'));
+
+        if ($this->monthlyPlan === null || $this->monthlyPlan === '') {
+            abort(404);
+        }
+
+        $this->resolveMonthlyPlan();
+
+        $this->authorizeAccess();
+    }
+
+    private function normalizeMonthlyPlanRouteKey(mixed $value): int|string|null
+    {
+        if ($value instanceof MonthlyPlan) {
+            return $value->getKey();
+        }
+
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return $value;
+    }
+
+    private function resolveMonthlyPlan(): MonthlyPlan
+    {
+        if ($this->resolvedMonthlyPlan instanceof MonthlyPlan) {
+            return $this->resolvedMonthlyPlan;
+        }
+
+        $beneficiary = $this->getRecord();
+        if (! $beneficiary instanceof Beneficiary) {
+            abort(404);
+        }
+
+        $plan = $beneficiary->interventionPlan;
+        if (! $plan) {
+            abort(404);
+        }
+
+        $monthlyPlan = MonthlyPlan::query()
             ->where('intervention_plan_id', $plan->id)
-            ->where('id', $monthlyPlanId)
+            ->where('id', $this->monthlyPlan)
             ->with([
                 'monthlyPlanServices.service',
                 'monthlyPlanServices.monthlyPlanInterventions.serviceIntervention',
@@ -61,7 +111,7 @@ class ViewCaseMonthlyPlan extends ViewRecord
             ])
             ->firstOrFail();
 
-        $this->authorizeAccess();
+        return $this->resolvedMonthlyPlan = $monthlyPlan;
     }
 
     protected function authorizeAccess(): void
@@ -91,6 +141,13 @@ class ViewCaseMonthlyPlan extends ViewRecord
         return [
             BackAction::make()
                 ->url(CaseResource::getUrl('view_intervention_plan', ['record' => $this->getRecord()])),
+            Action::make('download_monthly_sheet')
+                ->label(__('intervention_plan.actions.download_monthly_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->outlined()
+                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadMonthlyPlanSheetPdf(
+                    $this->resolveMonthlyPlan(),
+                )),
             DeleteAction::make()
                 ->label(__('intervention_plan.actions.delete_monthly_plan'))
                 ->modalHeading(__('intervention_plan.headings.delete_monthly_plan_modal'))
@@ -106,7 +163,7 @@ class ViewCaseMonthlyPlan extends ViewRecord
         return $schema
             ->columns(2)
             ->inlineLabel(true)
-            ->record($this->monthlyPlan);
+            ->record($this->resolveMonthlyPlan());
     }
 
     public function infolist(Schema $schema): Schema
@@ -126,13 +183,10 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                         ->state(__('intervention_plan.headings.monthly_plan_details'))
                                         ->action(
                                             EditAction::make()
-                                                ->url(fn (): ?string => $this->monthlyPlan instanceof MonthlyPlan
-                                                    ? CaseResource::getUrl('edit_monthly_plan_details', [
-                                                        'record' => $this->getRecord(),
-                                                        'monthlyPlan' => $this->monthlyPlan,
-                                                    ])
-                                                    : null)
-                                                ->visible(fn (): bool => $this->monthlyPlan instanceof MonthlyPlan)
+                                                ->url(fn (): string => CaseResource::getUrl('edit_monthly_plan_details', [
+                                                    'record' => $this->getRecord(),
+                                                    'monthlyPlan' => $this->resolveMonthlyPlan(),
+                                                ]))
                                         ),
 
                                     TextEntry::make('beneficiary.full_name')
@@ -143,7 +197,16 @@ class ViewCaseMonthlyPlan extends ViewRecord
 
                                     TextEntry::make('domiciliu')
                                         ->label(__('intervention_plan.labels.domiciliu'))
-                                        ->state(fn (MonthlyPlan $record): string => self::formatAddress($record->beneficiary)),
+                                        ->state(function (?MonthlyPlan $record): string {
+                                            $plan = $record ?? $this->resolveMonthlyPlan();
+
+                                            $beneficiary = $plan->beneficiary;
+                                            if (! $beneficiary instanceof Beneficiary) {
+                                                return '—';
+                                            }
+
+                                            return self::formatAddress($beneficiary);
+                                        }),
 
                                     TextEntry::make('interventionPlan.admit_date_in_center')
                                         ->label(__('intervention_plan.labels.admit_date_in_center'))
@@ -165,7 +228,11 @@ class ViewCaseMonthlyPlan extends ViewRecord
 
                                     TextEntry::make('case_team_display')
                                         ->label(__('intervention_plan.labels.specialists'))
-                                        ->state(fn (MonthlyPlan $record): string => self::formatMonthlyPlanCaseTeam($record)),
+                                        ->state(function (?MonthlyPlan $record): string {
+                                            $plan = $record ?? $this->resolveMonthlyPlan();
+
+                                            return self::formatMonthlyPlanCaseTeam($plan);
+                                        }),
                                 ]),
                         ]),
 
@@ -179,13 +246,10 @@ class ViewCaseMonthlyPlan extends ViewRecord
                                         ->state(__('intervention_plan.headings.services_and_interventions'))
                                         ->action(
                                             EditAction::make()
-                                                ->url(fn (): ?string => $this->monthlyPlan instanceof MonthlyPlan
-                                                    ? CaseResource::getUrl('edit_monthly_plan_services', [
-                                                        'record' => $this->getRecord(),
-                                                        'monthlyPlan' => $this->monthlyPlan,
-                                                    ])
-                                                    : null)
-                                                ->visible(fn (): bool => $this->monthlyPlan instanceof MonthlyPlan)
+                                                ->url(fn (): string => CaseResource::getUrl('edit_monthly_plan_services', [
+                                                    'record' => $this->getRecord(),
+                                                    'monthlyPlan' => $this->resolveMonthlyPlan(),
+                                                ]))
                                         ),
 
                                     View::make('filament.organizations.components.monthly-plan-services-and-interventions')

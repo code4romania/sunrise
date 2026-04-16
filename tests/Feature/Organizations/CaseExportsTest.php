@@ -11,9 +11,14 @@ use App\Models\InterventionPlan;
 use App\Models\InterventionService;
 use App\Models\Monitoring;
 use App\Models\MonthlyPlan;
+use App\Models\MonthlyPlanInterventions;
+use App\Models\MonthlyPlanService;
 use App\Models\OrganizationServiceIntervention;
+use App\Models\Service;
+use App\Models\ServiceIntervention;
 use App\Models\User;
 use App\Services\CaseExports\CaseExportManager;
+use App\Services\CaseExports\Composers\MonthlyPlanSheetPdfComposer;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
@@ -140,6 +145,93 @@ it('generates monthly plan pdf export', function (): void {
         ->whereMorphedTo('subject', $beneficiary)
         ->where('event', 'pdf_monthly_plan_exported')
         ->exists())->toBeTrue();
+});
+
+it('generates monthly plan sheet pdf export', function (): void {
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+    $interventionPlan = InterventionPlan::factory()->for($beneficiary)->for($this->organization)->create();
+    $monthlyPlan = MonthlyPlan::query()->create([
+        'intervention_plan_id' => $interventionPlan->id,
+        'start_date' => now()->subMonth()->toDateString(),
+        'end_date' => now()->toDateString(),
+    ]);
+
+    $response = app(CaseExportManager::class)->downloadMonthlyPlanSheetPdf($monthlyPlan);
+
+    expect($response)->toBeInstanceOf(StreamedResponse::class);
+    expect((string) $response->headers->get('content-type'))->toContain('application/pdf');
+
+    expect(Activity::query()
+        ->whereMorphedTo('subject', $beneficiary)
+        ->where('event', 'pdf_monthly_plan_sheet_exported')
+        ->exists())->toBeTrue();
+
+    $files = Storage::disk('private')->allFiles();
+    expect($files)->not->toBeEmpty();
+    $pdfBinary = (string) Storage::disk('private')->get($files[0]);
+    expect($pdfBinary)->toContain(__('intervention_plan.sheet.document_title'));
+    expect($pdfBinary)->toContain(__('intervention_plan.sheet.social_benefits'));
+});
+
+it('composes monthly plan sheet data from services and interventions', function (): void {
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+    $interventionPlan = InterventionPlan::factory()->for($beneficiary)->for($this->organization)->create();
+    $monthlyPlan = MonthlyPlan::query()->create([
+        'intervention_plan_id' => $interventionPlan->id,
+        'start_date' => now()->subMonth()->toDateString(),
+        'end_date' => now()->toDateString(),
+    ]);
+
+    $service = Service::query()->create([
+        'name' => 'Asistență medicală',
+        'identifier' => 'MED',
+        'status' => 1,
+        'sort' => 1,
+    ]);
+
+    $serviceIntervention = ServiceIntervention::query()->create([
+        'service_id' => $service->id,
+        'name' => 'Consult',
+        'identifier' => 'MED_1',
+        'status' => 1,
+        'sort' => 1,
+    ]);
+
+    $monthlyPlanService = MonthlyPlanService::query()->create([
+        'monthly_plan_id' => $monthlyPlan->id,
+        'service_id' => $service->id,
+        'institution' => 'Spitalul X',
+        'objective' => 'Obiectiv serviciu unic',
+        'service_details' => 'Detalii suplimentare serviciu',
+        'responsible_person' => 'Dr. Ion',
+        'start_date' => now()->subWeek()->toDateString(),
+        'end_date' => now()->toDateString(),
+    ]);
+
+    MonthlyPlanInterventions::query()->create([
+        'monthly_plan_service_id' => $monthlyPlanService->id,
+        'service_intervention_id' => $serviceIntervention->id,
+        'objections' => 'Obiective intervenție lunare',
+        'observations' => 'Observații intervenție lunare',
+    ]);
+
+    $payload = app(MonthlyPlanSheetPdfComposer::class)->compose($monthlyPlan->fresh());
+
+    expect($payload['service_rows'])->toHaveCount(1);
+
+    $medServiceRow = collect($payload['service_rows'])->firstWhere('identifier', 'MED');
+    expect($medServiceRow)->not->toBeNull()
+        ->and($medServiceRow['institution'])->toContain('Spitalul X')
+        ->and($medServiceRow['objectives'])->toContain('Obiectiv serviciu unic')
+        ->and($medServiceRow['objectives'])->toContain('Detalii suplimentare serviciu');
+
+    $medInterventionRow = collect($payload['intervention_rows'])->first(
+        fn (array $row): bool => ($row['label'] ?? '') === __('intervention_plan.sheet.intervention_row.MED')
+    );
+    expect($medInterventionRow)->not->toBeNull()
+        ->and($medInterventionRow['objectives'])->toContain('Consult')
+        ->and($medInterventionRow['objectives'])->toContain('Obiective intervenție lunare')
+        ->and($medInterventionRow['observations'])->toContain('Observații intervenție lunare');
 });
 
 it('generates initial evaluation pdf export with identity and risk factors layout', function (): void {

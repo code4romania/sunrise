@@ -344,4 +344,87 @@
         vertical-align: bottom;
         min-height: 14px;
     }
+
+    .monthly-sheet-doc-title {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
+        margin: 8px 0 16px;
+        text-transform: uppercase;
+    }
+    .monthly-sheet-info-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000;
+        margin-bottom: 14px;
+        font-size: 10px;
+    }
+    .monthly-sheet-info-table th,
+    .monthly-sheet-info-table td {
+        border: 1px solid #000;
+        padding: 5px 8px;
+        vertical-align: top;
+    }
+    .monthly-sheet-info-table th {
+        width: 32%;
+        font-weight: 700;
+        text-align: left;
+        background: #f9fafb;
+    }
+    .monthly-sheet-section-title {
+        text-align: center;
+        font-size: 11px;
+        font-weight: 700;
+        margin: 14px 0 8px;
+    }
+    .monthly-sheet-subheading {
+        font-size: 11px;
+        font-weight: 700;
+        margin: 14px 0 8px;
+    }
+    .monthly-sheet-data-table,
+    .monthly-sheet-team-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000;
+        margin-bottom: 12px;
+        font-size: 9px;
+    }
+    .monthly-sheet-data-table th,
+    .monthly-sheet-data-table td,
+    .monthly-sheet-team-table th,
+    .monthly-sheet-team-table td {
+        border: 1px solid #000;
+        padding: 3px 5px;
+        vertical-align: top;
+    }
+    .monthly-sheet-data-table th,
+    .monthly-sheet-team-table th {
+        font-weight: 700;
+        background: #f9fafb;
+        text-align: left;
+    }
+    .monthly-sheet-empty {
+        text-align: center;
+        color: #6b7280;
+        font-style: italic;
+    }
+    .monthly-sheet-page-break {
+        page-break-after: always;
+    }
+    .monthly-sheet-gps-checks {
+        margin-top: 6px;
+    }
+    .monthly-sheet-inline-cb {
+        display: block;
+        font-size: 9px;
+        margin: 2px 0;
+    }
+    .monthly-sheet-inline-cb input {
+        margin-right: 6px;
+        vertical-align: middle;
+    }
+    .monthly-sheet-cb-cell {
+        text-align: center;
+    }
 </style>
