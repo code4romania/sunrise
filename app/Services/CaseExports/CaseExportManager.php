@@ -16,6 +16,7 @@ use App\Services\CaseExports\Composers\DetailedEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\InitialEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\MonitoringPdfComposer;
 use App\Services\CaseExports\Composers\MonthlyPlanSheetPdfComposer;
+use App\Services\CaseExports\Support\BeneficiaryPdfTableDataBuilder;
 use App\Services\CaseExports\Support\CaseTeamSignatureRowsBuilder;
 use App\Services\CaseExports\Support\ExportBrandingResolver;
 use App\Services\CaseExports\Support\ExportDataFormatter;
@@ -31,6 +32,7 @@ class CaseExportManager
         private readonly ExportFilenameBuilder $filenameBuilder,
         private readonly ExportBrandingResolver $brandingResolver,
         private readonly ExportDataFormatter $formatter,
+        private readonly BeneficiaryPdfTableDataBuilder $beneficiaryTables,
         private readonly CaseTeamSignatureRowsBuilder $signatureRowsBuilder,
         private readonly InitialEvaluationPdfComposer $initialEvaluationPdfComposer,
         private readonly DetailedEvaluationPdfComposer $detailedEvaluationPdfComposer,
@@ -45,6 +47,8 @@ class CaseExportManager
 
         $this->logPdfExport($beneficiary, 'pdf_identity_exported');
 
+        $childrenSection = $this->beneficiaryTables->buildChildrenTableData($beneficiary);
+
         $sections = [
             ['title' => 'Identitate beneficiar', 'rows' => $this->formatter->normalizeArray($beneficiary->only([
                 'first_name', 'last_name', 'prior_name', 'cnp', 'gender', 'birthplace', 'birthdate', 'civil_status',
@@ -53,9 +57,11 @@ class CaseExportManager
                 'children_care_count', 'children_under_18_care_count', 'children_18_care_count',
                 'children_accompanying_count', 'children_notes',
             ]))],
-            ['title' => 'Identitate copii', 'rows' => $this->formatter->normalizeArray([
-                'children' => $beneficiary->children->map(fn ($child) => $child->toArray())->all(),
-            ])],
+            [
+                'title' => 'Identitate copii',
+                'type' => 'initial_evaluation_children_table',
+                'children' => $childrenSection,
+            ],
         ];
 
         return $this->downloadPdf(

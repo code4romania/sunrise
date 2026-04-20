@@ -219,40 +219,43 @@ class ExportDataFormatter
 
     private function translateEnumLikeValue(string $value): ?string
     {
-        if (! preg_match('/^[a-z0-9_]+$/', $value)) {
+        $normalized = strtolower(trim($value));
+        if (! preg_match('/^[a-z0-9_]+$/', $normalized)) {
             return null;
         }
 
         $candidates = [
-            "enum.helps.{$value}",
-            "enum.level.{$value}",
-            "enum.frequency.{$value}",
-            "enum.ternary.{$value}",
-            "enum.meeting_status.{$value}",
-            "enum.role.{$value}",
-            "enum.gender.{$value}",
-            "enum.civil_status.{$value}",
-            "enum.studies.{$value}",
-            "enum.occupation.{$value}",
-            "enum.income.{$value}",
-            "enum.homeownership.{$value}",
-            "enum.diseases.{$value}",
-            "enum.citizenship.{$value}",
-            "enum.drug.{$value}",
-            "enum.case_permissions.{$value}",
-            "enum.admin_permission.{$value}",
-            "enum.violence_means.{$value}",
-            "enum.violence.{$value}",
-            "enum.protection_order.{$value}",
-            "enum.referral_mode.{$value}",
-            "enum.presentation_mode.{$value}",
-            "enum.aggressor_relationship.{$value}",
-            "enum.aggressor_legal_history.{$value}",
-            "enum.maintenance_sources.{$value}",
-            "enum.child_aggressor_relationships.{$value}",
-            "beneficiary.section.initial_evaluation.labels.{$value}",
-            "beneficiary.section.detailed_evaluation.labels.{$value}",
-            "intervention_plan.labels.{$value}",
+            "enum.helps.{$normalized}",
+            "enum.level.{$normalized}",
+            "enum.frequency.{$normalized}",
+            "enum.ternary.{$normalized}",
+            "enum.meeting_status.{$normalized}",
+            "enum.role.{$normalized}",
+            "enum.gender.{$normalized}",
+            "enum.gender_short_values.{$normalized}",
+            "enum.civil_status.{$normalized}",
+            "enum.id_type.{$normalized}",
+            "enum.studies.{$normalized}",
+            "enum.occupation.{$normalized}",
+            "enum.income.{$normalized}",
+            "enum.homeownership.{$normalized}",
+            "enum.diseases.{$normalized}",
+            "enum.citizenship.{$normalized}",
+            "enum.drug.{$normalized}",
+            "enum.case_permissions.{$normalized}",
+            "enum.admin_permission.{$normalized}",
+            "enum.violence_means.{$normalized}",
+            "enum.violence.{$normalized}",
+            "enum.protection_order.{$normalized}",
+            "enum.referral_mode.{$normalized}",
+            "enum.presentation_mode.{$normalized}",
+            "enum.aggressor_relationship.{$normalized}",
+            "enum.aggressor_legal_history.{$normalized}",
+            "enum.maintenance_sources.{$normalized}",
+            "enum.child_aggressor_relationships.{$normalized}",
+            "beneficiary.section.initial_evaluation.labels.{$normalized}",
+            "beneficiary.section.detailed_evaluation.labels.{$normalized}",
+            "intervention_plan.labels.{$normalized}",
         ];
 
         foreach ($candidates as $candidate) {

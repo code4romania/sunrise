@@ -96,12 +96,12 @@
                     <h4 class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
                         {{ __('intervention_plan.labels.service_objective') }}
                     </h4>
-                    <div class="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-gray-900 dark:text-gray-100">
+                    <div class="mt-2 text-sm leading-relaxed text-gray-900 dark:text-gray-100">
                         {{ $displayText($serviceRow->objective) }}
                     </div>
                 </div>
 
-                <div class="mt-8 overflow-x-auto">
+                <div class="mt-8 overflow-x-auto w-full">
                     <table class="w-full border-collapse overflow-hidden rounded-lg border border-gray-200 text-left text-sm dark:border-gray-600">
                         <thead>
                             <tr class="bg-gray-100 dark:bg-gray-800">
@@ -127,11 +127,11 @@
                                         {{ $intervention->serviceIntervention?->name ?? '—' }}
                                     </td>
                                     <td
-                                        class="border border-gray-200 px-4 py-3 align-top whitespace-pre-wrap text-gray-900 dark:border-gray-600 dark:text-gray-100">
+                                        class="border border-gray-200 px-4 py-3 align-top text-gray-900 dark:border-gray-600 dark:text-gray-100">
                                         {{ $interventionObjectives($intervention) }}
                                     </td>
                                     <td
-                                        class="border border-gray-200 px-4 py-3 align-top whitespace-pre-wrap text-gray-900 dark:border-gray-600 dark:text-gray-100">
+                                        class="border border-gray-200 px-4 py-3 align-top text-gray-900 dark:border-gray-600 dark:text-gray-100">
                                         {{ $displayText($intervention->observations) }}
                                     </td>
                                 </tr>
@@ -151,7 +151,7 @@
                     <h4 class="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
                         {{ __('intervention_plan.labels.service_details_label') }}
                     </h4>
-                    <div class="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-gray-900 dark:text-gray-100">
+                    <div class="mt-2 text-sm leading-relaxed text-gray-900 dark:text-gray-100">
                         {{ $displayText($serviceRow->service_details) }}
                     </div>
                 </div>

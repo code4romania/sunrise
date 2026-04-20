@@ -1,5 +1,8 @@
 @php($section = $section ?? [])
-@if(trim((string) ($section['title'] ?? '')) !== '')
+@php($sectionTitle = trim((string) ($section['title'] ?? '')))
+@php($pageTitle = trim((string) ($reportTitle ?? '')))
+@php($showSectionTitle = $sectionTitle !== '' && mb_strtolower($sectionTitle) !== mb_strtolower($pageTitle))
+@if($showSectionTitle)
     <div class="section-title">{{ $section['title'] }}</div>
 @endif
 @switch($section['type'] ?? null)

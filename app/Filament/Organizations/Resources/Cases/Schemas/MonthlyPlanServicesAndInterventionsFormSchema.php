@@ -10,10 +10,10 @@ use App\Models\Service;
 use App\Models\ServiceIntervention;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Support\Enums\Alignment;
@@ -41,6 +41,7 @@ final class MonthlyPlanServicesAndInterventionsFormSchema
                 $component->ensureMinItems();
             })
             ->hiddenLabel()
+            ->columnSpanFull()
             ->collapsible()
             ->itemLabel(function () {
                 static $index = 0;
@@ -58,7 +59,7 @@ final class MonthlyPlanServicesAndInterventionsFormSchema
             ->addActionAlignment(Alignment::Left)
             ->schema([
                 Grid::make(2)
-                    ->maxWidth('3xl')
+                    ->columnSpanFull()
                     ->schema([
                         Select::make('service_id')
                             ->label(__('intervention_plan.labels.service_type'))
@@ -94,11 +95,10 @@ final class MonthlyPlanServicesAndInterventionsFormSchema
                     ->label(__('intervention_plan.labels.responsible_person'))
                     ->placeholder(__('intervention_plan.placeholders.responsible_person'))
                     ->columnSpanFull()
-                    ->maxWidth('3xl')
                     ->maxLength(200),
 
                 Grid::make(2)
-                    ->maxWidth('3xl')
+                    ->columnSpanFull()
                     ->schema([
                         DatePicker::make('start_date')
                             ->label(__('intervention_plan.labels.monthly_plan_service_interval_start'))
@@ -138,22 +138,21 @@ final class MonthlyPlanServicesAndInterventionsFormSchema
                     ->label(__('intervention_plan.labels.service_objective'))
                     ->placeholder(__('intervention_plan.placeholders.service_objective'))
                     ->columnSpanFull()
-                    ->maxWidth('3xl')
                     ->rows(4)
                     ->maxLength(2000),
 
                 AppRepeater::make('monthlyPlanInterventions')
                     ->relationship('monthlyPlanInterventions')
                     ->hiddenLabel()
-                    ->maxWidth('3xl')
                     ->addActionLabel(__('intervention_plan.actions.add_intervention_repeater'))
                     ->addActionAlignment(Alignment::Center)
-                    ->columns(4)
+                    ->columns(12)
                     ->itemLabel(fn (array $state): ?string => isset($state['service_intervention_id']) && $state['service_intervention_id'] ? (ServiceIntervention::query()->find($state['service_intervention_id'])?->name ?? null) : null)
                     ->schema([
-                        Placeholder::make('number')
+                        TextEntry::make('number')
                             ->label(__('intervention_plan.labels.count'))
-                            ->content(function () {
+                            ->columnSpan(1)
+                            ->state(function () {
                                 static $index = 0;
 
                                 return (string) ++$index;
@@ -179,6 +178,7 @@ final class MonthlyPlanServicesAndInterventionsFormSchema
 
                                 return null;
                             })
+                            ->columnSpan(3)
                             ->options(
                                 function (Get $get, ?int $state): array {
                                     $serviceId = self::resolveMonthlyPlanServiceIdFromForm($get);
@@ -211,11 +211,13 @@ final class MonthlyPlanServicesAndInterventionsFormSchema
                         TextInput::make('objections')
                             ->label(__('intervention_plan.labels.objectives_short'))
                             ->placeholder(__('intervention_plan.placeholders.monthly_plan_objective'))
+                            ->columnSpan(4)
                             ->maxLength(200),
 
                         TextInput::make('observations')
                             ->label(__('intervention_plan.labels.observations'))
                             ->placeholder(__('intervention_plan.placeholders.monthly_plan_observations'))
+                            ->columnSpan(4)
                             ->maxLength(200),
                     ]),
 
@@ -223,7 +225,6 @@ final class MonthlyPlanServicesAndInterventionsFormSchema
                     ->label(__('intervention_plan.labels.service_details_label'))
                     ->placeholder(__('intervention_plan.placeholders.service_details'))
                     ->columnSpanFull()
-                    ->maxWidth('3xl')
                     ->rows(4)
                     ->maxLength(2000),
             ]);
