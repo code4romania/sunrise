@@ -37,7 +37,9 @@ beforeEach(function (): void {
 });
 
 it('generates identity and case info pdf exports', function (): void {
-    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create([
+        'first_name' => 'PdfCaseInfoFirst',
+    ]);
 
     $service = app(CaseExportManager::class);
 
@@ -48,7 +50,16 @@ it('generates identity and case info pdf exports', function (): void {
     expect($caseInfo)->toBeInstanceOf(StreamedResponse::class);
     expect((string) $identity->headers->get('content-type'))->toContain('application/pdf');
     expect((string) $caseInfo->headers->get('content-type'))->toContain('application/pdf');
-    expect(Storage::disk('private')->allFiles())->not->toBeEmpty();
+    $storedFiles = Storage::disk('private')->allFiles();
+    expect($storedFiles)->not->toBeEmpty();
+
+    $anyPdfContainsCaseInfo = collect($storedFiles)
+        ->contains(fn (string $path): bool => str_contains((string) Storage::disk('private')->get($path), 'PdfCaseInfoFirst'));
+    expect($anyPdfContainsCaseInfo)->toBeTrue();
+
+    $anyPdfContainsSectionTitle = collect($storedFiles)
+        ->contains(fn (string $path): bool => str_contains((string) Storage::disk('private')->get($path), 'Informații generale'));
+    expect($anyPdfContainsSectionTitle)->toBeTrue();
 
     expect(Activity::query()
         ->whereMorphedTo('subject', $beneficiary)

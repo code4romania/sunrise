@@ -12,6 +12,7 @@ use App\Models\CloseFile;
 use App\Models\InterventionService;
 use App\Models\Monitoring;
 use App\Models\MonthlyPlan;
+use App\Services\CaseExports\Composers\CaseInfoPdfComposer;
 use App\Services\CaseExports\Composers\CloseFilePdfComposer;
 use App\Services\CaseExports\Composers\DetailedEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\InitialEvaluationPdfComposer;
@@ -44,6 +45,7 @@ class CaseExportManager
         private readonly MonthlyPlanSheetPdfComposer $monthlyPlanSheetPdfComposer,
         private readonly PsychologicalCounselingSheetPdfComposer $psychologicalCounselingSheetPdfComposer,
         private readonly LegalCounselingSheetPdfComposer $legalCounselingSheetPdfComposer,
+        private readonly CaseInfoPdfComposer $caseInfoPdfComposer,
     ) {}
 
     public function downloadIdentityPdf(Beneficiary $beneficiary): StreamedResponse
@@ -79,19 +81,9 @@ class CaseExportManager
 
     public function downloadCaseInfoPdf(Beneficiary $beneficiary): StreamedResponse
     {
-        $beneficiary->loadMissing(['details', 'antecedents', 'aggressors', 'flowPresentation']);
-
         $this->logPdfExport($beneficiary, 'pdf_case_info_exported');
 
-        $sections = [
-            ['title' => 'Informații generale', 'rows' => $this->formatter->normalizeArray($beneficiary->toArray())],
-            ['title' => 'Detalii beneficiar', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->details?->toArray())],
-            ['title' => 'Antecedente', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->antecedents?->toArray())],
-            ['title' => 'Agresor', 'rows' => $this->formatter->normalizeArray([
-                'aggressors' => $beneficiary->aggressors->map(fn ($aggressor) => $aggressor->toArray())->all(),
-            ])],
-            ['title' => 'Flux prezentare', 'rows' => $this->formatter->normalizeArray((array) $beneficiary->flowPresentation?->toArray())],
-        ];
+        $sections = $this->caseInfoPdfComposer->compose($beneficiary);
 
         return $this->downloadPdf(
             view: 'exports.reports.pdf-case-info',
