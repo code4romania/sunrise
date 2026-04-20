@@ -1,1 +1,1 @@
-<x-icon-logo class="h-full dark:fill-white text-primary-600" />
+<x-icon-logo class="h-full w-full text-primary-600 dark:fill-white" />
