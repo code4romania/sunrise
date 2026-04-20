@@ -17,24 +17,32 @@ class Report implements FromView
         $this->reportService = $reportService;
     }
 
-    public function view(): View
+    /**
+     * @return array<string, mixed>
+     */
+    public static function viewData(BeneficiariesV2 $reportService): array
     {
-        $verticalSubHeader = $this->reportService->getVerticalSubHeader();
-        $horizontalSubHeader = $this->reportService->getHorizontalSubHeader();
+        $verticalSubHeader = $reportService->getVerticalSubHeader();
+        $horizontalSubHeader = $reportService->getHorizontalSubHeader();
         $firstHeaderElementColSpan = $verticalSubHeader ? 2 : 1;
         $firstHeaderElementRowSpan = $horizontalSubHeader ? 2 : 1;
 
-        return view('exports.report-table', [
-            'reportData' => $this->reportService->getReportData(),
-            'header' => $this->reportService->getHorizontalHeader(),
+        return [
+            'reportData' => $reportService->getReportData(),
+            'header' => $reportService->getHorizontalHeader(),
             'subHeader' => $horizontalSubHeader,
-            'subHeaderKey' => $this->reportService->getSubHeaderKey(),
-            'verticalHeader' => $this->reportService->getVerticalHeader(),
-            'verticalHeaderKey' => $this->reportService->getVerticalHeaderKey(),
+            'subHeaderKey' => $reportService->getSubHeaderKey(),
+            'verticalHeader' => $reportService->getVerticalHeader(),
+            'verticalHeaderKey' => $reportService->getVerticalHeaderKey(),
             'verticalSubHeader' => $verticalSubHeader,
-            'verticalSubHeaderKey' => $this->reportService->getVerticalSubHeaderKey(),
+            'verticalSubHeaderKey' => $reportService->getVerticalSubHeaderKey(),
             'firstHeaderElementColSpan' => $firstHeaderElementColSpan,
             'firstHeaderElementRowSpan' => $firstHeaderElementRowSpan,
-        ]);
+        ];
+    }
+
+    public function view(): View
+    {
+        return view('exports.report-table', static::viewData($this->reportService));
     }
 }

@@ -13,11 +13,11 @@
 
     @if ($this->report_feature)
         <div class="space-y-4">
-            @if (in_array($this->report_feature, ['37', '38'], true))
-                <x-filament::section>
-                    {{ __('report.new.separate_note') }}
-                </x-filament::section>
-            @endif
+{{--            @if (in_array($this->report_feature, ['37', '38'], true))--}}
+{{--                <x-filament::section>--}}
+{{--                    {{ __('report.new.separate_note') }}--}}
+{{--                </x-filament::section>--}}
+{{--            @endif--}}
 
             {{ $this->infolist }}
         </div>

@@ -101,6 +101,8 @@ return [
     'actions' => [
         'generate' => 'Generar',
         'export' => 'Exportar',
+        'export_xls' => 'Descargar XLS',
+        'export_pdf' => 'Descargar PDF',
     ],
     'helpers' => [
         'add_cases_in_monitoring' => 'Incluir casos en seguimiento en los resultados',

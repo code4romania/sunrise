@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Pages;
 
 use App\Actions\ExportReport;
+use App\Actions\ExportReportPdf;
 use App\Enums\ReportType;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\ReportTable;
@@ -133,7 +134,13 @@ class ReportsPage extends Page implements HasForms, HasInfolists
             Section::make(fn () => $this->report_type ? __('report.table_heading.'.$this->report_type) : null)
                 ->hiddenLabel()
                 ->headerActions([
-                    ExportReport::make('export_report')
+                    ExportReport::make('export_report_xls')
+                        ->setReportType($this->report_type)
+                        ->setStartDate($this->start_date)
+                        ->setEndDate($this->end_date)
+                        ->setShowMissingValues($this->show_missing_values)
+                        ->setAddCasesInMonitoring($this->add_cases_in_monitoring),
+                    ExportReportPdf::make('export_report_pdf')
                         ->setReportType($this->report_type)
                         ->setStartDate($this->start_date)
                         ->setEndDate($this->end_date)

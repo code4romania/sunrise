@@ -107,6 +107,8 @@ return [
     'actions' => [
         'generate' => 'Generează raport',
         'export' => 'Exportă date',
+        'export_xls' => 'Descarcă XLS',
+        'export_pdf' => 'Descarcă PDF',
     ],
 
     'helpers' => [

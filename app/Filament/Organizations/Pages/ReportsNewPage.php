@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Pages;
 
+use App\Actions\ExportReport;
+use App\Actions\ExportReportPdf;
 use App\Enums\ReportType;
 use App\Forms\Components\DatePicker;
 use App\Forms\Components\ReportTable;
@@ -15,7 +17,6 @@ use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
@@ -83,6 +84,20 @@ class ReportsNewPage extends Page implements HasForms, HasInfolists
         foreach ($this->getSelectedReportTypes() as $reportType) {
             $sections[] = Section::make(__('report.table_heading.'.$reportType->value))
                 ->hiddenLabel()
+                ->headerActions([
+                    ExportReport::make('export_xls_'.$reportType->value)
+                        ->setReportType($reportType)
+                        ->setStartDate($this->start_date)
+                        ->setEndDate($this->end_date)
+                        ->setShowMissingValues($this->show_missing_values)
+                        ->setAddCasesInMonitoring($this->add_cases_in_monitoring),
+//                    ExportReportPdf::make('export_pdf_'.$reportType->value)
+//                        ->setReportType($reportType)
+//                        ->setStartDate($this->start_date)
+//                        ->setEndDate($this->end_date)
+//                        ->setShowMissingValues($this->show_missing_values)
+//                        ->setAddCasesInMonitoring($this->add_cases_in_monitoring),
+                ])
                 ->schema([
                     $this->reportTable($reportType),
                 ]);
@@ -129,16 +144,15 @@ class ReportsNewPage extends Page implements HasForms, HasInfolists
                         ->label(__('report.labels.start_date'))
                         ->default(now()->startOfMonth())
                         ->columnSpan(3)
-                        ->maxDate(fn (Get $get) => $get('end_date') ? $get('end_date') : now())
-                        ->live(),
+                        ->maxDate(now())
+                        ->rules(['required', 'date', 'before_or_equal:end_date']),
 
                     DatePicker::make('end_date')
                         ->label(__('report.labels.end_date'))
                         ->default(now())
                         ->columnSpan(3)
-                        ->minDate(fn (Get $get) => $get('start_date') ?? null)
                         ->maxDate(now())
-                        ->live(),
+                        ->rules(['required', 'date', 'after_or_equal:start_date']),
 
                     Checkbox::make('add_cases_in_monitoring')
                         ->hintIcon('heroicon-o-information-circle', __('report.helpers.add_cases_in_monitoring'))
