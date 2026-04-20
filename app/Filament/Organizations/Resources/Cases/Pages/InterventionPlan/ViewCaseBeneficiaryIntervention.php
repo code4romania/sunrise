@@ -5,27 +5,21 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
-use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
+use App\Filament\Organizations\Concerns\InteractsWithInterventionMeetingForm;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
-use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryIntervention;
 use App\Models\InterventionMeeting;
 use App\Models\InterventionService;
-use App\Models\Specialist;
 use App\Services\CaseExports\CaseExportManager;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -38,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
 class ViewCaseBeneficiaryIntervention extends ViewRecord
 {
     use InteractsWithBeneficiaryDetailsPanel;
+    use InteractsWithInterventionMeetingForm;
 
     protected static string $resource = CaseResource::class;
 
@@ -140,10 +135,26 @@ class ViewCaseBeneficiaryIntervention extends ViewRecord
         ];
     }
 
+    /**
+     * @return array<Action | ActionGroup>
+     */
+    public function getCachedHeaderActions(): array
+    {
+        return array_values(array_filter(
+            parent::getCachedHeaderActions(),
+            function (mixed $action): bool {
+                if (! $action instanceof Action) {
+                    return true;
+                }
+
+                return ! in_array($action->getName(), ['edit_meeting', 'view_meeting_observations'], true);
+            }
+        ));
+    }
+
     protected function getEditMeetingAction(): Action
     {
         return Action::make('edit_meeting')
-            ->hidden()
             ->modalSubmitActionLabel(__('general.action.save'))
             ->modalCancelActionLabel(__('general.action.cancel'))
             ->modalHeading(fn (array $arguments): string => __('intervention_plan.headings.meeting_repeater', [
@@ -188,7 +199,6 @@ class ViewCaseBeneficiaryIntervention extends ViewRecord
     protected function getViewMeetingObservationsAction(): Action
     {
         return Action::make('view_meeting_observations')
-            ->hidden()
             ->modalHeading(__('general.action.view_observations'))
             ->modalSubmitAction(false)
             ->modalCancelActionLabel(__('general.action.close'))
@@ -231,55 +241,7 @@ class ViewCaseBeneficiaryIntervention extends ViewRecord
     {
         $beneficiary = $this->record instanceof Beneficiary ? $this->record : null;
 
-        return [
-            Grid::make()
-                ->columns(3)
-                ->schema([
-                    Select::make('status')
-                        ->label(__('intervention_plan.labels.status'))
-                        ->options(MeetingStatus::options())
-                        ->default(MeetingStatus::PLANED)
-                        ->required(),
-                    DatePicker::make('date')
-                        ->label(__('intervention_plan.labels.date'))
-                        ->required(),
-                    TimePicker::make('time')
-                        ->label(__('intervention_plan.labels.time'))
-                        ->seconds(false)
-                        ->format('H:i')
-                        ->displayFormat('H:i'),
-                ]),
-            Grid::make()
-                ->columns(3)
-                ->schema([
-                    TextInput::make('duration')
-                        ->label(__('intervention_plan.labels.duration'))
-                        ->numeric()
-                        ->minValue(1)
-                        ->maxLength(4)
-                        ->suffix('min'),
-                    Select::make('specialist_id')
-                        ->label(__('intervention_plan.labels.responsible_specialist'))
-                        ->options(
-                            $beneficiary
-                                ? $beneficiary->specialistsTeam()
-                                    ->with(['user:id,first_name,last_name', 'roleForDisplay:id,name'])
-                                    ->get()
-                                    ->mapWithKeys(fn (Specialist $s) => [$s->id => $s->name_role])
-                                    ->all()
-                                : []
-                        )
-                        ->placeholder(__('intervention_plan.placeholders.specialist')),
-                    Textarea::make('topic')
-                        ->label(__('intervention_plan.labels.topics_covered'))
-                        ->rows(2)
-                        ->placeholder(__('intervention_plan.placeholders.add_details')),
-                ]),
-            RichEditor::make('observations')
-                ->label(__('intervention_plan.labels.observations'))
-                ->placeholder(__('intervention_plan.placeholders.service_details'))
-                ->columnSpanFull(),
-        ];
+        return $this->interventionMeetingFormSchema($beneficiary);
     }
 
     public function infolist(Schema $schema): Schema
@@ -308,15 +270,7 @@ class ViewCaseBeneficiaryIntervention extends ViewRecord
                                             ->modalSubmitActionLabel(__('general.action.save'))
                                             ->modalCancelActionLabel(__('general.action.cancel'))
                                             ->form($this->getMeetingFormSchema())
-                                            ->fillForm(fn (): array => [
-                                                'status' => MeetingStatus::PLANED,
-                                                'date' => now()->format('Y-m-d'),
-                                                'time' => null,
-                                                'duration' => 60,
-                                                'specialist_id' => $this->beneficiaryIntervention?->specialist_id,
-                                                'topic' => null,
-                                                'observations' => null,
-                                            ])
+                                            ->fillForm(fn (): array => $this->interventionMeetingFormDefaultState($this->beneficiaryIntervention))
                                             ->action(function (array $data): void {
                                                 if ($this->beneficiaryIntervention) {
                                                     $this->beneficiaryIntervention->meetings()->create($data);

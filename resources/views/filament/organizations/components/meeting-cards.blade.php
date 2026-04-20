@@ -41,7 +41,7 @@
                     </div>
                     <button
                         type="button"
-                        wire:click="mountAction('edit_meeting', arguments: ['meeting' => {{ $meeting->id }}])"
+                        wire:click="mountAction('edit_meeting', @js(['meeting' => $meeting->getKey()]))"
                         class="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400"
                     >
                         <x-filament::icon icon="heroicon-o-pencil-square" class="h-4 w-4" />

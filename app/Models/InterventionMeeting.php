@@ -32,6 +32,11 @@ class InterventionMeeting extends Model
         'time' => 'date:H:i',
     ];
 
+    public function beneficiaryIntervention(): BelongsTo
+    {
+        return $this->belongsTo(BeneficiaryIntervention::class);
+    }
+
     public function specialist(): BelongsTo
     {
         return $this->belongsTo(Specialist::class);

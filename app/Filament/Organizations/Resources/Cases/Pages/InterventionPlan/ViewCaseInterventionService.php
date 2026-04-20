@@ -6,27 +6,27 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan;
 
 use App\Actions\BackAction;
 use App\Enums\CounselingSheet;
-use App\Enums\MeetingStatus;
 use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
+use App\Filament\Organizations\Concerns\InteractsWithInterventionMeetingForm;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
+use App\Models\BeneficiaryIntervention;
+use App\Models\InterventionMeeting;
 use App\Models\InterventionService;
 use App\Models\OrganizationServiceIntervention;
 use App\Models\ServiceCounselingSheet;
 use App\Models\Specialist;
 use App\Schemas\CounselingSheetFormSchemas;
 use App\Schemas\CounselingSheetInfolistSchemas;
+use App\Services\CaseExports\CaseExportManager;
 use Carbon\Carbon;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
-use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\RepeatableEntry\TableColumn;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
@@ -41,10 +41,13 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseInterventionService extends ViewRecord
 {
     use InteractsWithBeneficiaryDetailsPanel;
+    use InteractsWithInterventionMeetingForm;
 
     protected static string $resource = CaseResource::class;
 
@@ -125,6 +128,32 @@ class ViewCaseInterventionService extends ViewRecord
         return [
             BackAction::make()
                 ->url($redirectUrl),
+            $this->getEditMeetingAction(),
+            $this->getViewMeetingObservationsAction(),
+            Action::make('download_psychological_counseling_sheet')
+                ->label(__('intervention_plan.actions.download_psychological_counseling_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->outlined()
+                ->visible(fn (): bool => $this->getCounselingSheetType() === CounselingSheet::PSYCHOLOGICAL_ASSISTANCE)
+                ->action(function (): StreamedResponse {
+                    if (! $this->interventionService instanceof InterventionService) {
+                        abort(404);
+                    }
+
+                    return app(CaseExportManager::class)->downloadPsychologicalCounselingSheetPdf($this->interventionService);
+                }),
+            Action::make('download_legal_counseling_sheet')
+                ->label(__('intervention_plan.actions.download_legal_counseling_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->outlined()
+                ->visible(fn (): bool => $this->getCounselingSheetType() === CounselingSheet::LEGAL_ASSISTANCE)
+                ->action(function (): StreamedResponse {
+                    if (! $this->interventionService instanceof InterventionService) {
+                        abort(404);
+                    }
+
+                    return app(CaseExportManager::class)->downloadLegalCounselingSheetPdf($this->interventionService);
+                }),
             DeleteAction::make()
                 ->label(__('intervention_plan.actions.delete_service'))
                 ->icon(Heroicon::OutlinedTrash)
@@ -138,6 +167,23 @@ class ViewCaseInterventionService extends ViewRecord
                         ->send();
                 }),
         ];
+    }
+
+    /**
+     * @return array<Action | ActionGroup>
+     */
+    public function getCachedHeaderActions(): array
+    {
+        return array_values(array_filter(
+            parent::getCachedHeaderActions(),
+            function (mixed $action): bool {
+                if (! $action instanceof Action) {
+                    return true;
+                }
+
+                return ! in_array($action->getName(), ['edit_meeting', 'view_meeting_observations'], true);
+            }
+        ));
     }
 
     public function infolist(Schema $schema): Schema
@@ -276,6 +322,51 @@ class ViewCaseInterventionService extends ViewRecord
                                             ->label(__('intervention_plan.labels.specific_objectives'))
                                             ->columnSpanFull()
                                             ->placeholder('—'),
+                                    ]),
+                            ]),
+                        Tab::make(__('intervention_plan.headings.service_meetings'))
+                            ->schema([
+                                Section::make(__('intervention_plan.headings.service_meetings'))
+                                    ->schema([
+                                        View::make('filament.organizations.components.service-aggregated-meetings'),
+                                    ])
+                                    ->headerActions([
+                                        Action::make('add_meeting')
+                                            ->label(__('intervention_plan.actions.add_meeting'))
+                                            ->icon(Heroicon::OutlinedPlus)
+                                            ->color('primary')
+                                            ->modalHeading(__('intervention_plan.actions.add_meeting'))
+                                            ->modalSubmitActionLabel(__('general.action.save'))
+                                            ->modalCancelActionLabel(__('general.action.cancel'))
+                                            ->visible(fn (): bool => $this->interventionService !== null
+                                                && $this->interventionService->beneficiaryInterventions()->exists())
+                                            ->form($this->getAddMeetingOnServiceFormSchema())
+                                            ->fillForm(fn (): array => array_merge(
+                                                ['beneficiary_intervention_id' => null],
+                                                $this->interventionMeetingFormDefaultState(null)
+                                            ))
+                                            ->action(function (array $data): void {
+                                                $interventionId = $data['beneficiary_intervention_id'] ?? null;
+                                                unset($data['beneficiary_intervention_id']);
+                                                if (blank($interventionId) || ! $this->interventionService instanceof InterventionService) {
+                                                    return;
+                                                }
+
+                                                $beneficiaryIntervention = BeneficiaryIntervention::query()
+                                                    ->whereKey($interventionId)
+                                                    ->where('intervention_service_id', $this->interventionService->getKey())
+                                                    ->first();
+
+                                                if (! $beneficiaryIntervention instanceof BeneficiaryIntervention) {
+                                                    return;
+                                                }
+
+                                                $beneficiaryIntervention->meetings()->create($data);
+                                                Notification::make()
+                                                    ->success()
+                                                    ->title(__('filament-actions::create.single.notifications.created.title'))
+                                                    ->send();
+                                            }),
                                     ]),
                             ]),
 
@@ -467,85 +558,152 @@ class ViewCaseInterventionService extends ViewRecord
     /**
      * @return array<int, \Filament\Forms\Components\Component>
      */
-    protected function getAddMeetingFormSchema(): array
+    protected function getMeetingFormSchema(): array
     {
-        $service = $this->interventionService;
-        $beneficiary = $this->record;
-        $organizationServiceId = $service->organization_service_id;
+        $beneficiary = $this->record instanceof Beneficiary ? $this->record : null;
 
-        return [
-            Grid::make()
-                ->schema([
-                    Select::make('organization_service_intervention_id')
-                        ->label(__('intervention_plan.labels.intervention_type'))
-                        ->options(
-                            OrganizationServiceIntervention::with('serviceInterventionWithoutStatusCondition')
-                                ->where('organization_service_id', $organizationServiceId)
-                                ->active()
-                                ->get()
-                                ->filter(fn (OrganizationServiceIntervention $osi) => $osi->serviceInterventionWithoutStatusCondition)
-                                ->pluck('serviceInterventionWithoutStatusCondition.name', 'id')
-                        )
-                        ->required(),
-                    Select::make('specialist_id')
-                        ->label(__('intervention_plan.labels.responsible_specialist'))
-                        ->options(
-                            $beneficiary->specialistsTeam()
-                                ->with(['user:id,first_name,last_name', 'roleForDisplay:id,name'])
-                                ->get()
-                                ->mapWithKeys(fn (Specialist $s) => [$s->id => $s->name_role])
-                                ->all()
-                        )
-                        ->placeholder(__('intervention_plan.placeholders.specialist')),
-                ]),
-            Grid::make()
-                ->columns(2)
-                ->schema([
-                    Select::make('status')
-                        ->label(__('intervention_plan.labels.status'))
-                        ->options(MeetingStatus::options())
-                        ->default(MeetingStatus::PLANED)
-                        ->required(),
-                    DatePicker::make('date')
-                        ->label(__('intervention_plan.labels.date'))
-                        ->required(),
-                    TimePicker::make('time')
-                        ->label(__('intervention_plan.labels.time'))
-                        ->seconds(false)
-                        ->format('H:i')
-                        ->displayFormat('H:i'),
-                    TextInput::make('duration')
-                        ->label(__('intervention_plan.labels.duration'))
-                        ->numeric()
-                        ->minValue(1)
-                        ->maxLength(4),
-                ]),
-            TextInput::make('topic')
-                ->label(__('intervention_plan.labels.topic'))
-                ->maxLength(255)
-                ->columnSpanFull(),
-            Textarea::make('observations')
-                ->label(__('intervention_plan.labels.observations'))
-                ->rows(3)
-                ->columnSpanFull(),
-        ];
+        return $this->interventionMeetingFormSchema($beneficiary);
     }
 
     /**
-     * @param  Carbon|\DateTimeInterface|string|null  $state
+     * @return array<int, \Filament\Forms\Components\Component>
      */
-    private static function formatDate(mixed $state): string
+    protected function getAddMeetingOnServiceFormSchema(): array
     {
-        if ($state === null || $state === '' || $state === '-') {
-            return '—';
+        $beneficiary = $this->record instanceof Beneficiary ? $this->record : null;
+        if ($beneficiary === null) {
+            return [];
         }
 
-        try {
-            return $state instanceof \DateTimeInterface
-                ? Carbon::instance($state)->translatedFormat('d.m.Y')
-                : Carbon::parse($state)->translatedFormat('d.m.Y');
-        } catch (\Throwable) {
-            return '—';
+        return array_merge(
+            [
+                Select::make('beneficiary_intervention_id')
+                    ->label(__('intervention_plan.labels.intervention'))
+                    ->options($this->getBeneficiaryInterventionSelectOptions())
+                    ->required(),
+            ],
+            $this->interventionMeetingFormSchema($beneficiary)
+        );
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    protected function getBeneficiaryInterventionSelectOptions(): array
+    {
+        $service = $this->interventionService;
+        if ($service === null) {
+            return [];
         }
+
+        return $service->beneficiaryInterventions()
+            ->with(['organizationServiceIntervention.serviceInterventionWithoutStatusCondition'])
+            ->orderByDesc('id')
+            ->get()
+            ->mapWithKeys(fn (BeneficiaryIntervention $bi): array => [
+                $bi->getKey() => $bi->organizationServiceIntervention?->serviceInterventionWithoutStatusCondition?->name ?? '—',
+            ])
+            ->all();
+    }
+
+    protected function getEditMeetingAction(): Action
+    {
+        return Action::make('edit_meeting')
+            ->modalSubmitActionLabel(__('general.action.save'))
+            ->modalCancelActionLabel(__('general.action.cancel'))
+            ->modalHeading(fn (array $arguments): string => __('intervention_plan.headings.meeting_repeater', [
+                'number' => $this->getMeetingNumberForId((int) ($arguments['meeting'] ?? 0)),
+            ]))
+            ->form($this->getMeetingFormSchema())
+            ->fillForm(function (array $arguments): array {
+                $meeting = InterventionMeeting::find($arguments['meeting'] ?? null);
+
+                return $meeting && $this->meetingBelongsToCurrentService($meeting)
+                    ? $meeting->only([
+                        'status', 'date', 'time', 'duration', 'specialist_id', 'topic', 'observations',
+                    ])
+                    : [];
+            })
+            ->extraModalFooterActions([
+                DeleteAction::make('delete_meeting')
+                    ->label(__('intervention_plan.actions.delete_meeting'))
+                    ->modalHeading(__('intervention_plan.actions.delete_meeting'))
+                    ->action(function (array $mountedActions): void {
+                        $arguments = $mountedActions[0]->getArguments();
+                        $meeting = InterventionMeeting::find($arguments['meeting'] ?? null);
+                        if ($meeting && $this->meetingBelongsToCurrentService($meeting)) {
+                            $meeting->delete();
+                            Notification::make()
+                                ->success()
+                                ->title(__('filament-actions::delete.single.notifications.deleted.title'))
+                                ->send();
+                        }
+                    }),
+            ])
+            ->action(function (array $arguments, array $data): void {
+                $meeting = InterventionMeeting::find($arguments['meeting'] ?? null);
+                if ($meeting && $this->meetingBelongsToCurrentService($meeting)) {
+                    $meeting->update($data);
+                    Notification::make()
+                        ->success()
+                        ->title(__('filament-actions::edit.single.notifications.saved.title'))
+                        ->send();
+                }
+            });
+    }
+
+    protected function getViewMeetingObservationsAction(): Action
+    {
+        return Action::make('view_meeting_observations')
+            ->modalHeading(__('general.action.view_observations'))
+            ->modalSubmitAction(false)
+            ->modalCancelActionLabel(__('general.action.close'))
+            ->modalContent(function (): Htmlable {
+                $action = $this->getMountedAction();
+                $meetingId = $action?->getArguments()['meeting'] ?? null;
+                $meeting = $meetingId
+                    ? InterventionMeeting::with('specialist.user', 'specialist.roleForDisplay')
+                        ->whereKey($meetingId)
+                        ->whereHas('beneficiaryIntervention', function ($query): void {
+                            $query->where('intervention_service_id', $this->interventionService?->getKey());
+                        })
+                        ->first()
+                    : null;
+
+                return new HtmlString(
+                    $meeting
+                        ? view('filament.organizations.components.meeting-observations-modal-content', ['meeting' => $meeting])->render()
+                        : '<p class="text-sm text-gray-500 dark:text-gray-400">—</p>'
+                );
+            });
+    }
+
+    protected function getMeetingNumberForId(int $meetingId): int
+    {
+        $meetingsTable = (new InterventionMeeting)->getTable();
+        $meetings = $this->interventionService?->meetings()
+            ->orderByDesc("{$meetingsTable}.id")
+            ->pluck("{$meetingsTable}.id")
+            ->values() ?? collect();
+
+        $index = $meetings->search($meetingId);
+
+        return $index !== false ? $meetings->count() - $index : 1;
+    }
+
+    protected function meetingBelongsToCurrentService(?InterventionMeeting $meeting): bool
+    {
+        if ($meeting === null || ! $this->interventionService instanceof InterventionService) {
+            return false;
+        }
+
+        if ($meeting->beneficiary_intervention_id === null) {
+            return false;
+        }
+
+        return BeneficiaryIntervention::query()
+            ->whereKey($meeting->beneficiary_intervention_id)
+            ->where('intervention_service_id', $this->interventionService->getKey())
+            ->exists();
     }
 }

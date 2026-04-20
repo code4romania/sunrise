@@ -45,6 +45,12 @@
     @case('monthly_plan_sheet')
         @include('exports.partials.sections.monthly-plan-sheet', ['data' => $section['data'] ?? []])
         @break
+    @case('psychological_counseling_sheet')
+        @include('exports.partials.sections.psychological-counseling-sheet', ['data' => $section['data'] ?? []])
+        @break
+    @case('legal_counseling_sheet')
+        @include('exports.partials.sections.legal-counseling-sheet', ['data' => $section['data'] ?? []])
+        @break
     @case('risk_factors_table')
         @include('exports.partials.sections.risk-factors', [
             'rows' => $section['rows'] ?? [],

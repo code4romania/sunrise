@@ -234,6 +234,224 @@ it('composes monthly plan sheet data from services and interventions', function 
         ->and($medInterventionRow['observations'])->toContain('Observații intervenție lunare');
 });
 
+it('generates psychological counseling sheet from interventions and meetings', function (): void {
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+    $interventionPlan = InterventionPlan::factory()->for($beneficiary)->for($this->organization)->create();
+
+    $service = Service::query()->create([
+        'name' => 'Asistență psihologică',
+        'identifier' => 'PSI',
+        'counseling_sheet' => \App\Enums\CounselingSheet::PSYCHOLOGICAL_ASSISTANCE,
+        'status' => 1,
+        'sort' => 1,
+    ]);
+
+    $organizationService = \App\Models\OrganizationService::query()->create([
+        'organization_id' => $this->organization->id,
+        'service_id' => $service->id,
+        'status' => 1,
+    ]);
+
+    $interventionService = InterventionService::query()->create([
+        'intervention_plan_id' => $interventionPlan->id,
+        'organization_service_id' => $organizationService->id,
+        'institution' => 'IEESR',
+        'objections' => 'Obiective serviciu psihologic',
+    ]);
+
+    $serviceIntervention = ServiceIntervention::query()->create([
+        'service_id' => $service->id,
+        'name' => 'Consiliere individuală',
+        'identifier' => 'PSI_1',
+        'status' => 1,
+        'sort' => 1,
+    ]);
+
+    $organizationServiceIntervention = OrganizationServiceIntervention::query()->create([
+        'organization_service_id' => $organizationService->id,
+        'service_intervention_id' => $serviceIntervention->id,
+        'status' => 1,
+    ]);
+
+    $beneficiaryInterventionOne = BeneficiaryIntervention::query()->create([
+        'intervention_service_id' => $interventionService->id,
+        'organization_service_intervention_id' => $organizationServiceIntervention->id,
+        'objections' => 'Rezumat intervenție 1',
+        'expected_results' => 'Rezultat 1',
+        'procedure' => 'Procedură 1',
+        'indicators' => 'Indicatori 1',
+        'achievement_degree' => 'Grad 1',
+    ]);
+
+    $beneficiaryInterventionTwo = BeneficiaryIntervention::query()->create([
+        'intervention_service_id' => $interventionService->id,
+        'organization_service_intervention_id' => $organizationServiceIntervention->id,
+        'objections' => 'Rezumat intervenție 2',
+    ]);
+
+    InterventionMeeting::query()->create([
+        'beneficiary_intervention_id' => $beneficiaryInterventionOne->id,
+        'date' => now()->subDay()->toDateString(),
+        'time' => '09:00:00',
+        'duration' => 60,
+        'topic' => 'Tema ședință 1',
+        'observations' => 'Observații ședință 1',
+    ]);
+
+    InterventionMeeting::query()->create([
+        'beneficiary_intervention_id' => $beneficiaryInterventionTwo->id,
+        'date' => now()->toDateString(),
+        'time' => '10:00:00',
+        'duration' => 45,
+        'topic' => 'Tema ședință 2',
+        'observations' => 'Observații ședință 2',
+    ]);
+
+    $response = app(CaseExportManager::class)->downloadPsychologicalCounselingSheetPdf($interventionService);
+
+    expect($response)->toBeInstanceOf(StreamedResponse::class);
+    expect((string) $response->headers->get('content-type'))->toContain('application/pdf');
+
+    expect(Activity::query()
+        ->whereMorphedTo('subject', $beneficiary)
+        ->where('event', 'pdf_psychological_counseling_sheet_exported')
+        ->exists())->toBeTrue();
+
+    $files = Storage::disk('private')->allFiles();
+    expect($files)->not->toBeEmpty();
+    $pdfBinary = (string) Storage::disk('private')->get($files[0]);
+    expect($pdfBinary)->toContain('SECȚIUNEA 27. PLAN DE CONSILIERE / INTERVENȚIE / DETALIERE');
+    expect($pdfBinary)->toContain('Tema ședință 1');
+    expect($pdfBinary)->toContain('Tema ședință 2');
+});
+
+it('generates legal counseling sheet from completed service sheet data', function (): void {
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+    $interventionPlan = InterventionPlan::factory()->for($beneficiary)->for($this->organization)->create();
+
+    $service = Service::query()->create([
+        'name' => 'Asistență juridică',
+        'identifier' => 'JRD',
+        'counseling_sheet' => \App\Enums\CounselingSheet::LEGAL_ASSISTANCE,
+        'status' => 1,
+        'sort' => 2,
+    ]);
+
+    $organizationService = \App\Models\OrganizationService::query()->create([
+        'organization_id' => $this->organization->id,
+        'service_id' => $service->id,
+        'status' => 1,
+    ]);
+
+    $interventionService = InterventionService::query()->create([
+        'intervention_plan_id' => $interventionPlan->id,
+        'organization_service_id' => $organizationService->id,
+        'institution' => 'IEESR',
+    ]);
+
+    \App\Models\ServiceCounselingSheet::query()->create([
+        'intervention_service_id' => $interventionService->id,
+        'data' => [
+            'patrimony' => 'apartment',
+            'possession_mode' => 'exclusive_property',
+            'institutions' => [
+                ['institution' => 'Poliție', 'phone' => '0265', 'contact_person' => 'Popescu'],
+            ],
+            'section_4_details' => [
+                ['details' => 'Detalii ședință juridică', 'session_number' => 1, 'schedule_date' => '01.01.2026', 'schedule_time' => '09:00'],
+            ],
+        ],
+    ]);
+
+    $response = app(CaseExportManager::class)->downloadLegalCounselingSheetPdf($interventionService);
+
+    expect($response)->toBeInstanceOf(StreamedResponse::class);
+    expect((string) $response->headers->get('content-type'))->toContain('application/pdf');
+    expect(Activity::query()
+        ->whereMorphedTo('subject', $beneficiary)
+        ->where('event', 'pdf_legal_counseling_sheet_exported')
+        ->exists())->toBeTrue();
+
+    $files = Storage::disk('private')->allFiles();
+    expect($files)->not->toBeEmpty();
+    $pdfBinary = (string) Storage::disk('private')->get($files[0]);
+    expect($pdfBinary)->toContain('FIȘĂ DE CONSILIERE JURIDICĂ');
+    expect($pdfBinary)->toContain('Detalii ședință juridică');
+    expect($pdfBinary)->toContain('01.01.2026');
+    expect($pdfBinary)->toContain('09:00');
+});
+
+it('fills legal counseling sheet section 4 schedule from meetings when session details are absent', function (): void {
+    $beneficiary = Beneficiary::factory()->for($this->organization)->create();
+    $interventionPlan = InterventionPlan::factory()->for($beneficiary)->for($this->organization)->create();
+
+    $service = Service::query()->create([
+        'name' => 'Asistență juridică',
+        'identifier' => 'JRD2',
+        'counseling_sheet' => \App\Enums\CounselingSheet::LEGAL_ASSISTANCE,
+        'status' => 1,
+        'sort' => 2,
+    ]);
+
+    $organizationService = \App\Models\OrganizationService::query()->create([
+        'organization_id' => $this->organization->id,
+        'service_id' => $service->id,
+        'status' => 1,
+    ]);
+
+    $interventionService = InterventionService::query()->create([
+        'intervention_plan_id' => $interventionPlan->id,
+        'organization_service_id' => $organizationService->id,
+        'institution' => 'IEESR',
+    ]);
+
+    \App\Models\ServiceCounselingSheet::query()->create([
+        'intervention_service_id' => $interventionService->id,
+        'data' => [
+            'patrimony' => 'apartment',
+            'possession_mode' => 'exclusive_property',
+        ],
+    ]);
+
+    $serviceIntervention = ServiceIntervention::query()->create([
+        'service_id' => $service->id,
+        'name' => 'Consiliere juridică',
+        'identifier' => 'JRD_I1',
+        'status' => 1,
+        'sort' => 1,
+    ]);
+
+    $organizationServiceIntervention = OrganizationServiceIntervention::query()->create([
+        'organization_service_id' => $organizationService->id,
+        'service_intervention_id' => $serviceIntervention->id,
+        'status' => 1,
+    ]);
+
+    $beneficiaryIntervention = BeneficiaryIntervention::query()->create([
+        'intervention_service_id' => $interventionService->id,
+        'organization_service_intervention_id' => $organizationServiceIntervention->id,
+    ]);
+
+    InterventionMeeting::query()->create([
+        'beneficiary_intervention_id' => $beneficiaryIntervention->id,
+        'date' => '2026-03-15',
+        'time' => '14:30:00',
+        'topic' => 'Discuție dosar',
+        'observations' => 'Notițe ședință juridică',
+    ]);
+
+    $response = app(CaseExportManager::class)->downloadLegalCounselingSheetPdf($interventionService);
+
+    expect($response)->toBeInstanceOf(StreamedResponse::class);
+
+    $files = Storage::disk('private')->allFiles();
+    expect($files)->not->toBeEmpty();
+    $pdfBinary = (string) Storage::disk('private')->get($files[0]);
+    expect($pdfBinary)->toContain('15.03.2026');
+    expect($pdfBinary)->toContain('14:30');
+    expect($pdfBinary)->toContain('Notițe ședință juridică');
+});
+
 it('generates initial evaluation pdf export with identity and risk factors layout', function (): void {
     $beneficiary = Beneficiary::factory()->for($this->organization)->create();
 

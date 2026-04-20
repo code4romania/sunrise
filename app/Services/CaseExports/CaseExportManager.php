@@ -9,13 +9,16 @@ use App\Models\Activity;
 use App\Models\Beneficiary;
 use App\Models\BeneficiaryIntervention;
 use App\Models\CloseFile;
+use App\Models\InterventionService;
 use App\Models\Monitoring;
 use App\Models\MonthlyPlan;
 use App\Services\CaseExports\Composers\CloseFilePdfComposer;
 use App\Services\CaseExports\Composers\DetailedEvaluationPdfComposer;
 use App\Services\CaseExports\Composers\InitialEvaluationPdfComposer;
+use App\Services\CaseExports\Composers\LegalCounselingSheetPdfComposer;
 use App\Services\CaseExports\Composers\MonitoringPdfComposer;
 use App\Services\CaseExports\Composers\MonthlyPlanSheetPdfComposer;
+use App\Services\CaseExports\Composers\PsychologicalCounselingSheetPdfComposer;
 use App\Services\CaseExports\Support\BeneficiaryPdfTableDataBuilder;
 use App\Services\CaseExports\Support\CaseTeamSignatureRowsBuilder;
 use App\Services\CaseExports\Support\ExportBrandingResolver;
@@ -39,6 +42,8 @@ class CaseExportManager
         private readonly MonitoringPdfComposer $monitoringPdfComposer,
         private readonly CloseFilePdfComposer $closeFilePdfComposer,
         private readonly MonthlyPlanSheetPdfComposer $monthlyPlanSheetPdfComposer,
+        private readonly PsychologicalCounselingSheetPdfComposer $psychologicalCounselingSheetPdfComposer,
+        private readonly LegalCounselingSheetPdfComposer $legalCounselingSheetPdfComposer,
     ) {}
 
     public function downloadIdentityPdf(Beneficiary $beneficiary): StreamedResponse
@@ -200,6 +205,56 @@ class CaseExportManager
                 'title' => '',
                 'type' => 'monthly_plan_sheet',
                 'data' => $this->monthlyPlanSheetPdfComposer->compose($monthlyPlan),
+            ]],
+        );
+    }
+
+    public function downloadPsychologicalCounselingSheetPdf(InterventionService $interventionService): StreamedResponse
+    {
+        $interventionService->loadMissing([
+            'interventionPlan.beneficiary',
+        ]);
+
+        $beneficiary = $interventionService->interventionPlan?->beneficiary;
+        if ($beneficiary instanceof Beneficiary) {
+            $this->logPdfExport($beneficiary, 'pdf_psychological_counseling_sheet_exported');
+        }
+
+        $caseId = $beneficiary?->id ?? $interventionService->id;
+
+        return $this->downloadPdf(
+            view: 'exports.reports.pdf-psychological-counseling-sheet',
+            reportTitle: __('intervention_plan.pdf.psychological_counseling_sheet_title'),
+            caseId: $caseId,
+            sections: [[
+                'title' => '',
+                'type' => 'psychological_counseling_sheet',
+                'data' => $this->psychologicalCounselingSheetPdfComposer->compose($interventionService),
+            ]],
+        );
+    }
+
+    public function downloadLegalCounselingSheetPdf(InterventionService $interventionService): StreamedResponse
+    {
+        $interventionService->loadMissing([
+            'interventionPlan.beneficiary',
+        ]);
+
+        $beneficiary = $interventionService->interventionPlan?->beneficiary;
+        if ($beneficiary instanceof Beneficiary) {
+            $this->logPdfExport($beneficiary, 'pdf_legal_counseling_sheet_exported');
+        }
+
+        $caseId = $beneficiary?->id ?? $interventionService->id;
+
+        return $this->downloadPdf(
+            view: 'exports.reports.pdf-legal-counseling-sheet',
+            reportTitle: __('intervention_plan.pdf.legal_counseling_sheet_title'),
+            caseId: $caseId,
+            sections: [[
+                'title' => '',
+                'type' => 'legal_counseling_sheet',
+                'data' => $this->legalCounselingSheetPdfComposer->compose($interventionService),
             ]],
         );
     }

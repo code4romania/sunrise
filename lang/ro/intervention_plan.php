@@ -216,6 +216,9 @@ return [
         'add_service' => 'Adaugă Serviciu',
         'interventions' => 'Intervenții',
         'counseling_sheet' => 'Fișă consiliere',
+        'service_meetings' => 'Desfǎşurǎtor',
+        'service_meetings_table' => 'Evidență ședințe',
+        'service_meetings_centralized_hint' => 'Toate ședințele și activitățile din intervențiile acestui serviciu.',
         'patrimony_data' => 'Date patrimoniu',
         'file_documents' => 'Acte depuse la dosar',
         'final_observations' => 'Observații finale',
@@ -320,6 +323,8 @@ return [
         'create_monthly_plan_with_plans' => '+ Creează un plan',
         'download_monthly_plan' => 'Descarcă plan',
         'download_monthly_sheet' => 'Descarcă fișă plan lunar',
+        'download_psychological_counseling_sheet' => 'Descarcă fișa psihologică',
+        'download_legal_counseling_sheet' => 'Descarcă fișa juridică',
         'download_plan' => 'Descarcă dosar',
         'complete_counseling_sheet' => 'Completează fișa consiliere',
         'edit_counseling_sheet' => 'Editează fișa consiliere',
@@ -406,6 +411,8 @@ return [
     'pdf' => [
         'monthly_report_title' => 'Dosar servicii VD – plan lunar pentru perioada :period',
         'monthly_sheet_title' => 'Plan de intervenție – plan lunar',
+        'psychological_counseling_sheet_title' => 'Fișă de consiliere psihologică',
+        'legal_counseling_sheet_title' => 'Fișă de consiliere juridică',
     ],
 
     'sheet' => [

@@ -196,6 +196,9 @@ return [
         'add_service' => 'Añadir servicio',
         'interventions' => 'Intervenciones',
         'counseling_sheet' => 'Hoja de asesoramiento',
+        'service_meetings' => 'Sesiones',
+        'service_meetings_table' => 'Registro de sesiones',
+        'service_meetings_centralized_hint' => 'Todas las sesiones y actividades de las intervenciones de este servicio.',
         'patrimony_data' => 'Datos de patrimonio',
         'file_documents' => 'Documentos del expediente',
         'final_observations' => 'Observaciones finales',
@@ -290,6 +293,8 @@ return [
         'create_monthly_plan_simple' => 'Crear plan mensual simple',
         'delete_monthly_plan' => 'Eliminar plan mensual',
         'download_monthly_sheet' => 'Descargar ficha plan mensual',
+        'download_psychological_counseling_sheet' => 'Descargar ficha psicológica',
+        'download_legal_counseling_sheet' => 'Descargar ficha jurídica',
         'complete_counseling_sheet' => 'Completar ficha de orientación',
         'edit_counseling_sheet' => 'Editar ficha de orientación',
     ],
@@ -355,6 +360,8 @@ return [
 
     'pdf' => [
         'monthly_sheet_title' => 'Plan de intervención – plan mensual',
+        'psychological_counseling_sheet_title' => 'Ficha de orientación psicológica',
+        'legal_counseling_sheet_title' => 'Ficha de orientación jurídica',
     ],
 
     'sheet' => [

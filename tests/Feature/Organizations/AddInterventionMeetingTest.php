@@ -61,6 +61,12 @@ it('can add a ședință/activitate from intervention service page', function ()
             'specialist_id' => $specialist->id,
         ]);
 
+    $beneficiaryIntervention = BeneficiaryIntervention::factory()->create([
+        'intervention_service_id' => $interventionService->id,
+        'organization_service_intervention_id' => $organizationServiceIntervention->id,
+        'specialist_id' => $specialist->id,
+    ]);
+
     $meetingDate = now()->format('Y-m-d');
 
     livewire(ViewCaseInterventionService::class, [
@@ -69,7 +75,7 @@ it('can add a ședință/activitate from intervention service page', function ()
         'tenant' => $organization,
     ])
         ->callAction('add_meeting', data: [
-            'organization_service_intervention_id' => $organizationServiceIntervention->id,
+            'beneficiary_intervention_id' => $beneficiaryIntervention->id,
             'specialist_id' => $specialist->id,
             'status' => MeetingStatus::PLANED,
             'date' => $meetingDate,
@@ -80,22 +86,83 @@ it('can add a ședință/activitate from intervention service page', function ()
         ])
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas(BeneficiaryIntervention::class, [
+    $meeting = InterventionMeeting::query()
+        ->where('beneficiary_intervention_id', $beneficiaryIntervention->id)
+        ->first();
+    $this->assertNotNull($meeting);
+    expect($meeting->specialist_id)->toBe($specialist->id);
+    expect($meeting->status)->toBe(MeetingStatus::PLANED);
+    expect($meeting->topic)->toBe('Test topic');
+    expect($meeting->observations)->toContain('Test observations');
+});
+
+it('aggregates meetings from all interventions on the intervention service', function () {
+    $organization = $this->organization;
+    $service = Service::factory()->create();
+    $organizationService = OrganizationService::factory()
+        ->for($organization)
+        ->for($service)
+        ->create();
+    $serviceInterventions = $service->serviceInterventions()->take(2)->get();
+    $this->assertGreaterThanOrEqual(2, $serviceInterventions->count());
+
+    $osiA = OrganizationServiceIntervention::factory()
+        ->for($organizationService)
+        ->for($serviceInterventions[0])
+        ->for($organization)
+        ->create(['status' => GeneralStatus::ACTIVE]);
+    $osiB = OrganizationServiceIntervention::factory()
+        ->for($organizationService)
+        ->for($serviceInterventions[1])
+        ->for($organization)
+        ->create(['status' => GeneralStatus::ACTIVE]);
+
+    $beneficiary = Beneficiary::factory()->for($organization)->create();
+    $specialist = $beneficiary->specialistsTeam()->first();
+    if (! $specialist) {
+        $this->markTestSkipped('Beneficiary has no specialists team');
+    }
+
+    $plan = InterventionPlan::factory()
+        ->for($beneficiary)
+        ->for($organization)
+        ->create();
+    $interventionService = InterventionService::factory()
+        ->for($plan)
+        ->create([
+            'organization_service_id' => $organizationService->id,
+            'specialist_id' => $specialist->id,
+        ]);
+
+    $interventionA = BeneficiaryIntervention::factory()->create([
         'intervention_service_id' => $interventionService->id,
-        'organization_service_intervention_id' => $organizationServiceIntervention->id,
+        'organization_service_intervention_id' => $osiA->id,
+        'specialist_id' => $specialist->id,
+    ]);
+    $interventionB = BeneficiaryIntervention::factory()->create([
+        'intervention_service_id' => $interventionService->id,
+        'organization_service_intervention_id' => $osiB->id,
         'specialist_id' => $specialist->id,
     ]);
 
-    $beneficiaryIntervention = BeneficiaryIntervention::query()
-        ->where('intervention_service_id', $interventionService->id)
-        ->where('organization_service_intervention_id', $organizationServiceIntervention->id)
-        ->first();
-    $this->assertNotNull($beneficiaryIntervention);
-    $this->assertDatabaseHas(InterventionMeeting::class, [
-        'beneficiary_intervention_id' => $beneficiaryIntervention->id,
+    $interventionA->meetings()->create([
         'specialist_id' => $specialist->id,
-        'status' => MeetingStatus::PLANED->value,
-        'topic' => 'Test topic',
-        'observations' => 'Test observations',
+        'status' => MeetingStatus::PLANED,
+        'date' => now()->format('Y-m-d'),
+        'time' => null,
+        'duration' => 30,
+        'topic' => 'A',
+        'observations' => null,
     ]);
+    $interventionB->meetings()->create([
+        'specialist_id' => $specialist->id,
+        'status' => MeetingStatus::REALIZED,
+        'date' => now()->subDay()->format('Y-m-d'),
+        'time' => null,
+        'duration' => 45,
+        'topic' => 'B',
+        'observations' => null,
+    ]);
+
+    expect($interventionService->meetings()->count())->toBe(2);
 });

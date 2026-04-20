@@ -427,4 +427,47 @@
     .monthly-sheet-cb-cell {
         text-align: center;
     }
+
+    .psych-sheet-title {
+        text-align: center;
+        font-size: 14px;
+        font-weight: 700;
+        margin: 6px 0 14px;
+    }
+    .psych-sheet-subtitle {
+        font-size: 11px;
+        font-weight: 700;
+        margin: 14px 0 8px;
+        text-transform: uppercase;
+    }
+    .psych-sheet-meta-table,
+    .psych-sheet-data-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #000;
+        margin-bottom: 12px;
+        font-size: 9px;
+    }
+    .psych-sheet-meta-table th,
+    .psych-sheet-meta-table td,
+    .psych-sheet-data-table th,
+    .psych-sheet-data-table td {
+        border: 1px solid #000;
+        padding: 4px 5px;
+        vertical-align: top;
+    }
+    .psych-sheet-meta-table th,
+    .psych-sheet-data-table th {
+        font-weight: 700;
+        text-align: left;
+        background: #f9fafb;
+    }
+    .psych-sheet-box {
+        border: 1px solid #000;
+        min-height: 70px;
+        padding: 6px;
+        font-size: 9px;
+        white-space: pre-wrap;
+        margin-bottom: 10px;
+    }
 </style>
