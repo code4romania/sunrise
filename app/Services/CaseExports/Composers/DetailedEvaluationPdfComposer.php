@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\CaseExports\Composers;
 
+use App\Enums\RecommendationService;
 use App\Models\Beneficiary;
 use App\Services\CaseExports\Support\BeneficiaryPdfTableDataBuilder;
 use App\Services\CaseExports\Support\ExportDataFormatter;
@@ -84,6 +85,7 @@ class DetailedEvaluationPdfComposer
         })->values()->all();
 
         $multidisciplinary = $beneficiary->multidisciplinaryEvaluation;
+        $result = $beneficiary->detailedEvaluationResult;
         $multidisciplinarySectionData = [
             'reporting_by' => $this->formatter->toPrintableValue($multidisciplinary?->reporting_by),
             'is_reported_by' => $multidisciplinary?->applicant?->value === 'other',
@@ -93,6 +95,35 @@ class DetailedEvaluationPdfComposer
             'professional_need' => $this->formatter->toPrintableValue($multidisciplinary?->professional_need),
             'emotional_and_psychological_need' => $this->formatter->toPrintableValue($multidisciplinary?->emotional_and_psychological_need),
             'social_economic_need' => $this->formatter->toPrintableValue($multidisciplinary?->social_economic_need),
+            'extended_family' => $this->formatter->toPrintableValue($multidisciplinary?->extended_family),
+            'family_social_integration' => $this->formatter->toPrintableValue($multidisciplinary?->family_social_integration),
+            'income' => $this->formatter->toPrintableValue($multidisciplinary?->income),
+            'community_resources' => $this->formatter->toPrintableValue($multidisciplinary?->community_resources),
+            'house' => $this->formatter->toPrintableValue($multidisciplinary?->house),
+            'workplace' => $this->formatter->toPrintableValue($multidisciplinary?->workplace),
+            'risk' => $this->formatter->toPrintableValue($multidisciplinary?->risk),
+            'recommendations_for_intervention_plan' => $this->formatter->toPrintableValue($result?->recommendations_for_intervention_plan),
+            'other_services_description' => $this->formatter->toPrintableValue($result?->other_services_description),
+            'recommended_psychological' => $this->hasRecommendation($beneficiary, RecommendationService::PSYCHOLOGICAL_ADVICE),
+            'recommended_social' => $this->hasRecommendation($beneficiary, RecommendationService::SOCIAL_ADVICE),
+            'recommended_legal' => $this->hasAnyRecommendation($beneficiary, [
+                RecommendationService::LEGAL_ADVICE,
+                RecommendationService::LEGAL_ASSISTANCE,
+            ]),
+            'recommended_shelter' => $this->hasAnyRecommendation($beneficiary, [
+                RecommendationService::TEMPORARY_SHELTER_SERVICES,
+                RecommendationService::SECURING_RESIDENTIAL_SPACES,
+            ]),
+            'recommended_reintegration' => $this->hasAnyRecommendation($beneficiary, [
+                RecommendationService::OCCUPATIONAL_PROGRAM_SERVICES,
+                RecommendationService::EDUCATIONAL_SERVICES_FOR_CHILDREN,
+                RecommendationService::FAMILY_COUNSELING,
+            ]),
+            'recommended_medical' => $this->hasAnyRecommendation($beneficiary, [
+                RecommendationService::MEDICAL_SERVICES,
+                RecommendationService::MEDICAL_PAYMENT,
+            ]),
+            'recommended_other' => $this->hasRecommendation($beneficiary, RecommendationService::OTHER_SERVICES),
         ];
 
         return [
@@ -127,5 +158,43 @@ class DetailedEvaluationPdfComposer
         return [
             ['label' => 'Data creării evaluării inițiale', 'value' => $beneficiary->evaluateDetails?->created_at?->format('d.m.Y') ?? '—'],
         ];
+    }
+
+    private function hasRecommendation(Beneficiary $beneficiary, RecommendationService $service): bool
+    {
+        $recommendations = $beneficiary->detailedEvaluationResult?->recommendation_services;
+        if ($recommendations === null) {
+            return false;
+        }
+
+        foreach ($recommendations as $recommendation) {
+            if ($recommendation instanceof RecommendationService) {
+                if ($recommendation === $service) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if ((string) $recommendation === $service->value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  list<RecommendationService>  $services
+     */
+    private function hasAnyRecommendation(Beneficiary $beneficiary, array $services): bool
+    {
+        foreach ($services as $service) {
+            if ($this->hasRecommendation($beneficiary, $service)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
