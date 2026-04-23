@@ -1,8 +1,6 @@
 @php($d = $data ?? [])
 @php($institutions = $d['institutions'] ?? [])
-@php($matrixRows = $d['matrix_rows'] ?? [])
-@php($columns = $d['matrix_columns'] ?? range(1, 10))
-@php($detailsRows = $d['section4_rows'] ?? [])
+@php($meetingsRows = $d['meetings_rows'] ?? [])
 
 <div class="psych-sheet-title">FIȘĂ DE CONSILIERE JURIDICĂ</div>
 <div style="font-size: 9px; margin-bottom: 8px;">Operator de date cu caracter personal nr.27922</div>
@@ -77,30 +75,31 @@
 <table class="psych-sheet-data-table">
     <thead>
     <tr>
-        <th style="width: 26%;">Element</th>
-        @foreach($columns as $col)
-            <th style="width: 7.4%;">{{ $col }}</th>
-        @endforeach
+        <th style="width:5%;">Nr.</th>
+        <th style="width:10%;">Data</th>
+        <th style="width:8%;">Ora</th>
+        <th style="width:16%;">Intervenție</th>
+        <th style="width:14%;">Specialist</th>
+        <th style="width:9%;">Durată</th>
+        <th style="width:18%;">Teme</th>
+        <th style="width:20%;">Mențiuni / Detalii</th>
     </tr>
     </thead>
     <tbody>
-    @foreach($matrixRows as $row)
+    @forelse($meetingsRows as $row)
         <tr>
-            <td style="white-space: pre-wrap;">{{ $row['label'] ?? '—' }}</td>
-            @foreach(($row['values'] ?? []) as $value)
-                <td style="text-align:center;">{{ $value }}</td>
-            @endforeach
+            <td>{{ $row['nr'] ?? '—' }}</td>
+            <td>{{ $row['date'] ?? '—' }}</td>
+            <td>{{ $row['time'] ?? '—' }}</td>
+            <td style="white-space: pre-wrap;">{{ $row['intervention_name'] ?? '—' }}</td>
+            <td style="white-space: pre-wrap;">{{ $row['specialist'] ?? '—' }}</td>
+            <td>{{ $row['duration'] ?? '—' }}</td>
+            <td style="white-space: pre-wrap;">{{ $row['topic'] ?? '—' }}</td>
+            <td style="white-space: pre-wrap;">{{ $row['details'] ?? ($row['observations'] ?? '—') }}</td>
         </tr>
-    @endforeach
+    @empty
+        <tr><td colspan="8" class="monthly-sheet-empty">—</td></tr>
+    @endforelse
     </tbody>
 </table>
-
-<div class="psych-sheet-subtitle">Secțiunea 4. Detalii / ședință</div>
-@foreach($detailsRows as $row)
-    <table class="psych-sheet-meta-table">
-        <tr><th style="width: 20%;">Detalii</th><td>{{ $row['details'] ?? '—' }}</td></tr>
-        <tr><th>Numărul ședinței</th><td>{{ $row['session_number'] ?? '—' }}</td></tr>
-        <tr><th>Programare</th><td>Data {{ $row['schedule_date'] ?? '—' }} &nbsp;&nbsp; Ora {{ $row['schedule_time'] ?? '—' }}</td></tr>
-    </table>
-@endforeach
 

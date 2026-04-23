@@ -115,6 +115,13 @@ return [
         'add_cases_in_monitoring' => 'Sistemul include în statistici toți beneficiarii care au avut un caz cu status DESCHIS cel puțin o zi în intervalul de referință (definit de datele de început/final raportare). Bifarea acestei opțiuni va include și cazurile cu status ÎN MONITORIZARE în statisticile raportate.',
     ],
 
+    'export_meta' => [
+        'report_name' => 'Denumirea raportului',
+        'calendar_interval' => 'Interval calendaristic raportare',
+        'includes_monitoring_cases' => 'Include cazurile în monitorizare',
+        'includes_missing_values' => 'Include missing values',
+    ],
+
     'new' => [
         'title' => 'Rapoarte',
         'labels' => [

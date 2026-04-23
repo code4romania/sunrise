@@ -26,9 +26,18 @@ class ExportReport extends Action
     public function generateExport(): BinaryFileResponse
     {
         $service = $this->makeComposedReportService();
+        $reportName = $this->reportType !== null
+            ? __('report.table_heading.'.$this->reportType->value)
+            : '—';
 
         $fileName = \sprintf('%s_%s_%s.xls', $this->startDate, $this->endDate, $this->reportType->value);
 
-        return Excel::download(new Report($service), $fileName, \Maatwebsite\Excel\Excel::XLS);
+        return Excel::download(new Report($service, [
+            'report_name' => $reportName,
+            'start_date' => $this->startDate,
+            'end_date' => $this->endDate,
+            'includes_monitoring_cases' => (bool) $this->addCasesInMonitoring,
+            'includes_missing_values' => (bool) $this->showMissingValues,
+        ]), $fileName, \Maatwebsite\Excel\Excel::XLS);
     }
 }

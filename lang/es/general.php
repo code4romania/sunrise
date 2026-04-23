@@ -33,6 +33,6 @@ return [
         'no_document' => 'Ningún documento',
     ],
     'placeholders' => [
-        'date' => 'Fecha',
+        'date' => 'DD/MM/AAAA',
     ],
 ];

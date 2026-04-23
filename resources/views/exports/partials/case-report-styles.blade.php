@@ -21,6 +21,26 @@
     }
     .title { font-size: 20px; font-weight: 700; margin: 0 0 2px 0; }
     .meta { font-size: 12px; color: #111827; margin: 0; font-weight: 600; }
+    .detailed-approval-block {
+        width: 34%;
+        margin-left: auto;
+        margin-bottom: 6px;
+        font-size: 12px;
+        color: #111827;
+        font-weight: 600;
+        text-align: left;
+    }
+    .detailed-approval-line { line-height: 1.25; }
+    .detailed-approval-label, .detailed-approval-name { font-weight: 700; }
+    .detailed-approval-text { display: inline-block; min-width: 58px; }
+    .detailed-approval-dots {
+        display: inline-block;
+        width: 110px;
+        border-bottom: 1px solid #111827;
+        margin-left: 4px;
+        vertical-align: middle;
+        height: 10px;
+    }
     .section-title { margin: 16px 0 8px; font-size: 14px; font-weight: 700; color: #1f2937; }
     .fields-grid { margin-bottom: 8px; }
     .field-item {
@@ -455,6 +475,9 @@
         border: 1px solid #000;
         padding: 4px 5px;
         vertical-align: top;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        white-space: pre-wrap;
     }
     .psych-sheet-meta-table th,
     .psych-sheet-data-table th {
@@ -468,6 +491,21 @@
         padding: 6px;
         font-size: 9px;
         white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
         margin-bottom: 10px;
+    }
+
+    .social-children-table {
+        table-layout: fixed;
+        font-size: 7px;
+    }
+    .social-children-table th,
+    .social-children-table td {
+        font-size: 7px;
+        padding: 2px 2px;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+        word-break: break-word;
     }
 </style>

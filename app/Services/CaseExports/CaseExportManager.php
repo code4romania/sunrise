@@ -20,6 +20,7 @@ use App\Services\CaseExports\Composers\LegalCounselingSheetPdfComposer;
 use App\Services\CaseExports\Composers\MonitoringPdfComposer;
 use App\Services\CaseExports\Composers\MonthlyPlanSheetPdfComposer;
 use App\Services\CaseExports\Composers\PsychologicalCounselingSheetPdfComposer;
+use App\Services\CaseExports\Composers\SocialCounselingSheetPdfComposer;
 use App\Services\CaseExports\Support\BeneficiaryPdfTableDataBuilder;
 use App\Services\CaseExports\Support\CaseTeamSignatureRowsBuilder;
 use App\Services\CaseExports\Support\ExportBrandingResolver;
@@ -29,6 +30,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use ZipArchive;
 
 class CaseExportManager
 {
@@ -45,6 +47,7 @@ class CaseExportManager
         private readonly MonthlyPlanSheetPdfComposer $monthlyPlanSheetPdfComposer,
         private readonly PsychologicalCounselingSheetPdfComposer $psychologicalCounselingSheetPdfComposer,
         private readonly LegalCounselingSheetPdfComposer $legalCounselingSheetPdfComposer,
+        private readonly SocialCounselingSheetPdfComposer $socialCounselingSheetPdfComposer,
         private readonly CaseInfoPdfComposer $caseInfoPdfComposer,
     ) {}
 
@@ -130,6 +133,8 @@ class CaseExportManager
             'multidisciplinaryEvaluation',
             'detailedEvaluationResult',
             'violenceHistory',
+            'specialistsTeam.user',
+            'specialistsTeam.roleForDisplay',
             'evaluateDetails',
             'children',
             'details',
@@ -146,6 +151,7 @@ class CaseExportManager
             sections: $this->detailedEvaluationPdfComposer->composeSections($beneficiary),
             extraRows: $this->detailedEvaluationPdfComposer->composeExtraRows($beneficiary),
             signatureRows: $this->signatureRowsBuilder->build($beneficiary),
+            approvedByCoordinator: $this->resolveCenterCoordinatorName($beneficiary),
         );
     }
 
@@ -251,6 +257,31 @@ class CaseExportManager
         );
     }
 
+    public function downloadSocialCounselingSheetPdf(InterventionService $interventionService): StreamedResponse
+    {
+        $interventionService->loadMissing([
+            'interventionPlan.beneficiary',
+        ]);
+
+        $beneficiary = $interventionService->interventionPlan?->beneficiary;
+        if ($beneficiary instanceof Beneficiary) {
+            $this->logPdfExport($beneficiary, 'pdf_social_counseling_sheet_exported');
+        }
+
+        $caseId = $beneficiary?->id ?? $interventionService->id;
+
+        return $this->downloadPdf(
+            view: 'exports.reports.pdf-social-counseling-sheet',
+            reportTitle: __('intervention_plan.pdf.social_counseling_sheet_title'),
+            caseId: $caseId,
+            sections: [[
+                'title' => '',
+                'type' => 'social_counseling_sheet',
+                'data' => $this->socialCounselingSheetPdfComposer->compose($interventionService),
+            ]],
+        );
+    }
+
     public function downloadMonitoringPdf(Monitoring $monitoring): StreamedResponse
     {
         $monitoring->loadMissing(['beneficiary', 'children']);
@@ -290,6 +321,83 @@ class CaseExportManager
             sections: $sections,
             signatureRows: $beneficiary ? $this->signatureRowsBuilder->build($beneficiary) : [],
         );
+    }
+
+    public function downloadAllMonitoringPdfs(?Beneficiary $beneficiary): StreamedResponse
+    {
+        abort_unless($beneficiary instanceof Beneficiary, 404);
+
+        $beneficiary->loadMissing([
+            'monitoring.children',
+            'details',
+            'legal_residence',
+            'effective_residence',
+            'children',
+        ]);
+
+        $monitorings = $beneficiary->monitoring()->with('children')->orderBy('id')->get();
+        abort_if($monitorings->isEmpty(), 404);
+
+        $this->logPdfExport($beneficiary, 'pdf_monitoring_exported');
+
+        $zipPath = tempnam(sys_get_temp_dir(), 'monitoring_sheets_');
+        if ($zipPath === false) {
+            abort(500);
+        }
+
+        $zip = new ZipArchive;
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            @unlink($zipPath);
+            abort(500);
+        }
+
+        foreach ($monitorings as $monitoring) {
+            $reportTitle = $this->monitoringPdfComposer->composeReportTitle($monitoring, $beneficiary);
+            $sections = $this->monitoringPdfComposer->composeSections($monitoring, $beneficiary);
+            $signatureRows = $this->signatureRowsBuilder->build($beneficiary);
+            $branding = $this->brandingResolver->resolve();
+
+            $binary = Pdf::loadView('exports.reports.pdf-monitoring', [
+                'branding' => $branding,
+                'reportTitle' => $reportTitle,
+                'caseId' => $monitoring->beneficiary_id,
+                'sections' => $sections,
+                'extraRows' => [],
+                'signatureRows' => $signatureRows,
+                'signaturePreparedByManager' => null,
+            ])
+                ->setOption('defaultFont', 'DejaVu Sans')
+                ->setOption('isHtml5ParserEnabled', true)
+                ->setOption('isPhpEnabled', true)
+                ->setOption('isFontSubsettingEnabled', false)
+                ->setPaper('a4')
+                ->output();
+
+            $entryName = $this->filenameBuilder->build(
+                'fisa_monitorizare_'.$beneficiary->id.'_'.$monitoring->id,
+                $beneficiary->id,
+                'pdf'
+            );
+
+            $zip->addFromString($entryName, $binary);
+        }
+
+        $zip->close();
+
+        $zipFilename = $this->filenameBuilder->build('fise_monitorizare_toate', $beneficiary->id, 'zip');
+
+        return response()->streamDownload(function () use ($zipPath): void {
+            $stream = fopen($zipPath, 'rb');
+            if ($stream === false) {
+                return;
+            }
+
+            fpassthru($stream);
+            fclose($stream);
+            @unlink($zipPath);
+        }, $zipFilename, [
+            'Content-Type' => 'application/zip',
+        ]);
     }
 
     public function downloadCloseFilePdf(CloseFile $closeFile): StreamedResponse
@@ -388,6 +496,7 @@ class CaseExportManager
         array $extraRows = [],
         array $signatureRows = [],
         ?string $signaturePreparedByManager = null,
+        ?string $approvedByCoordinator = null,
     ): StreamedResponse {
         $branding = $this->brandingResolver->resolve();
         $filename = $this->filenameBuilder->build($reportTitle, $caseId, 'pdf');
@@ -399,6 +508,7 @@ class CaseExportManager
             'extraRows' => $extraRows,
             'signatureRows' => $signatureRows,
             'signaturePreparedByManager' => $signaturePreparedByManager,
+            'approvedByCoordinator' => $approvedByCoordinator,
         ])
             ->setOption('defaultFont', 'DejaVu Sans')
             ->setOption('isHtml5ParserEnabled', true)
@@ -447,5 +557,17 @@ class CaseExportManager
     private function exportsDisk(): Filesystem
     {
         return Storage::disk(config('exports.disk', 'private'));
+    }
+
+    private function resolveCenterCoordinatorName(Beneficiary $beneficiary): ?string
+    {
+        $coordinator = $beneficiary->specialistsTeam
+            ->first(function ($specialist): bool {
+                $roleName = mb_strtolower((string) ($specialist->roleForDisplay?->name ?? ''));
+
+                return str_contains($roleName, 'coordonator');
+            });
+
+        return $coordinator?->user?->full_name;
     }
 }

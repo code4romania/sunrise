@@ -154,6 +154,18 @@ class ViewCaseInterventionService extends ViewRecord
 
                     return app(CaseExportManager::class)->downloadLegalCounselingSheetPdf($this->interventionService);
                 }),
+            Action::make('download_social_counseling_sheet')
+                ->label(__('intervention_plan.actions.download_social_counseling_sheet'))
+                ->icon(Heroicon::OutlinedArrowDownTray)
+                ->outlined()
+                ->visible(fn (): bool => $this->getCounselingSheetType() === CounselingSheet::SOCIAL_ASSISTANCE)
+                ->action(function (): StreamedResponse {
+                    if (! $this->interventionService instanceof InterventionService) {
+                        abort(404);
+                    }
+
+                    return app(CaseExportManager::class)->downloadSocialCounselingSheetPdf($this->interventionService);
+                }),
             DeleteAction::make()
                 ->label(__('intervention_plan.actions.delete_service'))
                 ->icon(Heroicon::OutlinedTrash)

@@ -86,7 +86,7 @@ class EditCaseIdentity extends EditRecord
             $data['legal_residence'] = array_merge(
                 $data['legal_residence'] ?? [],
                 $record->legal_residence->only([
-                    'county_id', 'city_id', 'address', 'environment',
+                    'country_id', 'county_id', 'city_id', 'address', 'environment',
                 ])
             );
         }
@@ -95,7 +95,7 @@ class EditCaseIdentity extends EditRecord
             $data['effective_residence'] = array_merge(
                 $data['effective_residence'] ?? [],
                 $record->effective_residence->only([
-                    'county_id', 'city_id', 'address', 'environment',
+                    'country_id', 'county_id', 'city_id', 'address', 'environment',
                 ])
             );
         }

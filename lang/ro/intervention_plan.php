@@ -325,6 +325,7 @@ return [
         'download_monthly_sheet' => 'Descarcă fișă plan lunar',
         'download_psychological_counseling_sheet' => 'Descarcă fișa psihologică',
         'download_legal_counseling_sheet' => 'Descarcă fișa juridică',
+        'download_social_counseling_sheet' => 'Descarcă fișa socială',
         'download_plan' => 'Descarcă dosar',
         'complete_counseling_sheet' => 'Completează fișa consiliere',
         'edit_counseling_sheet' => 'Editează fișa consiliere',
@@ -413,6 +414,7 @@ return [
         'monthly_sheet_title' => 'Plan de intervenție – plan lunar',
         'psychological_counseling_sheet_title' => 'Fișă de consiliere psihologică',
         'legal_counseling_sheet_title' => 'Fișă de consiliere juridică',
+        'social_counseling_sheet_title' => 'Fișă de consiliere asistență socială',
     ],
 
     'sheet' => [

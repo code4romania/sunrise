@@ -17,6 +17,7 @@ return [
     'beneficiary_cnp' => 'CNP-ul beneficiarului',
     'without_cnp' => 'Nu deține / Nu știe',
     'contact_notes' => 'Notițe legate de contactare beneficiar',
+    'country' => 'Țară',
     'county' => 'Județ',
     'create_beneficiary_consent' => 'Confirm că s-a obținut acordul beneficiarului pentru înregistrarea datelor personale și utilizarea datelor rezultate din evaluare și intervenție în scopul oferirii serviciilor de management de caz.',
     'date' => 'Data',

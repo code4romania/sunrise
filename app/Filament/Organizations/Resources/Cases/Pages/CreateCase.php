@@ -320,6 +320,8 @@ class CreateCase extends CreateRecord
 
     protected function fillFormFromBeneficiary(Beneficiary $source): void
     {
+        $source->loadMissing(['legal_residence', 'effective_residence']);
+
         $current = $this->form->getRawState();
         $fill = [
             'last_name' => $source->last_name,
@@ -329,11 +331,33 @@ class CreateCase extends CreateRecord
             'gender' => $source->gender?->value,
             'birthdate' => $this->formatBirthdateForForm($source->birthdate),
             'birthplace' => $source->birthplace,
+            'citizenship' => $source->citizenship?->value,
             'ethnicity' => $source->ethnicity?->value,
             'id_type' => $source->id_type?->value,
             'id_serial' => $source->id_serial,
             'id_number' => $source->id_number,
             'cnp' => $source->cnp,
+            'primary_phone' => $source->primary_phone,
+            'backup_phone' => $source->backup_phone,
+            'email' => $source->email,
+            'social_media' => $source->social_media,
+            'contact_person_name' => $source->contact_person_name,
+            'contact_person_phone' => $source->contact_person_phone,
+            'same_as_legal_residence' => (bool) $source->same_as_legal_residence,
+            'legal_residence' => $source->legal_residence?->only([
+                'country_id',
+                'county_id',
+                'city_id',
+                'address',
+                'environment',
+            ]) ?? [],
+            'effective_residence' => $source->effective_residence?->only([
+                'country_id',
+                'county_id',
+                'city_id',
+                'address',
+                'environment',
+            ]) ?? [],
         ];
         $this->form->fill(array_merge($current, $fill));
     }

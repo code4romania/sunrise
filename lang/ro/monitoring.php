@@ -70,6 +70,7 @@ return [
     ],
     'actions' => [
         'create' => 'Adaugă fișă de monitorizare',
+        'download_all' => 'Descarcă toate fișele',
         'create_from_last' => 'Pornește de la un duplicat',
         'create_simple' => 'Începe cu o fișă necompletată',
         'create_widget' => 'Completează fișa de monitorizare',

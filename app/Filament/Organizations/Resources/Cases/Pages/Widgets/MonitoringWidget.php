@@ -7,9 +7,12 @@ namespace App\Filament\Organizations\Resources\Cases\Pages\Widgets;
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\MonitoringResource;
 use App\Models\Beneficiary;
 use App\Models\Monitoring;
+use App\Services\CaseExports\CaseExportManager;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MonitoringWidget extends TableWidget
 {
@@ -46,26 +49,11 @@ class MonitoringWidget extends TableWidget
             ])
             ->defaultSort('id', 'desc')
             ->headerActions([
-                \Filament\Actions\Action::make('create_modal')
-                    ->label(__('monitoring.actions.create'))
-                    ->modalHeading(__('monitoring.headings.modal_create'))
-                    ->modalDescription(__('monitoring.labels.modal_create_description'))
-                    ->modalSubmitAction(
-                        \Filament\Actions\Action::make('create_from_last')
-                            ->label(__('monitoring.actions.create_from_last'))
-                            ->url(fn (): string => MonitoringResource::getUrl('create', ['beneficiary' => $record]).'?copyLastFile=1')
-                    )
-                    ->modalCancelAction(
-                        \Filament\Actions\Action::make('create_simple')
-                            ->label(__('monitoring.actions.create_simple'))
-                            ->outlined()
-                            ->url(fn (): string => MonitoringResource::getUrl('create', ['beneficiary' => $record]))
-                    )
-                    ->visible(fn (): bool => $record !== null && $record->monitoring()->count() > 0),
-                \Filament\Actions\Action::make('create_direct')
-                    ->label(__('monitoring.actions.create'))
-                    ->url(fn (): string => MonitoringResource::getUrl('create', ['beneficiary' => $record]))
-                    ->visible(fn (): bool => $record !== null && $record->monitoring()->count() === 0),
+                Action::make('download_all_monitoring_sheets')
+                    ->label(__('monitoring.actions.download_all'))
+                    ->outlined()
+                    ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadAllMonitoringPdfs($record))
+                    ->visible(fn (): bool => $record !== null && $record->monitoring()->exists()),
             ])
             ->recordUrl(
                 fn (Monitoring $monitoring): string => MonitoringResource::getUrl('view', [

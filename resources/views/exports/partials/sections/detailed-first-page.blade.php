@@ -2,6 +2,14 @@
 @php($b = $data['beneficiary'] ?? [])
 @php($p = $data['partner'] ?? [])
 @php($c = $data['children'] ?? [])
+@if(filled($approvedByCoordinator ?? null))
+    <div class="detailed-approval-block">
+        <div class="detailed-approval-line detailed-approval-label">Avizat,Șef centru,</div>
+        <div class="detailed-approval-line detailed-approval-name">{{ $approvedByCoordinator }}</div>
+        <div class="detailed-approval-line"><span class="detailed-approval-text">Semnătura</span><span class="detailed-approval-dots"></span></div>
+        <div class="detailed-approval-line"><span class="detailed-approval-text">Data</span><span class="detailed-approval-dots"></span></div>
+    </div>
+@endif
 <div class="detailed-first-page-title">FIȘA DE EVALUARE DETALIATĂ</div>
 
 <div class="detailed-first-heading">I. Date personale privind beneficiarul:</div>

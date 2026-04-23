@@ -40,7 +40,7 @@ return [
     ],
 
     'placeholders' => [
-        'date' => 'zz-ll-aaaa',
+        'date' => 'ZZ/LL/AAAA',
     ],
 
     'yes' => 'Da',

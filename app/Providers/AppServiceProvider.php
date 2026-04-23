@@ -61,6 +61,7 @@ use App\Models\Violence;
 use App\Models\ViolenceHistory;
 use Filament\Forms\Components\Select as FormsSelect;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Support\Facades\FilamentView;
@@ -97,9 +98,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         TextInput::configureUsing(function (TextInput $input) {
+            $input->live(onBlur: true);
+
             if ($input->isNumeric()) {
                 $input->minValue(0);
             }
+        });
+
+        Textarea::configureUsing(function (Textarea $textarea): void {
+            $textarea->live(onBlur: true);
         });
 
         FormsSelect::configureUsing(function (FormsSelect $select): void {

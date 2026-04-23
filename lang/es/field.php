@@ -16,6 +16,7 @@ return [
     'beneficiary_cnp' => 'CNP del beneficiario',
     'without_cnp' => 'Sin CNP',
     'contact_notes' => 'Notas de contacto',
+    'country' => 'País',
     'county' => 'Provincia',
     'create_beneficiary_consent' => 'Consentimiento del beneficiario',
     'date' => 'Fecha',

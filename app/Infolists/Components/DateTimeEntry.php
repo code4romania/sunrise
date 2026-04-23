@@ -19,11 +19,11 @@ class DateTimeEntry extends TextEntry
             }
 
             if ($state instanceof Carbon) {
-                return $state->format('d.m.Y H:i:s');
+                return $state->format('d/m/Y H:i:s');
             }
 
             try {
-                return Carbon::parse($state)->format('d.m.Y H:i:s');
+                return Carbon::parse($state)->format('d/m/Y H:i:s');
             } catch (\Throwable) {
                 return '—';
             }

@@ -16,6 +16,7 @@ use App\Forms\Components\DatePicker;
 use App\Forms\Components\Select;
 use App\Forms\Components\Spacer;
 use App\Models\Beneficiary;
+use App\Models\Country;
 use App\Rules\ValidCNP;
 use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
@@ -31,6 +32,8 @@ use Illuminate\Validation\Rules\Unique;
 
 class BeneficiaryIdentityFormSchema
 {
+    private const OTHER_COUNTRY_OPTION = '__other_country__';
+
     /**
      * @return array<int, mixed>
      */
@@ -214,6 +217,37 @@ class BeneficiaryIdentityFormSchema
                         ->schema([
                             Grid::make()
                                 ->schema([
+                                    Select::make('legal_residence.country_id')
+                                        ->label(__('field.country'))
+                                        ->options(fn (): array => self::getCountryOptions())
+                                        ->default(fn (): int|string|null => self::getRomaniaCountryId())
+                                        ->live()
+                                        ->dehydrateStateUsing(fn ($state): mixed => self::normalizeCountryStateForSave($state))
+                                        ->afterStateHydrated(function (Set $set, $state): void {
+                                            if (blank($state)) {
+                                                $set('legal_residence.country_id', self::getRomaniaCountryId());
+
+                                                return;
+                                            }
+                                            if (! self::isRomaniaSelected($state)) {
+                                                $set('legal_residence.country_id', self::OTHER_COUNTRY_OPTION);
+                                            }
+                                        })
+                                        ->afterStateUpdated(function (Set $set, Get $get, $state): void {
+                                            if (! self::isRomaniaSelected($state)) {
+                                                $set('legal_residence.county_id', null);
+                                                $set('legal_residence.city_id', null);
+                                            }
+
+                                            if ($get('same_as_legal_residence')) {
+                                                $set('effective_residence.country_id', $state);
+                                                if (! self::isRomaniaSelected($state)) {
+                                                    $set('effective_residence.county_id', null);
+                                                    $set('effective_residence.city_id', null);
+                                                }
+                                            }
+                                        }),
+
                                     ...CountyCitySelect::make()
                                         ->countyField('legal_residence.county_id')
                                         ->cityField('legal_residence.city_id')
@@ -222,6 +256,8 @@ class BeneficiaryIdentityFormSchema
                                         ->countyPlaceholder(__('placeholder.county'))
                                         ->cityPlaceholder(__('placeholder.city'))
                                         ->required()
+                                        ->countyDisabled(fn (Get $get): bool => ! self::isRomaniaSelected($get('legal_residence.country_id')))
+                                        ->cityDisabled(fn (Get $get): bool => ! self::isRomaniaSelected($get('legal_residence.country_id')) || ! $get('legal_residence.county_id'))
                                         ->countyAfterStateUpdated(function (Set $set, Get $get): void {
                                             if ($get('same_as_legal_residence')) {
                                                 $set('effective_residence.county_id', $get('legal_residence.county_id'));
@@ -238,7 +274,7 @@ class BeneficiaryIdentityFormSchema
                                     TextInput::make('legal_residence.address')
                                         ->label(__('field.address'))
                                         ->placeholder(__('placeholder.address'))
-                                        ->maxLength(50)
+                                        ->maxLength(100)
                                         ->lazy()
                                         ->afterStateUpdated(function (Set $set, Get $get, $state) {
                                             if ($get('same_as_legal_residence')) {
@@ -267,6 +303,7 @@ class BeneficiaryIdentityFormSchema
                         ->live()
                         ->afterStateUpdated(function (bool $state, Set $set, Get $get) {
                             if (! $state) {
+                                $set('effective_residence.country_id', self::getRomaniaCountryId());
                                 $set('effective_residence.county_id', null);
                                 $set('effective_residence.city_id', null);
                                 $set('effective_residence.address', null);
@@ -274,6 +311,7 @@ class BeneficiaryIdentityFormSchema
                             }
 
                             if ($state) {
+                                $set('effective_residence.country_id', $get('legal_residence.country_id'));
                                 $set('effective_residence.county_id', $get('legal_residence.county_id'));
                                 $set('effective_residence.city_id', $get('legal_residence.city_id'));
                                 $set('effective_residence.address', $get('legal_residence.address'));
@@ -289,6 +327,35 @@ class BeneficiaryIdentityFormSchema
                         ->schema([
                             Grid::make()
                                 ->schema([
+                                    Select::make('effective_residence.country_id')
+                                        ->label(__('field.country'))
+                                        ->options(fn (): array => self::getCountryOptions())
+                                        ->default(fn (): int|string|null => self::getRomaniaCountryId())
+                                        ->live()
+                                        ->dehydrateStateUsing(fn ($state): mixed => self::normalizeCountryStateForSave($state))
+                                        ->disabled(fn (Get $get): bool => (bool) $get('same_as_legal_residence'))
+                                        ->afterStateHydrated(function (Set $set, Get $get, $state): void {
+                                            if ((bool) $get('same_as_legal_residence')) {
+                                                $set('effective_residence.country_id', $get('legal_residence.country_id'));
+
+                                                return;
+                                            }
+                                            if (blank($state)) {
+                                                $set('effective_residence.country_id', self::getRomaniaCountryId());
+
+                                                return;
+                                            }
+                                            if (! self::isRomaniaSelected($state)) {
+                                                $set('effective_residence.country_id', self::OTHER_COUNTRY_OPTION);
+                                            }
+                                        })
+                                        ->afterStateUpdated(function (Set $set, $state): void {
+                                            if (! self::isRomaniaSelected($state)) {
+                                                $set('effective_residence.county_id', null);
+                                                $set('effective_residence.city_id', null);
+                                            }
+                                        }),
+
                                     ...CountyCitySelect::make()
                                         ->countyField('effective_residence.county_id')
                                         ->cityField('effective_residence.city_id')
@@ -297,14 +364,14 @@ class BeneficiaryIdentityFormSchema
                                         ->countyPlaceholder(__('placeholder.county'))
                                         ->cityPlaceholder(__('placeholder.city'))
                                         ->required()
-                                        ->countyDisabled(fn (Get $get) => $get('same_as_legal_residence'))
-                                        ->cityDisabled(fn (Get $get) => $get('same_as_legal_residence') || ! $get('effective_residence.county_id'))
+                                        ->countyDisabled(fn (Get $get): bool => $get('same_as_legal_residence') || ! self::isRomaniaSelected($get('effective_residence.country_id')))
+                                        ->cityDisabled(fn (Get $get): bool => $get('same_as_legal_residence') || ! self::isRomaniaSelected($get('effective_residence.country_id')) || ! $get('effective_residence.county_id'))
                                         ->schema(),
 
                                     TextInput::make('effective_residence.address')
                                         ->label(__('field.address'))
                                         ->placeholder(__('placeholder.address'))
-                                        ->maxLength(50)
+                                        ->maxLength(100)
                                         ->disabled(fn (Get $get) => $get('same_as_legal_residence')),
 
                                     Select::make('effective_residence.environment')
@@ -361,5 +428,40 @@ class BeneficiaryIdentityFormSchema
                         ->nullable(),
                 ]),
         ];
+    }
+
+    private static function getRomaniaCountryId(): ?int
+    {
+        return Country::query()
+            ->whereRaw('LOWER(name) = ?', ['romania'])
+            ->value('id');
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    private static function getCountryOptions(): array
+    {
+        $romaniaId = self::getRomaniaCountryId();
+        if ($romaniaId === null) {
+            return [self::OTHER_COUNTRY_OPTION => __('beneficiary.section.identity.labels.country_other')];
+        }
+
+        return [
+            $romaniaId => __('beneficiary.section.identity.labels.country_romania'),
+            self::OTHER_COUNTRY_OPTION => __('beneficiary.section.identity.labels.country_other'),
+        ];
+    }
+
+    private static function isRomaniaSelected(mixed $state): bool
+    {
+        $romaniaId = self::getRomaniaCountryId();
+
+        return $romaniaId !== null && (string) $state === (string) $romaniaId;
+    }
+
+    private static function normalizeCountryStateForSave(mixed $state): ?int
+    {
+        return self::isRomaniaSelected($state) ? (int) $state : null;
     }
 }

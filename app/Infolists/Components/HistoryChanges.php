@@ -64,7 +64,7 @@ class HistoryChanges extends Entry
     public function getFieldValue(string $field, mixed $value): mixed
     {
         if ($field === 'created_at' || $field === 'updated_at') {
-            return $this->safeParseDateTime($value, 'd.m.Y H:i:s');
+            return $this->safeParseDateTime($value, 'd/m/Y H:i:s');
         }
 
         $castType = $this->getCastType($field);
@@ -85,7 +85,7 @@ class HistoryChanges extends Entry
             }
 
             if ($castType === 'date' && $value) {
-                return $this->safeParseDateTime($value, 'd.m.Y');
+                return $this->safeParseDateTime($value, 'd/m/Y');
             }
 
             $value = $this->convertToEnum($castType, $value);

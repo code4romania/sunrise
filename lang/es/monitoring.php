@@ -68,6 +68,7 @@ return [
     ],
     'actions' => [
         'create' => 'Crear monitoreo',
+        'download_all' => 'Descargar todas las fichas',
         'create_from_last' => 'Crear desde el último',
         'create_simple' => 'Crear simple',
         'create_widget' => 'Crear widget',

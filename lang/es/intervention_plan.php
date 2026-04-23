@@ -295,6 +295,7 @@ return [
         'download_monthly_sheet' => 'Descargar ficha plan mensual',
         'download_psychological_counseling_sheet' => 'Descargar ficha psicológica',
         'download_legal_counseling_sheet' => 'Descargar ficha jurídica',
+        'download_social_counseling_sheet' => 'Descargar ficha social',
         'complete_counseling_sheet' => 'Completar ficha de orientación',
         'edit_counseling_sheet' => 'Editar ficha de orientación',
     ],
@@ -362,6 +363,7 @@ return [
         'monthly_sheet_title' => 'Plan de intervención – plan mensual',
         'psychological_counseling_sheet_title' => 'Ficha de orientación psicológica',
         'legal_counseling_sheet_title' => 'Ficha de orientación jurídica',
+        'social_counseling_sheet_title' => 'Ficha de orientación de asistencia social',
     ],
 
     'sheet' => [

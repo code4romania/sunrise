@@ -98,7 +98,7 @@ class CreateMonitoring extends CreateRecord
 
         $data = [
             'date' => now()->format('Y-m-d'),
-            'number' => null,
+            'number' => $this->generateMonitoringNumber($beneficiary),
             'start_date' => null,
             'end_date' => null,
         ];
@@ -410,6 +410,14 @@ class CreateMonitoring extends CreateRecord
      */
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        $beneficiary = $this->getParentRecord();
+        if (
+            $beneficiary instanceof Beneficiary
+            && blank($data['number'] ?? null)
+        ) {
+            $data['number'] = $this->generateMonitoringNumber($beneficiary);
+        }
+
         $this->pendingSpecialistsTeam = $data['specialistsTeam'] ?? [];
         $this->pendingChildren = $data['children'] ?? [];
 
@@ -489,7 +497,7 @@ class CreateMonitoring extends CreateRecord
 
         $newMonitoring = $beneficiary->monitoring()->create([
             'date' => now(),
-            'number' => $last->number,
+            'number' => $this->generateMonitoringNumber($beneficiary),
             'start_date' => $last->start_date,
             'end_date' => $last->end_date,
             'admittance_date' => $last->admittance_date,
@@ -529,5 +537,13 @@ class CreateMonitoring extends CreateRecord
         }
 
         return $newMonitoring;
+    }
+
+    private function generateMonitoringNumber(Beneficiary $beneficiary): string
+    {
+        $order = $beneficiary->monitoring()->count() + 1;
+        $year = now()->year;
+
+        return $order.'/'.$year;
     }
 }
