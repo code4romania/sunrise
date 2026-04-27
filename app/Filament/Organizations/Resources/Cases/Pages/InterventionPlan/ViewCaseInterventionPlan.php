@@ -13,9 +13,7 @@ use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\In
 use App\Filament\Organizations\Resources\Cases\Pages\InterventionPlan\Widgets\InterventionPlanServicesWidget;
 use App\Forms\Components\DatePicker;
 use App\Models\Beneficiary;
-use App\Services\CaseExports\CaseExportManager;
 use Carbon\Carbon;
-use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\TextEntry;
@@ -30,7 +28,6 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ViewCaseInterventionPlan extends ViewRecord
 {
@@ -117,11 +114,6 @@ class ViewCaseInterventionPlan extends ViewRecord
                         ->title(__('filament-actions::edit.single.notifications.saved.title'))
                         ->send();
                 }),
-            Action::make('download_plan')
-                ->label(__('intervention_plan.actions.download_plan'))
-                ->icon(Heroicon::OutlinedArrowDownTray)
-                ->outlined()
-                ->action(fn (): StreamedResponse => app(CaseExportManager::class)->downloadMonthlyPlanPdf($record)),
         ];
     }
 

@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class Beneficiary extends Model
@@ -139,6 +140,19 @@ class Beneficiary extends Model
     {
         return Attribute::make(
             get: fn () => $this->birthdate?->age,
+        );
+    }
+
+    public function caseNumber(): Attribute
+    {
+        return Attribute::make(
+            get: function (): string {
+                $createdYear = ($this->created_at instanceof Carbon)
+                    ? $this->created_at->format('Y')
+                    : now()->format('Y');
+
+                return "{$this->id}/{$createdYear}";
+            },
         );
     }
 

@@ -9,25 +9,36 @@ use App\Models\Beneficiary;
 use App\Models\User;
 use App\Notifications\MonitoringSheetReminderNotification;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class SendMonitoringSheetRemindersCommand extends Command
 {
     protected $signature = 'beneficiaries:send-monitoring-sheet-reminders';
 
-    protected $description = 'Notify case team members to complete monitoring sheets one month after beneficiary registration.';
+    protected $description = 'Notify case team members one month after the last monitoring sheet was created.';
 
     public function handle(): int
     {
         $threshold = now()->subMonth();
 
         Beneficiary::query()
-            ->whereNull('monitoring_reminder_sent_at')
-            ->where('created_at', '<=', $threshold)
             ->whereIn('status', [CaseStatus::ACTIVE, CaseStatus::MONITORED])
-            ->whereDoesntHave('monitoring')
-            ->with(['organization', 'specialistsTeam.user'])
+            ->whereHas('monitoring', fn (Builder $query) => $query->where('created_at', '<=', $threshold))
+            ->with(['organization', 'specialistsTeam.user', 'lastMonitoring'])
             ->chunkById(100, function ($beneficiaries): void {
                 foreach ($beneficiaries as $beneficiary) {
+                    $lastMonitoring = $beneficiary->lastMonitoring;
+                    if ($lastMonitoring === null) {
+                        continue;
+                    }
+
+                    if (
+                        $beneficiary->monitoring_reminder_sent_at !== null
+                        && $beneficiary->monitoring_reminder_sent_at->greaterThan($lastMonitoring->created_at)
+                    ) {
+                        continue;
+                    }
+
                     $this->processBeneficiary($beneficiary);
                 }
             });

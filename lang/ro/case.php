@@ -12,7 +12,7 @@ return [
     ],
 
     'table' => [
-        'file_number' => 'Nr Fișă',
+        'file_number' => 'Număr caz',
         'beneficiary' => 'Beneficiar',
         'opened_at' => 'Deschis la',
         'monitored_at' => 'Monitorizat la',

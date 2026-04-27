@@ -15,7 +15,7 @@ return [
         'id' => 'ID',
         'file_number' => 'Număr intern fișă',
         'date' => 'Data realizării',
-        'interval' => 'Perioana monitorizată',
+        'interval' => 'Perioada monitorizată',
         'team' => 'Echipa',
         'actions' => 'Acțiuni',
         'modal_create' => 'Adauga fișă monitorizare',
@@ -65,8 +65,6 @@ return [
         'count' => 'Total monitorizări efectuate',
         'role' => 'Rol',
         'specialist_name' => 'Nume specialist',
-        'option_first' => 'Opțiune 1 (primul câmp interdependent)',
-        'option_second' => 'Opțiune 2 (vizibil/activat doar dacă Opțiune 1 este bifată)',
     ],
     'actions' => [
         'create' => 'Adaugă fișă de monitorizare',
@@ -105,6 +103,6 @@ return [
 
     'notifications' => [
         'sheet_reminder_title' => 'Fișă de monitorizare',
-        'sheet_reminder_body' => 'Au trecut cel puțin 30 de zile de la înregistrarea cazului :name. Completați fișa de monitorizare pentru acest beneficiar.',
+        'sheet_reminder_body' => 'Au trecut cel puțin 30 de zile de la ultima fișă de monitorizare pentru cazul :name. Completați o nouă fișă de monitorizare.',
     ],
 ];

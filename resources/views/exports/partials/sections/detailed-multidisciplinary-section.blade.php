@@ -51,6 +51,9 @@
     <div style="font-size: 12px; margin-bottom: 8px;">
         d) Din punct de vedere socio-economic: {{ $data['social_economic_need'] ?? '—' }}
     </div>
+    <div style="font-size: 12px; margin-bottom: 8px;">
+        e) Din punct de vedere juridic: {{ $data['legal_needs'] ?? '—' }}
+    </div>
 
     <div style="font-size: 14px; font-weight: 700; margin: 12px 0 10px;">
         4. Factori de mediu şi specifici familiei
@@ -105,4 +108,10 @@
             {{ $data['recommendations_for_intervention_plan'] }}
         </div>
     @endif
+    <div style="margin-top: 20px; font-size: 12px;">
+        Nume și Prenume solicitant: {{ $data['applicant_full_name'] ?? '—' }}
+    </div>
+    <div style="margin-top: 8px; font-size: 12px;">
+        Semnătură solicitant: ____________________
+    </div>
 </div>

@@ -48,7 +48,7 @@ class CaseTable
     public static function getColumns(): array
     {
         return [
-            TextColumn::make('id')
+            TextColumn::make('case_number')
                 ->label(__('case.table.file_number'))
                 ->sortable()
                 ->searchable(true, fn (Builder $query, string $search): Builder => $query->where('beneficiaries.id', 'like', '%'.$search.'%')),
@@ -61,12 +61,12 @@ class CaseTable
 
             TextColumn::make('created_at')
                 ->label(__('case.table.opened_at'))
-                ->date('Y-m-d')
+                ->date('d/m/Y')
                 ->sortable(),
 
             TextColumn::make('lastMonitoring.date')
                 ->label(__('case.table.monitored_at'))
-                ->date('Y-m-d')
+                ->date('d/m/Y')
                 ->placeholder('—'),
 
             TextColumn::make('managerTeam.user.full_name')

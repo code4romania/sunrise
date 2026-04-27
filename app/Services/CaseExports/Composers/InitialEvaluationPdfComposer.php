@@ -99,6 +99,8 @@ class InitialEvaluationPdfComposer
     {
         return [
             ['label' => 'Data creării evaluării inițiale', 'value' => $beneficiary->evaluateDetails?->created_at?->format('d.m.Y') ?? '—'],
+            ['label' => 'Nume și Prenume solicitant', 'value' => $beneficiary->full_name ?? '—'],
+            ['label' => 'Semnătură solicitant', 'value' => '____________________'],
         ];
     }
 }

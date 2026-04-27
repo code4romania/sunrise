@@ -78,6 +78,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-beneficiary-identity',
             reportTitle: 'Fișa identitate beneficiar',
             caseId: $beneficiary->id,
+            caseNumber: $beneficiary->case_number,
             sections: $sections,
         );
     }
@@ -92,6 +93,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-case-info',
             reportTitle: 'Fișa informații caz',
             caseId: $beneficiary->id,
+            caseNumber: $beneficiary->case_number,
             sections: $sections,
         );
     }
@@ -116,6 +118,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-initial-evaluation',
             reportTitle: 'Fișa evaluare inițială',
             caseId: $beneficiary->id,
+            caseNumber: $beneficiary->case_number,
             sections: $this->initialEvaluationPdfComposer->composeSections($beneficiary),
             extraRows: $this->initialEvaluationPdfComposer->composeExtraRows($beneficiary),
             signatureRows: $this->signatureRowsBuilder->buildInitialEvaluationRows($beneficiary),
@@ -148,6 +151,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-detailed-evaluation',
             reportTitle: 'Fișa evaluare detaliată',
             caseId: $beneficiary->id,
+            caseNumber: $beneficiary->case_number,
             sections: $this->detailedEvaluationPdfComposer->composeSections($beneficiary),
             extraRows: $this->detailedEvaluationPdfComposer->composeExtraRows($beneficiary),
             signatureRows: $this->signatureRowsBuilder->build($beneficiary),
@@ -173,6 +177,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-monthly-plan',
             reportTitle: __('intervention_plan.pdf.monthly_report_title', ['period' => $periodLabel]),
             caseId: $beneficiary->id,
+            caseNumber: $beneficiary->case_number,
             sections: [
                 ['title' => __('intervention_plan.headings.view_page'), 'rows' => $this->formatter->normalizeArray((array) $beneficiary->interventionPlan?->toArray())],
                 ['title' => 'Servicii sociale', 'rows' => $this->formatter->normalizeArray(['services' => $beneficiary->interventionPlan?->services?->toArray() ?? []])],
@@ -194,11 +199,13 @@ class CaseExportManager
         }
 
         $caseId = $monthlyPlan->interventionPlan?->beneficiary_id ?? $monthlyPlan->id;
+        $caseNumber = $beneficiary?->case_number;
 
         return $this->downloadPdf(
             view: 'exports.reports.pdf-monthly-plan-sheet',
             reportTitle: __('intervention_plan.pdf.monthly_sheet_title'),
             caseId: $caseId,
+            caseNumber: $caseNumber,
             sections: [[
                 'title' => '',
                 'type' => 'monthly_plan_sheet',
@@ -224,6 +231,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-psychological-counseling-sheet',
             reportTitle: __('intervention_plan.pdf.psychological_counseling_sheet_title'),
             caseId: $caseId,
+            caseNumber: $beneficiary?->case_number,
             sections: [[
                 'title' => '',
                 'type' => 'psychological_counseling_sheet',
@@ -249,6 +257,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-legal-counseling-sheet',
             reportTitle: __('intervention_plan.pdf.legal_counseling_sheet_title'),
             caseId: $caseId,
+            caseNumber: $beneficiary?->case_number,
             sections: [[
                 'title' => '',
                 'type' => 'legal_counseling_sheet',
@@ -274,6 +283,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-social-counseling-sheet',
             reportTitle: __('intervention_plan.pdf.social_counseling_sheet_title'),
             caseId: $caseId,
+            caseNumber: $beneficiary?->case_number,
             sections: [[
                 'title' => '',
                 'type' => 'social_counseling_sheet',
@@ -318,6 +328,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-monitoring',
             reportTitle: $reportTitle,
             caseId: $monitoring->beneficiary_id,
+            caseNumber: $beneficiary?->case_number,
             sections: $sections,
             signatureRows: $beneficiary ? $this->signatureRowsBuilder->build($beneficiary) : [],
         );
@@ -361,6 +372,7 @@ class CaseExportManager
                 'branding' => $branding,
                 'reportTitle' => $reportTitle,
                 'caseId' => $monitoring->beneficiary_id,
+                'caseNumber' => $beneficiary->case_number,
                 'sections' => $sections,
                 'extraRows' => [],
                 'signatureRows' => $signatureRows,
@@ -415,6 +427,7 @@ class CaseExportManager
             view: 'exports.reports.pdf-close-file',
             reportTitle: __('beneficiary.section.close_file.titles.create'),
             caseId: $closeFile->beneficiary_id,
+            caseNumber: $beneficiary?->case_number,
             sections: [
                 $this->closeFilePdfComposer->composeMainSection($closeFile, $beneficiary instanceof Beneficiary ? $beneficiary : null),
             ],
@@ -446,7 +459,7 @@ class CaseExportManager
 
             fprintf($out, chr(0xEF).chr(0xBB).chr(0xBF));
             fputcsv($out, [$branding['name']]);
-            fputcsv($out, ['Număr caz: '.$beneficiary->id]);
+            fputcsv($out, ['Număr caz: '.$beneficiary->case_number]);
             fputcsv($out, [$reportTitle]);
             fputcsv($out, []);
             fputcsv($out, [
@@ -492,6 +505,7 @@ class CaseExportManager
         string $view,
         string $reportTitle,
         int|string $caseId,
+        ?string $caseNumber,
         array $sections,
         array $extraRows = [],
         array $signatureRows = [],
@@ -504,6 +518,7 @@ class CaseExportManager
             'branding' => $branding,
             'reportTitle' => $reportTitle,
             'caseId' => $caseId,
+            'caseNumber' => $caseNumber,
             'sections' => $sections,
             'extraRows' => $extraRows,
             'signatureRows' => $signatureRows,

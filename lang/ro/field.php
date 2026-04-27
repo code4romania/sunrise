@@ -65,6 +65,7 @@ return [
     'primary_phone' => 'Număr telefon primar',
     'prior_name' => 'Nume anterior',
     'reason_removed' => 'Motiv scoatere din evidență',
+    'risk_level' => 'Nivel de risc',
     'same_as_legal_residence' => 'Domiciliul legal al beneficiarului este și domiciliul efectiv',
     'section_details' => ':section - detalii',
     'service_name' => 'Nume serviciu',

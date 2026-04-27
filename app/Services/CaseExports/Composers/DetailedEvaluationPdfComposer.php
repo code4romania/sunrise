@@ -95,6 +95,7 @@ class DetailedEvaluationPdfComposer
             'professional_need' => $this->formatter->toPrintableValue($multidisciplinary?->professional_need),
             'emotional_and_psychological_need' => $this->formatter->toPrintableValue($multidisciplinary?->emotional_and_psychological_need),
             'social_economic_need' => $this->formatter->toPrintableValue($multidisciplinary?->social_economic_need),
+            'legal_needs' => $this->formatter->toPrintableValue($multidisciplinary?->legal_needs),
             'extended_family' => $this->formatter->toPrintableValue($multidisciplinary?->extended_family),
             'family_social_integration' => $this->formatter->toPrintableValue($multidisciplinary?->family_social_integration),
             'income' => $this->formatter->toPrintableValue($multidisciplinary?->income),
@@ -124,6 +125,7 @@ class DetailedEvaluationPdfComposer
                 RecommendationService::MEDICAL_PAYMENT,
             ]),
             'recommended_other' => $this->hasRecommendation($beneficiary, RecommendationService::OTHER_SERVICES),
+            'applicant_full_name' => $beneficiary->full_name ?? '—',
         ];
 
         return [

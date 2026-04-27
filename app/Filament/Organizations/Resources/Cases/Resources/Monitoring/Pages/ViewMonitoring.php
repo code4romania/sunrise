@@ -59,6 +59,15 @@ class ViewMonitoring extends ViewRecord
         return [
             BackAction::make()
                 ->url(CaseResource::getUrl('edit_case_monitoring', ['record' => $parent])),
+            Action::make('edit_details')
+                ->label(__('monitoring.titles.edit_details'))
+                ->url(MonitoringResource::getUrl('edit_details', ['beneficiary' => $parent, 'record' => $this->getRecord()])),
+            Action::make('edit_children')
+                ->label(__('monitoring.titles.edit_children'))
+                ->url(MonitoringResource::getUrl('edit_children', ['beneficiary' => $parent, 'record' => $this->getRecord()])),
+            Action::make('edit_general')
+                ->label(__('monitoring.titles.edit_general'))
+                ->url(MonitoringResource::getUrl('edit_general', ['beneficiary' => $parent, 'record' => $this->getRecord()])),
             DeleteAction::make()
                 ->label(__('monitoring.actions.delete'))
                 ->modalHeading(__('monitoring.headings.modal_delete'))
@@ -224,7 +233,7 @@ class ViewMonitoring extends ViewRecord
             return '—';
         }
         try {
-            return Carbon::parse($state)->format('d.m.Y');
+            return Carbon::parse($state)->format('d/m/Y');
         } catch (\Throwable) {
             return '—';
         }

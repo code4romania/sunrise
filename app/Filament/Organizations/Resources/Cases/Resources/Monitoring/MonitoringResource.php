@@ -6,6 +6,9 @@ namespace App\Filament\Organizations\Resources\Cases\Resources\Monitoring;
 
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\Pages\CreateMonitoring;
+use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\Pages\EditChildren;
+use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\Pages\EditDetails;
+use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\Pages\EditGeneral;
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\Pages\ViewMonitoring;
 use App\Models\Monitoring;
 use Filament\Resources\ParentResourceRegistration;
@@ -68,6 +71,9 @@ class MonitoringResource extends Resource
         return [
             'create' => CreateMonitoring::route('/create'),
             'view' => ViewMonitoring::route('/{record}'),
+            'edit_details' => EditDetails::route('/{record}/edit-details'),
+            'edit_children' => EditChildren::route('/{record}/edit-children'),
+            'edit_general' => EditGeneral::route('/{record}/edit-general'),
         ];
     }
 }

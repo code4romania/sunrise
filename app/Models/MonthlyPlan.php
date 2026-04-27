@@ -34,6 +34,13 @@ class MonthlyPlan extends Model
         'specialists' => 'collection',
     ];
 
+    protected static function booted(): void
+    {
+        static::deleting(function (self $monthlyPlan): void {
+            $monthlyPlan->monthlyPlanServices()->get()->each->delete();
+        });
+    }
+
     public function monthlyPlanServices(): HasMany
     {
         return $this->hasMany(MonthlyPlanService::class);

@@ -20,7 +20,6 @@ use App\Models\Specialist;
 use App\Models\User;
 use App\Models\UserRole;
 use Carbon\Carbon;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Textarea;
@@ -52,6 +51,8 @@ class CreateMonitoring extends CreateRecord
      */
     protected array $pendingChildren = [];
 
+    protected bool $prefillFromLastMonitoring = false;
+
     public function mount(): void
     {
         $parent = $this->getParentRecord();
@@ -59,17 +60,7 @@ class CreateMonitoring extends CreateRecord
             abort(404);
         }
 
-        if (request('copyLastFile') === '1') {
-            $newMonitoring = $this->duplicateLastMonitoring();
-            if ($newMonitoring !== null) {
-                $this->redirect(MonitoringResource::getUrl('view', [
-                    'beneficiary' => $parent,
-                    'record' => $newMonitoring,
-                ]));
-
-                return;
-            }
-        }
+        $this->prefillFromLastMonitoring = request('copyLastFile') === '1';
 
         $this->authorizeAccess();
         $this->fillForm();
@@ -103,7 +94,7 @@ class CreateMonitoring extends CreateRecord
             'end_date' => null,
         ];
 
-        if ($lastFile !== null) {
+        if ($lastFile !== null && $this->prefillFromLastMonitoring) {
             $data['admittance_date'] = $lastFile->admittance_date?->format('Y-m-d');
             $data['admittance_disposition'] = $lastFile->admittance_disposition;
             $data['services_in_center'] = $lastFile->services_in_center;
@@ -295,10 +286,16 @@ class CreateMonitoring extends CreateRecord
                             TextInput::make('age')
                                 ->label(__('monitoring.labels.age'))
                                 ->maxLength(2)
-                                ->mask('99'),
+                                ->mask('99')
+                                ->readOnly()
+                                ->dehydrated(),
                             DatePicker::make('birthdate')
                                 ->label(__('monitoring.labels.birthdate'))
-                                ->format('Y-m-d'),
+                                ->format('Y-m-d')
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(function ($state, callable $set): void {
+                                    $set('age', $this->calculateAgeFromBirthdate($state));
+                                }),
                             Select::make('aggressor_relationship')
                                 ->label(__('monitoring.labels.aggressor_relationship'))
                                 ->placeholder(__('monitoring.placeholders.select_an_answer'))
@@ -346,12 +343,6 @@ class CreateMonitoring extends CreateRecord
                         ->label(__('monitoring.labels.services_in_center'))
                         ->placeholder(__('monitoring.placeholders.services_in_center'))
                         ->maxLength(2500),
-                    Checkbox::make('others.option_first')
-                        ->label(__('monitoring.labels.option_first')),
-                    Checkbox::make('others.option_second')
-                        ->label(__('monitoring.labels.option_second'))
-                        ->visible(fn (Get $get): bool => (bool) ($get('others.option_first') ?? false))
-                        ->disabled(fn (Get $get): bool => ! (bool) ($get('others.option_first') ?? false)),
                     ...$this->getGeneralMonitoringSectionFields(),
                     Placeholder::make('progress_placeholder')
                         ->label(__('monitoring.headings.progress')),
@@ -479,64 +470,17 @@ class CreateMonitoring extends CreateRecord
         ]);
     }
 
-    private function duplicateLastMonitoring(): ?Monitoring
+    private function calculateAgeFromBirthdate(mixed $birthdate): string
     {
-        $beneficiary = $this->getParentRecord();
-        if (! $beneficiary instanceof Beneficiary) {
-            return null;
+        if (! is_string($birthdate) || blank($birthdate)) {
+            return '';
         }
 
-        $last = $beneficiary->monitoring()
-            ->with(['children', 'specialistsTeam'])
-            ->orderByDesc('id')
-            ->first();
-
-        if ($last === null) {
-            return null;
+        try {
+            return (string) Carbon::parse($birthdate)->age;
+        } catch (\Throwable) {
+            return '';
         }
-
-        $newMonitoring = $beneficiary->monitoring()->create([
-            'date' => now(),
-            'number' => $this->generateMonitoringNumber($beneficiary),
-            'start_date' => $last->start_date,
-            'end_date' => $last->end_date,
-            'admittance_date' => $last->admittance_date,
-            'admittance_disposition' => $last->admittance_disposition,
-            'services_in_center' => $last->services_in_center,
-            'protection_measures' => $last->protection_measures,
-            'health_measures' => $last->health_measures,
-            'legal_measures' => $last->legal_measures,
-            'psychological_measures' => $last->psychological_measures,
-            'aggressor_relationship' => $last->aggressor_relationship,
-            'others' => $last->others,
-            'progress' => $last->progress,
-            'observation' => $last->observation,
-        ]);
-
-        foreach ($last->specialistsTeam as $s) {
-            Specialist::create([
-                'role_id' => $s->role_id,
-                'user_id' => $s->user_id,
-                'specialistable_type' => (new Monitoring)->getMorphClass(),
-                'specialistable_id' => $newMonitoring->getKey(),
-            ]);
-        }
-
-        foreach ($last->children as $c) {
-            MonitoringChild::create([
-                'monitoring_id' => $newMonitoring->getKey(),
-                'name' => $c->name,
-                'status' => $c->status,
-                'age' => $c->age,
-                'birthdate' => $c->birthdate,
-                'aggressor_relationship' => $c->aggressor_relationship?->value,
-                'maintenance_sources' => $c->maintenance_sources?->value,
-                'location' => $c->location,
-                'observations' => $c->observations,
-            ]);
-        }
-
-        return $newMonitoring;
     }
 
     private function generateMonitoringNumber(Beneficiary $beneficiary): string

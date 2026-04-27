@@ -28,7 +28,7 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
             ->query(
                 $plan
                     ? $plan->monthlyPlans()
-                        ->with(['caseManager', 'beneficiary'])
+                        ->with(['caseManager', 'beneficiary', 'monthlyPlanServices.service'])
                         ->withCount(['monthlyPlanServices', 'monthlyPlanInterventions'])
                         ->getQuery()
                     : MonthlyPlan::query()->whereRaw('1 = 0')
@@ -39,8 +39,18 @@ class InterventionPlanMonthlyPlansWidget extends TableWidget
                     ->label(__('intervention_plan.headings.interval_column')),
                 TextColumn::make('caseManager.full_name')
                     ->label(__('intervention_plan.headings.case_manager')),
-                TextColumn::make('monthly_plan_services_count')
-                    ->label(__('intervention_plan.headings.services_count')),
+                TextColumn::make('services_list')
+                    ->label(__('intervention_plan.headings.services'))
+                    ->state(function (MonthlyPlan $monthlyPlan): string {
+                        $services = $monthlyPlan->monthlyPlanServices
+                            ->pluck('service.name')
+                            ->filter()
+                            ->unique()
+                            ->values()
+                            ->implode(', ');
+
+                        return $services !== '' ? $services : '—';
+                    }),
                 TextColumn::make('monthly_plan_interventions_count')
                     ->label(__('intervention_plan.headings.interventions_count')),
                 TextColumn::make('view_details')

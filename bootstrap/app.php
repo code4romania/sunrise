@@ -37,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule) {
         $schedule->command('beneficiaries:send-monitoring-sheet-reminders')->dailyAt('08:00');
+        $schedule->command('monthly-plans:send-reminders')->dailyAt('08:05');
     })
     ->withCommands([
         __DIR__.'/../app/Console/Commands',

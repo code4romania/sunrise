@@ -26,7 +26,7 @@
 </table>
 
 <div class="detailed-first-heading">II.Date personale privind agresorul și membrii familiei:</div>
-<div class="detailed-first-subheading">Soțul/Partenerul/Tipul relației (căsătorie, divorț, separare, concubinaj, etc.):</div>
+<div class="detailed-first-subheading">Soțul/ partenerul/ tipul relației (căsătorie, divorț, separare, concubinaj, etc.):</div>
 <table class="detailed-first-table">
     <tr><th>Nume și prenume:</th><td>{{ $p['full_name'] ?? '—' }}</td></tr>
     <tr><th>Vârsta:</th><td>{{ $p['age'] ?? '—' }}</td></tr>

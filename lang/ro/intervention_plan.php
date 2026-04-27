@@ -417,6 +417,11 @@ return [
         'social_counseling_sheet_title' => 'Fișă de consiliere asistență socială',
     ],
 
+    'notifications' => [
+        'monthly_plan_reminder_title' => 'Plan lunar',
+        'monthly_plan_reminder_body' => 'Au trecut cel puțin 30 de zile de la crearea planului lunar pentru cazul :name. Revizuiți și actualizați planul lunar.',
+    ],
+
     'sheet' => [
         'document_title' => 'PLAN DE INTERVENȚIE',
         'beneficiary_name' => 'Nume și prenume beneficiar:',

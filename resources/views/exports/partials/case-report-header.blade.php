@@ -6,6 +6,6 @@
     </div>
     <div class="header-content">
         <h1 class="title">{{ $reportTitle }}</h1>
-        <p class="meta">Număr caz {{ $caseId }}</p>
+        <p class="meta">Număr caz {{ $caseNumber ?? $caseId }}</p>
     </div>
 </header>

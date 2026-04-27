@@ -29,6 +29,13 @@ class MonthlyPlanService extends Model
         'service_details',
     ];
 
+    protected static function booted(): void
+    {
+        static::deleting(function (self $service): void {
+            $service->monthlyPlanInterventions()->delete();
+        });
+    }
+
     public function monthlyPlan(): BelongsTo
     {
         return $this->belongsTo(MonthlyPlan::class);
