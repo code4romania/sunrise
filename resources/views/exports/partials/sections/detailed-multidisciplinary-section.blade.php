@@ -108,10 +108,4 @@
             {{ $data['recommendations_for_intervention_plan'] }}
         </div>
     @endif
-    <div style="margin-top: 20px; font-size: 12px;">
-        Nume și Prenume solicitant: {{ $data['applicant_full_name'] ?? '—' }}
-    </div>
-    <div style="margin-top: 8px; font-size: 12px;">
-        Semnătură solicitant: ____________________
-    </div>
 </div>
