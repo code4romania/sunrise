@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\MonitoringResource;
 use App\Models\Beneficiary;
+use App\Models\InterventionPlan;
 use App\Models\Monitoring;
 use App\Models\MonitoringChild;
 use App\Models\User;
@@ -23,6 +24,10 @@ beforeEach(function (): void {
 
 it('shows per-tab edit buttons on monitoring view', function (): void {
     $beneficiary = Beneficiary::factory()
+        ->for($this->organization)
+        ->create();
+    InterventionPlan::factory()
+        ->for($beneficiary)
         ->for($this->organization)
         ->create();
 
@@ -61,6 +66,7 @@ it('shows per-tab edit buttons on monitoring view', function (): void {
 
     $this->get($url)
         ->assertSuccessful()
+        ->assertSee(__('intervention_plan.actions.create_monthly_plan_with_plans'), escape: false)
         ->assertSee(__('monitoring.titles.edit_details'), escape: false)
         ->assertSee(__('monitoring.titles.edit_children'), escape: false)
         ->assertSee(__('monitoring.titles.edit_general'), escape: false);

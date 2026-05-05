@@ -60,6 +60,27 @@ class ViewMonitoring extends ViewRecord
         return [
             BackAction::make()
                 ->url(CaseResource::getUrl('edit_case_monitoring', ['record' => $parent])),
+            Action::make('create_monthly_plan')
+                ->label(__('intervention_plan.actions.create_monthly_plan_with_plans'))
+                ->modalHeading(__('intervention_plan.headings.create_monthly_plan_modal'))
+                ->modalDescription(__('intervention_plan.labels.create_monthly_plan_modal'))
+                ->modalSubmitAction(
+                    Action::make('create_from_last')
+                        ->label(__('intervention_plan.actions.create_monthly_plan_from_last'))
+                        ->url(CaseResource::getUrl('create_monthly_plan', [
+                            'case' => $parent,
+                            'copyLastPlan' => '1',
+                        ]))
+                )
+                ->modalCancelAction(
+                    Action::make('create_simple')
+                        ->label(__('intervention_plan.actions.create_monthly_plan_simple'))
+                        ->outlined()
+                        ->url(CaseResource::getUrl('create_monthly_plan', [
+                            'case' => $parent,
+                        ]))
+                )
+                ->visible(fn (): bool => $parent instanceof Beneficiary && $parent->interventionPlan !== null),
             DeleteAction::make()
                 ->label(__('monitoring.actions.delete'))
                 ->modalHeading(__('monitoring.headings.modal_delete'))
