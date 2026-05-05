@@ -8,8 +8,6 @@
         <div class="detailed-approval-line"><span class="detailed-approval-text">Semnătura</span><span class="detailed-approval-dots"></span></div>
         <div class="detailed-approval-line"><span class="detailed-approval-text">Data</span><span class="detailed-approval-dots"></span></div>
     </div>
-<div class="detailed-first-page-title">FIȘA DE EVALUARE DETALIATĂ</div>
-
 <div class="detailed-first-heading">I. Date personale privind beneficiarul:</div>
 <table class="detailed-first-table">
     <tr><th>Nume și prenumele:</th><td>{{ $b['full_name'] ?? '—' }}</td></tr>

@@ -193,7 +193,7 @@ class PsychologicalCounselingSheetPdfComposer
             'service_name' => $serviceName,
             'sheet_date' => $sheetDate ?? now()->format('d.m.Y'),
             'beneficiary_name' => $beneficiary?->full_name ?? '—',
-            'case_number' => $beneficiary?->id ?? '—',
+            'case_number' => $beneficiary?->case_number ?? '—',
             'specialist_name' => $specialist?->user?->full_name ?? '—',
             'specialist_role' => $specialist?->roleForDisplay?->name ?? '—',
             'session_number' => $sheetSessionNumber ?? (string) max(count($meetings), 1),

@@ -165,7 +165,7 @@ class SocialCounselingSheetPdfComposer
             'provider_name' => $service->organizationServiceWithoutStatusCondition?->serviceWithoutStatusCondition?->name ?? '—',
             'sheet_date' => $this->formatter->toPrintableValue($this->firstFilledString($sheetData, ['sheet_date', 'date_written', 'data_intocmirii_fisei']) ?? now()),
             'specialist_name' => $service->specialist?->user?->full_name ?? '—',
-            'case_number' => $beneficiary?->id ?? '—',
+            'case_number' => $beneficiary?->case_number ?? '—',
             'signature' => '........................................',
 
             'victim_name' => $beneficiary?->full_name ?? '—',
