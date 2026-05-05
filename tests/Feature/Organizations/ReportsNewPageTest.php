@@ -62,3 +62,31 @@ it('shows xls and pdf export actions after generating a report', function () {
         ->assertSee(__('report.actions.export_xls'))
         ->assertSee(__('report.actions.export_pdf'));
 });
+
+it('renders statistics pdf header image when branding header exists', function () {
+    $headerUrl = 'https://example.test/header.png';
+
+    $html = view('exports.reports.statistics-report-pdf', [
+        'title' => 'Raport test',
+        'exportPeriodStart' => '2026-01-01',
+        'exportPeriodEnd' => '2026-01-31',
+        'exportMeta' => null,
+        'header' => ['Categorie', 'Total'],
+        'firstHeaderElementColSpan' => 1,
+        'firstHeaderElementRowSpan' => 1,
+        'subHeader' => [],
+        'subHeaderKey' => null,
+        'verticalHeader' => [],
+        'verticalHeaderKey' => 'status',
+        'verticalSubHeader' => [],
+        'verticalSubHeaderKey' => null,
+        'reportData' => collect(),
+        'branding' => [
+            'name' => 'Organizatie Test',
+            'header_url' => $headerUrl,
+        ],
+    ])->render();
+
+    expect($html)->toContain($headerUrl)
+        ->and($html)->toContain('Organizatie Test');
+});

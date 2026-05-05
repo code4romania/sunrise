@@ -4,10 +4,42 @@
     <meta charset="utf-8">
     <title>{{ $title }}</title>
     <style>
+        @page { margin: 220px 24px 24px 24px; }
+
         body {
             font-family: DejaVu Sans, sans-serif;
             font-size: 9px;
             color: #111827;
+        }
+
+        header {
+            position: fixed;
+            top: -217px;
+            left: -24px;
+            right: -24px;
+        }
+
+        .header-strip {
+            height: 3cm;
+            background: #8a90a5;
+            text-align: center;
+        }
+
+        .header-strip img {
+            display: block;
+            max-height: 3cm;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .header-title {
+            text-align: center;
+            margin: 4px 0 0;
+            font-size: 11px;
+            font-weight: 700;
         }
 
         h1 {
@@ -35,6 +67,15 @@
     </style>
 </head>
 <body>
+<header>
+    <div class="header-strip">
+        @php($headerSrc = $branding['header_src'] ?? $branding['header_url'] ?? null)
+        @if(! empty($headerSrc))
+            <img src="{{ $headerSrc }}" alt="header">
+        @endif
+    </div>
+    <p class="header-title">{{ $branding['name'] ?? config('app.name') }}</p>
+</header>
 <h1>{{ $title }}</h1>
 <p class="meta">
     {{ __('report.labels.start_date') }}:

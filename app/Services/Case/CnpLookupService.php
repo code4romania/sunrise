@@ -33,10 +33,36 @@ class CnpLookupService
                 ->first();
         }
 
+        $beneficiaryInUserOtherTenant = $this->resolveBeneficiaryInUserOtherTenant($cnp, $tenant, $user);
+
         return new CnpLookupResult(
             beneficiaryInTenant: $beneficiaryInTenant,
             beneficiaryInInstitutionOtherCenter: $beneficiaryInInstitutionOtherCenter,
             userHasAccessToTenantBeneficiary: $userHasAccess,
+            beneficiaryInUserOtherTenant: $beneficiaryInUserOtherTenant,
         );
+    }
+
+    /**
+     * Same CNP in another center (tenant) where the user is a member — allows pre-filling a new case
+     * when registering the person at the current center (no institution-wide search permission required).
+     */
+    private function resolveBeneficiaryInUserOtherTenant(string $cnp, Organization $tenant, User $user): ?Beneficiary
+    {
+        $user->loadMissing('organizations');
+
+        $otherOrganizationIds = $user->organizations
+            ->where('id', '!=', $tenant->id)
+            ->pluck('id');
+
+        if ($otherOrganizationIds->isEmpty()) {
+            return null;
+        }
+
+        return Beneficiary::query()
+            ->withoutGlobalScope(BelongsToCurrentTenant::class)
+            ->where('cnp', $cnp)
+            ->whereIn('organization_id', $otherOrganizationIds)
+            ->first();
     }
 }

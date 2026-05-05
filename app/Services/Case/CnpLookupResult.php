@@ -8,10 +8,15 @@ use App\Models\Beneficiary;
 
 readonly class CnpLookupResult
 {
+    /**
+     * @param  ?Beneficiary  $beneficiaryInUserOtherTenant  Beneficiary with same CNP in another Organization (tenant)
+     *                                                      the user belongs to (not the current tenant).
+     */
     public function __construct(
         public ?Beneficiary $beneficiaryInTenant,
         public ?Beneficiary $beneficiaryInInstitutionOtherCenter,
         public bool $userHasAccessToTenantBeneficiary,
+        public ?Beneficiary $beneficiaryInUserOtherTenant = null,
     ) {}
 
     public function existsInTenant(): bool
@@ -22,6 +27,11 @@ readonly class CnpLookupResult
     public function existsInInstitutionOtherCenter(): bool
     {
         return $this->beneficiaryInInstitutionOtherCenter !== null;
+    }
+
+    public function existsInUserOtherTenant(): bool
+    {
+        return $this->beneficiaryInUserOtherTenant !== null;
     }
 
     public function canProceedToRegister(): bool
@@ -45,11 +55,12 @@ readonly class CnpLookupResult
 
     public function canCopyFromOtherCenter(): bool
     {
-        return $this->existsInInstitutionOtherCenter() && ! $this->existsInTenant();
+        return ! $this->existsInTenant()
+            && ($this->existsInUserOtherTenant() || $this->existsInInstitutionOtherCenter());
     }
 
     public function beneficiaryToCopyFrom(): ?Beneficiary
     {
-        return $this->beneficiaryInInstitutionOtherCenter;
+        return $this->beneficiaryInUserOtherTenant ?? $this->beneficiaryInInstitutionOtherCenter;
     }
 }

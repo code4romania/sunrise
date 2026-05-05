@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Enums\Gender;
 use App\Models\Beneficiary;
+use App\Models\Institution;
 use App\Models\Organization;
 use App\Models\Specialist;
 use App\Models\User;
@@ -65,4 +67,30 @@ it('shows no access when cnp exists in tenant but user has no access', function 
     expect($result->existsInTenant())->toBeTrue()
         ->and($result->userHasAccessToTenantBeneficiary)->toBeFalse()
         ->and($result->showNoAccessMessage())->toBeTrue();
+});
+
+it('offers copy from another tenant when user belongs to both organizations and cnp matches', function () {
+    $institution = Institution::factory()->create();
+    $orgA = Organization::factory()->for($institution)->create();
+    $orgB = Organization::factory()->for($institution)->create();
+
+    $user = User::factory()->create();
+    $user->organizations()->sync([$orgA->id, $orgB->id]);
+
+    $beneficiaryInB = Beneficiary::factory()
+        ->state([
+            'birthdate' => '15.03.1990',
+            'gender' => Gender::FEMALE,
+        ])
+        ->withCNP()
+        ->for($orgB)
+        ->create();
+
+    $service = app(CnpLookupService::class);
+    $result = $service->lookup((string) $beneficiaryInB->cnp, $orgA, $user);
+
+    expect($result->existsInTenant())->toBeFalse()
+        ->and($result->existsInUserOtherTenant())->toBeTrue()
+        ->and($result->canCopyFromOtherCenter())->toBeTrue()
+        ->and($result->beneficiaryToCopyFrom()?->is($beneficiaryInB))->toBeTrue();
 });

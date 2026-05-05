@@ -153,6 +153,7 @@ class ViewCaseMonthlyPlan extends ViewRecord
                 ->modalHeading(__('intervention_plan.headings.delete_monthly_plan_modal'))
                 ->modalDescription(__('intervention_plan.labels.delete_monthly_plan_modal_description'))
                 ->modalSubmitActionLabel(__('intervention_plan.actions.delete_monthly_plan'))
+                ->record($this->resolveMonthlyPlan())
                 ->successRedirectUrl(CaseResource::getUrl('view_intervention_plan', ['record' => $this->getRecord()]))
                 ->outlined(),
         ];

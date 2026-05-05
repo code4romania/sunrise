@@ -13,10 +13,4 @@ trait PreventSubmitFormOnEnter
         return parent::getCreateFormAction()
             ->extraAttributes(['type' => 'button']);
     }
-
-    protected function getSaveFormAction(): Action
-    {
-        return parent::getSaveFormAction()
-            ->extraAttributes(['type' => 'button']);
-    }
 }

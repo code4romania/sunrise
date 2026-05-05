@@ -62,15 +62,14 @@ trait SavesPartnerAddresses
      */
     protected function capturePartnerAddressDataBeforeSave(array $data): array
     {
-        $rawState = method_exists($this->form, 'getRawState') ? $this->form->getRawState() : (array) $this->data;
-        $partnerFromState = $data['partner'] ?? $rawState['partner'] ?? [];
-        $partnerFromLivewire = $rawState['partner'] ?? $this->data['partner'] ?? [];
-        $legal = $partnerFromState['legal_residence'] ?? $partnerFromLivewire['legal_residence'] ?? [];
-        $effective = $partnerFromState['effective_residence'] ?? $partnerFromLivewire['effective_residence'] ?? [];
+        $partnerForAddresses = $this->resolvePartnerFormStateForAddressCapture($data);
+
+        $legal = $partnerForAddresses['legal_residence'] ?? [];
+        $effective = $partnerForAddresses['effective_residence'] ?? [];
         $this->pendingPartnerAddressData = [
             'legal_residence' => is_array($legal) ? $legal : [],
             'effective_residence' => is_array($effective) ? $effective : [],
-            'same_as_legal_residence' => (bool) ($partnerFromState['same_as_legal_residence'] ?? $partnerFromLivewire['same_as_legal_residence'] ?? false),
+            'same_as_legal_residence' => (bool) ($partnerForAddresses['same_as_legal_residence'] ?? false),
         ];
 
         $partnerData = $data['partner'] ?? [];
@@ -78,6 +77,84 @@ trait SavesPartnerAddresses
         $data['partner'] = $partnerData;
 
         return $data;
+    }
+
+    /**
+     * Partner relationship sections use `dehydrated(false)`, so residence fields are often absent from
+     * dehydrated `$data` passed to `mutateFormDataBeforeSave`. Wizard pages nest `partner` under step state.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function resolvePartnerFormStateForAddressCapture(array $data): array
+    {
+        $fromMutate = $data['partner'] ?? [];
+        if (! is_array($fromMutate)) {
+            $fromMutate = [];
+        }
+
+        $fromLivewireProperty = [];
+        if (property_exists($this, 'data') && is_array($this->data)) {
+            $fromLivewireProperty = isset($this->data['partner']) && is_array($this->data['partner'])
+                ? $this->data['partner']
+                : $this->findNestedPartnerFormState($this->data);
+        }
+
+        $fromFormRawState = [];
+        if (method_exists($this->form, 'getRawState')) {
+            $raw = $this->form->getRawState();
+            if (is_array($raw)) {
+                $fromFormRawState = isset($raw['partner']) && is_array($raw['partner'])
+                    ? $raw['partner']
+                    : $this->findNestedPartnerFormState($raw);
+            }
+        }
+
+        foreach ([$fromLivewireProperty, $fromFormRawState, $fromMutate] as $candidate) {
+            if (! is_array($candidate) || $candidate === []) {
+                continue;
+            }
+
+            if (isset($candidate['legal_residence']) && is_array($candidate['legal_residence'])) {
+                return $candidate;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * @param  array<string, mixed>  $root
+     * @return array<string, mixed>
+     */
+    private function findNestedPartnerFormState(array $root): array
+    {
+        foreach ($root as $value) {
+            if (! is_array($value)) {
+                continue;
+            }
+
+            if ($this->isPartnerFormStateShape($value)) {
+                return $value;
+            }
+
+            $nested = $this->findNestedPartnerFormState($value);
+            if ($nested !== []) {
+                return $nested;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * @param  array<string, mixed>  $candidate
+     */
+    private function isPartnerFormStateShape(array $candidate): bool
+    {
+        return array_key_exists('same_as_legal_residence', $candidate)
+            && isset($candidate['legal_residence'])
+            && is_array($candidate['legal_residence']);
     }
 
     protected function afterSavePartnerAddresses(): void

@@ -132,7 +132,7 @@ class EditCaseDetailedEvaluationPartner extends EditRecord
                                 TextInput::make('legal_residence.address')
                                     ->label(__('field.legal_residence_address'))
                                     ->placeholder(__('placeholder.address'))
-                                    ->maxLength(50),
+                                    ->maxLength(100),
                             ]),
                         Checkbox::make('same_as_legal_residence')
                             ->label(__('field.same_as_legal_residence'))
@@ -166,7 +166,7 @@ class EditCaseDetailedEvaluationPartner extends EditRecord
                                 TextInput::make('effective_residence.address')
                                     ->label(__('field.effective_residence_address'))
                                     ->placeholder(__('placeholder.address'))
-                                    ->maxLength(50)
+                                    ->maxLength(100)
                                     ->disabled(fn (Get $get): bool => (bool) $get('same_as_legal_residence')),
                             ]),
                         Textarea::make('observations')

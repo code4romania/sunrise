@@ -1,7 +1,8 @@
 <header>
     <div class="header-strip">
-        @if(! empty($branding['header_url']))
-            <img src="{{ $branding['header_url'] }}" alt="header">
+        @php($headerSrc = $branding['header_src'] ?? $branding['header_url'] ?? null)
+        @if(! empty($headerSrc))
+            <img src="{{ $headerSrc }}" alt="header">
         @endif
     </div>
     <div class="header-content">

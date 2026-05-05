@@ -119,7 +119,7 @@ return [
         'report_name' => 'Denumirea raportului',
         'calendar_interval' => 'Interval calendaristic raportare',
         'includes_monitoring_cases' => 'Include cazurile în monitorizare',
-        'includes_missing_values' => 'Include missing values',
+        'includes_missing_values' => 'Include valori lipsa',
     ],
 
     'new' => [

@@ -1,18 +1,22 @@
 <style>
-    @page { margin: 128px 34px 66px 34px; }
+    @page { margin: 220px 34px 66px 34px; }
     body { font-family: DejaVu Sans, sans-serif; color: #1f2937; font-size: 10px; }
-    header { position: fixed; top: -125px; left: -34px; right: -34px; }
+    header { position: fixed; top: -217px; left: -34px; right: -34px; }
     footer { position: fixed; bottom: -56px; left: -34px; right: -34px; font-size: 9px; color: #4b5563; }
     .header-strip {
-        height: 54px;
+        height: 3cm;
         background: #8a90a5;
         text-align: center;
         color: #ffffff;
     }
     .header-strip img {
-        height: 54px;
-        width: 100%;
-        object-fit: cover;
+        display: block;
+        max-height: 3cm;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        margin: 0 auto;
+        object-fit: contain;
     }
     .header-content {
         text-align: center;

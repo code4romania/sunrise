@@ -131,3 +131,32 @@ it('deletes monthly plan with dependent services and interventions', function ()
     $this->assertDatabaseMissing('monthly_plan_services', ['id' => $monthlyPlanService->id]);
     $this->assertDatabaseMissing('monthly_plan_interventions', ['id' => $monthlyPlanIntervention->id]);
 });
+
+it('shows delete monthly plan action on monthly plan view page', function () {
+    $beneficiary = Beneficiary::factory()
+        ->for($this->organization)
+        ->create();
+
+    $interventionPlan = InterventionPlan::factory()
+        ->for($beneficiary)
+        ->for($this->organization)
+        ->create();
+
+    $monthlyPlan = MonthlyPlan::create([
+        'intervention_plan_id' => $interventionPlan->id,
+        'start_date' => Carbon::now()->startOfMonth(),
+        'end_date' => Carbon::now()->endOfMonth(),
+        'case_manager_user_id' => $this->user->id,
+        'specialists' => [],
+    ]);
+
+    $url = CaseResource::getUrl('view_monthly_plan', [
+        'record' => $beneficiary,
+        'monthlyPlan' => $monthlyPlan,
+        'tenant' => $this->organization,
+    ]);
+
+    $this->get($url)
+        ->assertSuccessful()
+        ->assertSee(__('intervention_plan.actions.delete_monthly_plan'), escape: false);
+});

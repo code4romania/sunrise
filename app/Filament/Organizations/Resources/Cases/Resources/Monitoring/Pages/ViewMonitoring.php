@@ -8,6 +8,7 @@ use App\Actions\BackAction;
 use App\Filament\Organizations\Concerns\InteractsWithBeneficiaryDetailsPanel;
 use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Filament\Organizations\Resources\Cases\Resources\Monitoring\MonitoringResource;
+use App\Infolists\Components\Actions\EditAction;
 use App\Infolists\Components\SectionHeader;
 use App\Models\Beneficiary;
 use App\Services\CaseExports\CaseExportManager;
@@ -59,15 +60,6 @@ class ViewMonitoring extends ViewRecord
         return [
             BackAction::make()
                 ->url(CaseResource::getUrl('edit_case_monitoring', ['record' => $parent])),
-            Action::make('edit_details')
-                ->label(__('monitoring.titles.edit_details'))
-                ->url(MonitoringResource::getUrl('edit_details', ['beneficiary' => $parent, 'record' => $this->getRecord()])),
-            Action::make('edit_children')
-                ->label(__('monitoring.titles.edit_children'))
-                ->url(MonitoringResource::getUrl('edit_children', ['beneficiary' => $parent, 'record' => $this->getRecord()])),
-            Action::make('edit_general')
-                ->label(__('monitoring.titles.edit_general'))
-                ->url(MonitoringResource::getUrl('edit_general', ['beneficiary' => $parent, 'record' => $this->getRecord()])),
             DeleteAction::make()
                 ->label(__('monitoring.actions.delete'))
                 ->modalHeading(__('monitoring.headings.modal_delete'))
@@ -105,6 +97,12 @@ class ViewMonitoring extends ViewRecord
                         ->schema([
                             Section::make(__('monitoring.headings.details'))
                                 ->schema([
+                                    SectionHeader::make('monitoring_details')
+                                        ->state(__('monitoring.headings.details'))
+                                        ->action(
+                                            EditAction::make()
+                                                ->url(MonitoringResource::getUrl('edit_details', ['beneficiary' => $this->getParentRecord(), 'record' => $this->getRecord()]))
+                                        ),
                                     TextEntry::make('date')
                                         ->label(__('monitoring.labels.date'))
                                         ->formatStateUsing(fn ($state) => $this->formatDateSafe($state)),
@@ -130,6 +128,12 @@ class ViewMonitoring extends ViewRecord
                             Section::make(__('monitoring.headings.child_info'))
                                 ->visible(fn (): bool => $monitoring->children->isNotEmpty())
                                 ->schema([
+                                    SectionHeader::make('monitoring_children')
+                                        ->state(__('monitoring.headings.child_info'))
+                                        ->action(
+                                            EditAction::make()
+                                                ->url(MonitoringResource::getUrl('edit_children', ['beneficiary' => $this->getParentRecord(), 'record' => $this->getRecord()]))
+                                        ),
                                     RepeatableEntry::make('children')
                                         ->hiddenLabel()
                                         ->schema([
@@ -172,6 +176,12 @@ class ViewMonitoring extends ViewRecord
                         ->schema([
                             Section::make(__('monitoring.headings.general'))
                                 ->schema([
+                                    SectionHeader::make('monitoring_general')
+                                        ->state(__('monitoring.headings.general'))
+                                        ->action(
+                                            EditAction::make()
+                                                ->url(MonitoringResource::getUrl('edit_general', ['beneficiary' => $this->getParentRecord(), 'record' => $this->getRecord()]))
+                                        ),
                                     TextEntry::make('admittance_date')
                                         ->label(__('monitoring.labels.admittance_date'))
                                         ->formatStateUsing(fn ($state) => $this->formatDateSafe($state)),
