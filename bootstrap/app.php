@@ -27,6 +27,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Support\Facades\RateLimiter;
+use Sentry\Laravel\Integration;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -54,8 +55,6 @@ return Application::configure(basePath: dirname(__DIR__))
             ConvertEmptyStringsToNull::class,
         ]);
 
-        // Web middleware group - replace default middleware with custom ones and append custom middleware
-        // Note: EnsureUserIsActive is configured in Panel Providers ->authMiddleware() to run only after authentication
         $middleware->web(replace: [
             \Illuminate\Cookie\Middleware\EncryptCookies::class => EncryptCookies::class,
             \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class => VerifyCsrfToken::class,
@@ -86,7 +85,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Illuminate\Foundation\Configuration\Exceptions $exceptions) {
-        //
+        Integration::handles($exceptions);
     })
     ->create();
 
