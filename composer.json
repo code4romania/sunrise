@@ -31,7 +31,7 @@
         "staudenmeir/eloquent-has-many-deep": "^1.7",
         "stevegrunwell/time-constants": "^1.2",
         "tpetry/laravel-query-expressions": "^1.4",
-        "typesense/typesense-php": "^5.0"
+        "typesense/typesense-php": "^6.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
