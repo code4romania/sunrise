@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'age' => 'Edad',
     'backup_phone' => 'Teléfono secundario',
@@ -14,6 +16,7 @@ return [
     'beneficiary_cnp' => 'CNP del beneficiario',
     'without_cnp' => 'Sin CNP',
     'contact_notes' => 'Notas de contacto',
+    'country' => 'País',
     'county' => 'Provincia',
     'create_beneficiary_consent' => 'Consentimiento del beneficiario',
     'date' => 'Fecha',
@@ -39,6 +42,8 @@ return [
     'last_evaluated_at' => 'Última evaluación',
     'last_name' => 'Apellidos',
     'last_serviced_at' => 'Último servicio',
+    'legal_residence' => 'Domicilio legal',
+    'effective_residence' => 'Domicilio efectivo',
     'legal_residence_address' => 'Dirección de residencia legal',
     'legal_residence_city' => 'Ciudad de residencia legal',
     'legal_residence_county' => 'Provincia de residencia legal',
@@ -86,6 +91,12 @@ return [
     'family_doctor_contact' => 'Contacto del médico de familia',
     'psychiatric_history' => 'Historial psiquiátrico',
     'psychiatric_history_notes' => 'Notas del historial psiquiátrico',
+    'investigations_for_psychiatric_pathology' => 'Investigaciones por patología psiquiátrica',
+    'investigations_observations' => 'Observaciones de investigaciones',
+    'treatment_for_psychiatric_pathology' => 'Tratamiento por patología psiquiátrica',
+    'treatment_observations' => 'Observaciones del tratamiento',
+    'current_contraception' => 'Anticoncepción actual',
+    'observations_contraception' => 'Observaciones anticoncepción',
     'criminal_history' => 'Antecedentes penales',
     'criminal_history_notes' => 'Notas de antecedentes penales',
     'studies' => 'Estudios',
@@ -118,6 +129,8 @@ return [
     'police_report_count' => 'Número de denuncias policiales',
     'has_medical_reports' => 'Tiene informes médicos',
     'medical_report_count' => 'Número de informes médicos',
+    'hospitalization_days' => 'Número de días de hospitalización',
+    'hospitalization_observations' => 'Observaciones días de hospitalización',
     'presentation_mode' => 'Modo de presentación',
     'referring_institution' => 'Institución de referencia',
     'referral_mode' => 'Modo de referencia',

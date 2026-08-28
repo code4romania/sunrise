@@ -17,8 +17,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 class MonitoringChild extends Model
 {
     use BelongsToThroughTrait;
-    use HasFactory;
     use HasBirthdate;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [

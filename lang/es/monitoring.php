@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'titles' => [
         'list' => 'Lista de monitoreo',
@@ -66,6 +68,7 @@ return [
     ],
     'actions' => [
         'create' => 'Crear monitoreo',
+        'download_all' => 'Descargar todas las fichas',
         'create_from_last' => 'Crear desde el último',
         'create_simple' => 'Crear simple',
         'create_widget' => 'Crear widget',
@@ -87,5 +90,13 @@ return [
     'breadcrumbs' => [
         'general' => 'General',
         'file' => 'Expediente',
+    ],
+
+    'pdf' => [
+        'report_title' => 'Ficha de seguimiento del caso para: :beneficiary (período :interval)',
+        'section_beneficiary_identity' => 'I. Datos de identidad del solicitante',
+        'section_sheet_details' => 'II. Detalles de la ficha de seguimiento',
+        'section_children' => 'III. Datos de los niños',
+        'section_general' => 'IV. Datos generales de seguimiento',
     ],
 ];

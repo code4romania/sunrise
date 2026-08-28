@@ -48,6 +48,4 @@ class Activity extends BaseActivity
                 $query->whereDate('created_at', '<=', $date);
             });
     }
-
-
 }

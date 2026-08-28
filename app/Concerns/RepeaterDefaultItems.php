@@ -20,7 +20,7 @@ trait RepeaterDefaultItems
             return collect($state)->count() > $this->getMinItems();
         });
 
-        $this->deleteAction(fn (\Filament\Actions\Action $action) => $action->requiresConfirmation());
+        $this->deleteAction(fn (Action $action) => $action->requiresConfirmation());
     }
 
     public function fillFromRelationship(): void

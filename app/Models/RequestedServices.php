@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RequestedServices extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -23,6 +23,6 @@ class RequestedServices extends Model
     ];
 
     protected $casts = [
-        'requested_services' => AsEnumCollection::class . ':' . RecommendationService::class,
+        'requested_services' => AsEnumCollection::class.':'.RecommendationService::class,
     ];
 }

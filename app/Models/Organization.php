@@ -23,13 +23,13 @@ use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCurrentTenantLabel
+class Organization extends Model implements HasAvatar, HasCurrentTenantLabel, HasMedia, HasName
 {
     use HasBeneficiaries;
     use HasFactory;
     use HasLocation;
-    use HasUlid;
     use HasSlug;
+    use HasUlid;
     use InteractsWithMedia;
 
     protected $fillable = [
@@ -89,6 +89,8 @@ class Organization extends Model implements HasAvatar, HasMedia, HasName, HasCur
 
     public function registerMediaCollections(): void
     {
+        $this->addMediaCollection('social_service_licensing_certificate')->singleFile();
+        $this->addMediaCollection('organization_header')->singleFile();
         $this->addMediaCollection('logo')
             ->singleFile()
             ->registerMediaConversions(function () {

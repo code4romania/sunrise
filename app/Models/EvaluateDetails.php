@@ -12,11 +12,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EvaluateDetails extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [
+        'beneficiary_id',
+        'organization_id',
         'specialist_id',
         'registered_date',
         'file_number',
@@ -26,6 +28,20 @@ class EvaluateDetails extends Model
     protected $casts = [
         'registered_date' => 'date',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (EvaluateDetails $model): void {
+            if ($model->organization_id === null && $model->beneficiary_id !== null) {
+                $model->organization_id = Beneficiary::find($model->beneficiary_id)?->organization_id;
+            }
+        });
+    }
+
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
+    }
 
     public function specialist(): BelongsTo
     {

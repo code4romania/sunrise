@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infolists\Components;
 
 use Closure;
-use Filament\Infolists\Components\Component;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -40,7 +39,7 @@ class DocumentPreview extends \Filament\Schemas\Components\Component
     public function getFile(): ?Media
     {
         return $this->getRecord()
-           ?->getFirstMedia($this->getCollection());
+            ?->getFirstMedia($this->getCollection());
     }
 
     public function getRecord(bool $withContainerRecord = true): Model|array|null
@@ -49,6 +48,7 @@ class DocumentPreview extends \Filament\Schemas\Components\Component
         if ($record !== null) {
             return $record;
         }
+
         return parent::getRecord($withContainerRecord);
     }
 

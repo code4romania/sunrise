@@ -19,15 +19,14 @@ class StatsWidget extends BaseWidget
         return [
             Stat::make(
                 __('admin.stats.total_institutions'),
-                Institution::query()
-                    ->count()
+                Institution::query()->count()
             ),
 
             Stat::make(
                 __('admin.stats.total_organizations'),
-                Organization::query()
-                    ->count()
+                Organization::query()->count()
             ),
+
             Stat::make(
                 __('admin.stats.beneficiaries_total_cases'),
                 Beneficiary::query()->count()
@@ -35,9 +34,8 @@ class StatsWidget extends BaseWidget
 
             Stat::make(
                 __('admin.stats.beneficiaries_open_cases'),
-                Beneficiary::query()->WhereCaseIsActive()->count()
+                Beneficiary::query()->whereCaseIsActive()->count()
             ),
-
         ];
     }
 }

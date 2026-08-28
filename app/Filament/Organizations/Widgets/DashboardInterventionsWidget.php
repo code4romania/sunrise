@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Filament\Organizations\Widgets;
 
-use Filament\Actions\ViewAction;
 use App\Enums\DashboardIntervalFilter;
-use App\Filament\Organizations\Resources\BeneficiaryResource;
-use App\Filament\Organizations\Resources\InterventionServiceResource;
+use App\Filament\Organizations\Resources\Cases\CaseResource;
 use App\Models\BeneficiaryIntervention;
 use App\Tables\Filters\SelectFilter;
-use Filament\Tables;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -18,7 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DashboardInterventionsWidget extends BaseWidget
 {
-    protected int | string | array $columnSpan = 2;
+    protected int|string|array $columnSpan = 2;
 
     public function table(Table $table): Table
     {
@@ -45,7 +43,9 @@ class DashboardInterventionsWidget extends BaseWidget
                     ->with([
                         'organizationServiceIntervention.serviceInterventionWithoutStatusCondition.service',
                         'interventionService',
+                        'interventionService.interventionPlan',
                         'beneficiary',
+                        'interventionPlan',
                         'specialist.user',
                     ])
             )
@@ -64,7 +64,7 @@ class DashboardInterventionsWidget extends BaseWidget
                 TextColumn::make('beneficiary.full_name')
                     ->label(__('intervention_plan.labels.beneficiary'))
                     ->url(
-                        fn ($record) => BeneficiaryResource::getUrl('view', [
+                        fn (BeneficiaryIntervention $record) => CaseResource::getUrl('view', [
                             'record' => $record->beneficiary,
                         ])
                     )
@@ -79,16 +79,14 @@ class DashboardInterventionsWidget extends BaseWidget
                 ViewAction::make()
                     ->label(__('intervention_plan.actions.view_intervention'))
                     ->url(
-                        fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                            'parent' => $record->intervention_service_id,
-                            'record' => $record,
+                        fn (BeneficiaryIntervention $record) => CaseResource::getUrl('view_intervention_plan', [
+                            'record' => $record->beneficiary,
                         ])
                     ),
             ])
             ->recordUrl(
-                fn (BeneficiaryIntervention $record) => InterventionServiceResource::getUrl('view_intervention', [
-                    'parent' => $record->intervention_service_id,
-                    'record' => $record,
+                fn (BeneficiaryIntervention $record) => CaseResource::getUrl('view_intervention_plan', [
+                    'record' => $record->beneficiary,
                 ])
             )
             ->recordActionsColumnLabel(__('intervention_plan.labels.actions'))
@@ -96,13 +94,14 @@ class DashboardInterventionsWidget extends BaseWidget
                 SelectFilter::make('selected_interval')
                     ->label(__('intervention_plan.labels.selected_interval'))
                     ->options(DashboardIntervalFilter::options())
-                    ->modifyQueryUsing(function (array $state, Builder $query) {
-                        if (DashboardIntervalFilter::isValue($state['value'], DashboardIntervalFilter::ONE_WEEK)) {
+                    ->query(function (Builder $query, array $data): Builder {
+                        $value = $data['value'] ?? null;
+                        if (DashboardIntervalFilter::isValue($value, DashboardIntervalFilter::ONE_WEEK)) {
                             return $query->where('start_date_interval', '<=', date('Y-m-d', strtotime('+1 week')))
                                 ->where('end_date_interval', '>=', date('Y-m-d'));
                         }
 
-                        if (DashboardIntervalFilter::isValue($state['value'], DashboardIntervalFilter::TOMORROW)) {
+                        if (DashboardIntervalFilter::isValue($value, DashboardIntervalFilter::TOMORROW)) {
                             return $query->where('start_date_interval', '<=', date('Y-m-d', strtotime('+1 day')))
                                 ->where('end_date_interval', '>=', date('Y-m-d'));
                         }

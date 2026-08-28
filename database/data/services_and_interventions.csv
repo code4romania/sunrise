@@ -1,0 +1,96 @@
+service_identifier,service_name,identifier_intervention,intervention_name
+GPS,"Găzduire, protecție și siguranță",GPS_1,"Identificare nevoi găzduire, protecție și siguranță"
+GPS,"Găzduire, protecție și siguranță",GPS_2,Informare
+GPS,"Găzduire, protecție și siguranță",GPS_3,Consiliere
+GPS,"Găzduire, protecție și siguranță",GPS_4,Referire/ trimitere
+GPS,"Găzduire, protecție și siguranță",GPS_5,Însoțire
+GPS,"Găzduire, protecție și siguranță",GPS_6,Monitorizare-evaluare
+GPS,"Găzduire, protecție și siguranță",GPS_7,Facilitarea comunicării
+GPS,"Găzduire, protecție și siguranță",GPS_8,Identificare locuință
+GPS,"Găzduire, protecție și siguranță",GPS_9,Oferire cazare/ găzduire
+GPS,"Găzduire, protecție și siguranță",GPS_10,Oferire hrană pe perioada cazării/ găzduirii
+GPS,"Găzduire, protecție și siguranță",GPS_11,"Oferire produse de imediată necesitate (igienă, îmbrăcăminte)"
+GPS,"Găzduire, protecție și siguranță",GPS_12,Măsuri de protecție
+GPS,"Găzduire, protecție și siguranță",GPS_13,"Alte intervenții pentru găzduire, protecție și siguranță"
+MED,Asistență medicală,MED_1,Identificare nevoi medicale
+MED,Asistență medicală,MED_2,Informare
+MED,Asistență medicală,MED_3,Consiliere
+MED,Asistență medicală,MED_4,Referire/ trimitere
+MED,Asistență medicală,MED_5,Însoțire
+MED,Asistență medicală,MED_6,Solicitare expertiză medico-legală
+MED,Asistență medicală,MED_7,Monitorizare-evaluare
+MED,Asistență medicală,MED_8,Facilitarea comunicării
+MED,Asistență medicală,MED_9,Asistență medicală/ Tratament/ Îngrijiri
+MED,Asistență medicală,MED_10,Alte intervenții pentru asistență medicală
+SOC,Asistență socială,SOC_1,Identificare nevoi asistență socială
+SOC,Asistență socială,SOC_2,Informare
+SOC,Asistență socială,SOC_3,Anchetă socială la birou
+SOC,Asistență socială,SOC_4,Ancheta socială pe teren
+SOC,Asistență socială,SOC_5,Orientare în resurse
+SOC,Asistență socială,SOC_6,Medierea relației cu alte resurse
+SOC,Asistență socială,SOC_7,Consiliere socială
+SOC,Asistență socială,SOC_8,Referire/ trimitere
+SOC,Asistență socială,SOC_9,Însoțire
+SOC,Asistență socială,SOC_10,Monitorizare-evaluare
+SOC,Asistență socială,SOC_11,Facilitarea comunicării
+SOC,Asistență socială,SOC_12,Implementare măsuri siguranță
+SOC,Asistență socială,SOC_13,Vizite minori supravegheate
+SOC,Asistență socială,SOC_14,Înscriere/ transfer copii în unități de educație
+SOC,Asistență socială,SOC_15,Sprijin în solicitarea pentru eliberare de documente
+SOC,Asistență socială,SOC_16,Dezvoltare abilități
+SOC,Asistență socială,SOC_17,Orientare vocațională
+SOC,Asistență socială,SOC_18,"Sprijin căutare loc de muncă (pregătire CV, interviu, etc)"
+SOC,Asistență socială,SOC_19,Sprijin căutare locuință
+SOC,Asistență socială,SOC_20,Alte intervenții pentru asistență socială
+PSI,Asistență psihologică,PSI_1,Identificare nevoi asistență psihologică
+PSI,Asistență psihologică,PSI_2,Informare
+PSI,Asistență psihologică,PSI_3,Evaluare psihologică
+PSI,Asistență psihologică,PSI_4,Consiliere individuală
+PSI,Asistență psihologică,PSI_5,Terapie individuală
+PSI,Asistență psihologică,PSI_6,Grup de suport
+PSI,Asistență psihologică,PSI_7,Activități de grup
+PSI,Asistență psihologică,PSI_8,Însoțire
+PSI,Asistență psihologică,PSI_9,Trimitere/ referire
+PSI,Asistență psihologică,PSI_10,Monitorizare-evaluare
+PSI,Asistență psihologică,PSI_11,Facilitarea comunicării
+PSI,Asistență psihologică,PSI_12,Alte intervenții pentru asistență psihologică
+JRD,Asistență juridică,JRD_1,Identificare nevoi asistență juridică
+JRD,Asistență juridică,JRD_2,Informare
+JRD,Asistență juridică,JRD_3,Consiliere juridică
+JRD,Asistență juridică,JRD_4,Asistență pentru pregătirea documentelor
+JRD,Asistență juridică,JRD_5,Reprezentare
+JRD,Asistență juridică,JRD_6,Trimitere/ referire
+JRD,Asistență juridică,JRD_7,Însoțire
+JRD,Asistență juridică,JRD_8,Monitorizare-evaluare
+JRD,Asistență juridică,JRD_9,Facilitarea comunicării
+JRD,Asistență juridică,JRD_10,Taxe judiciare
+JRD,Asistență juridică,JRD_11,Alte intervenții pentru asistență juridică
+EDU,Asistență educațională,EDU_1,Identificare nevoi asistență educațională
+EDU,Asistență educațională,EDU_2,Informare
+EDU,Asistență educațională,EDU_3,Consiliere
+EDU,Asistență educațională,EDU_4,Asistență pentru măsuri școlare copii
+EDU,Asistență educațională,EDU_5,Trimitere/ referire
+EDU,Asistență educațională,EDU_6,Însoțire
+EDU,Asistență educațională,EDU_7,Monitorizare-evaluare
+EDU,Asistență educațională,EDU_8,Facilitarea comunicării
+EDU,Asistență educațională,EDU_9,Alte intervenții pentru asistență educațională
+VOF,"Asistență vocațională, ocupațională și formare",VOF_1,Identificare nevoi asistență ocupațională
+VOF,"Asistență vocațională, ocupațională și formare",VOF_2,Informare
+VOF,"Asistență vocațională, ocupațională și formare",VOF_3,Consiliere
+VOF,"Asistență vocațională, ocupațională și formare",VOF_4,Asistență pentru angajare sau post-angajare
+VOF,"Asistență vocațională, ocupațională și formare",VOF_5,Formare profesională
+VOF,"Asistență vocațională, ocupațională și formare",VOF_6,Trimitere/ referire
+VOF,"Asistență vocațională, ocupațională și formare",VOF_7,Însoțire
+VOF,"Asistență vocațională, ocupațională și formare",VOF_8,Monitorizare-evaluare
+VOF,"Asistență vocațională, ocupațională și formare",VOF_9,Facilitarea comunicării
+VOF,"Asistență vocațională, ocupațională și formare",VOF_8,Alte intervenții pentru asistență educațională
+MAT,Ajutor material sau subvenționare,MAT_1,Identificare nevoi ajutor material
+MAT,Ajutor material sau subvenționare,MAT_2,Consiliere sau informare
+MAT,Ajutor material sau subvenționare,MAT_3,Oferire subvenții sau ajutor material
+MAT,Ajutor material sau subvenționare,MAT_4,Trimitere/ referire
+MAT,Ajutor material sau subvenționare,MAT_5,Însoțire
+MAT,Ajutor material sau subvenționare,MAT_6,Monitorizare-evaluare
+MAT,Ajutor material sau subvenționare,MAT_7,Facilitarea comunicării
+MAT,Ajutor material sau subvenționare,MAT_8,Alte intervenții pentru ajutor material
+AMPS,Alte masuri pentru protecție și siguranță,AMPS_1,Plan de siguranță
+AMPS,Alte masuri pentru protecție și siguranță,AMPS_2,Altele

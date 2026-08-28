@@ -20,9 +20,11 @@ class ViolenceFactory extends Factory
      */
     public function definition(): array
     {
+        $types = fake()->randomElements(Violence::values(), fake()->numberBetween(1, 5));
+
         return [
-            'violence_types' => fake()->randomElements(Violence::values(), rand(0, 5)),
-            'violence_primary_type' => fake()->randomElement(Violence::values()),
+            'violence_types' => $types,
+            'violence_primary_type' => $types[0],
             'frequency_violence' => fake()->randomElement(Frequency::values()),
             'description' => fake()->text(),
         ];

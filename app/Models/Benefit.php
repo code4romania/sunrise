@@ -17,7 +17,17 @@ class Benefit extends Model
 
     protected $fillable = [
         'name',
+        'sort',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Benefit $model): void {
+            if (! isset($model->sort)) {
+                $model->sort = static::max('sort') + 1;
+            }
+        });
+    }
 
     public function benefitTypes(): HasMany
     {
@@ -31,7 +41,7 @@ class Benefit extends Model
 
     public function organizations(): Builder
     {
-        return Organization::whereHas('beneficiaries', function ($query) {
+        return \App\Models\Organization::whereHas('beneficiaries', function ($query) {
             $query->whereHas('interventionPlan.benefits', function ($query) {
                 $query->where('benefit_id', $this->id);
             });

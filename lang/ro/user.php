@@ -82,13 +82,15 @@ return [
     ],
 
     'action_reactivate_confirm' => [
-        'title' => 'Deactivează cont',
+        'title' => 'Reactivează cont',
         'success' => 'Cont reactivat cu succes',
     ],
 
     'action_reset_password_confirm' => [
         'title' => 'Resetează parola',
         'success' => 'Email-ul a fost trimis cu succes',
+        'failure_title' => 'Eroare la resetarea parolei',
+        'failure_body' => 'A apărut o eroare la trimiterea link-ului de resetare a parolei.',
     ],
 
     'status' => [

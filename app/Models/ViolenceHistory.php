@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ViolenceHistory extends Model
 {
-    use HasFactory;
     use BelongsToBeneficiary;
+    use HasFactory;
     use LogsActivityOptions;
 
     protected $fillable = [

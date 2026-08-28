@@ -158,9 +158,20 @@ class BeneficiaryFactory extends Factory
     {
         return $this
             ->afterCreating(function (Beneficiary $beneficiary) {
-                BeneficiaryAntecedents::factory()
-                    ->for($beneficiary)
-                    ->create();
+                $aggressor = $beneficiary->aggressors()->orderBy('id')->first();
+                if ($aggressor === null) {
+                    return;
+                }
+
+                $antecedent = BeneficiaryAntecedents::factory()->make();
+
+                $aggressor->update([
+                    'has_police_reports' => $antecedent->has_police_reports,
+                    'police_report_count' => $antecedent->police_report_count,
+                    'has_medical_reports' => $antecedent->has_medical_reports,
+                    'medical_report_count' => $antecedent->medical_report_count,
+                    'hospitalization_observations' => $antecedent->observations,
+                ]);
             });
     }
 

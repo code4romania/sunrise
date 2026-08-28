@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Infolists\Components\Actions;
 
 use App\Concerns\HasModalExtraFooterActionsAlignment;
-use Filament\Infolists\Components\Actions\Action;
 
 class EditAction extends \Filament\Actions\Action
 {

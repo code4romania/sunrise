@@ -14,9 +14,9 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class MonthlyPlanService extends Model
 {
+    use BelongsToThroughTrait;
     use HasFactory;
     use LogsActivityOptions;
-    use BelongsToThroughTrait;
 
     protected $fillable = [
         'monthly_plan_id',
@@ -28,6 +28,13 @@ class MonthlyPlanService extends Model
         'objective',
         'service_details',
     ];
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $service): void {
+            $service->monthlyPlanInterventions()->delete();
+        });
+    }
 
     public function monthlyPlan(): BelongsTo
     {
@@ -41,7 +48,7 @@ class MonthlyPlanService extends Model
 
     public function monthlyPlanInterventions(): HasMany
     {
-        return $this->hasMany(MonthlyPlanInterventions::class);
+        return $this->hasMany(MonthlyPlanInterventions::class)->orderBy('id');
     }
 
     public function beneficiary(): BelongsToThrough

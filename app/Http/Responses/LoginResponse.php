@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Responses;
 
 use Filament\Facades\Filament;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse as Responsable;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Features\SupportRedirects\Redirector;
 

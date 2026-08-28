@@ -44,8 +44,8 @@ class CasesByStudiesAndAge extends BaseGenerator implements ReportGenerator
         return [
             'studies',
             "CASE
-                WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 17 THEN 'minor'
-                WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) > 18 THEN 'major'
+                WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 18 THEN 'minor'
+                WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) >= 18 THEN 'major'
                 ELSE 'unknown'
             END as age_group",
         ];

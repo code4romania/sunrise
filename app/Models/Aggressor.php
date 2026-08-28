@@ -23,9 +23,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Aggressor extends Model
 {
+    use BelongsToBeneficiary;
     use HasCitizenship;
     use HasFactory;
-    use BelongsToBeneficiary;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -47,22 +47,31 @@ class Aggressor extends Model
         'has_protection_order',
         'electronically_monitored',
         'protection_order_notes',
+        'has_police_reports',
+        'police_report_count',
+        'has_medical_reports',
+        'medical_report_count',
+        'hospitalization_days',
+        'hospitalization_observations',
     ];
 
     protected $casts = [
         'age' => 'integer',
         'civil_status' => CivilStatus::class,
-        'drugs' => AsEnumCollection::class . ':' . Drug::class,
+        'drugs' => AsEnumCollection::class.':'.Drug::class,
         'gender' => Gender::class,
         'has_drug_history' => Ternary::class,
         'has_psychiatric_history' => Ternary::class,
         'has_violence_history' => Ternary::class,
-        'legal_history' => AsEnumCollection::class . ':' . AggressorLegalHistory::class,
+        'legal_history' => AsEnumCollection::class.':'.AggressorLegalHistory::class,
         'occupation' => Occupation::class,
         'relationship' => AggressorRelationship::class,
         'studies' => Studies::class,
-        'violence_types' => AsEnumCollection::class . ':' . Violence::class,
+        'violence_types' => AsEnumCollection::class.':'.Violence::class,
         'has_protection_order' => ProtectionOrder::class,
         'electronically_monitored' => Ternary::class,
+        'has_police_reports' => Ternary::class,
+        'has_medical_reports' => Ternary::class,
+        'hospitalization_days' => 'integer',
     ];
 }

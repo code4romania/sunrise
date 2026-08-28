@@ -10,7 +10,7 @@
     </h2>
 
     <a href="https://www.eeirh.org" target="_blank" rel="noopener noreferrer" tabindex="-1">
-        <img src="{{ Vite::image('eeirh.png') }}" class="h-10" alt="">
+        <img src="{{ Vite::image('eeirh.png') }}" class="h-12" alt="">
     </a>
 
     <a href="https://www.code4.ro" target="_blank" rel="noopener noreferrer" tabindex="-1">

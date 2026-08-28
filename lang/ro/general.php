@@ -11,8 +11,10 @@ return [
         'edit' => 'Editează',
         'actions' => 'Acțiuni',
         'cancel' => 'Renunță',
+        'close' => 'Închide',
         'save' => 'Salvează modificările',
         'delete' => 'Șterge',
+        'download' => 'Descarcă',
         'view_observations' => 'Vezi observații',
         'change' => 'Modifică',
         'finish' => 'Finalizează',
@@ -34,9 +36,13 @@ return [
     'labels' => [
         'village' => 'sat',
         'commune' => 'Comuna',
+        'no_document' => 'Niciun document',
     ],
 
     'placeholders' => [
-        'date' => 'zz-ll-aaaa',
+        'date' => 'ZZ/LL/AAAA',
     ],
+
+    'yes' => 'Da',
+    'no' => 'Nu',
 ];

@@ -6,6 +6,7 @@ namespace App\Concerns;
 
 use Cache;
 use Filament\Support\Exceptions\Halt;
+use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Str;
 
 trait PreventMultipleSubmit
@@ -18,12 +19,21 @@ trait PreventMultipleSubmit
         $lock = Cache::lock($cacheKey, 5);
 
         if (! $lock->get()) {
-            throw new Halt();
+            throw new Halt;
         }
+
+        $this->deferReleasingPreventMultipleSubmitLock($lock);
     }
 
     public function beforeSave(): void
     {
         $this->beforeCreate();
+    }
+
+    private function deferReleasingPreventMultipleSubmitLock(Lock $lock): void
+    {
+        defer(function () use ($lock): void {
+            $lock->release();
+        });
     }
 }

@@ -5,18 +5,11 @@ declare(strict_types=1);
 namespace App\Forms\Components;
 
 use Filament\Forms\Components\Concerns\HasAffixes;
-use Filament\Forms\Components\Concerns\HasKey;
-use Filament\Forms\Components\Contracts\HasAffixActions;
 use Filament\Forms\Components\Placeholder;
-use Filament\Support\Concerns\HasColor;
-use Filament\Support\Concerns\HasIcon;
-use Filament\Support\Concerns\HasIconColor;
 
 class Notice extends Placeholder implements \Filament\Schemas\Components\Contracts\HasAffixActions
 {
-    use HasIcon;
-    use HasColor;
-    use HasIconColor;
+    // HasIcon, HasColor, HasIconColor are already available from TextEntry (via Placeholder)
     use HasAffixes;
     use \Filament\Schemas\Components\Concerns\HasKey;
 

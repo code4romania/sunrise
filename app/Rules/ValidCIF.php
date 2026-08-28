@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Rules;
 
-use Illuminate\Translation\PotentiallyTranslatedString;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Str;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
 class ValidCIF implements ValidationRule
 {

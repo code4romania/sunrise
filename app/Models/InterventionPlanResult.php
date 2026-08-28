@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InterventionPlanResult extends Model
 {
+    use BelongsToInterventionPlan;
     use HasFactory;
     use LogsActivityOptions;
-    use BelongsToInterventionPlan;
 
     protected $fillable = [
         'result_id',

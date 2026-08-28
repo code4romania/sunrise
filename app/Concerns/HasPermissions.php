@@ -93,6 +93,25 @@ trait HasPermissions
         return (bool) $this->permissions?->admin_permissions->contains(AdminPermission::CAN_CHANGE_ORGANISATION_PROFILE);
     }
 
+    /**
+     * Whether the user can access the organization panel (configuration section).
+     * Requires at least one of: modify nomenclature, modify staff, modify organisation profile.
+     */
+    public function hasAccessToOrganizationConfig(): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        if ($this->isNgoAdmin()) {
+            return true;
+        }
+
+        return $this->hasAccessToNomenclature()
+            || $this->hasAccessToStaff()
+            || $this->canChangeOrganizationProfile();
+    }
+
     public function canSearchBeneficiary(): bool
     {
         if ($this->isNgoAdmin()) {

@@ -15,7 +15,7 @@ return [
         'id' => 'ID',
         'file_number' => 'Număr intern fișă',
         'date' => 'Data realizării',
-        'interval' => 'Perioana monitorizată',
+        'interval' => 'Perioada monitorizată',
         'team' => 'Echipa',
         'actions' => 'Acțiuni',
         'modal_create' => 'Adauga fișă monitorizare',
@@ -68,6 +68,7 @@ return [
     ],
     'actions' => [
         'create' => 'Adaugă fișă de monitorizare',
+        'download_all' => 'Descarcă toate fișele',
         'create_from_last' => 'Pornește de la un duplicat',
         'create_simple' => 'Începe cu o fișă necompletată',
         'create_widget' => 'Completează fișa de monitorizare',
@@ -90,5 +91,18 @@ return [
     'breadcrumbs' => [
         'general' => 'Monitorizare caz',
         'file' => 'Fișă monitorizare :file_number',
+    ],
+
+    'pdf' => [
+        'report_title' => 'Fișa de monitorizare a cazului pentru: :beneficiary (perioada :interval)',
+        'section_beneficiary_identity' => 'I. Date de identitate ale solicitantului',
+        'section_sheet_details' => 'II. Detalii fișă monitorizare',
+        'section_children' => 'III. Date copii',
+        'section_general' => 'IV. Date generale monitorizare',
+    ],
+
+    'notifications' => [
+        'sheet_reminder_title' => 'Fișă de monitorizare',
+        'sheet_reminder_body' => 'Au trecut cel puțin 30 de zile de la ultima fișă de monitorizare pentru cazul :name. Completați o nouă fișă de monitorizare.',
     ],
 ];

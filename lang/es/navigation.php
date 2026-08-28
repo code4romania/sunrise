@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
     'beneficiaries' => [
         '_group' => 'Beneficiarios',
@@ -7,6 +10,7 @@ return [
     'statistics' => [
         '_group' => 'Estadísticas',
         'label' => 'Estadísticas',
+        'new_reports' => 'Nuevos reportes',
     ],
     'community' => [
         '_group' => 'Comunidad',
@@ -16,7 +20,7 @@ return [
     'configurations' => [
         '_group' => 'Configuraciones',
         'organization' => 'Organización',
-        'services' => 'Servicios',
+        'services' => 'Lista de tipos de servicios',
         'staff' => 'Personal',
     ],
     'developed_by' => 'Desarrollado por',

@@ -9,6 +9,10 @@ use App\Models\Scopes\BelongsToCurrentTenant;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Ensures the model is scoped by tenant (centru) and organization.
+ * In this app tenant = Organization (centru); all queries are limited to the current tenant.
+ */
 trait BelongsToOrganization
 {
     public function initializeBelongsToOrganization(): void

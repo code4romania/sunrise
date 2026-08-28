@@ -1,0 +1,260 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Organizations\Resources\Cases\Schemas;
+
+use App\Enums\DisabilityDegree;
+use App\Enums\DisabilityType;
+use App\Enums\Diseases;
+use App\Enums\Drug;
+use App\Enums\HomeOwnership;
+use App\Enums\Income;
+use App\Enums\IncomeSource;
+use App\Enums\Occupation;
+use App\Enums\Studies;
+use App\Enums\Ternary;
+use App\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Utilities\Get;
+
+class PersonalInfoFormSchema
+{
+    /**
+     * @return array<int, mixed>
+     */
+    public static function getSchema(): array
+    {
+        return [
+            Grid::make()
+                ->maxWidth('3xl')
+                ->relationship('details')
+                ->schema([
+                    Select::make('has_family_doctor')
+                        ->label(__('field.has_family_doctor'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    Group::make()
+                        ->schema([
+                            TextInput::make('family_doctor_name')
+                                ->label(__('field.family_doctor_name'))
+                                ->placeholder(__('placeholder.name'))
+                                ->maxLength(80)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+
+                            TextInput::make('family_doctor_contact')
+                                ->label(__('field.family_doctor_contact'))
+                                ->placeholder(__('placeholder.phone_or_email'))
+                                ->maxLength(80)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+
+                            TextInput::make('family_doctor_address')
+                                ->label(__('field.family_doctor_address'))
+                                ->placeholder(__('placeholder.address'))
+                                ->maxLength(80)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('has_family_doctor'))),
+                        ]),
+
+                    Group::make()
+                        ->schema([
+                            Select::make('health_insurance')
+                                ->label(__('beneficiary.section.personal_information.label.health_insurance'))
+                                ->options(Ternary::options())
+                                ->columnSpanFull()
+                                ->enum(Ternary::class),
+
+                            Select::make('health_status')
+                                ->label(__('beneficiary.section.personal_information.label.health_status'))
+                                ->options(Diseases::options())
+                                ->columnSpanFull()
+                                ->live()
+                                ->multiple(),
+                        ]),
+                    Group::make()
+                        ->schema([
+
+                            Textarea::make('observations_chronic_diseases')
+                                ->label(__('beneficiary.section.personal_information.label.observations_chronic_diseases'))
+                                ->visible(fn (Get $get) => $get('health_status') && \in_array(Diseases::CHRONIC_DISEASES->value, $get('health_status') ?? [], true))
+                                ->maxLength(250),
+
+                            Textarea::make('observations_degenerative_diseases')
+                                ->label(__('beneficiary.section.personal_information.label.observations_degenerative_diseases'))
+                                ->visible(fn (Get $get) => $get('health_status') && \in_array(Diseases::DEGENERATIVE_DISEASES->value, $get('health_status') ?? [], true))
+                                ->maxLength(250),
+
+                            Textarea::make('observations_mental_illness')
+                                ->label(__('beneficiary.section.personal_information.label.observations_mental_illness'))
+                                ->visible(fn (Get $get) => $get('health_status') && \in_array(Diseases::MENTAL_ILLNESSES->value, $get('health_status') ?? [], true))
+                                ->maxLength(250),
+                        ]),
+
+                    Group::make()
+                        ->schema([
+                            Select::make('drug_consumption')
+                                ->label(__('beneficiary.section.personal_information.label.drug_consumption'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(Ternary::options())
+                                ->live(),
+
+                            Select::make('drug_types')
+                                ->label(__('beneficiary.section.personal_information.label.drug_types'))
+                                ->placeholder(__('beneficiary.section.personal_information.placeholders.select_drugs'))
+                                ->options(Drug::options())
+                                ->multiple()
+                                ->visible(fn (Get $get) => Ternary::isYes($get('drug_consumption'))),
+                        ])->columnSpanFull()->columns(2),
+                    Select::make('psychiatric_history')
+                        ->label(__('field.psychiatric_history'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+
+                    Group::make()
+                        ->schema([
+                            Textarea::make('psychiatric_history_notes')
+                                ->label(__('field.psychiatric_history_notes'))
+                                ->placeholder(__('placeholder.observations'))
+                                ->maxLength(250)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            Select::make('investigations_for_psychiatric_pathology')
+                                ->label(__('field.investigations_for_psychiatric_pathology'))
+                                ->options(Ternary::options())
+                                ->enum(Ternary::class)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            Textarea::make('investigations_observations')
+                                ->label(__('field.investigations_observations'))
+                                ->placeholder(__('placeholder.observations'))
+                                ->maxLength(250)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            Select::make('treatment_for_psychiatric_pathology')
+                                ->label(__('field.treatment_for_psychiatric_pathology'))
+                                ->options(Ternary::options())
+                                ->enum(Ternary::class)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+
+                            Textarea::make('treatment_observations')
+                                ->label(__('field.treatment_observations'))
+                                ->placeholder(__('placeholder.observations'))
+                                ->maxLength(250)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('psychiatric_history'))),
+                        ]),
+
+                    Select::make('disabilities')
+                        ->label(__('beneficiary.section.personal_information.label.disabilities'))
+                        ->options(Ternary::options())
+                        ->enum(Ternary::class)
+                        ->live(),
+                    Group::make()
+                        ->schema([
+
+                            Select::make('type_of_disability')
+                                ->label(__('beneficiary.section.personal_information.label.type_of_disability'))
+                                ->options(DisabilityType::options())
+                                ->multiple()
+                                ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
+
+                            Select::make('degree_of_disability')
+                                ->label(__('beneficiary.section.personal_information.label.degree_of_disability'))
+                                ->options(DisabilityDegree::options())
+                                ->enum(DisabilityDegree::class)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
+
+                            Textarea::make('observations_disability')
+                                ->label(__('beneficiary.section.personal_information.label.observations_disability'))
+                                ->placeholder(__('placeholder.observations'))
+                                ->maxLength(250)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('disabilities'))),
+                        ]),
+                    Group::make()
+                        ->columnSpanFull()
+                        ->columns(2)
+                        ->schema([
+                            Select::make('current_contraception')
+                                ->live()
+                                ->label(__('field.current_contraception'))
+                                ->enum(Ternary::class)
+                                ->options(Ternary::options()),
+
+                            Textarea::make('observations_contraception')
+                                ->placeholder(__('placeholder.observations'))
+                                ->visible(fn (Get $get) => Ternary::isYes($get('current_contraception')))
+                                ->label(__('field.observations_contraception'))
+                                ->maxLength(250),
+                        ]),
+                    Group::make()
+                        ->schema([
+                            Select::make('other_current_medication')
+                                ->label(__('beneficiary.section.personal_information.label.other_current_medication'))
+                                ->placeholder(__('placeholder.select_one'))
+                                ->options(Ternary::options())
+                                ->live(),
+
+                            TextInput::make('medication_observations')
+                                ->label(__('beneficiary.section.personal_information.label.medication_observations'))
+                                ->placeholder(__('placeholder.input_text'))
+                                ->maxLength(100)
+                                ->visible(fn (Get $get) => Ternary::isYes($get('other_current_medication'))),
+                        ])->columnSpanFull()->columns(2),
+
+                    Select::make('studies')
+                        ->label(__('field.studies'))
+                        ->placeholder(__('placeholder.studies'))
+                        ->options(Studies::options())
+                        ->enum(Studies::class),
+
+                    Select::make('occupation')
+                        ->label(__('field.occupation'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(Occupation::options())
+                        ->enum(Occupation::class),
+
+                    TextInput::make('workplace')
+                        ->label(__('field.workplace'))
+                        ->placeholder(__('placeholder.workplace'))
+                        ->maxLength(100)
+                        ->columnSpanFull(),
+
+                    TextInput::make('net_income')
+                        ->label(__('field.net_income'))
+                        ->placeholder(__('placeholder.input_sum'))
+                        ->mask('9999999999'),
+
+                    Select::make('income')
+                        ->label(__('field.income'))
+                        ->placeholder(__('placeholder.choose_situation'))
+                        ->options(Income::options())
+                        ->enum(Income::class),
+
+                    Select::make('income_source')
+                        ->label(__('beneficiary.section.personal_information.label.income_source'))
+                        ->options(IncomeSource::options())
+                        ->placeholder(__('placeholder.choose_one_or_more'))
+                        ->multiple(),
+
+                    TextInput::make('elder_care_count')
+                        ->label(__('field.elder_care_count'))
+                        ->placeholder(__('placeholder.number'))
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(99),
+
+                    Select::make('homeownership')
+                        ->label(__('field.homeownership'))
+                        ->placeholder(__('placeholder.select_one'))
+                        ->options(HomeOwnership::options())
+                        ->enum(HomeOwnership::class),
+                ]),
+        ];
+    }
+}

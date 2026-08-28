@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'age' => 'Edad',
     'action' => [
@@ -7,8 +9,10 @@ return [
         'edit' => 'Editar',
         'actions' => 'Acciones',
         'cancel' => 'Cancelar',
+        'close' => 'Cerrar',
         'save' => 'Guardar',
         'delete' => 'Eliminar',
+        'download' => 'Descargar',
         'view_observations' => 'Ver observaciones',
         'change' => 'Cambiar',
         'finish' => 'Finalizar',
@@ -26,8 +30,9 @@ return [
     'labels' => [
         'village' => 'Pueblo',
         'commune' => 'Comuna',
+        'no_document' => 'Ningún documento',
     ],
     'placeholders' => [
-        'date' => 'Fecha',
+        'date' => 'DD/MM/AAAA',
     ],
 ];

@@ -4,6 +4,22 @@
 
 
 <table>
+    @if(isset($exportMeta) && is_array($exportMeta))
+        <tr>
+            <td colspan="20"><strong>{{ __('report.export_meta.report_name') }}:</strong> {{ $exportMeta['report_name'] ?? '—' }}</td>
+        </tr>
+        <tr>
+            <td colspan="20"><strong>{{ __('report.export_meta.calendar_interval') }}:</strong> {{ $exportMeta['calendar_interval'] ?? '—' }}</td>
+        </tr>
+        <tr>
+            <td colspan="20"><strong>{{ __('report.export_meta.includes_monitoring_cases') }}:</strong> {{ ($exportMeta['includes_monitoring_cases'] ?? false) ? __('general.yes') : __('general.no') }}</td>
+        </tr>
+        <tr>
+            <td colspan="20"><strong>{{ __('report.export_meta.includes_missing_values') }}:</strong> {{ ($exportMeta['includes_missing_values'] ?? false) ? __('general.yes') : __('general.no') }}</td>
+        </tr>
+        <tr><td colspan="20"></td></tr>
+    @endif
+
     <tr>
         @foreach($header as $key => $headerElement)
             @if($key === 0)

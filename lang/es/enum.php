@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
     'civil_status' => [
         'single' => 'Soltero/a',
@@ -89,6 +92,15 @@ return [
         'cyber' => 'Cibernética',
         'deprivation' => 'Privación',
     ],
+    'violence_means' => [
+        'body_parts' => 'Partes del cuerpo',
+        'cutting_objects' => 'Objetos cortantes',
+        'piercing_objects' => 'Objetos punzantes',
+        'blunt_objects' => 'Objetos contundentes',
+        'firearms' => 'Armas de fuego',
+        'no_answer' => 'No sabe/ No responde',
+        'other' => 'Otros',
+    ],
     'drug' => [
         'alcohol_occasional' => 'Alcohol ocasional',
         'alcohol_frequent' => 'Alcohol frecuente',
@@ -112,6 +124,7 @@ return [
         'written' => 'Escrito',
         'phone' => 'Teléfono',
         'brought' => 'Acompañado',
+        'reporting_form' => 'Formulario de señalización',
     ],
     'notifier' => [
         'victim' => 'Víctima',
@@ -299,6 +312,13 @@ return [
         'cases_by_primary_violence_frequency_and_age' => 'Casos por frecuencia primaria de violencia y edad',
         'cases_by_presentation_mode' => 'Casos por modo de presentación',
         'cases_by_referring_institution' => 'Casos por institución de referencia',
+        'cases_by_results_status' => 'Resultados de intervención por estado',
+        'cases_by_service_types' => 'Casos por tipo de servicio',
+        'cases_by_service_types_and_age' => 'Casos por tipo de servicio y edad',
+        'cases_by_violence_types_and_age' => 'Casos por tipos de violencia y edad',
+        'cases_by_aggressor_risk_factors' => 'Factores de riesgo del agresor',
+        'cases_by_victim_risk_factors' => 'Factores de riesgo de la víctima',
+        'cases_by_evaluation_initial_risk_factors' => 'Factores de riesgo de evaluación inicial',
     ],
     'age_interval' => [
         'under_1_year' => 'Menos de 1 año',

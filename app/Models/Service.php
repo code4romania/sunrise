@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Service extends Model
 {
@@ -18,12 +19,26 @@ class Service extends Model
 
     protected $fillable = [
         'name',
+        'identifier',
         'counseling_sheet',
+        'sort',
     ];
 
     protected $casts = [
         'counseling_sheet' => CounselingSheet::class,
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Service $model): void {
+            if (! isset($model->sort)) {
+                $model->sort = static::max('sort') + 1;
+            }
+            if (! isset($model->identifier)) {
+                $model->identifier = Str::slug($model->name);
+            }
+        });
+    }
 
     public function serviceInterventions(): HasMany
     {

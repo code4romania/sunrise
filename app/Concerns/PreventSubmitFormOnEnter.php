@@ -10,11 +10,7 @@ trait PreventSubmitFormOnEnter
 {
     protected function getCreateFormAction(): Action
     {
-        return parent::getCreateFormAction();
-    }
-
-    protected function getSaveFormAction(): Action
-    {
-        return parent::getSaveFormAction();
+        return parent::getCreateFormAction()
+            ->extraAttributes(['type' => 'button']);
     }
 }

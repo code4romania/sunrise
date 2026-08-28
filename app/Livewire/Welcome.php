@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use Filament\Schemas\Schema;
 use App\Models\User;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\SimplePage;
+use Filament\Schemas\Schema;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -93,12 +91,12 @@ class Welcome extends SimplePage
         return $schema
             ->components([
                 TextInput::make('email')
-                    ->label(__('filament-panels::pages/auth/register.form.email.label'))
+                    ->label(__('filament-panels::auth/pages/register.form.email.label'))
                     ->email()
                     ->disabled(),
 
                 TextInput::make('password')
-                    ->label(__('filament-panels::pages/auth/register.form.password.label'))
+                    ->label(__('filament-panels::auth/pages/register.form.password.label'))
                     ->password()
                     ->rule(
                         [
@@ -108,10 +106,11 @@ class Welcome extends SimplePage
                     )
                     ->revealable()
                     ->required()
+                    ->validationAttribute(__('filament-panels::auth/pages/register.form.password.validation_attribute'))
                     ->confirmed(),
 
                 TextInput::make('password_confirmation')
-                    ->label(__('filament-panels::pages/auth/register.form.password_confirmation.label'))
+                    ->label(__('filament-panels::auth/pages/register.form.password_confirmation.label'))
                     ->password()
                     ->revealable()
                     ->required(),

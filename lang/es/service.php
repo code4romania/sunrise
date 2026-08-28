@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'label' => [
         'singular' => 'Servicio',
@@ -14,6 +16,7 @@ return [
             'activate' => 'Activar',
             'inactivate' => 'Desactivar',
             'inactivate_modal' => 'Desactivar servicio',
+            'inactivate_intervention' => 'Desactivar intervención',
         ],
         'create' => 'Crear',
         'delete' => 'Eliminar',
@@ -21,21 +24,25 @@ return [
         'view_counseling_sheet' => 'Ver hoja de asesoramiento',
     ],
     'labels' => [
-        'name' => 'Nombre',
+        'name' => 'Tipo de servicio',
+        'catalog_service' => 'Tipo de servicio (catálogo)',
+        'intervention_name' => 'Nombre de la intervención',
         'interventions' => 'Intervenciones',
+        'intervention_item' => 'Intervención',
         'cases' => 'Casos',
         'status' => 'Estado',
         'select' => 'Seleccionar',
     ],
     'headings' => [
-        'navigation' => 'Navegación',
+        'navigation' => 'Lista de tipos de servicios',
         'empty_state_table' => 'No hay servicios disponibles',
-        'list_page' => 'Servicios',
+        'list_page' => 'Lista de tipos de servicios especializados',
         'list_table' => 'Lista de servicios',
         'create_page' => 'Crear servicio',
         'edit_page' => 'Editar servicio',
         'interventions' => 'Intervenciones',
         'inactivate_modal' => 'Desactivar servicio',
+        'inactivate_intervention_modal' => 'Desactivar intervención en el nomenclador',
         'view_service_page' => 'Ver servicio',
     ],
     'helper_texts' => [
@@ -44,6 +51,7 @@ return [
         'interventions' => 'Gestionar intervenciones',
         'under_interventions_table' => 'Lista de intervenciones para este servicio',
         'inactivate_modal' => '¿Está seguro que desea desactivar este servicio?',
+        'inactivate_intervention_modal' => 'Al desactivar la intervención, ya no estará disponible para añadirla a los planes de intervención de los beneficiarios. La información no se eliminará del historial de casos en los que se haya utilizado.',
         'counseling_sheet' => 'Hoja de asesoramiento',
     ],
 ];

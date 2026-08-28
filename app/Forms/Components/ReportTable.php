@@ -6,7 +6,6 @@ namespace App\Forms\Components;
 
 use App\Enums\ReportType;
 use App\Services\Reports\BeneficiariesV2;
-use Filament\Infolists\Components\Component;
 use Illuminate\Support\Collection;
 
 class ReportTable extends \Filament\Schemas\Components\Component
@@ -122,5 +121,42 @@ class ReportTable extends \Filament\Schemas\Components\Component
     public function getVerticalSubHeaderKey(): ?string
     {
         return $this->reportService->getVerticalSubHeaderKey();
+    }
+
+    /**
+     * @return array{
+     *     reportData: \Illuminate\Support\Collection,
+     *     header: array,
+     *     subHeader: array,
+     *     subHeaderKey: string|null,
+     *     verticalHeader: array,
+     *     verticalHeaderKey: string|null,
+     *     verticalSubHeader: array,
+     *     verticalSubHeaderKey: string|null,
+     *     firstHeaderElementColSpan: int,
+     *     firstHeaderElementRowSpan: int
+     * }
+     */
+    public function getTablePayload(): array
+    {
+        $this->composeReport();
+
+        $reportData = $this->getReportData();
+        $header = $this->getHorizontalHeader();
+        $subHeader = $this->getHorizontalSubHeader();
+        $verticalSubHeader = $this->getVerticalSubHeader();
+
+        return [
+            'reportData' => $reportData,
+            'header' => $header,
+            'subHeader' => $subHeader,
+            'subHeaderKey' => $this->getSubHeaderKey(),
+            'verticalHeader' => $this->getVerticalHeader(),
+            'verticalHeaderKey' => $this->getVerticalHeaderKey(),
+            'verticalSubHeader' => $verticalSubHeader,
+            'verticalSubHeaderKey' => $this->getVerticalSubHeaderKey(),
+            'firstHeaderElementColSpan' => $verticalSubHeader ? 2 : 1,
+            'firstHeaderElementRowSpan' => $subHeader ? 2 : 1,
+        ];
     }
 }

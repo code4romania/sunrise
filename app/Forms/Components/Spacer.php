@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Forms\Components;
 
-use Filament\Forms\Components\Component;
-
 class Spacer extends \Filament\Schemas\Components\Component
 {
     protected string $view = 'forms.components.spacer';

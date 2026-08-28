@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Http\Responses\LoginResponse;
 use App\Models\Activity;
 use App\Models\Address;
 use App\Models\Aggressor;
@@ -58,10 +59,11 @@ use App\Models\UserRole;
 use App\Models\UserStatus;
 use App\Models\Violence;
 use App\Models\ViolenceHistory;
-use App\Http\Responses\LoginResponse;
+use Filament\Forms\Components\Select as FormsSelect;
 use Filament\Forms\Components\TextInput;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
+use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Grid;
 use Filament\Support\Facades\FilamentView;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Table;
@@ -96,15 +98,34 @@ class AppServiceProvider extends ServiceProvider
         });
 
         TextInput::configureUsing(function (TextInput $input) {
+            $input->live(onBlur: true);
+
             if ($input->isNumeric()) {
                 $input->minValue(0);
             }
         });
 
+        Textarea::configureUsing(function (Textarea $textarea): void {
+            $textarea->live(onBlur: true);
+        });
+
+        FormsSelect::configureUsing(function (FormsSelect $select): void {
+            $select->extraFieldWrapperAttributes([
+                'class' => 'min-w-0 w-full',
+            ]);
+        });
+
+        Grid::configureUsing(function (Grid $grid) {
+            $grid->extraAttributes([
+                'class' => 'bg-white dark:bg-gray-800/50 rounded-xl p-6 shadow',
+            ]);
+        });
+
         FilamentView::registerRenderHook(
-            PanelsRenderHook::SIDEBAR_NAV_END,
+            PanelsRenderHook::SIDEBAR_FOOTER,
             fn () => view('filament.sidebar-footer')
         );
+
     }
 
     /**

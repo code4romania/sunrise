@@ -16,10 +16,10 @@ use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
 
 class Monitoring extends Model
 {
-    use HasFactory;
-    use HasSpecialistsTeam;
     use BelongsToBeneficiary;
     use BelongsToThroughTrait;
+    use HasFactory;
+    use HasSpecialistsTeam;
     use LogsActivityOptions;
 
     protected $fillable = [
@@ -70,6 +70,6 @@ class Monitoring extends Model
 
     public function getIntervalAttribute(): string
     {
-        return $this->start_date?->format('d.m.Y') . ' - ' . $this->end_date?->format('d.m.Y');
+        return $this->start_date?->format('d.m.Y').' - '.$this->end_date?->format('d.m.Y');
     }
 }

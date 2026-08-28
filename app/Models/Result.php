@@ -17,7 +17,17 @@ class Result extends Model
 
     protected $fillable = [
         'name',
+        'sort',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Result $model): void {
+            if (! isset($model->sort)) {
+                $model->sort = static::max('sort') + 1;
+            }
+        });
+    }
 
     public function interventionPlanResults(): HasMany
     {

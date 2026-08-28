@@ -4,29 +4,23 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin\Pages\Auth\Login;
-use App\Filament\Admin\Pages\Dashboard;
-use Filament\Actions\Action;
-use Filament\Schemas\Schema;
-use App\Filament\Admin\Pages;
-use App\Filament\Admin\Resources\ServiceResource;
-use App\Filament\Pages\Auth\RequestPasswordReset;
+use App\Filament\Admin\Pages\NomenclatorPage;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
-use Filament\Actions\MountableAction;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Infolists\Infolist;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\Page;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Schemas\Schema;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables\Table;
-use Filament\Widgets;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -38,11 +32,13 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
-    public static string $defaultDateDisplayFormat = 'd.m.Y';
+    private const AdminNamespace = 'App\\Filament\\Admin';
 
-    public static string $defaultDateTimeDisplayFormat = 'd.m.Y H:i';
+    public static string $defaultDateDisplayFormat = 'Y-m-d';
 
-    public static string $defaultDateTimeWithSecondsDisplayFormat = 'd.m.Y H:i:s';
+    public static string $defaultDateTimeDisplayFormat = 'Y-m-d H:i';
+
+    public static string $defaultDateTimeWithSecondsDisplayFormat = 'Y-m-d H:i:s';
 
     public static string $defaultTimeDisplayFormat = 'H:i';
 
@@ -60,40 +56,45 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->login()
+            ->default()
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups(false)
-            ->login(Login::class)
-            ->passwordReset(RequestPasswordReset::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Violet,
             ])
             ->font('DM Sans')
             ->maxContentWidth('full')
             ->viteTheme('resources/css/filament/common/theme.css')
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('3rem')
+            ->renderHook(
+                PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+                fn () => view('filament.partials.login-eu-logos')
+            )
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_LOGO_AFTER,
+                fn () => view('filament.partials.topbar-eu-logos')
+            )
+            ->colors([
+                'primary' => Color::Amber,
+            ])
             ->darkMode(false)
             ->discoverResources(
                 in: app_path('Filament/Admin/Resources'),
-                for: 'App\\Filament\\Admin\\Resources'
+                for: self::AdminNamespace.'\\Resources'
             )
             ->discoverPages(
                 in: app_path('Filament/Admin/Pages'),
-                for: 'App\\Filament\\Admin\\Pages'
+                for: self::AdminNamespace.'\\Pages'
             )
-            ->pages([
-                Dashboard::class,
-            ])
             ->routes(function () {
                 Route::get('/welcome/{user:ulid}', Welcome::class)->name('auth.welcome');
             })
             ->discoverWidgets(
                 in: app_path('Filament/Admin/Widgets'),
-                for: 'App\\Filament\\Admin\\Widgets'
+                for: self::AdminNamespace.'\\Widgets'
             )
-            ->widgets([
-                // Widgets\AccountWidget::class,
-            ])
             ->bootUsing(function () {
                 Page::stickyFormActions();
                 Page::alignFormActionsEnd();
@@ -106,21 +107,11 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-rectangle-stack')
                     ->sort(2)
                     ->isActiveWhen(
-                        fn () => request()->routeIs('filament.admin.resources.roles.*') ||
-                            request()->routeIs('filament.admin.resources.services.*') ||
-                            request()->routeIs('filament.admin.resources.benefits.*')
+                        fn () => request()->routeIs('filament.admin.pages.nomenclator-page')
                     )
-                    ->url(fn () => ServiceResource::getUrl()),
+                    ->url(fn () => NomenclatorPage::getUrl()),
             ])
             ->unsavedChangesAlerts()
-            ->plugins([
-//                BreezyCore::make()
-//                    ->myProfile(
-//                        hasAvatars: true,
-//                        slug: 'settings'
-//                    )
-//                    ->enableTwoFactorAuthentication(),
-            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -140,18 +131,18 @@ class AdminPanelProvider extends PanelProvider
 
     protected function setDefaultDateTimeDisplayFormats(): void
     {
-        Table::configureUsing(fn(Table $table) => $table->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
-        Table::configureUsing(fn(Table $table) => $table->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
-        Table::configureUsing(fn(Table $table) => $table->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
+        Table::configureUsing(fn (Table $table) => $table->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
+        Table::configureUsing(fn (Table $table) => $table->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
+        Table::configureUsing(fn (Table $table) => $table->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
 
-        Schema::configureUsing(fn(Schema $schema) => $schema->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
-        Schema::configureUsing(fn(Schema $schema) => $schema->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
-        Schema::configureUsing(fn(Schema $schema) => $schema->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
+        Schema::configureUsing(fn (Schema $schema) => $schema->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
+        Schema::configureUsing(fn (Schema $schema) => $schema->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
+        Schema::configureUsing(fn (Schema $schema) => $schema->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
 
-        DateTimePicker::configureUsing(fn(DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
-        DateTimePicker::configureUsing(fn(DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
-        DateTimePicker::configureUsing(fn(DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateTimeWithSecondsDisplayFormat(static::$defaultDateTimeWithSecondsDisplayFormat));
-        DateTimePicker::configureUsing(fn(DateTimePicker $dateTimePicker) => $dateTimePicker->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
-        DateTimePicker::configureUsing(fn(DateTimePicker $dateTimePicker) => $dateTimePicker->defaultTimeWithSecondsDisplayFormat(static::$defaultTimeWithSecondsDisplayFormat));
+        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateDisplayFormat(static::$defaultDateDisplayFormat));
+        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateTimeDisplayFormat(static::$defaultDateTimeDisplayFormat));
+        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultDateTimeWithSecondsDisplayFormat(static::$defaultDateTimeWithSecondsDisplayFormat));
+        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultTimeDisplayFormat(static::$defaultTimeDisplayFormat));
+        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker) => $dateTimePicker->defaultTimeWithSecondsDisplayFormat(static::$defaultTimeWithSecondsDisplayFormat));
     }
 }

@@ -22,6 +22,7 @@ class InterventionMeeting extends Model
         'date',
         'time',
         'duration',
+        'topic',
         'observations',
     ];
 
@@ -30,6 +31,11 @@ class InterventionMeeting extends Model
         'date' => 'date:Y-m-d',
         'time' => 'date:H:i',
     ];
+
+    public function beneficiaryIntervention(): BelongsTo
+    {
+        return $this->belongsTo(BeneficiaryIntervention::class);
+    }
 
     public function specialist(): BelongsTo
     {

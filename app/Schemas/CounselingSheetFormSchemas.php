@@ -1,0 +1,572 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Schemas;
+
+use App\Enums\ExtendedFrequency;
+use App\Enums\FamilyRelationship;
+use App\Enums\FileDocumentType;
+use App\Enums\HomeType;
+use App\Enums\Patrimony;
+use App\Enums\PossessionMode;
+use App\Enums\SocialRelationship;
+use App\Enums\Ternary;
+use App\Forms\Components\DatePicker;
+use App\Forms\Components\Repeater;
+use App\Forms\Components\Select;
+use App\Models\InterventionService;
+use Filament\Actions\Action;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+
+class CounselingSheetFormSchemas
+{
+    public static function getLegalAssistanceForm(): array
+    {
+        return [
+            Section::make(__('intervention_plan.headings.patrimony_data'))
+                ->columns()
+                ->maxWidth('3xl')
+                ->schema([
+                    Select::make('data.patrimony')
+                        ->label(__('intervention_plan.labels.patrimony'))
+                        ->placeholder(__('intervention_plan.placeholders.juridic_file.chose_option'))
+                        ->options(Patrimony::options()),
+
+                    Select::make('data.possession_mode')
+                        ->label(__('intervention_plan.labels.possession_mode'))
+                        ->options(PossessionMode::options())
+                        ->placeholder(__('intervention_plan.placeholders.juridic_file.chose_option'))
+                        ->live(),
+
+                    Textarea::make('data.possession_observation')
+                        ->label(__('intervention_plan.labels.possession_observation'))
+                        ->visible(fn (Get $get) => PossessionMode::isValue($get('data.possession_mode'), PossessionMode::OTHER))
+                        ->maxLength(100)
+                        ->columnSpanFull(),
+                ]),
+
+            Section::make(__('intervention_plan.headings.file_documents'))
+                ->columns()
+                ->maxWidth('3xl')
+                ->schema([
+                    Group::make()
+                        ->schema([
+                            CheckboxList::make('data.copy_documents')
+                                ->label(__('intervention_plan.labels.copy_documents'))
+                                ->options(FileDocumentType::options())
+                                ->live(),
+
+                            Textarea::make('data.copy_documents_observation')
+                                ->label(__('intervention_plan.labels.copy_documents_observation'))
+                                ->maxLength(100)
+                                ->visible(fn (Get $get) => \in_array(FileDocumentType::OTHER->value, $get('data.copy_documents') ?? [])),
+                        ]),
+                    Group::make()
+                        ->schema([
+                            CheckboxList::make('data.original_documents')
+                                ->label(__('intervention_plan.labels.original_documents'))
+                                ->options(FileDocumentType::options())
+                                ->live(),
+
+                            Textarea::make('data.original_documents_observation')
+                                ->label(__('intervention_plan.labels.original_documents_observation'))
+                                ->maxLength(100)
+                                ->visible(fn (Get $get) => \in_array(FileDocumentType::OTHER->value, $get('data.original_documents') ?? [])),
+                        ]),
+
+                ]),
+
+            Section::make(__('intervention_plan.headings.institution_contacted'))
+                ->schema([
+                    Repeater::make('data.institutions')
+                        ->hiddenLabel()
+                        ->addActionLabel(__('intervention_plan.actions.add_institution'))
+                        ->columns(4)
+                        ->itemLabel(fn (array $state): ?string => $state['institution'] ?? null)
+                        ->schema([
+                            TextInput::make('institution')
+                                ->label(__('intervention_plan.labels.responsible_institution'))
+                                ->placeholder(__('intervention_plan.placeholders.juridic_file.responsible_institution'))
+                                ->maxLength(100),
+
+                            DatePicker::make('contact_date')
+                                ->label(__('intervention_plan.labels.contact_date')),
+
+                            TextInput::make('phone')
+                                ->label(__('intervention_plan.labels.phone'))
+                                ->placeholder(__('intervention_plan.placeholders.juridic_file.phone'))
+                                ->maxLength(50),
+
+                            TextInput::make('contact_person')
+                                ->label(__('intervention_plan.labels.contact_person'))
+                                ->placeholder(__('intervention_plan.placeholders.juridic_file.contact_person'))
+                                ->maxLength(100),
+                        ]),
+
+                ]),
+
+            Section::make(__('intervention_plan.headings.final_observations'))
+                ->maxWidth('3xl')
+                ->schema([
+                    RichEditor::make('data.observations')
+                        ->label(__('intervention_plan.labels.final_observation'))
+                        ->placeholder(__('intervention_plan.placeholders.juridic_file.final_observation'))
+                        ->maxLength(2500)
+                        ->columnSpanFull(),
+                ]),
+        ];
+    }
+
+    public static function getSchemaForPsychologicalAssistance(): array
+    {
+        return [
+            Section::make(__('intervention_plan.headings.history'))
+                ->maxWidth('3xl')
+                ->schema([
+                    Textarea::make('data.relationship_history')
+                        ->label(__('intervention_plan.labels.relationship_history'))
+                        ->maxLength(1500),
+
+                    Textarea::make('data.last_incident_description')
+                        ->label(__('intervention_plan.labels.last_incident_description'))
+                        ->maxLength(1500),
+                ]),
+
+            Section::make(__('intervention_plan.headings.violence_forms'))
+                ->schema([
+                    Textarea::make('data.violence_history_forms')
+                        ->label(__('intervention_plan.labels.violence_history_forms'))
+                        ->maxLength(1500)
+                        ->maxWidth('3xl'),
+
+                    Radio::make('data.physics')
+                        ->label(__('intervention_plan.labels.physics'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Radio::make('data.sexed')
+                        ->label(__('intervention_plan.labels.sexed'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Radio::make('data.psychological')
+                        ->label(__('intervention_plan.labels.psychological'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Radio::make('data.verbal')
+                        ->label(__('intervention_plan.labels.verbal'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Radio::make('data.sociable')
+                        ->label(__('intervention_plan.labels.sociable'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Radio::make('data.economic')
+                        ->label(__('intervention_plan.labels.economic'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Radio::make('data.cybernetics')
+                        ->label(__('intervention_plan.labels.cybernetics'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Radio::make('data.spiritual')
+                        ->label(__('intervention_plan.labels.spiritual'))
+                        ->inline()
+                        ->options(ExtendedFrequency::options())
+                        ->live(),
+
+                    Group::make()
+                        ->maxWidth('3xl')
+                        ->schema([
+                            Textarea::make('data.physical_violence_description')
+                                ->label(__('intervention_plan.labels.physical_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.physics') ||
+                                    ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NONE) ||
+                                    ExtendedFrequency::isValue($get('data.physics'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+
+                            Textarea::make('data.sexual_violence_description')
+                                ->label(__('intervention_plan.labels.sexual_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.sexed') ||
+                                    ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NONE) ||
+                                    ExtendedFrequency::isValue($get('data.sexed'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+
+                            Textarea::make('data.psychological_violence_description')
+                                ->label(__('intervention_plan.labels.psychological_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.psychological') ||
+                                    ExtendedFrequency::isValue($get('data.psychological'), ExtendedFrequency::NONE) ||
+                                    ExtendedFrequency::isValue($get('data.psychological'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+
+                            Textarea::make('data.verbal_violence_description')
+                                ->label(__('intervention_plan.labels.verbal_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.verbal') ||
+                                        ExtendedFrequency::isValue($get('data.verbal'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.verbal'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+
+                            Textarea::make('data.social_violence_description')
+                                ->label(__('intervention_plan.labels.social_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.sociable') ||
+                                        ExtendedFrequency::isValue($get('data.sociable'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.sociable'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+
+                            Textarea::make('data.economic_violence_description')
+                                ->label(__('intervention_plan.labels.economic_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.economic') ||
+                                        ExtendedFrequency::isValue($get('data.economic'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.economic'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+
+                            Textarea::make('data.cyber_violence_description')
+                                ->label(__('intervention_plan.labels.cyber_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.cybernetics') ||
+                                        ExtendedFrequency::isValue($get('data.cybernetics'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.cybernetics'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+
+                            Textarea::make('data.spiritual_violence_description')
+                                ->label(__('intervention_plan.labels.spiritual_violence_description'))
+                                ->hidden(
+                                    fn (Get $get) => ! $get('data.spiritual') ||
+                                        ExtendedFrequency::isValue($get('data.spiritual'), ExtendedFrequency::NONE) ||
+                                        ExtendedFrequency::isValue($get('data.spiritual'), ExtendedFrequency::NO_ANSWER)
+                                )
+                                ->maxLength(1500),
+                        ]),
+                ]),
+
+            Section::make(__('intervention_plan.headings.violence_effects'))
+                ->maxWidth('3xl')
+                ->schema([
+                    Textarea::make('data.physical_effects')
+                        ->label(__('intervention_plan.labels.physical_effects'))
+                        ->maxLength(1500),
+
+                    Textarea::make('data.psychological_effects')
+                        ->label(__('intervention_plan.labels.psychological_effects'))
+                        ->maxLength(1500),
+
+                    Textarea::make('data.social_effects')
+                        ->label(__('intervention_plan.labels.social_effects'))
+                        ->maxLength(1500),
+                ]),
+
+            Section::make(__('intervention_plan.headings.risk_factors'))
+                ->maxWidth('3xl')
+                ->schema([
+                    Textarea::make('data.risk_factors_description')
+                        ->label(__('intervention_plan.labels.risk_factors_description'))
+                        ->maxLength(1500),
+                ]),
+
+            Section::make(__('intervention_plan.headings.protection_factors'))
+                ->maxWidth('3xl')
+                ->schema([
+                    Textarea::make('data.internal_resources')
+                        ->label(__('intervention_plan.labels.internal_resources'))
+                        ->maxLength(1500),
+
+                    Textarea::make('data.external_resources')
+                        ->label(__('intervention_plan.labels.external_resources'))
+                        ->maxLength(1500),
+                ]),
+
+            Section::make(__('intervention_plan.headings.request'))
+                ->maxWidth('3xl')
+                ->schema([
+                    Textarea::make('data.requests_description')
+                        ->label(__('intervention_plan.labels.requests_description'))
+                        ->maxLength(1500),
+                ]),
+
+            Section::make(__('intervention_plan.headings.psychological_evaluation'))
+                ->maxWidth('3xl')
+                ->schema([
+                    RichEditor::make('data.first_meeting_psychological_evaluation')
+                        ->label(__('intervention_plan.labels.first_meeting_psychological_evaluation'))
+                        ->maxLength(5000),
+                ]),
+
+        ];
+    }
+
+    /**
+     * @return array<int, \Filament\Schemas\Components\Section>
+     */
+    public static function getSchemaForSocialAssistance(?InterventionService $interventionService = null): array
+    {
+        return [
+            Section::make(__('intervention_plan.headings.family_relationship'))
+                ->schema([
+                    Repeater::make('data.family')
+                        ->hiddenLabel()
+                        ->itemLabel(function () {
+                            static $index = 1;
+
+                            return __('intervention_plan.labels.family', ['number' => $index++]);
+                        })
+                        ->columns()
+                        ->addAction(
+                            fn (Action $action) => $action->link()
+                                ->label(__('intervention_plan.actions.add_social_relationship'))
+                        )
+                        ->reorderable(false)
+                        ->maxWidth('3xl')
+                        ->schema([
+
+                            Select::make('relationship')
+                                ->label(__('intervention_plan.labels.relationship'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                                ->options(FamilyRelationship::options()),
+
+                            TextInput::make('first_and_last_name')
+                                ->label(__('intervention_plan.labels.first_and_last_name'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.first_and_last_name'))
+                                ->maxLength(100),
+
+                            TextInput::make('age')
+                                ->label(__('intervention_plan.labels.age'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.age'))
+                                ->mask('999'),
+
+                            TextInput::make('locality')
+                                ->label(__('intervention_plan.labels.locality'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.locality'))
+                                ->maxLength(100),
+
+                            TextInput::make('occupation')
+                                ->label(__('intervention_plan.labels.occupation'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.occupation'))
+                                ->maxLength(100),
+
+                            TextInput::make('relationship_observation')
+                                ->label(__('intervention_plan.labels.relationship_observation'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.relationship_observation'))
+                                ->maxLength(250),
+
+                            Select::make('support')
+                                ->label(__('intervention_plan.labels.support'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                                ->options(Ternary::options()),
+
+                            TextInput::make('support_observations')
+                                ->label(__('intervention_plan.labels.support_observations'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.support_observations'))
+                                ->maxLength(250),
+
+                        ]),
+                ]),
+
+            Section::make(__('intervention_plan.headings.support_group'))
+                ->schema([
+                    Repeater::make('data.support_group')
+                        ->hiddenLabel()
+                        ->itemLabel(function () {
+                            static $index = 1;
+
+                            return __('intervention_plan.labels.social_relationship', ['number' => $index++]);
+                        })
+                        ->columns()
+                        ->addAction(
+                            fn (Action $action) => $action->link()
+                                ->label(__('intervention_plan.actions.add_social_relationship'))
+                        )
+                        ->reorderable(false)
+                        ->maxWidth('3xl')
+                        ->schema([
+                            Select::make('relationship')
+                                ->label(__('intervention_plan.labels.relationship'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                                ->options(SocialRelationship::options()),
+
+                            TextInput::make('full_name')
+                                ->label(__('intervention_plan.labels.person_or_group_name'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.person_or_group_name'))
+                                ->maxLength(200),
+
+                            Select::make('support')
+                                ->label(__('intervention_plan.labels.support'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                                ->options(Ternary::options()),
+
+                            TextInput::make('support_observations')
+                                ->label(__('intervention_plan.labels.support_observations'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.support_observations'))
+                                ->maxLength(250),
+                        ]),
+                ]),
+
+            Section::make(__('intervention_plan.headings.living_conditions'))
+                ->schema([
+                    Grid::make()
+                        ->maxWidth('3xl')
+                        ->schema([
+                            Select::make('data.home_type')
+                                ->label(__('intervention_plan.labels.home_type'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                                ->options(HomeType::options()),
+
+                            TextInput::make('data.rooms')
+                                ->label(__('intervention_plan.labels.rooms'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.rooms'))
+                                ->mask('999'),
+
+                            TextInput::make('data.peoples')
+                                ->label(__('intervention_plan.labels.peoples'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.peoples'))
+                                ->mask('999'),
+
+                            TextInput::make('data.utilities')
+                                ->label(__('intervention_plan.labels.utilities'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                                ->maxLength(250),
+
+                            Textarea::make('data.living_observations')
+                                ->label(__('intervention_plan.labels.living_observations'))
+                                ->placeholder(__('intervention_plan.placeholders.social_file.add_details'))
+                                ->columnSpanFull()
+                                ->maxLength(1000),
+                        ]),
+
+                ]),
+
+            Section::make(__('intervention_plan.headings.professional_experience'))
+                ->schema([
+                    Textarea::make('data.professional_experience')
+                        ->label(__('intervention_plan.labels.professional_experience'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.add_details'))
+                        ->maxWidth('3xl')
+                        ->maxLength(1000),
+                ]),
+
+            Section::make(__('intervention_plan.headings.integration_and_participation_in_social_service'))
+                ->columns()
+                ->maxWidth('3xl')
+                ->schema([
+                    Select::make('data.communication')
+                        ->label(__('intervention_plan.labels.communication'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.communication_observations')
+                        ->label(__('intervention_plan.labels.communication_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Select::make('data.socialization')
+                        ->label(__('intervention_plan.labels.socialization'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.socialization_observations')
+                        ->label(__('intervention_plan.labels.socialization_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Select::make('data.rules_compliance')
+                        ->label(__('intervention_plan.labels.rules_compliance'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.rules_compliance_observations')
+                        ->label(__('intervention_plan.labels.rules_compliance_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Select::make('data.participation_in_individual_counseling')
+                        ->label(__('intervention_plan.labels.participation_in_individual_counseling'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.participation_in_individual_counseling_observations')
+                        ->label(__('intervention_plan.labels.participation_in_individual_counseling_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Select::make('data.participation_in_joint_activities')
+                        ->label(__('intervention_plan.labels.participation_in_joint_activities'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.participation_in_joint_activities_observations')
+                        ->label(__('intervention_plan.labels.participation_in_joint_activities_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Select::make('data.self_management')
+                        ->label(__('intervention_plan.labels.self_management'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.self_management_observations')
+                        ->label(__('intervention_plan.labels.self_management_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Select::make('data.addictive_behavior')
+                        ->label(__('intervention_plan.labels.addictive_behavior'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.addictive_behavior_observations')
+                        ->label(__('intervention_plan.labels.addictive_behavior_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Select::make('data.financial_education')
+                        ->label(__('intervention_plan.labels.financial_education'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.select'))
+                        ->options(Ternary::options()),
+
+                    TextInput::make('data.financial_education_observations')
+                        ->label(__('intervention_plan.labels.financial_education_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->maxLength(100),
+
+                    Textarea::make('data.integration_and_participation_in_social_service_observations')
+                        ->label(__('intervention_plan.labels.integration_and_participation_in_social_service_observations'))
+                        ->placeholder(__('intervention_plan.placeholders.social_file.observations'))
+                        ->columnSpanFull()
+                        ->maxLength(1000),
+                ]),
+        ];
+    }
+}

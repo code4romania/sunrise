@@ -1,0 +1,523 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Organizations\Resources\Cases\Pages;
+
+use alcea\cnp\Cnp;
+use App\Enums\AddressType;
+use App\Enums\CaseStatus;
+use App\Filament\Organizations\Resources\Cases\CaseResource;
+use App\Filament\Organizations\Resources\Cases\Schemas\AggressorFormSchema;
+use App\Filament\Organizations\Resources\Cases\Schemas\BeneficiaryIdentityFormSchema;
+use App\Filament\Organizations\Resources\Cases\Schemas\CaseTeamFormSchema;
+use App\Filament\Organizations\Resources\Cases\Schemas\ChildrenIdentityFormSchema;
+use App\Filament\Organizations\Resources\Cases\Schemas\FlowPresentationFormSchema;
+use App\Filament\Organizations\Resources\Cases\Schemas\PersonalInfoFormSchema;
+use App\Forms\Components\Repeater;
+use App\Models\Aggressor;
+use App\Models\Beneficiary;
+use App\Models\FlowPresentation;
+use App\Services\Case\CnpLookupService;
+use Carbon\Carbon;
+use Filament\Actions\Action;
+use Filament\Facades\Filament;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\Wizard;
+use Filament\Schemas\Components\Wizard\Step;
+use Filament\Support\Exceptions\Halt;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
+
+class CreateCase extends CreateRecord
+{
+    use HasWizard;
+
+    protected static string $resource = CaseResource::class;
+
+    /** @var array<int|string, mixed> Captured case_team selection from form before unset in mutateFormDataBeforeCreate */
+    protected array $pendingCaseTeamSelection = [];
+
+    /** Beneficiary found in same center when validating CNP step (shows "CNP identificat" message + link). */
+    public ?Beneficiary $cnpBeneficiaryInTenant = null;
+
+    /** Parent beneficiary when reactivating a closed/archived case (from ?parent= query param). */
+    public ?Beneficiary $parentBeneficiary = null;
+
+    public function mount(): void
+    {
+        $parentId = (int) request('parent');
+        if ($parentId > 0) {
+            $this->parentBeneficiary = Beneficiary::find($parentId);
+        }
+        parent::mount();
+        if ($this->parentBeneficiary !== null) {
+            $this->fillFormFromParentBeneficiary();
+        }
+    }
+
+    protected function getStartStep(): int
+    {
+        return $this->parentBeneficiary !== null ? 3 : 1;
+    }
+
+    protected function fillFormFromParentBeneficiary(): void
+    {
+        $parent = $this->parentBeneficiary;
+        if ($parent === null) {
+            return;
+        }
+        $data = [
+            'consent' => true,
+            'without_cnp' => false,
+            'cnp' => $parent->cnp,
+            'last_name' => $parent->last_name,
+            'first_name' => $parent->first_name,
+            'prior_name' => $parent->prior_name,
+            'civil_status' => $parent->civil_status?->value,
+            'gender' => $parent->gender?->value,
+            'birthdate' => $this->formatBirthdateForForm($parent->birthdate),
+            'birthplace' => $parent->birthplace,
+            'ethnicity' => $parent->ethnicity?->value,
+            'id_type' => $parent->id_type?->value,
+            'id_serial' => $parent->id_serial,
+            'id_number' => $parent->id_number,
+            'initial_id' => $parent->initial_id ?? $parent->id,
+        ];
+        $this->form->fill(array_merge($this->form->getRawState(), $data));
+    }
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('case.create.title');
+    }
+
+    public function getWizardComponent(): \Filament\Schemas\Components\Component
+    {
+        return Wizard::make($this->getSteps())
+            ->key('form.wizard')
+            ->startOnStep($this->getStartStep())
+            ->cancelAction($this->getCancelFormAction())
+            ->submitAction($this->getSubmitFormAction())
+            ->alpineSubmitHandler("\$wire.{$this->getSubmitFormLivewireMethodName()}()")
+            ->skippable($this->hasSkippableSteps())
+            ->contained(false);
+    }
+
+    /**
+     * @return array<int, Step>
+     */
+    protected function getSteps(): array
+    {
+        return [
+            Step::make('consent')
+                ->label(__('case.create.wizard.consent'))
+                ->schema([
+                    Grid::make()
+                        ->schema([
+                            Checkbox::make('consent')
+                                ->label(__('field.create_beneficiary_consent'))
+                                ->required()
+                                ->accepted()
+                                ->columnSpanFull(),
+                        ]),
+                ]),
+
+            Step::make('cnp')
+                ->label(__('case.create.wizard.cnp'))
+                ->schema([
+                    Grid::make()
+                        ->schema([
+                            TextInput::make('cnp')
+                                ->label(__('field.beneficiary_cnp'))
+                                ->placeholder(__('placeholder.cnp'))
+                                ->maxLength(13)
+                                ->required(fn (Get $get): bool => ! $get('without_cnp'))
+                                ->mask('9999999999999')
+                                ->rules([
+                                    fn (Get $get): array => $get('without_cnp') ? [] : [new \App\Rules\ValidCNP],
+                                ])
+                                ->lazy()
+                                ->afterStateUpdated(fn (): mixed => $this->resetCnpBeneficiaryInTenant())
+                                ->disabled(fn (Get $get): bool => (bool) $get('without_cnp')),
+
+                            Checkbox::make('without_cnp')
+                                ->label(__('field.without_cnp'))
+                                ->afterStateUpdated(fn (bool $state, Set $set): mixed => $set('cnp', null))
+                                ->live(),
+
+                            TextEntry::make('cnp_beneficiary_exists')
+                                ->hiddenLabel()
+                                ->visible(fn (): bool => $this->cnpBeneficiaryInTenant !== null)
+                                ->state(fn (): HtmlString => $this->getCnpBeneficiaryExistsMessage())
+                                ->columnSpanFull(),
+                        ]),
+                ])
+                ->afterValidation(function ($livewire): void {
+                    if ($livewire instanceof self) {
+                        $livewire->handleCnpStepAfterValidation();
+                    }
+                }),
+
+            Step::make('identity_beneficiary')
+                ->label(__('case.create.wizard.identity_beneficiary'))
+                ->schema(BeneficiaryIdentityFormSchema::getSchema(null, false)),
+
+            Step::make('identity_children')
+                ->label(__('case.create.wizard.identity_children'))
+                ->schema(ChildrenIdentityFormSchema::getSchema()),
+
+            Step::make('case_info')
+                ->label(__('case.create.wizard.case_info'))
+                ->schema([
+                    ...PersonalInfoFormSchema::getSchema(),
+                    Section::make(__('case.create.wizard.aggressor'))
+                        ->maxWidth('3xl')
+                        ->schema([
+                            Repeater::make('aggressors')
+                                ->schema(AggressorFormSchema::getRepeaterItemSchema())
+                                ->maxWidth('3xl')
+                                ->hiddenLabel()
+                                ->columns(2)
+                                ->minItems(1)
+                                ->addAction(
+                                    fn (Action $action): Action => $action
+                                        ->label(__('beneficiary.section.personal_information.actions.add_aggressor'))
+                                        ->link()
+                                        ->color('primary')
+                                )
+                                ->defaultItems(1),
+                        ]),
+                    Section::make(__('case.create.wizard.flow_presentation'))
+                        ->maxWidth('3xl')
+                        ->schema(FlowPresentationFormSchema::getSchemaForCreateWizard()),
+                ]),
+
+            Step::make('case_team')
+                ->label(__('case.create.wizard.case_team'))
+                ->schema([
+                    Section::make()
+                        ->description(fn (): string => __('beneficiary.section.specialists.labels.select_roles', [
+                            'user_name' => auth()->user()?->full_name ?? '',
+                        ]))
+                        ->schema(CaseTeamFormSchema::getSchemaForCreateWizard())
+                        ->maxWidth('3xl'),
+                ]),
+        ];
+    }
+
+    public function handleCnpStepAfterValidation(): void
+    {
+        $data = $this->form->getRawState();
+        $withoutCnp = (bool) ($data['without_cnp'] ?? false);
+        $raw = isset($data['cnp']) && $data['cnp'] !== '' ? (string) $data['cnp'] : null;
+        $cnp = $raw !== null ? preg_replace('/\D/', '', $raw) : null;
+
+        if ($withoutCnp || $cnp === null || $cnp === '') {
+            return;
+        }
+
+        $tenant = Filament::getTenant();
+        $user = auth()->user();
+        $result = app(CnpLookupService::class)->lookup($cnp, $tenant, $user);
+
+        if ($result->shouldRedirectToView() && $result->beneficiaryInTenant !== null) {
+            $this->cnpBeneficiaryInTenant = $result->beneficiaryInTenant;
+            throw new Halt;
+        }
+
+        if ($result->showNoAccessMessage()) {
+            $this->resetErrorBag();
+            $this->form->addError('cnp', __('case.create.cnp_no_access'));
+            throw new Halt;
+        }
+
+        if ($result->canCopyFromOtherCenter()) {
+            $source = $result->beneficiaryToCopyFrom();
+            if ($source !== null) {
+                $this->fillFormFromBeneficiary($source);
+            }
+        }
+
+        $this->applyBirthdateFromCnpWizardState((string) $cnp);
+    }
+
+    /**
+     * Pre-fill birthdate on the identity step from the CNP captured in the previous wizard step.
+     */
+    protected function applyBirthdateFromCnpWizardState(string $cnpDigits): void
+    {
+        if ($cnpDigits === '') {
+            return;
+        }
+
+        if (! filled($birthdate = (new Cnp($cnpDigits))->getBirthDateFromCNP('Y-m-d'))) {
+            return;
+        }
+
+        $current = $this->form->getRawState();
+        if (filled($current['birthdate'] ?? null)) {
+            return;
+        }
+
+        $this->form->fill(array_merge($current, ['birthdate' => $birthdate]));
+    }
+
+    public function resetCnpBeneficiaryInTenant(): void
+    {
+        $this->cnpBeneficiaryInTenant = null;
+    }
+
+    protected function getCnpBeneficiaryExistsMessage(): HtmlString
+    {
+        $beneficiary = $this->cnpBeneficiaryInTenant;
+        if ($beneficiary === null) {
+            return new HtmlString('');
+        }
+
+        $tenant = Filament::getTenant();
+        $viewUrl = CaseResource::getUrl('view', [
+            'tenant' => $tenant,
+            'record' => $beneficiary,
+        ]);
+        $text = __('beneficiary.placeholder.beneficiary_exists');
+        $linkText = __('beneficiary.page.view_case_details.title');
+
+        $html = \sprintf(
+            '<div class="flex items-center gap-3 rounded-xl p-4 bg-primary-50 dark:bg-primary-500/10 text-primary-700 dark:text-primary-400 ring-1 ring-primary-200 dark:ring-primary-500/20"><span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-500 text-white text-sm font-medium">i</span><span class="text-sm">%s</span> <a href="%s" class="text-sm font-medium text-primary-600 dark:text-primary-400 underline hover:no-underline">%s</a></div>',
+            e($text),
+            e($viewUrl),
+            e($linkText)
+        );
+
+        return new HtmlString($html);
+    }
+
+    /**
+     * Format birthdate for form display, returning null for empty or placeholder values.
+     */
+    protected function formatBirthdateForForm(mixed $value): ?string
+    {
+        if ($value === null || $value === '' || $value === '-') {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($value)->format('d.m.Y');
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    protected function fillFormFromBeneficiary(Beneficiary $source): void
+    {
+        $source->loadMissing(['legal_residence', 'effective_residence']);
+
+        $current = $this->form->getRawState();
+        $fill = [
+            'last_name' => $source->last_name,
+            'first_name' => $source->first_name,
+            'prior_name' => $source->prior_name,
+            'civil_status' => $source->civil_status?->value,
+            'gender' => $source->gender?->value,
+            'birthdate' => $this->formatBirthdateForForm($source->birthdate),
+            'birthplace' => $source->birthplace,
+            'citizenship' => $source->citizenship?->value,
+            'ethnicity' => $source->ethnicity?->value,
+            'id_type' => $source->id_type?->value,
+            'id_serial' => $source->id_serial,
+            'id_number' => $source->id_number,
+            'cnp' => $source->cnp,
+            'primary_phone' => $source->primary_phone,
+            'backup_phone' => $source->backup_phone,
+            'email' => $source->email,
+            'social_media' => $source->social_media,
+            'contact_person_name' => $source->contact_person_name,
+            'contact_person_phone' => $source->contact_person_phone,
+            'same_as_legal_residence' => (bool) $source->same_as_legal_residence,
+            'legal_residence' => $source->legal_residence?->only([
+                'country_id',
+                'county_id',
+                'city_id',
+                'address',
+                'environment',
+            ]) ?? [],
+            'effective_residence' => $source->effective_residence?->only([
+                'country_id',
+                'county_id',
+                'city_id',
+                'address',
+                'environment',
+            ]) ?? [],
+        ];
+        $this->form->fill(array_merge($current, $fill));
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        $record = $this->getRecord();
+
+        return CaseResource::getUrl('view', ['record' => $record]);
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        unset($data['consent'], $data['without_cnp']);
+        $data['status'] = $data['status'] ?? CaseStatus::ACTIVE;
+        if ($this->parentBeneficiary !== null) {
+            $data['initial_id'] = $this->parentBeneficiary->initial_id ?? $this->parentBeneficiary->id;
+        }
+
+        $fillable = (new Beneficiary)->getFillable();
+
+        return array_intersect_key($data, array_flip($fillable));
+    }
+
+    protected function afterCreate(): void
+    {
+        $state = $this->form->getState();
+        $beneficiary = $this->getRecord();
+
+        $aggressors = $state['aggressors'] ?? [];
+        foreach ($aggressors as $item) {
+            $beneficiary->aggressors()->create($this->mapAggressorItemForSave($item));
+        }
+
+        $flowData = $state['flow_presentation'] ?? null;
+        if (\is_array($flowData) && ! empty(array_filter($flowData))) {
+            $otherIds = $flowData['other_called_institutions'] ?? [];
+            unset($flowData['other_called_institutions']);
+            $flow = $beneficiary->flowPresentation()->create(
+                array_intersect_key($flowData, array_flip((new FlowPresentation)->getFillable()))
+            );
+            if (! empty($otherIds)) {
+                $flow->otherCalledInstitution()->sync($otherIds);
+            }
+        }
+
+        $this->createAddressesFromFormState($beneficiary, $state);
+
+        $roleIds = self::normalizeCaseTeamSelection($state['case_team'] ?? []);
+        $currentUserId = auth()->id();
+        if (! $currentUserId || $roleIds === null || empty($roleIds)) {
+            return;
+        }
+
+        foreach ($roleIds as $roleId) {
+            $beneficiary->specialistsTeam()->create([
+                'role_id' => $roleId,
+                'user_id' => $currentUserId,
+                'specialistable_type' => $beneficiary->getMorphClass(),
+            ]);
+        }
+    }
+
+    /**
+     * Normalize case_team form state to list of role IDs, or null if "no other role" is selected.
+     *
+     * @param  array<int|string, mixed>  $selected  CheckboxList state (list of keys or associative key => true)
+     * @return array<int>|null Role IDs to create specialists for, or null when no specialists should be created
+     */
+    private static function normalizeCaseTeamSelection(array $selected): ?array
+    {
+        $hasNoOtherRole = false;
+        $roleIds = [];
+
+        foreach ($selected as $key => $value) {
+            $optionKey = ($value === true && (\is_int($key) || is_numeric($key)))
+                ? $key
+                : (\is_int($key) ? $value : $key);
+            if ($optionKey === CaseTeamFormSchema::NO_OTHER_ROLE_VALUE) {
+                $hasNoOtherRole = true;
+
+                continue;
+            }
+            if (is_numeric($optionKey)) {
+                $roleIds[] = (int) $optionKey;
+            }
+        }
+
+        if ($hasNoOtherRole) {
+            return null;
+        }
+
+        return array_values(array_unique($roleIds));
+    }
+
+    /**
+     * Create legal_residence and effective_residence addresses from form state.
+     *
+     * @param  array<int|string, mixed>  $state
+     */
+    private function createAddressesFromFormState(Beneficiary $beneficiary, array $state): void
+    {
+        $legalData = $state['legal_residence'] ?? [];
+        $effectiveData = $state['effective_residence'] ?? [];
+        $sameAsLegal = (bool) ($state['same_as_legal_residence'] ?? false);
+
+        if ($this->hasAddressData($legalData)) {
+            $beneficiary->legal_residence()->create($this->buildAddressAttributes($legalData, AddressType::LEGAL_RESIDENCE));
+        }
+
+        $effectivePayload = $sameAsLegal ? ($legalData ?? []) : $effectiveData;
+        if ($this->hasAddressData($effectivePayload)) {
+            $beneficiary->effective_residence()->create($this->buildAddressAttributes($effectivePayload, AddressType::EFFECTIVE_RESIDENCE));
+        }
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function hasAddressData(array $data): bool
+    {
+        $countyId = $data['county_id'] ?? null;
+        $cityId = $data['city_id'] ?? null;
+        $address = $data['address'] ?? null;
+
+        return $countyId !== null || $cityId !== null || filled($address);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function buildAddressAttributes(array $data, AddressType $type): array
+    {
+        $attrs = [
+            'country_id' => $data['country_id'] ?? null,
+            'county_id' => $data['county_id'] ?? null,
+            'city_id' => $data['city_id'] ?? null,
+            'address' => $data['address'] ?? null,
+            'environment' => $data['environment'] ?? null,
+            'address_type' => $type,
+        ];
+
+        return array_filter($attrs, fn ($v) => $v !== null && $v !== '');
+    }
+
+    /**
+     * @param  array<string, mixed>  $item
+     * @return array<string, mixed>
+     */
+    private function mapAggressorItemForSave(array $item): array
+    {
+        $fillable = (new Aggressor)->getFillable();
+        $mapped = array_intersect_key($item, array_flip($fillable));
+        foreach (['violence_types', 'legal_history', 'drugs'] as $key) {
+            if (isset($mapped[$key]) && \is_array($mapped[$key])) {
+                $mapped[$key] = array_values($mapped[$key]);
+            }
+        }
+
+        return $mapped;
+    }
+}

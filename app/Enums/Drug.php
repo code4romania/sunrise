@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Concerns;
 use App\Concerns\Enums\Arrayable;
 use App\Concerns\Enums\Comparable;
-use App\Concerns;
 use Filament\Support\Contracts\HasLabel;
 
 enum Drug: string implements HasLabel

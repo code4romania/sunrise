@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrganizationUserPermissions extends Model
 {
-    use HasFactory;
     use BelongsToOrganization;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -24,8 +24,8 @@ class OrganizationUserPermissions extends Model
     ];
 
     protected $casts = [
-        'case_permissions' => AsEnumCollection::class . ':' . CasePermission::class,
-        'admin_permissions' => AsEnumCollection::class . ':' . AdminPermission::class,
+        'case_permissions' => AsEnumCollection::class.':'.CasePermission::class,
+        'admin_permissions' => AsEnumCollection::class.':'.AdminPermission::class,
     ];
 
     public function user(): BelongsTo

@@ -5,8 +5,7 @@ USER root
 
 # Install additional PHP extensions
 RUN set -ex; \
-    install-php-extensions \
-    sockets
+    install-php-extensions
 
 # Drop back to our unprivileged user
 USER www-data
