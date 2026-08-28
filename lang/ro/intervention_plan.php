@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 return [
     'labels' => [
         'empty_state_table' => 'Creează chiar acum un Dosar servicii VD și adaugă serviciile de care ar trebui să beneficieze',
@@ -45,7 +42,6 @@ return [
         'phone' => 'Contact(telefon/email)',
         'contact_person' => 'Persoana de contact',
         'final_observation' => 'Observații finale evaluare',
-
         'substance_use' => 'Consum de substanțe',
         'substance_types' => 'Tip de substanțe',
         'observations_substances' => 'Observații consum de substanțe (altele)',
@@ -200,7 +196,6 @@ return [
         'counseling_sheet_empty' => 'Fișa de consiliere nu a fost completată încă. Folosește butonul de mai sus pentru a o completa.',
         'counseling_sheet_completed' => 'Ultima actualizare',
     ],
-
     'headings' => [
         'view_page' => 'Dosar servicii VD',
         'edit_page' => 'Editează :service_name',
@@ -292,7 +287,6 @@ return [
         'edit_benefit' => 'Modifică beneficiu social',
         'award_methods' => 'Modalitatea de acordare',
     ],
-
     'actions' => [
         'create' => 'Creează Dosar servicii VD',
         'edit_intervention_plan' => 'Actualizează detalii',
@@ -330,7 +324,6 @@ return [
         'complete_counseling_sheet' => 'Completează fișa consiliere',
         'edit_counseling_sheet' => 'Editează fișa consiliere',
     ],
-
     'placeholders' => [
         'benefit_description' => 'Descrieți pe scurt orice alte informații relevante legate de acordarea beneficiului social',
         'organization_service' => 'Alege un serviciu',
@@ -369,7 +362,6 @@ return [
             'phone' => 'Intordu date de contact ',
             'contact_person' => 'Introdu nume persoanǎ',
             'final_observation' => 'Adaugǎ detalii',
-
         ],
         'social_file' => [
             'select' => 'Alege un răspuns',
@@ -385,30 +377,25 @@ return [
             'observations' => 'Specificați',
             'add_details' => 'Adaugă detalii',
             'select_age' => 'Alege un an',
-
         ],
-
     ],
-
     'validation' => [
         'service_end_date_after_start' => 'Finalul perioadei de acordare nu poate fi definit înainte de data de început a perioadei de acordare.',
     ],
-
     'helpers' => [
         'select_service_first_for_interventions' => 'Selectați mai întâi tipul serviciului ca să apară lista de intervenții pentru acest serviciu.',
         'no_active_interventions_for_service' => 'Serviciul ales nu are intervenții active în nomenclator (Superadmin). Adăugați sau activați intervențiile pentru acel serviciu.',
         'add_interventions_multiple' => 'Puteți bifa una sau mai multe intervenții; toate vor fi create cu aceleași detalii (perioadă, persoană responsabilă, obiective etc.).',
         'empty_case_team_for_responsible' => 'Nu există încă membri în echipa de caz. Adăugați membri din secțiunea „Echipă de caz” pentru a alege persoana responsabilă.',
     ],
-
     'wizard' => [
         'monthly_plan_general' => 'Informații generale',
     ],
-
     'notifications' => [
         'interventions_added' => '{1} A fost adăugată o intervenție.|[2,*] Au fost adăugate :count intervenții.',
+        'monthly_plan_reminder_title' => 'Plan lunar',
+        'monthly_plan_reminder_body' => 'Au trecut cel puțin 30 de zile de la crearea planului lunar pentru cazul :name. Revizuiți și actualizați planul lunar.',
     ],
-
     'pdf' => [
         'monthly_report_title' => 'Dosar servicii VD – plan lunar pentru perioada :period',
         'monthly_sheet_title' => 'Plan de intervenție – plan lunar',
@@ -416,12 +403,6 @@ return [
         'legal_counseling_sheet_title' => 'Fișă de consiliere juridică',
         'social_counseling_sheet_title' => 'Fișă de consiliere asistență socială',
     ],
-
-    'notifications' => [
-        'monthly_plan_reminder_title' => 'Plan lunar',
-        'monthly_plan_reminder_body' => 'Au trecut cel puțin 30 de zile de la crearea planului lunar pentru cazul :name. Revizuiți și actualizați planul lunar.',
-    ],
-
     'sheet' => [
         'document_title' => 'PLAN DE INTERVENȚIE',
         'beneficiary_name' => 'Nume și prenume beneficiar:',
