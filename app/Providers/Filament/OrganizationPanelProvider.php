@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Filament\Auth\RequestPasswordReset;
 use App\Filament\Organizations\Pages\Tenancy\EditOrganizationProfile;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
@@ -38,6 +39,7 @@ class OrganizationPanelProvider extends PanelProvider
             ->id('organization')
             ->path('')
             ->login()
+            ->passwordReset(RequestPasswordReset::class)
             ->tenant(Organization::class, slugAttribute: 'slug')
             ->tenantProfile(EditOrganizationProfile::class)
             ->colors([

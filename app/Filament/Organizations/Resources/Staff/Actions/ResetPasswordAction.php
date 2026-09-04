@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Organizations\Resources\Staff\Actions;
 
 use App\Models\User;
-use Exception;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
-use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Support\Facades\Password;
 
 class ResetPasswordAction extends Action
@@ -33,19 +31,7 @@ class ResetPasswordAction extends Action
         $this->modalWidth('md');
         $this->action(function (User $record) {
             $status = Password::broker(Filament::getAuthPasswordBroker())
-                ->sendResetLink(
-                    ['email' => $record->email],
-                    function (CanResetPassword $user, string $token): void {
-                        if (! method_exists($user, 'notify')) {
-                            throw new Exception('Model ['.get_class($user).'] does not have a [notify()] method.');
-                        }
-
-                        $notification = new \Filament\Auth\Notifications\ResetPassword($token);
-                        $notification->url = Filament::getResetPasswordUrl($token, $user);
-
-                        $user->notify($notification);
-                    }
-                );
+                ->sendResetLink(['email' => $record->email]);
 
             if ($status !== Password::RESET_LINK_SENT) {
                 $this->failureNotificationTitle(__($status));

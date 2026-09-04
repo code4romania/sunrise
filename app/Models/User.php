@@ -349,6 +349,42 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasDefaul
 
     public function sendPasswordResetNotification($token): void
     {
-        $this->notify(new PasswordReset($token));
+        $panel = $this->panelForPasswordReset();
+
+        if ($panel === null) {
+            return;
+        }
+
+        $notification = new PasswordReset($token);
+        $notification->url = $panel->getResetPasswordUrl((string) $token, $this);
+
+        $this->notify($notification);
+    }
+
+    public function panelForPasswordReset(): ?Panel
+    {
+        $currentPanel = Filament::getCurrentPanel();
+
+        if (
+            $currentPanel instanceof Panel
+            && $currentPanel->hasPasswordReset()
+            && $this->canAccessPanel($currentPanel)
+        ) {
+            return $currentPanel;
+        }
+
+        $adminPanel = Filament::getPanel('admin');
+
+        if ($adminPanel->hasPasswordReset() && $this->canAccessPanel($adminPanel)) {
+            return $adminPanel;
+        }
+
+        $organizationPanel = Filament::getPanel('organization');
+
+        if ($organizationPanel->hasPasswordReset() && $this->canAccessPanel($organizationPanel)) {
+            return $organizationPanel;
+        }
+
+        return null;
     }
 }

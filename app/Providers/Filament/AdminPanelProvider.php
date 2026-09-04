@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\NomenclatorPage;
+use App\Filament\Auth\RequestPasswordReset;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Livewire\Welcome;
 use Filament\Actions\Action;
@@ -57,6 +58,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->passwordReset(RequestPasswordReset::class)
             ->default()
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups(false)
