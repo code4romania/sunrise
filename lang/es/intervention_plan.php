@@ -351,18 +351,15 @@ return [
             'select_age' => 'Seleccionar edad',
         ],
     ],
-
     'wizard' => [
         'monthly_plan_general' => 'Información general',
     ],
-
     'pdf' => [
         'monthly_sheet_title' => 'Plan de intervención – plan mensual',
         'psychological_counseling_sheet_title' => 'Ficha de orientación psicológica',
         'legal_counseling_sheet_title' => 'Ficha de orientación jurídica',
         'social_counseling_sheet_title' => 'Ficha de orientación de asistencia social',
     ],
-
     'sheet' => [
         'document_title' => 'PLAN DE INTERVENCIÓN',
         'beneficiary_name' => 'Nombre y apellidos de la beneficiaria:',

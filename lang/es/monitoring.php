@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 return [
     'titles' => [
         'list' => 'Lista de monitoreo',
@@ -91,7 +88,6 @@ return [
         'general' => 'General',
         'file' => 'Expediente',
     ],
-
     'pdf' => [
         'report_title' => 'Ficha de seguimiento del caso para: :beneficiary (período :interval)',
         'section_beneficiary_identity' => 'I. Datos de identidad del solicitante',
