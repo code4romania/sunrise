@@ -24,7 +24,7 @@
         "laravel/scout": "^10.14",
         "laravel/tinker": "^2.10",
         "league/flysystem-aws-s3-v3": "^3.35",
-        "maatwebsite/excel": "^3.1",
+        "maatwebsite/excel": "^4.0",
         "sentry/sentry-laravel": "^4.29",
         "spatie/laravel-activitylog": "^4.9",
         "staudenmeir/belongs-to-through": "^2.5",
