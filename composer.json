@@ -20,7 +20,7 @@
         "filament/spatie-laravel-media-library-plugin": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^12.41",
-        "laravel/sanctum": "^4.0",
+        "laravel/sanctum": "^4.3",
         "laravel/scout": "^10.14",
         "laravel/tinker": "^2.10",
         "league/flysystem-aws-s3-v3": "^3.28",
