@@ -15,7 +15,7 @@
         "php": "^8.4",
         "alcea/cnp": "^3.0",
         "barryvdh/laravel-dompdf": "^3.1",
-        "blade-ui-kit/blade-icons": "^1.6",
+        "blade-ui-kit/blade-icons": "^1.10",
         "filament/filament": "^4.0",
         "filament/spatie-laravel-media-library-plugin": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
