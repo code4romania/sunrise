@@ -23,7 +23,7 @@
         "laravel/sanctum": "^4.3",
         "laravel/scout": "^10.14",
         "laravel/tinker": "^2.10",
-        "league/flysystem-aws-s3-v3": "^3.28",
+        "league/flysystem-aws-s3-v3": "^3.35",
         "maatwebsite/excel": "^3.1",
         "sentry/sentry-laravel": "^4.11",
         "spatie/laravel-activitylog": "^4.9",
